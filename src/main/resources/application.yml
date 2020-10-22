@@ -1,0 +1,50 @@
+spring:
+  datasource:
+  #   url: jdbc:postgresql://localhost:5532/agent
+  #   username: postgres
+  #   password: postgres
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    contexts: schema-change
+    liquibase-schema: collection
+  jpa:
+    open-in-view: false
+  # Allow grace timeout period for 20 seconds
+  lifecycle.timeout-per-shutdown-phase: 20s
+crnk:
+  pathPrefix: /api/v1
+  domainName: ""
+  defaultPageLimit: 20
+  maxPageLimit: 1000
+  allow-unknown-attributes: true
+  # The "include" query-string param is handled by our code and incorporated into the database
+  # query, so we don't let Crnk automatically call findOneTarget for each null relation.
+  config.lookup.behavior.default: NONE
+  jpa.enabled: false
+logging:
+  level:
+    Root: INFO
+    # Reduce the logging from the rsql-jpa library, which is otherwise too excessive:
+    com.github.tennaito.rsql: ERROR
+keycloak:
+  enabled: false
+  realm: dina
+  auth-server-url: http://${KEYCLOAK_HOST_IP}:8080/auth
+  ssl-required: none
+  resource: agent
+  public-client: true
+  bearer-only: true
+  principal-attribute: preferred_username
+  # All endpoints require a logged-in user with the "user" role.
+  security-constraints:
+    - auth-roles:
+      - user
+      security-collections:
+        - patterns:
+          - /*
+javers:
+  # Don't let Javers create its tables
+  sqlSchemaManagementEnabled: false
+  
+# Wait for requests to finish before shutting down:
+server.shutdown: graceful

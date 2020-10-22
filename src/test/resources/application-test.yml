@@ -1,0 +1,16 @@
+# Test config:
+spring:
+  datasource:
+    username: web_user
+    password: test
+  liquibase:
+    liquibase-schema: collection
+    user: migration_user
+    password: test
+embedded.postgresql:
+  enabled: true
+  image: postgres:12.4
+  init-script-file: init-collection-module.sql
+  database: collection_test
+  schema: collection
+
