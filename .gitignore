@@ -1,0 +1,12 @@
+.classpath
+.project
+/.settings
+/.idea
+/target/
+.factorypath
+.vscode
+docker-compose.yml
+docker-compose.override.yml
+/*.env
+/*.iml
+/bin
