@@ -31,7 +31,7 @@ public class ISODateTime {
     YYYY_MM(YYYY_MM_PRECISION),
     YYYY_MM_DD(YYYY_MM_DD_PRECISION);
 
-    int precision;
+    private final int precision;
     Format(int precision) {
       this.precision = precision;
     }

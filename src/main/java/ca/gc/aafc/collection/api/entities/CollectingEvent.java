@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -25,7 +27,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Getter
-@Setter
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
@@ -46,6 +47,9 @@ public class CollectingEvent implements DinaEntity {
 
   private Integer coordinateUncertaintyInMeters;
   private String verbatimCoordinates;
+
+  @Transient
+  private ISODateTime startISOEventDateTime;
 
   private LocalDateTime startEventDateTime;
   private Short startEventDateTimePrecision;
