@@ -26,6 +26,7 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @Builder
+@Setter
 @Getter
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
@@ -65,5 +66,6 @@ public class CollectingEvent implements DinaEntity {
   @NotBlank
   @Column(updatable = false)
   private String createdBy;
+  
 
 }

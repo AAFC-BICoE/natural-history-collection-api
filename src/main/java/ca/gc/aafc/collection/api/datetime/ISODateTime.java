@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.datetime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.util.Optional;
  */
 @AllArgsConstructor
 @Builder
+@Getter
 @EqualsAndHashCode
 public class ISODateTime {
 
