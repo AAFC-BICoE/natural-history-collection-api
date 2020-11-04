@@ -34,7 +34,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .decimalLatitude(12.123456)
         .decimalLongitude(45.01)
         .startEventDateTime(testDateTime)
-        .startEventDateTimePrecision((short) 8)
+        .startEventDateTimePrecision((byte) 8)
         .build();
     dbService.save(collectingEvent);
 
@@ -43,7 +43,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(12.123456, fetchedCollectingEvent.getDecimalLatitude());
     assertEquals(45.01, fetchedCollectingEvent.getDecimalLongitude());
     assertEquals(testDateTime, fetchedCollectingEvent.getStartEventDateTime());
-    assertEquals((short) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
+    assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
 
   }
