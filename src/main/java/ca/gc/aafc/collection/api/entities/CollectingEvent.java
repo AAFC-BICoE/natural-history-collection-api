@@ -16,7 +16,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -49,13 +48,6 @@ public class CollectingEvent implements DinaEntity {
   private Integer coordinateUncertaintyInMeters;
   private String verbatimCoordinates;
 
-  // ideally, I would like to remove this field completely and rename setStartISOEventDateTime
-  // to applyStartISOEventDateTime
-  @Transient
-  private ISODateTime startISOEventDateTime;
-
-  // Setters for startEventDateTime and startEventDateTimePrecision should only be used
-  // by Hibernate to set the data from database. Otherwise startISOEventDateTime should be used.
   private LocalDateTime startEventDateTime;
   private Byte startEventDateTimePrecision;
 
@@ -71,7 +63,7 @@ public class CollectingEvent implements DinaEntity {
   @Column(updatable = false)
   private String createdBy;
 
-  public void setStartISOEventDateTime(ISODateTime startISOEventDateTime) {
+  public void applyStartISOEventDateTime(ISODateTime startISOEventDateTime) {
     if (startISOEventDateTime == null) {
       startEventDateTime = null;
       startEventDateTimePrecision = null;
@@ -80,5 +72,6 @@ public class CollectingEvent implements DinaEntity {
       startEventDateTimePrecision = startISOEventDateTime.getFormat().getPrecision();
     }
   }
+
 
 }
