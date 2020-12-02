@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,10 +49,16 @@ public class CollectingEvent implements DinaEntity {
   private Integer coordinateUncertaintyInMeters;
   private String verbatimCoordinates;
 
+  // Set by applyStartISOEventDateTime
+  @Setter(AccessLevel.NONE)
   private LocalDateTime startEventDateTime;
+  @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
+  // Set by applyEndISOEventDateTime
+  @Setter(AccessLevel.NONE)
   private LocalDateTime endEventDateTime;
+  @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
@@ -70,6 +77,23 @@ public class CollectingEvent implements DinaEntity {
     } else {
       startEventDateTime = startISOEventDateTime.getLocalDateTime();
       startEventDateTimePrecision = startISOEventDateTime.getFormat().getPrecision();
+    }
+  }
+
+  public ISODateTime supplyStartISOEventDateTime() {
+    return ISODateTime.builder().localDateTime(startEventDateTime)
+        .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision)
+            .orElse(null))
+        .build();
+  }
+
+  public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
+    if (endISOEventDateTime == null) {
+      startEventDateTime = null;
+      startEventDateTimePrecision = null;
+    } else {
+      startEventDateTime = endISOEventDateTime.getLocalDateTime();
+      startEventDateTimePrecision = endISOEventDateTime.getFormat().getPrecision();
     }
   }
 

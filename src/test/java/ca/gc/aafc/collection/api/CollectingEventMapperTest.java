@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,7 +24,7 @@ public class CollectingEventMapperTest {
 
     CollectingEvent ceEntity = new CollectingEvent();
     CE_MAPPER.applyDtoToEntity(ceDto, ceEntity, Map.of(CollectingEventDto.class,
-        Set.of("startISOEventDateTime")), Collections.emptySet());
+        Collections.emptySet()), Collections.emptySet());
 
     assertEquals(LocalDateTime.of(2019,8,13,0, 0),
         ceEntity.getStartEventDateTime());
@@ -34,12 +33,13 @@ public class CollectingEventMapperTest {
 
   @Test
   public void testEventDateMappingToDto() {
-    CollectingEvent ceEntity = new CollectingEvent();
-    ceEntity.setStartEventDateTime(LocalDateTime.of(2019,8,13,0, 0));
-    ceEntity.setStartEventDateTimePrecision(ISODateTime.Format.YYYY_MM_DD.getPrecision());
+    CollectingEvent ceEntity = CollectingEvent.builder()
+        .startEventDateTime(LocalDateTime.of(2019,8,13,0, 0))
+        .startEventDateTimePrecision(ISODateTime.Format.YYYY_MM_DD.getPrecision())
+        .build();
 
     CollectingEventDto ceDto = CE_MAPPER.toDto(ceEntity, Map.of(CollectingEvent.class,
-        Set.of("startEventDateTime")), Collections.emptySet());
+        Collections.emptySet()), Collections.emptySet());
     assertEquals("2019-08-13", ceDto.getStartEventDateTime());
   }
 }

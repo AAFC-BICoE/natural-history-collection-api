@@ -17,4 +17,4 @@ jobs:
       - name: Run Checkstyle
         run: mvn checkstyle:check
       - name: Run SpotBugs
-        run: mvn com.github.spotbugs:spotbugs-maven-plugin:check
+        run: mvn spotbugs:check
