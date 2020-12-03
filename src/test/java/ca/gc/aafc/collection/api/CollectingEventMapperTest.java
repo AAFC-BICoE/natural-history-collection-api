@@ -12,6 +12,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Collecting Event contains some custom mappings using {@link ca.gc.aafc.dina.mapper.DinaFieldAdapter}.
+ * This class ensure the mapping is configured to return expected results.
+ */
 public class CollectingEventMapperTest {
 
   private static final DinaMapper<CollectingEventDto, CollectingEvent> CE_MAPPER =
@@ -21,6 +25,7 @@ public class CollectingEventMapperTest {
   public void testEventDateMappingToEntity() {
     CollectingEventDto ceDto = new CollectingEventDto();
     ceDto.setStartEventDateTime("2019-08-13");
+    ceDto.setEndEventDateTime("2019-08-14");
 
     CollectingEvent ceEntity = new CollectingEvent();
     CE_MAPPER.applyDtoToEntity(ceDto, ceEntity, Map.of(CollectingEventDto.class,
@@ -28,7 +33,10 @@ public class CollectingEventMapperTest {
 
     assertEquals(LocalDateTime.of(2019,8,13,0, 0),
         ceEntity.getStartEventDateTime());
+    assertEquals(LocalDateTime.of(2019,8,14,0, 0),
+        ceEntity.getEndEventDateTime());
     assertEquals((byte)8, ceEntity.getStartEventDateTimePrecision());
+    assertEquals((byte)8, ceEntity.getEndEventDateTimePrecision());
   }
 
   @Test
@@ -36,10 +44,13 @@ public class CollectingEventMapperTest {
     CollectingEvent ceEntity = CollectingEvent.builder()
         .startEventDateTime(LocalDateTime.of(2019,8,13,0, 0))
         .startEventDateTimePrecision(ISODateTime.Format.YYYY_MM_DD.getPrecision())
+        .endEventDateTime(LocalDateTime.of(2019,8,14,0, 0))
+        .endEventDateTimePrecision(ISODateTime.Format.YYYY_MM_DD.getPrecision())
         .build();
 
     CollectingEventDto ceDto = CE_MAPPER.toDto(ceEntity, Map.of(CollectingEvent.class,
         Collections.emptySet()), Collections.emptySet());
     assertEquals("2019-08-13", ceDto.getStartEventDateTime());
+    assertEquals("2019-08-14", ceDto.getEndEventDateTime());
   }
 }

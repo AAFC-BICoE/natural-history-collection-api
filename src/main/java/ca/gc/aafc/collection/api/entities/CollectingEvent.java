@@ -70,6 +70,11 @@ public class CollectingEvent implements DinaEntity {
   @Column(updatable = false)
   private String createdBy;
 
+  /**
+   * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
+   * are always in sync.
+   * @param startISOEventDateTime the startEventDate time as ISODateTime or null.
+   */
   public void applyStartISOEventDateTime(ISODateTime startISOEventDateTime) {
     if (startISOEventDateTime == null) {
       startEventDateTime = null;
@@ -81,21 +86,39 @@ public class CollectingEvent implements DinaEntity {
   }
 
   public ISODateTime supplyStartISOEventDateTime() {
+    if (startEventDateTime == null || startEventDateTimePrecision == null) {
+      return null;
+    }
+
     return ISODateTime.builder().localDateTime(startEventDateTime)
-        .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision)
-            .orElse(null))
+        .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
         .build();
   }
 
+  /**
+   *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
+   * are always in sync.
+   * @param endISOEventDateTime
+   */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {
-      startEventDateTime = null;
-      startEventDateTimePrecision = null;
+      endEventDateTime = null;
+      endEventDateTimePrecision = null;
     } else {
-      startEventDateTime = endISOEventDateTime.getLocalDateTime();
-      startEventDateTimePrecision = endISOEventDateTime.getFormat().getPrecision();
+      endEventDateTime = endISOEventDateTime.getLocalDateTime();
+      endEventDateTimePrecision = endISOEventDateTime.getFormat().getPrecision();
     }
   }
 
+  public ISODateTime supplyEndISOEventDateTime() {
+
+    if (endEventDateTime == null || endEventDateTimePrecision == null) {
+      return null;
+    }
+
+    return ISODateTime.builder().localDateTime(endEventDateTime)
+        .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
+        .build();
+  }
 
 }
