@@ -12,6 +12,7 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -27,6 +28,9 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
+
+  private String createdBy;
+  private OffsetDateTime createdOn;
 
   private Double decimalLatitude;
   private Double decimalLongitude;
