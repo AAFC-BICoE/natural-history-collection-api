@@ -60,10 +60,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT{
       assertNotNull(collectingEventDto);
       assertEquals(testCollectingEvent.getUuid(), collectingEventDto.getUuid());
       assertEquals(testCollectingEvent.getCreatedBy(), collectingEventDto.getCreatedBy());
-      assertEquals(LocalDateTime.of(startDate, startTime), collectingEventDto.getStartEventDateTime());
-      assertEquals(8, collectingEventDto.getStartEventDateTimePrecision());
-      assertEquals(LocalDateTime.of(endDate, endTime), collectingEventDto.getEndEventDateTime());
-      assertEquals(8, collectingEventDto.getEndEventDateTimePrecision());    
+      assertEquals(testCollectingEvent.supplyStartISOEventDateTime().toString(), collectingEventDto.getStartEventDateTime());
+      assertEquals(testCollectingEvent.supplyEndISOEventDateTime().toString(), collectingEventDto.getEndEventDateTime());
       assertEquals("XI-02-1798", collectingEventDto.getVerbatimEventDateTime());    
       assertEquals(26.089, collectingEventDto.getDecimalLatitude());    
       assertEquals(106.36, collectingEventDto.getDecimalLongitude());    
