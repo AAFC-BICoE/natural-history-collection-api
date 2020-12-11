@@ -127,6 +127,13 @@
           <includeSystemScope>true</includeSystemScope>
           <fork>${spring-boot-maven-plugin.fork}</fork>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+         </executions>        
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
