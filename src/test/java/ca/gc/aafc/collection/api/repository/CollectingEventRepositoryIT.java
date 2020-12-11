@@ -60,15 +60,15 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT{
       assertNotNull(collectingEventDto);
       assertEquals(testCollectingEvent.getUuid(), collectingEventDto.getUuid());
       assertEquals(testCollectingEvent.getCreatedBy(), collectingEventDto.getCreatedBy());
-      assertEquals(testCollectingEvent.getStartEventDateTime(), collectingEventDto.getStartEventDateTime());
-      assertEquals(testCollectingEvent.getStartEventDateTimePrecision(), collectingEventDto.getStartEventDateTimePrecision());
-      assertEquals(testCollectingEvent.getEndEventDateTime(), collectingEventDto.getEndEventDateTime());
-      assertEquals(testCollectingEvent.getEndEventDateTimePrecision(), collectingEventDto.getEndEventDateTimePrecision());    
-      assertEquals(testCollectingEvent.getVerbatimEventDateTime(), collectingEventDto.getVerbatimEventDateTime());    
-      assertEquals(testCollectingEvent.getDecimalLatitude(), collectingEventDto.getDecimalLatitude());    
-      assertEquals(testCollectingEvent.getDecimalLongitude(), collectingEventDto.getDecimalLongitude());    
-      assertEquals(testCollectingEvent.getCoordinateUncertaintyInMeters(), collectingEventDto.getCoordinateUncertaintyInMeters());    
-      assertEquals(testCollectingEvent.getVerbatimCoordinates(), collectingEventDto.getVerbatimCoordinates());    
+      assertEquals(LocalDateTime.of(startDate, startTime), collectingEventDto.getStartEventDateTime());
+      assertEquals(8, collectingEventDto.getStartEventDateTimePrecision());
+      assertEquals(LocalDateTime.of(endDate, endTime), collectingEventDto.getEndEventDateTime());
+      assertEquals(8, collectingEventDto.getEndEventDateTimePrecision());    
+      assertEquals("XI-02-1798", collectingEventDto.getVerbatimEventDateTime());    
+      assertEquals(26.089, collectingEventDto.getDecimalLatitude());    
+      assertEquals(106.36, collectingEventDto.getDecimalLongitude());    
+      assertEquals(208, collectingEventDto.getCoordinateUncertaintyInMeters());    
+      assertEquals("26.089, 106.36", collectingEventDto.getVerbatimCoordinates());    
 
     }      
     
