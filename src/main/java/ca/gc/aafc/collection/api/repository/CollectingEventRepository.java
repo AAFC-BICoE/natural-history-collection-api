@@ -1,5 +1,4 @@
-package ca.gc.aafc.collection.api.repository;
-
+package ca.gc.aafc.collection.api.repository; 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.dina.filter.DinaFilterResolver;
@@ -33,7 +32,4 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
       null,
       props);
   }
-
- 
-
-}
+ }
