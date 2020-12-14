@@ -56,11 +56,11 @@ public class AgentRole implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
   
-  @Column(insertable = false, updatable = false)
+  @Column(name = "created_on", insertable = false, updatable = false)
   private OffsetDateTime createdOn;
 
   @NotBlank
-  @Column(updatable = false)
+  @Column(name = "created_by", updatable = false)
   private String createdBy;
 
   @NotNull
@@ -72,6 +72,6 @@ public class AgentRole implements DinaEntity {
   @Type(type = "jsonb")
   @Column(name = "name", columnDefinition = "jsonb")
   @NotEmpty  
-  private Map<String, String> name;
+  private Map<String, String> name;  
 
 }

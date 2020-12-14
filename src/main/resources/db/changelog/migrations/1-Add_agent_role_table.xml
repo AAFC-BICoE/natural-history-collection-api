@@ -6,7 +6,7 @@
   <changeSet context="schema-change" id="1-Add_agent_role_table_1" author="ganx">
     <sql>
       CREATE TYPE role_type AS ENUM (
-        'COLLECTING_EVENT '
+        'COLLECTING_EVENT'
       );
     </sql>	
   </changeSet>				   
@@ -24,7 +24,7 @@
       <column name="name" type="jsonb" >
        <constraints nullable="false" />
       </column>
-      <column name="created_date" type="timestamptz" defaultValueComputed="current_timestamp" />
+      <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp" />
       <column name="created_by" type="VARCHAR(250)">
         <constraints nullable="false" />
       </column>	  
