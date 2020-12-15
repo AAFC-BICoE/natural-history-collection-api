@@ -4,8 +4,8 @@ import ca.gc.aafc.collection.api.entities.AgentRole;
 import ca.gc.aafc.collection.api.entities.AgentRole.AgentRoleType;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
+import java.util.Map;
 import java.util.UUID;
-import com.google.common.collect.ImmutableMap;
 
 public class AgentRoleFactory implements TestableEntityFactory<AgentRole> {
 
@@ -25,7 +25,7 @@ public class AgentRoleFactory implements TestableEntityFactory<AgentRole> {
       return AgentRole
           .builder()
           .uuid(UUID.randomUUID())
-          .name(ImmutableMap.of("en", "test name"))
+          .name(Map.of("en", "test name"))
           .createdBy("createdBy")
           .agentRoleType(AgentRoleType.COLLECTING_EVENT);          
     }

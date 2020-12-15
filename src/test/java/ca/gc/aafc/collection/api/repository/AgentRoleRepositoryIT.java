@@ -7,13 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
-
-import com.google.common.collect.ImmutableMap;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +34,7 @@ public class AgentRoleRepositoryIT extends CollectionModuleBaseIT{
   
     private AgentRole createTestAgentRole() {
       testAgentRole = AgentRoleFactory.newAgentRole()
-      .name(ImmutableMap.of("fr", TEST_NAME_IN_FRENCH))
+      .name(Map.of("fr", TEST_NAME_IN_FRENCH))
       .agentRoleType(AgentRoleType.COLLECTING_EVENT)
       .build();  
       service.save(testAgentRole);
@@ -63,7 +61,7 @@ public class AgentRoleRepositoryIT extends CollectionModuleBaseIT{
       AgentRoleDto agentRoleDto = new AgentRoleDto();
       agentRoleDto.setUuid(UUID.randomUUID());
       agentRoleDto.setAgentRoleType(AgentRoleType.COLLECTING_EVENT);
-      agentRoleDto.setName(ImmutableMap.of("fr", TEST_NAME_IN_FRENCH ));
+      agentRoleDto.setName(Map.of("fr", TEST_NAME_IN_FRENCH ));
   
       assertThrows(
         ConstraintViolationException.class, ()-> agentRoleRepository.create(agentRoleDto));

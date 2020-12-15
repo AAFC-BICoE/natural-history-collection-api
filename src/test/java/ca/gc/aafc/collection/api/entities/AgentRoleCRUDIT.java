@@ -7,9 +7,8 @@ import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-
 import java.time.LocalDateTime;
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,7 +33,7 @@ public class AgentRoleCRUDIT extends CollectionModuleBaseIT {
   @Test
   public void testFind() {
     AgentRole agentRole = AgentRoleFactory.newAgentRole()
-      .name(ImmutableMap.of("fr", TEST_NAME_IN_FRENCH))
+      .name(Map.of("fr", TEST_NAME_IN_FRENCH))
       .createdBy(TEST_USER)
       .build();          
     dbService.save(agentRole);

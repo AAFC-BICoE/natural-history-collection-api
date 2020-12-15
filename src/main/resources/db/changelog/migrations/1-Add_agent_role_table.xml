@@ -5,7 +5,7 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
   <changeSet context="schema-change" id="1-Add_agent_role_table_1" author="ganx">
     <sql>
-      CREATE TYPE role_type AS ENUM (
+      CREATE TYPE agent_role_type AS ENUM (
         'COLLECTING_EVENT'
       );
     </sql>	
@@ -18,7 +18,7 @@
       <column name="uuid" type="uuid">
         <constraints nullable="false" unique="true" />
       </column>
-      <column name="type" type="role_type">
+      <column name="type" type="agent_role_type">
         <constraints nullable="false" />
 	  </column>
       <column name="name" type="jsonb" >
