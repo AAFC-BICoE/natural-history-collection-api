@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,29 +64,32 @@ public class ISODateTime {
   private final Format format;
 
   /**
-   * @param date
-   * @return
+   * Tries to parse the provided date-time.
+   *
+   * @param dateTime date and time as string, can't be null
+   * @return date time as {@link ISODateTime}
+   * @throws {@link DateTimeParseException} if the provided value can't be parsed.
    */
-  public static ISODateTime parse(String date) {
+  public static ISODateTime parse(@NonNull String dateTime) {
     int numberOfNumericChar = ALL_NON_NUMERIC
-        .matcher(date).replaceAll("").length();
+        .matcher(dateTime).replaceAll("").length();
 
     Format format = Format.fromPrecision(numberOfNumericChar)
-        .orElseThrow(() -> new DateTimeParseException("unknown format", date, 0));
+        .orElseThrow(() -> new DateTimeParseException("unknown format", dateTime, 0));
     LocalDateTime parsedLocalDateTime = null;
 
     switch (format) {
       case YYYY:
-        parsedLocalDateTime = Year.parse(date).atDay(1).atStartOfDay();
+        parsedLocalDateTime = Year.parse(dateTime).atDay(1).atStartOfDay();
         break;
       case YYYY_MM:
-        parsedLocalDateTime = YearMonth.parse(date).atDay(1).atStartOfDay();
+        parsedLocalDateTime = YearMonth.parse(dateTime).atDay(1).atStartOfDay();
         break;
       case YYYY_MM_DD:
-        parsedLocalDateTime = LocalDate.parse(date).atStartOfDay();
+        parsedLocalDateTime = LocalDate.parse(dateTime).atStartOfDay();
         break;
       case YYYY_MM_DD_HH_MM_SS:
-        parsedLocalDateTime = LocalDateTime.parse(date);
+        parsedLocalDateTime = LocalDateTime.parse(dateTime);
         break;
       default:
         break;

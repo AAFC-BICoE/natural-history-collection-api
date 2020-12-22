@@ -11,6 +11,7 @@ import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -58,6 +59,9 @@ public class CollectingEventDto {
 
     @Override
     public ISODateTime toEntity(String startEventDateTime) {
+      if(StringUtils.isBlank(startEventDateTime)) {
+        return null;
+      }
       return ISODateTime.parse(startEventDateTime);
     }
 
@@ -92,8 +96,11 @@ public class CollectingEventDto {
     }
 
     @Override
-    public ISODateTime toEntity(String startEventDateTime) {
-      return ISODateTime.parse(startEventDateTime);
+    public ISODateTime toEntity(String endEventDateTime) {
+      if(StringUtils.isBlank(endEventDateTime)) {
+        return null;
+      }
+      return ISODateTime.parse(endEventDateTime);
     }
 
     @Override
