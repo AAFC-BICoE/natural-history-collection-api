@@ -47,7 +47,6 @@ public class CollectingEventDto {
 
   private String verbatimEventDateTime;
 
-
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
       implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
@@ -59,7 +58,7 @@ public class CollectingEventDto {
 
     @Override
     public ISODateTime toEntity(String startEventDateTime) {
-      if(StringUtils.isBlank(startEventDateTime)) {
+      if (StringUtils.isBlank(startEventDateTime)) {
         return null;
       }
       return ISODateTime.parse(startEventDateTime);
@@ -97,7 +96,7 @@ public class CollectingEventDto {
 
     @Override
     public ISODateTime toEntity(String endEventDateTime) {
-      if(StringUtils.isBlank(endEventDateTime)) {
+      if (StringUtils.isBlank(endEventDateTime)) {
         return null;
       }
       return ISODateTime.parse(endEventDateTime);
