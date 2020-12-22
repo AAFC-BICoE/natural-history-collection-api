@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.LinkedHashSet;
 import java.util.UUID;
 
 @Entity
@@ -53,6 +54,7 @@ public class CollectorGroup implements DinaEntity {
   @Column(unique = true)
   private String name;  
 
-  private UUID[] agentIdentifiers;
+  @NotBlank
+  private LinkedHashSet<UUID> agentIdentifiers;
 
 }
