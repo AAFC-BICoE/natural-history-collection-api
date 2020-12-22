@@ -24,18 +24,20 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode
 public class ISODateTime {
 
-  private static final Pattern ALL_NON_NUMERIC = Pattern.compile("[^\\d.]");
+  private static final Pattern ALL_NON_NUMERIC = Pattern.compile("[^\\d]");
 
   private static final byte YYYY_PRECISION = 4;
   private static final byte YYYY_MM_PRECISION = 6;
   private static final byte YYYY_MM_DD_PRECISION = 8;
   private static final byte YYYY_MM_DD_HH_MM_SS_PRECISION = 14;
+  private static final byte YYYY_MM_DD_HH_MM_SS_MMM_PRECISION = 17;
 
   public enum Format {
     YYYY(YYYY_PRECISION),
     YYYY_MM(YYYY_MM_PRECISION),
     YYYY_MM_DD(YYYY_MM_DD_PRECISION),
-    YYYY_MM_DD_HH_MM_SS(YYYY_MM_DD_HH_MM_SS_PRECISION);
+    YYYY_MM_DD_HH_MM_SS(YYYY_MM_DD_HH_MM_SS_PRECISION),
+    YYYY_MM_DD_HH_MM_SS_MMM(YYYY_MM_DD_HH_MM_SS_MMM_PRECISION);
 
     private final byte precision;
     Format(byte precision) {
@@ -47,7 +49,8 @@ public class ISODateTime {
         case YYYY_PRECISION : return Optional.of(YYYY);
         case YYYY_MM_PRECISION : return Optional.of(YYYY_MM);
         case YYYY_MM_DD_PRECISION : return Optional.of(YYYY_MM_DD);
-      case YYYY_MM_DD_HH_MM_SS_PRECISION: return Optional.of(YYYY_MM_DD_HH_MM_SS);
+        case YYYY_MM_DD_HH_MM_SS_PRECISION: return Optional.of(YYYY_MM_DD_HH_MM_SS);
+        case YYYY_MM_DD_HH_MM_SS_MMM_PRECISION: return Optional.of(YYYY_MM_DD_HH_MM_SS_MMM);
         default:
           break;
       }
@@ -89,6 +92,7 @@ public class ISODateTime {
         parsedLocalDateTime = LocalDate.parse(dateTime).atStartOfDay();
         break;
       case YYYY_MM_DD_HH_MM_SS:
+      case YYYY_MM_DD_HH_MM_SS_MMM:
         parsedLocalDateTime = LocalDateTime.parse(dateTime);
         break;
       default:
@@ -106,6 +110,7 @@ public class ISODateTime {
       case YYYY_MM_DD:
         return LocalDate.from(localDateTime).toString();
       case YYYY_MM_DD_HH_MM_SS:
+      case YYYY_MM_DD_HH_MM_SS_MMM:
         return localDateTime.toString();
       default:
         break;

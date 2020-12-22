@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ISODateTimeTest {
 
-  @ParameterizedTest
-  @ValueSource(strings = { "2019", "2019-08", "2019-08-23", "2019-08-23T12:24:34" })
+  @ParameterizedTest @ValueSource(strings = { "2019", "2019-08", "2019-08-23",
+      "2019-08-23T12:24:34", "2020-12-23T05:01:02.333" })
   public void testRoundTrip(String input) {
     assertEquals(input, ISODateTime.parse(input).toString());
   }
