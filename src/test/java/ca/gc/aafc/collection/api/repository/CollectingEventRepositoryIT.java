@@ -34,8 +34,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT{
     private static final LocalDate endDate = LocalDate.of(2002,10, 10);
     private static final LocalTime endTime = LocalTime.of(10,10);      
 
-    private final static String DINA_USER_NAME = DinaAuthenticatedUserConfig.USER_NAME;
-  
     private CollectingEvent createTestCollectingEvent() {
       testCollectingEvent = CollectingEventFactory.newCollectingEvent()
         .startEventDateTime(LocalDateTime.of(startDate, startTime))
@@ -84,7 +82,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT{
       ce.setVerbatimCoordinates("26.089, 106.36");
       CollectingEventDto result = collectingEventRepository.findOne(collectingEventRepository.create(ce).getUuid(),
           new QuerySpec(CollectingEventDto.class));
-      assertEquals(DINA_USER_NAME, result.getCreatedBy());
+      assertNotNull(result.getCreatedBy());
     }    
     
 }
