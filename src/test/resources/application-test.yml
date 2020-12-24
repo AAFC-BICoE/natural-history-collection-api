@@ -13,4 +13,6 @@ embedded.postgresql:
   init-script-file: init-collection-module.sql
   database: collection_test
   schema: collection
+dev-user:
+  enabled: true
 

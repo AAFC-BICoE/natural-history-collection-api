@@ -27,7 +27,7 @@
     <checkstyle.version>8.36.2</checkstyle.version>
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
     <dina-base-api.version>0.45</dina-base-api.version>
-
+    <hibernate-types-5.version>2.9.13</hibernate-types-5.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
   </properties>
   <repositories>
@@ -69,6 +69,11 @@
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.vladmihalcea</groupId>
+      <artifactId>hibernate-types-5</artifactId>
+      <version>${hibernate-types-5.version}</version>
+    </dependency>    
 
     <!--  Added for compatability with new liquibase update, ticket: #18663 -->
     <dependency>

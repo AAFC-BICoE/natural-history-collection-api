@@ -1,9 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +18,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+
+import com.vladmihalcea.hibernate.type.array.UUIDArrayType;
+
 import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
 import java.util.UUID;
@@ -32,6 +35,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
+@TypeDef(name = "uuid-array", typeClass = UUIDArrayType.class)
 public class CollectorGroup implements DinaEntity {
 
   @Id
@@ -54,7 +58,9 @@ public class CollectorGroup implements DinaEntity {
   @Column(unique = true)
   private String name;  
 
-  @NotBlank
-  private LinkedHashSet<UUID> agentIdentifiers;
+  @NotNull
+  @Type(type = "uuid-array")
+  @Column(name = "agent_identifiers", columnDefinition = "uuid[]")  
+  private UUID[] agentIdentifiers;
 
 }

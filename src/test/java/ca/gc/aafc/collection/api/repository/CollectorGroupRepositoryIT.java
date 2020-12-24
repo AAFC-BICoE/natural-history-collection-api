@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -27,14 +29,17 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
   
     private CollectorGroup testCollectorGroup;
 
+    private List<UUID> identifiers = new ArrayList<UUID>();
     private UUID firstAgentIdentifier = UUID.randomUUID();
-    private UUID secondAgentIdentifier = UUID.randomUUID();
-    private LinkedHashSet<UUID> identifiers = new LinkedHashSet<UUID>();
+    private UUID secondAgentIdentifier = UUID.randomUUID();    
+
+    private final String TEST_COLLECTOR_GROUP = "test collector group";
+    private final String TEST_NEW_COLLECTOR_GROUP = "new test collector group";
   
     private CollectorGroup createTestCollectorGroup() {            
       testCollectorGroup = CollectorGroupFactory.newCollectorGroup()
-        .name("test collector group")
-        .agentIdentifiers(identifiers)
+        .name(TEST_COLLECTOR_GROUP)
+        .agentIdentifiers(identifiers.toArray(new UUID[identifiers.size()] ))
         .build();
   
       service.save(testCollectorGroup);
@@ -57,18 +62,19 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
       assertEquals(testCollectorGroup.getUuid(), collectorGroupDto.getUuid());
       assertEquals(testCollectorGroup.getCreatedBy(), collectorGroupDto.getCreatedBy());
       assertEquals(testCollectorGroup.getName(), collectorGroupDto.getName());
-      assertEquals(testCollectorGroup.getAgentIdentifiers(), collectorGroupDto.getAgentIdentifiers());
+      assertEquals(2, collectorGroupDto.getAgentIdentifiers().length);
+      assertEquals(firstAgentIdentifier, collectorGroupDto.getAgentIdentifiers()[0]);
     }    
     
     @Test
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
       CollectorGroupDto cg = new CollectorGroupDto();
       cg.setUuid(UUID.randomUUID());
-      cg.setName("new test collector group");
-      cg.setAgentIdentifiers(identifiers);
-      CollectorGroupDto result = collectorGroupRepository.findOne(collectorGroupRepository.create(os).getUuid(),
+      cg.setName(TEST_NEW_COLLECTOR_GROUP);
+      cg.setAgentIdentifiers(identifiers.toArray( new UUID[identifiers.size()]));
+      CollectorGroupDto result = collectorGroupRepository.findOne(collectorGroupRepository.create(cg).getUuid(),
           new QuerySpec(CollectorGroupDto.class));
-      assertEquals(result.getCreatedBy());
+      assertNotNull(result.getCreatedBy());
     }
           
 }

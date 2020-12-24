@@ -8,7 +8,6 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
-import java.util.LinkedHashSet;
 import java.util.UUID;
 
 @RelatedEntity(CollectorGroup.class)
@@ -25,6 +24,6 @@ public class CollectorGroupDto {
 
   private String name;  
 
-  private LinkedHashSet<UUID> agentIdentifiers;  
+  private UUID[] agentIdentifiers;  
 
 }
