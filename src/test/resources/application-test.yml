@@ -15,4 +15,3 @@ embedded.postgresql:
   schema: collection
 dev-user:
   enabled: true
-

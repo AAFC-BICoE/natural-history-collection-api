@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
@@ -30,7 +32,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT{
   
     private static final LocalDate endDate = LocalDate.of(2002,10, 10);
     private static final LocalTime endTime = LocalTime.of(10,10);      
-  
+
     private CollectingEvent createTestCollectingEvent() {
       testCollectingEvent = CollectingEventFactory.newCollectingEvent()
         .startEventDateTime(LocalDateTime.of(startDate, startTime))
@@ -68,6 +70,18 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT{
       assertEquals(208, collectingEventDto.getCoordinateUncertaintyInMeters());    
       assertEquals("26.089, 106.36", collectingEventDto.getVerbatimCoordinates());    
 
-    }      
+    }   
+    
+    @Test
+    public void create_WithAuthenticatedUser_SetsCreatedBy() {
+      CollectingEventDto ce = new CollectingEventDto();
+      ce.setUuid(UUID.randomUUID());
+      ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
+      ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
+      ce.setVerbatimCoordinates("26.089, 106.36");
+      CollectingEventDto result = collectingEventRepository.findOne(collectingEventRepository.create(ce).getUuid(),
+          new QuerySpec(CollectingEventDto.class));
+      assertNotNull(result.getCreatedBy());
+    }    
     
 }

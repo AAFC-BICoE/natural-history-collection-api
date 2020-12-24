@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Collecting Event contains some custom mappings using {@link ca.gc.aafc.dina.mapper.DinaFieldAdapter}.
@@ -37,6 +38,19 @@ public class CollectingEventMapperTest {
         ceEntity.getEndEventDateTime());
     assertEquals((byte)8, ceEntity.getStartEventDateTimePrecision());
     assertEquals((byte)8, ceEntity.getEndEventDateTimePrecision());
+  }
+
+  @Test
+  public void testEventDateMappingToEntityNullEmpty() {
+    CollectingEventDto ceDto = new CollectingEventDto();
+    ceDto.setStartEventDateTime("");
+    ceDto.setEndEventDateTime(null);
+
+    CollectingEvent ceEntity = new CollectingEvent();
+    CE_MAPPER.applyDtoToEntity(ceDto, ceEntity, Map.of(CollectingEventDto.class,
+        Collections.emptySet()), Collections.emptySet());
+    assertNull(ceEntity.getStartEventDateTime());
+    assertNull(ceEntity.getEndEventDateTime());
   }
 
   @Test

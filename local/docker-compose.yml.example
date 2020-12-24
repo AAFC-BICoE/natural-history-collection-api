@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  collection-db:
+    image: "postgres:10-alpine"
+    env_file:
+      - ${BASE_PATH_TO_COLLECTION:-.}/pg.env
+    volumes:
+      - ${BASE_PATH_TO_COLLECTION:-.}/src/test/resources/init-collection-module.sql:/docker-entrypoint-initdb.d/1-init-schema.sql
+    
+  collection-api:
+    build: ${BASE_PATH_TO_COLLECTION:-.}
+    ports:
+      - "8085:8080"
+    env_file:
+      - ${BASE_PATH_TO_COLLECTION:-.}/collection-api.env
+    networks:
+      default:      
