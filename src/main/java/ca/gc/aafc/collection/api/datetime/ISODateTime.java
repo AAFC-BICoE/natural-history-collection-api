@@ -65,7 +65,7 @@ public class ISODateTime {
       }
 
       // Consider that all precision above seconds means milliseconds
-      if(precision > YYYY_MM_DD_HH_MM_SS_PRECISION) {
+      if (precision > YYYY_MM_DD_HH_MM_SS_PRECISION) {
         return Optional.of(YYYY_MM_DD_HH_MM_SS_MMM);
       }
 

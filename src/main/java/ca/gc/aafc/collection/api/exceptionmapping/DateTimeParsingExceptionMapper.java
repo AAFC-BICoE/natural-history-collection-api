@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.exceptionmapping;
 import io.crnk.core.engine.document.ErrorData;
 import io.crnk.core.engine.error.ErrorResponse;
 import io.crnk.core.engine.error.ExceptionMapper;
-import org.apache.http.HttpStatus;
 
 import javax.inject.Named;
 import java.time.format.DateTimeParseException;
