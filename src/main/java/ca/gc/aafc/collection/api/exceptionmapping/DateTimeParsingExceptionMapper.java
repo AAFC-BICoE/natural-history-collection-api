@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.exceptionmapping;
 import io.crnk.core.engine.document.ErrorData;
 import io.crnk.core.engine.error.ErrorResponse;
 import io.crnk.core.engine.error.ExceptionMapper;
+import org.apache.http.HttpStatus;
 
 import javax.inject.Named;
 import java.time.format.DateTimeParseException;
@@ -14,9 +15,14 @@ public class DateTimeParsingExceptionMapper implements ExceptionMapper<DateTimeP
 
   @Override
   public ErrorResponse toErrorResponse(DateTimeParseException e) {
-    return ErrorResponse.builder()
-      .setStatus(HTTP_ERROR_CODE)
-      .setSingleErrorData(ErrorData.builder().setDetail(e.getMessage()).build())
+    String detail = "Unknown Date format for input '" + e.getParsedString()
+      + "', Error Input at index: " + e.getErrorIndex();
+    return ErrorResponse.builder().setStatus(HTTP_ERROR_CODE).setSingleErrorData(
+      ErrorData.builder()
+        .setDetail(detail)
+        .setTitle("Un-processable Entity")
+        .setStatus(Integer.toString(HTTP_ERROR_CODE))
+        .build())
       .build();
   }
 
@@ -25,8 +31,8 @@ public class DateTimeParsingExceptionMapper implements ExceptionMapper<DateTimeP
     return new DateTimeParseException(
       errorResponse.getResponse()
         .getErrors()
-        .stream().map(ErrorData::getTitle)
-        .collect(Collectors.joining("")), "", 0);
+        .stream().map(ErrorData::getDetail)
+        .collect(Collectors.joining(System.lineSeparator())), "", 0);
   }
 
   @Override
