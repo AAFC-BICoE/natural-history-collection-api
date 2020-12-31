@@ -25,7 +25,7 @@ public class CollectingEventValidationTest {
   }
 
   @Test
-  void validate_whenStartDateInFuture_ConstraintViolated() {
+  void validate_whenDatesInTheFuture_ConstraintViolated() {
     CollectingEvent event = newEvent(2050, 2099);
     Set<ConstraintViolation<CollectingEvent>> validate = validator.validate(event);
     MatcherAssert.assertThat(
@@ -36,11 +36,34 @@ public class CollectingEventValidationTest {
       Matchers.containsInAnyOrder("must be a past date", "must be a past date"));
   }
 
-  private CollectingEvent newEvent(int year, int endYear) {
+  @Test
+  void validate_whenEndDateIsBeforeStartDate_ConstraintViolated() {
+    CollectingEvent event = newEvent(2000, 1900);
+    Set<ConstraintViolation<CollectingEvent>> validate = validator.validate(event);
+    MatcherAssert.assertThat(
+      validate.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()),
+      Matchers.contains("The start and end dates do not create a valid time line."));
+  }
+
+  @Test
+  void validate_whenEndDateWithoutStartDate_ConstraintViolated() {
+    CollectingEvent event = CollectingEvent.builder()
+      .uuid(UUID.randomUUID())
+      .createdBy("jon")
+      .startEventDateTime(null)
+      .endEventDateTime(LocalDateTime.of(1999, 1, 1, 1, 1))
+      .build();
+    Set<ConstraintViolation<CollectingEvent>> validate = validator.validate(event);
+    MatcherAssert.assertThat(
+      validate.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()),
+      Matchers.contains("The start and end dates do not create a valid time line."));
+  }
+
+  private CollectingEvent newEvent(int startYear, int endYear) {
     return CollectingEvent.builder()
       .uuid(UUID.randomUUID())
       .createdBy("jon")
-      .startEventDateTime(LocalDateTime.of(year, 1, 1, 1, 1))
+      .startEventDateTime(LocalDateTime.of(startYear, 1, 1, 1, 1))
       .endEventDateTime(LocalDateTime.of(endYear, 1, 1, 1, 1))
       .build();
   }
