@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {ValidTimeLineValidator.class})
+@Constraint(validatedBy = ValidTimeLineValidator.class)
 @Documented
 public @interface ValidTimeLine {
 
