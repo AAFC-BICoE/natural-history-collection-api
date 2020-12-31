@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -51,12 +52,14 @@ public class CollectingEvent implements DinaEntity {
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime startEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
   // Set by applyEndISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime endEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
