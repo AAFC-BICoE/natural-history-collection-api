@@ -1,27 +1,30 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class CollectingEventValidationTest {
+public class CollectingEventValidationTest extends CollectionModuleBaseIT {
+  @Inject
+  private ApplicationContext context;
 
   private Validator validator;
 
   @BeforeEach
   void setUp() {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    validator = factory.getValidator();
+    validator = context.getBean(LocalValidatorFactoryBean.class).getValidator();
   }
 
   @Test

@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ValidEventDateTime {
 
-  String message() default "The start and end dates do not create a valid time line.";
+  String message() default "{validation.constraint.violation.validEventDateTime}";
 
   Class<?>[] groups() default {};
 
