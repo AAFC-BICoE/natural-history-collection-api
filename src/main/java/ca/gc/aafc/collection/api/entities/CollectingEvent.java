@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.collection.api.validation.ValidTimeLine;
+import ca.gc.aafc.collection.api.validation.ValidEventDateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
@@ -33,7 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
-@ValidTimeLine
+@ValidEventDateTime
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -103,7 +103,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime
+   * @param endISOEventDateTime the ISODateTime
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {

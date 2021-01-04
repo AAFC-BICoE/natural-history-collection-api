@@ -10,11 +10,15 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Used for bean validation of the {@link ca.gc.aafc.collection.api.entities.CollectingEvent}.
+ * Validation is done through the {@link ValidEventDateTimeValidator}
+ */
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = ValidTimeLineValidator.class)
+@Constraint(validatedBy = ValidEventDateTimeValidator.class)
 @Documented
-public @interface ValidTimeLine {
+public @interface ValidEventDateTime {
 
   String message() default "The start and end dates do not create a valid time line.";
 
