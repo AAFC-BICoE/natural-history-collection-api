@@ -45,7 +45,7 @@ public class CollectingEventValidationTest extends CollectionModuleBaseIT {
     Set<ConstraintViolation<CollectingEvent>> validate = validator.validate(event);
     MatcherAssert.assertThat(
       validate.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()),
-      Matchers.contains("The start and end dates do not create a valid time line."));
+      Matchers.contains("The start and end dates do not create a valid timeline."));
   }
 
   @Test
@@ -59,7 +59,7 @@ public class CollectingEventValidationTest extends CollectionModuleBaseIT {
     Set<ConstraintViolation<CollectingEvent>> validate = validator.validate(event);
     MatcherAssert.assertThat(
       validate.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList()),
-      Matchers.contains("The start and end dates do not create a valid time line."));
+      Matchers.contains("The start and end dates do not create a valid timeline."));
   }
 
   private CollectingEvent newEvent(int startYear, int endYear) {
