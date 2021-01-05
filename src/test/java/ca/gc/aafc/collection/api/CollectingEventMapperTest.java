@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import org.junit.jupiter.api.Test;
 
@@ -51,6 +52,18 @@ public class CollectingEventMapperTest {
         Collections.emptySet()), Collections.emptySet());
     assertNull(ceEntity.getStartEventDateTime());
     assertNull(ceEntity.getEndEventDateTime());
+  }
+
+  @Test
+  public void testEventDateMappingToDtoNull() {
+    CollectingEvent ceEntity = CollectingEventFactory
+        .newCollectingEvent()
+        .startEventDateTime(null)
+        .startEventDateTimePrecision(null)
+        .build();
+
+    CollectingEventDto ceDto = CE_MAPPER.toDto(ceEntity);
+    assertNull(ceDto.getStartEventDateTime());
   }
 
   @Test
