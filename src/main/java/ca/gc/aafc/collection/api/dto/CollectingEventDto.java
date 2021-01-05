@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -52,12 +53,12 @@ public class CollectingEventDto {
       implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
-    public String toDTO(ISODateTime isoDateTime) {
+    public String toDTO(@Nullable ISODateTime isoDateTime) {
       return isoDateTime == null ? null : isoDateTime.toString();
     }
 
     @Override
-    public ISODateTime toEntity(String startEventDateTime) {
+    public ISODateTime toEntity(@Nullable String startEventDateTime) {
       if (StringUtils.isBlank(startEventDateTime)) {
         return null;
       }
@@ -91,12 +92,12 @@ public class CollectingEventDto {
       implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
-    public String toDTO(ISODateTime isoDateTime) {
+    public String toDTO(@Nullable ISODateTime isoDateTime) {
       return isoDateTime == null ? null : isoDateTime.toString();
     }
 
     @Override
-    public ISODateTime toEntity(String endEventDateTime) {
+    public ISODateTime toEntity(@Nullable String endEventDateTime) {
       if (StringUtils.isBlank(endEventDateTime)) {
         return null;
       }
