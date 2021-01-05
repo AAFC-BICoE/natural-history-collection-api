@@ -53,7 +53,7 @@ public class CollectingEventDto {
 
     @Override
     public String toDTO(ISODateTime isoDateTime) {
-      return isoDateTime.toString();
+      return isoDateTime == null ? null : isoDateTime.toString();
     }
 
     @Override
@@ -89,9 +89,10 @@ public class CollectingEventDto {
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
       implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+
     @Override
     public String toDTO(ISODateTime isoDateTime) {
-      return isoDateTime.toString();
+      return isoDateTime == null ? null : isoDateTime.toString();
     }
 
     @Override
