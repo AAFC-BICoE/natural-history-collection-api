@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.CollectorGroupDto;
 import ca.gc.aafc.collection.api.entities.CollectorGroup;
+import ca.gc.aafc.collection.api.service.CollectorGroupService;
 import ca.gc.aafc.dina.filter.DinaFilterResolver;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.mapper.DinaMapper;
@@ -21,13 +22,14 @@ public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, 
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
   public CollectorGroupRepository(
+    @NonNull CollectorGroupService dinaService,
     @NonNull BaseDAO baseDAO,
     @NonNull DinaFilterResolver filterResolver,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
-      new DefaultDinaService<>(baseDAO),
+      dinaService,
       Optional.empty(),
       Optional.empty(),
       new DinaMapper<>(CollectorGroupDto.class),
