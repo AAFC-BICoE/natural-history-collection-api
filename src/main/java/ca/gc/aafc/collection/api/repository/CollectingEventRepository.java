@@ -2,12 +2,12 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.dina.filter.DinaFilterResolver;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 
 import java.util.Optional;
@@ -21,13 +21,14 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   private Optional<DinaAuthenticatedUser> authenticatedUser;
 
   public CollectingEventRepository(
+    @NonNull CollectingEventService dinaService,
     @NonNull BaseDAO baseDAO,
     @NonNull DinaFilterResolver filterResolver,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> authenticatedUser
   ) {
     super(
-      new DefaultDinaService<>(baseDAO),
+      dinaService,
       Optional.empty(),
       Optional.empty(),
       new DinaMapper<>(CollectingEventDto.class),
