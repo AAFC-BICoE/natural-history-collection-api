@@ -62,6 +62,7 @@ public class CollectingEvent implements DinaEntity {
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
+  private String verbatimCollector;
 
   @Column(insertable = false, updatable = false)
   private OffsetDateTime createdOn;

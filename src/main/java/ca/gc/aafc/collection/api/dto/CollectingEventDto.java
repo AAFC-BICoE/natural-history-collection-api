@@ -39,6 +39,7 @@ public class CollectingEventDto {
 
   private Integer coordinateUncertaintyInMeters;
   private String verbatimCoordinates;
+  private String verbatimCollector;
 
   @IgnoreDinaMapping
   private String startEventDateTime;
