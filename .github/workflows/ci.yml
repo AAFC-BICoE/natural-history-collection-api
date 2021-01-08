@@ -20,7 +20,7 @@ jobs:
         run: mvn spotbugs:check
 
       - name: Run OWASP dependency-check (only on dev)
-          run: mvn dependency-check:check
+        run: mvn dependency-check:check
 
       - name: Extract Version
         run: |
