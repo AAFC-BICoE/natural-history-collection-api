@@ -17,7 +17,6 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import io.crnk.core.queryspec.QuerySpec;
 
