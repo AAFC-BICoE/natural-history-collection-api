@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,10 +85,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setVerbatimCoordinates("26.089, 106.36");
+    ce.setDocuments(List.of(
+      ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
     assertNotNull(result.getCreatedBy());
+    assertEquals(ce.getDocuments().get(0).getId(), result.getDocuments().get(0).getId());
   }
 
 }
