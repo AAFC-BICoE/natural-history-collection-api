@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,6 +46,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .coordinateUncertaintyInMeters(208)
       .verbatimCoordinates("26.089, 106.36")
       .verbatimCollector("Jon and the gang")
+      .collectors(List.of(UUID.randomUUID()))
       .build();
 
     service.save(testCollectingEvent);
@@ -74,6 +77,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(208, collectingEventDto.getCoordinateUncertaintyInMeters());
     assertEquals("26.089, 106.36", collectingEventDto.getVerbatimCoordinates());
     assertEquals("Jon and the gang", collectingEventDto.getVerbatimCollector());
+    assertEquals(
+      testCollectingEvent.getCollectors().get(0).toString(),
+      collectingEventDto.getCollectors().get(0).getId());
   }
 
   @Test
@@ -84,11 +90,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setVerbatimCoordinates("26.089, 106.36");
     ce.setVerbatimCollector("Jon and the gang");
+    ce.setCollectors(List.of(ExternalRelationDto.builder()
+      .type("agent")
+      .id(UUID.randomUUID().toString()).build()));
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
     assertNotNull(result.getCreatedBy());
-    assertEquals("Jon and the gang", result.getVerbatimCollector());
+    assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
   }
 
 }

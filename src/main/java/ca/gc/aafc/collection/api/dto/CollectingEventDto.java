@@ -2,12 +2,15 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,14 +18,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
-    CollectingEventDto.StartEventDateTimeAdapter.class,
-    CollectingEventDto.EndEventDateTimeAdapter.class})
+  CollectingEventDto.StartEventDateTimeAdapter.class,
+  CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = "collecting-event")
@@ -49,9 +53,13 @@ public class CollectingEventDto {
 
   private String verbatimEventDateTime;
 
+  @JsonApiExternalRelation(type = "agent")
+  @JsonApiRelation
+  private List<ExternalRelationDto> collectors;
+
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
-      implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -90,7 +98,7 @@ public class CollectingEventDto {
 
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
-      implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
