@@ -1,27 +1,20 @@
 package ca.gc.aafc.collection.api.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.UUID;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectorGroupDto;
 import ca.gc.aafc.collection.api.entities.CollectorGroup;
-import ca.gc.aafc.collection.api.repository.CollectorGroupRepository;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectorGroupFactory;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
     @Inject

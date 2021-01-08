@@ -9,7 +9,7 @@ spring:
     password: test
 embedded.postgresql:
   enabled: true
-  image: postgres:12.4
+  image: "postgres:10-alpine"
   init-script-file: init-collection-module.sql
   database: collection_test
   schema: collection
