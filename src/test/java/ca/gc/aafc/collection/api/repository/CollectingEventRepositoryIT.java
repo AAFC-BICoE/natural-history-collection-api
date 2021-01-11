@@ -43,7 +43,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   private CollectingEvent createTestCollectingEvent(CollectorGroup groupRelation) {
-    CollectingEvent newEvent  = CollectingEventFactory.newCollectingEvent()
+    CollectingEvent newEvent = CollectingEventFactory.newCollectingEvent()
       .startEventDateTime(LocalDateTime.of(startDate, startTime))
       .startEventDateTimePrecision((byte) 8)
       .endEventDateTime(LocalDateTime.of(endDate, endTime))

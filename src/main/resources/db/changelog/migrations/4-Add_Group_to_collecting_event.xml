@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
         context="schema-change">
 
-    <changeSet id="2-Add_Group_to_collecting_event" context="schema-change" author="keyuk">
+    <changeSet id="4-Add_Group_to_collecting_event" context="schema-change" author="keyuk">
 
         <!-- Add the column -->
         <addColumn tableName="collecting_event">
