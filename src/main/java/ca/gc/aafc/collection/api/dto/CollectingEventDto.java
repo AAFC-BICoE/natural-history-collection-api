@@ -34,6 +34,7 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
+  private UUID collectorGroupUuid;
 
   private String createdBy;
   private OffsetDateTime createdOn;

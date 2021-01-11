@@ -51,6 +51,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .verbatimCoordinates("26.089, 106.36")
       .attachment(List.of(UUID.randomUUID()))
       .collectors(List.of(UUID.randomUUID()))
+      .collectorGroupUuid(UUID.randomUUID())
       .build();
 
     service.save(testCollectingEvent);
@@ -82,12 +83,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       testCollectingEvent.getCollectors().get(0).toString(),
       collectingEventDto.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", testCollectingEvent.getVerbatimCollectors());
+    assertEquals(testCollectingEvent.getCollectorGroupUuid(), collectingEventDto.getCollectorGroupUuid());
   }
 
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setUuid(UUID.randomUUID());
+    ce.setCollectorGroupUuid(UUID.randomUUID());
     ce.setVerbatimCollectors("Jack and Jane");
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
@@ -103,6 +106,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", result.getVerbatimCollectors());
+    assertEquals(ce.getCollectorGroupUuid(), result.getCollectorGroupUuid());
   }
 
 }

@@ -50,6 +50,9 @@ public class CollectingEvent implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
 
+  // Not a Foreign Key, we would not use the UUID if it was.
+  private UUID collectorGroupUuid;
+
   // Might not be the final choice to store lat/long
   private Double decimalLatitude;
   private Double decimalLongitude;

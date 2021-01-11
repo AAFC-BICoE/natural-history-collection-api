@@ -9,6 +9,7 @@
         <addColumn tableName="collecting_event">
             <column name="verbatim_collectors" type="VARCHAR(250)"/>
             <column name="collectors" type="uuid[]"/>
+            <column name="collector_group_uuid" type="uuid"/>
         </addColumn>
     </changeSet>
 
