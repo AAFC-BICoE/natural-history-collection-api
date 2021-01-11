@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import com.vladmihalcea.hibernate.type.array.UUIDArrayType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,6 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +21,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import com.vladmihalcea.hibernate.type.array.UUIDArrayType;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,6 @@ public class CollectorGroup implements DinaEntity {
   @Column(name = "agent_identifiers", columnDefinition = "uuid[]")  
   private UUID[] agentIdentifiers;
 
-  @NotNull
   @OneToMany(mappedBy = "collectorGroup")
   private List<CollectingEvent> collectingEvents = new ArrayList<>();
 
