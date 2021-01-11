@@ -4,10 +4,13 @@ import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RelatedEntity(CollectorGroup.class)
@@ -24,6 +27,8 @@ public class CollectorGroupDto {
 
   private String name;  
 
-  private UUID[] agentIdentifiers;  
+  private UUID[] agentIdentifiers;
 
+  @JsonApiRelation
+  private List<CollectingEventDto> collectingEvents = new ArrayList<>();
 }
