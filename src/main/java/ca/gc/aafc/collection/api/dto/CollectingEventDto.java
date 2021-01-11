@@ -57,6 +57,10 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> collectors;
 
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonApiRelation
+  private List<ExternalRelationDto> attachment;
+
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {

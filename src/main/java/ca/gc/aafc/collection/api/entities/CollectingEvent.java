@@ -83,6 +83,9 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "collectors", columnDefinition = "uuid[]")
   private List<UUID> collectors;
 
+  @Type(type = "list-array")
+  @Column(name = "attachment", columnDefinition = "uuid[]")
+  private List<UUID> attachment;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
