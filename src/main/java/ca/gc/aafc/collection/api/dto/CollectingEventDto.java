@@ -2,12 +2,14 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +49,9 @@ public class CollectingEventDto {
   private String endEventDateTime;
 
   private String verbatimEventDateTime;
+
+  @JsonApiRelation
+  private CollectorGroupDto collectorGroup;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

@@ -64,11 +64,7 @@ public class CollectorGroup implements DinaEntity {
   private UUID[] agentIdentifiers;
 
   @NotNull
-  @OneToMany(
-    mappedBy = "collectorGroup",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true
-  )
+  @OneToMany(mappedBy = "collectorGroup")
   private List<CollectingEvent> collectingEvents = new ArrayList<>();
 
 }
