@@ -4,5 +4,5 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <include file="db/changelog/db.changelog-init.xml"/>
     <include file="db/changelog/migrations/1-Add_collector_group_table.xml"/>
-    <include file="db/changelog/migrations/2-add_documents_collecting_event.xml"/>
+    <include file="db/changelog/migrations/2-Add_attachment_collecting_event.xml"/>
 </databaseChangeLog>
