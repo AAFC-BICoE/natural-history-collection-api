@@ -3,5 +3,5 @@
   <include file="db/changelog/db.changelog-init.xml"/>
   <include file="db/changelog/migrations/1-Add_collector_group_table.xml"/>
   <include file="db/changelog/migrations/2-Add_attachment_collecting_event.xml"/>
-  <include file="db/changelog/migrations/3-Add_VerbatimCollector_collecting_event.xml"/>
+  <include file="db/changelog/migrations/3-Add_support_for_collectors_collecting_event.xml"/>
 </databaseChangeLog>

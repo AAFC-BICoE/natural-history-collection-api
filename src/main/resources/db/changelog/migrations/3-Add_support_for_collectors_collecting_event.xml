@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
         context="schema-change">
 
-    <changeSet context="schema-change" id="3-Add_VerbatimCollector_collecting_event" author="Keyuk">
+    <changeSet context="schema-change" id="3-Add_support_for_collectors_collecting_event" author="Keyuk">
         <addColumn tableName="collecting_event">
             <column name="verbatim_collectors" type="VARCHAR(250)"/>
             <column name="collectors" type="uuid[]"/>
