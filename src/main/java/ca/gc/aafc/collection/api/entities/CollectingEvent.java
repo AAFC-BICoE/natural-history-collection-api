@@ -27,6 +27,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -87,11 +88,11 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "list-array")
   @Column(name = "collectors", columnDefinition = "uuid[]")
-  private List<UUID> collectors;
+  private List<UUID> collectors = new ArrayList<>();
 
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
-  private List<UUID> attachment;
+  private List<UUID> attachment = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "collector_group_id", referencedColumnName = "id")

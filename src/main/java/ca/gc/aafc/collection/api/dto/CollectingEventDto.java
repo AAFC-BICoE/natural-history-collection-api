@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -56,11 +57,11 @@ public class CollectingEventDto {
 
   @JsonApiExternalRelation(type = "agent")
   @JsonApiRelation
-  private List<ExternalRelationDto> collectors;
+  private List<ExternalRelationDto> collectors = new ArrayList<>();
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
-  private List<ExternalRelationDto> attachment;
+  private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   @JsonApiRelation
   private CollectorGroupDto collectorGroup;
