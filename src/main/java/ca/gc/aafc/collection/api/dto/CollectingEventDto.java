@@ -34,6 +34,7 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
+  private UUID collectorGroupUuid;
 
   private String createdBy;
   private OffsetDateTime createdOn;
@@ -43,6 +44,7 @@ public class CollectingEventDto {
 
   private Integer coordinateUncertaintyInMeters;
   private String verbatimCoordinates;
+  private String verbatimCollectors;
 
   @IgnoreDinaMapping
   private String startEventDateTime;
@@ -51,6 +53,10 @@ public class CollectingEventDto {
   private String endEventDateTime;
 
   private String verbatimEventDateTime;
+
+  @JsonApiExternalRelation(type = "agent")
+  @JsonApiRelation
+  private List<ExternalRelationDto> collectors;
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
