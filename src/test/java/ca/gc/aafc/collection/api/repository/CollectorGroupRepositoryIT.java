@@ -32,24 +32,25 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   public void setup() {
-    testCollectingEvent = createEvent();
     identifiers.clear();
     identifiers.add(firstAgentIdentifier);
     identifiers.add(secondAgentIdentifier);
-    createTestCollectorGroup(testCollectingEvent);
+    createTestCollectorGroup();
+    testCollectingEvent = createEvent(testCollectorGroup);
   }
 
-  private void createTestCollectorGroup(CollectingEvent testCollectingEvent) {
+  private void createTestCollectorGroup() {
     testCollectorGroup = CollectorGroupFactory.newCollectorGroup()
       .name("test collector group")
       .agentIdentifiers(identifiers.toArray(new UUID[0]))
-      .collectingEvents(List.of(testCollectingEvent))
       .build();
     service.save(testCollectorGroup);
   }
 
-  private CollectingEvent createEvent() {
-    CollectingEvent event = CollectingEventFactory.newCollectingEvent().build();
+  private CollectingEvent createEvent(CollectorGroup testCollectorGroup) {
+    CollectingEvent event = CollectingEventFactory.newCollectingEvent()
+      .collectorGroup(testCollectorGroup)
+      .build();
     service.save(event);
     return event;
   }
