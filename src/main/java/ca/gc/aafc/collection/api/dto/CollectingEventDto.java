@@ -2,10 +2,12 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -31,6 +34,7 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
+  private UUID collectorGroupUuid;
 
   private String createdBy;
   private OffsetDateTime createdOn;
@@ -40,6 +44,7 @@ public class CollectingEventDto {
 
   private Integer coordinateUncertaintyInMeters;
   private String verbatimCoordinates;
+  private String verbatimCollectors;
 
   @IgnoreDinaMapping
   private String startEventDateTime;
@@ -48,6 +53,14 @@ public class CollectingEventDto {
   private String endEventDateTime;
 
   private String verbatimEventDateTime;
+
+  @JsonApiExternalRelation(type = "agent")
+  @JsonApiRelation
+  private List<ExternalRelationDto> collectors;
+
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonApiRelation
+  private List<ExternalRelationDto> attachment;
 
   @JsonApiRelation
   private CollectorGroupDto collectorGroup;

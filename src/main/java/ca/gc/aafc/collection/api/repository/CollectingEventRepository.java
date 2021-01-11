@@ -7,6 +7,7 @@ import ca.gc.aafc.dina.filter.DinaFilterResolver;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
+import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 
@@ -25,7 +26,8 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
     @NonNull BaseDAO baseDAO,
     @NonNull DinaFilterResolver filterResolver,
     @NonNull BuildProperties props,
-    Optional<DinaAuthenticatedUser> authenticatedUser
+    Optional<DinaAuthenticatedUser> authenticatedUser,
+    @NonNull ExternalResourceProvider externalResourceProvider
   ) {
     super(
       dinaService,
@@ -35,18 +37,18 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
       CollectingEventDto.class,
       CollectingEvent.class,
       filterResolver,
-      null,
-      props);  
+      externalResourceProvider,
+      props);
 
     this.authenticatedUser = authenticatedUser;
- }
+  }
 
- @Override
- public <S extends CollectingEventDto> S create(S resource) {
-   if (authenticatedUser.isPresent()) {
-     resource.setCreatedBy(authenticatedUser.get().getUsername());
-   }
-   return super.create(resource);
- } 
+  @Override
+  public <S extends CollectingEventDto> S create(S resource) {
+    if (authenticatedUser.isPresent()) {
+      resource.setCreatedBy(authenticatedUser.get().getUsername());
+    }
+    return super.create(resource);
+  }
 }
 
