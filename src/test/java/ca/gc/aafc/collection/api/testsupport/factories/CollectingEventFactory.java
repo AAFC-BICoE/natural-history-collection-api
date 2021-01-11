@@ -23,6 +23,7 @@ public class CollectingEventFactory implements TestableEntityFactory<CollectingE
       return CollectingEvent
           .builder()
           .uuid(UUID.randomUUID())
+          .group("test group")
           .createdBy("test user");
     }
 
