@@ -54,7 +54,7 @@ public class CollectingEventDto {
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
-  private List<ExternalRelationDto> documents;
+  private List<ExternalRelationDto> attachment;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

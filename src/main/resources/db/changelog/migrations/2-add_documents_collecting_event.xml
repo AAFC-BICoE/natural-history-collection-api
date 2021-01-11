@@ -7,7 +7,7 @@
     <!--  Add column documents to collecting event -->
     <changeSet id="2-add_documents_collecting_event" context="schema-change" author="keyuk">
         <addColumn tableName="collecting_event">
-            <column name="documents" type="uuid[]"/>
+            <column name="attachment" type="uuid[]"/>
         </addColumn>
     </changeSet>
 

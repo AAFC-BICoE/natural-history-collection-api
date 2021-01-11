@@ -43,7 +43,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .decimalLongitude(106.36)
       .coordinateUncertaintyInMeters(208)
       .verbatimCoordinates("26.089, 106.36")
-      .documents(List.of(UUID.randomUUID()))
+      .attachment(List.of(UUID.randomUUID()))
       .build();
 
     service.save(testCollectingEvent);
@@ -74,8 +74,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(208, collectingEventDto.getCoordinateUncertaintyInMeters());
     assertEquals("26.089, 106.36", collectingEventDto.getVerbatimCoordinates());
     assertEquals(
-      testCollectingEvent.getDocuments().get(0).toString(),
-      collectingEventDto.getDocuments().get(0).getId());
+      testCollectingEvent.getAttachment().get(0).toString(),
+      collectingEventDto.getAttachment().get(0).getId());
   }
 
   @Test
@@ -85,13 +85,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setVerbatimCoordinates("26.089, 106.36");
-    ce.setDocuments(List.of(
+    ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
     assertNotNull(result.getCreatedBy());
-    assertEquals(ce.getDocuments().get(0).getId(), result.getDocuments().get(0).getId());
+    assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
   }
 
 }
