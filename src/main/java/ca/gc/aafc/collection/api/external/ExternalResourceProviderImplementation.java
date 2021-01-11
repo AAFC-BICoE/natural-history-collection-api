@@ -9,17 +9,17 @@ import java.util.Set;
 @Component
 public class ExternalResourceProviderImplementation implements ExternalResourceProvider {
 
-  public static final Map<String, String> typeToReferenceMap = Map.of(
+  public static final Map<String, String> TYPE_TO_REFERENCE_MAP = Map.of(
     "metadata", "objectstore/api/v1/metadata"
   );
 
   @Override
   public String getReferenceForType(String type) {
-    return typeToReferenceMap.get(type);
+    return TYPE_TO_REFERENCE_MAP.get(type);
   }
 
   @Override
   public Set<String> getTypes() {
-    return typeToReferenceMap.keySet();
+    return TYPE_TO_REFERENCE_MAP.keySet();
   }
 }
