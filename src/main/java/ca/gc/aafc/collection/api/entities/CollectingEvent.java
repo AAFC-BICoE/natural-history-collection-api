@@ -115,7 +115,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime the time
+   * @param endISOEventDateTime
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {

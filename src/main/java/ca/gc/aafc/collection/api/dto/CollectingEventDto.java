@@ -25,8 +25,8 @@ import java.util.function.Supplier;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
-  CollectingEventDto.StartEventDateTimeAdapter.class,
-  CollectingEventDto.EndEventDateTimeAdapter.class})
+    CollectingEventDto.StartEventDateTimeAdapter.class,
+    CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = "collecting-event")
@@ -63,7 +63,7 @@ public class CollectingEventDto {
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
-    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+      implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -102,7 +102,7 @@ public class CollectingEventDto {
 
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
-    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+      implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {

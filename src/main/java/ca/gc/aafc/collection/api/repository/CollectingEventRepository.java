@@ -10,10 +10,11 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class CollectingEventRepository extends DinaRepository<CollectingEventDto, CollectingEvent> {
