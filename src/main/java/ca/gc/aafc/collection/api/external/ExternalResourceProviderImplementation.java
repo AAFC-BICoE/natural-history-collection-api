@@ -10,7 +10,7 @@ import java.util.Set;
 public class ExternalResourceProviderImplementation implements ExternalResourceProvider {
 
   public static final Map<String, String> typeToReferenceMap = Map.of(
-    "file", "objectstore/api/v1/file"
+    "metadata", "objectstore/api/v1/metadata"
   );
 
   @Override

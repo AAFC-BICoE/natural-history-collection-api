@@ -52,7 +52,7 @@ public class CollectingEventDto {
 
   private String verbatimEventDateTime;
 
-  @JsonApiExternalRelation(type = "file")
+  @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
   private List<ExternalRelationDto> documents;
 
