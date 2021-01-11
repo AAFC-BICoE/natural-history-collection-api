@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
