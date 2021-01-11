@@ -80,7 +80,7 @@ public class CollectingEvent implements DinaEntity {
   private String createdBy;
 
   @Type(type = "list-array")
-  @Column(name = "documents", columnDefinition = "uuid[]")
+  @Column(name = "collectors", columnDefinition = "uuid[]")
   private List<UUID> collectors;
 
 

@@ -8,7 +8,7 @@
     <changeSet context="schema-change" id="3-Add_VerbatimCollector_collecting_event" author="Keyuk">
         <addColumn tableName="collecting_event">
             <column name="verbatim_collector" type="VARCHAR(250)"/>
-            <column name="documents" type="uuid[]"/>
+            <column name="collectors" type="uuid[]"/>
         </addColumn>
     </changeSet>
 
