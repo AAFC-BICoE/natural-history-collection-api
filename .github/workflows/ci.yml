@@ -1,0 +1,78 @@
+name: Java CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build with Maven
+        run: mvn verify
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
+      - name: Run SpotBugs
+        run: mvn spotbugs:check
+
+      - name: Run OWASP dependency-check (only on dev)
+        run: mvn org.owasp:dependency-check-maven:check
+        if: ${{ github.ref == 'refs/heads/dev' }}
+
+      - name: Extract Version
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          mvn help:evaluate -Dexpression=project.version -q -DforceStdout > version.txt
+      - name: Store artifacts
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: |
+            version.txt
+            target/natural-history-collection-api-*.jar
+            Dockerfile
+  push:
+    name: Build Docker Image and Push to DockerHub
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/master' }}
+
+    steps:
+      - name: Download artifacts from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+
+      - name: Set VERSION_TAG ENV variable
+        run: |
+          echo "VERSION_TAG=$(cat version.txt)" >> $GITHUB_ENV
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Image and Push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: aafcbicoe/natural-history-collection-api:${{ env.VERSION_TAG }}
