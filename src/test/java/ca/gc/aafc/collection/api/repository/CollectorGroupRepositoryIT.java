@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectorGroupDto;
 import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectorGroupFactory;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
     private CollectorGroup createTestCollectorGroup() {            
       testCollectorGroup = CollectorGroupFactory.newCollectorGroup()
         .name(TEST_COLLECTOR_GROUP)
-        .agentIdentifiers(identifiers.toArray(new UUID[identifiers.size()] ))
+        .agentIdentifiers(identifiers)
         .build();
   
       service.save(testCollectorGroup);
@@ -42,8 +43,7 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
     @BeforeEach
     public void setup(){
       identifiers.clear();
-      identifiers.add(firstAgentIdentifier);
-      identifiers.add(secondAgentIdentifier);            
+      identifiers = List.of(firstAgentIdentifier, secondAgentIdentifier);            
       createTestCollectorGroup();
     }    
 
@@ -55,8 +55,8 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
       assertEquals(testCollectorGroup.getUuid(), collectorGroupDto.getUuid());
       assertEquals(testCollectorGroup.getCreatedBy(), collectorGroupDto.getCreatedBy());
       assertEquals(testCollectorGroup.getName(), collectorGroupDto.getName());
-      assertEquals(2, collectorGroupDto.getAgentIdentifiers().length);
-      assertEquals(firstAgentIdentifier, collectorGroupDto.getAgentIdentifiers()[0]);
+      assertEquals(2, collectorGroupDto.getAgentIdentifiers().size());
+      assertEquals(firstAgentIdentifier.toString(), collectorGroupDto.getAgentIdentifiers().get(0).getId());
     }    
     
     @Test
@@ -64,7 +64,8 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
       CollectorGroupDto cg = new CollectorGroupDto();
       cg.setUuid(UUID.randomUUID());
       cg.setName(TEST_NEW_COLLECTOR_GROUP);
-      cg.setAgentIdentifiers(identifiers.toArray( new UUID[identifiers.size()]));
+      cg.setAgentIdentifiers(List.of(
+        ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("agent").build()));
       CollectorGroupDto result = collectorGroupRepository.findOne(collectorGroupRepository.create(cg).getUuid(),
           new QuerySpec(CollectorGroupDto.class));
       assertNotNull(result.getCreatedBy());

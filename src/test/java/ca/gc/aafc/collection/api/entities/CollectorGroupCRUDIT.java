@@ -23,14 +23,13 @@ public class CollectorGroupCRUDIT extends CollectionModuleBaseIT {
   @BeforeEach
   void setup(){
     identifiers.clear();
-    identifiers.add(firstAgentIdentifier);
-    identifiers.add(secondAgentIdentifier);
+    identifiers = List.of(firstAgentIdentifier, secondAgentIdentifier);
   }
 
   @Test
   public void testSave() {
     CollectorGroup collectorGroup = CollectorGroupFactory.newCollectorGroup()
-       .agentIdentifiers(identifiers.toArray( new UUID[identifiers.size()]))
+       .agentIdentifiers(identifiers)
        .name(TEST_COLLECTOR_GROUP)
        .build();
     assertNull(collectorGroup.getId());
@@ -42,14 +41,14 @@ public class CollectorGroupCRUDIT extends CollectionModuleBaseIT {
   public void testFind() {
     CollectorGroup collectorGroup = CollectorGroupFactory.newCollectorGroup()
         .name(TEST_COLLECTOR_GROUP)
-        .agentIdentifiers(identifiers.toArray( new UUID[identifiers.size()]))
+        .agentIdentifiers(identifiers)
         .build();
     service.save(collectorGroup);
 
     CollectorGroup fetchedCollectorGroup = service.find(CollectorGroup.class, collectorGroup.getId());
     assertEquals(collectorGroup.getId(), fetchedCollectorGroup.getId());
-    assertEquals(2, fetchedCollectorGroup.getAgentIdentifiers().length);
-    assertEquals(collectorGroup.getAgentIdentifiers()[0], fetchedCollectorGroup.getAgentIdentifiers()[0]);
+    assertEquals(2, fetchedCollectorGroup.getAgentIdentifiers().size());
+    assertEquals(collectorGroup.getAgentIdentifiers().get(0), fetchedCollectorGroup.getAgentIdentifiers().get(0));
     assertEquals(collectorGroup.getName(), fetchedCollectorGroup.getName());
     assertNotNull(fetchedCollectorGroup.getCreatedOn());
   }

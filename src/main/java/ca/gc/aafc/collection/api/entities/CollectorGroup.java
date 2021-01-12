@@ -19,8 +19,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import com.vladmihalcea.hibernate.type.array.UUIDArrayType;
+
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +33,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
-@TypeDef(name = "uuid-array", typeClass = UUIDArrayType.class)
+@TypeDef(
+  name = "list-array",
+  typeClass = ListArrayType.class
+)
 public class CollectorGroup implements DinaEntity {
 
   @Id
@@ -55,8 +60,8 @@ public class CollectorGroup implements DinaEntity {
   private String name;  
 
   @NotNull
-  @Type(type = "uuid-array")
+  @Type(type = "list-array")
   @Column(name = "agent_identifiers", columnDefinition = "uuid[]")  
-  private UUID[] agentIdentifiers;
+  private List<UUID> agentIdentifiers;
 
 }
