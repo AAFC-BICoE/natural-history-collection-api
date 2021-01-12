@@ -3,7 +3,10 @@ package ca.gc.aafc.collection.api.exceptionmapping;
 import io.crnk.core.engine.document.ErrorData;
 import io.crnk.core.engine.error.ErrorResponse;
 import io.crnk.core.engine.error.ExceptionMapper;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.time.format.DateTimeParseException;
 import java.util.stream.Collectors;
@@ -12,13 +15,17 @@ import java.util.stream.Collectors;
 public class DateTimeParsingExceptionMapper implements ExceptionMapper<DateTimeParseException> {
   private static final int HTTP_ERROR_CODE = 422;
 
+  @Inject
+  private MessageSource messageSource;
+
   @Override
   public ErrorResponse toErrorResponse(DateTimeParseException e) {
-    String detail = "Unknown Date format for input '" + e.getParsedString()
-      + "', Error Input at index: " + e.getErrorIndex();
     return ErrorResponse.builder().setStatus(HTTP_ERROR_CODE).setSingleErrorData(
       ErrorData.builder()
-        .setDetail(detail)
+        .setDetail(messageSource.getMessage(
+          "exception.dateTimeParse.message",
+          new Object[]{e.getParsedString(), e.getErrorIndex()},
+          LocaleContextHolder.getLocale()))
         .setTitle("Un-processable Entity")
         .setStatus(Integer.toString(HTTP_ERROR_CODE))
         .build())

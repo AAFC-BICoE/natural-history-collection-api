@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -27,14 +27,8 @@ class DateTimeParsingExceptionMapperTest extends BaseRestAssuredTest {
 
   @Test
   void exceptionMappedTest() {
-    sendPost(
-      "/api/v1/collecting-event",
+    sendPost("/api/v1/collecting-event",
       JsonAPITestHelper.toJsonAPIMap(
-        "collecting-event",
-        new ImmutableMap.Builder<String, Object>()
-          .put("endEventDateTime", "asdasdasdasd")
-          .build()),
-      422
-    );
+        "collecting-event", Map.of("endEventDateTime", "asdasdasdasd")), 422);
   }
 }
