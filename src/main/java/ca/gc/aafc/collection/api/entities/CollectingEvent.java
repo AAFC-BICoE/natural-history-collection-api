@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.validation.ValidEventDateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +26,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +39,10 @@ import java.util.UUID;
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
 @ValidEventDateTime
+@TypeDef(
+  name = "list-array",
+  typeClass = ListArrayType.class
+)
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -44,6 +53,9 @@ public class CollectingEvent implements DinaEntity {
   @NotNull
   @Column(unique = true)
   private UUID uuid;
+
+  // Not a Foreign Key, we would not use the UUID if it was.
+  private UUID collectorGroupUuid;
 
   // Might not be the final choice to store lat/long
   private Double decimalLatitude;
@@ -67,6 +79,7 @@ public class CollectingEvent implements DinaEntity {
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
+  private String verbatimCollectors;
 
   @Column(insertable = false, updatable = false)
   private OffsetDateTime createdOn;
@@ -74,6 +87,14 @@ public class CollectingEvent implements DinaEntity {
   @NotBlank
   @Column(updatable = false)
   private String createdBy;
+
+  @Type(type = "list-array")
+  @Column(name = "collectors", columnDefinition = "uuid[]")
+  private List<UUID> collectors = new ArrayList<>();
+
+  @Type(type = "list-array")
+  @Column(name = "attachment", columnDefinition = "uuid[]")
+  private List<UUID> attachment = new ArrayList<>();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
