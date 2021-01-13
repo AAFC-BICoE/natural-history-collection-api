@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
+import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 
 @Repository
 public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, CollectorGroup> {
@@ -25,7 +26,8 @@ public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, 
     @NonNull BaseDAO baseDAO,
     @NonNull DinaFilterResolver filterResolver,
     @NonNull BuildProperties props,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    @NonNull ExternalResourceProvider externalResourceProvider
   ) {
     super(
       dinaService,
@@ -35,7 +37,7 @@ public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, 
       CollectorGroupDto.class,
       CollectorGroup.class,
       filterResolver,
-      null,
+      externalResourceProvider,
       props);
       this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
@@ -47,5 +49,4 @@ public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, 
     }
     return super.create(resource);
   }
-
- }
+}
