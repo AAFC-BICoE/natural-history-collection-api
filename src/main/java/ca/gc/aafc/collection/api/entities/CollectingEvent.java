@@ -51,6 +51,10 @@ public class CollectingEvent implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
 
+  @NotBlank
+  @Column(name = "_group")
+  private String group;
+
   // Not a Foreign Key, we would not use the UUID if it was.
   private UUID collectorGroupUuid;
 

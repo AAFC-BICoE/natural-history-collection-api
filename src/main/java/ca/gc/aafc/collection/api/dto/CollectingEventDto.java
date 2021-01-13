@@ -37,6 +37,8 @@ public class CollectingEventDto {
   private UUID uuid;
   private UUID collectorGroupUuid;
 
+  private String group;
+
   private String createdBy;
   private OffsetDateTime createdOn;
 
