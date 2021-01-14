@@ -29,9 +29,6 @@ public class LocaleValidationIT {
   @LocalServerPort
   protected int testPort;
 
-  @Inject
-  private DefaultDinaService<CollectingEvent> service;
-
   @SneakyThrows
   @Test
   void validate_LocaleSwitch_LocalResolved() {
@@ -44,7 +41,6 @@ public class LocaleValidationIT {
     RestAssured.given()
       .port(this.testPort)
       .contentType("application/vnd.api+json")
-      .header("lang", "fr")
       .header("Accept-Language", "fr")
       .when()
       .body(JsonAPITestHelper.toJsonAPIMap(

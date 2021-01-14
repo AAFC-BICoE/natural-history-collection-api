@@ -9,16 +9,18 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 
+import javax.validation.Validator;
+
 @Service
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
 
-    public CollectingEventService(@NonNull BaseDAO baseDAO) {
-        super(baseDAO);
-    }
+  public CollectingEventService(@NonNull BaseDAO baseDAO, @NonNull Validator validator) {
+    super(baseDAO, validator);
+  }
 
-    @Override
-    protected void preCreate(CollectingEvent entity) {    
-      entity.setUuid(UUID.randomUUID());    
-    }
-    
+  @Override
+  protected void preCreate(CollectingEvent entity) {
+    entity.setUuid(UUID.randomUUID());
+  }
+
 }

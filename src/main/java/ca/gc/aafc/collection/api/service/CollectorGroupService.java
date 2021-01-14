@@ -9,16 +9,18 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 
+import javax.validation.Validator;
+
 @Service
 public class CollectorGroupService extends DefaultDinaService<CollectorGroup> {
 
-    public CollectorGroupService(@NonNull BaseDAO baseDAO) {
-        super(baseDAO);
-    }
+  public CollectorGroupService(@NonNull BaseDAO baseDAO, @NonNull Validator validator) {
+    super(baseDAO, validator);
+  }
 
-    @Override
-    protected void preCreate(CollectorGroup entity) {    
-      entity.setUuid(UUID.randomUUID());    
-    }
-    
+  @Override
+  protected void preCreate(CollectorGroup entity) {
+    entity.setUuid(UUID.randomUUID());
+  }
+
 }
