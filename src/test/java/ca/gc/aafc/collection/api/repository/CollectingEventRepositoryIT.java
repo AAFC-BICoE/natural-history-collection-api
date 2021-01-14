@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
+
   @Inject
   private CollectingEventRepository collectingEventRepository;
 
@@ -90,6 +91,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setUuid(UUID.randomUUID());
+    ce.setGroup("test group");
     ce.setCollectorGroupUuid(UUID.randomUUID());
     ce.setVerbatimCollectors("Jack and Jane");
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
