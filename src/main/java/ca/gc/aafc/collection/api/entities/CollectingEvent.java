@@ -62,8 +62,8 @@ public class CollectingEvent implements DinaEntity {
   private Double decimalLatitude;
   private Double decimalLongitude;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
+  private Integer dwcCoordinateUncertaintyInMeters;
+  private String dwcVerbatimCoordinates;
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)

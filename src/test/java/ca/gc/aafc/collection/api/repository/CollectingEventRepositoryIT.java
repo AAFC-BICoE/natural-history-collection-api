@@ -48,8 +48,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .verbatimEventDateTime("XI-02-1798")
       .decimalLatitude(26.089)
       .decimalLongitude(106.36)
-      .coordinateUncertaintyInMeters(208)
-      .verbatimCoordinates("26.089, 106.36")
+      .dwcCoordinateUncertaintyInMeters(208)
+      .dwcVerbatimCoordinates("26.089, 106.36")
       .attachment(List.of(UUID.randomUUID()))
       .collectors(List.of(UUID.randomUUID()))
       .collectorGroupUuid(UUID.randomUUID())
@@ -75,8 +75,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals("XI-02-1798", collectingEventDto.getVerbatimEventDateTime());
     assertEquals(26.089, collectingEventDto.getDecimalLatitude());
     assertEquals(106.36, collectingEventDto.getDecimalLongitude());
-    assertEquals(208, collectingEventDto.getCoordinateUncertaintyInMeters());
-    assertEquals("26.089, 106.36", collectingEventDto.getVerbatimCoordinates());
+    assertEquals(208, collectingEventDto.getDwcCoordinateUncertaintyInMeters());
+    assertEquals("26.089, 106.36", collectingEventDto.getDwcVerbatimCoordinates());
     assertEquals(
       testCollectingEvent.getAttachment().get(0).toString(),
       collectingEventDto.getAttachment().get(0).getId());
@@ -96,7 +96,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setVerbatimCollectors("Jack and Jane");
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
-    ce.setVerbatimCoordinates("26.089, 106.36");
+    ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(

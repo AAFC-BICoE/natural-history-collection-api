@@ -45,8 +45,8 @@ public class CollectingEventDto {
   private Double decimalLatitude;
   private Double decimalLongitude;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
+  private Integer dwcCoordinateUncertaintyInMeters;
+  private String dwcVerbatimCoordinates;
   private String verbatimCollectors;
 
   @IgnoreDinaMapping
