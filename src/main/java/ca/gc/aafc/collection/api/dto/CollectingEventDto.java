@@ -114,7 +114,9 @@ public class CollectingEventDto {
     public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
       return Map.of("rsql", filterSpec -> {
         Node node = new RSQLParser().parse(filterSpec.getValue());
-        String translatedQuery = node.accept(new IsoRsqlVisitor(), "startEventDateTime");
+        String translatedQuery = node.accept(
+          new IsoRsqlVisitor(),
+          List.of("startEventDateTime", "endEventDateTime"));
         return new FilterSpec[]{PathSpec.of("rsql").filter(FilterOperator.EQ, translatedQuery)};
       });
     }
@@ -155,15 +157,6 @@ public class CollectingEventDto {
     @Override
     public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
       return dtoRef::getEndEventDateTime;
-    }
-
-    @Override
-    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-      return Map.of("rsql", filterSpec -> {
-        Node node = new RSQLParser().parse(filterSpec.getValue());
-        String translatedQuery = node.accept(new IsoRsqlVisitor(), "endEventDateTime");
-        return new FilterSpec[]{PathSpec.of("rsql").filter(FilterOperator.EQ, translatedQuery)};
-      });
     }
   }
 

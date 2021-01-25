@@ -8,21 +8,24 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class IsoRsqlVisitor implements RSQLVisitor<String, String> {
+public class IsoRsqlVisitor implements RSQLVisitor<String, List<String>> {
 
   @Override
-  public String visit(AndNode andNode, String s) {
+  public String visit(AndNode andNode, List<String> field) {
+    return andNode.getChildren()
+      .stream()
+      .map(node -> node.accept(this, field))
+      .collect(Collectors.joining(" and "));
+  }
+
+  @Override
+  public String visit(OrNode orNode, List<String> s) {
     return null;
   }
 
   @Override
-  public String visit(OrNode orNode, String s) {
-    return null;
-  }
-
-  @Override
-  public String visit(ComparisonNode comparisonNode, String field) {
-    if (comparisonNode.getSelector().equalsIgnoreCase(field)) {
+  public String visit(ComparisonNode comparisonNode, List<String> field) {
+    if (field.stream().anyMatch(f -> comparisonNode.getSelector().equalsIgnoreCase(f))) {
       List<String> mappedArguments = comparisonNode.getArguments()
         .stream()
         .map(s -> ISODateTime.parse(s).getLocalDateTime().toString())
