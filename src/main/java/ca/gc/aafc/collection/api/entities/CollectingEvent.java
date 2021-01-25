@@ -65,6 +65,8 @@ public class CollectingEvent implements DinaEntity {
   private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
 
+  private String dwcRecordedBy;
+
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
   private LocalDateTime startEventDateTime;

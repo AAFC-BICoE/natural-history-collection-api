@@ -18,6 +18,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private DatabaseSupportService dbService;
 
+  private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
+
   @Test
   public void testSave() {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
@@ -35,6 +37,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcDecimalLongitude(45.01)
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
+        .dwcRecordedBy(dwcRecordedBy)
         .build();
     dbService.save(collectingEvent);
 
@@ -44,6 +47,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(45.01, fetchedCollectingEvent.getDwcDecimalLongitude());
     assertEquals(testDateTime, fetchedCollectingEvent.getStartEventDateTime());
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
+    assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
 
   }
