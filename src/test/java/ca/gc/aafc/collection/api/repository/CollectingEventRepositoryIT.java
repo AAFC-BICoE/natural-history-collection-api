@@ -95,7 +95,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @ParameterizedTest
-  @MethodSource({"startDateFilterTestSource", "endDateFilterTestSource"})
+  @MethodSource({"startDateFilterTestSource", "endDateFilterTestSource", "combinedDateFilterTestSource"})
   void findAll_WhenDateFiltered_DateFiltered(String input, int expectedSize) {
     Assertions.assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
 
@@ -124,6 +124,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       Arguments.of("endEventDateTime=le=2001 and endEventDateTime=ge=2003", 0),
       Arguments.of("endEventDateTime=le=2003 or endEventDateTime=ge=2003", 1),
       Arguments.of("endEventDateTime=le=2001 or endEventDateTime=ge=2200", 0)
+    );
+  }
+
+  private static Stream<Arguments> combinedDateFilterTestSource() {
+    return Stream.of(
+      Arguments.of("startEventDateTime=ge=2000-01-01 and endEventDateTime=le=2002-11-01", 1),
+      Arguments.of("startEventDateTime=ge=2000-01-01 and endEventDateTime=le=2002-10-01", 0)
     );
   }
 
