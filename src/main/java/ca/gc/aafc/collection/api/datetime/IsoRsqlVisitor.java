@@ -19,8 +19,11 @@ public class IsoRsqlVisitor implements RSQLVisitor<String, List<String>> {
   }
 
   @Override
-  public String visit(OrNode orNode, List<String> s) {
-    return null;
+  public String visit(OrNode orNode, List<String> field) {
+    return orNode.getChildren()
+      .stream()
+      .map(node -> node.accept(this, field))
+      .collect(Collectors.joining(" or "));
   }
 
   @Override

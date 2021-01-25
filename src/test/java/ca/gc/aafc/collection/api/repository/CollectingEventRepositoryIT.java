@@ -113,6 +113,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       0,
       collectingEventRepository.findAll(
         newRsqlQuerySpec("startEventDateTime=le=1999 and startEventDateTime=ge=2001")).size());
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("startEventDateTime=le=1999 or startEventDateTime=ge=1999")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("startEventDateTime=le=1999 or startEventDateTime=ge=2200")).size());
   }
 
   @Test
@@ -129,6 +137,22 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(
       0,
       collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=le=2001")).size());
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("endEventDateTime=le=2003 and endEventDateTime=ge=2001")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("endEventDateTime=le=2001 and endEventDateTime=ge=2003")).size());
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("endEventDateTime=le=2003 or endEventDateTime=ge=2003")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("endEventDateTime=le=2001 or endEventDateTime=ge=2200")).size());
   }
 
   @Test
