@@ -22,6 +22,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ public class CollectingEvent implements DinaEntity {
   private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
 
+  @Size(max = 250)  
   private String dwcRecordedBy;
 
   // Set by applyStartISOEventDateTime
