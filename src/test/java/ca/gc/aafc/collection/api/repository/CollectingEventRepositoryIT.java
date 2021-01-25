@@ -13,6 +13,9 @@ import io.crnk.core.resource.list.ResourceList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -91,68 +95,37 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(testCollectingEvent.getCollectorGroupUuid(), collectingEventDto.getCollectorGroupUuid());
   }
 
-  @Test
-  void findAll_FilterStartDate_DateFiltered() {
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=ge=1999")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=ge=2020")).size());
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=le=2020")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=le=1999")).size());
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("startEventDateTime=le=2001 and startEventDateTime=ge=1999")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("startEventDateTime=le=1999 and startEventDateTime=ge=2001")).size());
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("startEventDateTime=le=1999 or startEventDateTime=ge=1999")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("startEventDateTime=le=1999 or startEventDateTime=ge=2200")).size());
+  @ParameterizedTest
+  @MethodSource({"startDateFilterTestSource", "endDateFilterTestSource"})
+  void findAll_WhenDateFiltered_DateFiltered(String input, int expectedSize) {
+    Assertions.assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
+
   }
 
-  @Test
-  void findAll_FilterEndDate_DateFiltered() {
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=ge=2001")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=ge=2003")).size());
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=le=2003")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=le=2001")).size());
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("endEventDateTime=le=2003 and endEventDateTime=ge=2001")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("endEventDateTime=le=2001 and endEventDateTime=ge=2003")).size());
-    Assertions.assertEquals(
-      1,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("endEventDateTime=le=2003 or endEventDateTime=ge=2003")).size());
-    Assertions.assertEquals(
-      0,
-      collectingEventRepository.findAll(
-        newRsqlQuerySpec("endEventDateTime=le=2001 or endEventDateTime=ge=2200")).size());
+  private static Stream<Arguments> startDateFilterTestSource() {
+    return Stream.of(
+      Arguments.of("startEventDateTime=ge=1999", 1),
+      Arguments.of("startEventDateTime=ge=2020", 0),
+      Arguments.of("startEventDateTime=le=2020", 1),
+      Arguments.of("startEventDateTime=le=1999", 0),
+      Arguments.of("startEventDateTime=le=2001 and startEventDateTime=ge=1999", 1),
+      Arguments.of("startEventDateTime=le=1999 and startEventDateTime=ge=2001", 0),
+      Arguments.of("startEventDateTime=le=1999 or startEventDateTime=ge=1999", 1),
+      Arguments.of("startEventDateTime=le=1999 or startEventDateTime=ge=2200", 0)
+    );
+  }
+
+  private static Stream<Arguments> endDateFilterTestSource() {
+    return Stream.of(
+      Arguments.of("endEventDateTime=ge=2001", 1),
+      Arguments.of("endEventDateTime=ge=2003", 0),
+      Arguments.of("endEventDateTime=le=2003", 1),
+      Arguments.of("endEventDateTime=le=2001", 0),
+      Arguments.of("endEventDateTime=le=2003 and endEventDateTime=ge=2001", 1),
+      Arguments.of("endEventDateTime=le=2001 and endEventDateTime=ge=2003", 0),
+      Arguments.of("endEventDateTime=le=2003 or endEventDateTime=ge=2003", 1),
+      Arguments.of("endEventDateTime=le=2001 or endEventDateTime=ge=2200", 0)
+    );
   }
 
   @Test
