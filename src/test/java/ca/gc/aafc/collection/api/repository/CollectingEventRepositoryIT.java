@@ -6,7 +6,11 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import io.crnk.core.queryspec.FilterOperator;
+import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import io.crnk.core.resource.list.ResourceList;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -85,6 +89,15 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       collectingEventDto.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", testCollectingEvent.getVerbatimCollectors());
     assertEquals(testCollectingEvent.getCollectorGroupUuid(), collectingEventDto.getCollectorGroupUuid());
+  }
+
+  @Test
+  void findAll_WhenFilterCollectingEventDateGreaterThen_DateFiltered() {
+    QuerySpec spec = new QuerySpec(CollectingEventDto.class);
+    String rsql = "startEventDateTime=ge=1999";
+    spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ,rsql));
+    ResourceList<CollectingEventDto> all = collectingEventRepository.findAll(spec);
+    Assertions.assertEquals(1, all.size());
   }
 
   @Test
