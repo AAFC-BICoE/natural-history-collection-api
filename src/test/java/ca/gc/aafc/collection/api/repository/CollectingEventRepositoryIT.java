@@ -109,6 +109,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       1,
       collectingEventRepository.findAll(
         newRsqlQuerySpec("startEventDateTime=le=2001 and startEventDateTime=ge=1999")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(
+        newRsqlQuerySpec("startEventDateTime=le=1999 and startEventDateTime=ge=2001")).size());
   }
 
   @Test
