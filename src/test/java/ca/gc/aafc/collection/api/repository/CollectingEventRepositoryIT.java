@@ -108,6 +108,22 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void findAll_FilterEndDate_DateFiltered() {
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=ge=2001")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=ge=2003")).size());
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=le=2003")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(newRsqlQuerySpec("endEventDateTime=le=2001")).size());
+  }
+
+  @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setUuid(UUID.randomUUID());
