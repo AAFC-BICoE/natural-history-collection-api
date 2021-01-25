@@ -100,6 +100,18 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
 
+  @Size(max = 100)  
+  private String dwcVerbatimLocality;
+
+  @Type(type = "list-array")
+  @Column(columnDefinition = "uuid[]")  
+  private List<UUID> dwcGeoreferencedBy = new ArrayList<>();
+
+  private OffsetDateTime dwcGeoreferencedDate;  
+
+  @Size(max = 100)  
+  private String dwcGeoreferenceSources;
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.

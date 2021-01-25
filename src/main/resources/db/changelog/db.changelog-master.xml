@@ -7,4 +7,5 @@
   <include file="db/changelog/migrations/4-Add_Group_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/5-Rename_previous_location_fields.xml"/>
   <include file="db/changelog/migrations/6-Add_dwcRecordedBy_collecting_event.xml"/>
+  <include file="db/changelog/migrations/6-Add_dwcRecordedBy_collecting_event.xml"/>
 </databaseChangeLog>
