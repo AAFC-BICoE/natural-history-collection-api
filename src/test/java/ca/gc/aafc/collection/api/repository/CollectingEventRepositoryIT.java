@@ -92,12 +92,19 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  void findAll_WhenFilterCollectingEventDateGreaterThen_DateFiltered() {
-    QuerySpec spec = new QuerySpec(CollectingEventDto.class);
-    String rsql = "startEventDateTime=ge=1999";
-    spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ,rsql));
-    ResourceList<CollectingEventDto> all = collectingEventRepository.findAll(spec);
-    Assertions.assertEquals(1, all.size());
+  void findAll_FilterStartDate_DateFiltered() {
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=ge=1999")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=ge=2020")).size());
+    Assertions.assertEquals(
+      1,
+      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=le=2020")).size());
+    Assertions.assertEquals(
+      0,
+      collectingEventRepository.findAll(newRsqlQuerySpec("startEventDateTime=le=1999")).size());
   }
 
   @Test
@@ -122,6 +129,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", result.getVerbatimCollectors());
     assertEquals(ce.getCollectorGroupUuid(), result.getCollectorGroupUuid());
+  }
+
+  private static QuerySpec newRsqlQuerySpec(String rsql) {
+    QuerySpec spec = new QuerySpec(CollectingEventDto.class);
+    spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ, rsql));
+    return spec;
   }
 
 }
