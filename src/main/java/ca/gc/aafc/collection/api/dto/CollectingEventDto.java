@@ -48,6 +48,7 @@ public class CollectingEventDto {
   private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
   private String verbatimCollectors;
+  private String dwcRecordedBy;
 
   @IgnoreDinaMapping
   private String startEventDateTime;
@@ -63,7 +64,7 @@ public class CollectingEventDto {
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
-  private List<ExternalRelationDto> attachment = new ArrayList<>();
+  private List<ExternalRelationDto> attachment = new ArrayList<>();  
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

@@ -33,6 +33,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final LocalDate endDate = LocalDate.of(2002, 10, 10);
   private static final LocalTime endTime = LocalTime.of(10, 10);
 
+  private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
+
   @BeforeEach
   public void setup() {
     createTestCollectingEvent();
@@ -53,6 +55,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .attachment(List.of(UUID.randomUUID()))
       .collectors(List.of(UUID.randomUUID()))
       .collectorGroupUuid(UUID.randomUUID())
+      .dwcRecordedBy(dwcRecordedBy)
       .build();
 
     service.save(testCollectingEvent);
@@ -77,6 +80,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(106.36, collectingEventDto.getDwcDecimalLongitude());
     assertEquals(208, collectingEventDto.getDwcCoordinateUncertaintyInMeters());
     assertEquals("26.089, 106.36", collectingEventDto.getDwcVerbatimCoordinates());
+    assertEquals(dwcRecordedBy, collectingEventDto.getDwcRecordedBy());
     assertEquals(
       testCollectingEvent.getAttachment().get(0).toString(),
       collectingEventDto.getAttachment().get(0).getId());
@@ -97,10 +101,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
+    ce.setDwcRecordedBy(dwcRecordedBy);
     ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(
       List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));
+
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
@@ -109,6 +115,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", result.getVerbatimCollectors());
     assertEquals(ce.getCollectorGroupUuid(), result.getCollectorGroupUuid());
+    assertEquals(dwcRecordedBy, result.getDwcRecordedBy());
   }
 
 }

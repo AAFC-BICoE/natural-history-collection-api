@@ -37,6 +37,8 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "collecting-event";
 
+  private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
+
   static {
     URI_BUILDER.setScheme("https");
     URI_BUILDER.setHost(SPEC_HOST);
@@ -67,6 +69,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setCollectors(null);
     ce.setAttachment(null);
+    ce.setDwcRecordedBy(dwcRecordedBy);
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
