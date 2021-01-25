@@ -31,8 +31,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   public void testFind() {
     LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .decimalLatitude(12.123456)
-        .decimalLongitude(45.01)
+        .dwcDecimalLatitude(12.123456)
+        .dwcDecimalLongitude(45.01)
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
         .build();
@@ -40,8 +40,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     CollectingEvent fetchedCollectingEvent = dbService.find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
-    assertEquals(12.123456, fetchedCollectingEvent.getDecimalLatitude());
-    assertEquals(45.01, fetchedCollectingEvent.getDecimalLongitude());
+    assertEquals(12.123456, fetchedCollectingEvent.getDwcDecimalLatitude());
+    assertEquals(45.01, fetchedCollectingEvent.getDwcDecimalLongitude());
     assertEquals(testDateTime, fetchedCollectingEvent.getStartEventDateTime());
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());

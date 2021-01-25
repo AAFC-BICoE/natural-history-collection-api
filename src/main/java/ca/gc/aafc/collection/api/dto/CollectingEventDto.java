@@ -42,11 +42,11 @@ public class CollectingEventDto {
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  private Double decimalLatitude;
-  private Double decimalLongitude;
+  private Double dwcDecimalLatitude;
+  private Double dwcDecimalLongitude;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
+  private Integer dwcCoordinateUncertaintyInMeters;
+  private String dwcVerbatimCoordinates;
   private String verbatimCollectors;
 
   @IgnoreDinaMapping

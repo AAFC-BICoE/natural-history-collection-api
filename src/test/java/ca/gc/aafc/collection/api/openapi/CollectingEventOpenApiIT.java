@@ -56,15 +56,15 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   void collectingEvent_SpecValid() {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("test group");
-    ce.setDecimalLatitude(3.2);
-    ce.setDecimalLongitude(1.2);
+    ce.setDwcDecimalLatitude(3.2);
+    ce.setDwcDecimalLongitude(1.2);
     ce.setVerbatimEventDateTime("a cold winter morning in the winter of 2099");
-    ce.setCoordinateUncertaintyInMeters(2);
+    ce.setDwcCoordinateUncertaintyInMeters(2);
     ce.setCollectorGroupUuid(UUID.randomUUID());
     ce.setVerbatimCollectors("Jack and Jane");
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
-    ce.setVerbatimCoordinates("26.089, 106.36");
+    ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setCollectors(null);
     ce.setAttachment(null);
 

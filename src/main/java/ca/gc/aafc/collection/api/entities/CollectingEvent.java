@@ -59,11 +59,11 @@ public class CollectingEvent implements DinaEntity {
   private UUID collectorGroupUuid;
 
   // Might not be the final choice to store lat/long
-  private Double decimalLatitude;
-  private Double decimalLongitude;
+  private Double dwcDecimalLatitude;
+  private Double dwcDecimalLongitude;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
+  private Integer dwcCoordinateUncertaintyInMeters;
+  private String dwcVerbatimCoordinates;
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
