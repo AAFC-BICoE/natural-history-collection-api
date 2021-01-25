@@ -156,6 +156,15 @@ public class CollectingEventDto {
     public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
       return dtoRef::getEndEventDateTime;
     }
+
+    @Override
+    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
+      return Map.of("rsql", filterSpec -> {
+        Node node = new RSQLParser().parse(filterSpec.getValue());
+        String translatedQuery = node.accept(new IsoRsqlVisitor(), "endEventDateTime");
+        return new FilterSpec[]{PathSpec.of("rsql").filter(FilterOperator.EQ, translatedQuery)};
+      });
+    }
   }
 
 }
