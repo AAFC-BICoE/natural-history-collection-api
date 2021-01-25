@@ -8,7 +8,7 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class IsoRsqlVisitor implements RSQLVisitor<String, List<String>> {
+public class IsoRsqlPrecisionResolver implements RSQLVisitor<String, List<String>> {
 
   @Override
   public String visit(AndNode andNode, List<String> field) {

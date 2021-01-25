@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.datetime.IsoRsqlVisitor;
+import ca.gc.aafc.collection.api.datetime.IsoRsqlPrecisionResolver;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -10,7 +10,6 @@ import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import cz.jirutka.rsql.parser.RSQLParser;
-import cz.jirutka.rsql.parser.ast.Node;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.FilterSpec;
@@ -78,7 +77,7 @@ public class CollectingEventDto {
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     private static final RSQLParser RSQL_PARSER = new RSQLParser();
-    private static final IsoRsqlVisitor ISO_RSQL_VISITOR = new IsoRsqlVisitor();
+    private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver();
     private static final List<String> RSQL_FIELD_LIST = List.of("startEventDateTime", "endEventDateTime");
 
     @Override
