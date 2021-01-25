@@ -8,6 +8,10 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Rsql visitor to support rsql date filtering with partial dates. Partial dates are resolved using {@link
+ * ISODateTime#parse(String)}
+ */
 public class IsoRsqlPrecisionResolver implements RSQLVisitor<String, List<String>> {
 
   @Override
