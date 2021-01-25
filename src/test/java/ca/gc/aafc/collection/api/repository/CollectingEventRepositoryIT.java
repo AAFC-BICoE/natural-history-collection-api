@@ -9,7 +9,6 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-import io.crnk.core.resource.list.ResourceList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
