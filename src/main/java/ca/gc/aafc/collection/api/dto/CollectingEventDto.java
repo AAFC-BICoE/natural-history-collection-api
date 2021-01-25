@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.datetime.IsoRsqlPrecisionResolver;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.collection.api.datetime.IsoRsqlPrecisionResolver;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -9,7 +9,6 @@ import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import cz.jirutka.rsql.parser.RSQLParser;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.FilterSpec;
@@ -76,9 +75,8 @@ public class CollectingEventDto {
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
-    private static final RSQLParser RSQL_PARSER = new RSQLParser();
-    private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver();
-    private static final List<String> RSQL_FIELD_LIST = List.of("startEventDateTime", "endEventDateTime");
+    private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver(
+      List.of("startEventDateTime", "endEventDateTime"));
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -116,9 +114,8 @@ public class CollectingEventDto {
     @Override
     public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
       return Map.of("rsql",
-        filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-          FilterOperator.EQ,
-          RSQL_PARSER.parse(filterSpec.getValue()).accept(ISO_RSQL_VISITOR, RSQL_FIELD_LIST))});
+        filterSpec -> new FilterSpec[]{
+          PathSpec.of("rsql").filter(FilterOperator.EQ, ISO_RSQL_VISITOR.parse(filterSpec.getValue()))});
     }
   }
 

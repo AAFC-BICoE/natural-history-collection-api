@@ -1,10 +1,12 @@
 package ca.gc.aafc.collection.api.datetime;
 
+import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.LogicalOperator;
 import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +15,15 @@ import java.util.stream.Collectors;
  * Rsql visitor to support rsql date filtering with partial dates. Partial dates are resolved using {@link
  * ISODateTime#parse(String)}
  */
+@AllArgsConstructor
 public class IsoRsqlPrecisionResolver implements RSQLVisitor<String, List<String>> {
+
+  private static final RSQLParser RSQL_PARSER = new RSQLParser();
+  private final List<String> fieldList;
+
+  public String parse(String rsql) {
+    return RSQL_PARSER.parse(rsql).accept(this, fieldList);
+  }
 
   @Override
   public String visit(AndNode andNode, List<String> field) {
