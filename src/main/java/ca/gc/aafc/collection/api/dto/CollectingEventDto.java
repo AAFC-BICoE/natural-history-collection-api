@@ -77,6 +77,10 @@ public class CollectingEventDto {
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
+    private static final RSQLParser RSQL_PARSER = new RSQLParser();
+    private static final IsoRsqlVisitor ISO_RSQL_VISITOR = new IsoRsqlVisitor();
+    private static final List<String> RSQL_FIELD_LIST = List.of("startEventDateTime", "endEventDateTime");
+
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
       return isoDateTime == null ? null : isoDateTime.toString();
@@ -112,13 +116,10 @@ public class CollectingEventDto {
 
     @Override
     public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-      return Map.of("rsql", filterSpec -> {
-        Node node = new RSQLParser().parse(filterSpec.getValue());
-        String translatedQuery = node.accept(
-          new IsoRsqlVisitor(),
-          List.of("startEventDateTime", "endEventDateTime"));
-        return new FilterSpec[]{PathSpec.of("rsql").filter(FilterOperator.EQ, translatedQuery)};
-      });
+      return Map.of("rsql",
+        filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
+          FilterOperator.EQ,
+          RSQL_PARSER.parse(filterSpec.getValue()).accept(ISO_RSQL_VISITOR, RSQL_FIELD_LIST))});
     }
   }
 
