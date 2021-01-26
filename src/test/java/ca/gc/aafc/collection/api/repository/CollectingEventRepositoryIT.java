@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final LocalTime endTime = LocalTime.of(10, 10);
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
+  private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
+  private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
+  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();
 
   @BeforeEach
   public void setup() {
@@ -56,6 +60,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .collectors(List.of(UUID.randomUUID()))
       .collectorGroupUuid(UUID.randomUUID())
       .dwcRecordedBy(dwcRecordedBy)
+      .dwcVerbatimLocality(dwcVerbatimLocality)
+      .dwcGeoreferencedDate(dwcGeoreferencedDate)
+      .dwcGeoreferenceSources(dwcGeoreferenceSources)
+      .dwcGeoreferencedBy(List.of(UUID.randomUUID()))
       .build();
 
     service.save(testCollectingEvent);
@@ -89,6 +97,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       collectingEventDto.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", testCollectingEvent.getVerbatimCollectors());
     assertEquals(testCollectingEvent.getCollectorGroupUuid(), collectingEventDto.getCollectorGroupUuid());
+    assertEquals(dwcVerbatimLocality, collectingEventDto.getDwcVerbatimLocality());
+    assertEquals(dwcGeoreferenceSources, collectingEventDto.getDwcGeoreferenceSources());
+    assertEquals(dwcGeoreferencedDate, collectingEventDto.getDwcGeoreferencedDate());
+    assertEquals(testCollectingEvent.getDwcGeoreferencedBy().get(0).toString(), collectingEventDto.getDwcGeoreferencedBy().get(0).getId());
   }
 
   @Test
@@ -106,6 +118,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(
       List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));
+    ce.setDwcVerbatimLocality(dwcVerbatimLocality);
+    ce.setDwcGeoreferencedDate(dwcGeoreferencedDate);
+    ce.setDwcGeoreferenceSources(dwcGeoreferenceSources);
+    ce.setDwcGeoreferencedBy(List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));      
 
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
@@ -115,7 +131,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", result.getVerbatimCollectors());
     assertEquals(ce.getCollectorGroupUuid(), result.getCollectorGroupUuid());
-    assertEquals(dwcRecordedBy, result.getDwcRecordedBy());
+    assertEquals(dwcRecordedBy, result.getDwcRecordedBy());                   
+    assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
+    assertEquals(dwcGeoreferenceSources, result.getDwcGeoreferenceSources());
+    assertEquals(dwcGeoreferencedDate, result.getDwcGeoreferencedDate());
+    assertEquals(ce.getDwcGeoreferencedBy().get(0).getId(), result.getDwcGeoreferencedBy().get(0).getId());    
+
   }
 
 }

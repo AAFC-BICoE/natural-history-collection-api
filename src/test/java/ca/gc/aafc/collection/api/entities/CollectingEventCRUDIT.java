@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,6 +22,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private DatabaseSupportService dbService;
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
+  private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
+  private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
+  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();  
 
   @Test
   public void testSave() {
@@ -38,6 +44,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
         .dwcRecordedBy(dwcRecordedBy)
+        .dwcVerbatimLocality(dwcVerbatimLocality)
+        .dwcGeoreferencedDate(dwcGeoreferencedDate)
+        .dwcGeoreferenceSources(dwcGeoreferenceSources)
         .build();
     dbService.save(collectingEvent);
 
@@ -49,7 +58,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
-
+    assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
+    assertEquals(dwcGeoreferenceSources, fetchedCollectingEvent.getDwcGeoreferenceSources());
+    assertEquals(dwcGeoreferencedDate, fetchedCollectingEvent.getDwcGeoreferencedDate());
   }
 
 }
