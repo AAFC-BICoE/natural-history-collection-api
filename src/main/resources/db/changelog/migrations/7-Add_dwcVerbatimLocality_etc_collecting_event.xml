@@ -9,7 +9,7 @@
 
     <!-- Add the column -->
     <addColumn tableName="collecting_event">
-      <column name="dwc_verbatim_locality" type="VARCHAR(100)" />
+      <column name="dwc_verbatim_locality" type="VARCHAR(250)" />
     </addColumn>
 
     <!-- Add the column -->
@@ -25,6 +25,12 @@
     <!-- Add the column -->
     <addColumn tableName="collecting_event">
       <column name="dwc_georeference_sources" type="VARCHAR(100)" />
-    </addColumn>        
+    </addColumn>      
+
+    <!-- add index -->
+    <sql>
+      CREATE INDEX ON collecting_event (dwc_verbatim_locality);
+    </sql>
+
   </changeSet>
 </databaseChangeLog>

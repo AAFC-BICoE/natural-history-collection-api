@@ -100,7 +100,7 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
 
-  @Size(max = 100)  
+  @Size(max = 250)  
   private String dwcVerbatimLocality;
 
   @Type(type = "list-array")
