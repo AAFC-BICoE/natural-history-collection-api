@@ -66,6 +66,16 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> attachment = new ArrayList<>();  
 
+  private String dwcVerbatimLocality;
+
+  @JsonApiExternalRelation(type = "agent")
+  @JsonApiRelation
+  private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
+
+  private OffsetDateTime dwcGeoreferencedDate;
+
+  private String dwcGeoreferenceSources;  
+
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
       implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
