@@ -19,7 +19,7 @@
 
     <!-- Add the column -->
     <addColumn tableName="collecting_event">
-      <column name="dwc_georeferenced_date" type="timestamp" />
+      <column name="dwc_georeferenced_date" type="timestamptz" />
     </addColumn>
 
     <!-- Add the column -->
