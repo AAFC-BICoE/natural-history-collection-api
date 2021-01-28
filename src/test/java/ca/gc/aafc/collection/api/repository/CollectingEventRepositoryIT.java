@@ -49,7 +49,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .startEventDateTime(LocalDateTime.of(startDate, startTime))
       .startEventDateTimePrecision((byte) 8)
       .endEventDateTime(LocalDateTime.of(endDate, endTime))
-      .verbatimCollectors("Jack and Jane")
       .endEventDateTimePrecision((byte) 8)
       .verbatimEventDateTime("XI-02-1798")
       .dwcDecimalLatitude(26.089)
@@ -58,7 +57,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimCoordinates("26.089, 106.36")
       .attachment(List.of(UUID.randomUUID()))
       .collectors(List.of(UUID.randomUUID()))
-      .collectorGroupUuid(UUID.randomUUID())
       .dwcRecordedBy(dwcRecordedBy)
       .dwcVerbatimLocality(dwcVerbatimLocality)
       .dwcGeoreferencedDate(dwcGeoreferencedDate)
@@ -95,8 +93,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(
       testCollectingEvent.getCollectors().get(0).toString(),
       collectingEventDto.getCollectors().get(0).getId());
-    assertEquals("Jack and Jane", testCollectingEvent.getVerbatimCollectors());
-    assertEquals(testCollectingEvent.getCollectorGroupUuid(), collectingEventDto.getCollectorGroupUuid());
     assertEquals(dwcVerbatimLocality, collectingEventDto.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, collectingEventDto.getDwcGeoreferenceSources());
     assertEquals(dwcGeoreferencedDate, collectingEventDto.getDwcGeoreferencedDate());
@@ -108,8 +104,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setUuid(UUID.randomUUID());
     ce.setGroup("test group");
-    ce.setCollectorGroupUuid(UUID.randomUUID());
-    ce.setVerbatimCollectors("Jack and Jane");
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
@@ -129,8 +123,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertNotNull(result.getCreatedBy());
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
-    assertEquals("Jack and Jane", result.getVerbatimCollectors());
-    assertEquals(ce.getCollectorGroupUuid(), result.getCollectorGroupUuid());
     assertEquals(dwcRecordedBy, result.getDwcRecordedBy());                   
     assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, result.getDwcGeoreferenceSources());
