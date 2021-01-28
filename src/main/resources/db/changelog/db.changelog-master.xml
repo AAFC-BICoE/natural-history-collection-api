@@ -8,4 +8,5 @@
   <include file="db/changelog/migrations/5-Rename_previous_location_fields.xml"/>
   <include file="db/changelog/migrations/6-Add_dwcRecordedBy_collecting_event.xml"/>
   <include file="db/changelog/migrations/7-Add_dwcVerbatimLocality_etc_collecting_event.xml"/>
+  <include file="db/changelog/migrations/8-Remove_verbatimCollectors_etc_collecting_event.xml"/>
 </databaseChangeLog>

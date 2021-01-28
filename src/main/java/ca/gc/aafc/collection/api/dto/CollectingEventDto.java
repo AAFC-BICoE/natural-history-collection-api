@@ -35,8 +35,7 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
-  private UUID collectorGroupUuid;
-
+  
   private String group;
 
   private String createdBy;
@@ -47,7 +46,6 @@ public class CollectingEventDto {
 
   private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
-  private String verbatimCollectors;
   private String dwcRecordedBy;
 
   @IgnoreDinaMapping

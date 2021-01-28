@@ -57,9 +57,6 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  // Not a Foreign Key, we would not use the UUID if it was.
-  private UUID collectorGroupUuid;
-
   // Might not be the final choice to store lat/long
   private Double dwcDecimalLatitude;
   private Double dwcDecimalLongitude;
@@ -83,8 +80,7 @@ public class CollectingEvent implements DinaEntity {
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
-  private String verbatimCollectors;
-
+  
   @Column(insertable = false, updatable = false)
   private OffsetDateTime createdOn;
 
