@@ -7,13 +7,14 @@ import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.Node;
 import cz.jirutka.rsql.parser.ast.OrNode;
+import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,15 +52,17 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionRes
 
   private PrecisionNode resolveLogicalNode(LogicalNode logicalNode, Set<String> field) {
     List<Node> nodes = new ArrayList<>();
-    Map<String, Integer> precisionMap = new HashMap<>();
+    List<ComparisonNode> precisionMap = new ArrayList<>();
     for (Node node : logicalNode.getChildren()) {
       PrecisionNode accept = node.accept(this, field);
       nodes.add(accept.getNode());
-      precisionMap.putAll(accept.getHighestPrecision());
+      if (CollectionUtils.isNotEmpty(accept.getPrecisionComparisons())) {
+        precisionMap.addAll(accept.getPrecisionComparisons());
+      }
     }
     return PrecisionNode.builder()
       .node(logicalNode.withChildren(nodes))
-      .highestPrecision(precisionMap)
+      .precisionComparisons(precisionMap)
       .build();
   }
 
@@ -75,25 +78,32 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionRes
       }
       return PrecisionNode.builder()
         .node(new ComparisonNode(node.getOperator(), node.getSelector(), mappedArguments))
-        .highestPrecision(Map.of(fieldToPrecisionNameMap.get(node.getSelector()), highestPrecision)).build();
+        .precisionComparisons(newPrecisionComparison(highestPrecision, node.getSelector()))
+        .build();
     } else {
-      return PrecisionNode.builder().node(node).highestPrecision(null).build();
+      return PrecisionNode.builder().node(node).precisionComparisons(null).build();
     }
+  }
+
+  private List<ComparisonNode> newPrecisionComparison(int precision, String selector) {
+    return List.of(new ComparisonNode(
+      new ComparisonOperator(RSQLOperators.GREATER_THAN_OR_EQUAL.getSymbol()),
+      fieldToPrecisionNameMap.get(selector),
+      List.of(Integer.toString(precision))));
   }
 
   @Builder
   @Getter
   public static final class PrecisionNode {
     private final Node node;
-    private final Map<String, Integer> highestPrecision;
+    private final List<ComparisonNode> precisionComparisons;
 
     @Override
     public String toString() {
-      if (!highestPrecision.keySet().isEmpty()) {
+      if (CollectionUtils.isNotEmpty(precisionComparisons)) {
         List<Node> nodes = new ArrayList<>();
         nodes.add(node);
-        highestPrecision.forEach((s, integer) -> nodes.add(new ComparisonNode(
-          new ComparisonOperator("=ge="), s, List.of(Integer.toString(integer)))));
+        nodes.addAll(precisionComparisons);
         return new AndNode(nodes).toString();
       } else {
         return this.getNode().toString();
