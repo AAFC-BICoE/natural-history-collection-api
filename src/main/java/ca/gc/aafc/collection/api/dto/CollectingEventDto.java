@@ -85,7 +85,8 @@ public class CollectingEventDto {
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver(
-      List.of("startEventDateTime", "endEventDateTime"));
+      Map.of("startEventDateTime", "startEventDateTimePrecision",
+        "endEventDateTime", "endEventDateTimePrecision"));
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
