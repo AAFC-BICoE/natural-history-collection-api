@@ -3,6 +3,8 @@ package ca.gc.aafc.collection.api.datetime;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
+import cz.jirutka.rsql.parser.ast.ComparisonOperator;
+import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.Node;
 import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
@@ -24,7 +26,7 @@ import java.util.Set;
 public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionResolver.PrecisionNode, Set<String>> {
 
   private static final RSQLParser RSQL_PARSER = new RSQLParser();
-  private final Map<String,String> fieldList;
+  private final Map<String, String> fieldToPrecisionNameMap;
 
   /**
    * Returns the given rsql string with partial dates resolved for fields tracked by the resolver. Partial
@@ -34,35 +36,29 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionRes
    * @return the given rsql string with partial dates resolved
    */
   public String resolveDates(String rsql) {
-    return RSQL_PARSER.parse(rsql).accept(this, fieldList.keySet()).toString();
+    return RSQL_PARSER.parse(rsql).accept(this, fieldToPrecisionNameMap.keySet()).toString();
   }
 
   @Override
   public PrecisionNode visit(AndNode andNode, Set<String> field) {
-    List<Node> nodes = new ArrayList<>();
-    Map<String,Integer> precisionMap = new HashMap<>();
-    for (Node node : andNode.getChildren()) {
-      PrecisionNode accept = node.accept(this, field);
-      nodes.add(accept.getNode());
-      precisionMap.putAll(accept.getHighestPrecision());
-    }
-    return PrecisionNode.builder()
-      .node(andNode.withChildren(nodes))
-      .highestPrecision(precisionMap)
-      .build();
+    return resolveLogicalNode(andNode, field);
   }
 
   @Override
   public PrecisionNode visit(OrNode orNode, Set<String> field) {
+    return resolveLogicalNode(orNode, field);
+  }
+
+  private PrecisionNode resolveLogicalNode(LogicalNode logicalNode, Set<String> field) {
     List<Node> nodes = new ArrayList<>();
-    Map<String,Integer> precisionMap = new HashMap<>();
-    for (Node node : orNode.getChildren()) {
+    Map<String, Integer> precisionMap = new HashMap<>();
+    for (Node node : logicalNode.getChildren()) {
       PrecisionNode accept = node.accept(this, field);
       nodes.add(accept.getNode());
       precisionMap.putAll(accept.getHighestPrecision());
     }
     return PrecisionNode.builder()
-      .node(orNode.withChildren(nodes))
+      .node(logicalNode.withChildren(nodes))
       .highestPrecision(precisionMap)
       .build();
   }
@@ -79,7 +75,7 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionRes
       }
       return PrecisionNode.builder()
         .node(new ComparisonNode(node.getOperator(), node.getSelector(), mappedArguments))
-        .highestPrecision(Map.of(fieldList.get(node.getSelector()), highestPrecision)).build();
+        .highestPrecision(Map.of(fieldToPrecisionNameMap.get(node.getSelector()), highestPrecision)).build();
     } else {
       return PrecisionNode.builder().node(node).highestPrecision(null).build();
     }
@@ -89,11 +85,19 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionRes
   @Getter
   public static final class PrecisionNode {
     private final Node node;
-    private final Map<String,Integer> highestPrecision;
+    private final Map<String, Integer> highestPrecision;
 
     @Override
     public String toString() {
-      return this.getNode().toString();
+      if (!highestPrecision.keySet().isEmpty()) {
+        List<Node> nodes = new ArrayList<>();
+        nodes.add(node);
+        highestPrecision.forEach((s, integer) -> nodes.add(new ComparisonNode(
+          new ComparisonOperator("=ge="), s, List.of(Integer.toString(integer)))));
+        return new AndNode(nodes).toString();
+      } else {
+        return this.getNode().toString();
+      }
     }
   }
 }

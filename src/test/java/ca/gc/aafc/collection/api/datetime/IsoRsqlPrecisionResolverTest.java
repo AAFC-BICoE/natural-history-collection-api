@@ -9,7 +9,8 @@ import java.util.Map;
 class IsoRsqlPrecisionResolverTest {
 
   public static final RSQLParser RSQL_PARSER = new RSQLParser();
-  public static final Map<String, String> FIELD_LIST = Map.of("startEventDateTime","startEventDateTimePrecision");
+  public static final Map<String, String> FIELD_LIST = Map.of("startEventDateTime",
+    "startEventDateTimePrecision");
 
   @Test
   void highestPercision() {
