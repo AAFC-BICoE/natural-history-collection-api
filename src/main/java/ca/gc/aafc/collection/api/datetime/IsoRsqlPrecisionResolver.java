@@ -7,16 +7,18 @@ import cz.jirutka.rsql.parser.ast.Node;
 import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Rsql visitor to support rsql date filtering with partial dates. Partial dates are resolved using {@link
  * ISODateTime#parse(String)}
  */
 @AllArgsConstructor
-public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, List<String>> {
+public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionResolver.PrecisionNode, List<String>> {
 
   private static final RSQLParser RSQL_PARSER = new RSQLParser();
   private final List<String> fieldList;
@@ -33,31 +35,66 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, List<String>>
   }
 
   @Override
-  public Node visit(AndNode andNode, List<String> field) {
-    return andNode.withChildren(andNode.getChildren()
-      .stream()
-      .map(node -> node.accept(this, field))
-      .collect(Collectors.toList()));
+  public PrecisionNode visit(AndNode andNode, List<String> field) {
+    List<Node> nodes = new ArrayList<>();
+    int highestPrecision = 0;
+    for (Node node : andNode.getChildren()) {
+      PrecisionNode accept = node.accept(this, field);
+      if (accept.getHighestPrecision() != null) {
+        highestPrecision = Math.max(highestPrecision, accept.getHighestPrecision());
+      }
+      nodes.add(accept.getNode());
+    }
+    return PrecisionNode.builder()
+      .node(andNode.withChildren(nodes))
+      .highestPrecision(highestPrecision == 0 ? null : highestPrecision)
+      .build();
   }
 
   @Override
-  public Node visit(OrNode orNode, List<String> field) {
-    return orNode.withChildren(orNode.getChildren()
-      .stream()
-      .map(node -> node.accept(this, field))
-      .collect(Collectors.toList()));
+  public PrecisionNode visit(OrNode orNode, List<String> field) {
+    List<Node> nodes = new ArrayList<>();
+    int highestPrecision = 0;
+    for (Node node : orNode.getChildren()) {
+      PrecisionNode accept = node.accept(this, field);
+      if (accept.getHighestPrecision() != null) {
+        highestPrecision = Math.max(highestPrecision, accept.getHighestPrecision());
+      }
+      nodes.add(accept.getNode());
+    }
+    return PrecisionNode.builder()
+      .node(orNode.withChildren(nodes))
+      .highestPrecision(highestPrecision == 0 ? null : highestPrecision)
+      .build();
   }
 
   @Override
-  public Node visit(ComparisonNode comparisonNode, List<String> field) {
-    if (field.stream().anyMatch(f -> comparisonNode.getSelector().equalsIgnoreCase(f))) {
-      List<String> mappedArguments = comparisonNode.getArguments()
-        .stream()
-        .map(s -> ISODateTime.parse(s).getLocalDateTime().toString())
-        .collect(Collectors.toList());
-      return new ComparisonNode(comparisonNode.getOperator(), comparisonNode.getSelector(), mappedArguments);
+  public PrecisionNode visit(ComparisonNode node, List<String> field) {
+    if (field.stream().anyMatch(f -> node.getSelector().equalsIgnoreCase(f))) {
+      List<String> mappedArguments = new ArrayList<>();
+      int highestPrecision = 0;
+      for (String s : node.getArguments()) {
+        ISODateTime dateTime = ISODateTime.parse(s);
+        highestPrecision = Math.max(highestPrecision, dateTime.getFormat().getPrecision());
+        mappedArguments.add(dateTime.getLocalDateTime().toString());
+      }
+      return PrecisionNode.builder()
+        .node(new ComparisonNode(node.getOperator(), node.getSelector(), mappedArguments))
+        .highestPrecision(highestPrecision).build();
     } else {
-      return comparisonNode;
+      return PrecisionNode.builder().node(node).highestPrecision(null).build();
+    }
+  }
+
+  @Builder
+  @Getter
+  public static final class PrecisionNode {
+    private final Node node;
+    private final Integer highestPrecision;
+
+    @Override
+    public String toString() {
+      return this.getNode().toString();
     }
   }
 }
