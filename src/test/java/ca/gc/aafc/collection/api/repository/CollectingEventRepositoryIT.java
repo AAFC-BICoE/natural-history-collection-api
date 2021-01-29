@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import io.crnk.core.resource.list.ResourceList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,7 +99,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @MethodSource({"startDateFilterTestSource", "endDateFilterTestSource", "combinedDateFilterTestSource"})
   void findAll_WhenDateFiltered_DateFiltered(String input, int expectedSize) {
     Assertions.assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
-
   }
 
   private static Stream<Arguments> startDateFilterTestSource() {
@@ -135,19 +135,18 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void DatePrecisionTest_PrecisionProperlyEvaluated() {
+    CollectingEventDto ce = newEventDto("1800");
+    CollectingEventDto dto = collectingEventRepository.create(ce);
+    assertEquals(0, collectingEventRepository.findAll(
+      newRsqlQuerySpec("startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02")).size());
+    assertEquals(1, collectingEventRepository.findAll(
+      newRsqlQuerySpec("startEventDateTime=ge=1800 and startEventDateTime=le=1800-02")).size());
+  }
+
+  @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
-    CollectingEventDto ce = new CollectingEventDto();
-    ce.setUuid(UUID.randomUUID());
-    ce.setGroup("test group");
-    ce.setCollectorGroupUuid(UUID.randomUUID());
-    ce.setVerbatimCollectors("Jack and Jane");
-    ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
-    ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
-    ce.setVerbatimCoordinates("26.089, 106.36");
-    ce.setAttachment(List.of(
-      ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
-    ce.setCollectors(
-      List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));
+    CollectingEventDto ce = newEventDto("2007-12-03T10:15:30");
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
@@ -156,6 +155,22 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
     assertEquals("Jack and Jane", result.getVerbatimCollectors());
     assertEquals(ce.getCollectorGroupUuid(), result.getCollectorGroupUuid());
+  }
+
+  private CollectingEventDto newEventDto(String startTime) {
+    CollectingEventDto ce = new CollectingEventDto();
+    ce.setUuid(UUID.randomUUID());
+    ce.setGroup("test group");
+    ce.setCollectorGroupUuid(UUID.randomUUID());
+    ce.setVerbatimCollectors("Jack and Jane");
+    ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
+    ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
+    ce.setVerbatimCoordinates("26.089, 106.36");
+    ce.setAttachment(List.of(
+      ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
+    ce.setCollectors(
+      List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));
+    return ce;
   }
 
   private static QuerySpec newRsqlQuerySpec(String rsql) {
