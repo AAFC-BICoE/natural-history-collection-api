@@ -22,6 +22,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -55,15 +57,15 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  // Not a Foreign Key, we would not use the UUID if it was.
-  private UUID collectorGroupUuid;
-
   // Might not be the final choice to store lat/long
-  private Double decimalLatitude;
-  private Double decimalLongitude;
+  private Double dwcDecimalLatitude;
+  private Double dwcDecimalLongitude;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
+  private Integer dwcCoordinateUncertaintyInMeters;
+  private String dwcVerbatimCoordinates;
+
+  @Size(max = 250)  
+  private String dwcRecordedBy;
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
@@ -78,8 +80,7 @@ public class CollectingEvent implements DinaEntity {
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
-  private String verbatimCollectors;
-
+  
   @Column(insertable = false, updatable = false)
   private OffsetDateTime createdOn;
 
@@ -94,6 +95,18 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
+
+  @Size(max = 250)  
+  private String dwcVerbatimLocality;
+
+  @Type(type = "list-array")
+  @Column(columnDefinition = "uuid[]")  
+  private List<UUID> dwcGeoreferencedBy = new ArrayList<>();
+
+  private OffsetDateTime dwcGeoreferencedDate;  
+
+  @Size(max = 100)  
+  private String dwcGeoreferenceSources;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields

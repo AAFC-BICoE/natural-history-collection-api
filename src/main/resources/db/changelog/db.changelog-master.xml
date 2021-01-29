@@ -5,4 +5,8 @@
   <include file="db/changelog/migrations/2-Add_attachment_collecting_event.xml"/>
   <include file="db/changelog/migrations/3-Add_support_for_collectors_collecting_event.xml"/>
   <include file="db/changelog/migrations/4-Add_Group_to_collecting_event.xml"/>
+  <include file="db/changelog/migrations/5-Rename_previous_location_fields.xml"/>
+  <include file="db/changelog/migrations/6-Add_dwcRecordedBy_collecting_event.xml"/>
+  <include file="db/changelog/migrations/7-Add_dwcVerbatimLocality_etc_collecting_event.xml"/>
+  <include file="db/changelog/migrations/8-Remove_verbatimCollectors_etc_collecting_event.xml"/>
 </databaseChangeLog>

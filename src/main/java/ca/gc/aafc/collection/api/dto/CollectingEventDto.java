@@ -41,19 +41,18 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
-  private UUID collectorGroupUuid;
-
+  
   private String group;
 
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  private Double decimalLatitude;
-  private Double decimalLongitude;
+  private Double dwcDecimalLatitude;
+  private Double dwcDecimalLongitude;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
-  private String verbatimCollectors;
+  private Integer dwcCoordinateUncertaintyInMeters;
+  private String dwcVerbatimCoordinates;
+  private String dwcRecordedBy;
 
   @IgnoreDinaMapping
   private String startEventDateTime;
@@ -69,7 +68,17 @@ public class CollectingEventDto {
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
-  private List<ExternalRelationDto> attachment = new ArrayList<>();
+  private List<ExternalRelationDto> attachment = new ArrayList<>();  
+
+  private String dwcVerbatimLocality;
+
+  @JsonApiExternalRelation(type = "agent")
+  @JsonApiRelation
+  private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
+
+  private OffsetDateTime dwcGeoreferencedDate;
+
+  private String dwcGeoreferenceSources;  
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
