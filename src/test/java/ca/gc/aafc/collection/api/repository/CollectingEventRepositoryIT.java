@@ -9,7 +9,6 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-import io.crnk.core.resource.list.ResourceList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,8 +42,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final LocalTime endTime = LocalTime.of(10, 10);
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
-  private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
-  private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
+  private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
+  private static final String dwcGeoreferenceSources = "https://www.geonames.org/";
   private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();
 
   @BeforeEach
@@ -52,7 +51,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     createTestCollectingEvent();
   }
 
-  private CollectingEvent createTestCollectingEvent() {
+  private void createTestCollectingEvent() {
     testCollectingEvent = CollectingEventFactory.newCollectingEvent()
       .startEventDateTime(LocalDateTime.of(startDate, startTime))
       .startEventDateTimePrecision((byte) 8)
@@ -73,7 +72,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .build();
 
     service.save(testCollectingEvent);
-    return testCollectingEvent;
   }
 
   @Test
@@ -104,7 +102,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimLocality, collectingEventDto.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, collectingEventDto.getDwcGeoreferenceSources());
     assertEquals(dwcGeoreferencedDate, collectingEventDto.getDwcGeoreferencedDate());
-    assertEquals(testCollectingEvent.getDwcGeoreferencedBy().get(0).toString(), collectingEventDto.getDwcGeoreferencedBy().get(0).getId());
+    assertEquals(
+      testCollectingEvent.getDwcGeoreferencedBy().get(0).toString(),
+      collectingEventDto.getDwcGeoreferencedBy().get(0).getId());
   }
 
   @ParameterizedTest
@@ -147,13 +147,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  void DatePrecisionTest_PrecisionProperlyEvaluated() {
-    CollectingEventDto ce = newEventDto("1800");
-    CollectingEventDto dto = collectingEventRepository.create(ce);
+  void findAllDate_WhenPrecisionOutOfBounds_RecordNotReturned() {
+    collectingEventRepository.create(newEventDto("1800"));
     assertEquals(0, collectingEventRepository.findAll(
       newRsqlQuerySpec("startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02")).size());
-    assertEquals(1, collectingEventRepository.findAll(
-      newRsqlQuerySpec("startEventDateTime=ge=1800 and startEventDateTime=le=1800-02")).size());
   }
 
   @Test
@@ -187,7 +184,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimLocality(dwcVerbatimLocality);
     ce.setDwcGeoreferencedDate(dwcGeoreferencedDate);
     ce.setDwcGeoreferenceSources(dwcGeoreferenceSources);
-    ce.setDwcGeoreferencedBy(List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));
+    ce.setDwcGeoreferencedBy(List.of(ExternalRelationDto.builder()
+      .type("agent")
+      .id(UUID.randomUUID().toString())
+      .build()));
     return ce;
   }
 
