@@ -20,5 +20,8 @@ class IsoRsqlPrecisionResolverTest {
     Assertions.assertEquals(6, RSQL_PARSER.parse(
       "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02")
       .accept(resolver, FIELD_LIST).getHighestPrecision());
+    Assertions.assertEquals(6, RSQL_PARSER.parse(
+      "startEventDateTime=ge=1800-01 or startEventDateTime=le=1800-02")
+      .accept(resolver, FIELD_LIST).getHighestPrecision());
   }
 }
