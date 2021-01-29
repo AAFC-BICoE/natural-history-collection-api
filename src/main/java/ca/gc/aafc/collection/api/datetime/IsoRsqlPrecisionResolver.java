@@ -4,6 +4,7 @@ import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.LogicalOperator;
+import cz.jirutka.rsql.parser.ast.Node;
 import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * ISODateTime#parse(String)}
  */
 @AllArgsConstructor
-public class IsoRsqlPrecisionResolver implements RSQLVisitor<String, List<String>> {
+public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, List<String>> {
 
   private static final RSQLParser RSQL_PARSER = new RSQLParser();
   private final List<String> fieldList;
@@ -29,36 +30,35 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<String, List<String
    * @return the given rsql string with partial dates resolved
    */
   public String resolveDates(String rsql) {
-    return RSQL_PARSER.parse(rsql).accept(this, fieldList);
+    return RSQL_PARSER.parse(rsql).accept(this, fieldList).toString();
   }
 
   @Override
-  public String visit(AndNode andNode, List<String> field) {
-    return andNode.getChildren()
+  public Node visit(AndNode andNode, List<String> field) {
+    return andNode.withChildren(andNode.getChildren()
       .stream()
       .map(node -> node.accept(this, field))
-      .collect(Collectors.joining(LogicalOperator.AND.toString()));
+      .collect(Collectors.toList()));
   }
 
   @Override
-  public String visit(OrNode orNode, List<String> field) {
-    return orNode.getChildren()
+  public Node visit(OrNode orNode, List<String> field) {
+    return orNode.withChildren(orNode.getChildren()
       .stream()
       .map(node -> node.accept(this, field))
-      .collect(Collectors.joining(LogicalOperator.OR.toString()));
+      .collect(Collectors.toList()));
   }
 
   @Override
-  public String visit(ComparisonNode comparisonNode, List<String> field) {
+  public Node visit(ComparisonNode comparisonNode, List<String> field) {
     if (field.stream().anyMatch(f -> comparisonNode.getSelector().equalsIgnoreCase(f))) {
       List<String> mappedArguments = comparisonNode.getArguments()
         .stream()
         .map(s -> ISODateTime.parse(s).getLocalDateTime().toString())
         .collect(Collectors.toList());
-      return new ComparisonNode(comparisonNode.getOperator(), comparisonNode.getSelector(), mappedArguments)
-        .toString();
+      return new ComparisonNode(comparisonNode.getOperator(), comparisonNode.getSelector(), mappedArguments);
     } else {
-      return comparisonNode.toString();
+      return comparisonNode;
     }
   }
 }
