@@ -148,28 +148,42 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @ParameterizedTest
   @MethodSource({"precisionFilterSource"})
-  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String date, String input, int expectedSize) {
-    collectingEventRepository.create(newEventDto(date));
+  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(
+    String startDate,
+    String endDate,
+    String input,
+    int expectedSize
+  ) {
+    collectingEventRepository.create(newEventDto(startDate, endDate));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
   }
 
   private static Stream<Arguments> precisionFilterSource() {
     return Stream.of(
-      Arguments.of("1800", "startEventDateTime=ge=1800 and startEventDateTime=le=1801", 1),
-      Arguments.of("1800", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 0),
-      Arguments.of("1800", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-02-02", 0),
-      Arguments.of("1800-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
-      Arguments.of("1800-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
-      Arguments.of("1800-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 0),
-      Arguments.of("1800-01-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
-      Arguments.of("1800-01-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
-      Arguments.of("1800-01-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 1)
+      Arguments.of("1800","1801", "startEventDateTime=ge=1800 and startEventDateTime=le=1801", 1),
+      Arguments.of("1800","1801", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 0),
+      Arguments.of("1800", "1801", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-02-02", 0),
+      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
+      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
+      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 0),
+      Arguments.of("1800-01-01", "1800-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
+      Arguments.of("1800-01-01", "1800-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
+      Arguments.of("1800-01-01", "1800-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 1),
+      Arguments.of("1800","1800", "startEventDateTime=ge=1800 and endEventDateTime=le=1801", 1),
+      Arguments.of("1800","1800", "startEventDateTime=ge=1800-01 and endEventDateTime=le=1800-02", 0),
+      Arguments.of("1800", "1800", "startEventDateTime=ge=1800-01-01 and endEventDateTime=le=1800-02-02", 0),
+      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800 and endEventDateTime=le=1802", 1),
+      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01 and endEventDateTime=le=1800-02", 1),
+      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01-01 and endEventDateTime=le=1800-01-02", 0),
+      Arguments.of("1800-01-01", "1800-01-01", "startEventDateTime=ge=1800 and endEventDateTime=le=1802", 1),
+      Arguments.of("1800-01-01", "1800-01-01", "startEventDateTime=ge=1800-01 and endEventDateTime=le=1800-02", 1),
+      Arguments.of("1800-01-01", "1800-01-01", "startEventDateTime=ge=1800-01-01 and endEventDateTime=le=1800-01-02", 1)
     );
   }
 
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
-    CollectingEventDto ce = newEventDto("2007-12-03T10:15:30");
+    CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
@@ -183,12 +197,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(ce.getDwcGeoreferencedBy().get(0).getId(), result.getDwcGeoreferencedBy().get(0).getId());
   }
 
-  private CollectingEventDto newEventDto(String startTime) {
+  private CollectingEventDto newEventDto(String startTime, String endDate) {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setUuid(UUID.randomUUID());
     ce.setGroup("test group");
     ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
-    ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
+    ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setDwcRecordedBy(dwcRecordedBy);
     ce.setAttachment(List.of(
