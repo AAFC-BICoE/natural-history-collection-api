@@ -115,7 +115,7 @@ public class CollectingEventDto {
     public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
       return Map.of("rsql",
         filterSpec -> new FilterSpec[]{
-          PathSpec.of("rsql").filter(FilterOperator.EQ, ISO_RSQL_VISITOR.parse(filterSpec.getValue()))});
+          PathSpec.of("rsql").filter(FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
     }
   }
 

@@ -28,7 +28,7 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<String, List<String
    * @param rsql rsql string to resolve
    * @return the given rsql string with partial dates resolved
    */
-  public String parse(String rsql) {
+  public String resolveDates(String rsql) {
     return RSQL_PARSER.parse(rsql).accept(this, fieldList);
   }
 
