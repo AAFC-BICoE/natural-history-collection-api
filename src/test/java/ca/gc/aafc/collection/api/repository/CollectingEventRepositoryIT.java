@@ -146,11 +146,19 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     );
   }
 
-  @Test
-  void findAllDate_WhenPrecisionOutOfBounds_RecordNotReturned() {
-    collectingEventRepository.create(newEventDto("1800"));
-    assertEquals(0, collectingEventRepository.findAll(
-      newRsqlQuerySpec("startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02")).size());
+  @ParameterizedTest
+  @MethodSource({"precisionFilterSource"})
+  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String date, String input, int expectedSize) {
+    collectingEventRepository.create(newEventDto(date));
+    assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
+  }
+
+  private static Stream<Arguments> precisionFilterSource() {
+    return Stream.of(
+      Arguments.of("1800", "startEventDateTime=ge=1800 and startEventDateTime=le=1801", 1),
+      Arguments.of("1800", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 0),
+      Arguments.of("1800", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-02-02", 0)
+    );
   }
 
   @Test
