@@ -157,7 +157,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     return Stream.of(
       Arguments.of("1800", "startEventDateTime=ge=1800 and startEventDateTime=le=1801", 1),
       Arguments.of("1800", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 0),
-      Arguments.of("1800", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-02-02", 0)
+      Arguments.of("1800", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-02-02", 0),
+      Arguments.of("1800-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
+      Arguments.of("1800-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
+      Arguments.of("1800-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 0),
+      Arguments.of("1800-01-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
+      Arguments.of("1800-01-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
+      Arguments.of("1800-01-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 1)
     );
   }
 
