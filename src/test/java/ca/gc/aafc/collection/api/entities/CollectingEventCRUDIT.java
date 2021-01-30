@@ -25,6 +25,12 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
   private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
   private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();  
+  private static final String dwcVerbatimLatitude = "latitude 12.123456";
+  private static final String dwcVerbatimLongitude = "long 45.01";
+  private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
+  private static final String dwcVerbatimSRS = "EPSG:4326";
+  private static final String dwcVerbatimElevation = "100-200 m";
+  private static final String dwcVerbatimDepth = "10-20 m ";  
 
   @Test
   public void testSave() {
@@ -47,6 +53,12 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcVerbatimLocality(dwcVerbatimLocality)
         .dwcGeoreferencedDate(dwcGeoreferencedDate)
         .dwcGeoreferenceSources(dwcGeoreferenceSources)
+        .dwcVerbatimLatitude(dwcVerbatimLatitude)
+        .dwcVerbatimLongitude(dwcVerbatimLongitude)
+        .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
+        .dwcVerbatimSRS(dwcVerbatimSRS)
+        .dwcVerbatimElevation(dwcVerbatimElevation)
+        .dwcVerbatimDepth(dwcVerbatimDepth)
         .build();
     dbService.save(collectingEvent);
 
@@ -61,6 +73,13 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, fetchedCollectingEvent.getDwcGeoreferenceSources());
     assertEquals(dwcGeoreferencedDate, fetchedCollectingEvent.getDwcGeoreferencedDate());
+    assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());    
+    assertEquals(dwcVerbatimLongitude, fetchedCollectingEvent.getDwcVerbatimLongitude());    
+    assertEquals(dwcVerbatimCoordinateSystem, fetchedCollectingEvent.getDwcVerbatimCoordinateSystem());    
+    assertEquals(dwcVerbatimSRS, fetchedCollectingEvent.getDwcVerbatimSRS());    
+    assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());    
+    assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());    
+
   }
 
 }

@@ -108,6 +108,24 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 100)  
   private String dwcGeoreferenceSources;
 
+  @Size(max = 25)  
+  private String dwcVerbatimLatitude;
+
+  @Size(max = 25)  
+  private String dwcVerbatimLongitude;
+
+  @Size(max = 50)  
+  private String dwcVerbatimCoordinateSystem;
+
+  @Size(max = 50)  
+  private String dwcVerbatimSRS;
+
+  @Size(max = 25)  
+  private String dwcVerbatimElevation;
+
+  @Size(max = 25)  
+  private String dwcVerbatimDepth;
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.

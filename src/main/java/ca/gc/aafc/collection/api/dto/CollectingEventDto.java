@@ -71,8 +71,13 @@ public class CollectingEventDto {
   private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
 
   private OffsetDateTime dwcGeoreferencedDate;
-
   private String dwcGeoreferenceSources;  
+  private String dwcVerbatimLatitude;
+  private String dwcVerbatimLongitude;
+  private String dwcVerbatimCoordinateSystem;
+  private String dwcVerbatimSRS;
+  private String dwcVerbatimElevation;
+  private String dwcVerbatimDepth;  
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
