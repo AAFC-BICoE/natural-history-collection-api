@@ -46,6 +46,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcGeoreferenceSources = "https://www.geonames.org/";
   private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();
 
+  private static final String dwcVerbatimLatitude = "latitude 12.123456";
+  private static final String dwcVerbatimLongitude = "long 45.01";
+  private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
+  private static final String dwcVerbatimSRS = "EPSG:4326";
+  private static final String dwcVerbatimElevation = "100-200 m";
+  private static final String dwcVerbatimDepth = "10-20 m ";
+
   @BeforeEach
   public void setup() {
     createTestCollectingEvent();
@@ -75,6 +82,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcGeoreferencedDate(dwcGeoreferencedDate)
       .dwcGeoreferenceSources(dwcGeoreferenceSources)
       .dwcGeoreferencedBy(List.of(UUID.randomUUID()))
+      .dwcVerbatimLatitude(dwcVerbatimLatitude)
+      .dwcVerbatimLongitude(dwcVerbatimLongitude)
+      .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
+      .dwcVerbatimSRS(dwcVerbatimSRS)
+      .dwcVerbatimElevation(dwcVerbatimElevation)
+      .dwcVerbatimDepth(dwcVerbatimDepth)
       .build();
 
     service.save(testCollectingEvent);
@@ -149,6 +162,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcGeoreferenceSources, result.getDwcGeoreferenceSources());
     assertEquals(dwcGeoreferencedDate, result.getDwcGeoreferencedDate());
     assertEquals(ce.getDwcGeoreferencedBy().get(0).getId(), result.getDwcGeoreferencedBy().get(0).getId());
+    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+
   }
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
@@ -170,6 +190,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .type("agent")
       .id(UUID.randomUUID().toString())
       .build()));
+    ce.setDwcVerbatimLatitude(dwcVerbatimLatitude);
+    ce.setDwcVerbatimLongitude(dwcVerbatimLongitude);
+    ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
+    ce.setDwcVerbatimSRS(dwcVerbatimSRS);
+    ce.setDwcVerbatimElevation(dwcVerbatimElevation);
+    ce.setDwcVerbatimDepth(dwcVerbatimDepth);
     return ce;
   }
 
