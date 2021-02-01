@@ -15,12 +15,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Used to resolve Iso Date time partial dates.
+ */
 @AllArgsConstructor
 public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, Set<String>> {
 
   private static final RSQLParser RSQL_PARSER = new RSQLParser();
   private final Map<String, String> fieldList;
 
+  /**
+   * Resolves the given rsql string for dates tracked by the resolver.
+   *
+   * @param rsql - string to resolve
+   * @return - Resolved rsql
+   */
   public String resolveDates(String rsql) {
     return RSQL_PARSER.parse(rsql).accept(this, fieldList.keySet()).toString();
   }
