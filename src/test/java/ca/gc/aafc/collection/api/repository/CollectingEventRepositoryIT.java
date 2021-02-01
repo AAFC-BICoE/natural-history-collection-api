@@ -122,9 +122,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private static Stream<Arguments> precisionFilterSource() {
     return Stream.of(
+      Arguments.of("1999", "startEventDateTime==1999", 1),
       Arguments.of("2000", "startEventDateTime==2000-03", 0),
       Arguments.of("2000-03", "startEventDateTime==2000-03", 1),
-      Arguments.of("2000-03-03", "startEventDateTime==2000-03", 1)
+      Arguments.of("2021-03", "startEventDateTime==2021-02-28", 0),
+      Arguments.of("2021-03", "startEventDateTime==2021-04-01", 0),
+      Arguments.of("2000-03-03", "startEventDateTime==2000-03", 1),
+      Arguments.of("2021-03-03", "startEventDateTime==2021-02-02T23:59", 0),
+      Arguments.of("2021-03-03", "startEventDateTime==2021-04-02T00:00", 0)
     );
   }
 
