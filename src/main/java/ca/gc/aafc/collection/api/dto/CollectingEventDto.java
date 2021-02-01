@@ -25,7 +25,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -85,8 +84,9 @@ public class CollectingEventDto {
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
-    private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver(
-      Set.of("startEventDateTime", "endEventDateTime"));
+    private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver(Map.of(
+      "startEventDateTime", "startEventDateTimePrecision",
+      "endEventDateTime", "endEventDateTimePrecision"));
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {

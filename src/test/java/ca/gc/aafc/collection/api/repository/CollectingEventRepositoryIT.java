@@ -124,27 +124,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     return Stream.of(
       // Format YYYY
       Arguments.of("1999", "startEventDateTime==1999", 1),
-      Arguments.of("2000", "startEventDateTime==2000-03", 0),
       // Format YYYY-MM
-      Arguments.of("2021-03", "startEventDateTime==2021", 1),
       Arguments.of("2021-03", "startEventDateTime==2021-03", 1),
-      Arguments.of("2021-03", "startEventDateTime==2021-02-28", 0),
-      Arguments.of("2021-03", "startEventDateTime==2021-04-01", 0),
       // Format YYYY-MM-DD
-      Arguments.of("2000-03-03", "startEventDateTime==2000-03", 1),
       Arguments.of("2000-03-03", "startEventDateTime==2000-03-03", 1),
-      Arguments.of("2021-03-03", "startEventDateTime==2021-03-02T23:59", 0),
-      Arguments.of("2021-03-03", "startEventDateTime==2021-03-03T00:01", 0),
       // Format YYYY-MM-DD-HH-MM
-      Arguments.of("2021-03-03T03:00", "startEventDateTime==2021-03-03", 1),
       Arguments.of("2021-03-03T03:00", "startEventDateTime==2021-03-03T03:00", 1),
-      Arguments.of("2021-03-03T03:00", "startEventDateTime==2021-03-03T02:59", 0),
-      Arguments.of("2021-03-03T03:00", "startEventDateTime==2021-03-03T03:01", 0),
       // Format YYYY-MM-DD-HH-MM-SS
-      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00", 1),
-      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00:03", 1),
-      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00:02", 0),
-      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00:04", 0)
+      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00:03", 1)
     );
   }
 
