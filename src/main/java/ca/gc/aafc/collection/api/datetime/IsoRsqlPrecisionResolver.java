@@ -71,19 +71,21 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, Set<String>> 
     LocalDateTime upperBound = null;
     switch (format) {
       case YYYY:
-        upperBound = lowerBound.plusYears(1).minusNanos(1);
+        upperBound = lowerBound.withDayOfYear(1).withHour(0).withMinute(0).withSecond(0).withNano(0)
+          .plusYears(1).minusNanos(1);
         break;
       case YYYY_MM:
-        upperBound = lowerBound.plusMonths(1).minusNanos(1);
+        upperBound = lowerBound.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0)
+          .plusMonths(1).minusNanos(1);
         break;
       case YYYY_MM_DD:
-        upperBound = lowerBound.plusDays(1).minusNanos(1);
+        upperBound = lowerBound.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1).minusNanos(1);
         break;
       case YYYY_MM_DD_HH_MM:
-        upperBound = lowerBound.plusMinutes(1).minusNanos(1);
+        upperBound = lowerBound.withSecond(0).withNano(0).plusMinutes(1).minusNanos(1);
         break;
       case YYYY_MM_DD_HH_MM_SS:
-        upperBound = lowerBound.plusSeconds(1).minusNanos(1);
+        upperBound = lowerBound.withNano(0).plusSeconds(1).minusNanos(1);
         break;
       case YYYY_MM_DD_HH_MM_SS_MMM:
         upperBound = lowerBound;
