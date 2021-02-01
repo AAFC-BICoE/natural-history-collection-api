@@ -41,7 +41,14 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
   private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
-  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();    
+  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now(); 
+  
+  private static final String dwcVerbatimLatitude = "latitude 12.123456";
+  private static final String dwcVerbatimLongitude = "long 45.01";
+  private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
+  private static final String dwcVerbatimSRS = "EPSG:4326";
+  private static final String dwcVerbatimElevation = "100-200 m";
+  private static final String dwcVerbatimDepth = "10-20 m ";    
 
   static {
     URI_BUILDER.setScheme("https");
@@ -75,7 +82,13 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     ce.setDwcVerbatimLocality(dwcVerbatimLocality);
     ce.setDwcGeoreferencedDate(dwcGeoreferencedDate);
     ce.setDwcGeoreferenceSources(dwcGeoreferenceSources);
-    ce.setDwcGeoreferencedBy(null);      
+    ce.setDwcGeoreferencedBy(null);     
+    ce.setDwcVerbatimLatitude(dwcVerbatimLatitude);
+    ce.setDwcVerbatimLongitude(dwcVerbatimLongitude);
+    ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
+    ce.setDwcVerbatimSRS(dwcVerbatimSRS);
+    ce.setDwcVerbatimElevation(dwcVerbatimElevation);
+    ce.setDwcVerbatimDepth(dwcVerbatimDepth);          
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
