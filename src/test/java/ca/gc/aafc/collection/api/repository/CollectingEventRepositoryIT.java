@@ -121,31 +121,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimLocality, collectingEventDto.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, collectingEventDto.getDwcGeoreferenceSources());
     assertEquals(dwcGeoreferencedDate, collectingEventDto.getDwcGeoreferencedDate());
-    assertEquals(
-      testCollectingEvent.getDwcGeoreferencedBy().get(0).toString(),
-      collectingEventDto.getDwcGeoreferencedBy().get(0).getId());
-  }
+    assertEquals(testCollectingEvent.getDwcGeoreferencedBy().get(0).toString(), collectingEventDto.getDwcGeoreferencedBy().get(0).getId());
 
-  @ParameterizedTest
-  @MethodSource({"precisionFilterSource"})
-  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
-    collectingEventRepository.create(newEventDto(startDate, "1888"));
-    assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
-  }
-
-  private static Stream<Arguments> precisionFilterSource() {
-    return Stream.of(
-      // Format YYYY
-      Arguments.of("1999", "startEventDateTime==1999", 1),
-      // Format YYYY-MM
-      Arguments.of("2021-03", "startEventDateTime==2021-03", 1),
-      // Format YYYY-MM-DD
-      Arguments.of("2000-03-03", "startEventDateTime==2000-03-03", 1),
-      // Format YYYY-MM-DD-HH-MM
-      Arguments.of("2021-03-03T03:00", "startEventDateTime==2021-03-03T03:00", 1),
-      // Format YYYY-MM-DD-HH-MM-SS
-      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00:03", 1)
-    );
+    assertEquals(dwcVerbatimLatitude, collectingEventDto.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, collectingEventDto.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, collectingEventDto.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
   }
 
   @Test
