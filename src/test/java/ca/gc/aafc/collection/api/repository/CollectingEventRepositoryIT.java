@@ -182,6 +182,28 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     return ce;
   }
 
+  @ParameterizedTest
+  @MethodSource({"precisionFilterSource"})
+  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
+    collectingEventRepository.create(newEventDto(startDate, "1888"));
+    assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
+  }
+
+  private static Stream<Arguments> precisionFilterSource() {
+    return Stream.of(
+      // Format YYYY
+      Arguments.of("1999", "startEventDateTime==1999", 1),
+      // Format YYYY-MM
+      Arguments.of("2021-03", "startEventDateTime==2021-03", 1),
+      // Format YYYY-MM-DD
+      Arguments.of("2000-03-03", "startEventDateTime==2000-03-03", 1),
+      // Format YYYY-MM-DD-HH-MM
+      Arguments.of("2021-03-03T03:00", "startEventDateTime==2021-03-03T03:00", 1),
+      // Format YYYY-MM-DD-HH-MM-SS
+      Arguments.of("2021-03-03T03:00:03", "startEventDateTime==2021-03-03T03:00:03", 1)
+    );
+  }
+
   private static QuerySpec newRsqlQuerySpec(String rsql) {
     QuerySpec spec = new QuerySpec(CollectingEventDto.class);
     spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ, rsql));
