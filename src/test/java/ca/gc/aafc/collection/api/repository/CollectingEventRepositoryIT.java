@@ -134,7 +134,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       Arguments.of("2021-03-03T03:00", "startEventDateTime==2000-03-03", 1),
       Arguments.of("2021-03-03T03:00", "startEventDateTime==2000-03-03T03:00", 1),
       Arguments.of("2021-03-03T03:00", "startEventDateTime==2000-03-03T02:59", 0),
-      Arguments.of("2021-03-03T03:00", "startEventDateTime==2000-03-03T04:00", 0)
+      Arguments.of("2021-03-03T03:00", "startEventDateTime==2000-03-03T03:01", 0)
     );
   }
 
