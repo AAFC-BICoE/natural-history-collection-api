@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +42,7 @@ public class CollectingEventDto {
 
   @JsonApiId
   private UUID uuid;
-  
+
   private String group;
 
   private String createdBy;
@@ -68,7 +69,7 @@ public class CollectingEventDto {
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
-  private List<ExternalRelationDto> attachment = new ArrayList<>();  
+  private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   private String dwcVerbatimLocality;
 
@@ -85,8 +86,7 @@ public class CollectingEventDto {
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver(
-      Map.of("startEventDateTime", "startEventDateTimePrecision",
-        "endEventDateTime", "endEventDateTimePrecision"));
+      Set.of("startEventDateTime", "endEventDateTime"));
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {

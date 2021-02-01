@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,10 +20,10 @@ import java.util.stream.Collectors;
 public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, Set<String>> {
 
   private static final RSQLParser RSQL_PARSER = new RSQLParser();
-  private final Map<String, String> fieldToPrecisionNameMap;
+  private final Set<String> fieldList;
 
   public String resolveDates(String rsql) {
-    return RSQL_PARSER.parse(rsql).accept(this, fieldToPrecisionNameMap.keySet()).toString();
+    return RSQL_PARSER.parse(rsql).accept(this, fieldList).toString();
   }
 
   @Override
