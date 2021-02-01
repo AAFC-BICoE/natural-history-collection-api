@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.datetime;
 
+import ca.gc.aafc.collection.api.datetime.ISODateTime.Format;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
-import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.Node;
 import cz.jirutka.rsql.parser.ast.OrNode;
@@ -12,8 +12,8 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.apache.commons.collections.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,62 +52,88 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<IsoRsqlPrecisionRes
 
   private PrecisionNode resolveLogicalNode(LogicalNode logicalNode, Set<String> field) {
     List<Node> nodes = new ArrayList<>();
-    List<ComparisonNode> precisionMap = new ArrayList<>();
     for (Node node : logicalNode.getChildren()) {
       PrecisionNode accept = node.accept(this, field);
       nodes.add(accept.getNode());
-      if (CollectionUtils.isNotEmpty(accept.getPrecisionComparisons())) {
-        precisionMap.addAll(accept.getPrecisionComparisons());
-      }
     }
     return PrecisionNode.builder()
       .node(logicalNode.withChildren(nodes))
-      .precisionComparisons(precisionMap)
       .build();
   }
 
   @Override
   public PrecisionNode visit(ComparisonNode node, Set<String> field) {
     if (field.stream().anyMatch(f -> node.getSelector().equalsIgnoreCase(f))) {
-      List<String> mappedArguments = new ArrayList<>();
-      int highestPrecision = 0;
-      for (String s : node.getArguments()) {
-        ISODateTime dateTime = ISODateTime.parse(s);
-        highestPrecision = Math.max(highestPrecision, dateTime.getFormat().getPrecision());
-        mappedArguments.add(dateTime.getLocalDateTime().toString());
+      ISODateTime argument = node.getArguments().stream().findFirst().map(ISODateTime::parse).orElseThrow();
+      LocalDateTime lowerBound = argument.getLocalDateTime();
+      LocalDateTime upperBound = getUpperBound(lowerBound, argument.getFormat());
+      if (node.getOperator().equals(RSQLOperators.EQUAL)) {
+        return PrecisionNode.builder()
+          .node(newBoundedNode(node, lowerBound, upperBound, node.getSelector()))
+          .build();
+      } else {
+        return PrecisionNode.builder()
+          .node(new ComparisonNode(node.getOperator(),
+            node.getSelector(),
+            List.of(argument.getLocalDateTime().toString())))
+          .build();
       }
-      return PrecisionNode.builder()
-        .node(new ComparisonNode(node.getOperator(), node.getSelector(), mappedArguments))
-        .precisionComparisons(newPrecisionComparison(highestPrecision, node.getSelector()))
-        .build();
     } else {
-      return PrecisionNode.builder().node(node).precisionComparisons(null).build();
+      return PrecisionNode.builder().node(node).build();
     }
   }
 
-  private List<ComparisonNode> newPrecisionComparison(int precision, String selector) {
-    return List.of(new ComparisonNode(
-      new ComparisonOperator(RSQLOperators.GREATER_THAN_OR_EQUAL.getSymbol()),
-      fieldToPrecisionNameMap.get(selector),
-      List.of(Integer.toString(precision))));
+  private AndNode newBoundedNode(
+    ComparisonNode node,
+    LocalDateTime lowerBound,
+    LocalDateTime upperBound,
+    String selector
+  ) {
+    return new AndNode(List.of(
+      new ComparisonNode(
+        RSQLOperators.GREATER_THAN_OR_EQUAL,
+        selector,
+        List.of(lowerBound.toString())),
+      new ComparisonNode(
+        RSQLOperators.LESS_THAN_OR_EQUAL,
+        node.getSelector(),
+        List.of(upperBound.toString()))));
+  }
+
+  private static LocalDateTime getUpperBound(LocalDateTime lowerBound, Format format) {
+    LocalDateTime upperBound = null;
+    switch (format) {
+      case YYYY:
+        upperBound = lowerBound.plusYears(1).minusNanos(1);
+        break;
+      case YYYY_MM:
+        upperBound = lowerBound.plusMonths(1).minusNanos(1);
+        break;
+      case YYYY_MM_DD:
+        upperBound = lowerBound.plusDays(1).minusNanos(1);
+        break;
+      case YYYY_MM_DD_HH_MM:
+        upperBound = lowerBound.plusMinutes(1).minusNanos(1);
+        break;
+      case YYYY_MM_DD_HH_MM_SS:
+        upperBound = lowerBound.plusSeconds(1).minusNanos(1);
+        break;
+      case YYYY_MM_DD_HH_MM_SS_MMM:
+        upperBound = lowerBound;
+        break;
+    }
+    return upperBound;
   }
 
   @Builder
   @Getter
   public static final class PrecisionNode {
     private final Node node;
-    private final List<ComparisonNode> precisionComparisons;
 
     @Override
     public String toString() {
-      if (CollectionUtils.isNotEmpty(precisionComparisons)) {
-        List<Node> nodes = new ArrayList<>();
-        nodes.add(node);
-        nodes.addAll(precisionComparisons);
-        return new AndNode(nodes).toString();
-      } else {
-        return this.getNode().toString();
-      }
+      System.out.println(this.getNode().toString());
+      return this.getNode().toString();
     }
   }
 }

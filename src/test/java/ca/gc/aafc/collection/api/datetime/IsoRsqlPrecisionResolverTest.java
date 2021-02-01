@@ -16,7 +16,7 @@ class IsoRsqlPrecisionResolverTest {
   void highestPercision() {
     IsoRsqlPrecisionResolver resolver = new IsoRsqlPrecisionResolver(FIELD_LIST);
     IsoRsqlPrecisionResolver.PrecisionNode node = RSQL_PARSER.parse(
-      "startEventDateTime=ge=1800-01")
+      "startEventDateTime==1800-01")
       .accept(resolver, FIELD_LIST.keySet());
     System.out.println(node);
   }

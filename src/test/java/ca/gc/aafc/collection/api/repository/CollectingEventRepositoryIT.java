@@ -9,7 +9,7 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -49,6 +49,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @BeforeEach
   public void setup() {
     createTestCollectingEvent();
+  }
+
+  @AfterEach
+  void tearDown() {
+    collectingEventRepository.findAll(new QuerySpec(CollectingEventDto.class))
+      .forEach(collectingEventDto -> collectingEventRepository.delete(collectingEventDto.getUuid()));
   }
 
   private void createTestCollectingEvent() {
@@ -108,76 +114,17 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @ParameterizedTest
-  @MethodSource({"startDateFilterTestSource", "endDateFilterTestSource", "combinedDateFilterTestSource"})
-  void findAll_WhenDateFiltered_DateFiltered(String input, int expectedSize) {
-    Assertions.assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
-  }
-
-  private static Stream<Arguments> startDateFilterTestSource() {
-    return Stream.of(
-      Arguments.of("startEventDateTime=ge=1999", 1),
-      Arguments.of("startEventDateTime=ge=2020", 0),
-      Arguments.of("startEventDateTime=le=2020", 1),
-      Arguments.of("startEventDateTime=le=1999", 0),
-      Arguments.of("startEventDateTime=le=2001 and startEventDateTime=ge=1999", 1),
-      Arguments.of("startEventDateTime=le=1999 and startEventDateTime=ge=2001", 0),
-      Arguments.of("startEventDateTime=le=1999 or startEventDateTime=ge=1999", 1),
-      Arguments.of("startEventDateTime=le=1999 or startEventDateTime=ge=2200", 0)
-    );
-  }
-
-  private static Stream<Arguments> endDateFilterTestSource() {
-    return Stream.of(
-      Arguments.of("endEventDateTime=ge=2001", 1),
-      Arguments.of("endEventDateTime=ge=2003", 0),
-      Arguments.of("endEventDateTime=le=2003", 1),
-      Arguments.of("endEventDateTime=le=2001", 0),
-      Arguments.of("endEventDateTime=le=2003 and endEventDateTime=ge=2001", 1),
-      Arguments.of("endEventDateTime=le=2001 and endEventDateTime=ge=2003", 0),
-      Arguments.of("endEventDateTime=le=2003 or endEventDateTime=ge=2003", 1),
-      Arguments.of("endEventDateTime=le=2001 or endEventDateTime=ge=2200", 0)
-    );
-  }
-
-  private static Stream<Arguments> combinedDateFilterTestSource() {
-    return Stream.of(
-      Arguments.of("startEventDateTime=ge=2000-01-01 and endEventDateTime=le=2002-11-01", 1),
-      Arguments.of("startEventDateTime=ge=2000-01-01 and endEventDateTime=le=2002-10-01", 0)
-    );
-  }
-
-  @ParameterizedTest
   @MethodSource({"precisionFilterSource"})
-  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(
-    String startDate,
-    String endDate,
-    String input,
-    int expectedSize
-  ) {
-    collectingEventRepository.create(newEventDto(startDate, endDate));
+  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
+    collectingEventRepository.create(newEventDto(startDate, "1888"));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
   }
 
   private static Stream<Arguments> precisionFilterSource() {
     return Stream.of(
-      Arguments.of("1800","1801", "startEventDateTime=ge=1800 and startEventDateTime=le=1801", 1),
-      Arguments.of("1800","1801", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 0),
-      Arguments.of("1800", "1801", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-02-02", 0),
-      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
-      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
-      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 0),
-      Arguments.of("1800-01-01", "1800-01", "startEventDateTime=ge=1800 and startEventDateTime=le=1802", 1),
-      Arguments.of("1800-01-01", "1800-01", "startEventDateTime=ge=1800-01 and startEventDateTime=le=1800-02", 1),
-      Arguments.of("1800-01-01", "1800-01", "startEventDateTime=ge=1800-01-01 and startEventDateTime=le=1800-01-02", 1),
-      Arguments.of("1800","1800", "startEventDateTime=ge=1800 and endEventDateTime=le=1801", 1),
-      Arguments.of("1800","1800", "startEventDateTime=ge=1800-01 and endEventDateTime=le=1800-02", 0),
-      Arguments.of("1800", "1800", "startEventDateTime=ge=1800-01-01 and endEventDateTime=le=1800-02-02", 0),
-      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800 and endEventDateTime=le=1802", 1),
-      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01 and endEventDateTime=le=1800-02", 1),
-      Arguments.of("1800-01", "1800-01", "startEventDateTime=ge=1800-01-01 and endEventDateTime=le=1800-01-02", 0),
-      Arguments.of("1800-01-01", "1800-01-01", "startEventDateTime=ge=1800 and endEventDateTime=le=1802", 1),
-      Arguments.of("1800-01-01", "1800-01-01", "startEventDateTime=ge=1800-01 and endEventDateTime=le=1800-02", 1),
-      Arguments.of("1800-01-01", "1800-01-01", "startEventDateTime=ge=1800-01-01 and endEventDateTime=le=1800-01-02", 1)
+      Arguments.of("2000", "startEventDateTime==2000-03", 0),
+      Arguments.of("2000-03", "startEventDateTime==2000-03", 1),
+      Arguments.of("2000-03-03", "startEventDateTime==2000-03", 1)
     );
   }
 
