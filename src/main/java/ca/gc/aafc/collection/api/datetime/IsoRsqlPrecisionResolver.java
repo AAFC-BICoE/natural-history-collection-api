@@ -82,7 +82,7 @@ public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, Set<String>> 
           .plusDays(1).minusSeconds(1);
         break;
       case YYYY_MM_DD_HH_MM:
-        upperBound = lowerBound.withSecond(0).withNano(0).plusMinutes(1).minusNanos(1);
+        upperBound = lowerBound.withSecond(0).withNano(0).plusMinutes(1).minusSeconds(1);
         break;
       case YYYY_MM_DD_HH_MM_SS:
         upperBound = lowerBound.withNano(0).plusSeconds(1).minusNanos(1);
