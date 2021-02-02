@@ -15,6 +15,8 @@ import lombok.NonNull;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +24,9 @@ import org.springframework.stereotype.Repository;
 public class CollectingEventRepository extends DinaRepository<CollectingEventDto, CollectingEvent> {
 
   private Optional<DinaAuthenticatedUser> authenticatedUser;
+
+  @Inject
+  private Optional<GroupAuthorizationService> groupAuthService;
 
   public CollectingEventRepository(
     @NonNull CollectingEventService dinaService,
@@ -34,7 +39,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   ) {
     super(
       dinaService,
-      Optional.of(new GroupAuthorizationService()),
+      groupAuthService,
       Optional.empty(),
       new DinaMapper<>(CollectingEventDto.class),
       CollectingEventDto.class,
