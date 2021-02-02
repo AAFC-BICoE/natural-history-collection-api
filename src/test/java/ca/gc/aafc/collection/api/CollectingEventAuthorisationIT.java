@@ -38,7 +38,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   private static final LocalDate endDate = LocalDate.of(2002, 10, 10);
   private static final LocalTime endTime = LocalTime.of(10, 10);  
 
-  @WithMockKeycloakUser(groupRole = { "group 1: staff" })
+  @WithMockKeycloakUser(groupRole = { "amf: staff" })
   @BeforeEach
   public void setup() {
     createTestCollectingEvent();
@@ -50,13 +50,13 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
      .endEventDateTime(LocalDateTime.of(endDate, endTime)).endEventDateTimePrecision((byte) 8)
      .verbatimEventDateTime("XI-02-1798").build();
 
-     testCollectingEvent.setGroup("group 1");
+     testCollectingEvent.setGroup("amf");
 
     service.save(testCollectingEvent);
     return testCollectingEvent;
   }
 
-  @WithMockKeycloakUser(groupRole = { "group 2: CNC-CM" })
+  @WithMockKeycloakUser(groupRole = { "aafc: collection-manager" })
   @Test
   public void when_UpdatingAsUserFromGroupOtherthanEventGroup_AccessDenied() {
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
@@ -65,7 +65,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     Assertions.assertThrows(AccessDeniedException.class,()-> collectingEventRepository.save(retrievedEvent));    
   }
 
-  @WithMockKeycloakUser(groupRole = { "group 1: staff" })  
+  @WithMockKeycloakUser(groupRole = { "amf: staff" })  
   @Test
   public void when_UpdatingAsUserFromEventGroup_EventUpdated(){
     CollectingEventDto retrievedEventDto = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
@@ -76,7 +76,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     assertEquals("10-20m", updatedEvent.getDwcVerbatimDepth());       
   }
 
-  @WithMockKeycloakUser(groupRole = { "group 2: CNC-CM" })
+  @WithMockKeycloakUser(groupRole = { "aafc: collection-manager" })
   @Test
   public void when_deleteAsUserFromGroupOtherthanEventGroup_AccessDenied() {
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
@@ -86,7 +86,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     assertNotNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
   }
 
-  @WithMockKeycloakUser(groupRole = { "group 1: staff" })  
+  @WithMockKeycloakUser(groupRole = { "amf: staff" })
   @Test
   public void when_deleteAsUserFromEventGroup_Eventdeleted(){
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
