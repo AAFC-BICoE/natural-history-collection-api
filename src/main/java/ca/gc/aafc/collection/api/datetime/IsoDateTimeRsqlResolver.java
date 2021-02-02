@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * Used to resolve Iso Date time partial dates.
  */
 @AllArgsConstructor
-public class IsoRsqlPrecisionResolver implements RSQLVisitor<Node, Set<String>> {
+public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, Set<String>> {
 
   private static final RSQLParser RSQL_PARSER = new RSQLParser();
   private final Map<String, String> fieldList;

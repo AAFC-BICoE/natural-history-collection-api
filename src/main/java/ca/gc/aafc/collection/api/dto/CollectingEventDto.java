@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.collection.api.datetime.IsoRsqlPrecisionResolver;
+import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -89,7 +89,7 @@ public class CollectingEventDto {
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
-    private static final IsoRsqlPrecisionResolver ISO_RSQL_VISITOR = new IsoRsqlPrecisionResolver(Map.of(
+    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(Map.of(
       "startEventDateTime", "startEventDateTimePrecision",
       "endEventDateTime", "endEventDateTimePrecision"));
 
