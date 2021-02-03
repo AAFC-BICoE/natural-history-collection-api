@@ -171,11 +171,12 @@ public class CollectingEventDto {
       return dtoRef::getEndEventDateTime;
     }
 
-    @Override
-    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-    }
+    //C.G. commented since it will run even if the field is not included
+//    @Override
+//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
+//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
+//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
+//    }
   }
 
 }
