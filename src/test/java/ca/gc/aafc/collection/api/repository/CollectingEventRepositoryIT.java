@@ -130,7 +130,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
-    assertEquals(dwcRecordNumber, collectingEventDto.getDwcRecordNumber());
   }
 
   @Test
@@ -159,7 +158,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(dwcRecordNumber, result.getDwcRecordNumber());
     assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
     assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
     assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
@@ -193,7 +191,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
-    ce.setDwcRecordNumber(dwcRecordNumber);
     return ce;
   }
 
