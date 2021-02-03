@@ -161,7 +161,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
     assertEquals(dwcRecordNumber, result.getDwcRecordNumber());
-
+    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
   }
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {

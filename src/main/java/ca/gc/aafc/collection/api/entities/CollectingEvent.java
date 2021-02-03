@@ -126,9 +126,6 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcVerbatimDepth;
 
-  @Size(max = 25)  
-  private String dwcRecordNumber;
-
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
