@@ -10,5 +10,4 @@
   <include file="db/changelog/migrations/7-Add_dwcVerbatimLocality_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/8-Remove_verbatimCollectors_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/9-Add_dwcVerbatimLatitude_etc_collecting_event.xml"/>  
-  <include file="db/changelog/migrations/10-Add_dwcRecordNumber_collecting_event.xml"/>    
 </databaseChangeLog>
