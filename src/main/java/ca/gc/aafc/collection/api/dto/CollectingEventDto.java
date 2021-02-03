@@ -77,21 +77,20 @@ public class CollectingEventDto {
   private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
 
   private OffsetDateTime dwcGeoreferencedDate;
-  private String dwcGeoreferenceSources;  
+  private String dwcGeoreferenceSources;
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;
   private String dwcVerbatimCoordinateSystem;
   private String dwcVerbatimSRS;
   private String dwcVerbatimElevation;
-  private String dwcVerbatimDepth;  
+  private String dwcVerbatimDepth;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
-    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(Map.of(
-      "startEventDateTime", "startEventDateTimePrecision",
-      "endEventDateTime", "endEventDateTimePrecision"));
+    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
+      "startEventDateTime", "startEventDateTimePrecision");
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -128,15 +127,16 @@ public class CollectingEventDto {
 
     @Override
     public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-      return Map.of("rsql",
-        filterSpec -> new FilterSpec[]{
-          PathSpec.of("rsql").filter(FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
+      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
+        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
     }
   }
 
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
+      "endEventDateTime", "endEventDateTimePrecision");
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -169,6 +169,12 @@ public class CollectingEventDto {
     @Override
     public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
       return dtoRef::getEndEventDateTime;
+    }
+
+    @Override
+    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
+      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
+        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
     }
   }
 
