@@ -52,7 +52,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
-  private static final String dwcRecordNumber = "80-79";
 
   @BeforeEach
   public void setup() {
