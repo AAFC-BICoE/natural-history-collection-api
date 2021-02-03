@@ -52,6 +52,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
+  private static final String dwcRecordNumber = "80-79";
 
   @BeforeEach
   public void setup() {
@@ -88,6 +89,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
+      .dwcRecordNumber(dwcRecordNumber)
       .build();
 
     service.save(testCollectingEvent);
@@ -129,6 +131,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
+    assertEquals(dwcRecordNumber, collectingEventDto.getDwcRecordNumber());
   }
 
   @Test
@@ -151,6 +154,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+    assertEquals(dwcRecordNumber, result.getDwcRecordNumber());
 
   }
 
@@ -179,6 +189,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
+    ce.setDwcRecordNumber(dwcRecordNumber);
     return ce;
   }
 
