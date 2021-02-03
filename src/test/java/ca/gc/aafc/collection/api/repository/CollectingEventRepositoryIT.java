@@ -89,7 +89,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
-      .dwcRecordNumber(dwcRecordNumber)
       .build();
 
     service.save(testCollectingEvent);
