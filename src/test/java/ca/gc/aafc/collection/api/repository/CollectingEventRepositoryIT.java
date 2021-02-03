@@ -44,7 +44,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
-  private static final String dwcVerbatimDepth = "10-20 m ";    
+  private static final String dwcVerbatimDepth = "10-20 m ";  
+  private static final String dwcRecordNumber = "80-79";    
 
   @BeforeEach
   public void setup() {
@@ -74,7 +75,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
-      .dwcVerbatimDepth(dwcVerbatimDepth)      
+      .dwcVerbatimDepth(dwcVerbatimDepth)   
+      .dwcRecordNumber(dwcRecordNumber)   
       .build();
 
     service.save(testCollectingEvent);
@@ -117,6 +119,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
+    assertEquals(dwcRecordNumber, collectingEventDto.getDwcRecordNumber());          
   }
 
   @Test
@@ -142,7 +145,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
-    ce.setDwcVerbatimDepth(dwcVerbatimDepth);      
+    ce.setDwcVerbatimDepth(dwcVerbatimDepth);  
+    ce.setDwcRecordNumber(dwcRecordNumber);
 
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
@@ -162,7 +166,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());      
-    
+    assertEquals(dwcRecordNumber, result.getDwcRecordNumber());         
 
   }
 
