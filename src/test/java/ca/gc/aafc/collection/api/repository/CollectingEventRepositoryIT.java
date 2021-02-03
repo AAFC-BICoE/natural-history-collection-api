@@ -6,9 +6,15 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import io.crnk.core.queryspec.FilterOperator;
+import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -17,6 +23,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,8 +42,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final LocalTime endTime = LocalTime.of(10, 10);
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
-  private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
-  private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
+  private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
+  private static final String dwcGeoreferenceSources = "https://www.geonames.org/";
   private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();
 
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
@@ -44,14 +51,20 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
-  private static final String dwcVerbatimDepth = "10-20 m ";    
+  private static final String dwcVerbatimDepth = "10-20 m ";
 
   @BeforeEach
   public void setup() {
     createTestCollectingEvent();
   }
 
-  private CollectingEvent createTestCollectingEvent() {
+  @AfterEach
+  void tearDown() {
+    collectingEventRepository.findAll(new QuerySpec(CollectingEventDto.class))
+      .forEach(collectingEventDto -> collectingEventRepository.delete(collectingEventDto.getUuid()));
+  }
+
+  private void createTestCollectingEvent() {
     testCollectingEvent = CollectingEventFactory.newCollectingEvent()
       .startEventDateTime(LocalDateTime.of(startDate, startTime))
       .startEventDateTimePrecision((byte) 8)
@@ -74,11 +87,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
-      .dwcVerbatimDepth(dwcVerbatimDepth)      
+      .dwcVerbatimDepth(dwcVerbatimDepth)
       .build();
 
     service.save(testCollectingEvent);
-    return testCollectingEvent;
   }
 
   @Test
@@ -116,16 +128,49 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimCoordinateSystem, collectingEventDto.getDwcVerbatimCoordinateSystem());
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
-    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
+    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
   }
 
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
+    CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
+    CollectingEventDto result = collectingEventRepository.findOne(
+      collectingEventRepository.create(ce).getUuid(),
+      new QuerySpec(CollectingEventDto.class));
+    assertNotNull(result.getCreatedBy());
+    assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
+    assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
+    assertEquals(dwcRecordedBy, result.getDwcRecordedBy());
+    assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
+    assertEquals(dwcGeoreferenceSources, result.getDwcGeoreferenceSources());
+    assertEquals(dwcGeoreferencedDate, result.getDwcGeoreferencedDate());
+    assertEquals(ce.getDwcGeoreferencedBy().get(0).getId(), result.getDwcGeoreferencedBy().get(0).getId());
+    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+  }
+
+  private CollectingEventDto newEventDto(String startTime, String endDate) {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setUuid(UUID.randomUUID());
     ce.setGroup("test group");
-    ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
-    ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
+    ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
+    ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setDwcRecordedBy(dwcRecordedBy);
     ce.setAttachment(List.of(
@@ -135,35 +180,50 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimLocality(dwcVerbatimLocality);
     ce.setDwcGeoreferencedDate(dwcGeoreferencedDate);
     ce.setDwcGeoreferenceSources(dwcGeoreferenceSources);
-    ce.setDwcGeoreferencedBy(List.of(ExternalRelationDto.builder().type("agent").id(UUID.randomUUID().toString()).build()));      
-
+    ce.setDwcGeoreferencedBy(List.of(ExternalRelationDto.builder()
+      .type("agent")
+      .id(UUID.randomUUID().toString())
+      .build()));
     ce.setDwcVerbatimLatitude(dwcVerbatimLatitude);
     ce.setDwcVerbatimLongitude(dwcVerbatimLongitude);
     ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
-    ce.setDwcVerbatimDepth(dwcVerbatimDepth);      
+    ce.setDwcVerbatimDepth(dwcVerbatimDepth);
+    return ce;
+  }
 
-    CollectingEventDto result = collectingEventRepository.findOne(
-      collectingEventRepository.create(ce).getUuid(),
-      new QuerySpec(CollectingEventDto.class));
-    assertNotNull(result.getCreatedBy());
-    assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
-    assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
-    assertEquals(dwcRecordedBy, result.getDwcRecordedBy());                   
-    assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
-    assertEquals(dwcGeoreferenceSources, result.getDwcGeoreferenceSources());
-    assertEquals(dwcGeoreferencedDate, result.getDwcGeoreferencedDate());
-    assertEquals(ce.getDwcGeoreferencedBy().get(0).getId(), result.getDwcGeoreferencedBy().get(0).getId());    
+  @ParameterizedTest
+  @MethodSource({"precisionFilterSource"})
+  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
+    collectingEventRepository.create(newEventDto(startDate, "1888"));
+    assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
+  }
 
-    assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
-    assertEquals(dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
-    assertEquals(dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
-    assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
-    assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
-    assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());      
-    
+  private static Stream<Arguments> precisionFilterSource() {
+    return Stream.of(
+      // Format YYYY
+      Arguments.of("1999", "startEventDateTime==1999", 1),
+      Arguments.of("1999", "startEventDateTime==1998", 0),
+      // Format YYYY-MM
+      Arguments.of("1999-03", "startEventDateTime==1999-03", 1),
+      Arguments.of("1999-03", "startEventDateTime==1999-02", 0),
+      // Format YYYY-MM-DD
+      Arguments.of("1999-03-03", "startEventDateTime==1999-03-03", 1),
+      Arguments.of("1999-03-03", "startEventDateTime==1999-03-02", 0),
+      // Format YYYY-MM-DD-HH-MM
+      Arguments.of("1999-03-03T03:00", "startEventDateTime==1999-03-03T03:00", 1),
+      Arguments.of("1999-03-03T03:00", "startEventDateTime==1999-03-03T02:00", 0),
+      // Format YYYY-MM-DD-HH-MM-SS
+      Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:03", 1),
+      Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:02", 0)
+    );
+  }
 
+  private static QuerySpec newRsqlQuerySpec(String rsql) {
+    QuerySpec spec = new QuerySpec(CollectingEventDto.class);
+    spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ, rsql));
+    return spec;
   }
 
 }
