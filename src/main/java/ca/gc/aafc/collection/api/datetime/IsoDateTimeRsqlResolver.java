@@ -9,6 +9,7 @@ import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,9 @@ public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, String> {
    * @return - Resolved rsql
    */
   public String resolveDates(String rsql) {
+    if (StringUtils.isBlank(rsql)) {
+      return rsql;
+    }
     return RSQL_PARSER.parse(rsql).accept(this, fieldName).toString();
   }
 
