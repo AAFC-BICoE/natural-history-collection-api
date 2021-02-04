@@ -125,7 +125,7 @@ public class CollectingEventDto {
       return dtoRef::getStartEventDateTime;
     }
 
-    // Comented out for hotfix due to bug in date filtering See Redmine:21603
+    // Commented out for hotfix due to bug in date filtering See Redmine:21603
 //    @Override
 //    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
 //      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
