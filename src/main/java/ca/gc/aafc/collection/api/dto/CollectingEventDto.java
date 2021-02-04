@@ -125,11 +125,12 @@ public class CollectingEventDto {
       return dtoRef::getStartEventDateTime;
     }
 
-    @Override
-    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-    }
+    // Comented out for hotfix due to bug in date filtering See Redmine:21603
+//    @Override
+//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
+//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
+//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
+//    }
   }
 
   @NoArgsConstructor
