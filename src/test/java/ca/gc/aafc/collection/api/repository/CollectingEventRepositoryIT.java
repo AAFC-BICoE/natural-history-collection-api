@@ -62,13 +62,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     createTestCollectingEvent();
   }
 
-  @AfterEach
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
-  void tearDown() {
-    collectingEventRepository.findAll(new QuerySpec(CollectingEventDto.class))
-      .forEach(collectingEventDto -> collectingEventRepository.delete(collectingEventDto.getUuid()));
-  }
-
   private void createTestCollectingEvent() {
     testCollectingEvent = CollectingEventFactory.newCollectingEvent()
       .startEventDateTime(LocalDateTime.of(startDate, startTime))
@@ -93,6 +86,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
+      .group("aafc")
       .build();
 
     service.save(testCollectingEvent);
@@ -140,7 +134,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
-    ce.setGroup("aafc");
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
@@ -174,8 +167,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
     CollectingEventDto ce = new CollectingEventDto();
+    ce.setGroup("aafc");
     ce.setUuid(UUID.randomUUID());
-    ce.setGroup("test group");
     ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
@@ -202,6 +195,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @ParameterizedTest
   @MethodSource({"precisionFilterSource"})
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
     collectingEventRepository.create(newEventDto(startDate, "1888"));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
