@@ -25,7 +25,7 @@ public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, String> {
   private final String precisionName;
 
   /**
-   * Resolves the given rsql string for dates tracked by the resolver.
+   * Resolves the given rsql string for dates tracked by the resolver. Blank strings are returned.
    *
    * @param rsql - string to resolve
    * @return - Resolved rsql
