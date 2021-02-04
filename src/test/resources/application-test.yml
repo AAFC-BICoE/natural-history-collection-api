@@ -9,7 +9,7 @@ spring:
     password: test
 embedded.postgresql:
   enabled: true
-  image: "postgres:10-alpine"
+  image: "kartoza/postgis:13.0"
   init-script-file: init-collection-module.sql
   database: collection_test
   schema: collection
