@@ -10,9 +10,6 @@ import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.crnk.core.queryspec.FilterOperator;
-import io.crnk.core.queryspec.FilterSpec;
-import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -24,10 +21,8 @@ import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @RelatedEntity(CollectingEvent.class)
@@ -125,11 +120,12 @@ public class CollectingEventDto {
       return dtoRef::getStartEventDateTime;
     }
 
-    @Override
-    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-    }
+    // Commented out for hotfix due to bug in date filtering See Redmine:21603
+//    @Override
+//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
+//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
+//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
+//    }
   }
 
   @NoArgsConstructor
