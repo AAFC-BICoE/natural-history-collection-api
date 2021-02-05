@@ -9,12 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.NaturalId;
 import org.postgis.Geometry;
 
 import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 
@@ -23,13 +23,8 @@ import lombok.Data;
 @Data
 @JsonApiResource(type = "site")
 public class SiteDto {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
 
-  @NaturalId
-  @NotNull
-  @Column(unique = true)
+  @JsonApiId
   private UUID uuid;
 
   private String name;

@@ -12,7 +12,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.postgis.Geometry;
+import org.hibernate.annotations.Type;
+import com.vividsolutions.jts.geom.Polygon;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -24,6 +25,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import com.vividsolutions.jts.geom.Polygon;
+
 
 @Entity
 @AllArgsConstructor
@@ -46,7 +49,7 @@ public class Site implements DinaEntity {
     private String name;
     private String description;
 
-    private Geometry polygon;
+    private Polygon polygon;
 
     @Column(insertable = false, updatable = false)
     private OffsetDateTime createdOn;

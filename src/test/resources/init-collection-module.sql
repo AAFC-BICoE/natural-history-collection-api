@@ -4,6 +4,15 @@ REVOKE USAGE, CREATE ON SCHEMA public FROM PUBLIC;
 CREATE SCHEMA IF NOT EXISTS collection;
 REVOKE CREATE ON SCHEMA collection FROM PUBLIC;
 
+UPDATE pg_extension 
+  SET extrelocatable = TRUE 
+    WHERE extname = 'postgis';
+
+ALTER EXTENSION postgis 
+  SET SCHEMA collection;
+
+SET search_path TO collection;
+
 -- migration user
 CREATE ROLE migration_user NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN PASSWORD 'test';
 GRANT CONNECT ON DATABASE collection_test TO migration_user;
@@ -17,3 +26,4 @@ GRANT USAGE ON SCHEMA collection TO web_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA collection TO web_user;
 ALTER DEFAULT PRIVILEGES FOR USER migration_user IN SCHEMA collection GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES ON TABLES TO web_user;
 ALTER DEFAULT PRIVILEGES FOR USER migration_user IN SCHEMA collection GRANT SELECT, USAGE ON SEQUENCES TO web_user;
+
