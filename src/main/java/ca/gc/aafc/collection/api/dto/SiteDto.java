@@ -3,13 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-import org.postgis.Geometry;
+import com.vividsolutions.jts.geom.Polygon;
 
 import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -30,7 +24,7 @@ public class SiteDto {
   private String name;
   private String description;
 
-  private Geometry polygon;
+  private Polygon polygon;
 
   private String createdBy;
   private OffsetDateTime createdOn;

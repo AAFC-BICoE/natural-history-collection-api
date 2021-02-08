@@ -4,6 +4,8 @@ REVOKE USAGE, CREATE ON SCHEMA public FROM PUBLIC;
 CREATE SCHEMA IF NOT EXISTS collection;
 REVOKE CREATE ON SCHEMA collection FROM PUBLIC;
 
+CREATE EXTENSION IF NOT EXISTS postgis;
+
 UPDATE pg_extension 
   SET extrelocatable = TRUE 
     WHERE extname = 'postgis';

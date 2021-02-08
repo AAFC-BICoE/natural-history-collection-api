@@ -60,7 +60,7 @@ public class SiteRepositoryIT extends CollectionModuleBaseIT {
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     SiteDto cg = new SiteDto();
     cg.setUuid(UUID.randomUUID());
-    cg.setName(TEST_SITE);
+    cg.setName(TEST_SITE + "2");
     SiteDto result = siteRepository.findOne(siteRepository.create(cg).getUuid(), new QuerySpec(SiteDto.class));
     assertNotNull(result.getCreatedBy());
   }

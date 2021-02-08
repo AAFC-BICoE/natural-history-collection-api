@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 import com.vividsolutions.jts.geom.Polygon;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -22,11 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import com.vividsolutions.jts.geom.Polygon;
-
 
 @Entity
 @AllArgsConstructor

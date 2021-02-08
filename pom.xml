@@ -29,8 +29,8 @@
     <dina-base-api.version>0.48</dina-base-api.version>
     <hibernate-types-5.version>2.9.13</hibernate-types-5.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
-    <postgis-jdbc.version>2.5.0</postgis-jdbc.version>    
-    <hibernate-spatial.version>5.2.12.Final</hibernate-spatial.version>
+    <hibernate-spatial.version>5.3.20.Final</hibernate-spatial.version>
+    <hibernate.version>5.3.20.Final</hibernate.version>
   </properties>
   <repositories>
     <!-- dina-base-api bintray repository -->
@@ -64,6 +64,16 @@
 
     <!--  Database -->
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-spatial</artifactId>
+      <version>${hibernate-spatial.version}</version>
+    </dependency>    
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
     </dependency>
@@ -75,17 +85,7 @@
       <groupId>com.vladmihalcea</groupId>
       <artifactId>hibernate-types-5</artifactId>
       <version>${hibernate-types-5.version}</version>
-    </dependency>    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-spatial</artifactId>
-      <version>${hibernate-spatial.version}</version>
-    </dependency>    
-    <dependency>
-      <groupId>net.postgis</groupId>
-      <artifactId>postgis-jdbc</artifactId>
-      <version>${postgis-jdbc.version}</version>
-    </dependency>
+    </dependency> 
     <!--  Added for compatability with new liquibase update, ticket: #18663 -->
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
@@ -131,7 +131,7 @@
       <artifactId>dina-test-support</artifactId>
       <version>${dina-base-api.version}</version>
       <scope>test</scope>
-    </dependency>    
+    </dependency>            
   </dependencies>
 
   <build>

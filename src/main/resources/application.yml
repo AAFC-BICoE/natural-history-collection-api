@@ -9,6 +9,10 @@ spring:
     liquibase-schema: collection
   jpa:
     open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
+    
   # Allow grace timeout period for 20 seconds
   lifecycle.timeout-per-shutdown-phase: 20s
 crnk:
