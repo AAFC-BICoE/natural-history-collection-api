@@ -29,8 +29,7 @@
     <dina-base-api.version>0.48</dina-base-api.version>
     <hibernate-types-5.version>2.9.13</hibernate-types-5.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
-    <hibernate-spatial.version>5.4.27.Final</hibernate-spatial.version>
-    <hibernate.version>5.4.27.Final</hibernate.version>
+    <hibernate-spatial.version>5.4.25.Final</hibernate-spatial.version>
   </properties>
   <repositories>
     <!-- dina-base-api bintray repository -->
@@ -63,11 +62,6 @@
     </dependency>
 
     <!--  Database -->  
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-spatial</artifactId>
