@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.SiteDto;
 import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.collection.api.testsupport.factories.SiteFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 
 import org.geolatte.geom.Geometry;
@@ -13,6 +14,7 @@ import org.geolatte.geom.codec.Wkt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.io.WKTReader;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest(properties = "keycloak.enabled=true")
 public class SiteRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private SiteRepository siteRepository;
@@ -59,6 +62,7 @@ public class SiteRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  @WithMockKeycloakUser(username = "test user")  
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     SiteDto cg = new SiteDto();
     cg.setUuid(UUID.randomUUID());
