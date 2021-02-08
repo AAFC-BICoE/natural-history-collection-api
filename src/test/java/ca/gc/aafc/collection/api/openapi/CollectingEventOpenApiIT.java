@@ -49,7 +49,8 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
-  private static final String dwcVerbatimDepth = "10-20 m ";    
+  private static final String dwcVerbatimDepth = "10-20 m ";   
+  private static final String dwcRecordNumber = "80-79";   
 
   static {
     URI_BUILDER.setScheme("https");
@@ -90,7 +91,8 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
-    ce.setDwcVerbatimDepth(dwcVerbatimDepth);          
+    ce.setDwcVerbatimDepth(dwcVerbatimDepth); 
+    ce.setDwcRecordNumber(dwcRecordNumber);         
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
