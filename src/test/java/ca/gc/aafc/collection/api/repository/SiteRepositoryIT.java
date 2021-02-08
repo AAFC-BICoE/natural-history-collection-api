@@ -6,17 +6,17 @@ import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.collection.api.testsupport.factories.SiteFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import io.crnk.core.queryspec.QuerySpec;
+
+import org.geolatte.geom.Geometry;
+import org.geolatte.geom.Polygon;
+import org.geolatte.geom.codec.Wkt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.io.WKTReader;
 
 import javax.inject.Inject;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,8 +32,10 @@ public class SiteRepositoryIT extends CollectionModuleBaseIT {
   private Site testSite;
   private final String TEST_SITE = "test site";
 
-  private void createTestSite() throws ParseException {
-    Polygon polygon = (Polygon) wktToGeometry("POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))");
+  private void createTestSite() {
+    Polygon polygon = (Polygon) Wkt.fromWkt("POLYGON (" +
+    "(30 10, 40 40, 20 40, 10 20, 30 10), " +
+    "(20 30, 35 35, 30 20, 20 30))");
     testSite = SiteFactory.newSite()
       .name(TEST_SITE)
       .polygon(polygon)
@@ -42,7 +44,7 @@ public class SiteRepositoryIT extends CollectionModuleBaseIT {
   }
   
   @BeforeEach
-  public void setup() throws ParseException {
+  public void setup() { 
     createTestSite();
   }
 
@@ -64,9 +66,4 @@ public class SiteRepositoryIT extends CollectionModuleBaseIT {
     SiteDto result = siteRepository.findOne(siteRepository.create(cg).getUuid(), new QuerySpec(SiteDto.class));
     assertNotNull(result.getCreatedBy());
   }
-
-  private Geometry wktToGeometry(String wellKnownText) throws ParseException {
-    return new WKTReader().read(wellKnownText);
-  }
-          
 }

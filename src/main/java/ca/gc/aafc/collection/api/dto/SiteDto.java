@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import com.vividsolutions.jts.geom.Polygon;
+import org.geolatte.geom.Polygon;
 
 import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.dto.RelatedEntity;

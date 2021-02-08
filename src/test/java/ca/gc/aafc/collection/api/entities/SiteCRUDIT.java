@@ -2,6 +2,9 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.SiteFactory;
+
+import org.geolatte.geom.Polygon;
+import org.geolatte.geom.codec.Wkt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -24,8 +21,10 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
   private Polygon testPolygon ; 
 
   @BeforeEach
-  private void setUp() throws ParseException {
-    testPolygon = (Polygon) wktToGeometry("POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))");
+  private void setUp() {//throws ParseException {
+    testPolygon = (Polygon) Wkt.fromWkt("POLYGON (" +
+    "(30 10, 40 40, 20 40, 10 20, 30 10), " +
+    "(20 30, 35 35, 30 20, 20 30))");
   }
 
   @Test
@@ -40,7 +39,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void testFind() throws ParseException{
+  public void testFind() { 
     
     Site site = SiteFactory.newSite()
         .name(TEST_SITE)
@@ -53,9 +52,5 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
     assertEquals(site.getName(), fetchedSite.getName());
     assertEquals(site.getPolygon(), fetchedSite.getPolygon());
     assertNotNull(fetchedSite.getCreatedOn());
-  }
-
-  private Geometry wktToGeometry(String wellKnownText) throws ParseException {
-    return new WKTReader().read(wellKnownText);
   }
 }
