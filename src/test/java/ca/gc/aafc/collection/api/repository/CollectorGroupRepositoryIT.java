@@ -5,9 +5,11 @@ import ca.gc.aafc.collection.api.dto.CollectorGroupDto;
 import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectorGroupFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
     @Inject
     private CollectorGroupRepository collectorGroupRepository;
@@ -59,6 +62,7 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
       assertEquals(firstAgentIdentifier.toString(), collectorGroupDto.getAgentIdentifiers().get(0).getId());
     }    
     
+    @WithMockKeycloakUser(username = "test user")  
     @Test
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
       CollectorGroupDto cg = new CollectorGroupDto();

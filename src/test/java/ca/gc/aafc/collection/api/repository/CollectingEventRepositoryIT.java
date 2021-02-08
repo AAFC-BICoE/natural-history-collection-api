@@ -6,12 +6,14 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
@@ -52,16 +55,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
+  private static final String dwcRecordNumber = "80-79";    
 
   @BeforeEach
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
   public void setup() {
     createTestCollectingEvent();
-  }
-
-  @AfterEach
-  void tearDown() {
-    collectingEventRepository.findAll(new QuerySpec(CollectingEventDto.class))
-      .forEach(collectingEventDto -> collectingEventRepository.delete(collectingEventDto.getUuid()));
   }
 
   private void createTestCollectingEvent() {
@@ -87,7 +86,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
-      .dwcVerbatimDepth(dwcVerbatimDepth)
+      .dwcVerbatimDepth(dwcVerbatimDepth)   
+      .dwcRecordNumber(dwcRecordNumber)   
       .build();
 
     service.save(testCollectingEvent);
@@ -128,9 +128,11 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimCoordinateSystem, collectingEventDto.getDwcVerbatimCoordinateSystem());
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
-    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
+    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
+    assertEquals(dwcRecordNumber, collectingEventDto.getDwcRecordNumber());          
   }
 
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
@@ -163,12 +165,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
+    assertEquals(dwcRecordNumber, result.getDwcRecordNumber());         
   }
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
     CollectingEventDto ce = new CollectingEventDto();
+    ce.setGroup("aafc");
     ce.setUuid(UUID.randomUUID());
-    ce.setGroup("test group");
     ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
@@ -190,6 +193,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
+    ce.setDwcRecordNumber(dwcRecordNumber);
     return ce;
   }
 

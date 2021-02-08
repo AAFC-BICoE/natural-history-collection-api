@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
   context="schema-change">
   
-  <changeSet context="schema-change" id="10-Add_site_table" author="ganx">
+  <changeSet context="schema-change" id="11-Add_site_table" author="ganx">
     <createTable tableName="site">
       <column autoIncrement="true" name="id" type="SERIAL">
         <constraints primaryKey="true" primaryKeyName="pk_site_id" />
