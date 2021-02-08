@@ -30,6 +30,7 @@ import java.util.UUID;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+
 public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
@@ -68,7 +69,8 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   @Test
   void collectingEvent_SpecValid() {
     CollectingEventDto ce = new CollectingEventDto();
-    ce.setGroup("test group");
+    ce.setCreatedBy("test user");  
+    ce.setGroup("test group");  
     ce.setDwcDecimalLatitude(3.2);
     ce.setDwcDecimalLongitude(1.2);
     ce.setVerbatimEventDateTime("a cold winter morning in the winter of 2099");

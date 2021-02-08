@@ -6,12 +6,14 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
@@ -54,14 +57,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimDepth = "10-20 m ";
 
   @BeforeEach
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
   public void setup() {
     createTestCollectingEvent();
-  }
-
-  @AfterEach
-  void tearDown() {
-    collectingEventRepository.findAll(new QuerySpec(CollectingEventDto.class))
-      .forEach(collectingEventDto -> collectingEventRepository.delete(collectingEventDto.getUuid()));
   }
 
   private void createTestCollectingEvent() {
@@ -88,6 +86,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
+      .group("aafc")
       .build();
 
     service.save(testCollectingEvent);
@@ -131,6 +130,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
   }
 
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
@@ -167,8 +167,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
     CollectingEventDto ce = new CollectingEventDto();
+    ce.setGroup("aafc");
     ce.setUuid(UUID.randomUUID());
-    ce.setGroup("test group");
     ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
