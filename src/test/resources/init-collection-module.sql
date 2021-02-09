@@ -13,8 +13,6 @@ UPDATE pg_extension
 ALTER EXTENSION postgis 
   SET SCHEMA collection;
 
-SET search_path TO collection;
-
 -- migration user
 CREATE ROLE migration_user NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN PASSWORD 'test';
 GRANT CONNECT ON DATABASE collection_test TO migration_user;
