@@ -33,6 +33,7 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
       .createdBy(expectedCreatedBy)
       .name(expectedName)
       .build()).getUuid();
+
     ManagedAttribute result = service.findOne(uuid, ManagedAttribute.class);
     Assertions.assertNotNull(result.getId());
     Assertions.assertNotNull(result.getCreatedOn());
