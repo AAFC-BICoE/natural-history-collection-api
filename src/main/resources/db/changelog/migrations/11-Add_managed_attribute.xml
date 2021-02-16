@@ -7,10 +7,15 @@
     <changeSet id="11-Add_managed_attribute" context="schema-change" author="keyuk">
         <sql>
             CREATE TYPE managed_attribute_type AS ENUM (
-            'INTEGER',
-            'STRING'
+                'INTEGER',
+                'STRING'
             );
             CREATE CAST (character varying as managed_attribute_type) WITH INOUT AS IMPLICIT;
+
+            CREATE TYPE managed_attribute_component AS ENUM (
+                'COLLECTING_EVENT'
+            );
+            CREATE CAST (character varying as managed_attribute_component) WITH INOUT AS IMPLICIT;
         </sql>
 
         <createTable tableName="managed_attribute">
@@ -21,6 +26,9 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="type" type="managed_attribute_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component" type="managed_attribute_component">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(50)">

@@ -29,6 +29,7 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
       .uuid(UUID.randomUUID())
       .managedAttributeType(ManagedAttribute.ManagedAttributeType.STRING)
       .acceptedValues(new String[]{expectedValue})
+      .managedAttributeComponent(ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
       .createdBy(expectedCreatedBy)
       .name(expectedName)
       .build()).getUuid();
@@ -38,6 +39,12 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(expectedCreatedBy, result.getCreatedBy());
     Assertions.assertEquals(expectedName, result.getName());
     Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
+    Assertions.assertEquals(
+      ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
+      result.getManagedAttributeComponent());
+    Assertions.assertEquals(
+      ManagedAttribute.ManagedAttributeType.STRING,
+      result.getManagedAttributeType());
   }
 
 }

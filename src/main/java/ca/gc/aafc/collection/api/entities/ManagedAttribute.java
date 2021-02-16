@@ -46,6 +46,10 @@ public class ManagedAttribute implements DinaEntity {
     INTEGER, STRING
   }
 
+  public enum ManagedAttributeComponent {
+    COLLECTING_EVENT
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -63,6 +67,12 @@ public class ManagedAttribute implements DinaEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "type")
   private ManagedAttributeType managedAttributeType;
+
+  @NotNull
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "component")
+  private ManagedAttributeComponent managedAttributeComponent;
 
   @Type(type = "string-array")
   @Column(columnDefinition = "text[]")
