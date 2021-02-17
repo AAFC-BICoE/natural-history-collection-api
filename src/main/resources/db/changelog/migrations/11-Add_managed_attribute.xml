@@ -10,12 +10,10 @@
                 'INTEGER',
                 'STRING'
             );
-            CREATE CAST (character varying as managed_attribute_type) WITH INOUT AS IMPLICIT;
 
             CREATE TYPE managed_attribute_component AS ENUM (
                 'COLLECTING_EVENT'
             );
-            CREATE CAST (character varying as managed_attribute_component) WITH INOUT AS IMPLICIT;
         </sql>
 
         <createTable tableName="managed_attribute">
