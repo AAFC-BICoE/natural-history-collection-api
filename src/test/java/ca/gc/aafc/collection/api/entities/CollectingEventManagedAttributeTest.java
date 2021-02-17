@@ -3,14 +3,17 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectingEventManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ManagedAttributeDto;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
 import ca.gc.aafc.collection.api.repository.ManagedAttributeRepo;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+import java.util.List;
 
 class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
   @Inject
@@ -21,13 +24,22 @@ class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
 
   @Test
   void name() {
-
     ManagedAttributeDto attribute = managedAttributeRepo.findOne(
       managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
 
-    CollectingEventDto event = eventRepository.findOne(
-      eventRepository.create(newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
+    CollectingEventDto event = newEventDto();
+    String expectedValue = "99";
+    event.setManagedAttributes(List.of(CollectingEventManagedAttributeDto.builder()
+      .assignedValue(expectedValue)
+      .attributeId(attribute.getUuid())
+      .build()));
 
+    CollectingEventDto result = eventRepository.findOne(
+      eventRepository.create(event).getUuid(), new QuerySpec(CollectingEventDto.class));
+
+    Assertions.assertEquals(expectedValue, result.getManagedAttributes().get(0).getAssignedValue());
+    Assertions.assertEquals(attribute.getName(), result.getManagedAttributes().get(0).getName());
+    Assertions.assertEquals(attribute.getUuid(), result.getManagedAttributes().get(0).getAttributeId());
   }
 
   private ManagedAttributeDto newAttributeDto() {
