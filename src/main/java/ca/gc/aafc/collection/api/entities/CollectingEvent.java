@@ -15,6 +15,7 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,12 +25,10 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -131,8 +130,8 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcRecordNumber;
 
-  @OneToMany(mappedBy = "event")
-  private List<CollectingEventManagedAttribute> managedAttributes;
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+  private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
@@ -162,7 +161,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime
+   * @param endISOEventDateTime - the time
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {
