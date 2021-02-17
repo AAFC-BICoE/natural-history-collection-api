@@ -21,18 +21,23 @@ class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
 
   @Test
   void name() {
+
+    ManagedAttributeDto attribute = managedAttributeRepo.findOne(
+      managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
+
+    CollectingEventDto event = eventRepository.findOne(
+      eventRepository.create(newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
+
+  }
+
+  private ManagedAttributeDto newAttributeDto() {
     ManagedAttributeDto dto = new ManagedAttributeDto();
     dto.setName(RandomStringUtils.randomAlphabetic(5));
     dto.setManagedAttributeType(ManagedAttribute.ManagedAttributeType.INTEGER);
     dto.setAcceptedValues(new String[]{RandomStringUtils.randomAlphabetic(5)});
     dto.setManagedAttributeComponent(ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     dto.setCreatedBy(RandomStringUtils.randomAlphabetic(5));
-
-    ManagedAttributeDto result = managedAttributeRepo.findOne(
-      managedAttributeRepo.create(dto).getUuid(),
-      new QuerySpec(ManagedAttributeDto.class));
-
-    eventRepository.create(newEventDto());
+    return dto;
   }
 
   private CollectingEventDto newEventDto() {
