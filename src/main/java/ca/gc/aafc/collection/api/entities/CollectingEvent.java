@@ -20,6 +20,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -128,6 +130,9 @@ public class CollectingEvent implements DinaEntity {
 
   @Size(max = 25)  
   private String dwcRecordNumber;
+
+  @OneToMany(mappedBy = "event")
+  private List<CollectingEventManagedAttribute> managedAttributes;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields

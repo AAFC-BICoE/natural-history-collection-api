@@ -9,9 +9,6 @@
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_metatdata_managed_attribute_id"/>
             </column>
-            <column name="uuid" type="uuid">
-                <constraints nullable="false" unique="true"/>
-            </column>
             <column name="event_id" type="integer">
                 <constraints
                         foreignKeyName="fk_event_managed_attribute_to_event_id"
