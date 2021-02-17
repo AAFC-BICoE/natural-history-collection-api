@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="12-Add_managed_attribute_to_collecting_event" context="schema-change" author="keyuk">
+        <createTable tableName="collecting_event_managed_attribute">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_metatdata_managed_attribute_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="event_id" type="integer">
+                <constraints
+                        foreignKeyName="fk_event_managed_attribute_to_event_id"
+                        references="collecting_event(id)"/>
+            </column>
+            <column name="managed_attribute_id" type="integer">
+                <constraints
+                        foreignKeyName="fk_event_managed_attribute_to_managed_attribute_id"
+                        references="managed_attribute(id)"/>
+            </column>
+            <column name="assigned_value" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
