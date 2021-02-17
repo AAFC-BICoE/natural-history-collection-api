@@ -7,6 +7,7 @@ import ca.gc.aafc.dina.filter.DinaFilterResolver;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
+import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -15,11 +16,15 @@ import java.util.Optional;
 
 @Repository
 public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, ManagedAttribute> {
+
+  private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
+
   public ManagedAttributeRepo(
     @NonNull ManagedAttributeService service,
     @NonNull DinaFilterResolver filterResolver,
     ExternalResourceProvider externalResourceProvider,
-    @NonNull BuildProperties buildProperties
+    @NonNull BuildProperties buildProperties,
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       service,
@@ -31,5 +36,14 @@ public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, Ma
       filterResolver,
       externalResourceProvider,
       buildProperties);
+    this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
+
+  @Override
+  public <S extends ManagedAttributeDto> S create(S resource) {
+    dinaAuthenticatedUser.ifPresent(
+      authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
+    return super.create(resource);
+  }
+
 }
