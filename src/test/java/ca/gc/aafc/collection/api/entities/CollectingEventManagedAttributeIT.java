@@ -26,7 +26,7 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
   private CollectingEventRepository eventRepository;
 
   @Inject
-  private ManagedAttributeService managedAttributeService;
+  private ManagedAttributeService dbService;
 
   @Test
   void create_recordCreated() {
@@ -118,21 +118,30 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
 
   @Test
   void deleteCollectingEvent_OrphanAttributesRemoved() {
+    String assignedValue = RandomStringUtils.randomAlphabetic(4);
+
     ManagedAttributeDto attribute = managedAttributeRepo.findOne(
       managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
-
     CollectingEventDto result = eventRepository.findOne(
-      eventRepository.create(
-        newEventDto(List.of(newEventAttribute("1", attribute.getUuid())))).getUuid(),
+      eventRepository.create(newEventDto(List.of(newEventAttribute(assignedValue, attribute.getUuid())))).getUuid(),
       new QuerySpec(CollectingEventDto.class));
-    Assertions.assertEquals(1, result.getManagedAttributes().size());
+
+    // Assert one child
+    Assertions.assertEquals(1, dbService.findAll(
+      CollectingEventManagedAttribute.class,
+      (criteriaBuilder, managedAttributeRoot) -> new Predicate[]{
+        criteriaBuilder.equal(managedAttributeRoot.get("assignedValue"), assignedValue)
+      },
+      null, 0, 100).size());
 
     eventRepository.delete(result.getUuid());
 
     // Assert Orphans Removed
-    Assertions.assertEquals(0, managedAttributeService.findAll(
+    Assertions.assertEquals(0, dbService.findAll(
       CollectingEventManagedAttribute.class,
-      (criteriaBuilder, managedAttributeRoot) -> new Predicate[]{},
+      (criteriaBuilder, managedAttributeRoot) -> new Predicate[]{
+        criteriaBuilder.equal(managedAttributeRoot.get("assignedValue"), assignedValue)
+      },
       null, 0, 100).size());
   }
 
