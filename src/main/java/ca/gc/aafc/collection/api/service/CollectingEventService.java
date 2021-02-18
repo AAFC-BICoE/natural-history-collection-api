@@ -20,6 +20,18 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
+    handleManagedAttributes(entity);
+  }
+
+  @Override
+  protected void preUpdate(CollectingEvent entity) {
+    if (CollectionUtils.isNotEmpty(entity.getManagedAttributes())) {
+      entity.getManagedAttributes().forEach(attribute -> attribute.setAttribute(
+        this.findOne(attribute.getAttribute().getUuid(), ManagedAttribute.class)));
+    }
+  }
+
+  private void handleManagedAttributes(CollectingEvent entity) {
     if (CollectionUtils.isNotEmpty(entity.getManagedAttributes())) {
       entity.getManagedAttributes().forEach(attribute -> attribute.setAttribute(
         this.findOne(attribute.getAttribute().getUuid(), ManagedAttribute.class)));

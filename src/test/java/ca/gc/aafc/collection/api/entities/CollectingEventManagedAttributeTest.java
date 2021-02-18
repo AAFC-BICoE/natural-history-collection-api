@@ -14,6 +14,7 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.UUID;
 
 class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
   @Inject
@@ -23,23 +24,50 @@ class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
   private CollectingEventRepository eventRepository;
 
   @Test
-  void name() {
+  void create_ThroughCollectingEvent_recordCreated() {
+    String expectedValue = "99";
+
     ManagedAttributeDto attribute = managedAttributeRepo.findOne(
       managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
 
-    CollectingEventDto event = newEventDto();
-    String expectedValue = "99";
-    event.setManagedAttributes(List.of(CollectingEventManagedAttributeDto.builder()
-      .assignedValue(expectedValue)
-      .attributeId(attribute.getUuid())
-      .build()));
-
     CollectingEventDto result = eventRepository.findOne(
-      eventRepository.create(event).getUuid(), new QuerySpec(CollectingEventDto.class));
+      eventRepository.create(
+        newEventDto(List.of(newEventAttribute(expectedValue, attribute.getUuid())))).getUuid(),
+      new QuerySpec(CollectingEventDto.class));
 
     Assertions.assertEquals(expectedValue, result.getManagedAttributes().get(0).getAssignedValue());
     Assertions.assertEquals(attribute.getName(), result.getManagedAttributes().get(0).getName());
     Assertions.assertEquals(attribute.getUuid(), result.getManagedAttributes().get(0).getAttributeId());
+  }
+
+  @Test
+  void update_AttributeValue_AttributeUpdated() {
+    String expectedValue = "99";
+
+    ManagedAttributeDto attribute = managedAttributeRepo.findOne(
+      managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
+
+    UUID id = eventRepository.create(newEventDto(List.of(newEventAttribute("1", attribute.getUuid()))))
+      .getUuid();
+    CollectingEventDto toUpdate = eventRepository.findOne(id, new QuerySpec(CollectingEventDto.class));
+    toUpdate.setManagedAttributes(List.of(newEventAttribute(expectedValue, attribute.getUuid())));
+    eventRepository.save(toUpdate);
+
+    CollectingEventDto result = eventRepository.findOne(id, new QuerySpec(CollectingEventDto.class));
+    Assertions.assertEquals(1, result.getManagedAttributes().size());
+    Assertions.assertEquals(expectedValue, result.getManagedAttributes().get(0).getAssignedValue());
+    Assertions.assertEquals(attribute.getName(), result.getManagedAttributes().get(0).getName());
+    Assertions.assertEquals(attribute.getUuid(), result.getManagedAttributes().get(0).getAttributeId());
+  }
+
+  private CollectingEventManagedAttributeDto newEventAttribute(
+    String expectedValue,
+    UUID attributeId
+  ) {
+    return CollectingEventManagedAttributeDto.builder()
+      .assignedValue(expectedValue)
+      .attributeId(attributeId)
+      .build();
   }
 
   private ManagedAttributeDto newAttributeDto() {
@@ -52,11 +80,12 @@ class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
     return dto;
   }
 
-  private CollectingEventDto newEventDto() {
+  private CollectingEventDto newEventDto(List<CollectingEventManagedAttributeDto> managedAttributes) {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("aafc");
     ce.setStartEventDateTime(ISODateTime.parse("2020").toString());
     ce.setCreatedBy("dina");
+    ce.setManagedAttributes(managedAttributes);
     return ce;
   }
 }
