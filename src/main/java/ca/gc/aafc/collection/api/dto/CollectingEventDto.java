@@ -18,11 +18,13 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -193,6 +195,9 @@ public class CollectingEventDto {
 
     @Override
     public List<CollectingEventManagedAttributeDto> toDTO(List<CollectingEventManagedAttribute> attributes) {
+      if (CollectionUtils.isEmpty(attributes)) {
+        return Collections.emptyList();
+      }
       return attributes.stream()
         .map(ManagedAttributesAdapter::mapToDto)
         .collect(Collectors.toList());
@@ -208,6 +213,9 @@ public class CollectingEventDto {
 
     @Override
     public List<CollectingEventManagedAttribute> toEntity(List<CollectingEventManagedAttributeDto> attributes) {
+      if (CollectionUtils.isEmpty(attributes)) {
+        return Collections.emptyList();
+      }
       return attributes.stream()
         .map(ManagedAttributesAdapter::mapToEntity)
         .collect(Collectors.toList());
