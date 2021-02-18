@@ -24,7 +24,7 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
   private CollectingEventRepository eventRepository;
 
   @Test
-  void create_ThroughCollectingEvent_recordCreated() {
+  void create_recordCreated() {
     String expectedValue = "99";
 
     ManagedAttributeDto attribute = managedAttributeRepo.findOne(
@@ -58,6 +58,57 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(expectedValue, result.getManagedAttributes().get(0).getAssignedValue());
     Assertions.assertEquals(attribute.getName(), result.getManagedAttributes().get(0).getName());
     Assertions.assertEquals(attribute.getUuid(), result.getManagedAttributes().get(0).getAttributeId());
+  }
+
+  @Test
+  void update_AddAttribute() {
+    ManagedAttributeDto attribute = managedAttributeRepo.findOne(
+      managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
+
+    CollectingEventManagedAttributeDto eventAttribute1 = newEventAttribute("1", attribute.getUuid());
+    CollectingEventManagedAttributeDto eventAttribute2 = newEventAttribute("2", attribute.getUuid());
+
+    UUID id = eventRepository.create(newEventDto(List.of(eventAttribute1))).getUuid();
+
+    CollectingEventDto toUpdate = eventRepository.findOne(id, new QuerySpec(CollectingEventDto.class));
+    toUpdate.setManagedAttributes(List.of(eventAttribute1, eventAttribute2));
+    eventRepository.save(toUpdate);
+
+    List<CollectingEventManagedAttributeDto> resultAttributes = eventRepository
+      .findOne(id, new QuerySpec(CollectingEventDto.class))
+      .getManagedAttributes();
+    Assertions.assertEquals(2, resultAttributes.size());
+    Assertions.assertEquals(eventAttribute1.getAssignedValue(), resultAttributes.get(0).getAssignedValue());
+    Assertions.assertEquals(attribute.getName(), resultAttributes.get(0).getName());
+    Assertions.assertEquals(attribute.getUuid(), resultAttributes.get(0).getAttributeId());
+
+    Assertions.assertEquals(eventAttribute2.getAssignedValue(), resultAttributes.get(1).getAssignedValue());
+    Assertions.assertEquals(attribute.getName(), resultAttributes.get(1).getName());
+    Assertions.assertEquals(attribute.getUuid(), resultAttributes.get(1).getAttributeId());
+  }
+
+  @Test
+  void update_AttributeRemoved() {
+    ManagedAttributeDto attribute = managedAttributeRepo.findOne(
+      managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
+
+    CollectingEventManagedAttributeDto eventAttribute1 = newEventAttribute("1", attribute.getUuid());
+    CollectingEventManagedAttributeDto eventAttribute2 = newEventAttribute("2", attribute.getUuid());
+
+    UUID id = eventRepository.create(newEventDto(List.of(eventAttribute1, eventAttribute2))).getUuid();
+
+    CollectingEventDto toUpdate = eventRepository.findOne(id, new QuerySpec(CollectingEventDto.class));
+    toUpdate.setManagedAttributes(List.of(eventAttribute1));
+    eventRepository.save(toUpdate);
+
+    List<CollectingEventManagedAttributeDto> resultAttributes = eventRepository
+      .findOne(id, new QuerySpec(CollectingEventDto.class))
+      .getManagedAttributes();
+
+    Assertions.assertEquals(1, resultAttributes.size());
+    Assertions.assertEquals(eventAttribute1.getAssignedValue(), resultAttributes.get(0).getAssignedValue());
+    Assertions.assertEquals(attribute.getName(), resultAttributes.get(0).getName());
+    Assertions.assertEquals(attribute.getUuid(), resultAttributes.get(0).getAttributeId());
   }
 
   private CollectingEventManagedAttributeDto newEventAttribute(String expectedValue, UUID attributeId) {
