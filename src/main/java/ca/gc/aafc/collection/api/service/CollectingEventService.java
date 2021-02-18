@@ -1,11 +1,9 @@
 package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.ManagedAttribute;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -20,19 +18,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
-    handleManagedAttributes(entity);
-  }
-
-  @Override
-  protected void preUpdate(CollectingEvent entity) {
-    handleManagedAttributes(entity);
-  }
-
-  private void handleManagedAttributes(CollectingEvent entity) {
-    if (CollectionUtils.isNotEmpty(entity.getManagedAttributes())) {
-      entity.getManagedAttributes().forEach(attribute -> attribute.setAttribute(
-        this.findOne(attribute.getAttribute().getUuid(), ManagedAttribute.class)));
-    }
   }
 
 }
