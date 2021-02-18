@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Entity(name = "collecting_event_managed_attribute")
 @AllArgsConstructor
@@ -22,11 +27,17 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
+@NaturalIdCache
 public class CollectingEventManagedAttribute {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
+  @NaturalId
+  @NotNull
+  @Column(name = "uuid", unique = true)
+  private UUID uuid;
 
   @ManyToOne
   @JoinColumn(name = "event_id")
