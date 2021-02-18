@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
-class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
+class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
   @Inject
   private ManagedAttributeRepo managedAttributeRepo;
 
