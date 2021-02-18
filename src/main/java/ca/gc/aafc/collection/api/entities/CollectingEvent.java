@@ -130,7 +130,7 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcRecordNumber;
 
-  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
 
   /**

@@ -7,12 +7,14 @@ import ca.gc.aafc.collection.api.dto.CollectingEventManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ManagedAttributeDto;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
 import ca.gc.aafc.collection.api.repository.ManagedAttributeRepo;
+import ca.gc.aafc.collection.api.service.ManagedAttributeService;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+import javax.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +24,9 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectingEventRepository eventRepository;
+
+  @Inject
+  private ManagedAttributeService managedAttributeService;
 
   @Test
   void create_recordCreated() {
@@ -109,6 +114,26 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(eventAttribute1.getAssignedValue(), resultAttributes.get(0).getAssignedValue());
     Assertions.assertEquals(attribute.getName(), resultAttributes.get(0).getName());
     Assertions.assertEquals(attribute.getUuid(), resultAttributes.get(0).getAttributeId());
+  }
+
+  @Test
+  void deleteCollectingEvent_OrphanAttributesRemoved() {
+    ManagedAttributeDto attribute = managedAttributeRepo.findOne(
+      managedAttributeRepo.create(newAttributeDto()).getUuid(), new QuerySpec(ManagedAttributeDto.class));
+
+    CollectingEventDto result = eventRepository.findOne(
+      eventRepository.create(
+        newEventDto(List.of(newEventAttribute("1", attribute.getUuid())))).getUuid(),
+      new QuerySpec(CollectingEventDto.class));
+    Assertions.assertEquals(1, result.getManagedAttributes().size());
+
+    eventRepository.delete(result.getUuid());
+
+    // Assert Orphans Removed
+    Assertions.assertEquals(0, managedAttributeService.findAll(
+      CollectingEventManagedAttribute.class,
+      (criteriaBuilder, managedAttributeRoot) -> new Predicate[]{},
+      null, 0, 100).size());
   }
 
   private CollectingEventManagedAttributeDto newEventAttribute(String expectedValue, UUID attributeId) {
