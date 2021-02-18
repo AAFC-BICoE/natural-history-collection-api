@@ -60,10 +60,7 @@ class CollectingEventManagedAttributeTest extends CollectionModuleBaseIT {
     Assertions.assertEquals(attribute.getUuid(), result.getManagedAttributes().get(0).getAttributeId());
   }
 
-  private CollectingEventManagedAttributeDto newEventAttribute(
-    String expectedValue,
-    UUID attributeId
-  ) {
+  private CollectingEventManagedAttributeDto newEventAttribute(String expectedValue, UUID attributeId) {
     return CollectingEventManagedAttributeDto.builder()
       .assignedValue(expectedValue)
       .attributeId(attributeId)
