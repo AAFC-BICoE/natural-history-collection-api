@@ -15,7 +15,6 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -130,7 +129,7 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcRecordNumber;
 
-  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "event")
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
 
   /**
