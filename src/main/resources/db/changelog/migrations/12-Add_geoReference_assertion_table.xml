@@ -12,9 +12,9 @@
             <column name="uuid" type="uuid">
                 <constraints nullable="false" unique="true"/>
             </column>
-			      <column name="decimal_latitude" type="DECIMAL(10,6)"/>
-			      <column name="decimal_longitude" type="DECIMAL(10,6)"/>
-			      <column name="coordinate_uncertainty_in_meters" type="INTEGER"/>            
+			<column name="dwc_decimal_latitude" type="DECIMAL(10,6)"/>
+			<column name="dwc_decimal_longitude" type="DECIMAL(10,6)"/>
+			<column name="dwc_coordinate_uncertainty_in_meters" type="INTEGER"/>            
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
