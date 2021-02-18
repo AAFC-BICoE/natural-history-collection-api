@@ -3,8 +3,6 @@ package ca.gc.aafc.collection.api.dto;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectingEventManagedAttribute;
-import ca.gc.aafc.collection.api.entities.ManagedAttribute;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
@@ -18,24 +16,20 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
   CollectingEventDto.StartEventDateTimeAdapter.class,
-  CollectingEventDto.EndEventDateTimeAdapter.class,
-  CollectingEventDto.ManagedAttributesAdapter.class})
+  CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = "collecting-event")
@@ -79,7 +73,7 @@ public class CollectingEventDto {
   private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @IgnoreDinaMapping(reason = "custom mapped")
+  @JsonApiRelation
   private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
 
   private OffsetDateTime dwcGeoreferencedDate;
@@ -185,71 +179,6 @@ public class CollectingEventDto {
 //      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
 //        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
 //    }
-  }
-
-  public static class ManagedAttributesAdapter implements DinaFieldAdapter<
-    CollectingEventDto,
-    CollectingEvent,
-    List<CollectingEventManagedAttributeDto>,
-    List<CollectingEventManagedAttribute>> {
-
-    @Override
-    public List<CollectingEventManagedAttributeDto> toDTO(List<CollectingEventManagedAttribute> attributes) {
-      if (CollectionUtils.isEmpty(attributes)) {
-        return Collections.emptyList();
-      }
-      return attributes.stream()
-        .map(ManagedAttributesAdapter::mapToDto)
-        .collect(Collectors.toList());
-    }
-
-    private static CollectingEventManagedAttributeDto mapToDto(CollectingEventManagedAttribute e) {
-      return CollectingEventManagedAttributeDto.builder()
-        .assignedValue(e.getAssignedValue())
-        .attributeId(e.getAttribute().getUuid())
-        .name(e.getAttribute().getName())
-        .build();
-    }
-
-    @Override
-    public List<CollectingEventManagedAttribute> toEntity(List<CollectingEventManagedAttributeDto> attributes) {
-      if (CollectionUtils.isEmpty(attributes)) {
-        return Collections.emptyList();
-      }
-      return attributes.stream()
-        .map(ManagedAttributesAdapter::mapToEntity)
-        .collect(Collectors.toList());
-    }
-
-    private static CollectingEventManagedAttribute mapToEntity(CollectingEventManagedAttributeDto dto) {
-      return CollectingEventManagedAttribute.builder()
-        .attribute(ManagedAttribute.builder()
-          .uuid(dto.getAttributeId())
-          .name(dto.getName())
-          .build())
-        .assignedValue(dto.getAssignedValue())
-        .build();
-    }
-
-    @Override
-    public Consumer<List<CollectingEventManagedAttribute>> entityApplyMethod(CollectingEvent entityRef) {
-      return entityRef::setManagedAttributes;
-    }
-
-    @Override
-    public Consumer<List<CollectingEventManagedAttributeDto>> dtoApplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::setManagedAttributes;
-    }
-
-    @Override
-    public Supplier<List<CollectingEventManagedAttribute>> entitySupplyMethod(CollectingEvent entityRef) {
-      return entityRef::getManagedAttributes;
-    }
-
-    @Override
-    public Supplier<List<CollectingEventManagedAttributeDto>> dtoSupplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::getManagedAttributes;
-    }
   }
 
 }
