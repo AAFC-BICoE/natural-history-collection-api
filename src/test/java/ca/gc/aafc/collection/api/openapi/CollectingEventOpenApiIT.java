@@ -1,5 +1,21 @@
 package ca.gc.aafc.collection.api.openapi;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.transaction.Transactional;
+
+import org.apache.http.client.utils.URIBuilder;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
@@ -8,20 +24,6 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
-import org.apache.http.client.utils.URIBuilder;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
-import javax.transaction.Transactional;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -72,10 +74,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     CollectingEventDto ce = new CollectingEventDto();
     ce.setCreatedBy("test user");  
     ce.setGroup("test group");  
-    ce.setDwcDecimalLatitude(3.2);
-    ce.setDwcDecimalLongitude(1.2);
     ce.setVerbatimEventDateTime("a cold winter morning in the winter of 2099");
-    ce.setDwcCoordinateUncertaintyInMeters(2);
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");

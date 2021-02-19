@@ -1,25 +1,31 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
-import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.Collections;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.GeoReferenceAssertionFactory;
+import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @Inject
   private DatabaseSupportService dbService;
+
+  private GeoReferenceAssertion geoReferenceAssertion = GeoReferenceAssertionFactory.newGeoReferenceAssertion()
+    .dwcDecimalLatitude(12.123456)
+    .dwcDecimalLongitude(45.01)
+    .build();
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
@@ -36,7 +42,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   public void testSave() {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .build();
+       .build();
+    dbService.save(geoReferenceAssertion);
+    collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     assertNull(collectingEvent.getId());
     dbService.save(collectingEvent);
     assertNotNull(collectingEvent.getId());
@@ -45,9 +53,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   public void testFind() {
     LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
+    dbService.save(geoReferenceAssertion);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .dwcDecimalLatitude(12.123456)
-        .dwcDecimalLongitude(45.01)
+        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))        
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
         .dwcRecordedBy(dwcRecordedBy)
@@ -66,11 +74,15 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     CollectingEvent fetchedCollectingEvent = dbService.find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
-    assertEquals(12.123456, fetchedCollectingEvent.getDwcDecimalLatitude());
-    assertEquals(45.01, fetchedCollectingEvent.getDwcDecimalLongitude());
     assertEquals(testDateTime, fetchedCollectingEvent.getStartEventDateTime());
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
+    assertEquals(
+      geoReferenceAssertion.getId(),
+      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());    
+    assertEquals(
+      12.123456,
+      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, fetchedCollectingEvent.getDwcGeoreferenceSources());
