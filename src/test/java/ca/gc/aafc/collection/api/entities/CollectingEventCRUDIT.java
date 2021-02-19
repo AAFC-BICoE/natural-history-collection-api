@@ -43,17 +43,17 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   public void testSave() {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
        .build();
-    dbService.save(geoReferenceAssertion);
+    dbService.save(geoReferenceAssertion,false);
     collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     assertNull(collectingEvent.getId());
-    dbService.save(collectingEvent);
+    dbService.save(collectingEvent, false);
     assertNotNull(collectingEvent.getId());
   }
 
   @Test
   public void testFind() {
     LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
-    dbService.save(geoReferenceAssertion);
+    dbService.save(geoReferenceAssertion,false);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
         .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))        
         .startEventDateTime(testDateTime)
@@ -70,7 +70,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcVerbatimDepth(dwcVerbatimDepth)
         .dwcRecordNumber(dwcRecordNumber)
         .build();
-    dbService.save(collectingEvent);
+    dbService.save(collectingEvent,false);
 
     CollectingEvent fetchedCollectingEvent = dbService.find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
