@@ -13,4 +13,5 @@
   <include file="db/changelog/migrations/10-Add_dwcRecordNumber_collecting_event.xml"/>
   <include file="db/changelog/migrations/11-Add_managed_attribute.xml"/>
   <include file="db/changelog/migrations/12-Add_geoReference_assertion_table.xml"/>  
+  <include file="db/changelog/migrations/13-Update_dwcRecordNumber_collecting_event_table.xml"/>  
 </databaseChangeLog>

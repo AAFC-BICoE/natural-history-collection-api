@@ -1,5 +1,16 @@
 package ca.gc.aafc.collection.api.dto;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.StringUtils;
+
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
@@ -15,15 +26,6 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.annotation.Nullable;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
@@ -79,7 +81,7 @@ public class CollectingEventDto {
   private String dwcVerbatimSRS;
   private String dwcVerbatimElevation;
   private String dwcVerbatimDepth; 
-  private String dwcRecordNumber;
+  private String[] dwcRecordNumbers;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

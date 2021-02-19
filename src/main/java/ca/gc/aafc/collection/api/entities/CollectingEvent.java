@@ -1,19 +1,10 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.dina.entity.DinaEntity;
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,11 +15,23 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.entity.DinaEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
@@ -42,6 +45,7 @@ import java.util.UUID;
   name = "list-array",
   typeClass = ListArrayType.class
 )
+@TypeDef(name = "string-array", typeClass = StringArrayType.class)
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -126,8 +130,8 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcVerbatimDepth;
 
-  @Size(max = 25)  
-  private String dwcRecordNumber;
+  @Type(type = "string-array")
+  private String[] dwcRecordNumbers;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
