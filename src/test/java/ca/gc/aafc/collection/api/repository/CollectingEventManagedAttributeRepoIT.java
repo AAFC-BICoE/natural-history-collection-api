@@ -1,13 +1,11 @@
-package ca.gc.aafc.collection.api.entities;
+package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectingEventManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ManagedAttributeDto;
-import ca.gc.aafc.collection.api.repository.CollectingEventAttributeRepository;
-import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
-import ca.gc.aafc.collection.api.repository.ManagedAttributeRepo;
+import ca.gc.aafc.collection.api.entities.ManagedAttribute;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,7 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
 
-class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
+class CollectingEventManagedAttributeRepoIT extends CollectionModuleBaseIT {
   @Inject
   private ManagedAttributeRepo managedAttributeRepo;
 
@@ -23,7 +21,7 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
   private CollectingEventRepository eventRepository;
 
   @Inject
-  private CollectingEventAttributeRepository repo;
+  private CollectingEventAttributeRepository repoUnderTest;
 
   @Test
   void create_recordCreated() {
@@ -33,8 +31,8 @@ class CollectingEventManagedAttributeIT extends CollectionModuleBaseIT {
     CollectingEventDto event = eventRepository.findOne(
       eventRepository.create(newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
 
-    CollectingEventManagedAttributeDto result = repo.findOne(
-      repo.create(newEventAttribute(expectedValue, attribute, event)).getUuid(),
+    CollectingEventManagedAttributeDto result = repoUnderTest.findOne(
+      repoUnderTest.create(newEventAttribute(expectedValue, attribute, event)).getUuid(),
       new QuerySpec(CollectingEventManagedAttributeDto.class));
 
     Assertions.assertEquals(expectedValue, result.getAssignedValue());
