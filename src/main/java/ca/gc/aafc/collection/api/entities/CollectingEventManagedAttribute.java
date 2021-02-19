@@ -47,7 +47,7 @@ public class CollectingEventManagedAttribute implements DinaEntity {
 
   @ManyToOne
   @JoinColumn(name = "managed_attribute_id")
-  private ManagedAttribute attribute;
+  private ManagedAttribute managedAttribute;
 
   @NotBlank
   private String assignedValue;

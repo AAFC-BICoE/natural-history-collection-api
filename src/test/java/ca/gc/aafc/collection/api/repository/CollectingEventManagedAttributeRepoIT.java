@@ -36,7 +36,7 @@ class CollectingEventManagedAttributeRepoIT extends CollectionModuleBaseIT {
       new QuerySpec(CollectingEventManagedAttributeDto.class));
 
     Assertions.assertEquals(expectedValue, result.getAssignedValue());
-    Assertions.assertEquals(attribute.getUuid(), result.getAttribute().getUuid());
+    Assertions.assertEquals(attribute.getUuid(), result.getManagedAttribute().getUuid());
     Assertions.assertEquals(event.getUuid(), result.getEvent().getUuid());
   }
 
@@ -47,7 +47,7 @@ class CollectingEventManagedAttributeRepoIT extends CollectionModuleBaseIT {
   ) {
     return CollectingEventManagedAttributeDto.builder()
       .assignedValue(expectedValue)
-      .attribute(attribute)
+      .managedAttribute(attribute)
       .event(event)
       .build();
   }

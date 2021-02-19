@@ -29,7 +29,7 @@ public class CollectingEventManagedAttributeDto {
   private CollectingEventDto event;
 
   @JsonApiRelation
-  private ManagedAttributeDto attribute;
+  private ManagedAttributeDto managedAttribute;
 
   private String assignedValue;
 
