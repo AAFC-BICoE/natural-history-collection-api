@@ -12,4 +12,5 @@
   <include file="db/changelog/migrations/9-Add_dwcVerbatimLatitude_etc_collecting_event.xml"/>  
   <include file="db/changelog/migrations/10-Add_dwcRecordNumber_collecting_event.xml"/>
   <include file="db/changelog/migrations/11-Add_managed_attribute.xml"/>
+  <include file="db/changelog/migrations/12-Add_geoReference_assertion_table.xml"/>  
 </databaseChangeLog>
