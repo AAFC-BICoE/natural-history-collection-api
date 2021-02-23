@@ -83,8 +83,8 @@ public class CollectingEventDto {
   private String dwcVerbatimCoordinateSystem;
   private String dwcVerbatimSRS;
   private String dwcVerbatimElevation;
-  private String dwcVerbatimDepth;
-  private String dwcRecordNumber;
+  private String dwcVerbatimDepth; 
+  private String[] dwcRecordNumbers;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

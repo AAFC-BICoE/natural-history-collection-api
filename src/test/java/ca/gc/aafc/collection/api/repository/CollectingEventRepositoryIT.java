@@ -1,5 +1,21 @@
 package ca.gc.aafc.collection.api.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
@@ -10,25 +26,6 @@ import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import javax.inject.Inject;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
@@ -55,7 +52,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
-  private static final String dwcRecordNumber = "80-79";    
+  private static final String[] dwcRecordNumbers = new String[] { "80-79", "80-80"};    
 
   @BeforeEach
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
@@ -87,7 +84,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)   
-      .dwcRecordNumber(dwcRecordNumber)   
+      .dwcRecordNumbers(dwcRecordNumbers)   
       .build();
 
     service.save(testCollectingEvent);
@@ -129,7 +126,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
-    assertEquals(dwcRecordNumber, collectingEventDto.getDwcRecordNumber());          
+    assertEquals(dwcRecordNumbers[1], collectingEventDto.getDwcRecordNumbers()[1]);          
   }
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
@@ -165,7 +162,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(dwcRecordNumber, result.getDwcRecordNumber());         
+    assertEquals(dwcRecordNumbers[1], result.getDwcRecordNumbers()[1]);         
   }
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
@@ -193,7 +190,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
-    ce.setDwcRecordNumber(dwcRecordNumber);
+    ce.setDwcRecordNumbers(dwcRecordNumbers);
     return ce;
   }
 

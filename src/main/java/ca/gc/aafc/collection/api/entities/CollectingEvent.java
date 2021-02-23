@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,7 @@ import java.util.UUID;
   name = "list-array",
   typeClass = ListArrayType.class
 )
+@TypeDef(name = "string-array", typeClass = StringArrayType.class)
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -126,8 +128,8 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcVerbatimDepth;
 
-  @Size(max = 25)  
-  private String dwcRecordNumber;
+  @Type(type = "string-array")
+  private String[] dwcRecordNumbers;
 
   @OneToMany(mappedBy = "event")
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
