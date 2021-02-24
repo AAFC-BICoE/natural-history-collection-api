@@ -22,6 +22,8 @@ import com.vladmihalcea.hibernate.type.array.ListArrayType;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
@@ -49,6 +51,7 @@ import lombok.Setter;
   name = "list-array",
   typeClass = ListArrayType.class
 )
+@TypeDef(name = "string-array", typeClass = StringArrayType.class)
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -135,8 +138,8 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcVerbatimDepth;
 
-  @Size(max = 25)  
-  private String dwcRecordNumber;
+  @Type(type = "string-array")
+  private String[] dwcRecordNumbers;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields

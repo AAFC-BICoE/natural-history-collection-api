@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -37,7 +38,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";  
-  private static final String dwcRecordNumber = "80-79";  
+  private static final String[] dwcRecordNumbers = new String[] { "80-79", "80-80"};  
 
   @Test
   public void testSave() {
@@ -68,11 +69,12 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcVerbatimSRS(dwcVerbatimSRS)
         .dwcVerbatimElevation(dwcVerbatimElevation)
         .dwcVerbatimDepth(dwcVerbatimDepth)
-        .dwcRecordNumber(dwcRecordNumber)
+        .dwcRecordNumbers(dwcRecordNumbers)
         .build();
     dbService.save(collectingEvent,false);
 
-    CollectingEvent fetchedCollectingEvent = dbService.find(CollectingEvent.class, collectingEvent.getId());
+    CollectingEvent fetchedCollectingEvent = dbService
+        .find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
     assertEquals(testDateTime, fetchedCollectingEvent.getStartEventDateTime());
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
@@ -87,13 +89,14 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcGeoreferenceSources, fetchedCollectingEvent.getDwcGeoreferenceSources());
     assertEquals(dwcGeoreferencedDate, fetchedCollectingEvent.getDwcGeoreferencedDate());
-    assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());    
-    assertEquals(dwcVerbatimLongitude, fetchedCollectingEvent.getDwcVerbatimLongitude());    
-    assertEquals(dwcVerbatimCoordinateSystem, fetchedCollectingEvent.getDwcVerbatimCoordinateSystem());    
-    assertEquals(dwcVerbatimSRS, fetchedCollectingEvent.getDwcVerbatimSRS());    
-    assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());    
-    assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());    
-    assertEquals(dwcRecordNumber, fetchedCollectingEvent.getDwcRecordNumber());    
+    assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());
+    assertEquals(dwcVerbatimLongitude, fetchedCollectingEvent.getDwcVerbatimLongitude());
+    assertEquals(dwcVerbatimCoordinateSystem,
+        fetchedCollectingEvent.getDwcVerbatimCoordinateSystem());
+    assertEquals(dwcVerbatimSRS, fetchedCollectingEvent.getDwcVerbatimSRS());
+    assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
+    assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
+    assertArrayEquals(dwcRecordNumbers, fetchedCollectingEvent.getDwcRecordNumbers());
   }
 
 }
