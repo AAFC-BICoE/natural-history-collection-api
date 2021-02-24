@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
@@ -45,7 +46,8 @@ public class CollectingEventDto {
   private OffsetDateTime createdOn;
 
   @JsonApiRelation
-  private List<GeoReferenceAssertionDto> geoReferenceAssertions;  
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<GeoReferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
