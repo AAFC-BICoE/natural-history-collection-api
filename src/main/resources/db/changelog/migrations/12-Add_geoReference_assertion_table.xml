@@ -19,6 +19,9 @@
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
+            <column name="collecting_event_id" type="integer">
+                <constraints foreignKeyName="fk_georeference_assertion_collecting_event_id" references="collecting_event(id)"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

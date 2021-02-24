@@ -44,10 +44,9 @@ public class CollectingEventDto {
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  private Double dwcDecimalLatitude;
-  private Double dwcDecimalLongitude;
+  @JsonApiRelation
+  private List<GeoReferenceAssertionDto> geoReferenceAssertions;  
 
-  private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
 

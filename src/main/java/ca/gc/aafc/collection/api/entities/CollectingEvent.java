@@ -6,16 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 
 import org.hibernate.annotations.NaturalId;
@@ -61,11 +67,12 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  // Might not be the final choice to store lat/long
-  private Double dwcDecimalLatitude;
-  private Double dwcDecimalLongitude;
+  @OneToMany(fetch = FetchType.LAZY,
+      mappedBy = "collectingEvent",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
+    )      
+  private List<GeoReferenceAssertion> geoReferenceAssertions;
 
-  private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
 
   @Size(max = 250)  
@@ -86,6 +93,7 @@ public class CollectingEvent implements DinaEntity {
   private String verbatimEventDateTime;
   
   @Column(insertable = false, updatable = false)
+  @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
