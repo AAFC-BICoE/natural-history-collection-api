@@ -19,9 +19,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     super(baseDAO);
   }
 
-    @Override
-    protected void preCreate(CollectingEvent entity) {
-      entity.setUuid(UUID.randomUUID());
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
