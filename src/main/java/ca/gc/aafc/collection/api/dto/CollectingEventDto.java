@@ -44,7 +44,8 @@ public class CollectingEventDto {
   private OffsetDateTime createdOn;
 
   @JsonApiRelation
-  private List<GeoReferenceAssertionDto> geoReferenceAssertions;  
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<GeoReferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
