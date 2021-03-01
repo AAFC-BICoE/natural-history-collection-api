@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.service;
 import java.util.List;
 import java.util.UUID;
 
-import ca.gc.aafc.collection.api.entities.GeoReferenceAssertion;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private void linkAssertions(CollectingEvent entity) {
-    List<GeoReferenceAssertion> geos = entity.getGeoReferenceAssertions();
+    List<GeoreferenceAssertion> geos = entity.getGeoReferenceAssertions();
     if (CollectionUtils.isNotEmpty(geos)) {
       geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
     }
