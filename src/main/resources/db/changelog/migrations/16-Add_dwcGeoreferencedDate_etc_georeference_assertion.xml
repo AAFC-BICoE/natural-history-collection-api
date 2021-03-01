@@ -19,7 +19,7 @@
 
     <!-- Add the column -->
     <addColumn tableName="georeference_assertion">
-      <column name="dwc_georeference_protocol " type="VARCHAR(100)" />
+      <column name="dwc_georeference_protocol" type="VARCHAR(100)" />
     </addColumn>        
 
     <!-- Add the column -->

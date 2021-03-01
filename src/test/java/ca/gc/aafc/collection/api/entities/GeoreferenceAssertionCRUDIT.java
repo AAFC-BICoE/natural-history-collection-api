@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.time.OffsetDateTime;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
 
   @Inject
   private DatabaseSupportService dbService;
+
+  private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
 
 
   @Test
@@ -33,6 +37,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
         .dwcDecimalLatitude(12.123456)
         .dwcDecimalLongitude(45.01)
         .dwcCoordinateUncertaintyInMeters(10)
+        .dwcGeoreferencedDate(testGeoreferencedDate)
         .build();
     dbService.save(geoReferenceAssertion);
 
@@ -41,6 +46,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(12.123456, fetchedGeoreferenceAssertion.getDwcDecimalLatitude());
     assertEquals(45.01, fetchedGeoreferenceAssertion.getDwcDecimalLongitude());
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
+    assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
   }
 }

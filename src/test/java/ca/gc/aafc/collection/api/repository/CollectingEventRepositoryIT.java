@@ -67,10 +67,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
+  private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
     
   private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
+    .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
   private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};    
 
@@ -138,6 +140,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(
       12.123456,
       collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
+
+    assertEquals(
+      testGeoreferencedDate,
+      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());          
 
     assertEquals("26.089, 106.36", collectingEventDto.getDwcVerbatimCoordinates());
     assertEquals(dwcRecordedBy, collectingEventDto.getDwcRecordedBy());
