@@ -35,6 +35,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     if (CollectionUtils.isNotEmpty(geos)) {
       geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
     }
+
   }
 
 }

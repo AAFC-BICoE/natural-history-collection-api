@@ -24,9 +24,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -85,5 +87,8 @@ public class ManagedAttribute implements DinaEntity {
   @NotBlank
   @Column(name = "created_by", updatable = false)
   private String createdBy;
+
+  @OneToMany(mappedBy = "event")
+  private List<CollectingEventManagedAttribute> managedAttributes;
 
 }

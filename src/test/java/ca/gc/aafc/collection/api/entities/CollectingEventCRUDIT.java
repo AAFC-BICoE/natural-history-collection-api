@@ -38,7 +38,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";  
-  private static final String[] dwcRecordNumbers = new String[] { "80-79", "80-80"};  
+  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};  
 
   @Test
   public void testSave() {
@@ -69,7 +69,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcVerbatimSRS(dwcVerbatimSRS)
         .dwcVerbatimElevation(dwcVerbatimElevation)
         .dwcVerbatimDepth(dwcVerbatimDepth)
-        .dwcRecordNumbers(dwcRecordNumbers)
+        .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
         .build();
     dbService.save(collectingEvent,false);
 
@@ -96,7 +96,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, fetchedCollectingEvent.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
-    assertArrayEquals(dwcRecordNumbers, fetchedCollectingEvent.getDwcRecordNumbers());
+    assertArrayEquals(dwcOtherRecordNumbers, fetchedCollectingEvent.getDwcOtherRecordNumbers());
   }
 
 }

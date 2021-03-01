@@ -1,10 +1,22 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.entity.DinaEntity;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,27 +29,11 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
-
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.dina.entity.DinaEntity;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -70,7 +66,7 @@ public class CollectingEvent implements DinaEntity {
   @OneToMany(fetch = FetchType.LAZY,
       mappedBy = "collectingEvent",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
-    )      
+    )
   private List<GeoReferenceAssertion> geoReferenceAssertions;
 
   private String dwcVerbatimCoordinates;
@@ -139,7 +135,13 @@ public class CollectingEvent implements DinaEntity {
   private String dwcVerbatimDepth;
 
   @Type(type = "string-array")
-  private String[] dwcRecordNumbers;
+  private String[] dwcOtherRecordNumbers;
+
+  @Size(max = 50)  
+  private String dwcRecordNumber;  
+
+  @OneToMany(mappedBy = "event")
+  private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
@@ -169,7 +171,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime
+   * @param endISOEventDateTime - the time
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {

@@ -1,17 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.commons.lang3.StringUtils;
-
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
@@ -21,12 +9,22 @@ import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Nullable;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
@@ -74,6 +72,10 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonApiRelation
+  private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
+
   private OffsetDateTime dwcGeoreferencedDate;
   private String dwcGeoreferenceSources;
   private String dwcVerbatimLatitude;
@@ -82,7 +84,8 @@ public class CollectingEventDto {
   private String dwcVerbatimSRS;
   private String dwcVerbatimElevation;
   private String dwcVerbatimDepth; 
-  private String[] dwcRecordNumbers;
+  private String[] dwcOtherRecordNumbers;
+  private String dwcRecordNumber;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
