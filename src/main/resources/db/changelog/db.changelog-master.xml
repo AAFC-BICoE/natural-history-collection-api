@@ -15,5 +15,6 @@
   <include file="db/changelog/migrations/12-Add_geoReference_assertion_table.xml"/>  
   <include file="db/changelog/migrations/13-Update_dwcRecordNumber_collecting_event_table.xml"/>  
   <include file="db/changelog/migrations/14-Remove_dwcDecimalLatitude_etc_collecting_event.xml"/>    
-  <include file="db/changelog/migrations/15-Add_dwcOtherRecordNumbers_etc_collecting_event.xml"/>    
+  <include file="db/changelog/migrations/15-Add_dwcOtherRecordNumbers_etc_collecting_event.xml"/>
+  <include file="db/changelog/migrations/16-Add_managed_attribute_to_collecting_event.xml"/>
 </databaseChangeLog>
