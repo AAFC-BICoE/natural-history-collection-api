@@ -72,7 +72,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .build();
-  private static final String[] dwcRecordNumbers = new String[] { "80-79", "80-80"};    
+  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};    
 
   @BeforeEach
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
@@ -102,7 +102,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)   
-      .dwcRecordNumbers(dwcRecordNumbers)   
+      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)   
       .build();
     testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     dbService.save(testCollectingEvent,false);
@@ -158,7 +158,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
-    assertEquals(dwcRecordNumbers[1], collectingEventDto.getDwcRecordNumbers()[1]);          
+    assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);          
   }
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
@@ -194,7 +194,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(dwcRecordNumbers[1], result.getDwcRecordNumbers()[1]);         
+    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
   }
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
@@ -226,7 +226,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
-    ce.setDwcRecordNumbers(dwcRecordNumbers);
+    ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);
     return ce;
   }
 
