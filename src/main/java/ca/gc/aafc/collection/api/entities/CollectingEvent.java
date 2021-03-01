@@ -135,7 +135,10 @@ public class CollectingEvent implements DinaEntity {
   private String dwcVerbatimDepth;
 
   @Type(type = "string-array")
-  private String[] dwcRecordNumbers;
+  private String[] dwcOtherRecordNumbers;
+
+  @Size(max = 50)  
+  private String dwcRecordNumber;  
 
   @OneToMany(mappedBy = "event")
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
