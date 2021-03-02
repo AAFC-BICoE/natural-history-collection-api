@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -14,11 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 
 import org.junit.jupiter.api.Assertions;
@@ -89,11 +92,19 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   @WithMockKeycloakUser(groupRole = { "amf: staff" })
   @Test
   public void when_deleteAsUserFromEventGroup_Eventdeleted(){
-    CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
-        new QuerySpec(CollectingEventDto.class));
-    assertNotNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
-    collectingEventRepository.delete(retrievedEvent.getUuid());    
-    assertNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
+    CollectingEventDto ce = new CollectingEventDto();
+    ce.setGroup("amf");
+    ce.setUuid(UUID.randomUUID());
+    ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());    
+    CollectingEventDto retrievedEvent = collectingEventRepository.findOne(
+      collectingEventRepository.create(ce).getUuid(),
+      new QuerySpec(CollectingEventDto.class));
+
+    assertNotNull(retrievedEvent.getUuid());
+    collectingEventRepository.delete(retrievedEvent.getUuid());        
+    Assertions.assertThrows(ResourceNotFoundException.class, ()->collectingEventRepository.findOne(retrievedEvent.getUuid(),
+         new QuerySpec(CollectingEventDto.class)));    
+
   }
     
 }
