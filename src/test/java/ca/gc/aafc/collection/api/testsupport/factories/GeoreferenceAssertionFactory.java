@@ -2,14 +2,14 @@ package ca.gc.aafc.collection.api.testsupport.factories;
 
 import java.util.UUID;
 
-import ca.gc.aafc.collection.api.entities.GeoReferenceAssertion;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
-public class GeoReferenceAssertionFactory implements TestableEntityFactory<GeoReferenceAssertion> {
+public class GeoreferenceAssertionFactory implements TestableEntityFactory<GeoreferenceAssertion> {
 
     @Override
-    public GeoReferenceAssertion getEntityInstance() {
-      return newGeoReferenceAssertion().build();
+    public GeoreferenceAssertion getEntityInstance() {
+      return newGeoreferenceAssertion().build();
     }
 
     /**
@@ -19,8 +19,8 @@ public class GeoReferenceAssertionFactory implements TestableEntityFactory<GeoRe
      *
      * @return Pre-configured builder with all mandatory fields set
      */
-    public static GeoReferenceAssertion.GeoReferenceAssertionBuilder newGeoReferenceAssertion() {
-      return GeoReferenceAssertion
+    public static GeoreferenceAssertion.GeoreferenceAssertionBuilder newGeoreferenceAssertion() {
+      return GeoreferenceAssertion
           .builder()
           .uuid(UUID.randomUUID())
           .createdBy("test user");

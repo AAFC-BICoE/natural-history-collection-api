@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -37,7 +38,7 @@ import lombok.ToString;
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
 @Table(name = "georeference_assertion")
-public class GeoReferenceAssertion implements DinaEntity {
+public class GeoreferenceAssertion implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,5 +64,19 @@ public class GeoReferenceAssertion implements DinaEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @ToString.Exclude
   private CollectingEvent collectingEvent;  
+
+  private OffsetDateTime dwcGeoreferencedDate;
+  
+  @Size(max = 250)  
+  private String literalGeoreferencedBy;
+
+  @Size(max = 100)  
+  private String dwcGeoreferenceProtocol;
+
+  @Size(max = 150)  
+  private String dwcGeoreferenceSources;
+
+  @Size(max = 250)  
+  private String dwcGeoreferenceRemarks; 
 
 }

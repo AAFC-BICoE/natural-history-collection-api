@@ -23,11 +23,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.GeoReferenceAssertionDto;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.GeoReferenceAssertion;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoReferenceAssertionFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
@@ -43,7 +43,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private CollectingEventRepository collectingEventRepository;
 
   @Inject
-  private GeoReferenceAssertionRepository geoReferenceAssertionRepository;
+  private GeoreferenceAssertionRepository geoReferenceAssertionRepository;
 
   @Inject
   private DatabaseSupportService dbService;
@@ -67,10 +67,12 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
+  private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
     
-  private GeoReferenceAssertion geoReferenceAssertion = GeoReferenceAssertionFactory.newGeoReferenceAssertion()
+  private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
+    .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
   private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};    
 
@@ -111,7 +113,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @Test
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
-    QuerySpec geoSpec = new QuerySpec(GeoReferenceAssertionDto.class);
+    QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
 
     List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
         .map(Arrays::asList)
@@ -138,6 +140,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(
       12.123456,
       collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
+
+    assertEquals(
+      testGeoreferencedDate,
+      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());          
 
     assertEquals("26.089, 106.36", collectingEventDto.getDwcVerbatimCoordinates());
     assertEquals(dwcRecordedBy, collectingEventDto.getDwcRecordedBy());
@@ -199,9 +205,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private CollectingEventDto newEventDto(String startTime, String endDate) {
     CollectingEventDto ce = new CollectingEventDto();
-    GeoReferenceAssertionDto geoRef = new GeoReferenceAssertionDto();
+    GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
     geoRef.setDwcCoordinateUncertaintyInMeters(10);
-    GeoReferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
+    GeoreferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
     ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setUuid(UUID.randomUUID());

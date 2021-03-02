@@ -45,7 +45,7 @@ public class CollectingEventDto {
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<GeoReferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
