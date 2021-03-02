@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoReferenceAssertionFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
@@ -23,7 +23,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private DatabaseSupportService dbService;
 
-  private GeoReferenceAssertion geoReferenceAssertion = GeoReferenceAssertionFactory.newGeoReferenceAssertion()
+  private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .build();

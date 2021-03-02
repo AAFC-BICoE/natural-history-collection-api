@@ -66,8 +66,8 @@ public class CollectingEvent implements DinaEntity {
   @OneToMany(fetch = FetchType.LAZY,
       mappedBy = "collectingEvent",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
-    )
-  private List<GeoReferenceAssertion> geoReferenceAssertions;
+      )
+  private List<GeoreferenceAssertion> geoReferenceAssertions;
 
   private String dwcVerbatimCoordinates;
 
