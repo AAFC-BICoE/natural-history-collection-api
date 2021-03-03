@@ -14,4 +14,4 @@ embedded.postgresql:
   database: collection_test
   schema: collection
 dev-user:
-  enabled: true
+  enabled: false

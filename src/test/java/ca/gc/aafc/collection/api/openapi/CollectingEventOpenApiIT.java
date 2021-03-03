@@ -1,20 +1,5 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
-import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
-import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
-import lombok.SneakyThrows;
-import org.apache.http.client.utils.URIBuilder;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
-import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -23,6 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
+import org.apache.http.client.utils.URIBuilder;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
+import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
+import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import lombok.SneakyThrows;
+
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -30,6 +32,7 @@ import java.util.UUID;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+
 public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
@@ -48,7 +51,8 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
-  private static final String dwcVerbatimDepth = "10-20 m ";    
+  private static final String dwcVerbatimDepth = "10-20 m ";   
+  private static final String[] dwcOtherRecordNumbers = new String[]{"80-79"};   
 
   static {
     URI_BUILDER.setScheme("https");
@@ -68,11 +72,9 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   @Test
   void collectingEvent_SpecValid() {
     CollectingEventDto ce = new CollectingEventDto();
-    ce.setGroup("test group");
-    ce.setDwcDecimalLatitude(3.2);
-    ce.setDwcDecimalLongitude(1.2);
+    ce.setCreatedBy("test user");  
+    ce.setGroup("test group");  
     ce.setVerbatimEventDateTime("a cold winter morning in the winter of 2099");
-    ce.setDwcCoordinateUncertaintyInMeters(2);
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
@@ -88,7 +90,8 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
-    ce.setDwcVerbatimDepth(dwcVerbatimDepth);          
+    ce.setDwcVerbatimDepth(dwcVerbatimDepth); 
+    ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);         
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),

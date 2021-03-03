@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,20 +11,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -42,6 +47,7 @@ import java.util.UUID;
   name = "list-array",
   typeClass = ListArrayType.class
 )
+@TypeDef(name = "string-array", typeClass = StringArrayType.class)
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -57,11 +63,12 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  // Might not be the final choice to store lat/long
-  private Double dwcDecimalLatitude;
-  private Double dwcDecimalLongitude;
+  @OneToMany(fetch = FetchType.LAZY,
+      mappedBy = "collectingEvent",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
+      )
+  private List<GeoreferenceAssertion> geoReferenceAssertions;
 
-  private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
 
   @Size(max = 250)  
@@ -82,6 +89,7 @@ public class CollectingEvent implements DinaEntity {
   private String verbatimEventDateTime;
   
   @Column(insertable = false, updatable = false)
+  @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -126,6 +134,15 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 25)  
   private String dwcVerbatimDepth;
 
+  @Type(type = "string-array")
+  private String[] dwcOtherRecordNumbers;
+
+  @Size(max = 50)  
+  private String dwcRecordNumber;  
+
+  @OneToMany(mappedBy = "event")
+  private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
@@ -154,7 +171,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime
+   * @param endISOEventDateTime - the time
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {

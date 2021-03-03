@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.FilterSpec;
@@ -47,10 +48,10 @@ public class CollectingEventDto {
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  private Double dwcDecimalLatitude;
-  private Double dwcDecimalLongitude;
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
-  private Integer dwcCoordinateUncertaintyInMeters;
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
 
@@ -76,6 +77,10 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonApiRelation
+  private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
+
   private OffsetDateTime dwcGeoreferencedDate;
   private String dwcGeoreferenceSources;
   private String dwcVerbatimLatitude;
@@ -83,7 +88,9 @@ public class CollectingEventDto {
   private String dwcVerbatimCoordinateSystem;
   private String dwcVerbatimSRS;
   private String dwcVerbatimElevation;
-  private String dwcVerbatimDepth;
+  private String dwcVerbatimDepth; 
+  private String[] dwcOtherRecordNumbers;
+  private String dwcRecordNumber;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
