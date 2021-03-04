@@ -79,4 +79,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   @Size(max = 250)  
   private String dwcGeoreferenceRemarks; 
 
+  @Size(max = 25)  
+  private String dwcGeodeticDatum;   
+
 }

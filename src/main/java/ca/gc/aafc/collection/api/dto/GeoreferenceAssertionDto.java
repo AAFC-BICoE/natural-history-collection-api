@@ -30,6 +30,7 @@ public class GeoreferenceAssertionDto {
   private String literalGeoreferencedBy;
   private String dwcGeoreferenceProtocol;
   private String dwcGeoreferenceSources;
-  private String dwcGeoreferenceRemarks; 
+  private String dwcGeoreferenceRemarks;   
+  private String dwcGeodeticDatum;  
 
 }
