@@ -68,16 +68,11 @@ public class CollectingEventDto {
 
   private String dwcVerbatimLocality;
 
-  @JsonApiExternalRelation(type = "agent")
-  @JsonApiRelation
-  private List<ExternalRelationDto> dwcGeoreferencedBy = new ArrayList<>();
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @JsonApiRelation
   private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
 
-  private OffsetDateTime dwcGeoreferencedDate;
-  private String dwcGeoreferenceSources;
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;
   private String dwcVerbatimCoordinateSystem;
