@@ -29,6 +29,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -111,7 +113,7 @@ public class CollectingEvent implements DinaEntity {
   @Column(columnDefinition = "uuid[]")  
   private List<UUID> dwcGeoreferencedBy = new ArrayList<>();
 
-  private OffsetDateTime dwcGeoreferencedDate;  
+  private LocalDate dwcGeoreferencedDate;
 
   @Size(max = 100)  
   private String dwcGeoreferenceSources;

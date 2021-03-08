@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
   private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
-  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now(); 
+  private static final LocalDate dwcGeoreferencedDate = LocalDate.now(); 
   
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
   private static final String dwcVerbatimLongitude = "long 45.01";

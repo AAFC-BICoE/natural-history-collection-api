@@ -59,7 +59,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
   private static final String dwcGeoreferenceSources = "https://www.geonames.org/";
-  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();
+  private static final LocalDate dwcGeoreferencedDate = LocalDate.now();
 
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
   private static final String dwcVerbatimLongitude = "long 45.01";
@@ -67,7 +67,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
-  private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
+  private static final LocalDate testGeoreferencedDate = LocalDate.now();
     
   private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)

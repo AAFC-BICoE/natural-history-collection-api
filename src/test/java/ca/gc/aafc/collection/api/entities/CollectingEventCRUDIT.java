@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
   private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
-  private static final OffsetDateTime dwcGeoreferencedDate = OffsetDateTime.now();  
+  private static final LocalDate dwcGeoreferencedDate = LocalDate.now();  
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
   private static final String dwcVerbatimLongitude = "long 45.01";
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
