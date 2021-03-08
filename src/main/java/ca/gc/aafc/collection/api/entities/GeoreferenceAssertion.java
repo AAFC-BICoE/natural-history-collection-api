@@ -67,16 +67,19 @@ public class GeoreferenceAssertion implements DinaEntity {
 
   private OffsetDateTime dwcGeoreferencedDate;
   
-  @Size(max = 250)  
+  @Size(max = 250)
   private String literalGeoreferencedBy;
 
-  @Size(max = 100)  
+  @Size(max = 100)
   private String dwcGeoreferenceProtocol;
 
-  @Size(max = 150)  
+  @Size(max = 150)
   private String dwcGeoreferenceSources;
 
-  @Size(max = 250)  
-  private String dwcGeoreferenceRemarks; 
+  @Size(max = 250)
+  private String dwcGeoreferenceRemarks;
+
+  @Size(max = 25)
+  private String dwcGeodeticDatum;
 
 }
