@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -21,14 +23,17 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
 
   private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
 
+  private List<UUID> agentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
   @Test
   public void testSave() {
     GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-        .build();
+      .georeferencedBy(agentIdentifiers)  
+      .build();
     assertNull(geoReferenceAssertion.getId());
     dbService.save(geoReferenceAssertion);
     assertNotNull(geoReferenceAssertion.getId());
+    assertEquals(agentIdentifiers, geoReferenceAssertion.getGeoreferencedBy());
   }
 
   @Test

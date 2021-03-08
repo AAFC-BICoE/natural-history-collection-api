@@ -21,5 +21,6 @@
   <include file="db/changelog/migrations/18-Add_Javers_audit_tables.xml"/>
   <include file="db/changelog/migrations/19-Remove_dwcGeoreferencedBy_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/20-Add_dwcGeodeticDatum_georeference_assertion.xml"/>
+  <include file="db/changelog/migrations/22-Add_georeferencedBy_to_GeoreferenceAssertion.xml"/>
 </databaseChangeLog>
 

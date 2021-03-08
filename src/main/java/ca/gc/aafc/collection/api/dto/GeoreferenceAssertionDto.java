@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
@@ -27,6 +28,7 @@ public class GeoreferenceAssertionDto {
   private Integer dwcCoordinateUncertaintyInMeters;
 
   private OffsetDateTime dwcGeoreferencedDate;
+  private List<UUID> georeferencedBy;
   private String literalGeoreferencedBy;
   private String dwcGeoreferenceProtocol;
   private String dwcGeoreferenceSources;
