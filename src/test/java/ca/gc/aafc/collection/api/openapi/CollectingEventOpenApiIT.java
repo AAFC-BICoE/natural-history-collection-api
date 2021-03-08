@@ -44,8 +44,6 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
-  private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
-  private static final LocalDate dwcGeoreferencedDate = LocalDate.now(); 
   
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
   private static final String dwcVerbatimLongitude = "long 45.01";
@@ -83,9 +81,6 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     ce.setAttachment(null);
     ce.setDwcRecordedBy(dwcRecordedBy);
     ce.setDwcVerbatimLocality(dwcVerbatimLocality);
-    ce.setDwcGeoreferencedDate(dwcGeoreferencedDate);
-    ce.setDwcGeoreferenceSources(dwcGeoreferenceSources);
-    ce.setDwcGeoreferencedBy(null);     
     ce.setDwcVerbatimLatitude(dwcVerbatimLatitude);
     ce.setDwcVerbatimLongitude(dwcVerbatimLongitude);
     ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);

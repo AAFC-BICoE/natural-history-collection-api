@@ -31,8 +31,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
-  private static final String dwcGeoreferenceSources  = "https://www.geonames.org/" ;
-  private static final LocalDate dwcGeoreferencedDate = LocalDate.now();  
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
   private static final String dwcVerbatimLongitude = "long 45.01";
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
@@ -62,8 +60,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .startEventDateTimePrecision((byte) 8)
         .dwcRecordedBy(dwcRecordedBy)
         .dwcVerbatimLocality(dwcVerbatimLocality)
-        .dwcGeoreferencedDate(dwcGeoreferencedDate)
-        .dwcGeoreferenceSources(dwcGeoreferenceSources)
         .dwcVerbatimLatitude(dwcVerbatimLatitude)
         .dwcVerbatimLongitude(dwcVerbatimLongitude)
         .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
@@ -88,8 +84,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
-    assertEquals(dwcGeoreferenceSources, fetchedCollectingEvent.getDwcGeoreferenceSources());
-    assertEquals(dwcGeoreferencedDate, fetchedCollectingEvent.getDwcGeoreferencedDate());
     assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());
     assertEquals(dwcVerbatimLongitude, fetchedCollectingEvent.getDwcVerbatimLongitude());
     assertEquals(dwcVerbatimCoordinateSystem,

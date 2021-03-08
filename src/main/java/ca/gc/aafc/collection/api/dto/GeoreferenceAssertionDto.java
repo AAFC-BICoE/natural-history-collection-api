@@ -25,12 +25,13 @@ public class GeoreferenceAssertionDto {
 
   private Double dwcDecimalLatitude;
   private Double dwcDecimalLongitude;
-  private Integer dwcCoordinateUncertaintyInMeters;  
+  private Integer dwcCoordinateUncertaintyInMeters;
 
   private LocalDate dwcGeoreferencedDate;
   private String literalGeoreferencedBy;
   private String dwcGeoreferenceProtocol;
   private String dwcGeoreferenceSources;
-  private String dwcGeoreferenceRemarks; 
+  private String dwcGeoreferenceRemarks;
+  private String dwcGeodeticDatum;
 
 }

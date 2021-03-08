@@ -109,15 +109,6 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 250)  
   private String dwcVerbatimLocality;
 
-  @Type(type = "list-array")
-  @Column(columnDefinition = "uuid[]")  
-  private List<UUID> dwcGeoreferencedBy = new ArrayList<>();
-
-  private LocalDate dwcGeoreferencedDate;
-
-  @Size(max = 100)  
-  private String dwcGeoreferenceSources;
-
   @Size(max = 25)  
   private String dwcVerbatimLatitude;
 

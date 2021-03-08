@@ -5,10 +5,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
         context="schema-change">
 
-  <changeSet id="19-Change-dwcGeoreferencedDate-to-LocalDate" context="schema-change" author="poffm">
+  <changeSet id="20-Add_dwcGeodeticDatum_georeference_assertion" context="schema-change" author="xgan">
 
-    <modifyDataType tableName="collecting_event" columnName="dwc_georeferenced_date" newDataType="date" />  
-    <modifyDataType tableName="georeference_assertion" columnName="dwc_georeferenced_date" newDataType="date" />  
+    <!-- Add the column -->
+    <addColumn tableName="georeference_assertion">
+      <column name="dwc_geodetic_datum" type="VARCHAR(25)" />
+    </addColumn>
 
   </changeSet>
 </databaseChangeLog>
