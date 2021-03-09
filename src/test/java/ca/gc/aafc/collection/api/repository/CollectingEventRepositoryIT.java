@@ -230,8 +230,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private static Stream<Arguments> precisionFilterSource() {
     return Stream.of(
-      // Blank rsql string - returns all records
-      Arguments.of("1999", "", 2),
       // Format YYYY
       Arguments.of("1999", "startEventDateTime==1999", 1),
       Arguments.of("1999", "startEventDateTime==1998", 0),
