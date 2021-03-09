@@ -18,6 +18,8 @@
   <include file="db/changelog/migrations/15-Add_dwcOtherRecordNumbers_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/16-Add_managed_attribute_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/17-Add_dwcGeoreferencedDate_etc_georeference_assertion.xml"/>
-  <include file="db/changelog/migrations/18-Add_Javers_audit_tables.xml"/>    
+  <include file="db/changelog/migrations/18-Add_Javers_audit_tables.xml"/>
+  <include file="db/changelog/migrations/19-Remove_dwcGeoreferencedBy_etc_collecting_event.xml"/>
+  <include file="db/changelog/migrations/20-Add_dwcGeodeticDatum_georeference_assertion.xml"/>
 </databaseChangeLog>
 
