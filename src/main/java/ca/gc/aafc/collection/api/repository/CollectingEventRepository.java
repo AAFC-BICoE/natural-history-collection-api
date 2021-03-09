@@ -39,7 +39,8 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
       CollectingEventDto.class,
       CollectingEvent.class,
       new DinaFilterResolver(new IsoDateTimeRsqlResolver(Map.of(
-        "startEventDateTime", "startEventDateTimePrecision"
+        "startEventDateTime", "startEventDateTimePrecision",
+        "endEventDateTime", "endEventDateTimePrecision"
       ))),
       externalResourceProvider,
       props);
