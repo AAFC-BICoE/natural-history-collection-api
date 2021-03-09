@@ -3,8 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
-import ca.gc.aafc.dina.filter.DinaFilterResolver;
-import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -12,9 +10,10 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
 import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import lombok.NonNull;
-import java.util.Optional;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class CollectingEventRepository extends DinaRepository<CollectingEventDto, CollectingEvent> {
@@ -25,8 +24,6 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
     @NonNull CollectingEventService dinaService,
     Optional<DinaAuthorizationService> groupAuthService,
     @NonNull AuditService auditService,
-    @NonNull BaseDAO baseDAO,
-    @NonNull DinaFilterResolver filterResolver,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull ExternalResourceProvider externalResourceProvider
@@ -38,7 +35,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
       new DinaMapper<>(CollectingEventDto.class),
       CollectingEventDto.class,
       CollectingEvent.class,
-      filterResolver,
+      null,
       externalResourceProvider,
       props);
 
