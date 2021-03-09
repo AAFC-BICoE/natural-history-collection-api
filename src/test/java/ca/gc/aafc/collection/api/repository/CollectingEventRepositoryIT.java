@@ -18,6 +18,9 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
@@ -219,6 +222,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @ParameterizedTest
   @MethodSource({"precisionFilterSource"})
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
     collectingEventRepository.create(newEventDto(startDate, "1888"));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());

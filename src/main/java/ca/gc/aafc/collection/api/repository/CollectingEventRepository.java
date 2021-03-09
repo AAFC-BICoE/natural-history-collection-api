@@ -1,8 +1,10 @@
 package ca.gc.aafc.collection.api.repository;
 
+import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
+import ca.gc.aafc.dina.filter.DinaFilterResolver;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -13,6 +15,7 @@ import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -35,7 +38,9 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
       new DinaMapper<>(CollectingEventDto.class),
       CollectingEventDto.class,
       CollectingEvent.class,
-      null,
+      new DinaFilterResolver(new IsoDateTimeRsqlResolver(Map.of(
+        "startEventDateTime", "startEventDateTimePrecision"
+      ))),
       externalResourceProvider,
       props);
 
