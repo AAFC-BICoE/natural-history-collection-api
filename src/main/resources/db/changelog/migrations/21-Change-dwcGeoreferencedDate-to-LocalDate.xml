@@ -7,6 +7,10 @@
 
   <changeSet id="21-Change-dwcGeoreferencedDate-to-LocalDate" context="schema-change" author="poffm">
 
+    <!-- Set existing values to null. -->
+    <update tableName="georeference_assertion">
+      <column name="dwc_georeferenced_date" value="null"/>
+    </update>
     <modifyDataType tableName="georeference_assertion" columnName="dwc_georeferenced_date" newDataType="date" />  
 
   </changeSet>
