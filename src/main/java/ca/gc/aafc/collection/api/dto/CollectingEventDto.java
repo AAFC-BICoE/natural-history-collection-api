@@ -124,8 +124,6 @@ public class CollectingEventDto {
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
-    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
-      "endEventDateTime", "endEventDateTimePrecision");
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
