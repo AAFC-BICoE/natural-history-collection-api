@@ -3,18 +3,15 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.dto.CollectorGroupDto;
 import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.collection.api.service.CollectorGroupService;
-import ca.gc.aafc.dina.filter.DinaFilterResolver;
-import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
+import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
-
-import java.util.Optional;
-
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
-import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
+
+import java.util.Optional;
 
 @Repository
 public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, CollectorGroup> {
@@ -23,8 +20,6 @@ public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, 
 
   public CollectorGroupRepository(
     @NonNull CollectorGroupService dinaService,
-    @NonNull BaseDAO baseDAO,
-    @NonNull DinaFilterResolver filterResolver,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
     @NonNull ExternalResourceProvider externalResourceProvider
@@ -36,7 +31,7 @@ public class CollectorGroupRepository extends DinaRepository<CollectorGroupDto, 
       new DinaMapper<>(CollectorGroupDto.class),
       CollectorGroupDto.class,
       CollectorGroup.class,
-      filterResolver,
+      null,
       externalResourceProvider,
       props);
       this.dinaAuthenticatedUser = dinaAuthenticatedUser;

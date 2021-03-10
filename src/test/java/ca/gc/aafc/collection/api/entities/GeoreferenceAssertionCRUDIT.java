@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private DatabaseSupportService dbService;
 
-  private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
+  private static final LocalDate testGeoreferencedDate = LocalDate.now();
 
   private List<UUID> agentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -67,7 +68,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   @ToString.Exclude
   private CollectingEvent collectingEvent;  
 
-  private OffsetDateTime dwcGeoreferencedDate;
+  private LocalDate dwcGeoreferencedDate;
   
   @Type(type = "list-array")
   @Column(name = "georeferenced_by", columnDefinition = "uuid[]")  
