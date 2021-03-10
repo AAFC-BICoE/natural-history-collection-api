@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, Set<String>>, RsqlFilterAdapter {
 
-  private final Map<String, String> fieldPerPrecision;
+  private final Map<String, String> fieldPrecisionMap;
 
   @Override
   public Node process(Node node) {
-    return node.accept(this, fieldPerPrecision.keySet());
+    return node.accept(this, fieldPrecisionMap.keySet());
   }
 
   @Override
@@ -53,7 +53,7 @@ public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, Set<String>>, 
       List<String> precision = List.of(Byte.toString(argument.getFormat().getPrecision()));
       return new AndNode(List.of(
         new ComparisonNode(RSQLOperators.EQUAL, selector, List.of(argument.getLocalDateTime().toString())),
-        new ComparisonNode(RSQLOperators.EQUAL, fieldPerPrecision.get(selector), precision)
+        new ComparisonNode(RSQLOperators.EQUAL, fieldPrecisionMap.get(selector), precision)
       ));
     } else {
       return node;
