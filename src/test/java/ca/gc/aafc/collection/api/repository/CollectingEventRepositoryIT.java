@@ -67,7 +67,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
-  private static final OffsetDateTime testGeoreferencedDate = OffsetDateTime.now();
+  private static final LocalDate testGeoreferencedDate = LocalDate.now();
     
   private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
