@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -89,9 +88,6 @@ public class CollectingEventDto {
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
-    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
-      "startEventDateTime", "startEventDateTimePrecision");
-
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
       return isoDateTime == null ? null : isoDateTime.toString();
@@ -125,19 +121,11 @@ public class CollectingEventDto {
       return dtoRef::getStartEventDateTime;
     }
 
-    // Commented out for hotfix due to bug in date filtering See Redmine:21603
-//    @Override
-//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-//    }
   }
 
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
-    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
-      "endEventDateTime", "endEventDateTimePrecision");
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -172,12 +160,6 @@ public class CollectingEventDto {
       return dtoRef::getEndEventDateTime;
     }
 
-    //C.G. commented since it will run even if the field is not included
-//    @Override
-//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-//    }
   }
 
 }
