@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -68,6 +70,10 @@ public class GeoreferenceAssertion implements DinaEntity {
 
   private LocalDate dwcGeoreferencedDate;
   
+  @Type(type = "list-array")
+  @Column(name = "georeferenced_by", columnDefinition = "uuid[]")  
+  private List<UUID> georeferencedBy;
+
   @Size(max = 250)
   private String literalGeoreferencedBy;
 
