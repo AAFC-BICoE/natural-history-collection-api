@@ -58,7 +58,6 @@ public class CollectingEventDto {
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @ShallowReference
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
