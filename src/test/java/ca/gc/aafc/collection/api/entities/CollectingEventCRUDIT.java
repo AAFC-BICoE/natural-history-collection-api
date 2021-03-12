@@ -1,30 +1,23 @@
 package ca.gc.aafc.collection.api.entities;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Collections;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.Test;
-
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
+import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @Inject
   private DatabaseSupportService dbService;
 
-  private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+  private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .build();
@@ -36,8 +29,12 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
-  private static final String dwcVerbatimDepth = "10-20 m ";  
-  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};  
+  private static final String dwcVerbatimDepth = "10-20 m ";
+  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
+  private static final String dwcCountry = "Atlantis";
+  private static final String dwcCountryCode = "Al";
+  private static final String dwcStateProvince = "Island of Pharo's";
+  private static final String dwcMunicipality = "Morocco";
 
   @Test
   public void testSave() {
@@ -67,6 +64,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcVerbatimElevation(dwcVerbatimElevation)
         .dwcVerbatimDepth(dwcVerbatimDepth)
         .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+        .dwcCountry(dwcCountry)
+        .dwcCountryCode(dwcCountryCode)
+        .dwcStateProvince(dwcStateProvince)
+        .dwcMunicipality(dwcMunicipality)
         .build();
     dbService.save(collectingEvent,false);
 
@@ -92,6 +93,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
     assertArrayEquals(dwcOtherRecordNumbers, fetchedCollectingEvent.getDwcOtherRecordNumbers());
+    assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
+    assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
+    assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
+    assertEquals(dwcMunicipality, fetchedCollectingEvent.getDwcMunicipality());
   }
 
 }

@@ -23,5 +23,6 @@
   <include file="db/changelog/migrations/20-Add_dwcGeodeticDatum_georeference_assertion.xml"/>
   <include file="db/changelog/migrations/21-Change-dwcGeoreferencedDate-to-LocalDate.xml"/>    
   <include file="db/changelog/migrations/22-Add_georeferencedBy_to_GeoreferenceAssertion.xml"/>
+  <include file="db/changelog/migrations/23-Add_initial_place_fields_to_coll_event.xml"/>
 </databaseChangeLog>
 
