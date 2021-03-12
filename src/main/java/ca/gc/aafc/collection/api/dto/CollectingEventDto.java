@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.apache.commons.lang3.StringUtils;
 import org.javers.core.metamodel.annotation.PropertyName;
-import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
