@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,7 +54,11 @@ public class GeoreferenceAssertion implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
 
+  @DecimalMin(value = "-90.0")
+  @DecimalMax(value = "90.0")
   private Double dwcDecimalLatitude;
+  @DecimalMin(value = "-180.0")
+  @DecimalMax(value = "180.0")
   private Double dwcDecimalLongitude;
   private Integer dwcCoordinateUncertaintyInMeters;
 
