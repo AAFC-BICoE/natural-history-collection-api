@@ -12,6 +12,9 @@ import javax.annotation.Nullable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.apache.commons.lang3.StringUtils;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
@@ -28,16 +31,24 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.javers.core.metamodel.annotation.DiffIgnore;
+import org.javers.core.metamodel.annotation.Id;
+
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
   CollectingEventDto.StartEventDateTimeAdapter.class,
   CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
-@JsonApiResource(type = "collecting-event")
+@JsonApiResource(type = CollectingEventDto.TYPENAME)
+@TypeName(CollectingEventDto.TYPENAME)
 public class CollectingEventDto {
 
+  public static final String TYPENAME = "collecting-event";
+
   @JsonApiId
+  @Id
+  @PropertyName("id")
   private UUID uuid;
 
   private String group;
@@ -47,6 +58,7 @@ public class CollectingEventDto {
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @ShallowReference
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
@@ -73,6 +85,7 @@ public class CollectingEventDto {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @JsonApiRelation
+  @DiffIgnore
   private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
 
   private String dwcVerbatimLatitude;
