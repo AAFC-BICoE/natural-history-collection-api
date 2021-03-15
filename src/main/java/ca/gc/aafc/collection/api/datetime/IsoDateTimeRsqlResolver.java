@@ -55,27 +55,30 @@ public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, Set<String>>, 
       List<String> precision = List.of(Byte.toString(argument.getFormat().getPrecision()));
       if (operator.equals(RSQLOperators.EQUAL)) {
         return processEqualOperator(selector, argument, precision);
-      } else if (operator.equals(RSQLOperators.LESS_THAN) || operator.equals(RSQLOperators.LESS_THAN_OR_EQUAL)) {
-        return processLessThenOperator(selector, argument, precision);
-      } else if (operator.equals(RSQLOperators.GREATER_THAN) || operator.equals(RSQLOperators.GREATER_THAN_OR_EQUAL)) {
-        return processGreaterThenOperator(selector, argument, precision);
+      } else if (operator.equals(RSQLOperators.LESS_THAN) || operator.equals(RSQLOperators.LESS_THAN_OR_EQUAL)
+        || operator.equals(RSQLOperators.GREATER_THAN) || operator.equals(RSQLOperators.GREATER_THAN_OR_EQUAL)) {
+        return processLessOrGreaterOperators(selector, argument, precision, operator);
       }
     }
     return node;
-  }
-
-  private AndNode processLessThenOperator(String selector, ISODateTime argument, List<String> precision) {
-    return null;
-  }
-
-  private AndNode processGreaterThenOperator(String selector, ISODateTime argument, List<String> precision) {
-    return null;
   }
 
   private AndNode processEqualOperator(String selector, ISODateTime argument, List<String> precision) {
     return new AndNode(List.of(
       new ComparisonNode(RSQLOperators.EQUAL, selector, List.of(argument.getLocalDateTime().toString())),
       new ComparisonNode(RSQLOperators.EQUAL, precisionFields.get(selector), precision)
+    ));
+  }
+
+  private AndNode processLessOrGreaterOperators(
+    String selector,
+    ISODateTime argument,
+    List<String> precision,
+    ComparisonOperator operator
+  ) {
+    return new AndNode(List.of(
+      new ComparisonNode(operator, selector, List.of(argument.getLocalDateTime().toString())),
+      new ComparisonNode(RSQLOperators.GREATER_THAN_OR_EQUAL, precisionFields.get(selector), precision)
     ));
   }
 
