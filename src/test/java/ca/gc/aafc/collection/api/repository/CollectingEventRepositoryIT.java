@@ -248,20 +248,19 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static Stream<Arguments> lt_FilterSource() {
     return Stream.of(//TODO
       // Format YYYY
-      Arguments.of("1999", "startEventDateTime==1999", 1),
-      Arguments.of("1999", "startEventDateTime==1998", 0),
+      Arguments.of("1999", "startEventDateTime=le=1999", 1),
+      Arguments.of("1999", "startEventDateTime=le=1998", 0),
+
+      Arguments.of("1999", "startEventDateTime=lt=1999", 0),
+      Arguments.of("1999", "startEventDateTime=lt=2000", 1)
       // Format YYYY-MM
-      Arguments.of("1999-03", "startEventDateTime==1999-03", 1),
-      Arguments.of("1999-03", "startEventDateTime==1999-02", 0),
+
       // Format YYYY-MM-DD
-      Arguments.of("1999-03-03", "startEventDateTime==1999-03-03", 1),
-      Arguments.of("1999-03-03", "startEventDateTime==1999-03-02", 0),
+
       // Format YYYY-MM-DD-HH-MM
-      Arguments.of("1999-03-03T03:00", "startEventDateTime==1999-03-03T03:00", 1),
-      Arguments.of("1999-03-03T03:00", "startEventDateTime==1999-03-03T02:00", 0),
+
       // Format YYYY-MM-DD-HH-MM-SS
-      Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:03", 1),
-      Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:02", 0)
+
     );
   }
 
