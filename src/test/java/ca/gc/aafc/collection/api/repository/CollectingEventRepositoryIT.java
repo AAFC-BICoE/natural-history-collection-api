@@ -218,7 +218,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @ParameterizedTest
-  @MethodSource({"equalFilterSource", "lt_FilterSource"})
+  @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
     collectingEventRepository.create(newEventDto(startDate, "1888"));
@@ -278,6 +278,41 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       Arguments.of("1999-01-02T02:00", "startEventDateTime=lt=1999-01-02T03:00", 1)
     );
   }
+
+  private static Stream<Arguments> gt_FilterSource() {//TODO use these
+    return Stream.of(
+      // Format YYYY
+      Arguments.of("2222", "startEventDateTime=ge=2222", 1),
+      Arguments.of("2222", "startEventDateTime=ge=2223", 0),
+
+      Arguments.of("2222", "startEventDateTime=gt=2222", 0),
+      Arguments.of("2222", "startEventDateTime=gt=2221", 1),
+
+      // Format YYYY-MM
+      Arguments.of("2222", "startEventDateTime=ge=2222-01", 0),
+      Arguments.of("2222-01", "startEventDateTime=ge=2222-01", 1),
+      Arguments.of("2222-01", "startEventDateTime=ge=2222-02", 0),
+
+      Arguments.of("2222-01", "startEventDateTime=gt=2222-01", 0),
+      Arguments.of("2222-01", "startEventDateTime=gt=2221-12", 1),
+
+      // Format YYYY-MM-DD
+      Arguments.of("2222-01", "startEventDateTime=ge=2222-01-01", 0),
+      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-02", 1),
+      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-03", 0),
+
+      Arguments.of("2222-01-02", "startEventDateTime=gt=2222-01-02", 0),
+      Arguments.of("2222-01-02", "startEventDateTime=gt=2222-01-01", 1),
+      // Format YYYY-MM-DD-HH-MM
+      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-02T02:00", 0),
+      Arguments.of("2222-01-02T01:00", "startEventDateTime=ge=2222-01-02T02:00", 0),
+      Arguments.of("2222-01-02T02:00", "startEventDateTime=ge=2222-01-02T01:00", 1),
+
+      Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T02:00", 0),
+      Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T01:00", 1)
+    );
+  }
+
 
   private static QuerySpec newRsqlQuerySpec(String rsql) {
     QuerySpec spec = new QuerySpec(CollectingEventDto.class);
