@@ -253,14 +253,22 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
       Arguments.of("1999", "startEventDateTime=lt=1999", 0),
       Arguments.of("1999", "startEventDateTime=lt=2000", 1),
+
       // Format YYYY-MM
       Arguments.of("1999", "startEventDateTime=le=1999-01", 0),
       Arguments.of("1999-01", "startEventDateTime=le=1999-01", 1),
+      Arguments.of("1999-01", "startEventDateTime=le=1998-12", 0),
 
       Arguments.of("1999-01", "startEventDateTime=lt=1999-01", 0),
-      Arguments.of("1999-01", "startEventDateTime=lt=1999-02", 1)
-      // Format YYYY-MM-DD
+      Arguments.of("1999-01", "startEventDateTime=lt=1999-02", 1),
 
+      // Format YYYY-MM-DD
+      Arguments.of("1999-01", "startEventDateTime=le=1999-01-01", 0),
+      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-02", 1),
+      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-01", 0),
+
+      Arguments.of("1999-01-02", "startEventDateTime=lt=1999-01-02", 0),
+      Arguments.of("1999-01-02", "startEventDateTime=lt=1999-01-03", 1)
       // Format YYYY-MM-DD-HH-MM
 
       // Format YYYY-MM-DD-HH-MM-SS
