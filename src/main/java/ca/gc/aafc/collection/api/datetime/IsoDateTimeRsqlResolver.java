@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.datetime;
 import ca.gc.aafc.dina.filter.RsqlFilterAdapter;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
+import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.Node;
 import cz.jirutka.rsql.parser.ast.OrNode;
@@ -48,16 +49,34 @@ public class IsoDateTimeRsqlResolver implements RSQLVisitor<Node, Set<String>>, 
   @Override
   public Node visit(ComparisonNode node, Set<String> field) {
     String selector = node.getSelector();
-    if (isSelectedField(field, selector) && node.getOperator().equals(RSQLOperators.EQUAL)) {
+    if (isSelectedField(field, selector)) {
+      ComparisonOperator operator = node.getOperator();
       ISODateTime argument = node.getArguments().stream().findFirst().map(ISODateTime::parse).orElseThrow();
       List<String> precision = List.of(Byte.toString(argument.getFormat().getPrecision()));
-      return new AndNode(List.of(
-        new ComparisonNode(RSQLOperators.EQUAL, selector, List.of(argument.getLocalDateTime().toString())),
-        new ComparisonNode(RSQLOperators.EQUAL, precisionFields.get(selector), precision)
-      ));
-    } else {
-      return node;
+      if (operator.equals(RSQLOperators.EQUAL)) {
+        return processEqualOperator(selector, argument, precision);
+      } else if (operator.equals(RSQLOperators.LESS_THAN) || operator.equals(RSQLOperators.LESS_THAN_OR_EQUAL)) {
+        return processLessThenOperator(selector, argument, precision);
+      } else if (operator.equals(RSQLOperators.GREATER_THAN) || operator.equals(RSQLOperators.GREATER_THAN_OR_EQUAL)) {
+        return processGreaterThenOperator(selector, argument, precision);
+      }
     }
+    return node;
+  }
+
+  private AndNode processLessThenOperator(String selector, ISODateTime argument, List<String> precision) {
+    return null;
+  }
+
+  private AndNode processGreaterThenOperator(String selector, ISODateTime argument, List<String> precision) {
+    return null;
+  }
+
+  private AndNode processEqualOperator(String selector, ISODateTime argument, List<String> precision) {
+    return new AndNode(List.of(
+      new ComparisonNode(RSQLOperators.EQUAL, selector, List.of(argument.getLocalDateTime().toString())),
+      new ComparisonNode(RSQLOperators.EQUAL, precisionFields.get(selector), precision)
+    ));
   }
 
   private static boolean isSelectedField(Set<String> field, String selector) {
