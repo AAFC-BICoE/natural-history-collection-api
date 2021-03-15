@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
-import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import javax.annotation.Nullable;
@@ -54,7 +53,6 @@ public class CollectingEventDto {
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @ShallowReference
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
