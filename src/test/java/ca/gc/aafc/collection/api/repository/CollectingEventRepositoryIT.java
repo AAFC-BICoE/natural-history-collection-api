@@ -1,28 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
@@ -38,6 +15,26 @@ import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
