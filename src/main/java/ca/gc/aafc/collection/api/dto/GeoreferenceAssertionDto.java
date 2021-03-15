@@ -48,4 +48,7 @@ public class GeoreferenceAssertionDto {
   @JsonApiExternalRelation(type = "agent")
   @JsonApiRelation
   private List<ExternalRelationDto> georeferencedBy;
+
+  @JsonApiRelation
+  private CollectingEventDto collectingEvent;
 }
