@@ -57,7 +57,7 @@ import lombok.Setter;
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class CollectingEvent implements DinaEntity {
 
-  public static enum GeoreferenceVerificationStatus {
+  public enum GeoreferenceVerificationStatus {
     GEOREFERENCING_NOT_POSSIBLE
   }
 
