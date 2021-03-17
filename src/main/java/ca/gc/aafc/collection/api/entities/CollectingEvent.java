@@ -9,6 +9,8 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +22,7 @@ import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -51,7 +54,12 @@ import lombok.Setter;
   typeClass = ListArrayType.class
 )
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class CollectingEvent implements DinaEntity {
+
+  public enum GeoreferenceVerificationStatus {
+    GEOREFERENCING_NOT_POSSIBLE
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -132,7 +140,20 @@ public class CollectingEvent implements DinaEntity {
   private String[] dwcOtherRecordNumbers;
 
   @Size(max = 50)  
-  private String dwcRecordNumber;  
+  private String dwcRecordNumber;
+
+  @Size(max = 100)
+  private String dwcCountry;
+  @Size(max = 2)
+  private String dwcCountryCode;
+  @Size(max = 100)
+  private String dwcStateProvince;
+  @Size(max = 100)
+  private String dwcMunicipality;
+
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
   @OneToMany(mappedBy = "event")
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();

@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="23-Add_initial_place_fields_to_coll_event" context="schema-change" author="keyuk">
+        <addColumn tableName="collecting_event">
+            <column name="dwc_country" type="VARCHAR(100)"/>
+        </addColumn>
+        <addColumn tableName="collecting_event">
+            <column name="dwc_country_code" type="VARCHAR(2)"/>
+        </addColumn>
+        <addColumn tableName="collecting_event">
+            <column name="dwc_state_province" type="VARCHAR(100)"/>
+        </addColumn>
+        <addColumn tableName="collecting_event">
+            <column name="dwc_municipality" type="VARCHAR(100)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

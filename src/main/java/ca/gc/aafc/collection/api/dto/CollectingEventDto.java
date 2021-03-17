@@ -1,5 +1,28 @@
 package ca.gc.aafc.collection.api.dto;
 
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
+import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
+import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiRelation;
+import io.crnk.core.resource.annotations.JsonApiResource;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.javers.core.metamodel.annotation.DiffIgnore;
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
+
+import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,38 +30,21 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import org.apache.commons.lang3.StringUtils;
-
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.collection.api.datetime.IsoDateTimeRsqlResolver;
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
-import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
-import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
-import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiRelation;
-import io.crnk.core.resource.annotations.JsonApiResource;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
   CollectingEventDto.StartEventDateTimeAdapter.class,
   CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
-@JsonApiResource(type = "collecting-event")
+@JsonApiResource(type = CollectingEventDto.TYPENAME)
+@TypeName(CollectingEventDto.TYPENAME)
 public class CollectingEventDto {
 
+  public static final String TYPENAME = "collecting-event";
+
   @JsonApiId
+  @Id
+  @PropertyName("id")
   private UUID uuid;
 
   private String group;
@@ -74,6 +80,7 @@ public class CollectingEventDto {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @JsonApiRelation
+  @DiffIgnore
   private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
 
   private String dwcVerbatimLatitude;
@@ -84,13 +91,16 @@ public class CollectingEventDto {
   private String dwcVerbatimDepth; 
   private String[] dwcOtherRecordNumbers;
   private String dwcRecordNumber;
+  private String dwcCountry;
+  private String dwcCountryCode;
+  private String dwcStateProvince;
+  private String dwcMunicipality;
+
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
-
-    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
-      "startEventDateTime", "startEventDateTimePrecision");
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -125,19 +135,11 @@ public class CollectingEventDto {
       return dtoRef::getStartEventDateTime;
     }
 
-    // Commented out for hotfix due to bug in date filtering See Redmine:21603
-//    @Override
-//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-//    }
   }
 
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
     implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
-    private static final IsoDateTimeRsqlResolver ISO_RSQL_VISITOR = new IsoDateTimeRsqlResolver(
-      "endEventDateTime", "endEventDateTimePrecision");
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -172,12 +174,6 @@ public class CollectingEventDto {
       return dtoRef::getEndEventDateTime;
     }
 
-    //C.G. commented since it will run even if the field is not included
-//    @Override
-//    public Map<String, Function<FilterSpec, FilterSpec[]>> toFilterSpec() {
-//      return Map.of("rsql", filterSpec -> new FilterSpec[]{PathSpec.of("rsql").filter(
-//        FilterOperator.EQ, ISO_RSQL_VISITOR.resolveDates(filterSpec.getValue()))});
-//    }
   }
 
 }

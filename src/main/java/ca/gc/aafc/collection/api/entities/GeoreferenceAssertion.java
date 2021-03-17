@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,6 +23,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -50,7 +54,11 @@ public class GeoreferenceAssertion implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
 
+  @DecimalMin(value = "-90.0")
+  @DecimalMax(value = "90.0")
   private Double dwcDecimalLatitude;
+  @DecimalMin(value = "-180.0")
+  @DecimalMax(value = "180.0")
   private Double dwcDecimalLongitude;
   private Integer dwcCoordinateUncertaintyInMeters;
 
@@ -68,6 +76,10 @@ public class GeoreferenceAssertion implements DinaEntity {
 
   private LocalDate dwcGeoreferencedDate;
   
+  @Type(type = "list-array")
+  @Column(name = "georeferenced_by", columnDefinition = "uuid[]")  
+  private List<UUID> georeferencedBy;
+
   @Size(max = 250)
   private String literalGeoreferencedBy;
 
