@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
@@ -35,6 +36,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
   private static final String dwcMunicipality = "Morocco";
+  private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
 
   @Test
   public void testSave() {
@@ -68,6 +70,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcCountryCode(dwcCountryCode)
         .dwcStateProvince(dwcStateProvince)
         .dwcMunicipality(dwcMunicipality)
+        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .build();
     dbService.save(collectingEvent,false);
 
@@ -97,6 +100,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
     assertEquals(dwcMunicipality, fetchedCollectingEvent.getDwcMunicipality());
+    assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
   }
 
 }
