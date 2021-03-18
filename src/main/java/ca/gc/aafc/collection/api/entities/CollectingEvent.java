@@ -1,22 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.dina.entity.DinaEntity;
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,11 +18,27 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.entity.DinaEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
@@ -48,6 +53,7 @@ import java.util.UUID;
   typeClass = ListArrayType.class
 )
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
   @Id
@@ -140,8 +146,9 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 100)
   private String dwcMunicipality;
 
-  @OneToMany(mappedBy = "event")
-  private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
+  @Type(type = "jsonb")
+  @NotNull
+  private Map<UUID, ManagedAttributeValue> managedAttributeValues = Map.of();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
@@ -194,4 +201,9 @@ public class CollectingEvent implements DinaEntity {
         .build();
   }
 
+  @Getter
+  public static class ManagedAttributeValue {
+    private String assignedValue;
+  }
 }
+

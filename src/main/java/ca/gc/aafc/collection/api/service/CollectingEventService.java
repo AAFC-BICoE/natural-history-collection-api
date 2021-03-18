@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
@@ -22,11 +23,13 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
+    cleanupManagedAttributeValues(entity);
     linkAssertions(entity);
   }
 
   @Override
   public void preUpdate(CollectingEvent entity) {
+    cleanupManagedAttributeValues(entity);
     linkAssertions(entity);
   }
 
@@ -36,6 +39,17 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
       geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
     }
 
+  }
+
+  private void cleanupManagedAttributeValues(CollectingEvent entity) {
+    var values = entity.getManagedAttributeValues();
+    if (values == null) {
+      return;
+    }
+    // Remove blank Managed Attribute values:
+    values.entrySet().removeIf(
+      entry -> StringUtils.isBlank(entry.getValue().getAssignedValue())
+    );
   }
 
 }
