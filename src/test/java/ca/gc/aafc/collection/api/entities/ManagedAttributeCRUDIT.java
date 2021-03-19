@@ -13,6 +13,9 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
   @Inject
@@ -63,6 +66,10 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     result = maService.findOne(uuid, ManagedAttribute.class);
     assertNotEquals("abc", result.getKey());
     assertNotEquals("new name", result.getName());
+
+    // delete is disabled for now
+    ManagedAttribute finalResult = result;
+    assertThrows(HttpRequestMethodNotSupportedException.class, () -> maService.delete(finalResult));
   }
 
 }

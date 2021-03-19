@@ -4,9 +4,11 @@ import ca.gc.aafc.collection.api.entities.ManagedAttribute;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -31,6 +33,12 @@ public class ManagedAttributeService extends DefaultDinaService<ManagedAttribute
       entity.setKey(generateKeyFromName(entity.getName()));
     }
 
+  }
+
+  @SneakyThrows
+  @Override
+  public void delete(ManagedAttribute entity) {
+    throw new HttpRequestMethodNotSupportedException("DELETE");
   }
 
   /**
