@@ -1,23 +1,27 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.service.ManagedAttributeService;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private BaseDAO baseDAO;
-  private DefaultDinaService<ManagedAttribute> service;
+  private DefaultDinaService<ManagedAttribute> maService;
 
   @BeforeEach
   void setUp() {
-    service = new DefaultDinaService<>(baseDAO);
+    maService = new ManagedAttributeService(baseDAO);
   }
 
   @Test
@@ -25,7 +29,7 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedValue = "value";
     String expectedCreatedBy = "dina";
     String expectedName = "dina test attribute";
-    UUID uuid = service.create(ManagedAttribute.builder()
+    UUID uuid = maService.create(ManagedAttribute.builder()
       .uuid(UUID.randomUUID())
       .managedAttributeType(ManagedAttribute.ManagedAttributeType.STRING)
       .acceptedValues(new String[]{expectedValue})
@@ -34,18 +38,31 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
       .name(expectedName)
       .build()).getUuid();
 
-    ManagedAttribute result = service.findOne(uuid, ManagedAttribute.class);
-    Assertions.assertNotNull(result.getId());
-    Assertions.assertNotNull(result.getCreatedOn());
-    Assertions.assertEquals(expectedCreatedBy, result.getCreatedBy());
-    Assertions.assertEquals(expectedName, result.getName());
-    Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
-    Assertions.assertEquals(
+    ManagedAttribute result = maService.findOne(uuid, ManagedAttribute.class);
+    assertNotNull(result.getId());
+    assertNotNull(result.getCreatedOn());
+    assertEquals(expectedCreatedBy, result.getCreatedBy());
+    assertEquals(expectedName, result.getName());
+    assertEquals(expectedValue, result.getAcceptedValues()[0]);
+    assertEquals(
       ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
-    Assertions.assertEquals(
+    assertEquals(
       ManagedAttribute.ManagedAttributeType.STRING,
       result.getManagedAttributeType());
+
+
+    result.setKey("abc");
+    result.setName("new name");
+
+    maService.update(result);
+
+    //detach the object to force a reload from the database
+    service.detach(result);
+
+    result = maService.findOne(uuid, ManagedAttribute.class);
+    assertNotEquals("abc", result.getKey());
+    assertNotEquals("new name", result.getName());
   }
 
 }

@@ -25,5 +25,6 @@
   <include file="db/changelog/migrations/22-Add_georeferencedBy_to_GeoreferenceAssertion.xml"/>
   <include file="db/changelog/migrations/23-Add_initial_place_fields_to_coll_event.xml"/>
   <include file="db/changelog/migrations/24-Add-dwcGeoreferenceVerificationStatus.xml"/>
+  <include file="db/changelog/migrations/25-Add_key_to_managedAttribute.xml"/>
 </databaseChangeLog>
 

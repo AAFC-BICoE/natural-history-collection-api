@@ -27,6 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -62,7 +63,14 @@ public class ManagedAttribute implements DinaEntity {
   private UUID uuid;
 
   @NotBlank
+  @Size(max = 50)
+  @Column(updatable = false)
   private String name;
+
+  @NotBlank
+  @Size(max = 50)
+  @Column(updatable = false)
+  private String key;
 
   @NotNull
   @Type(type = "pgsql_enum")

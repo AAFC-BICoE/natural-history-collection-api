@@ -19,6 +19,7 @@ public class ManagedAttributeDto {
   @JsonApiId
   private UUID uuid;
   private String name;
+  private String key;
   private ManagedAttribute.ManagedAttributeType managedAttributeType;
   private ManagedAttribute.ManagedAttributeComponent managedAttributeComponent;
   private String[] acceptedValues;
