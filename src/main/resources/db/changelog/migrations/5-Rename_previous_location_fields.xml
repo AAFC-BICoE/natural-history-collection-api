@@ -1,0 +1,26 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+        context="schema-change">
+
+  <changeSet id="5-Rename_previous_location_fields" context="schema-change" author="cgendreau">
+
+    <renameColumn tableName="collecting_event"
+                  oldColumnName="coordinate_uncertainty_in_meters"
+                  newColumnName="dwc_coordinate_uncertainty_in_meters"/>
+
+    <renameColumn tableName="collecting_event"
+                  oldColumnName="verbatim_coordinates"
+                  newColumnName="dwc_verbatim_coordinates"/>
+
+    <renameColumn tableName="collecting_event"
+                  oldColumnName="decimal_latitude"
+                  newColumnName="dwc_decimal_latitude"/>
+
+    <renameColumn tableName="collecting_event"
+                  oldColumnName="decimal_longitude"
+                  newColumnName="dwc_decimal_longitude"/>
+  </changeSet>
+</databaseChangeLog>

@@ -1,9 +1,39 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.validation.ValidEventDateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,7 +73,13 @@ import java.util.UUID;
   name = "list-array",
   typeClass = ListArrayType.class
 )
+@TypeDef(name = "string-array", typeClass = StringArrayType.class)
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class CollectingEvent implements DinaEntity {
+
+  public enum GeoreferenceVerificationStatus {
+    GEOREFERENCING_NOT_POSSIBLE
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,15 +94,16 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  // Not a Foreign Key, we would not use the UUID if it was.
-  private UUID collectorGroupUuid;
+  @OneToMany(fetch = FetchType.LAZY,
+      mappedBy = "collectingEvent",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
+      )
+  private List<GeoreferenceAssertion> geoReferenceAssertions;
 
-  // Might not be the final choice to store lat/long
-  private Double decimalLatitude;
-  private Double decimalLongitude;
+  private String dwcVerbatimCoordinates;
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
+  @Size(max = 250)  
+  private String dwcRecordedBy;
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
@@ -83,9 +120,9 @@ public class CollectingEvent implements DinaEntity {
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
-  private String verbatimCollectors;
-
+  
   @Column(insertable = false, updatable = false)
+  @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -99,6 +136,49 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
+
+  @Size(max = 250)  
+  private String dwcVerbatimLocality;
+
+  @Size(max = 25)  
+  private String dwcVerbatimLatitude;
+
+  @Size(max = 25)  
+  private String dwcVerbatimLongitude;
+
+  @Size(max = 50)  
+  private String dwcVerbatimCoordinateSystem;
+
+  @Size(max = 50)  
+  private String dwcVerbatimSRS;
+
+  @Size(max = 25)  
+  private String dwcVerbatimElevation;
+
+  @Size(max = 25)  
+  private String dwcVerbatimDepth;
+
+  @Type(type = "string-array")
+  private String[] dwcOtherRecordNumbers;
+
+  @Size(max = 50)  
+  private String dwcRecordNumber;
+
+  @Size(max = 100)
+  private String dwcCountry;
+  @Size(max = 2)
+  private String dwcCountryCode;
+  @Size(max = 100)
+  private String dwcStateProvince;
+  @Size(max = 100)
+  private String dwcMunicipality;
+
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+
+  @OneToMany(mappedBy = "event")
+  private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields

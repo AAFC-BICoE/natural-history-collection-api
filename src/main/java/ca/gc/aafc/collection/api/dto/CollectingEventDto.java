@@ -2,12 +2,14 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
@@ -15,6 +17,10 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.javers.core.metamodel.annotation.DiffIgnore;
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
@@ -26,28 +32,32 @@ import java.util.function.Supplier;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
-    CollectingEventDto.StartEventDateTimeAdapter.class,
-    CollectingEventDto.EndEventDateTimeAdapter.class})
+  CollectingEventDto.StartEventDateTimeAdapter.class,
+  CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
-@JsonApiResource(type = "collecting-event")
+@JsonApiResource(type = CollectingEventDto.TYPENAME)
+@TypeName(CollectingEventDto.TYPENAME)
 public class CollectingEventDto {
 
+  public static final String TYPENAME = "collecting-event";
+
   @JsonApiId
+  @Id
+  @PropertyName("id")
   private UUID uuid;
-  private UUID collectorGroupUuid;
 
   private String group;
 
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  private Double decimalLatitude;
-  private Double decimalLongitude;
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
-  private Integer coordinateUncertaintyInMeters;
-  private String verbatimCoordinates;
-  private String verbatimCollectors;
+  private String dwcVerbatimCoordinates;
+  private String dwcRecordedBy;
 
   @IgnoreDinaMapping
   private String startEventDateTime;
@@ -65,9 +75,32 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
+  private String dwcVerbatimLocality;
+
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @JsonApiRelation
+  @DiffIgnore
+  private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
+
+  private String dwcVerbatimLatitude;
+  private String dwcVerbatimLongitude;
+  private String dwcVerbatimCoordinateSystem;
+  private String dwcVerbatimSRS;
+  private String dwcVerbatimElevation;
+  private String dwcVerbatimDepth; 
+  private String[] dwcOtherRecordNumbers;
+  private String dwcRecordNumber;
+  private String dwcCountry;
+  private String dwcCountryCode;
+  private String dwcStateProvince;
+  private String dwcMunicipality;
+
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
-      implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -106,7 +139,7 @@ public class CollectingEventDto {
 
   @NoArgsConstructor
   public static final class EndEventDateTimeAdapter
-      implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
 
     @Override
     public String toDTO(@Nullable ISODateTime isoDateTime) {
@@ -140,6 +173,7 @@ public class CollectingEventDto {
     public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
       return dtoRef::getEndEventDateTime;
     }
+
   }
 
 }

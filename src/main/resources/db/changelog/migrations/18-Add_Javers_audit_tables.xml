@@ -1,0 +1,152 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+	<changeSet author="poffm (generated)" id="1584740432194-1">
+		<createSequence sequenceName="jv_commit_pk_seq" />
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-2">
+		<createSequence sequenceName="jv_global_id_pk_seq" />
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-3">
+		<createSequence sequenceName="jv_snapshot_pk_seq" />
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-5">
+		<createTable tableName="jv_commit">
+			<column name="commit_pk" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="jv_commit_pk" />
+			</column>
+			<column name="author" type="VARCHAR(200)" />
+			<column name="commit_date" type="TIMESTAMP WITHOUT TIME ZONE" />
+			<column name="commit_date_instant" type="VARCHAR(30)" />
+			<column name="commit_id" type="numeric(22, 2)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-6">
+		<createTable tableName="jv_commit_property">
+			<column name="property_name" type="VARCHAR(191)">
+				<constraints primaryKey="true" primaryKeyName="jv_commit_property_pk" />
+			</column>
+			<column name="property_value" type="VARCHAR(600)" />
+			<column name="commit_fk" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="jv_commit_property_pk" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-7">
+		<createTable tableName="jv_global_id">
+			<column name="global_id_pk" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="jv_global_id_pk" />
+			</column>
+			<column name="local_id" type="VARCHAR(191)" />
+			<column name="fragment" type="VARCHAR(200)" />
+			<column name="type_name" type="VARCHAR(200)" />
+			<column name="owner_id_fk" type="BIGINT" />
+		</createTable>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-8">
+		<createTable tableName="jv_snapshot">
+			<column name="snapshot_pk" type="BIGINT">
+				<constraints primaryKey="true" primaryKeyName="jv_snapshot_pk" />
+			</column>
+			<column name="type" type="VARCHAR(200)" />
+			<column name="version" type="BIGINT" />
+			<column name="state" type="TEXT" />
+			<column name="changed_properties" type="TEXT" />
+			<column name="managed_type" type="VARCHAR(200)" />
+			<column name="global_id_fk" type="BIGINT" />
+			<column name="commit_fk" type="BIGINT" />
+		</createTable>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-23">
+		<createIndex indexName="jv_commit_commit_id_idx" tableName="jv_commit">
+			<column name="commit_id" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-24">
+		<createIndex indexName="jv_commit_property_commit_fk_idx" tableName="jv_commit_property">
+			<column name="commit_fk" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-25">
+		<createIndex indexName="jv_commit_property_property_name_property_value_idx" tableName="jv_commit_property">
+			<column name="property_name" />
+			<column name="property_value" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-26">
+		<createIndex indexName="jv_global_id_local_id_idx" tableName="jv_global_id">
+			<column name="local_id" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-27">
+		<createIndex indexName="jv_global_id_owner_id_fk_idx" tableName="jv_global_id">
+			<column name="owner_id_fk" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-28">
+		<createIndex indexName="jv_snapshot_commit_fk_idx" tableName="jv_snapshot">
+			<column name="commit_fk" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-29">
+		<createIndex indexName="jv_snapshot_global_id_fk_idx" tableName="jv_snapshot">
+			<column name="global_id_fk" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-35">
+		<addForeignKeyConstraint
+		  baseColumnNames="commit_fk"
+			baseTableName="jv_commit_property"
+			constraintName="jv_commit_property_commit_fk"
+			deferrable="false"
+			initiallyDeferred="false"
+			onDelete="NO ACTION"
+			onUpdate="NO ACTION"
+			referencedColumnNames="commit_pk"
+			referencedTableName="jv_commit"
+			validate="true" />
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-36">
+		<addForeignKeyConstraint
+		  baseColumnNames="owner_id_fk"
+			baseTableName="jv_global_id"
+			constraintName="jv_global_id_owner_id_fk"
+			deferrable="false"
+			initiallyDeferred="false"
+			onDelete="NO ACTION"
+			onUpdate="NO ACTION"
+			referencedColumnNames="global_id_pk"
+			referencedTableName="jv_global_id"
+			validate="true" />
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-37">
+		<addForeignKeyConstraint
+			baseColumnNames="commit_fk"
+			baseTableName="jv_snapshot"
+			constraintName="jv_snapshot_commit_fk"
+			deferrable="false"
+			initiallyDeferred="false"
+			onDelete="NO ACTION"
+			onUpdate="NO ACTION"
+			referencedColumnNames="commit_pk"
+			referencedTableName="jv_commit"
+			validate="true" />
+	</changeSet>
+	<changeSet author="poffm (generated)" id="1584740432194-38">
+		<addForeignKeyConstraint
+			baseColumnNames="global_id_fk"
+			baseTableName="jv_snapshot"
+			constraintName="jv_snapshot_global_id_fk"
+			deferrable="false"
+			initiallyDeferred="false"
+			onDelete="NO ACTION"
+			onUpdate="NO ACTION"
+			referencedColumnNames="global_id_pk"
+			referencedTableName="jv_global_id"
+			validate="true" />
+	</changeSet>
+</databaseChangeLog>
