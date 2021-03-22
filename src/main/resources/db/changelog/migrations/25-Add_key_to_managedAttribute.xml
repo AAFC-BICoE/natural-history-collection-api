@@ -6,8 +6,15 @@
 
   <changeSet id="25-Add_key_to_managedAttribute.xml" context="schema-change" author="gendreauc">
     <addColumn tableName="managed_attribute">
-      <column name="key" type="VARCHAR(50)"/>
+      <column name="key" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
     </addColumn>
+
+    <addUniqueConstraint
+      columnNames="key, component"
+      constraintName="unique_key_per_component"
+      tableName="managed_attribute"/>
   </changeSet>
 
 </databaseChangeLog>
