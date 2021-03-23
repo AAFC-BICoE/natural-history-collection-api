@@ -82,7 +82,7 @@ public class CollectingEventDto {
   private String dwcVerbatimLocality;
 
   /** Map of Managed attribute key to value object. */
-  private Map<UUID, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
 
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;
