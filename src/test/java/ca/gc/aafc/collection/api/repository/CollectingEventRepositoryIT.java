@@ -190,7 +190,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
   }
 
-  private CollectingEventDto newEventDto(String startTime, String endDate) {
+  private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
     GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
     geoRef.setDwcCoordinateUncertaintyInMeters(10);
@@ -198,8 +198,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setUuid(UUID.randomUUID());
-    ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
-    ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
+    ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
+    ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setDwcRecordedBy(dwcRecordedBy);
     ce.setAttachment(List.of(
@@ -279,7 +279,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     );
   }
 
-  private static Stream<Arguments> gt_FilterSource() {//TODO use these
+  private static Stream<Arguments> gt_FilterSource() {
     return Stream.of(
       // Format YYYY
       Arguments.of("2222", "startEventDateTime=ge=2222", 1),
