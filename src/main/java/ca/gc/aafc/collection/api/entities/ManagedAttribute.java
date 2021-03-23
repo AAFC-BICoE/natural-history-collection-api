@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
@@ -63,7 +64,14 @@ public class ManagedAttribute implements DinaEntity {
   private UUID uuid;
 
   @NotBlank
+  @Size(max = 50)
+  @Column(updatable = false)
   private String name;
+
+  @NotBlank
+  @Size(max = 50)
+  @Column(updatable = false)
+  private String key;
 
   @NotNull
   @Type(type = "pgsql_enum")

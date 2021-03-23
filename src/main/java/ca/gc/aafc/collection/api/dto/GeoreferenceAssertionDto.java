@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @RelatedEntity(GeoreferenceAssertion.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -47,7 +48,7 @@ public class GeoreferenceAssertionDto {
 
   @JsonApiExternalRelation(type = "agent")
   @JsonApiRelation
-  private List<ExternalRelationDto> georeferencedBy;
+  private List<ExternalRelationDto> georeferencedBy = new ArrayList<>();
 
   @JsonApiRelation
   private CollectingEventDto collectingEvent;

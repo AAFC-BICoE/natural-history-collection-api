@@ -19,6 +19,7 @@ import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -94,6 +95,8 @@ public class CollectingEventDto {
   private String dwcCountryCode;
   private String dwcStateProvince;
   private String dwcMunicipality;
+
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

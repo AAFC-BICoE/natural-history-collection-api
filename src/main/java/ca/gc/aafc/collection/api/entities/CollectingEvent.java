@@ -10,6 +10,8 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,7 @@ import javax.validation.constraints.Size;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -54,7 +57,12 @@ import lombok.Setter;
 )
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class CollectingEvent implements DinaEntity {
+
+  public enum GeoreferenceVerificationStatus {
+    GEOREFERENCING_NOT_POSSIBLE
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -149,6 +157,10 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "jsonb")
   @NotNull
   private Map<UUID, ManagedAttributeValue> managedAttributeValues = Map.of();
+
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
