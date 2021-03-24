@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -95,4 +97,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   @Size(max = 25)
   private String dwcGeodeticDatum;
 
+  public List<UUID> getGeoreferencedBy() {
+    return CollectionUtils.isNotEmpty(georeferencedBy) ? georeferencedBy : Collections.emptyList();
+  }
 }

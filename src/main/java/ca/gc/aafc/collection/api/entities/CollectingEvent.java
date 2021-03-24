@@ -152,7 +152,7 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 100)
   private String dwcStateProvince;
   @Size(max = 100)
-  private String dwcMunicipality;
+  private String geographicPlaceName;
 
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
