@@ -49,6 +49,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   static void beforeAll() {
     geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
       .sourceID("1")
+      .sourceIdType("N")
       .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
       .date(OffsetDateTime.now()).build();
   }
@@ -124,6 +125,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceID());
     assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getDate());
     assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceUrl());
+    assertNotNull(
+      geographicPlaceNameSourceDetail.getSourceIdType(),
+      fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceIdType());
   }
 
 }
