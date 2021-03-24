@@ -41,6 +41,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcStateProvince = "Island of Pharo's";
   private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
+  private static final String geographicPlaceName = "Morocco";
   private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
@@ -87,6 +88,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcStateProvince(dwcStateProvince)
         .dwcMunicipality(dwcMunicipality)
         .geographicPlaceNameSource(geographicPlaceNameSource)
+        .geographicPlaceName(geographicPlaceName)
         .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
         .build();
@@ -117,7 +119,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
-    assertEquals(dwcMunicipality, fetchedCollectingEvent.getDwcMunicipality());
+    assertEquals(geographicPlaceName, fetchedCollectingEvent.getGeographicPlaceName());
     assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
