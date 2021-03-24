@@ -35,7 +35,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
-  private static final String dwcMunicipality = "Morocco";
+  private static final String geographicPlaceName = "Morocco";
   private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
 
   @Test
@@ -69,7 +69,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcCountry(dwcCountry)
         .dwcCountryCode(dwcCountryCode)
         .dwcStateProvince(dwcStateProvince)
-        .dwcMunicipality(dwcMunicipality)
+        .geographicPlaceName(geographicPlaceName)
         .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .build();
     dbService.save(collectingEvent,false);
@@ -99,7 +99,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
-    assertEquals(dwcMunicipality, fetchedCollectingEvent.getDwcMunicipality());
+    assertEquals(geographicPlaceName, fetchedCollectingEvent.getGeographicPlaceName());
     assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
   }
 
