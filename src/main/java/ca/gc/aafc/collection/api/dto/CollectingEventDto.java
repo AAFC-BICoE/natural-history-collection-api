@@ -97,6 +97,7 @@ public class CollectingEventDto {
   private String dwcMunicipality;
 
   private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+  private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

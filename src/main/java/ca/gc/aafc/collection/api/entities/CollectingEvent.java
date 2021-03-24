@@ -61,6 +61,10 @@ public class CollectingEvent implements DinaEntity {
     GEOREFERENCING_NOT_POSSIBLE
   }
 
+  public enum GeographicPlaceNameSource {
+    OSM
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -154,6 +158,10 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  private GeographicPlaceNameSource geographicPlaceNameSource;
 
   @OneToMany(mappedBy = "event")
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
