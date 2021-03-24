@@ -38,6 +38,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
+  private static final GeographicPlaceNameSourceDetail GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL =
+    GeographicPlaceNameSourceDetail.builder().sourceID("1").sourceUrl("www").date("12/12/2012").build();
 
   @Test
   public void testSave() {
@@ -73,6 +75,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcMunicipality(dwcMunicipality)
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
+        .geographicPlaceNameSourceDetail(GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL)
         .build();
     dbService.save(collectingEvent,false);
 
@@ -104,6 +107,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcMunicipality, fetchedCollectingEvent.getDwcMunicipality());
     assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
+    assertEquals(
+      GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL.getSourceID(),
+      fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceID());
   }
 
 }

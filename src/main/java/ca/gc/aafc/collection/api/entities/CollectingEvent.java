@@ -24,6 +24,7 @@ import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -55,6 +56,7 @@ import lombok.Setter;
 )
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
   public enum GeoreferenceVerificationStatus {
@@ -165,6 +167,10 @@ public class CollectingEvent implements DinaEntity {
 
   @OneToMany(mappedBy = "event")
   private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
+
+  @Type(type = "jsonb")
+  @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
+  private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
