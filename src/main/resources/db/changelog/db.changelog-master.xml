@@ -26,5 +26,6 @@
   <include file="db/changelog/migrations/23-Add_initial_place_fields_to_coll_event.xml"/>
   <include file="db/changelog/migrations/24-Add-dwcGeoreferenceVerificationStatus.xml"/>
   <include file="db/changelog/migrations/25-Add_key_to_managedAttribute.xml"/>
+  <include file="db/changelog/migrations/26-Rename_dwcMunicipality_to_geographicPlaceName.xml"/>
 </databaseChangeLog>
 

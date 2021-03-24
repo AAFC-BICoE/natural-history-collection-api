@@ -94,7 +94,7 @@ public class CollectingEventDto {
   private String dwcCountry;
   private String dwcCountryCode;
   private String dwcStateProvince;
-  private String dwcMunicipality;
+  private String geographicPlaceName;
 
   private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
