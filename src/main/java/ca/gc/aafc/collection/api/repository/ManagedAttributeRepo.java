@@ -7,6 +7,7 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.FilterSpec;
 import io.crnk.core.queryspec.QuerySpec;
@@ -72,6 +73,8 @@ public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, Ma
         var results = super.findAll(keyQuerySpec);
         if (results.size() > 0) {
           return results.get(0);
+        } else {
+          throw new ResourceNotFoundException("Managed Attribute not found: " + id);
         }
       }
     }
