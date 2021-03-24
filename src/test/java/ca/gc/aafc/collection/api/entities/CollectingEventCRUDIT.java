@@ -5,9 +5,12 @@ import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificati
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -39,8 +42,16 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
-  private static final GeographicPlaceNameSourceDetail GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL =
-    GeographicPlaceNameSourceDetail.builder().sourceID("1").sourceUrl("www").date(OffsetDateTime.now()).build();
+  private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
+
+  @SneakyThrows
+  @BeforeAll
+  static void beforeAll() {
+    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
+      .sourceID("1")
+      .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
+      .date(OffsetDateTime.now()).build();
+  }
 
   @Test
   public void testSave() {
@@ -76,7 +87,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcMunicipality(dwcMunicipality)
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
-        .geographicPlaceNameSourceDetail(GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL)
+        .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
         .build();
     dbService.save(collectingEvent,false);
 
@@ -109,9 +120,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
-      GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL.getSourceID(),
+      geographicPlaceNameSourceDetail.getSourceID(),
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceID());
     assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getDate());
+    assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceUrl());
   }
 
 }
