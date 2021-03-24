@@ -125,7 +125,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceID());
     assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getDate());
     assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceUrl());
-    assertNotNull(
+    assertEquals(
       geographicPlaceNameSourceDetail.getSourceIdType(),
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceIdType());
   }
