@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +40,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
   private static final GeographicPlaceNameSourceDetail GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL =
-    GeographicPlaceNameSourceDetail.builder().sourceID("1").sourceUrl("www").date("12/12/2012").build();
+    GeographicPlaceNameSourceDetail.builder().sourceID("1").sourceUrl("www").date(OffsetDateTime.now()).build();
 
   @Test
   public void testSave() {
@@ -110,6 +111,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(
       GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL.getSourceID(),
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceID());
+    assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getDate());
   }
 
 }
