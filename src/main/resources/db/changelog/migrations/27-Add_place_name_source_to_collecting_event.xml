@@ -12,6 +12,7 @@
         </sql>
         <addColumn tableName="collecting_event">
             <column name="geographic_place_name_source" type="geographic_place_name_source"/>
+            <column name="geographic_place_name_source_details" type="jsonb"/>
         </addColumn>
     </changeSet>
 
