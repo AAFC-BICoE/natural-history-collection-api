@@ -86,7 +86,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcCountry(dwcCountry)
         .dwcCountryCode(dwcCountryCode)
         .dwcStateProvince(dwcStateProvince)
-        .dwcMunicipality(dwcMunicipality)
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .geographicPlaceName(geographicPlaceName)
         .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
