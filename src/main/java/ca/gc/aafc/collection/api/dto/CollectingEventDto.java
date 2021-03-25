@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
@@ -97,6 +98,8 @@ public class CollectingEventDto {
   private String geographicPlaceName;
 
   private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+  private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
+  private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

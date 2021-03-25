@@ -5,16 +5,21 @@ import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import lombok.SneakyThrows;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,9 +28,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +42,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
@@ -41,6 +50,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectingEventRepository collectingEventRepository;
+
+  @Inject
+  private CollectingEventService collectingEventService;
 
   @Inject
   private GeoreferenceAssertionRepository geoReferenceAssertionRepository;
@@ -65,17 +77,27 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
-    
-  private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+  private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
+  private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
-  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};    
+  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
+  private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   @BeforeEach
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
+  @SneakyThrows
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   public void setup() {
+    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
+      .sourceID("1")
+      .sourceIdType("N")
+      .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
+        // recordedOn should be overwritten by the server side generated value
+      .recordedOn(OffsetDateTime.of(LocalDateTime.of(2000,01,01,11,10), ZoneOffset.ofHoursMinutes(1, 0)))
+      .build();
+
     createTestCollectingEvent();
   }
 
@@ -98,10 +120,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)   
-      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)   
+      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+      .geographicPlaceNameSource(geographicPlaceNameSource)
+      .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .build();
     testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-    dbService.save(testCollectingEvent,false);
+
+    collectingEventService.create(testCollectingEvent);
   }
 
   @Test
@@ -154,7 +179,18 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
-    assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);          
+    assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
+    assertEquals(geographicPlaceNameSource, collectingEventDto.getGeographicPlaceNameSource());
+    assertEquals(
+      geographicPlaceNameSourceDetail.getSourceID(),
+      collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceID());
+    // assigned server-side
+    assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn());
+    assertNotEquals(2000, collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn().getYear());
+    assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceUrl());
+    assertEquals(
+      geographicPlaceNameSourceDetail.getSourceIdType(),
+      collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceIdType());
   }
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
