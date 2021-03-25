@@ -12,5 +12,5 @@ public class GeographicPlaceNameSourceDetail {
   private String sourceID;
   private String sourceIdType;
   private URL sourceUrl;
-  private OffsetDateTime date;
+  private OffsetDateTime recordedOn;
 }
