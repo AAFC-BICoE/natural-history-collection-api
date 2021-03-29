@@ -10,7 +10,7 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 
 @Service
-public class PhysicalEntityService extends DefaultDinaService<PhysicalEntity>{
+public class PhysicalEntityService extends DefaultDinaService<PhysicalEntity> {
 
     public PhysicalEntityService(@NonNull BaseDAO baseDAO) {
         super(baseDAO);
