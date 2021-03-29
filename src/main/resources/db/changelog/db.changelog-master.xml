@@ -28,5 +28,6 @@
   <include file="db/changelog/migrations/25-Add_key_to_managedAttribute.xml"/>
   <include file="db/changelog/migrations/26-Rename_dwcMunicipality_to_geographicPlaceName.xml"/>
   <include file="db/changelog/migrations/27-Add_place_name_source_to_collecting_event.xml"/>
+  <include file="db/changelog/migrations/28-Add_Preparation_Process.xml"/>
 </databaseChangeLog>
 
