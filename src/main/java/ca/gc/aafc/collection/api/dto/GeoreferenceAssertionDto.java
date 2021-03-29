@@ -1,5 +1,16 @@
 package ca.gc.aafc.collection.api.dto;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
+import org.javers.core.metamodel.annotation.TypeName;
+
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -9,15 +20,6 @@ import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
-import org.javers.core.metamodel.annotation.Id;
-import org.javers.core.metamodel.annotation.PropertyName;
-import org.javers.core.metamodel.annotation.TypeName;
-
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.ArrayList;
 
 @RelatedEntity(GeoreferenceAssertion.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -51,5 +53,6 @@ public class GeoreferenceAssertionDto {
   private List<ExternalRelationDto> georeferencedBy = new ArrayList<>();
 
   @JsonApiRelation
+  @ShallowReference
   private CollectingEventDto collectingEvent;
 }
