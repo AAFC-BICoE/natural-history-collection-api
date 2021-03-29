@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.repository;
 import java.util.Optional;
 
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Repository;
 
 import ca.gc.aafc.collection.api.dto.PhysicalEntityDto;
 import ca.gc.aafc.collection.api.entities.PhysicalEntity;
@@ -13,6 +14,7 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 
+@Repository
 public class PhysicalEntityRepository extends DinaRepository<PhysicalEntityDto, PhysicalEntity> {
     
     private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;  

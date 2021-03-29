@@ -18,7 +18,7 @@
     <column name="created_by" type="VARCHAR(250)">
       <constraints nullable="false"/>
     </column>
-    <column name="dwc_catalogue_number" type="VARCHAR(25)"/>
+    <column name="dwc_catalog_number" type="VARCHAR(25)"/>
     <column name="attachment" type="uuid[]"/>
     <column name="collecting_event_id" type="integer">
       <constraints foreignKeyName="fk_physical_entity_collecting_event_id" references="collecting_event(id)"/>

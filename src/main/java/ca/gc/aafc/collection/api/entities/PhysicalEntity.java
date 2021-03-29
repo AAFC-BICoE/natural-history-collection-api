@@ -41,7 +41,7 @@ import lombok.ToString;
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
 @Table(name = "physical_entity")
-public class PhysicalEntity implements DinaEntity{
+public class PhysicalEntity implements DinaEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
