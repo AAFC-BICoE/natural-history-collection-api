@@ -16,6 +16,9 @@
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
+            <column name="agent_id" type="uuid">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 

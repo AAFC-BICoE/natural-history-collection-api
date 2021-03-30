@@ -49,4 +49,8 @@ public class PreparationProcess implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
+  @NotNull
+  @Column(name = "agent_id")
+  private UUID agentId;
+
 }
