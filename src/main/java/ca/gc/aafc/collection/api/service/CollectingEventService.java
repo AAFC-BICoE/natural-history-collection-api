@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +37,14 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private static void linkAssertions(CollectingEvent entity) {
     List<GeoreferenceAssertion> geos = entity.getGeoReferenceAssertions();
     if (CollectionUtils.isNotEmpty(geos)) {
-      geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
+      if (entity.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) {
+        geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(null));
+        entity.setGeoReferenceAssertions(null);
+      } else {
+        geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
+      }
     }
+    
     assignAutomaticValues(entity);
   }
 

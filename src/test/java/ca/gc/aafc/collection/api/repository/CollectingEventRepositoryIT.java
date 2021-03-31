@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
@@ -44,6 +45,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
@@ -226,6 +228,30 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
   }
 
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+  @Test
+  void updateCollectingEvent_WhenGeoreferenceVerificationStatusSetAsGEOREFERENCING_NOT_POSSIBLE_geoReferenceAssertionsSetToNull() {
+    CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
+    ce.setDwcGeoreferenceVerificationStatus(GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+    QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
+    QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
+
+    List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
+        .map(Arrays::asList)
+        .map(IncludeRelationSpec::new)
+        .collect(Collectors.toList());
+
+    querySpec.setIncludedRelations(includeRelationSpec);
+    querySpec.setNestedSpecs(Collections.singletonList(geoSpec));
+
+    CollectingEventDto result = collectingEventRepository.findOne(
+      collectingEventRepository.create(ce).getUuid(),
+      querySpec);
+
+    assertTrue(result.getGeoReferenceAssertions() == null);
+  }  
+
+
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
     GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
@@ -260,7 +286,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     collectingEventRepository.create(newEventDto(startDate, "1888"));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
   }
-
+  
   private static Stream<Arguments> equalFilterSource() {
     return Stream.of(
       // Format YYYY
@@ -348,8 +374,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T01:00", 1)
     );
   }
-
-
   private static QuerySpec newRsqlQuerySpec(String rsql) {
     QuerySpec spec = new QuerySpec(CollectingEventDto.class);
     spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ, rsql));
