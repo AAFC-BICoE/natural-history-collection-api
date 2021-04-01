@@ -29,6 +29,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +44,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -230,27 +233,11 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   @Test
-  void updateCollectingEvent_WhenGeoreferenceVerificationStatusSetAsGEOREFERENCING_NOT_POSSIBLE_geoReferenceAssertionsSetToNull() {
+  void updateCollectingEvent_WhenGeoreferenceVerificationStatusSetAsGEOREFERENCING_NOT_POSSIBLE_exceptionThrown() {
     CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
     ce.setDwcGeoreferenceVerificationStatus(GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
-    QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
-    QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
-
-    List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
-        .map(Arrays::asList)
-        .map(IncludeRelationSpec::new)
-        .collect(Collectors.toList());
-
-    querySpec.setIncludedRelations(includeRelationSpec);
-    querySpec.setNestedSpecs(Collections.singletonList(geoSpec));
-
-    CollectingEventDto result = collectingEventRepository.findOne(
-      collectingEventRepository.create(ce).getUuid(),
-      querySpec);
-
-    assertTrue(result.getGeoReferenceAssertions() == null);
+    assertThrows(ValidationException.class, ()->collectingEventRepository.create(ce));    
   }  
-
 
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
