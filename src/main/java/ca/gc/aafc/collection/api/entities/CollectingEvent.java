@@ -59,10 +59,6 @@ import lombok.Setter;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
-  public enum GeoreferenceVerificationStatus {
-    GEOREFERENCING_NOT_POSSIBLE
-  }
-
   public enum GeographicPlaceNameSource {
     OSM
   }
@@ -156,10 +152,6 @@ public class CollectingEvent implements DinaEntity {
   private String dwcStateProvince;
   @Size(max = 100)
   private String geographicPlaceName;
-
-  @Type(type = "pgsql_enum")
-  @Enumerated(EnumType.STRING)
-  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)

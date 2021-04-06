@@ -12,6 +12,7 @@ import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
@@ -47,6 +48,8 @@ public class GeoreferenceAssertionDto {
   private String dwcGeoreferenceSources;
   private String dwcGeoreferenceRemarks;
   private String dwcGeodeticDatum;
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+
 
   @JsonApiExternalRelation(type = "agent")
   @JsonApiRelation
