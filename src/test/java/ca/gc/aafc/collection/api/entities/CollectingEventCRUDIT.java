@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
@@ -42,7 +41,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final String geographicPlaceName = "Morocco";
-  private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   @SneakyThrows
@@ -87,7 +85,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcStateProvince(dwcStateProvince)
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .geographicPlaceName(geographicPlaceName)
-        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
         .build();
     dbService.save(collectingEvent,false);
@@ -118,7 +115,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
     assertEquals(geographicPlaceName, fetchedCollectingEvent.getGeographicPlaceName());
-    assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
       geographicPlaceNameSourceDetail.getSourceID(),

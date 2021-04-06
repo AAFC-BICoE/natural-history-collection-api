@@ -19,7 +19,6 @@ import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -101,7 +100,6 @@ public class CollectingEventDto {
   private String dwcStateProvince;
   private String geographicPlaceName;
 
-  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
