@@ -23,6 +23,9 @@
     <column name="collecting_event_id" type="integer">
       <constraints foreignKeyName="fk_physical_entity_collecting_event_id" references="collecting_event(id)"/>
     </column>
+    <column name="_group" type="VARCHAR(50)">
+      <constraints nullable="false"/>
+    </column>
     </createTable>        
   </changeSet>
 </databaseChangeLog>

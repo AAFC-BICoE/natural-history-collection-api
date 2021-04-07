@@ -32,6 +32,8 @@ public class PhysicalEntityDto {
     @Id
     @PropertyName("id")
     private UUID uuid;
+
+    private String group;
   
     private OffsetDateTime createdOn;
     private String createdBy;

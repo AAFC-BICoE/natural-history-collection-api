@@ -23,7 +23,8 @@ public class PhysicalEntityFactory implements TestableEntityFactory<PhysicalEnti
         return PhysicalEntity
             .builder()
             .uuid(UUID.randomUUID())
-            .createdBy("test user");
+            .createdBy("test user")
+            .group("aafc");
     }
     
 }

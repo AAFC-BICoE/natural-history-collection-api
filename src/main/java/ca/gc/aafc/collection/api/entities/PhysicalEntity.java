@@ -52,6 +52,11 @@ public class PhysicalEntity implements DinaEntity {
     @Column(unique = true)
     private UUID uuid;
 
+    @NotBlank
+    @Size(max = 50) 
+    @Column(name = "_group")
+    private String group;
+
     @Column(name = "created_on", insertable = false, updatable = false)
     @Generated(value = GenerationTime.INSERT)
     private OffsetDateTime createdOn;

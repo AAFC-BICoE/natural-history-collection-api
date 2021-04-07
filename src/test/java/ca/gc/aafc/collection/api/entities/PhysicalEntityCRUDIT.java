@@ -47,7 +47,6 @@ public class PhysicalEntityCRUDIT extends CollectionModuleBaseIT {
     public void testFind() {
         String dwcCatalogNumber = "F-4313";
         String expectedCreatedBy = "dina-find";
-        UUID collectingEventIdentifier = UUID.randomUUID();
 
         PhysicalEntity physicalEntity = PhysicalEntityFactory.newPhysicalEntity()
             .dwcCatalogNumber(dwcCatalogNumber)

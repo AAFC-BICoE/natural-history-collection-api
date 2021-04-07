@@ -31,6 +31,8 @@ public class PhysicalEntityRepositoryIT extends CollectionModuleBaseIT {
     private CollectingEventRepository eventRepository;
 
     private static final String dwcCatalogNumber = "R-4313";
+    private static final String group = "aafc";
+
 
     @Test
     @WithMockKeycloakUser(username = "test user")
@@ -62,6 +64,7 @@ public class PhysicalEntityRepositoryIT extends CollectionModuleBaseIT {
         PhysicalEntityDto pe = new PhysicalEntityDto();
         pe.setDwcCatalogNumber(dwcCatalogNumber);
         pe.setCollectingEvent(event);
+        pe.setGroup(group);
         pe.setAttachment(List.of(
             ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
         return pe;
@@ -69,7 +72,7 @@ public class PhysicalEntityRepositoryIT extends CollectionModuleBaseIT {
 
     private CollectingEventDto newEventDto() {
         CollectingEventDto ce = new CollectingEventDto();
-        ce.setGroup("aafc");
+        ce.setGroup(group);
         ce.setStartEventDateTime(ISODateTime.parse("2020").toString());
         ce.setCreatedBy("dina");
         return ce;
