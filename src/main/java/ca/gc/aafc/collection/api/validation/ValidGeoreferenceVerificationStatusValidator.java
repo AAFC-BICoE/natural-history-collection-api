@@ -6,6 +6,11 @@ import javax.validation.ConstraintValidatorContext;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
 
+/**
+ * Used for bean validation of {@link ca.gc.aafc.collection.api.entities.GeoreferenceAssertion}
+ * if dwcGeoreferenceVerificationStatus equals GEOREFERENCING_NOT_POSSIBLE: 
+ * dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null.
+ */
 public class ValidGeoreferenceVerificationStatusValidator implements ConstraintValidator<ValidGeoreferenceVerificationStatus, GeoreferenceAssertion> {
     
     @Override
