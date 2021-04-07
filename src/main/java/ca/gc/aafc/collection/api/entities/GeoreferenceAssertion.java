@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,6 +48,10 @@ import lombok.ToString;
 @NaturalIdCache
 @Table(name = "georeference_assertion")
 public class GeoreferenceAssertion implements DinaEntity {
+
+  public enum GeoreferenceVerificationStatus {
+    GEOREFERENCING_NOT_POSSIBLE
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,6 +102,10 @@ public class GeoreferenceAssertion implements DinaEntity {
 
   @Size(max = 25)
   private String dwcGeodeticDatum;
+
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
   public List<UUID> getGeoreferencedBy() {
     return CollectionUtils.isNotEmpty(georeferencedBy) ? georeferencedBy : Collections.emptyList();
