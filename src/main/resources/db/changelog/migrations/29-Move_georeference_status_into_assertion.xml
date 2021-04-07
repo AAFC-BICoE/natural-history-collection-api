@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
         context="schema-change">
 
-    <changeSet id="28-Move_georeference_status_into_assertion" context="schema-change" author="Steven Luu">
+    <changeSet id="29-Move_georeference_status_into_assertion" context="schema-change" author="Steven Luu">
         <dropColumn columnName="dwc_georeference_verification_status" tableName="collecting_event"/>
         <addColumn tableName="georeference_assertion">
             <column name="dwc_georeference_verification_status" type="georeference_verification_status"/>
