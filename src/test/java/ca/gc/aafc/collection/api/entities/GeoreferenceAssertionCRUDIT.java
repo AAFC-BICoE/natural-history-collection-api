@@ -3,12 +3,15 @@ package ca.gc.aafc.collection.api.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +49,6 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
         .dwcDecimalLongitude(45.01)
         .dwcCoordinateUncertaintyInMeters(10)
         .dwcGeoreferencedDate(testGeoreferencedDate)
-        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .build();
     dbService.save(geoReferenceAssertion);
 
@@ -56,7 +58,43 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(45.01, fetchedGeoreferenceAssertion.getDwcDecimalLongitude());
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
     assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
-    assertEquals(georeferenceVerificationStatus, fetchedGeoreferenceAssertion.getDwcGeoreferenceVerificationStatus());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
+  }
+
+  @Test
+  public void Validate_GeoreferenceVerificationStatus_ThrowsException() {
+    GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+        .dwcDecimalLatitude(12.123456)
+        .dwcDecimalLongitude(45.01)
+        .dwcCoordinateUncertaintyInMeters(10)
+        .dwcGeoreferencedDate(testGeoreferencedDate)
+        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
+        .build();
+    ConstraintViolationException exception =  assertThrows(ConstraintViolationException.class, () -> {
+      dbService.save(geoReferenceAssertion);
+    });
+
+    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  public void Validate_DefaultValidation_ThrowsException() {
+    GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+      .dwcDecimalLatitude(-300.0)
+      .dwcDecimalLongitude(45.01)
+      .dwcCoordinateUncertaintyInMeters(10)
+      .dwcGeoreferencedDate(testGeoreferencedDate)
+      .build();
+    ConstraintViolationException exception =  assertThrows(ConstraintViolationException.class, () -> {
+        dbService.save(geoReferenceAssertion);
+    });
+
+    String expectedMessage = "must be greater than or equal to";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 }

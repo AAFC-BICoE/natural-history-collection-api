@@ -29,6 +29,7 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
+import ca.gc.aafc.collection.api.validation.ValidGeoreferenceVerificationStatus;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
+@ValidGeoreferenceVerificationStatus
 @Table(name = "georeference_assertion")
 public class GeoreferenceAssertion implements DinaEntity {
 
