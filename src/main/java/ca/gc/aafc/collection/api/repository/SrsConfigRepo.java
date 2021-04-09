@@ -17,7 +17,7 @@ public class SrsConfigRepo extends ReadOnlyResourceRepositoryBase<SrsConfigDto, 
 
   protected SrsConfigRepo(@NonNull LocationConfiguration locationConfiguration) {
     super(SrsConfigDto.class);
-    this.configDto = List.of(new SrsConfigDto(locationConfiguration.getSrs()));
+    this.configDto = List.of(new SrsConfigDto("1", locationConfiguration.getSrs()));
   }
 
   @Override
