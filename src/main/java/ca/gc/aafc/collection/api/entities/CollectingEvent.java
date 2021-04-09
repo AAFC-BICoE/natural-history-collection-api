@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -41,6 +42,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
@@ -81,6 +83,10 @@ public class CollectingEvent implements DinaEntity {
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
       )
   private List<GeoreferenceAssertion> geoReferenceAssertions;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @ToString.Exclude
+  private GeoreferenceAssertion primaryGeoreferenceAssertion;
 
   private String dwcVerbatimCoordinates;
 
