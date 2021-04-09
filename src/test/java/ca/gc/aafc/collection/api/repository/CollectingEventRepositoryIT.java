@@ -125,6 +125,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .build();
     testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
+    testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertion);
 
     collectingEventService.create(testCollectingEvent);
   }
