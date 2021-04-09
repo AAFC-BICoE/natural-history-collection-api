@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -83,6 +84,16 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
+  private final GeoreferenceAssertion geoReferenceAssertionA = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    .dwcDecimalLatitude(0.0)
+    .dwcDecimalLongitude(12.34)
+    .dwcGeoreferencedDate(testGeoreferencedDate)
+    .build();
+  private final GeoreferenceAssertion geoReferenceAssertionB = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    .dwcDecimalLatitude(9.87654321)
+    .dwcDecimalLongitude(177.77)
+    .dwcGeoreferencedDate(testGeoreferencedDate)
+    .build();
   private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
@@ -129,6 +140,41 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
     collectingEventService.create(testCollectingEvent);
   }
+
+  @Test
+  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithOneGeoreferenceAssertion(){
+    testCollectingEvent.setPrimaryGeoreferenceAssertion(null);
+    collectingEventService.update(testCollectingEvent);
+    assertEquals(testCollectingEvent.getGeoReferenceAssertions().size(), 0);
+  }
+
+  @Test
+  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithMultipleGeoreferenceAssertion(){
+    List<GeoreferenceAssertion> georef = new ArrayList<>();
+    georef.add(testCollectingEvent.getGeoReferenceAssertions().iterator().next());
+    georef.add(geoReferenceAssertionA);
+    georef.add(geoReferenceAssertionB);
+    testCollectingEvent.setGeoReferenceAssertions(georef);
+    testCollectingEvent.setPrimaryGeoreferenceAssertion(null);
+    collectingEventService.update(testCollectingEvent);
+    assertEquals(testCollectingEvent.getGeoReferenceAssertions().size(), 3);
+    assertNotNull(testCollectingEvent.getPrimaryGeoreferenceAssertion());
+  }
+
+  @Test
+  public void updateCollectingEvent_changePrimaryGeoreferenceAssertion(){
+    List<GeoreferenceAssertion> georef = new ArrayList<>();
+    georef.add(testCollectingEvent.getGeoReferenceAssertions().iterator().next());
+    georef.add(geoReferenceAssertionA);
+    georef.add(geoReferenceAssertionB);
+    testCollectingEvent.setGeoReferenceAssertions(georef);
+    testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertionA);
+    collectingEventService.update(testCollectingEvent);
+    assertEquals(testCollectingEvent.getGeoReferenceAssertions().size(), 3);
+    assertEquals(testCollectingEvent.getPrimaryGeoreferenceAssertion().getDwcDecimalLatitude(), geoReferenceAssertionA.getDwcDecimalLatitude());
+    assertEquals(testCollectingEvent.getPrimaryGeoreferenceAssertion().getDwcDecimalLongitude(), geoReferenceAssertionA.getDwcDecimalLongitude());
+  }
+
 
   @Test
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
