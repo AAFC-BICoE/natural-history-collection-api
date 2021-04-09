@@ -1,8 +1,9 @@
 package ca.gc.aafc.collection.api.service;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
@@ -26,13 +27,13 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     entity.setUuid(UUID.randomUUID());
     assignAutomaticValues(entity);
     linkAssertions(entity);
-    assignPrimaryGeoreferenceAssertion(entity);
+    handlePrimaryGeoreferenceAssertion(entity);
   }
 
   @Override
   public void preUpdate(CollectingEvent entity) {
     linkAssertions(entity);
-    assignPrimaryGeoreferenceAssertion(entity);
+    handlePrimaryGeoreferenceAssertion(entity);
   }
 
   private static void linkAssertions(CollectingEvent entity) {
@@ -55,17 +56,20 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
    * 
    * @param entity
    */
-  private static void assignPrimaryGeoreferenceAssertion(CollectingEvent entity) {
-    Integer assertionsSize = entity.getGeoReferenceAssertions().size();
+  private static void handlePrimaryGeoreferenceAssertion(CollectingEvent entity) {
+    int assertionsSize = Optional.ofNullable(entity.getGeoReferenceAssertions())
+        .map(List::size).orElse(0);
+
     //Set primary assertion to first assertion in list by default if assertion list is bigger than 1
     if (assertionsSize > 1 && entity.getPrimaryGeoreferenceAssertion() == null) {
       entity.setPrimaryGeoreferenceAssertion(entity.getGeoReferenceAssertions().get(0));
       return;
-    } else if ((assertionsSize == 1 && entity.getPrimaryGeoreferenceAssertion() == null) || (assertionsSize == 0 && entity.getPrimaryGeoreferenceAssertion() != null)) {
-      List<GeoreferenceAssertion> empty = new ArrayList<>();
-      entity.setGeoReferenceAssertions(empty);
+    }
+
+    if ((assertionsSize == 1 && entity.getPrimaryGeoreferenceAssertion() == null) ||
+        (assertionsSize == 0 && entity.getPrimaryGeoreferenceAssertion() != null)) {
+      entity.setGeoReferenceAssertions(Collections.emptyList());
       entity.setPrimaryGeoreferenceAssertion(null);
-      return;
     }
   }
 }
