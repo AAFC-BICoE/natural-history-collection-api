@@ -17,7 +17,7 @@ public class CoordinateSystemConfigRepo extends ReadOnlyResourceRepositoryBase<C
 
   protected CoordinateSystemConfigRepo(@NonNull LocationConfiguration locationConfiguration) {
     super(CoordinateSystemConfigDto.class);
-    this.configDto = List.of(new CoordinateSystemConfigDto(locationConfiguration.getCoordinateSystem()));
+    this.configDto = List.of(new CoordinateSystemConfigDto("1", locationConfiguration.getCoordinateSystem()));
   }
 
   @Override
