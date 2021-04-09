@@ -9,14 +9,20 @@ import java.util.UUID;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 
 @Service
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
+
+  private final CollectingEventValidator collectingEventValidator;
 
   public CollectingEventService(@NonNull BaseDAO baseDAO) {
     super(baseDAO);
@@ -50,26 +56,19 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     }
   }
 
-  /**
-   * the primary assertion's FK can only be removed if there is only 1 assertion (but it can be changed to another assertion)
-   * if the primary assertion's FK is removed (since there is only 1 left) the regular FK of the last assertion is also removed
-   * 
-   * @param entity
-   */
-  private static void handlePrimaryGeoreferenceAssertion(CollectingEvent entity) {
-    int assertionsSize = Optional.ofNullable(entity.getGeoReferenceAssertions())
-        .map(List::size).orElse(0);
+  public void validatePrimaryGeoreferenceAssertion(CollectingEvent entity) {
+    Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
+    collectingEventValidator.validate(entity, errors);
 
-    //Set primary assertion to first assertion in list by default if assertion list is bigger than 1
-    if (assertionsSize > 1 && entity.getPrimaryGeoreferenceAssertion() == null) {
-      entity.setPrimaryGeoreferenceAssertion(entity.getGeoReferenceAssertions().get(0));
+    if (!errors.hasErrors()) {
       return;
     }
 
-    if ((assertionsSize == 1 && entity.getPrimaryGeoreferenceAssertion() == null) ||
-        (assertionsSize == 0 && entity.getPrimaryGeoreferenceAssertion() != null)) {
-      entity.setGeoReferenceAssertions(Collections.emptyList());
-      entity.setPrimaryGeoreferenceAssertion(null);
-    }
+    Optional<String> errorMsg = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).findAny();
+    errorMsg.ifPresent(msg -> {
+      throw new IllegalArgumentException(msg);
+    });
+
   }
+
 }
