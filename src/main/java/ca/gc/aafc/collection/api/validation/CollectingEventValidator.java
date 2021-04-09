@@ -20,7 +20,7 @@ public class CollectingEventValidator implements Validator {
     @Inject
     private MessageSource messageSource;
 
-    public CollectingEventPrimaryGeoreferenceValidator(MessageSource messageSource) {
+    public void CollectingEventPrimaryGeoreferenceValidator(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
