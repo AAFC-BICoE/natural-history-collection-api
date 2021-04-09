@@ -7,24 +7,22 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
-import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class CollectingEventAttributeRepository extends DinaRepository<CollectingEventManagedAttributeDto, CollectingEventManagedAttribute> {
   public CollectingEventAttributeRepository(
-    @NonNull CollectingEventManagedAttributeService CollectingEventManagedAttributeService,
+    @NonNull CollectingEventManagedAttributeService collectingEventManagedAttributeService,
     @NonNull BaseDAO baseDAO,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties
   ) {
     super(
-      CollectingEventManagedAttributeService,
+      collectingEventManagedAttributeService,
       Optional.empty(),
       Optional.empty(),
       new DinaMapper<>(CollectingEventManagedAttributeDto.class),
