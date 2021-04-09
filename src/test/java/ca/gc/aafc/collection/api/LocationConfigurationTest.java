@@ -28,5 +28,8 @@ class LocationConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getSrs() {
+    MatcherAssert.assertThat(
+      locationConfiguration.getSrs(),
+      Matchers.contains("WGS84 (EPSG:4326)", "NAD27 (EPSG:4276)"));
   }
 }
