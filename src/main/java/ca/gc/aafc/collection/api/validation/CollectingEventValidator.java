@@ -1,4 +1,4 @@
-package src.main.java.ca.gc.aafc.collection.api.validation;
+package ca.gc.aafc.collection.api.validation;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +20,7 @@ public class CollectingEventValidator implements Validator {
     @Inject
     private MessageSource messageSource;
 
-    public void CollectingEventPrimaryGeoreferenceValidator(MessageSource messageSource) {
+    public CollectingEventValidator(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
@@ -31,19 +31,19 @@ public class CollectingEventValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        CollectingEvent collectingEvent = (CollectingEvent) collectingEvent;
+        CollectingEvent collectingEvent = (CollectingEvent) target;
         int assertionsSize = Optional.ofNullable(collectingEvent.getGeoReferenceAssertions())
         .map(List::size).orElse(0);
 
-        if (assertionsSize > 0 && collectingEvent.getPrimaryGeoreferenceAssertion() != null) {
-            String errorMessage = messageSource.getMessage("primaryGeoreference.null",
+        if (assertionsSize > 0 && collectingEvent.getPrimaryGeoreferenceAssertion() == null) {
+            String errorMessage = messageSource.getMessage("primaryGeoreferenceAssertion.null",
             null, LocaleContextHolder.getLocale());
-            errors.rejectValue("primaryGeoreference", "primaryGeoreference.null", errorMessage);
+            errors.rejectValue("primaryGeoreferenceAssertion", "primaryGeoreferenceAssertion.null", errorMessage);
         } 
         if (collectingEvent.getGeoReferenceAssertions().contains(collectingEvent.getPrimaryGeoreferenceAssertion())) {
-            String errorMessage = messageSource.getMessage("primaryGeoreference.inList",
+            String errorMessage = messageSource.getMessage("primaryGeoreferenceAssertion.inList",
             null, LocaleContextHolder.getLocale());
-            errors.rejectValue("primaryGeoreference", "primaryGeoreference.inList", errorMessage);
+            errors.rejectValue("primaryGeoreferenceAssertion", "primaryGeoreferenceAssertion.inList", errorMessage);
         }
     }
 

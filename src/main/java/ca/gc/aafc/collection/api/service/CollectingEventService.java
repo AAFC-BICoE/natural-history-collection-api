@@ -24,8 +24,9 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private final CollectingEventValidator collectingEventValidator;
 
-  public CollectingEventService(@NonNull BaseDAO baseDAO) {
+  public CollectingEventService(@NonNull BaseDAO baseDAO, @NonNull CollectingEventValidator collectingEventValidator) {
     super(baseDAO);
+    this.collectingEventValidator = collectingEventValidator;
   }
 
   @Override
@@ -33,13 +34,13 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     entity.setUuid(UUID.randomUUID());
     assignAutomaticValues(entity);
     linkAssertions(entity);
-    handlePrimaryGeoreferenceAssertion(entity);
+    validatePrimaryGeoreferenceAssertion(entity);
   }
 
   @Override
   public void preUpdate(CollectingEvent entity) {
     linkAssertions(entity);
-    handlePrimaryGeoreferenceAssertion(entity);
+    validatePrimaryGeoreferenceAssertion(entity);
   }
 
   private static void linkAssertions(CollectingEvent entity) {

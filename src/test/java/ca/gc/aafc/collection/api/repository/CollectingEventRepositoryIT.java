@@ -94,6 +94,11 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcDecimalLongitude(177.77)
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
+  private final GeoreferenceAssertion primaryGeoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    .dwcDecimalLatitude(11.11)
+    .dwcDecimalLongitude(22.22)
+    .dwcGeoreferencedDate(testGeoreferencedDate)
+    .build();
   private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
@@ -136,7 +141,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .build();
     testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-    testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertion);
+    testCollectingEvent.setPrimaryGeoreferenceAssertion(primaryGeoReferenceAssertion);
 
     collectingEventService.create(testCollectingEvent);
   }
