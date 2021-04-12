@@ -59,6 +59,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   public void validateCollectingEvent(CollectingEvent entity) {
     Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
+    collectingEventValidator.validate(entity, errors);
     
     if (!errors.hasErrors()) {
       return;
