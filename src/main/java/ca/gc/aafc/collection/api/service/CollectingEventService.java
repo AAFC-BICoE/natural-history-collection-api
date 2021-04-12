@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
+    assignAutomaticValues(entity);
     linkAssertions(entity);
   }
 
@@ -30,12 +32,18 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     linkAssertions(entity);
   }
 
-  private void linkAssertions(CollectingEvent entity) {
+  private static void linkAssertions(CollectingEvent entity) {
     List<GeoreferenceAssertion> geos = entity.getGeoReferenceAssertions();
     if (CollectionUtils.isNotEmpty(geos)) {
       geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
     }
+    assignAutomaticValues(entity);
+  }
 
+  private static void assignAutomaticValues(CollectingEvent entity) {
+    if (entity.getGeographicPlaceNameSourceDetail() != null) {
+      entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
+    }
   }
 
 }

@@ -17,7 +17,7 @@ public class ManagedAttributeRepoIT extends CollectionModuleBaseIT {
 
   @Test
   void create_recordCreated() {
-    String expectedName = "dina attribute";
+    String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
     String expectedCreatedBy = "dina";
 
@@ -32,6 +32,7 @@ public class ManagedAttributeRepoIT extends CollectionModuleBaseIT {
     ManagedAttributeDto result = repo.findOne(uuid, new QuerySpec(ManagedAttributeDto.class));
     Assertions.assertEquals(uuid, result.getUuid());
     Assertions.assertEquals(expectedName, result.getName());
+    Assertions.assertEquals("dina_attribute_12", result.getKey());
     Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
     Assertions.assertEquals(expectedCreatedBy, result.getCreatedBy());
     Assertions.assertEquals(ManagedAttribute.ManagedAttributeType.INTEGER, result.getManagedAttributeType());
@@ -39,4 +40,6 @@ public class ManagedAttributeRepoIT extends CollectionModuleBaseIT {
       ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
   }
+
+
 }

@@ -1,21 +1,25 @@
 package ca.gc.aafc.collection.api.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.service.CollectingEventService;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.mapper.DinaMapper;
+import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import io.crnk.core.queryspec.FilterOperator;
+import io.crnk.core.queryspec.IncludeRelationSpec;
+import io.crnk.core.queryspec.PathSpec;
+import io.crnk.core.queryspec.QuerySpec;
+import lombok.SneakyThrows;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,27 +27,32 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
-import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
-import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.queryspec.FilterOperator;
-import io.crnk.core.queryspec.IncludeRelationSpec;
-import io.crnk.core.queryspec.PathSpec;
-import io.crnk.core.queryspec.QuerySpec;
+import javax.inject.Inject;
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectingEventRepository collectingEventRepository;
+
+  @Inject
+  private CollectingEventService collectingEventService;
 
   @Inject
   private GeoreferenceAssertionRepository geoReferenceAssertionRepository;
@@ -68,17 +77,27 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
-    
-  private GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+  private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
+  private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
-  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};    
+  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
+  private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   @BeforeEach
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
+  @SneakyThrows
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   public void setup() {
+    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
+      .sourceID("1")
+      .sourceIdType("N")
+      .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
+        // recordedOn should be overwritten by the server side generated value
+      .recordedOn(OffsetDateTime.of(LocalDateTime.of(2000,01,01,11,10), ZoneOffset.ofHoursMinutes(1, 0)))
+      .build();
+
     createTestCollectingEvent();
   }
 
@@ -101,10 +120,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)   
-      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)   
+      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+      .geographicPlaceNameSource(geographicPlaceNameSource)
+      .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .build();
     testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-    dbService.save(testCollectingEvent,false);
+
+    collectingEventService.create(testCollectingEvent);
   }
 
   @Test
@@ -157,7 +179,18 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
-    assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);          
+    assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
+    assertEquals(geographicPlaceNameSource, collectingEventDto.getGeographicPlaceNameSource());
+    assertEquals(
+      geographicPlaceNameSourceDetail.getSourceID(),
+      collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceID());
+    // assigned server-side
+    assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn());
+    assertNotEquals(2000, collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn().getYear());
+    assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceUrl());
+    assertEquals(
+      geographicPlaceNameSourceDetail.getSourceIdType(),
+      collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceIdType());
   }
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
@@ -193,7 +226,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
   }
 
-  private CollectingEventDto newEventDto(String startTime, String endDate) {
+  private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
     GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
     geoRef.setDwcCoordinateUncertaintyInMeters(10);
@@ -201,8 +234,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setUuid(UUID.randomUUID());
-    ce.setStartEventDateTime(ISODateTime.parse(startTime).toString());
-    ce.setEndEventDateTime(ISODateTime.parse(endDate).toString());
+    ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
+    ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setDwcRecordedBy(dwcRecordedBy);
     ce.setAttachment(List.of(
@@ -221,14 +254,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @ParameterizedTest
-  @MethodSource({"precisionFilterSource"})
+  @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
     collectingEventRepository.create(newEventDto(startDate, "2000"));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
   }
 
-  private static Stream<Arguments> precisionFilterSource() {
+  private static Stream<Arguments> equalFilterSource() {
     return Stream.of(
       // Format YYYY
       Arguments.of("1999", "startEventDateTime==1999", 1),
@@ -247,6 +280,75 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:02", 0)
     );
   }
+
+  private static Stream<Arguments> lt_FilterSource() {
+    return Stream.of(
+      // Format YYYY
+      Arguments.of("1999", "startEventDateTime=le=1999", 1),
+      Arguments.of("1999", "startEventDateTime=le=1998", 0),
+
+      Arguments.of("1999", "startEventDateTime=lt=1999", 0),
+      Arguments.of("1999", "startEventDateTime=lt=2000", 1),
+
+      // Format YYYY-MM
+      Arguments.of("1999", "startEventDateTime=le=1999-01", 0),
+      Arguments.of("1999-01", "startEventDateTime=le=1999-01", 1),
+      Arguments.of("1999-01", "startEventDateTime=le=1998-12", 0),
+
+      Arguments.of("1999-01", "startEventDateTime=lt=1999-01", 0),
+      Arguments.of("1999-01", "startEventDateTime=lt=1999-02", 1),
+
+      // Format YYYY-MM-DD
+      Arguments.of("1999-01", "startEventDateTime=le=1999-01-01", 0),
+      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-02", 1),
+      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-01", 0),
+
+      Arguments.of("1999-01-02", "startEventDateTime=lt=1999-01-02", 0),
+      Arguments.of("1999-01-02", "startEventDateTime=lt=1999-01-03", 1),
+      // Format YYYY-MM-DD-HH-MM
+      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-02T02:00", 0),
+      Arguments.of("1999-01-02T01:00", "startEventDateTime=le=1999-01-02T02:00", 1),
+      Arguments.of("1999-01-02T02:00", "startEventDateTime=le=1999-01-02T01:00", 0),
+
+      Arguments.of("1999-01-02T02:00", "startEventDateTime=lt=1999-01-02T02:00", 0),
+      Arguments.of("1999-01-02T02:00", "startEventDateTime=lt=1999-01-02T03:00", 1)
+    );
+  }
+
+  private static Stream<Arguments> gt_FilterSource() {
+    return Stream.of(
+      // Format YYYY
+      Arguments.of("2222", "startEventDateTime=ge=2222", 1),
+      Arguments.of("2222", "startEventDateTime=ge=2223", 0),
+
+      Arguments.of("2222", "startEventDateTime=gt=2222", 0),
+      Arguments.of("2222", "startEventDateTime=gt=2221", 1),
+
+      // Format YYYY-MM
+      Arguments.of("2222", "startEventDateTime=ge=2222-01", 0),
+      Arguments.of("2222-01", "startEventDateTime=ge=2222-01", 1),
+      Arguments.of("2222-01", "startEventDateTime=ge=2222-02", 0),
+
+      Arguments.of("2222-01", "startEventDateTime=gt=2222-01", 0),
+      Arguments.of("2222-01", "startEventDateTime=gt=2221-12", 1),
+
+      // Format YYYY-MM-DD
+      Arguments.of("2222-01", "startEventDateTime=ge=2222-01-01", 0),
+      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-02", 1),
+      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-03", 0),
+
+      Arguments.of("2222-01-02", "startEventDateTime=gt=2222-01-02", 0),
+      Arguments.of("2222-01-02", "startEventDateTime=gt=2222-01-01", 1),
+      // Format YYYY-MM-DD-HH-MM
+      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-02T02:00", 0),
+      Arguments.of("2222-01-02T01:00", "startEventDateTime=ge=2222-01-02T02:00", 0),
+      Arguments.of("2222-01-02T02:00", "startEventDateTime=ge=2222-01-02T01:00", 1),
+
+      Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T02:00", 0),
+      Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T01:00", 1)
+    );
+  }
+
 
   private static QuerySpec newRsqlQuerySpec(String rsql) {
     QuerySpec spec = new QuerySpec(CollectingEventDto.class);
