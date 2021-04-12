@@ -13,6 +13,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +57,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   public void testSave() {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
        .build();
+    collectingEvent.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     assertNull(collectingEvent.getId());
@@ -86,6 +88,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .geographicPlaceName(geographicPlaceName)
         .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+        .uuid(UUID.randomUUID())
         .build();
     dbService.save(collectingEvent,false);
 
