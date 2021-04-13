@@ -8,10 +8,8 @@ import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 
-import javax.inject.Inject;
-
 @Component
-public class CollectingEventValidator implements Validator{
+public class CollectingEventValidator implements Validator {
 
     private final MessageSource messageSource;
 
