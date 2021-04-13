@@ -9,7 +9,7 @@ import org.springframework.validation.Validator;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 
 @Component
-public class GeoreferenceAssertionValidator implements Validator{
+public class GeoreferenceAssertionValidator implements Validator {
 
     private MessageSource messageSource;
 
