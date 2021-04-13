@@ -87,21 +87,25 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
+    .uuid(UUID.randomUUID())
     .build();
   private final GeoreferenceAssertion geoReferenceAssertionA = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(0.0)
     .dwcDecimalLongitude(12.34)
     .dwcGeoreferencedDate(testGeoreferencedDate)
+    .uuid(UUID.randomUUID())
     .build();
   private final GeoreferenceAssertion geoReferenceAssertionB = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(9.87654321)
     .dwcDecimalLongitude(177.77)
     .dwcGeoreferencedDate(testGeoreferencedDate)
+    .uuid(UUID.randomUUID())
     .build();
   private final GeoreferenceAssertion primaryGeoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(11.11)
     .dwcDecimalLongitude(22.22)
     .dwcGeoreferencedDate(testGeoreferencedDate)
+    .uuid(UUID.randomUUID())
     .build();
   private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
