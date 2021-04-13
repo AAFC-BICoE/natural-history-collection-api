@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Generated;
@@ -25,7 +24,6 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnCreate;
 import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
@@ -51,7 +49,6 @@ public class PhysicalEntity implements DinaEntity {
     private Integer id;
   
     @NaturalId
-    @Null(groups = OnCreate.class)
     @NotNull(groups = OnUpdate.class)
     @Column(unique = true)
     private UUID uuid;

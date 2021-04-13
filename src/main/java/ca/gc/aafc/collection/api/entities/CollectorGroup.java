@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnCreate;
 import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
