@@ -15,10 +15,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
@@ -35,7 +36,6 @@ import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnCreate;
 import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
@@ -44,6 +44,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
@@ -71,7 +72,6 @@ public class CollectingEvent implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @Null(groups = OnCreate.class)
   @NotNull(groups = OnUpdate.class)
   @Column(unique = true)
   private UUID uuid;
@@ -85,6 +85,11 @@ public class CollectingEvent implements DinaEntity {
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
       )
   private List<GeoreferenceAssertion> geoReferenceAssertions;
+
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ToString.Exclude
+  @JoinColumn(name = "primary_georeference_assertion_id", referencedColumnName = "id")
+  private GeoreferenceAssertion primaryGeoreferenceAssertion;
 
   private String dwcVerbatimCoordinates;
 

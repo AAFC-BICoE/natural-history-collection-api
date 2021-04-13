@@ -60,6 +60,9 @@ public class CollectingEventDto {
   @DiffIgnore
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
+  @JsonApiRelation
+  private GeoreferenceAssertionDto primaryGeoreferenceAssertion;
+
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
 

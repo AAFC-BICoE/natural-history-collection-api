@@ -12,7 +12,7 @@ import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVeri
 @Component
 public class GeoreferenceAssertionValidator implements Validator {
 
-    private final MessageSource messageSource;
+    private MessageSource messageSource;
 
     public GeoreferenceAssertionValidator(MessageSource messageSource) {
         this.messageSource = messageSource;
@@ -33,6 +33,13 @@ public class GeoreferenceAssertionValidator implements Validator {
                     LocaleContextHolder.getLocale());
                 errors.rejectValue("dwcGeoreferenceVerificationStatus","georeferenceAssertion.GeoreferenceVerificationStatus.invalid", errorMessage);   
             }
+
+        if (georeferenceAssertion.getCollectingEvent() != null && georeferenceAssertion.getCollectingEvent().getPrimaryGeoreferenceAssertion() == null) {
+            String errorMessage = messageSource.getMessage("georeferenceAssertion.collectingEvent.primaryGeoreferenceAssertion.null",
+                null, LocaleContextHolder.getLocale());
+            errors.rejectValue("collectingEvent", "georeferenceAssertion.collectingEvent.primaryGeoreferenceAssertion.null", errorMessage);
+        }
+        
     }
     
 }

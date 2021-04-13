@@ -37,6 +37,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
       .georeferencedBy(agentIdentifiers)  
       .build();
     assertNull(geoReferenceAssertion.getId());
+    geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion);
     assertNotNull(geoReferenceAssertion.getId());
     assertEquals(agentIdentifiers, geoReferenceAssertion.getGeoreferencedBy());
@@ -50,6 +51,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
         .dwcCoordinateUncertaintyInMeters(10)
         .dwcGeoreferencedDate(testGeoreferencedDate)
         .build();
+    geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion);
 
     GeoreferenceAssertion fetchedGeoreferenceAssertion = dbService.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId());
@@ -59,42 +61,5 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
     assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
-  }
-
-  @Test
-  public void Validate_GeoreferenceVerificationStatus_ThrowsException() {
-    GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-        .dwcDecimalLatitude(12.123456)
-        .dwcDecimalLongitude(45.01)
-        .dwcCoordinateUncertaintyInMeters(10)
-        .dwcGeoreferencedDate(testGeoreferencedDate)
-        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
-        .build();
-    ConstraintViolationException exception =  assertThrows(ConstraintViolationException.class, () -> {
-      dbService.save(geoReferenceAssertion);
-    });
-
-    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
-  }
-
-  @Test
-  public void Validate_DefaultValidation_ThrowsException() {
-    GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-      .dwcDecimalLatitude(-300.0)
-      .dwcDecimalLongitude(45.01)
-      .dwcCoordinateUncertaintyInMeters(10)
-      .dwcGeoreferencedDate(testGeoreferencedDate)
-      .build();
-    ConstraintViolationException exception =  assertThrows(ConstraintViolationException.class, () -> {
-        dbService.save(geoReferenceAssertion);
-    });
-
-    String expectedMessage = "must be greater than or equal to";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 }
