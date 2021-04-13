@@ -25,11 +25,12 @@ public class CollectingEventValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         CollectingEvent collectingEvent = (CollectingEvent) target;
-        if ((collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null) ||
-            (collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime().isAfter(collectingEvent.getEndEventDateTime()))) {
+        if ((collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null)
+                || (collectingEvent.getEndEventDateTime() != null
+                        && collectingEvent.getStartEventDateTime().isAfter(collectingEvent.getEndEventDateTime()))) {
             String errorMessage = messageSource.getMessage("validation.constraint.violation.validEventDateTime", null,
-            LocaleContextHolder.getLocale());
-            errors.reject("validation.constraint.violation.validEventDateTime", errorMessage);   
+                    LocaleContextHolder.getLocale());
+            errors.reject("validation.constraint.violation.validEventDateTime", errorMessage);
         }
-    }        
+    }
 }
