@@ -86,7 +86,7 @@ public class ISODateTime {
    *
    * @param dateTime date and time as string, can't be null
    * @return date time as {@link ISODateTime}
-   * @throws {@link DateTimeParseException} if the provided value can't be parsed.
+   * @throws DateTimeParseException if the provided value can't be parsed.
    */
   public static ISODateTime parse(@NonNull String dateTime) {
     int numberOfNumericChar = ALL_NON_NUMERIC
