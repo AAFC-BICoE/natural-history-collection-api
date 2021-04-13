@@ -44,6 +44,9 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
@@ -226,6 +229,38 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
   }
 
+  @Test
+  public void nullStartTimeNonNullEndTime_throwsIllegalArgumentException() {
+      testCollectingEvent = CollectingEventFactory.newCollectingEvent()
+          .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
+          .build();
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        collectingEventService.create(testCollectingEvent);
+      });
+
+      String expectedMessage = "The start and end dates do not create a valid timeline";
+      String actualMessage = exception.getMessage();
+  
+      assertTrue(actualMessage.contains(expectedMessage));
+    }
+      
+
+  @Test
+  public void startTimeAfterEndTime_throwsIllegalArgumentException() {
+      testCollectingEvent = CollectingEventFactory.newCollectingEvent()
+          .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
+          .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
+          .build();
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        collectingEventService.create(testCollectingEvent);
+      });
+
+      String expectedMessage = "The start and end dates do not create a valid timeline";
+      String actualMessage = exception.getMessage();
+  
+      assertTrue(actualMessage.contains(expectedMessage)); 
+  }
+
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
     GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
@@ -256,7 +291,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
-    collectingEventRepository.create(newEventDto(startDate, "2000"));
+    collectingEventRepository.create(newEventDto(startDate, "2020"));
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
   }
 
@@ -317,34 +352,34 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static Stream<Arguments> gt_FilterSource() {
     return Stream.of(
       // Format YYYY
-      Arguments.of("2222", "startEventDateTime=ge=2222", 1),
-      Arguments.of("2222", "startEventDateTime=ge=2223", 0),
+      Arguments.of("2010", "startEventDateTime=ge=2010", 1),
+      Arguments.of("2010", "startEventDateTime=ge=2011", 0),
 
-      Arguments.of("2222", "startEventDateTime=gt=2222", 0),
-      Arguments.of("2222", "startEventDateTime=gt=2221", 1),
+      Arguments.of("2010", "startEventDateTime=gt=2010", 0),
+      Arguments.of("2010", "startEventDateTime=gt=2009", 1),
 
       // Format YYYY-MM
-      Arguments.of("2222", "startEventDateTime=ge=2222-01", 0),
-      Arguments.of("2222-01", "startEventDateTime=ge=2222-01", 1),
-      Arguments.of("2222-01", "startEventDateTime=ge=2222-02", 0),
+      Arguments.of("2010", "startEventDateTime=ge=2010-01", 0),
+      Arguments.of("2010-01", "startEventDateTime=ge=2010-01", 1),
+      Arguments.of("2010-01", "startEventDateTime=ge=2010-02", 0),
 
-      Arguments.of("2222-01", "startEventDateTime=gt=2222-01", 0),
-      Arguments.of("2222-01", "startEventDateTime=gt=2221-12", 1),
+      Arguments.of("2010-01", "startEventDateTime=gt=2010-01", 0),
+      Arguments.of("2010-01", "startEventDateTime=gt=2009-12", 1),
 
       // Format YYYY-MM-DD
-      Arguments.of("2222-01", "startEventDateTime=ge=2222-01-01", 0),
-      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-02", 1),
-      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-03", 0),
+      Arguments.of("2010-01", "startEventDateTime=ge=2010-01-01", 0),
+      Arguments.of("2010-01-02", "startEventDateTime=ge=2010-01-02", 1),
+      Arguments.of("2010-01-02", "startEventDateTime=ge=2010-01-03", 0),
 
-      Arguments.of("2222-01-02", "startEventDateTime=gt=2222-01-02", 0),
-      Arguments.of("2222-01-02", "startEventDateTime=gt=2222-01-01", 1),
+      Arguments.of("2010-01-02", "startEventDateTime=gt=2010-01-02", 0),
+      Arguments.of("2010-01-02", "startEventDateTime=gt=2010-01-01", 1),
       // Format YYYY-MM-DD-HH-MM
-      Arguments.of("2222-01-02", "startEventDateTime=ge=2222-01-02T02:00", 0),
-      Arguments.of("2222-01-02T01:00", "startEventDateTime=ge=2222-01-02T02:00", 0),
-      Arguments.of("2222-01-02T02:00", "startEventDateTime=ge=2222-01-02T01:00", 1),
+      Arguments.of("2010-01-02", "startEventDateTime=ge=2010-01-02T02:00", 0),
+      Arguments.of("2010-01-02T01:00", "startEventDateTime=ge=2010-01-02T02:00", 0),
+      Arguments.of("2010-01-02T02:00", "startEventDateTime=ge=2010-01-02T01:00", 1),
 
-      Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T02:00", 0),
-      Arguments.of("2222-01-02T02:00", "startEventDateTime=gt=2222-01-02T01:00", 1)
+      Arguments.of("2010-01-02T02:00", "startEventDateTime=gt=2010-01-02T02:00", 0),
+      Arguments.of("2010-01-02T02:00", "startEventDateTime=gt=2010-01-02T01:00", 1)
     );
   }
 
