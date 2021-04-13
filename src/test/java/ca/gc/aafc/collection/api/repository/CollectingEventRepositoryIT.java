@@ -155,7 +155,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithOneGeoreferenceAssertion_throwsIllegalArgumentException(){
+  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithOneGeoreferenceAssertion_throwsIllegalArgumentException() {
     testCollectingEvent.setPrimaryGeoreferenceAssertion(null);
     IllegalArgumentException exception = 
     assertThrows(IllegalArgumentException.class, () -> {
@@ -169,7 +169,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void updateCollectingEvent_setPrimaryAssertionToOneInList_throwsIllegalArgumentException(){
+  public void updateCollectingEvent_setPrimaryAssertionToOneInList_throwsIllegalArgumentException() {
     List<GeoreferenceAssertion> georef = new ArrayList<>();
     georef.add(testCollectingEvent.getGeoReferenceAssertions().iterator().next());
     georef.add(geoReferenceAssertionA);
@@ -188,7 +188,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void updateCollectingEvent_changePrimaryGeoreferenceAssertion(){
+  public void updateCollectingEvent_changePrimaryGeoreferenceAssertion() {
     List<GeoreferenceAssertion> georef = new ArrayList<>();
     georef.add(testCollectingEvent.getGeoReferenceAssertions().iterator().next());
     georef.add(primaryGeoReferenceAssertion);
