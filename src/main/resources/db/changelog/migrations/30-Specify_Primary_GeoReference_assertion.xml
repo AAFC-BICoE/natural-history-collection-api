@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+        context="schema-change">
+
+    <changeSet id="30-Specify_Primary_GeoReference_assertion" context="schema-change" author="Steven Luu">
+        <addColumn tableName="collecting_event">
+            <column name="primary_georeference_assertion_id" type="integer">
+                <constraints foreignKeyName="fk_primary_georeference_assertion_id" references="georeference_assertion(id)" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
