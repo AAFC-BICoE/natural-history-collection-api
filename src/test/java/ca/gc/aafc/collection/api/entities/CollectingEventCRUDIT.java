@@ -58,8 +58,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
        .build();
     collectingEvent.setUuid(UUID.randomUUID());
+    geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
+    collectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertion);
     assertNull(collectingEvent.getId());
     dbService.save(collectingEvent, false);
     assertNotNull(collectingEvent.getId());
@@ -68,9 +70,11 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   public void testFind() {
     LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
+    geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))        
+        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
+        .primaryGeoreferenceAssertion(geoReferenceAssertion)        
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
         .dwcRecordedBy(dwcRecordedBy)
@@ -101,6 +105,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(
       geoReferenceAssertion.getId(),
       fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());    
+    assertEquals(geoReferenceAssertion.getId(), fetchedCollectingEvent.getPrimaryGeoreferenceAssertion().getId());
     assertEquals(
       12.123456,
       fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    

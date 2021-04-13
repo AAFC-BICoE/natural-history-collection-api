@@ -34,6 +34,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
       .georeferencedBy(agentIdentifiers)  
       .build();
     assertNull(geoReferenceAssertion.getId());
+    geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion);
     assertNotNull(geoReferenceAssertion.getId());
     assertEquals(agentIdentifiers, geoReferenceAssertion.getGeoreferencedBy());
@@ -48,6 +49,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
         .dwcGeoreferencedDate(testGeoreferencedDate)
         .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .build();
+    geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion);
 
     GeoreferenceAssertion fetchedGeoreferenceAssertion = dbService.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId());
