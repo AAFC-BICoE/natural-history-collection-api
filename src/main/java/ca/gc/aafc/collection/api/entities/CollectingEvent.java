@@ -89,7 +89,9 @@ public class CollectingEvent implements DinaEntity {
       )
   private List<GeoreferenceAssertion> geoReferenceAssertions;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY,
+      cascade={CascadeType.ALL}
+      )
   @ToString.Exclude
   @JoinColumn(name = "primary_georeference_assertion_id", referencedColumnName = "id")
   private GeoreferenceAssertion primaryGeoreferenceAssertion;

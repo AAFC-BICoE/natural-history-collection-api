@@ -45,6 +45,10 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
@@ -147,30 +151,43 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithOneGeoreferenceAssertion(){
+  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithOneGeoreferenceAssertion_throwsIllegalArgumentException(){
     testCollectingEvent.setPrimaryGeoreferenceAssertion(null);
-    collectingEventService.update(testCollectingEvent);
-    assertEquals(testCollectingEvent.getGeoReferenceAssertions().size(), 0);
+    IllegalArgumentException exception = 
+    assertThrows(IllegalArgumentException.class, () -> {
+      collectingEventService.update(testCollectingEvent);
+    });
+
+    String expectedMessage = "Must have a Primary Georeference Assertion if the Georeference Assertion list is not empty";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
-  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithMultipleGeoreferenceAssertion(){
+  public void updateCollectingEvent_setPrimaryAssertionToOneInList_throwsIllegalArgumentException(){
     List<GeoreferenceAssertion> georef = new ArrayList<>();
     georef.add(testCollectingEvent.getGeoReferenceAssertions().iterator().next());
     georef.add(geoReferenceAssertionA);
     georef.add(geoReferenceAssertionB);
     testCollectingEvent.setGeoReferenceAssertions(georef);
-    testCollectingEvent.setPrimaryGeoreferenceAssertion(null);
-    collectingEventService.update(testCollectingEvent);
-    assertEquals(testCollectingEvent.getGeoReferenceAssertions().size(), 3);
-    assertNotNull(testCollectingEvent.getPrimaryGeoreferenceAssertion());
+    testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertionA);
+    IllegalArgumentException exception = 
+      assertThrows(IllegalArgumentException.class, () -> {
+        collectingEventService.update(testCollectingEvent);
+      });
+
+    String expectedMessage = "Primary Georeference must not be in the Georeference Assertion list";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
   public void updateCollectingEvent_changePrimaryGeoreferenceAssertion(){
     List<GeoreferenceAssertion> georef = new ArrayList<>();
     georef.add(testCollectingEvent.getGeoReferenceAssertions().iterator().next());
-    georef.add(geoReferenceAssertionA);
+    georef.add(primaryGeoReferenceAssertion);
     georef.add(geoReferenceAssertionB);
     testCollectingEvent.setGeoReferenceAssertions(georef);
     testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertionA);
@@ -281,8 +298,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
     GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
+    GeoreferenceAssertionDto primaryGeoRef = new GeoreferenceAssertionDto();
     geoRef.setDwcCoordinateUncertaintyInMeters(10);
     GeoreferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
+    GeoreferenceAssertionDto primaryDto = geoReferenceAssertionRepository.create(primaryGeoRef);
     ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
@@ -301,6 +320,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
     ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);
+    ce.setPrimaryGeoreferenceAssertion(primaryDto);
+
     return ce;
   }
 
