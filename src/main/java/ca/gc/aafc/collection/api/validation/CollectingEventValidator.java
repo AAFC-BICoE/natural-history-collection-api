@@ -36,19 +36,16 @@ public class CollectingEventValidator implements Validator {
           String errorMessage = messageSource.getMessage("validation.constraint.violation.validEventDateTime", null,
             LocaleContextHolder.getLocale());
           errors.reject("validation.constraint.violation.validEventDateTime", errorMessage);
-          return;
         }
       if (assertionsSize > 0 && collectingEvent.getPrimaryGeoreferenceAssertion() == null) {
           String errorMessage = messageSource.getMessage("collectingEvent.primaryGeoreferenceAssertion.null",
           null, LocaleContextHolder.getLocale());
           errors.rejectValue("primaryGeoreferenceAssertion", "collectingEvent.primaryGeoreferenceAssertion.null", errorMessage);
-          return;
       } 
-      if (collectingEvent.getGeoReferenceAssertions().contains(collectingEvent.getPrimaryGeoreferenceAssertion())) {
+      if (assertionsSize > 0 && collectingEvent.getGeoReferenceAssertions().contains(collectingEvent.getPrimaryGeoreferenceAssertion())) {
           String errorMessage = messageSource.getMessage("collectingEvent.primaryGeoreferenceAssertion.inList",
           null, LocaleContextHolder.getLocale());
           errors.rejectValue("primaryGeoreferenceAssertion", "collectingEvent.primaryGeoreferenceAssertion.inList", errorMessage);
-          return;
       }
     }
 
