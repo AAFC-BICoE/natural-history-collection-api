@@ -51,7 +51,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     testCollectingEvent = CollectingEventFactory.newCollectingEvent()
      .startEventDateTime(LocalDateTime.of(startDate, startTime)).startEventDateTimePrecision((byte) 8)
      .endEventDateTime(LocalDateTime.of(endDate, endTime)).endEventDateTimePrecision((byte) 8)
-     .verbatimEventDateTime("XI-02-1798").build();
+     .verbatimEventDateTime("XI-02-1798").uuid(UUID.randomUUID()).build();
 
      testCollectingEvent.setGroup("amf");
 
@@ -94,7 +94,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   public void when_deleteAsUserFromEventGroup_Eventdeleted(){
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("amf");
-    ce.setUuid(UUID.randomUUID());
+    ce.setUuid(null);
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());    
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),

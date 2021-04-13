@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnCreate;
+import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +21,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -37,7 +41,8 @@ public class CollectingEventManagedAttribute implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
+  @Null(groups = OnCreate.class)
+  @NotNull(groups = OnUpdate.class)
   @Column(name = "uuid", unique = true)
   private UUID uuid;
 

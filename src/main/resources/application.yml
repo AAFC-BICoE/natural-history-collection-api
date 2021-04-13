@@ -9,6 +9,11 @@ spring:
     liquibase-schema: collection
   jpa:
     open-in-view: false
+    properties:
+      javax:
+        properties:
+          validation:
+            mode: none
   # Allow grace timeout period for 20 seconds
   lifecycle.timeout-per-shutdown-phase: 20s
 crnk:

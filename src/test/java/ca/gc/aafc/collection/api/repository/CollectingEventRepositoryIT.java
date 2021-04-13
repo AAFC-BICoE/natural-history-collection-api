@@ -285,7 +285,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     GeoreferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
     ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
-    ce.setUuid(UUID.randomUUID());
     ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
