@@ -8,7 +8,7 @@
     <changeSet id="30-Specify_Primary_GeoReference_assertion" context="schema-change" author="Steven Luu">
         <addColumn tableName="collecting_event">
             <column name="primary_georeference_assertion_id" type="integer">
-                <constraints foreignKeyName="fk_primary_georeference_assertion_id" references="georeference_assertion(id)"/>
+                <constraints foreignKeyName="fk_primary_georeference_assertion_id" references="georeference_assertion(id)" unique="true"/>
             </column>
         </addColumn>
     </changeSet>
