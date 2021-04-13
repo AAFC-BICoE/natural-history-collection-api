@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
@@ -34,6 +35,8 @@ import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnCreate;
+import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -68,7 +71,8 @@ public class CollectingEvent implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
+  @Null(groups = OnCreate.class)
+  @NotNull(groups = OnUpdate.class)
   @Column(unique = true)
   private UUID uuid;
 

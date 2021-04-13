@@ -20,6 +20,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -31,6 +32,8 @@ import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.collection.api.validation.ValidGeoreferenceVerificationStatus;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnCreate;
+import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,7 +63,8 @@ public class GeoreferenceAssertion implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
+  @Null(groups = OnCreate.class)
+  @NotNull(groups = OnUpdate.class)
   @Column(unique = true)
   private UUID uuid;
 
