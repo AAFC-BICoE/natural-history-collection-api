@@ -20,7 +20,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import java.time.OffsetDateTime;
@@ -46,7 +45,6 @@ public class CollectorGroup implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @Null(groups = OnCreate.class)
   @NotNull(groups = OnUpdate.class)
   @Column(unique = true)
   private UUID uuid;
