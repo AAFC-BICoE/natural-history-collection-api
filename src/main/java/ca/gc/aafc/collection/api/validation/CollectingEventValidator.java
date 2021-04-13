@@ -1,10 +1,7 @@
 package ca.gc.aafc.collection.api.validation;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import javax.inject.Inject;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,7 +14,6 @@ import ca.gc.aafc.collection.api.entities.CollectingEvent;
 @Component
 public class CollectingEventValidator implements Validator {
     
-    @Inject
     private MessageSource messageSource;
 
     public CollectingEventValidator(MessageSource messageSource) {
@@ -36,14 +32,14 @@ public class CollectingEventValidator implements Validator {
         .map(List::size).orElse(0);
 
         if (assertionsSize > 0 && collectingEvent.getPrimaryGeoreferenceAssertion() == null) {
-            String errorMessage = messageSource.getMessage("primaryGeoreferenceAssertion.null",
+            String errorMessage = messageSource.getMessage("collectingEvent.primaryGeoreferenceAssertion.null",
             null, LocaleContextHolder.getLocale());
-            errors.rejectValue("primaryGeoreferenceAssertion", "primaryGeoreferenceAssertion.null", errorMessage);
+            errors.rejectValue("primaryGeoreferenceAssertion", "collectingEvent.primaryGeoreferenceAssertion.null", errorMessage);
         } 
         if (collectingEvent.getGeoReferenceAssertions().contains(collectingEvent.getPrimaryGeoreferenceAssertion())) {
-            String errorMessage = messageSource.getMessage("primaryGeoreferenceAssertion.inList",
+            String errorMessage = messageSource.getMessage("collectingEvent.primaryGeoreferenceAssertion.inList",
             null, LocaleContextHolder.getLocale());
-            errors.rejectValue("primaryGeoreferenceAssertion", "primaryGeoreferenceAssertion.inList", errorMessage);
+            errors.rejectValue("primaryGeoreferenceAssertion", "collectingEvent.primaryGeoreferenceAssertion.inList", errorMessage);
         }
     }
 
