@@ -27,7 +27,7 @@ public class GeoreferenceAssertionValidator implements Validator {
   @Override
   public void validate(@NonNull Object target, @NonNull Errors errors) {
     if (!supports(target.getClass())) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("GeorefenceAssertionValidator not supported for class " + target.getClass().toString());
     }
     GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
     
