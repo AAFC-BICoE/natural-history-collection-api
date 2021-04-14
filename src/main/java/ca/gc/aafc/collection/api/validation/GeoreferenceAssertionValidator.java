@@ -26,8 +26,10 @@ public class GeoreferenceAssertionValidator implements Validator {
 
   @Override
   public void validate(@NonNull Object target, @NonNull Errors errors) {
-    if (!(target instanceof GeoreferenceAssertion)) {
-        throw new ClassCastException();
+    if (!supports(target.getClass())) {
+      String errorMessage = messageSource.getMessage("classCast.invalid", new String[] {"GeoreferenceAssertion"},
+        LocaleContextHolder.getLocale());
+      errors.reject("georeferenceAssertion.GeoreferenceVerificationStatus.invalid", errorMessage);   
     }
     GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
     
