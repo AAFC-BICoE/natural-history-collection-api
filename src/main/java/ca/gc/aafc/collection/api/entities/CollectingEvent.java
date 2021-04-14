@@ -86,7 +86,7 @@ public class CollectingEvent implements DinaEntity {
       mappedBy = "collectingEvent",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
       )
-  private List<GeoreferenceAssertion> geoReferenceAssertions;
+  private List<GeoreferenceAssertion> otherGeoReferenceAssertions;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @ToString.Exclude
