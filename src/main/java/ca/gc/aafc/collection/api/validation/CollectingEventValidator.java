@@ -28,7 +28,7 @@ public class CollectingEventValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
       CollectingEvent collectingEvent = (CollectingEvent) target;
-      int assertionsSize = Optional.ofNullable(collectingEvent.getGeoReferenceAssertions())
+      int assertionsSize = Optional.ofNullable(collectingEvent.getOtherGeoReferenceAssertions())
       .map(List::size).orElse(0);
       if ((collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null)
             || (collectingEvent.getEndEventDateTime() != null
@@ -42,7 +42,7 @@ public class CollectingEventValidator implements Validator {
           null, LocaleContextHolder.getLocale());
           errors.rejectValue("primaryGeoreferenceAssertion", "collectingEvent.primaryGeoreferenceAssertion.null", errorMessage);
       } 
-      if (assertionsSize > 0 && collectingEvent.getGeoReferenceAssertions().contains(collectingEvent.getPrimaryGeoreferenceAssertion())) {
+      if (assertionsSize > 0 && collectingEvent.getOtherGeoReferenceAssertions().contains(collectingEvent.getPrimaryGeoreferenceAssertion())) {
           String errorMessage = messageSource.getMessage("collectingEvent.primaryGeoreferenceAssertion.inList",
           null, LocaleContextHolder.getLocale());
           errors.rejectValue("primaryGeoreferenceAssertion", "collectingEvent.primaryGeoreferenceAssertion.inList", errorMessage);

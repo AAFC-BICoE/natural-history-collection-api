@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -60,7 +59,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     collectingEvent.setUuid(UUID.randomUUID());
     geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
-    collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
+    collectingEvent.setOtherGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     collectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertion);
     assertNull(collectingEvent.getId());
     dbService.save(collectingEvent, false);
@@ -73,7 +72,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .geoReferenceAssertions(Collections.singletonList(geoReferenceAssertion))
+        .otherGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion))
         .primaryGeoreferenceAssertion(geoReferenceAssertion)        
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
@@ -104,11 +103,11 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertEquals(
       geoReferenceAssertion.getId(),
-      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());    
+      fetchedCollectingEvent.getOtherGeoReferenceAssertions().iterator().next().getId());
     assertEquals(geoReferenceAssertion.getId(), fetchedCollectingEvent.getPrimaryGeoreferenceAssertion().getId());
     assertEquals(
       12.123456,
-      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
+      fetchedCollectingEvent.getOtherGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());
