@@ -8,23 +8,24 @@ import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
+import lombok.NonNull;
 
 @Component
 public class GeoreferenceAssertionValidator implements Validator {
 
-  private MessageSource messageSource;
+  private final MessageSource messageSource;
 
   public GeoreferenceAssertionValidator(MessageSource messageSource) {
     this.messageSource = messageSource;
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return GeoreferenceAssertion.class.isAssignableFrom(clazz);
   }
 
   @Override
-  public void validate(Object target, Errors errors) {
+  public void validate(@NonNull Object target, @NonNull Errors errors) {
     GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
     
     if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&

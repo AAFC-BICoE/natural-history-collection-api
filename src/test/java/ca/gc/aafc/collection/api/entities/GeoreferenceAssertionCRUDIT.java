@@ -50,6 +50,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
         .dwcDecimalLongitude(45.01)
         .dwcCoordinateUncertaintyInMeters(10)
         .dwcGeoreferencedDate(testGeoreferencedDate)
+        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .build();
     geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion);

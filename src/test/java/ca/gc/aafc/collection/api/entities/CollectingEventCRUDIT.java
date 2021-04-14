@@ -73,7 +73,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
+        .geoReferenceAssertions(Collections.singletonList(geoReferenceAssertion))
         .primaryGeoreferenceAssertion(geoReferenceAssertion)        
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
