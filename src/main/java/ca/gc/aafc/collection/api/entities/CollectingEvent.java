@@ -46,6 +46,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Past;
+
 @Entity
 @AllArgsConstructor
 @Builder
@@ -98,12 +100,14 @@ public class CollectingEvent implements DinaEntity {
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime startEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
   // Set by applyEndISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime endEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
@@ -201,7 +205,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime - the time
+   * @param endISOEventDateTime the ISODateTime
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {

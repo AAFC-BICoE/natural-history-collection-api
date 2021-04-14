@@ -145,6 +145,11 @@
         <version>${maven-checkstyle-plugin.version}</version>
         <dependencies>
           <dependency>
+            <groupId>io.github.aafc-bicoe</groupId>
+            <artifactId>dina-base-api</artifactId>
+            <version>${dina-base-api.version}</version>
+          </dependency>
+          <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
             <version>${checkstyle.version}</version>

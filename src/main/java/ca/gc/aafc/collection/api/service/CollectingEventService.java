@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -13,7 +15,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
@@ -33,13 +34,13 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     entity.setUuid(UUID.randomUUID());
     assignAutomaticValues(entity);
     linkAssertions(entity);
-    validatePrimaryGeoreferenceAssertion(entity);
+    validateCollectingEvent(entity);
   }
 
   @Override
   public void preUpdate(CollectingEvent entity) {
     linkAssertions(entity);
-    validatePrimaryGeoreferenceAssertion(entity);
+    validateCollectingEvent(entity);
   }
 
   private static void linkAssertions(CollectingEvent entity) {
@@ -56,10 +57,10 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     }
   }
 
-  public void validatePrimaryGeoreferenceAssertion(CollectingEvent entity) {
+  public void validateCollectingEvent(CollectingEvent entity) {
     Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
     collectingEventValidator.validate(entity, errors);
-
+    
     if (!errors.hasErrors()) {
       return;
     }
@@ -68,7 +69,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     errorMsg.ifPresent(msg -> {
       throw new IllegalArgumentException(msg);
     });
-
   }
 
 }
