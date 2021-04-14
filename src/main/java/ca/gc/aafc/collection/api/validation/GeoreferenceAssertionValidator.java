@@ -7,31 +7,41 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
+import lombok.NonNull;
 
 @Component
 public class GeoreferenceAssertionValidator implements Validator {
 
-    private MessageSource messageSource;
+  private final MessageSource messageSource;
 
-    public GeoreferenceAssertionValidator(MessageSource messageSource) {
-        this.messageSource = messageSource;
+  public GeoreferenceAssertionValidator(MessageSource messageSource) {
+    this.messageSource = messageSource;
+  }
+
+  @Override
+  public boolean supports(@NonNull Class<?> clazz) {
+    return GeoreferenceAssertion.class.isAssignableFrom(clazz);
+  }
+
+  @Override
+  public void validate(@NonNull Object target, @NonNull Errors errors) {
+    if (!supports(target.getClass())) {
+      throw new IllegalArgumentException("GeorefenceAssertionValidator not supported for class " + target.getClass().toString());
     }
-
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return GeoreferenceAssertion.class.isAssignableFrom(clazz);
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-        GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
-
-        if (georeferenceAssertion.getCollectingEvent() != null && georeferenceAssertion.getCollectingEvent().getPrimaryGeoreferenceAssertion() == null) {
-            String errorMessage = messageSource.getMessage("georeferenceAssertion.collectingEvent.primaryGeoreferenceAssertion.null",
-                null, LocaleContextHolder.getLocale());
-            errors.rejectValue("collectingEvent", "georeferenceAssertion.collectingEvent.primaryGeoreferenceAssertion.null", errorMessage);
-        }
-        
-    }
+    GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
     
+    if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
+        (georeferenceAssertion.getDwcDecimalLatitude() != null || georeferenceAssertion.getDwcDecimalLongitude() != null || georeferenceAssertion.getDwcCoordinateUncertaintyInMeters() != null)) {
+            String errorMessage = messageSource.getMessage("georeferenceAssertion.GeoreferenceVerificationStatus.invalid", null,
+                LocaleContextHolder.getLocale());
+            errors.rejectValue("dwcGeoreferenceVerificationStatus","georeferenceAssertion.GeoreferenceVerificationStatus.invalid", errorMessage);   
+        }
+
+    if (georeferenceAssertion.getCollectingEvent() != null && georeferenceAssertion.getCollectingEvent().getPrimaryGeoreferenceAssertion() == null) {
+        String errorMessage = messageSource.getMessage("georeferenceAssertion.collectingEvent.primaryGeoreferenceAssertion.null",
+            null, LocaleContextHolder.getLocale());
+        errors.rejectValue("collectingEvent", "georeferenceAssertion.collectingEvent.primaryGeoreferenceAssertion.null", errorMessage);
+    }
+  }
 }

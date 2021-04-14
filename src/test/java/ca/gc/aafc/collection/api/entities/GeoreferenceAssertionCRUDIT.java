@@ -3,12 +3,15 @@ package ca.gc.aafc.collection.api.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +61,6 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(45.01, fetchedGeoreferenceAssertion.getDwcDecimalLongitude());
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
     assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
-    assertEquals(georeferenceVerificationStatus, fetchedGeoreferenceAssertion.getDwcGeoreferenceVerificationStatus());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
   }
 }
