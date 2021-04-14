@@ -204,7 +204,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
     QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
 
-    List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
+    List<IncludeRelationSpec> includeRelationSpec = Stream.of("otherGeoReferenceAssertions")
         .map(Arrays::asList)
         .map(IncludeRelationSpec::new)
         .collect(Collectors.toList());
