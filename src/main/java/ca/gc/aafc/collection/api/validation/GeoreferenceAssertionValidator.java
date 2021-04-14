@@ -26,6 +26,9 @@ public class GeoreferenceAssertionValidator implements Validator {
 
   @Override
   public void validate(@NonNull Object target, @NonNull Errors errors) {
+    if (!(target instanceof GeoreferenceAssertion)) {
+        throw new ClassCastException();
+    }
     GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
     
     if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
