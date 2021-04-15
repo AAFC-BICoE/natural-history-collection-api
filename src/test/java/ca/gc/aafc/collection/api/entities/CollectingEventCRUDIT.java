@@ -59,7 +59,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     collectingEvent.setUuid(UUID.randomUUID());
     geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
-    collectingEvent.setOtherGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
+    collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     collectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertion);
     assertNull(collectingEvent.getId());
     dbService.save(collectingEvent, false);
@@ -72,7 +72,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     geoReferenceAssertion.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .otherGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion))
+        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
         .primaryGeoreferenceAssertion(geoReferenceAssertion)        
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
@@ -103,11 +103,11 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertEquals(
       geoReferenceAssertion.getId(),
-      fetchedCollectingEvent.getOtherGeoReferenceAssertions().iterator().next().getId());
+      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());
     assertEquals(geoReferenceAssertion.getId(), fetchedCollectingEvent.getPrimaryGeoreferenceAssertion().getId());
     assertEquals(
       12.123456,
-      fetchedCollectingEvent.getOtherGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
+      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());
