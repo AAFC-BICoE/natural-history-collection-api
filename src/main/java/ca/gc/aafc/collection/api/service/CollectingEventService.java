@@ -1,23 +1,21 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
-
+import ca.gc.aafc.dina.jpa.BaseDAO;
+import ca.gc.aafc.dina.service.DefaultDinaService;
+import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.service.DefaultDinaService;
-import lombok.NonNull;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
@@ -44,7 +42,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private static void linkAssertions(CollectingEvent entity) {
-    List<GeoreferenceAssertion> geos = entity.getOtherGeoReferenceAssertions();
+    List<GeoreferenceAssertion> geos = entity.getGeoReferenceAssertions();
     if (CollectionUtils.isNotEmpty(geos)) {
       geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
     }
@@ -60,7 +58,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateCollectingEvent(CollectingEvent entity) {
     Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
     collectingEventValidator.validate(entity, errors);
-    
+
     if (!errors.hasErrors()) {
       return;
     }

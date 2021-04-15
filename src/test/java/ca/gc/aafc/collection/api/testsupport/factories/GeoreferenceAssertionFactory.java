@@ -22,6 +22,7 @@ public class GeoreferenceAssertionFactory implements TestableEntityFactory<Geore
     public static GeoreferenceAssertion.GeoreferenceAssertionBuilder newGeoreferenceAssertion() {
       return GeoreferenceAssertion
           .builder()
+          .uuid(UUID.randomUUID())
           .createdBy("test user");
     }
   }

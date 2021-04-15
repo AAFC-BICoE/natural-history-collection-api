@@ -32,7 +32,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,12 +39,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
@@ -84,25 +78,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
-    .uuid(UUID.randomUUID())
-    .build();
-  private final GeoreferenceAssertion geoReferenceAssertionA = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-    .dwcDecimalLatitude(0.0)
-    .dwcDecimalLongitude(12.34)
-    .dwcGeoreferencedDate(testGeoreferencedDate)
-    .uuid(UUID.randomUUID())
-    .build();
-  private final GeoreferenceAssertion geoReferenceAssertionB = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-    .dwcDecimalLatitude(9.87654321)
-    .dwcDecimalLongitude(177.77)
-    .dwcGeoreferencedDate(testGeoreferencedDate)
-    .uuid(UUID.randomUUID())
-    .build();
-  private final GeoreferenceAssertion primaryGeoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-    .dwcDecimalLatitude(11.11)
-    .dwcDecimalLongitude(22.22)
-    .dwcGeoreferencedDate(testGeoreferencedDate)
-    .uuid(UUID.randomUUID())
     .build();
   private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
@@ -145,66 +120,17 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .geographicPlaceNameSource(geographicPlaceNameSource)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .build();
-    testCollectingEvent.setOtherGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-    testCollectingEvent.setPrimaryGeoreferenceAssertion(primaryGeoReferenceAssertion);
+    testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
 
     collectingEventService.create(testCollectingEvent);
   }
-
-  @Test
-  public void updateCollectingEvent_unassignPrimaryGeoreferenceAssertionWithOneGeoreferenceAssertion_throwsIllegalArgumentException() {
-    testCollectingEvent.setPrimaryGeoreferenceAssertion(null);
-    IllegalArgumentException exception = 
-    assertThrows(IllegalArgumentException.class, () -> {
-      collectingEventService.update(testCollectingEvent);
-    });
-
-    String expectedMessage = "Must have a Primary Georeference Assertion if the Georeference Assertion list is not empty";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
-  }
-
-  @Test
-  public void updateCollectingEvent_setPrimaryAssertionToOneInList_throwsIllegalArgumentException() {
-    List<GeoreferenceAssertion> georef = new ArrayList<>();
-    georef.add(testCollectingEvent.getOtherGeoReferenceAssertions().iterator().next());
-    georef.add(geoReferenceAssertionA);
-    georef.add(geoReferenceAssertionB);
-    testCollectingEvent.setOtherGeoReferenceAssertions(georef);
-    testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertionA);
-    IllegalArgumentException exception = 
-      assertThrows(IllegalArgumentException.class, () -> {
-        collectingEventService.update(testCollectingEvent);
-      });
-
-    String expectedMessage = "Primary Georeference must not be in the Georeference Assertion list";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
-  }
-
-  @Test
-  public void updateCollectingEvent_changePrimaryGeoreferenceAssertion() {
-    List<GeoreferenceAssertion> georef = new ArrayList<>();
-    georef.add(testCollectingEvent.getOtherGeoReferenceAssertions().iterator().next());
-    georef.add(primaryGeoReferenceAssertion);
-    georef.add(geoReferenceAssertionB);
-    testCollectingEvent.setOtherGeoReferenceAssertions(georef);
-    testCollectingEvent.setPrimaryGeoreferenceAssertion(geoReferenceAssertionA);
-    collectingEventService.update(testCollectingEvent);
-    assertEquals(testCollectingEvent.getOtherGeoReferenceAssertions().size(), 3);
-    assertEquals(testCollectingEvent.getPrimaryGeoreferenceAssertion().getDwcDecimalLatitude(), geoReferenceAssertionA.getDwcDecimalLatitude());
-    assertEquals(testCollectingEvent.getPrimaryGeoreferenceAssertion().getDwcDecimalLongitude(), geoReferenceAssertionA.getDwcDecimalLongitude());
-  }
-
 
   @Test
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
     QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
 
-    List<IncludeRelationSpec> includeRelationSpec = Stream.of("otherGeoReferenceAssertions")
+    List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
         .map(Arrays::asList)
         .map(IncludeRelationSpec::new)
         .collect(Collectors.toList());
@@ -228,11 +154,11 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     
     assertEquals(
       12.123456,
-      collectingEventDto.getOtherGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
+      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
 
     assertEquals(
       testGeoreferencedDate,
-      collectingEventDto.getOtherGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());
+      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());          
 
     assertEquals("26.089, 106.36", collectingEventDto.getDwcVerbatimCoordinates());
     assertEquals(dwcRecordedBy, collectingEventDto.getDwcRecordedBy());
@@ -307,10 +233,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
       String expectedMessage = "The start and end dates do not create a valid timeline";
       String actualMessage = exception.getMessage();
-  
+
       assertTrue(actualMessage.contains(expectedMessage));
     }
-      
+
 
   @Test
   public void startTimeAfterEndTime_throwsIllegalArgumentException() {
@@ -324,18 +250,16 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
       String expectedMessage = "The start and end dates do not create a valid timeline";
       String actualMessage = exception.getMessage();
-  
-      assertTrue(actualMessage.contains(expectedMessage)); 
+
+      assertTrue(actualMessage.contains(expectedMessage));
   }
 
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
     GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
-    GeoreferenceAssertionDto primaryGeoRef = new GeoreferenceAssertionDto();
     geoRef.setDwcCoordinateUncertaintyInMeters(10);
     GeoreferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
-    GeoreferenceAssertionDto primaryDto = geoReferenceAssertionRepository.create(primaryGeoRef);
-    ce.setOtherGeoReferenceAssertions(Collections.singletonList(dto));
+    ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());
@@ -353,8 +277,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
     ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);
-    ce.setPrimaryGeoreferenceAssertion(primaryDto);
-
     return ce;
   }
 

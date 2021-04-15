@@ -30,6 +30,5 @@
   <include file="db/changelog/migrations/27-Add_place_name_source_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/28-Add_initial_physical_entity.xml"/>
   <include file="db/changelog/migrations/29-Move_georeference_status_into_assertion.xml"/>
-  <include file="db/changelog/migrations/30-Specify_Primary_GeoReference_assertion.xml"/>
 </databaseChangeLog>
 
