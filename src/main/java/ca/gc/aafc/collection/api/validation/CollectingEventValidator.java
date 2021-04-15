@@ -33,8 +33,7 @@ public class CollectingEventValidator implements Validator {
       && collectingEvent.getStartEventDateTime().isAfter(collectingEvent.getEndEventDateTime()))) {
       String errorMessage = messageSource.getMessage(
         "validation.constraint.violation.validEventDateTime",
-        null,
-        LocaleContextHolder.getLocale());
+        null, LocaleContextHolder.getLocale());
       errors.reject("validation.constraint.violation.validEventDateTime", errorMessage);
     }
   }
