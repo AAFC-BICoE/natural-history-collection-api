@@ -58,7 +58,7 @@ public class CollectingEventDto {
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @DiffIgnore
-  private List<GeoreferenceAssertionDto> otherGeoReferenceAssertions = new ArrayList<>();
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   @JsonApiRelation
   private GeoreferenceAssertionDto primaryGeoreferenceAssertion;
