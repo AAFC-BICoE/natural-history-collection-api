@@ -1,34 +1,24 @@
 package ca.gc.aafc.collection.api.repository;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.service.GeoReferenceAssertionService;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import javax.inject.Inject;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
-import io.crnk.core.queryspec.QuerySpec;
-
-
-import javax.inject.Inject;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class GeoreferenceAssertionIT extends CollectionModuleBaseIT{
