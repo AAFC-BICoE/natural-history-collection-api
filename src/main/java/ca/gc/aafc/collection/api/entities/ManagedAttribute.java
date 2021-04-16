@@ -62,7 +62,6 @@ public class ManagedAttribute implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @Null(groups = OnCreate.class)
   @NotNull(groups = OnUpdate.class)
   @Column(name = "uuid", unique = true)
   private UUID uuid;
