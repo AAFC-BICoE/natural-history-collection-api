@@ -1,0 +1,16 @@
+= Managed Attributes
+
+Managed Attributes can be fetched either by UUID or by a "{component}.{key}" formatted url path.
+
+* component: The value of the ManagedAttribute's managedAttributeComponent field.
+* key: The value of the ManagedAttribute's unique "key" field.
+
+e.g.
+
+```
+/managed-attribute/collecting_event.my_managed_attribute.
+```
+
+```
+/managed-attribute/32746f92-0530-4913-b891-242b1ff629b6.
+```
