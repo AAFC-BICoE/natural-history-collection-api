@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -18,13 +19,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
-
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -39,11 +41,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.Past;
 
 @Entity
 @AllArgsConstructor
@@ -58,6 +60,7 @@ import javax.validation.constraints.Past;
   typeClass = ListArrayType.class
 )
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
@@ -158,12 +161,15 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 100)
   private String geographicPlaceName;
 
+  /** Map of Managed attribute key to value object. */
+  @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private GeographicPlaceNameSource geographicPlaceNameSource;
-
-  @OneToMany(mappedBy = "event")
-  private List<CollectingEventManagedAttribute> managedAttributes = new ArrayList<>();
 
   @Type(type = "jsonb")
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
@@ -218,6 +224,14 @@ public class CollectingEvent implements DinaEntity {
     return ISODateTime.builder().localDateTime(endEventDateTime)
         .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
         .build();
+  }
+
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class ManagedAttributeValue {
+    private String assignedValue;
   }
 
 }

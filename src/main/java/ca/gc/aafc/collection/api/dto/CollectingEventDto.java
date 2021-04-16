@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -19,6 +20,7 @@ import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -81,11 +83,8 @@ public class CollectingEventDto {
 
   private String dwcVerbatimLocality;
 
-
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @JsonApiRelation
-  @DiffIgnore
-  private List<CollectingEventManagedAttributeDto> managedAttributes = new ArrayList<>();
+  /** Map of Managed attribute key to value object. */
+  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
 
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;
