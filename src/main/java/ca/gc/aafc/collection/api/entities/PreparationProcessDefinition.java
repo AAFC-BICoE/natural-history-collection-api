@@ -42,7 +42,6 @@ public class PreparationProcessDefinition implements DinaEntity {
   private UUID uuid;
 
   @NotBlank
-  @Column(unique = true)
   private String name;
 
   @NotBlank

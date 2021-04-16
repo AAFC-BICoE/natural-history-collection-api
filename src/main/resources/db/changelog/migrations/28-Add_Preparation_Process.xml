@@ -13,7 +13,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="name" type="VARCHAR(250)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false" />
             </column>
             <column name="prep_group" type="VARCHAR(250)">
                 <constraints nullable="false" unique="true"/>

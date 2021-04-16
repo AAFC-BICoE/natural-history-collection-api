@@ -19,14 +19,13 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private BaseDAO baseDAO;
   private PreparationProcessService processService;
-  private PreparationProcessDefinitionService definitionService;
   private PreparationProcess prepUnderTest;
   private PreparationProcessDefinition definition;
 
   @BeforeEach
   void setUp() {
     this.processService = new PreparationProcessService(baseDAO);
-    this.definitionService = new PreparationProcessDefinitionService(baseDAO);
+    PreparationProcessDefinitionService definitionService = new PreparationProcessDefinitionService(baseDAO);
 
     this.definition = newDefinition();
     definitionService.create(definition);
