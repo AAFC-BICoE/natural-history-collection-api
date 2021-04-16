@@ -56,17 +56,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   public void validateCollectingEvent(CollectingEvent entity) {
-    Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
-    collectingEventValidator.validate(entity, errors);
-
-    if (!errors.hasErrors()) {
-      return;
-    }
-
-    Optional<String> errorMsg = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).findAny();
-    errorMsg.ifPresent(msg -> {
-      throw new IllegalArgumentException(msg);
-    });
+    validateBusinessRules(entity, collectingEventValidator);
   }
 
 }

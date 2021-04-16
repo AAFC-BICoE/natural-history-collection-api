@@ -26,6 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -227,7 +228,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       testCollectingEvent = CollectingEventFactory.newCollectingEvent()
           .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
           .build();
-      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+    ValidationException exception = assertThrows(ValidationException.class, () -> {
         collectingEventService.create(testCollectingEvent);
       });
 
@@ -244,7 +245,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
           .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
           .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
           .build();
-      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+    ValidationException exception = assertThrows(ValidationException.class, () -> {
         collectingEventService.create(testCollectingEvent);
       });
 
