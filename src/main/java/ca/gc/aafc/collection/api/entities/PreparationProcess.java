@@ -58,7 +58,7 @@ public class PreparationProcess implements DinaEntity {
 
   @OneToOne(cascade = CascadeType.ALL)
   @NotNull
-  @JoinColumn(name = "preparation_process_definition_id", referencedColumnName = "id")
+  @JoinColumn(name = "preparation_process_definition_id", referencedColumnName = "id", unique = true)
   private PreparationProcessDefinition preparationProcessDefinition;
 
 }
