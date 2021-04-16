@@ -66,7 +66,7 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
     @Test
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
       CollectorGroupDto cg = new CollectorGroupDto();
-      cg.setUuid(UUID.randomUUID());
+      cg.setUuid(null);
       cg.setName(TEST_NEW_COLLECTOR_GROUP);
       cg.setAgentIdentifiers(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("agent").build()));

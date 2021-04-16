@@ -34,6 +34,7 @@ import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.Past;
 
 @Entity
 @AllArgsConstructor
@@ -59,10 +62,6 @@ import lombok.Setter;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
-  public enum GeoreferenceVerificationStatus {
-    GEOREFERENCING_NOT_POSSIBLE
-  }
-
   public enum GeographicPlaceNameSource {
     OSM
   }
@@ -72,7 +71,7 @@ public class CollectingEvent implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
+  @NotNull(groups = OnUpdate.class)
   @Column(unique = true)
   private UUID uuid;
 
@@ -93,12 +92,14 @@ public class CollectingEvent implements DinaEntity {
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime startEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
   // Set by applyEndISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime endEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
@@ -159,10 +160,6 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
-  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
-
-  @Type(type = "pgsql_enum")
-  @Enumerated(EnumType.STRING)
   private GeographicPlaceNameSource geographicPlaceNameSource;
 
   @OneToMany(mappedBy = "event")
@@ -200,7 +197,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime - the time
+   * @param endISOEventDateTime the ISODateTime
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {

@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
@@ -12,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +41,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final String geographicPlaceName = "Morocco";
-  private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   @SneakyThrows
@@ -58,6 +56,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   public void testSave() {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
        .build();
+    collectingEvent.setUuid(UUID.randomUUID());
     dbService.save(geoReferenceAssertion,false);
     collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     assertNull(collectingEvent.getId());
@@ -70,7 +69,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
     dbService.save(geoReferenceAssertion,false);
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))        
+        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
         .startEventDateTime(testDateTime)
         .startEventDateTimePrecision((byte) 8)
         .dwcRecordedBy(dwcRecordedBy)
@@ -87,8 +86,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .dwcStateProvince(dwcStateProvince)
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .geographicPlaceName(geographicPlaceName)
-        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+        .uuid(UUID.randomUUID())
         .build();
     dbService.save(collectingEvent,false);
 
@@ -100,10 +99,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertEquals(
       geoReferenceAssertion.getId(),
-      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());    
+      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());
     assertEquals(
       12.123456,
-      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
+      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());
@@ -118,7 +117,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
     assertEquals(geographicPlaceName, fetchedCollectingEvent.getGeographicPlaceName());
-    assertEquals(georeferenceVerificationStatus, fetchedCollectingEvent.getDwcGeoreferenceVerificationStatus());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
       geographicPlaceNameSourceDetail.getSourceID(),

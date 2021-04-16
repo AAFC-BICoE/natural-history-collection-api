@@ -3,16 +3,20 @@ package ca.gc.aafc.collection.api.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 
@@ -22,6 +26,8 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
   private DatabaseSupportService dbService;
 
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
+  private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
+
 
   private List<UUID> agentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
@@ -43,6 +49,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
         .dwcDecimalLongitude(45.01)
         .dwcCoordinateUncertaintyInMeters(10)
         .dwcGeoreferencedDate(testGeoreferencedDate)
+        .dwcGeoreferenceVerificationStatus(georeferenceVerificationStatus)
         .build();
     dbService.save(geoReferenceAssertion);
 
