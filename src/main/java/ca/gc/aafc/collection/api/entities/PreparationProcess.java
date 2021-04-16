@@ -12,11 +12,14 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
@@ -52,5 +55,10 @@ public class PreparationProcess implements DinaEntity {
   @NotNull
   @Column(name = "agent_id")
   private UUID agentId;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @NotNull
+  @JoinColumn(name = "preparation_process_definition_id", referencedColumnName = "id")
+  private PreparationProcessDefinition preparationProcessDefinition;
 
 }
