@@ -12,13 +12,13 @@ import lombok.NonNull;
 @Service
 public class CollectorGroupService extends DefaultDinaService<CollectorGroup> {
 
-    public CollectorGroupService(@NonNull BaseDAO baseDAO) {
-        super(baseDAO);
-    }
+  public CollectorGroupService(@NonNull BaseDAO baseDAO) {
+    super(baseDAO);
+  }
 
-    @Override
-    protected void preCreate(CollectorGroup entity) {    
-      entity.setUuid(UUID.randomUUID());    
-    }
-    
+  @Override
+  protected void preCreate(CollectorGroup entity) {
+    entity.setUuid(UUID.randomUUID());
+  }
+
 }

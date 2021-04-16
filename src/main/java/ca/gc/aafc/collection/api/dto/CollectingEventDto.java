@@ -13,14 +13,15 @@ import javax.annotation.Nullable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.apache.commons.lang3.StringUtils;
+import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.GeoreferenceVerificationStatus;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
@@ -58,6 +59,7 @@ public class CollectingEventDto {
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @DiffIgnore
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
@@ -97,7 +99,8 @@ public class CollectingEventDto {
   private String dwcStateProvince;
   private String geographicPlaceName;
 
-  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+  private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
+  private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

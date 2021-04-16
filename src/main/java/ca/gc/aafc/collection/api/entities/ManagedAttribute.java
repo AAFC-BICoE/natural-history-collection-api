@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -26,6 +27,8 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnCreate;
+import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,7 +62,8 @@ public class ManagedAttribute implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
+  @Null(groups = OnCreate.class)
+  @NotNull(groups = OnUpdate.class)
   @Column(name = "uuid", unique = true)
   private UUID uuid;
 
@@ -68,7 +72,8 @@ public class ManagedAttribute implements DinaEntity {
   @Column(updatable = false)
   private String name;
 
-  @NotBlank
+  @Null(groups = OnCreate.class)
+  @NotBlank(groups = OnUpdate.class)
   @Size(max = 50)
   @Column(updatable = false)
   private String key;

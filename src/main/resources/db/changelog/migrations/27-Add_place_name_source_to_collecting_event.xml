@@ -4,11 +4,16 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="27-Move_managed_attributes_to_jsonb_based_column" context="schema-change" author="poffm">
+    <changeSet id="27-Add_place_name_source_to_collecting_event" context="schema-change" author="Keyuk">
+        <sql>
+            CREATE TYPE geographic_place_name_source AS ENUM (
+            'OSM'
+            );
+        </sql>
         <addColumn tableName="collecting_event">
-            <column name="managed_attribute_values" type="jsonb" defaultValue="{}" />
+            <column name="geographic_place_name_source" type="geographic_place_name_source"/>
+            <column name="geographic_place_name_source_details" type="jsonb"/>
         </addColumn>
-        <dropTable tableName="collecting_event_managed_attribute" />
     </changeSet>
 
 </databaseChangeLog>

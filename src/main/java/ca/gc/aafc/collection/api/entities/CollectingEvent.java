@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
@@ -35,6 +36,7 @@ import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -60,10 +62,11 @@ import lombok.Setter;
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
-  public enum GeoreferenceVerificationStatus {
-    GEOREFERENCING_NOT_POSSIBLE
+  public enum GeographicPlaceNameSource {
+    OSM
   }
 
   @Id
@@ -71,7 +74,7 @@ public class CollectingEvent implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
+  @NotNull(groups = OnUpdate.class)
   @Column(unique = true)
   private UUID uuid;
 
@@ -92,12 +95,14 @@ public class CollectingEvent implements DinaEntity {
 
   // Set by applyStartISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime startEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
   // Set by applyEndISOEventDateTime
   @Setter(AccessLevel.NONE)
+  @Past
   private LocalDateTime endEventDateTime;
   @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
@@ -164,7 +169,11 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
-  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+  private GeographicPlaceNameSource geographicPlaceNameSource;
+
+  @Type(type = "jsonb")
+  @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
+  private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
@@ -194,7 +203,7 @@ public class CollectingEvent implements DinaEntity {
   /**
    *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
    * are always in sync.
-   * @param endISOEventDateTime - the time
+   * @param endISOEventDateTime the ISODateTime
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
     if (endISOEventDateTime == null) {
