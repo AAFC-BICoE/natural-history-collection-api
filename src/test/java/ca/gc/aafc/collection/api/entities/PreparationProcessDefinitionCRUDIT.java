@@ -40,14 +40,14 @@ class PreparationProcessDefinitionCRUDIT extends CollectionModuleBaseIT {
       definition.getUuid(),
       PreparationProcessDefinition.class);
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
-    Assertions.assertEquals(EXPECTED_GROUP, result.getPrepGroup());
+    Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
   }
 
   private static PreparationProcessDefinition newDefinition() {
     return PreparationProcessDefinition.builder()
       .name(EXPECTED_NAME)
-      .prepGroup(EXPECTED_GROUP)
+      .group(EXPECTED_GROUP)
       .createdBy(EXPECTED_CREATED_BY)
       .build();
   }

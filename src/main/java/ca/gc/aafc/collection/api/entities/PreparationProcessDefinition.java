@@ -46,8 +46,8 @@ public class PreparationProcessDefinition implements DinaEntity {
   private String name;
 
   @NotBlank
-  @Column(unique = true)
-  private String prepGroup;
+  @Column(name = "prep_group", unique = true)
+  private String group;
 
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
