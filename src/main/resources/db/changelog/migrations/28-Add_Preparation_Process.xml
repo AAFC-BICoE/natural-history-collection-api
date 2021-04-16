@@ -5,22 +5,35 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <changeSet id="28-Add_Preparation_Process" context="schema-change" author="keyuk">
-        <createTable tableName="preparation_process">
-            <!--     id       -->
+        <createTable tableName="preparation_process_definition">
             <column autoIncrement="true" name="id" type="SERIAL">
-                <constraints primaryKey="true" primaryKeyName="pk_preparation_process_id"/>
+                <constraints primaryKey="true" primaryKeyName="pk_preparation_process_definition_id"/>
             </column>
-            <!--     uuid       -->
             <column name="uuid" type="uuid">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <!--     created_on       -->
+            <column name="name" type="VARCHAR(250)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="prep_group" type="VARCHAR(250)">
+                <constraints nullable="false" unique="true" />
+            </column>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
-            <!--     created_by       -->
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
-            <!--     agent_id       -->
+        </createTable>
+        <createTable tableName="preparation_process">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_preparation_process_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="created_by" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
             <column name="agent_id" type="uuid">
                 <constraints nullable="false"/>
             </column>
