@@ -26,6 +26,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -68,6 +69,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   private String createdBy;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @NotNull
   @ToString.Exclude
   private CollectingEvent collectingEvent;
 
