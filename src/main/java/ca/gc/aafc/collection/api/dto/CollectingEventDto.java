@@ -57,7 +57,8 @@ public class CollectingEventDto {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @DiffIgnore
-  private List<GeoreferenceAssertion> geoReferenceAssertions = new ArrayList<>();
+  @IgnoreDinaMapping(reason = "custom mapped")
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
@@ -176,5 +177,6 @@ public class CollectingEventDto {
     }
 
   }
+
 
 }
