@@ -25,7 +25,6 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
   private GeoReferenceAssertionService service;
 
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
-  private static final GeoreferenceVerificationStatus georeferenceVerificationStatus = GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE;
   private static final List<UUID> agentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
   private CollectingEvent event;
@@ -60,6 +59,22 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
     assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
+  }
+
+  @Test
+  public void georeferenceVerificationStatusEqualsGeoreferencingNotPossible_throwsIllegalArgumentException() {
+    GeoreferenceAssertion ga = newAssertion();
+    ga.setDwcGeoreferenceVerificationStatus(GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+
+    IllegalArgumentException exception = assertThrows(
+      IllegalArgumentException.class,
+      () -> service.create(ga));
+
+    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+
   }
 
   private GeoreferenceAssertion newAssertion() {
