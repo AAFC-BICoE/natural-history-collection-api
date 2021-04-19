@@ -9,5 +9,10 @@
 
         <addNotNullConstraint tableName="georeference_assertion" columnName="collecting_event_id"/>
 
+        <addColumn tableName="georeference_assertion">
+            <column name="index" type="integer"/>
+        </addColumn>
+
+        <addUniqueConstraint tableName="georeference_assertion" columnNames="collecting_event_id, index"/>
     </changeSet>
 </databaseChangeLog>

@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +22,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -54,6 +53,9 @@ public class GeoreferenceAssertion implements DinaEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @Column(name = "index", unique = true)
+  private int index;
+
   @DecimalMin(value = "-90.0")
   @DecimalMax(value = "90.0")
   private Double dwcDecimalLatitude;
@@ -71,7 +73,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   private String createdBy;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @NotNull
+  @JoinColumn(name = "collecting_event_id", nullable = false)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private CollectingEvent collectingEvent;

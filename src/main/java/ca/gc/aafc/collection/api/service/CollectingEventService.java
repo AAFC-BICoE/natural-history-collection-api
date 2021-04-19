@@ -48,7 +48,11 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private static void linkAssertions(CollectingEvent entity) {
     List<GeoreferenceAssertion> geos = entity.getGeoReferenceAssertions();
     if (CollectionUtils.isNotEmpty(geos)) {
-      geos.forEach(geoReferenceAssertion -> geoReferenceAssertion.setCollectingEvent(entity));
+      for (int i = 0; i < geos.size(); i++) {
+        GeoreferenceAssertion geoReferenceAssertion = geos.get(i);
+        geoReferenceAssertion.setIndex(i);
+        geoReferenceAssertion.setCollectingEvent(entity);
+      }
     }
     assignAutomaticValues(entity);
   }
