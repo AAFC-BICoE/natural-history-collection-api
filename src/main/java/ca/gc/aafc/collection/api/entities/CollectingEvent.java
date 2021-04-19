@@ -79,7 +79,7 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @OneToMany(fetch = FetchType.LAZY,
+  @OneToMany(fetch = FetchType.EAGER,
     mappedBy = "collectingEvent",
     cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
     orphanRemoval = true
