@@ -1,11 +1,13 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -21,27 +23,31 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private DatabaseSupportService dbService;
 
+  @Inject
+  private CollectingEventService collectingEventService;
+
   private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .build();
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
-  private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
+  private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
   private static final String dwcVerbatimLatitude = "latitude 12.123456";
   private static final String dwcVerbatimLongitude = "long 45.01";
   private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
-  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
+  private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
-  private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final String geographicPlaceName = "Morocco";
-  private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
+  public static final LocalDateTime TEST_DATE_TIME = LocalDateTime.of(2000, 2, 3, 0, 0);
+  private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
+  private CollectingEvent collectingEvent;
 
   @SneakyThrows
   @BeforeAll
@@ -52,49 +58,46 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard")).build();
   }
 
-  @Test
-  public void testSave() {
-    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-       .build();
-    collectingEvent.setUuid(UUID.randomUUID());
-    dbService.save(geoReferenceAssertion,false);
-    collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
+  @BeforeEach
+  void setUp() {
+    collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
+      .startEventDateTime(TEST_DATE_TIME)
+      .startEventDateTimePrecision((byte) 8)
+      .dwcRecordedBy(dwcRecordedBy)
+      .dwcVerbatimLocality(dwcVerbatimLocality)
+      .dwcVerbatimLatitude(dwcVerbatimLatitude)
+      .dwcVerbatimLongitude(dwcVerbatimLongitude)
+      .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
+      .dwcVerbatimSRS(dwcVerbatimSRS)
+      .dwcVerbatimElevation(dwcVerbatimElevation)
+      .dwcVerbatimDepth(dwcVerbatimDepth)
+      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+      .dwcCountry(dwcCountry)
+      .dwcCountryCode(dwcCountryCode)
+      .dwcStateProvince(dwcStateProvince)
+      .geographicPlaceNameSource(geographicPlaceNameSource)
+      .geographicPlaceName(geographicPlaceName)
+      .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+      .uuid(UUID.randomUUID())
+      .build();
     assertNull(collectingEvent.getId());
-    dbService.save(collectingEvent, false);
-    assertNotNull(collectingEvent.getId());
+    collectingEventService.create(collectingEvent);
   }
 
   @Test
-  public void testFind() {
-    LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
-    dbService.save(geoReferenceAssertion,false);
-    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
-        .startEventDateTime(testDateTime)
-        .startEventDateTimePrecision((byte) 8)
-        .dwcRecordedBy(dwcRecordedBy)
-        .dwcVerbatimLocality(dwcVerbatimLocality)
-        .dwcVerbatimLatitude(dwcVerbatimLatitude)
-        .dwcVerbatimLongitude(dwcVerbatimLongitude)
-        .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
-        .dwcVerbatimSRS(dwcVerbatimSRS)
-        .dwcVerbatimElevation(dwcVerbatimElevation)
-        .dwcVerbatimDepth(dwcVerbatimDepth)
-        .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-        .dwcCountry(dwcCountry)
-        .dwcCountryCode(dwcCountryCode)
-        .dwcStateProvince(dwcStateProvince)
-        .geographicPlaceNameSource(geographicPlaceNameSource)
-        .geographicPlaceName(geographicPlaceName)
-        .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
-        .uuid(UUID.randomUUID())
-        .build();
-    dbService.save(collectingEvent,false);
+  public void create() {
+    assertNotNull(collectingEvent.getId());
+    assertNotNull(collectingEvent.getCreatedOn());
+    assertEquals(geoReferenceAssertion.getId(), collectingEvent.getId());
+  }
 
+  @Test
+  public void find() {
     CollectingEvent fetchedCollectingEvent = dbService
-        .find(CollectingEvent.class, collectingEvent.getId());
+      .find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
-    assertEquals(testDateTime, fetchedCollectingEvent.getStartEventDateTime());
+    assertEquals(TEST_DATE_TIME, fetchedCollectingEvent.getStartEventDateTime());
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertEquals(
@@ -107,8 +110,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, fetchedCollectingEvent.getDwcVerbatimLatitude());
     assertEquals(dwcVerbatimLongitude, fetchedCollectingEvent.getDwcVerbatimLongitude());
-    assertEquals(dwcVerbatimCoordinateSystem,
-        fetchedCollectingEvent.getDwcVerbatimCoordinateSystem());
+    assertEquals(
+      dwcVerbatimCoordinateSystem,
+      fetchedCollectingEvent.getDwcVerbatimCoordinateSystem());
     assertEquals(dwcVerbatimSRS, fetchedCollectingEvent.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
