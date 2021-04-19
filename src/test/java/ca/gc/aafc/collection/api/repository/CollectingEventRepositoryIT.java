@@ -44,10 +44,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private CollectingEventRepository collectingEventRepository;
 
   private static final LocalDate startDate = LocalDate.of(2000, 1, 1);
-  private static final LocalTime startTime = LocalTime.of(0, 1);
 
   private static final LocalDate endDate = LocalDate.of(2002, 10, 10);
-  private static final LocalTime endTime = LocalTime.of(10, 10);
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
