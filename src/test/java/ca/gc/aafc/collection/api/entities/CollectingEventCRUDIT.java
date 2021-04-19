@@ -131,4 +131,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceIdType());
   }
 
+  @Test
+  void delete_Orphans_Removed() {
+    collectingEventService.delete(collectingEvent);
+    assertNull(dbService.find(CollectingEvent.class, collectingEvent.getId()));
+    assertNull(dbService.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId()));
+  }
 }
