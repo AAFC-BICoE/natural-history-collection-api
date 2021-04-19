@@ -13,7 +13,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="name" type="VARCHAR(250)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="prep_group" type="VARCHAR(250)">
                 <constraints nullable="false" unique="true"/>
@@ -43,6 +43,13 @@
                         references="preparation_process_definition(id)"
                         unique="true"
                         nullable="false"/>
+            </column>
+            <column name="physical_entity_id" type="integer">
+                <constraints
+                        foreignKeyName="fk_physical_entity_id"
+                        references="physical_entity(id)"
+                        unique="true"
+                        nullable="true"/>
             </column>
         </createTable>
     </changeSet>

@@ -1,8 +1,10 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.service.PhysicalEntityService;
 import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
 import ca.gc.aafc.collection.api.service.PreparationProcessService;
+import ca.gc.aafc.collection.api.testsupport.factories.PhysicalEntityFactory;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -21,16 +23,24 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
   private PreparationProcessService processService;
   private PreparationProcess prepUnderTest;
   private PreparationProcessDefinition definition;
+  private PhysicalEntity physicalEntity;
 
   @BeforeEach
   void setUp() {
     this.processService = new PreparationProcessService(baseDAO);
     PreparationProcessDefinitionService definitionService = new PreparationProcessDefinitionService(baseDAO);
+    PhysicalEntityService physicalEntityService = new PhysicalEntityService(baseDAO);
 
     this.definition = newDefinition();
     definitionService.create(definition);
 
-    this.prepUnderTest = persistPrepProcess(definition);
+    this.physicalEntity = PhysicalEntityFactory.newPhysicalEntity()
+      .dwcCatalogNumber("dwcCatalogNumber")
+      .createdBy("expectedCreatedBy")
+      .build();
+    physicalEntityService.create(physicalEntity);
+
+    this.prepUnderTest = persistPrepProcess(definition, physicalEntity);
   }
 
   @Test
@@ -46,12 +56,17 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(AGENT_ID, result.getAgentId());
     Assertions.assertEquals(CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(definition.getUuid(), result.getPreparationProcessDefinition().getUuid());
+    Assertions.assertEquals(physicalEntity.getUuid(), result.getPhysicalEntity().getUuid());
   }
 
-  private PreparationProcess persistPrepProcess(PreparationProcessDefinition def) {
+  private PreparationProcess persistPrepProcess(
+    PreparationProcessDefinition def,
+    PhysicalEntity physicalEntity
+  ) {
     PreparationProcess build = PreparationProcess.builder()
       .createdBy(CREATED_BY)
       .agentId(AGENT_ID)
+      .physicalEntity(physicalEntity)
       .preparationProcessDefinition(def)
       .build();
     processService.create(build);

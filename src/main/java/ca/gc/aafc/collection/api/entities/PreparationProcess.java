@@ -61,4 +61,8 @@ public class PreparationProcess implements DinaEntity {
   @JoinColumn(name = "preparation_process_definition_id", referencedColumnName = "id", unique = true)
   private PreparationProcessDefinition preparationProcessDefinition;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "physical_entity_id", referencedColumnName = "id", unique = true)
+  private PhysicalEntity physicalEntity;
+
 }
