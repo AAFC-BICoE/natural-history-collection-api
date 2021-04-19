@@ -1,9 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -71,6 +73,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private CollectingEvent collectingEvent;
 
   private LocalDate dwcGeoreferencedDate;
