@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
@@ -49,9 +48,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectingEventService collectingEventService;
-
-  @Inject
-  private GeoreferenceAssertionRepository geoReferenceAssertionRepository;
 
   @Inject
   private DatabaseSupportService dbService;
@@ -128,7 +124,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @Test
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
-    QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
 
     List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
         .map(Arrays::asList)
@@ -136,7 +131,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
         .collect(Collectors.toList());
 
     querySpec.setIncludedRelations(includeRelationSpec);
-    querySpec.setNestedSpecs(Collections.singletonList(geoSpec));
 
     CollectingEventDto collectingEventDto = collectingEventRepository
       .findOne(testCollectingEvent.getUuid(), querySpec);
@@ -256,10 +250,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
-    GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
-    geoRef.setDwcCoordinateUncertaintyInMeters(10);
-    GeoreferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
-    ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());

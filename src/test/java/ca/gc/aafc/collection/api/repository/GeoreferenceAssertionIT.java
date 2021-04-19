@@ -29,7 +29,6 @@ public class GeoreferenceAssertionIT extends CollectionModuleBaseIT {
   public void createUnlinkedGeoreference_success() {
     GeoreferenceAssertion ga = newGeoreferenceAssertion();
     georeferenceAssertionService.create(ga);
-    assertNotNull(ga.getUuid());
     assertEquals(latitude, ga.getDwcDecimalLatitude());
     assertEquals(longitude, ga.getDwcDecimalLongitude());
   }
