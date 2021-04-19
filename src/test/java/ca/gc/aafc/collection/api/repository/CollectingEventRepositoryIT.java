@@ -10,7 +10,6 @@ import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
@@ -49,9 +48,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private CollectingEventService collectingEventService;
 
-  @Inject
-  private DatabaseSupportService dbService;
-  
   private CollectingEvent testCollectingEvent;
 
   private static final LocalDate startDate = LocalDate.of(2000, 1, 1);
@@ -87,14 +83,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .sourceIdType("N")
       .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
         // recordedOn should be overwritten by the server side generated value
-      .recordedOn(OffsetDateTime.of(LocalDateTime.of(2000,01,01,11,10), ZoneOffset.ofHoursMinutes(1, 0)))
+      .recordedOn(OffsetDateTime.of(LocalDateTime.of(2000, 1, 1,11,10),
+        ZoneOffset.ofHoursMinutes(1, 0)))
       .build();
 
     createTestCollectingEvent();
   }
 
   private void createTestCollectingEvent() {
-    dbService.save(geoReferenceAssertion,false);
     testCollectingEvent = CollectingEventFactory.newCollectingEvent()
       .startEventDateTime(LocalDateTime.of(startDate, startTime))
       .startEventDateTimePrecision((byte) 8)
@@ -111,7 +107,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
-      .dwcVerbatimDepth(dwcVerbatimDepth)   
+      .dwcVerbatimDepth(dwcVerbatimDepth)
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
       .geographicPlaceNameSource(geographicPlaceNameSource)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
@@ -193,6 +189,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertNotNull(result.getCreatedBy());
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
+    assertEquals(ce.getGeoReferenceAssertions().get(0).getId(), result.getGeoReferenceAssertions().get(0).getId());
     assertEquals(dwcRecordedBy, result.getDwcRecordedBy());
     assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
@@ -221,9 +218,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       testCollectingEvent = CollectingEventFactory.newCollectingEvent()
           .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
           .build();
-      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-        collectingEventService.create(testCollectingEvent);
-      });
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> collectingEventService.create(testCollectingEvent));
 
       String expectedMessage = "The start and end dates do not create a valid timeline";
       String actualMessage = exception.getMessage();
@@ -238,9 +233,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
           .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
           .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
           .build();
-      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-        collectingEventService.create(testCollectingEvent);
-      });
+      IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> collectingEventService.create(testCollectingEvent));
 
       String expectedMessage = "The start and end dates do not create a valid timeline";
       String actualMessage = exception.getMessage();
@@ -255,6 +248,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());
     ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setDwcRecordedBy(dwcRecordedBy);
+    ce.setGeoReferenceAssertions(List.of(geoReferenceAssertion));
     ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(
