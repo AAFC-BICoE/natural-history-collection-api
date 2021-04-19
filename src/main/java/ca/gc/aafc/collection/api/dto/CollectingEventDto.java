@@ -32,11 +32,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
   CollectingEventDto.StartEventDateTimeAdapter.class,
-  CollectingEventDto.EndEventDateTimeAdapter.class})
+  CollectingEventDto.EndEventDateTimeAdapter.class,
+  CollectingEventDto.AssertionAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = CollectingEventDto.TYPENAME)
@@ -81,7 +83,9 @@ public class CollectingEventDto {
 
   private String dwcVerbatimLocality;
 
-  /** Map of Managed attribute key to value object. */
+  /**
+   * Map of Managed attribute key to value object.
+   */
   private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
 
   private String dwcVerbatimLatitude;
@@ -178,5 +182,74 @@ public class CollectingEventDto {
 
   }
 
+  public static class AssertionAdapter
+    implements DinaFieldAdapter<
+    CollectingEventDto,
+    CollectingEvent,
+    List<GeoreferenceAssertionDto>,
+    List<GeoreferenceAssertion>> {
+
+    @Override
+    public List<GeoreferenceAssertionDto> toDTO(List<GeoreferenceAssertion> assertionList) {
+      return assertionList == null ? null : assertionList.stream()
+        .map(assertion -> GeoreferenceAssertionDto.builder()
+          .createdBy(assertion.getCreatedBy())
+          .createdOn(assertion.getCreatedOn())
+          .dwcDecimalLatitude(assertion.getDwcDecimalLatitude())
+          .dwcDecimalLongitude(assertion.getDwcDecimalLongitude())
+          .dwcCoordinateUncertaintyInMeters(assertion.getDwcCoordinateUncertaintyInMeters())
+          .dwcGeodeticDatum(assertion.getDwcGeodeticDatum())
+          .dwcGeoreferencedDate(assertion.getDwcGeoreferencedDate())
+          .dwcGeoreferenceProtocol(assertion.getDwcGeoreferenceProtocol())
+          .dwcGeoreferenceRemarks(assertion.getDwcGeoreferenceRemarks())
+          .dwcGeoreferenceSources(assertion.getDwcGeoreferenceSources())
+          .dwcGeoreferenceVerificationStatus(assertion.getDwcGeoreferenceVerificationStatus())
+          .georeferencedBy(assertion.getGeoreferencedBy())
+          .literalGeoreferencedBy(assertion.getLiteralGeoreferencedBy())
+          .build())
+        .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GeoreferenceAssertion> toEntity(List<GeoreferenceAssertionDto> assertionList) {
+      return assertionList == null ? null : assertionList.stream()
+        .map(assertion -> GeoreferenceAssertion.builder()
+          .createdBy(assertion.getCreatedBy())
+          .createdOn(assertion.getCreatedOn())
+          .dwcDecimalLatitude(assertion.getDwcDecimalLatitude())
+          .dwcDecimalLongitude(assertion.getDwcDecimalLongitude())
+          .dwcCoordinateUncertaintyInMeters(assertion.getDwcCoordinateUncertaintyInMeters())
+          .dwcGeodeticDatum(assertion.getDwcGeodeticDatum())
+          .dwcGeoreferencedDate(assertion.getDwcGeoreferencedDate())
+          .dwcGeoreferenceProtocol(assertion.getDwcGeoreferenceProtocol())
+          .dwcGeoreferenceRemarks(assertion.getDwcGeoreferenceRemarks())
+          .dwcGeoreferenceSources(assertion.getDwcGeoreferenceSources())
+          .dwcGeoreferenceVerificationStatus(assertion.getDwcGeoreferenceVerificationStatus())
+          .georeferencedBy(assertion.getGeoreferencedBy())
+          .literalGeoreferencedBy(assertion.getLiteralGeoreferencedBy())
+          .build())
+        .collect(Collectors.toList());
+    }
+
+    @Override
+    public Consumer<List<GeoreferenceAssertion>> entityApplyMethod(CollectingEvent entityRef) {
+      return entityRef::setGeoReferenceAssertions;
+    }
+
+    @Override
+    public Consumer<List<GeoreferenceAssertionDto>> dtoApplyMethod(CollectingEventDto dtoRef) {
+      return dtoRef::setGeoReferenceAssertions;
+    }
+
+    @Override
+    public Supplier<List<GeoreferenceAssertion>> entitySupplyMethod(CollectingEvent entityRef) {
+      return entityRef::getGeoReferenceAssertions;
+    }
+
+    @Override
+    public Supplier<List<GeoreferenceAssertionDto>> dtoSupplyMethod(CollectingEventDto dtoRef) {
+      return dtoRef::getGeoReferenceAssertions;
+    }
+  }
 
 }
