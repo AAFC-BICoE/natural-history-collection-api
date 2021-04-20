@@ -74,6 +74,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
+  private static final String habitat = "Tropical";
   private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
@@ -119,6 +120,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
       .geographicPlaceNameSource(geographicPlaceNameSource)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+      .habitat(habitat)
       .build();
     testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
 
@@ -187,6 +189,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(
       geographicPlaceNameSourceDetail.getSourceIdType(),
       collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceIdType());
+    assertEquals(habitat, collectingEventDto.getHabitat());
   }
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
@@ -219,7 +222,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
+    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);    
+    assertEquals(habitat, result.getHabitat());     
   }
 
   @Test
@@ -277,6 +281,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
     ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);
+    ce.setHabitat(habitat);
     return ce;
   }
 

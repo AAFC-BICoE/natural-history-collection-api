@@ -161,6 +161,9 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 100)
   private String geographicPlaceName;
 
+  @Size(max = 500)
+  private String habitat;
+
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
   @NotNull
