@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -83,6 +84,7 @@ public class CollectingEvent implements DinaEntity {
     mappedBy = "collectingEvent",
     cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
   )
+  @ToString.Exclude
   private List<GeoreferenceAssertion> geoReferenceAssertions;
 
   private String dwcVerbatimCoordinates;

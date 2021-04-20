@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -74,7 +73,6 @@ public class GeoreferenceAssertion implements DinaEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
-  @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private CollectingEvent collectingEvent;
 
