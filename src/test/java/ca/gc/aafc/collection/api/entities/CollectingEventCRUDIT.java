@@ -41,6 +41,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcMunicipality = "Morocco";
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private static final String geographicPlaceName = "Morocco";
+  private static final String habitat = "Desert";
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   @SneakyThrows
@@ -87,6 +88,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .geographicPlaceNameSource(geographicPlaceNameSource)
         .geographicPlaceName(geographicPlaceName)
         .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+        .habitat(habitat)
         .uuid(UUID.randomUUID())
         .build();
     dbService.save(collectingEvent,false);
@@ -125,6 +127,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(
       geographicPlaceNameSourceDetail.getSourceIdType(),
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceIdType());
+    assertEquals(habitat, fetchedCollectingEvent.getHabitat());
   }
 
 }

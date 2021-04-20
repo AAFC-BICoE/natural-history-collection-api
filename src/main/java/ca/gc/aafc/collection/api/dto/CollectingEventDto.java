@@ -98,6 +98,7 @@ public class CollectingEventDto {
   private String dwcCountryCode;
   private String dwcStateProvince;
   private String geographicPlaceName;
+  private String habitat;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
