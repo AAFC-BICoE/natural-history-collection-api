@@ -81,8 +81,7 @@ public class CollectingEvent implements DinaEntity {
 
   @OneToMany(fetch = FetchType.EAGER,
     mappedBy = "collectingEvent",
-    cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
-    orphanRemoval = true
+    cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
   )
   private List<GeoreferenceAssertion> geoReferenceAssertions;
 
