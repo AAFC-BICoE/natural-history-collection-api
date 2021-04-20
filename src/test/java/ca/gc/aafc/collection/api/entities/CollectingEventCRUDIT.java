@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,10 +27,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private CollectingEventService collectingEventService;
 
-  private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
-    .dwcDecimalLatitude(12.123456)
-    .dwcDecimalLongitude(45.01)
-    .build();
+  private final GeoreferenceAssertion geoReferenceAssertion = newAssertion(12.123456);
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
@@ -89,7 +87,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   public void create() {
     assertNotNull(collectingEvent.getId());
     assertNotNull(collectingEvent.getCreatedOn());
-    assertEquals(geoReferenceAssertion.getId(), collectingEvent.getId());
+    assertNotNull(collectingEvent.getUuid());
   }
 
   @Test
@@ -101,10 +99,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
     assertEquals(dwcRecordedBy, fetchedCollectingEvent.getDwcRecordedBy());
     assertEquals(
-      geoReferenceAssertion.getId(),
-      fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getId());
-    assertEquals(
-      12.123456,
+      geoReferenceAssertion.getDwcDecimalLatitude(),
       fetchedCollectingEvent.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
     assertNotNull(fetchedCollectingEvent.getCreatedOn());
     assertEquals(dwcVerbatimLocality, fetchedCollectingEvent.getDwcVerbatimLocality());
@@ -136,5 +131,31 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     collectingEventService.delete(collectingEvent);
     assertNull(dbService.find(CollectingEvent.class, collectingEvent.getId()));
     assertNull(dbService.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId()));
+  }
+
+  @Test
+  void update_whenGeoAssertionsUpdated_GeosUpdated() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(),CollectingEvent.class);
+    GeoreferenceAssertion geo = newAssertion(1);
+    GeoreferenceAssertion geo2 = newAssertion(2);
+
+    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo, geo2));
+
+    collectingEventService.update(fetchedCollectingEvent);
+    CollectingEvent result = collectingEventService
+      .findOne(collectingEvent.getUuid(),CollectingEvent.class);
+
+    List<GeoreferenceAssertion> list = result.getGeoReferenceAssertions();
+    assertEquals(2, list.size());
+    assertEquals(geo.getDwcDecimalLatitude(), list.get(0).getDwcDecimalLatitude());
+    assertEquals(geo2.getDwcDecimalLatitude(), list.get(1).getDwcDecimalLatitude());
+  }
+
+  private static GeoreferenceAssertion newAssertion(double latitude) {
+    return GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+      .dwcDecimalLatitude(latitude)
+      .dwcDecimalLongitude(45.01)
+      .build();
   }
 }
