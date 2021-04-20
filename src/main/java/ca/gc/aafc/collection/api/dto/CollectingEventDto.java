@@ -19,7 +19,6 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -58,7 +57,6 @@ public class CollectingEventDto {
   private OffsetDateTime createdOn;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @DiffIgnore
   @IgnoreDinaMapping(reason = "custom mapped")
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
