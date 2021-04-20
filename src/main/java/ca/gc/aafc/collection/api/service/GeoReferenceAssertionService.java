@@ -36,7 +36,9 @@ public class GeoReferenceAssertionService extends DefaultDinaService<Georeferenc
   }
 
   public void validateGeoreferenceAssertion(GeoreferenceAssertion entity) {
-    Errors errors = new BeanPropertyBindingResult(entity, entity.getCreatedBy());
+    Errors errors = new BeanPropertyBindingResult(
+      entity,
+      entity.getCollectingEvent().getId().toString() + "/" + entity.getIndex());
     georeferenceAssertionValidator.validate(entity, errors);
 
     if (!errors.hasErrors()) {
