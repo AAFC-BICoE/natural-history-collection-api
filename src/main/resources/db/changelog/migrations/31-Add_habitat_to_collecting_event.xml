@@ -7,7 +7,7 @@
     <!--  Add column habitat to collecting event -->
     <changeSet id="31-Add_habitat_to_collecting_event" context="schema-change" author="Steven Luu">
         <addColumn tableName="collecting_event">
-            <column name="habitat" type="VARCHAR(250)"/>
+            <column name="habitat" type="VARCHAR(500)"/>
         </addColumn>
     </changeSet>
 
