@@ -1,12 +1,12 @@
 package ca.gc.aafc.collection.api.entities;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.net.URL;
 import java.time.OffsetDateTime;
 
 import org.javers.core.metamodel.annotation.Value;
+
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder
@@ -16,4 +16,23 @@ public class GeographicPlaceNameSourceDetail {
   private String sourceIdType;
   private URL sourceUrl;
   private OffsetDateTime recordedOn;
+  private StateProvince stateProvince;
+  private Country country;
+
+  @Data
+  @Builder
+  @Value
+  public static class StateProvince {
+    private String id;
+    private String name;
+  }
+
+  @Data
+  @Builder
+  @Value
+  public static class Country {
+    private String id;
+    private String name;
+  }
+
 }
