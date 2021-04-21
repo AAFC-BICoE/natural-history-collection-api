@@ -12,11 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
   public static final UUID AGENT_ID = UUID.randomUUID();
   public static final String CREATED_BY = "dina";
+  public static final LocalDateTime START_DATE_TIME = LocalDateTime.now().minusDays(2);
+  public static final LocalDateTime END_DATE_TIME = LocalDateTime.now().minusDays(1);
 
   @Inject
   private BaseDAO baseDAO;
@@ -57,6 +60,8 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(definition.getUuid(), result.getPreparationProcessDefinition().getUuid());
     Assertions.assertEquals(physicalEntity.getUuid(), result.getPhysicalEntity().getUuid());
+    Assertions.assertEquals(START_DATE_TIME, result.getStartDateTime());
+    Assertions.assertEquals(END_DATE_TIME, result.getEndDateTime());
   }
 
   private PreparationProcess persistPrepProcess(
@@ -68,6 +73,8 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
       .agentId(AGENT_ID)
       .physicalEntity(physicalEntity)
       .preparationProcessDefinition(def)
+      .startDateTime(START_DATE_TIME)
+      .endDateTime(END_DATE_TIME)
       .build();
     processService.create(build);
     return build;

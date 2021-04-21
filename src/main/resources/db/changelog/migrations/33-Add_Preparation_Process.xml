@@ -5,6 +5,7 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <changeSet id="33-Add_Preparation_Process" context="schema-change" author="keyuk">
+
         <createTable tableName="preparation_process_definition">
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_preparation_process_definition_id"/>
@@ -23,6 +24,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
         <createTable tableName="preparation_process">
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_preparation_process_id"/>
@@ -51,7 +53,10 @@
                         unique="true"
                         nullable="true"/>
             </column>
+            <column name="start_date_time" type="timestamp"/>
+            <column name="end_date_time" type="timestamp"/>
         </createTable>
+
     </changeSet>
 
 </databaseChangeLog>

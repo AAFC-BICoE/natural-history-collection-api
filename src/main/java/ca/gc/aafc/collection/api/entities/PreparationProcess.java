@@ -22,6 +22,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -65,4 +67,9 @@ public class PreparationProcess implements DinaEntity {
   @JoinColumn(name = "physical_entity_id", referencedColumnName = "id", unique = true)
   private PhysicalEntity physicalEntity;
 
+  @Past
+  private LocalDateTime startDateTime;
+
+  @Past
+  private LocalDateTime endDateTime;
 }
