@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!--  Add column habitat to collecting event -->
+    <changeSet id="31-Add_habitat_to_collecting_event" context="schema-change" author="Steven Luu">
+        <addColumn tableName="collecting_event">
+            <column name="habitat" type="text"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
