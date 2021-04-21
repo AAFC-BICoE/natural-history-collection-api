@@ -11,7 +11,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class GeoReferenceAssertionService extends DefaultDinaService<GeoreferenceAssertion> {
@@ -28,7 +27,6 @@ public class GeoReferenceAssertionService extends DefaultDinaService<Georeferenc
 
   @Override
   protected void preCreate(GeoreferenceAssertion entity) {
-    entity.setUuid(UUID.randomUUID());
     validateGeoreferenceAssertion(entity);
   }
 
@@ -38,7 +36,9 @@ public class GeoReferenceAssertionService extends DefaultDinaService<Georeferenc
   }
 
   public void validateGeoreferenceAssertion(GeoreferenceAssertion entity) {
-    Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
+    Errors errors = new BeanPropertyBindingResult(
+      entity,
+      entity.getCollectingEvent().getId().toString() + "/" + entity.getIndex());
     georeferenceAssertionValidator.validate(entity, errors);
 
     if (!errors.hasErrors()) {

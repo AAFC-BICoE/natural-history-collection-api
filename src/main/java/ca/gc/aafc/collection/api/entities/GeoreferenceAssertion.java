@@ -1,10 +1,17 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import ca.gc.aafc.dina.entity.DinaEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,23 +28,11 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-
-import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnUpdate;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -45,8 +40,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @RequiredArgsConstructor
-@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
-@NaturalIdCache
+@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Table(name = "georeference_assertion")
 public class GeoreferenceAssertion implements DinaEntity {
 
@@ -58,10 +52,8 @@ public class GeoreferenceAssertion implements DinaEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @NaturalId
-  @NotNull(groups = OnUpdate.class)
-  @Column(unique = true)
-  private UUID uuid;
+  @Column(name = "index", unique = true)
+  private int index;
 
   @DecimalMin(value = "-90.0")
   @DecimalMax(value = "90.0")
@@ -77,16 +69,17 @@ public class GeoreferenceAssertion implements DinaEntity {
 
   @NotBlank
   @Column(name = "created_by", updatable = false)
-  private String createdBy;  
+  private String createdBy;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @ToString.Exclude
-  private CollectingEvent collectingEvent;  
+  @NotNull
+  @EqualsAndHashCode.Exclude
+  private CollectingEvent collectingEvent;
 
   private LocalDate dwcGeoreferencedDate;
-  
+
   @Type(type = "list-array")
-  @Column(name = "georeferenced_by", columnDefinition = "uuid[]")  
+  @Column(name = "georeferenced_by", columnDefinition = "uuid[]")
   private List<UUID> georeferencedBy;
 
   @Size(max = 250)
