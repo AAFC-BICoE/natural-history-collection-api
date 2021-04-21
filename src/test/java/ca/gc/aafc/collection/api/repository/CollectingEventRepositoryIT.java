@@ -57,14 +57,13 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
   private final GeoreferenceAssertionDto geoReferenceAssertion = GeoreferenceAssertionDto.builder()
-  private static final String habitat = "Tropical";
-  private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
+  private static final String habitat = "Tropical";
 
   @BeforeEach
   @SneakyThrows
@@ -79,37 +78,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
         LocalDateTime.of(2000, 1, 1, 11, 10),
         ZoneOffset.ofHoursMinutes(1, 0)))
       .build();
-
-    createTestCollectingEvent();
-  }
-
-  private void createTestCollectingEvent() {
-    dbService.save(geoReferenceAssertion,false);
-    testCollectingEvent = CollectingEventFactory.newCollectingEvent()
-      .startEventDateTime(LocalDateTime.of(startDate, startTime))
-      .startEventDateTimePrecision((byte) 8)
-      .endEventDateTime(LocalDateTime.of(endDate, endTime))
-      .endEventDateTimePrecision((byte) 8)
-      .verbatimEventDateTime("XI-02-1798")
-      .dwcVerbatimCoordinates("26.089, 106.36")
-      .attachment(List.of(UUID.randomUUID()))
-      .collectors(List.of(UUID.randomUUID()))
-      .dwcRecordedBy(dwcRecordedBy)
-      .dwcVerbatimLocality(dwcVerbatimLocality)
-      .dwcVerbatimLatitude(dwcVerbatimLatitude)
-      .dwcVerbatimLongitude(dwcVerbatimLongitude)
-      .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
-      .dwcVerbatimSRS(dwcVerbatimSRS)
-      .dwcVerbatimElevation(dwcVerbatimElevation)
-      .dwcVerbatimDepth(dwcVerbatimDepth)
-      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-      .geographicPlaceNameSource(geographicPlaceNameSource)
-      .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
-      .habitat(habitat)
-      .build();
-    testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-
-    collectingEventService.create(testCollectingEvent);
   }
 
   @Test

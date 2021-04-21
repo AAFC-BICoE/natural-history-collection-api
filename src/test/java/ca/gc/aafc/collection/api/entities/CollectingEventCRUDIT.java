@@ -47,7 +47,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
   private CollectingEvent collectingEvent;
   private static final String habitat = "Desert";
-  private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   @SneakyThrows
   @BeforeAll
@@ -84,45 +83,18 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertNull(collectingEvent.getId());
     collectingEventService.create(collectingEvent);
   }
+
   @Test
   public void testSave() {
     CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-       .build();
+      .build();
     collectingEvent.setUuid(UUID.randomUUID());
-    dbService.save(geoReferenceAssertion,false);
+    dbService.save(geoReferenceAssertion, false);
     collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
     assertNull(collectingEvent.getId());
     dbService.save(collectingEvent, false);
     assertNotNull(collectingEvent.getId());
   }
-
-  @Test
-  public void testFind() {
-    LocalDateTime testDateTime = LocalDateTime.of(2000,2,3,0,0);
-    dbService.save(geoReferenceAssertion,false);
-    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-        .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
-        .startEventDateTime(testDateTime)
-        .startEventDateTimePrecision((byte) 8)
-        .dwcRecordedBy(dwcRecordedBy)
-        .dwcVerbatimLocality(dwcVerbatimLocality)
-        .dwcVerbatimLatitude(dwcVerbatimLatitude)
-        .dwcVerbatimLongitude(dwcVerbatimLongitude)
-        .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
-        .dwcVerbatimSRS(dwcVerbatimSRS)
-        .dwcVerbatimElevation(dwcVerbatimElevation)
-        .dwcVerbatimDepth(dwcVerbatimDepth)
-        .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-        .dwcCountry(dwcCountry)
-        .dwcCountryCode(dwcCountryCode)
-        .dwcStateProvince(dwcStateProvince)
-        .geographicPlaceNameSource(geographicPlaceNameSource)
-        .geographicPlaceName(geographicPlaceName)
-        .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
-        .habitat(habitat)
-        .uuid(UUID.randomUUID())
-        .build();
-    dbService.save(collectingEvent,false);
 
   @Test
   public void create() {
@@ -178,7 +150,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void update_whenGeoAssertionsUpdated_GeosUpdated() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
-      .findOne(collectingEvent.getUuid(),CollectingEvent.class);
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
     GeoreferenceAssertion geo = newAssertion(1);
     GeoreferenceAssertion geo2 = newAssertion(2);
 
@@ -186,7 +158,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     collectingEventService.update(fetchedCollectingEvent);
     CollectingEvent result = collectingEventService
-      .findOne(collectingEvent.getUuid(),CollectingEvent.class);
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
     List<GeoreferenceAssertion> list = result.getGeoReferenceAssertions();
     assertEquals(2, list.size());
