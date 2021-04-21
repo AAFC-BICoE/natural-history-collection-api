@@ -46,9 +46,9 @@
                         unique="true"
                         nullable="false"/>
             </column>
-            <column name="physical_entity_id" type="integer">
+            <column name="source_physical_entity_id" type="integer">
                 <constraints
-                        foreignKeyName="fk_physical_entity_id"
+                        foreignKeyName="fk_source_physical_entity_id"
                         references="physical_entity(id)"
                         unique="true"
                         nullable="true"/>

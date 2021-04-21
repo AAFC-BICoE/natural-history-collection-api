@@ -26,7 +26,7 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
   private PreparationProcessService processService;
   private PreparationProcess prepUnderTest;
   private PreparationProcessDefinition definition;
-  private PhysicalEntity physicalEntity;
+  private PhysicalEntity sourcePhysicalEntity;
 
   @BeforeEach
   void setUp() {
@@ -37,13 +37,13 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
     this.definition = newDefinition();
     definitionService.create(definition);
 
-    this.physicalEntity = PhysicalEntityFactory.newPhysicalEntity()
+    this.sourcePhysicalEntity = PhysicalEntityFactory.newPhysicalEntity()
       .dwcCatalogNumber("dwcCatalogNumber")
       .createdBy("expectedCreatedBy")
       .build();
-    physicalEntityService.create(physicalEntity);
+    physicalEntityService.create(sourcePhysicalEntity);
 
-    this.prepUnderTest = persistPrepProcess(definition, physicalEntity);
+    this.prepUnderTest = persistPrepProcess(definition, sourcePhysicalEntity);
   }
 
   @Test
@@ -59,7 +59,7 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(AGENT_ID, result.getAgentId());
     Assertions.assertEquals(CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(definition.getUuid(), result.getPreparationProcessDefinition().getUuid());
-    Assertions.assertEquals(physicalEntity.getUuid(), result.getPhysicalEntity().getUuid());
+    Assertions.assertEquals(sourcePhysicalEntity.getUuid(), result.getSourcePhysicalEntity().getUuid());
     Assertions.assertEquals(START_DATE_TIME, result.getStartDateTime());
     Assertions.assertEquals(END_DATE_TIME, result.getEndDateTime());
   }
@@ -71,7 +71,7 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
     PreparationProcess build = PreparationProcess.builder()
       .createdBy(CREATED_BY)
       .agentId(AGENT_ID)
-      .physicalEntity(physicalEntity)
+      .sourcePhysicalEntity(physicalEntity)
       .preparationProcessDefinition(def)
       .startDateTime(START_DATE_TIME)
       .endDateTime(END_DATE_TIME)
