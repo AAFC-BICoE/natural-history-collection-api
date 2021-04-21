@@ -12,6 +12,7 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
 import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import lombok.NonNull;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -51,9 +52,25 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   @Override
   public <S extends CollectingEventDto> S create(S resource) {
     if (authenticatedUser.isPresent()) {
-      resource.setCreatedBy(authenticatedUser.get().getUsername());
+      String username = authenticatedUser.get().getUsername();
+      resource.setCreatedBy(username);
+      if (CollectionUtils.isNotEmpty(resource.getGeoReferenceAssertions())) {
+        resource.getGeoReferenceAssertions()
+          .forEach(georeferenceAssertion -> georeferenceAssertion.setCreatedBy(username));
+      }
     }
     return super.create(resource);
+  }
+
+  @Override
+  public <S extends CollectingEventDto> S save(S resource) {
+    if (authenticatedUser.isPresent()) {
+      if (CollectionUtils.isNotEmpty(resource.getGeoReferenceAssertions())) {
+        resource.getGeoReferenceAssertions().forEach(
+          assertion -> assertion.setCreatedBy(authenticatedUser.get().getUsername()));
+      }
+    }
+    return super.save(resource);
   }
 }
 

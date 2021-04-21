@@ -32,5 +32,6 @@
   <include file="db/changelog/migrations/29-Move_georeference_status_into_assertion.xml"/>
   <include file="db/changelog/migrations/30-Move_managed_attributes_to_jsonb_based_column.xml"/>
   <include file="db/changelog/migrations/31-Add_habitat_to_collecting_event.xml"/>
+  <include file="db/changelog/migrations/32-Nest_GeoReference_In_Coll_Event.xml"/>
 </databaseChangeLog>
 
