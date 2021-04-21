@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="28-Add_Preparation_Process" context="schema-change" author="keyuk">
+    <changeSet id="33-Add_Preparation_Process" context="schema-change" author="keyuk">
         <createTable tableName="preparation_process_definition">
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_preparation_process_definition_id"/>
