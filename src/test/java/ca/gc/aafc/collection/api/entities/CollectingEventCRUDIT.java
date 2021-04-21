@@ -86,19 +86,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void testSave() {
-    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
-      .build();
-    collectingEvent.setUuid(UUID.randomUUID());
-    dbService.save(geoReferenceAssertion, false);
-    collectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-    assertNull(collectingEvent.getId());
-    dbService.save(collectingEvent, false);
-    assertNotNull(collectingEvent.getId());
-  }
-
-  @Test
   public void create() {
+    //Assert generated fields
     assertNotNull(collectingEvent.getId());
     assertNotNull(collectingEvent.getCreatedOn());
     assertNotNull(collectingEvent.getUuid());
