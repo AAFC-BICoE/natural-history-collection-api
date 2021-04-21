@@ -6,6 +6,7 @@
 
     <changeSet id="33-Add_Preparation_Process" context="schema-change" author="keyuk">
 
+        <!--        definition-->
         <createTable tableName="preparation_process_definition">
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_preparation_process_definition_id"/>
@@ -25,6 +26,7 @@
             </column>
         </createTable>
 
+        <!--        process-->
         <createTable tableName="preparation_process">
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_preparation_process_id"/>
@@ -57,6 +59,32 @@
             <column name="end_date_time" type="timestamp"/>
         </createTable>
 
+        <!--        element-->
+        <createTable tableName="preparation_process_element">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_preparation_process_element_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="created_by" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preparation_process_id" type="integer">
+                <constraints
+                        foreignKeyName="fk_preparation_process_id"
+                        references="preparation_process(id)"
+                        nullable="false"/>
+            </column>
+            <column name="physical_entity_id" type="integer">
+                <constraints
+                        foreignKeyName="fk_physical_entity_id"
+                        references="physical_entity(id)"
+                        unique="true"
+                        nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>
