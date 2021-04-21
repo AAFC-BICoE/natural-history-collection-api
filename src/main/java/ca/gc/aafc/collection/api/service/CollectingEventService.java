@@ -1,21 +1,23 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
@@ -30,6 +32,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
+    cleanupManagedAttributeValues(entity);
     assignAutomaticValues(entity);
     linkAssertions(entity);
     validateCollectingEvent(entity);
@@ -37,6 +40,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   @Override
   public void preUpdate(CollectingEvent entity) {
+    cleanupManagedAttributeValues(entity);
     linkAssertions(entity);
     validateCollectingEvent(entity);
   }
@@ -67,6 +71,17 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     errorMsg.ifPresent(msg -> {
       throw new IllegalArgumentException(msg);
     });
+  }
+
+  private void cleanupManagedAttributeValues(CollectingEvent entity) {
+    var values = entity.getManagedAttributeValues();
+    if (values == null) {
+      return;
+    }
+    // Remove blank Managed Attribute values:
+    values.entrySet().removeIf(
+      entry -> StringUtils.isBlank(entry.getValue().getAssignedValue())
+    );
   }
 
 }

@@ -41,5 +41,20 @@ public class ManagedAttributeRepoIT extends CollectionModuleBaseIT {
       result.getManagedAttributeComponent());
   }
 
+  @Test
+  void findOneByKey_whenKeyProvided_managedAttributeFetched() {
+    ManagedAttributeDto newAttribute = new ManagedAttributeDto();
+    newAttribute.setName("Collecting Event Attribute 1");
+    newAttribute.setManagedAttributeType(ManagedAttribute.ManagedAttributeType.INTEGER);
+    newAttribute.setManagedAttributeComponent(ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    newAttribute.setCreatedBy("poffm");
+
+    UUID newAttributeUuid = repo.create(newAttribute).getUuid();
+
+    QuerySpec querySpec = new QuerySpec(ManagedAttributeDto.class);
+    ManagedAttributeDto fetchedAttribute = repo.findOne("collecting_event.collecting_event_attribute_1", querySpec);
+
+    Assertions.assertEquals(newAttributeUuid, fetchedAttribute.getUuid());
+  }
 
 }
