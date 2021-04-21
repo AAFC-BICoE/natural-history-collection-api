@@ -53,7 +53,7 @@
                         foreignKeyName="fk_source_physical_entity_id"
                         references="physical_entity(id)"
                         unique="true"
-                        nullable="true"/>
+                        nullable="false"/>
             </column>
             <column name="start_date_time" type="timestamp"/>
             <column name="end_date_time" type="timestamp"/>
