@@ -53,6 +53,7 @@ public class PreparationProcessElement implements DinaEntity {
   private String createdBy;
 
   @ManyToOne
+  @NotNull
   @JoinColumn(name = "preparation_process_id", referencedColumnName = "id")
   private PreparationProcess preparationProcess;
 
