@@ -162,16 +162,41 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     GeoreferenceAssertion geo = newAssertion(1);
     GeoreferenceAssertion geo2 = newAssertion(2);
 
+    // Pop one, add two
     fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo, geo2));
+
+    collectingEventService.update(fetchedCollectingEvent);
+
+    List<GeoreferenceAssertion> results = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
+    assertEquals(2, results.size());
+    assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
+    assertEquals(geo2.getDwcDecimalLatitude(), results.get(1).getDwcDecimalLatitude());
+
+    fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    // remove last
+    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo));
+
+    results = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
+    assertEquals(1, results.size());
+    assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
+  }
+
+  @Test
+  void update_whenGeoAssertionsCleared_GeosRemoved() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setGeoReferenceAssertions(null);
 
     collectingEventService.update(fetchedCollectingEvent);
     CollectingEvent result = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    List<GeoreferenceAssertion> list = result.getGeoReferenceAssertions();
-    assertEquals(2, list.size());
-    assertEquals(geo.getDwcDecimalLatitude(), list.get(0).getDwcDecimalLatitude());
-    assertEquals(geo2.getDwcDecimalLatitude(), list.get(1).getDwcDecimalLatitude());
+    assertNull(result.getGeoReferenceAssertions());
   }
 
   @Test

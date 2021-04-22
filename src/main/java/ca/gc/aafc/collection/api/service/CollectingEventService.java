@@ -65,6 +65,11 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     entity.setGeoReferenceAssertions(null);
     List<GeoreferenceAssertion> currentAssertions = fetchAssertions(entity);
 
+    if (CollectionUtils.isEmpty(incomingAssertions) && CollectionUtils.isNotEmpty(currentAssertions)) {
+      currentAssertions.forEach(baseDAO::delete);
+      return;
+    }
+
     int currentSize = currentAssertions.size();
     for (int i = 0; i < incomingAssertions.size(); i++) {
       GeoreferenceAssertion in = incomingAssertions.get(i);
