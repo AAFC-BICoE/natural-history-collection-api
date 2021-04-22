@@ -6,12 +6,7 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
-import ca.gc.aafc.collection.api.service.CollectingEventService;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
@@ -30,11 +25,9 @@ import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,25 +38,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
+  public static final String XI_02_1798 = "XI-02-1798";
+  public static final String VER_COOR = "26.089, 106.36";
   @Inject
   private CollectingEventRepository collectingEventRepository;
 
-  @Inject
-  private CollectingEventService collectingEventService;
-
-  @Inject
-  private GeoreferenceAssertionRepository geoReferenceAssertionRepository;
-
-  @Inject
-  private DatabaseSupportService dbService;
-  
-  private CollectingEvent testCollectingEvent;
-
   private static final LocalDate startDate = LocalDate.of(2000, 1, 1);
-  private static final LocalTime startTime = LocalTime.of(0, 1);
 
   private static final LocalDate endDate = LocalDate.of(2002, 10, 10);
-  private static final LocalTime endTime = LocalTime.of(10, 10);
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
@@ -75,13 +57,14 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
-  private final GeoreferenceAssertion geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+  private final GeoreferenceAssertionDto geoReferenceAssertion = GeoreferenceAssertionDto.builder()
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .build();
-  private static final String[] dwcOtherRecordNumbers = new String[] { "80-79", "80-80"};
+  private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
+  private static final String habitat = "Tropical";
 
   @BeforeEach
   @SneakyThrows
@@ -91,53 +74,28 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       .sourceID("1")
       .sourceIdType("N")
       .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
-        // recordedOn should be overwritten by the server side generated value
-      .recordedOn(OffsetDateTime.of(LocalDateTime.of(2000,01,01,11,10), ZoneOffset.ofHoursMinutes(1, 0)))
+      // recordedOn should be overwritten by the server side generated value
+      .recordedOn(OffsetDateTime.of(
+        LocalDateTime.of(2000, 1, 1, 11, 10),
+        ZoneOffset.ofHoursMinutes(1, 0)))
       .build();
-
-    createTestCollectingEvent();
-  }
-
-  private void createTestCollectingEvent() {
-    dbService.save(geoReferenceAssertion,false);
-    testCollectingEvent = CollectingEventFactory.newCollectingEvent()
-      .startEventDateTime(LocalDateTime.of(startDate, startTime))
-      .startEventDateTimePrecision((byte) 8)
-      .endEventDateTime(LocalDateTime.of(endDate, endTime))
-      .endEventDateTimePrecision((byte) 8)
-      .verbatimEventDateTime("XI-02-1798")
-      .dwcVerbatimCoordinates("26.089, 106.36")
-      .attachment(List.of(UUID.randomUUID()))
-      .collectors(List.of(UUID.randomUUID()))
-      .dwcRecordedBy(dwcRecordedBy)
-      .dwcVerbatimLocality(dwcVerbatimLocality)
-      .dwcVerbatimLatitude(dwcVerbatimLatitude)
-      .dwcVerbatimLongitude(dwcVerbatimLongitude)
-      .dwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem)
-      .dwcVerbatimSRS(dwcVerbatimSRS)
-      .dwcVerbatimElevation(dwcVerbatimElevation)
-      .dwcVerbatimDepth(dwcVerbatimDepth)   
-      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-      .geographicPlaceNameSource(geographicPlaceNameSource)
-      .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
-      .build();
-    testCollectingEvent.setGeoReferenceAssertions(Collections.singletonList(geoReferenceAssertion));
-
-    collectingEventService.create(testCollectingEvent);
   }
 
   @Test
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
+    CollectingEventDto testCollectingEvent = collectingEventRepository.create(newEventDto(
+      startDate.toString(),
+      endDate.toString()));
+
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
-    QuerySpec geoSpec = new QuerySpec(GeoreferenceAssertionDto.class);
 
     List<IncludeRelationSpec> includeRelationSpec = Stream.of("geoReferenceAssertions")
-        .map(Arrays::asList)
-        .map(IncludeRelationSpec::new)
-        .collect(Collectors.toList());
+      .map(Arrays::asList)
+      .map(IncludeRelationSpec::new)
+      .collect(Collectors.toList());
 
     querySpec.setIncludedRelations(includeRelationSpec);
-    querySpec.setNestedSpecs(Collections.singletonList(geoSpec));
 
     CollectingEventDto collectingEventDto = collectingEventRepository
       .findOne(testCollectingEvent.getUuid(), querySpec);
@@ -146,28 +104,28 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(testCollectingEvent.getUuid(), collectingEventDto.getUuid());
     assertEquals(testCollectingEvent.getCreatedBy(), collectingEventDto.getCreatedBy());
     assertEquals(
-      testCollectingEvent.supplyStartISOEventDateTime().toString(),
+      testCollectingEvent.getStartEventDateTime(),
       collectingEventDto.getStartEventDateTime());
     assertEquals(
-      testCollectingEvent.supplyEndISOEventDateTime().toString(),
+      testCollectingEvent.getEndEventDateTime(),
       collectingEventDto.getEndEventDateTime());
-    assertEquals("XI-02-1798", collectingEventDto.getVerbatimEventDateTime());
-    
+    assertEquals(XI_02_1798, collectingEventDto.getVerbatimEventDateTime());
+
     assertEquals(
       12.123456,
-      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());    
+      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
 
     assertEquals(
       testGeoreferencedDate,
-      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());          
+      collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());
 
-    assertEquals("26.089, 106.36", collectingEventDto.getDwcVerbatimCoordinates());
+    assertEquals(VER_COOR, collectingEventDto.getDwcVerbatimCoordinates());
     assertEquals(dwcRecordedBy, collectingEventDto.getDwcRecordedBy());
     assertEquals(
-      testCollectingEvent.getAttachment().get(0).toString(),
+      testCollectingEvent.getAttachment().get(0).getId(),
       collectingEventDto.getAttachment().get(0).getId());
     assertEquals(
-      testCollectingEvent.getCollectors().get(0).toString(),
+      testCollectingEvent.getCollectors().get(0).getId(),
       collectingEventDto.getCollectors().get(0).getId());
     assertEquals(dwcVerbatimLocality, collectingEventDto.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, collectingEventDto.getDwcVerbatimLatitude());
@@ -175,7 +133,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimCoordinateSystem, collectingEventDto.getDwcVerbatimCoordinateSystem());
     assertEquals(dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
-    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());          
+    assertEquals(dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
     assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
     assertEquals(geographicPlaceNameSource, collectingEventDto.getGeographicPlaceNameSource());
     assertEquals(
@@ -188,9 +146,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(
       geographicPlaceNameSourceDetail.getSourceIdType(),
       collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceIdType());
+    assertEquals(habitat, collectingEventDto.getHabitat());
   }
 
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})   
+  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
@@ -200,6 +159,9 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertNotNull(result.getCreatedBy());
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
+    assertEquals(
+      ce.getGeoReferenceAssertions().get(0).getDwcDecimalLongitude(),
+      result.getGeoReferenceAssertions().get(0).getDwcDecimalLongitude());
     assertEquals(dwcRecordedBy, result.getDwcRecordedBy());
     assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
@@ -220,7 +182,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, result.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);         
+    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
+    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
+    assertEquals(habitat, result.getHabitat());
+    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
   }
 
   @Test
@@ -257,15 +222,15 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {
     CollectingEventDto ce = new CollectingEventDto();
-    GeoreferenceAssertionDto geoRef = new GeoreferenceAssertionDto();
-    geoRef.setDwcCoordinateUncertaintyInMeters(10);
-    GeoreferenceAssertionDto dto = geoReferenceAssertionRepository.create(geoRef);
-    ce.setGeoReferenceAssertions(Collections.singletonList(dto));
     ce.setGroup("aafc");
     ce.setStartEventDateTime(ISODateTime.parse(startDateTime).toString());
     ce.setEndEventDateTime(ISODateTime.parse(endDateTime).toString());
-    ce.setDwcVerbatimCoordinates("26.089, 106.36");
     ce.setDwcRecordedBy(dwcRecordedBy);
+    ce.setVerbatimEventDateTime(XI_02_1798);
+    ce.setDwcVerbatimCoordinates(VER_COOR);
+    ce.setGeographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail);
+    ce.setGeographicPlaceNameSource(geographicPlaceNameSource);
+    ce.setGeoReferenceAssertions(List.of(geoReferenceAssertion));
     ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(
@@ -278,6 +243,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth);
     ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);
+    ce.setHabitat(habitat);
     return ce;
   }
 
@@ -376,7 +342,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       Arguments.of("2010-01-02T02:00", "startEventDateTime=gt=2010-01-02T01:00", 1)
     );
   }
-
 
   private static QuerySpec newRsqlQuerySpec(String rsql) {
     QuerySpec spec = new QuerySpec(CollectingEventDto.class);

@@ -1,11 +1,28 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.OnUpdate;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,31 +38,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
-import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnUpdate;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -53,7 +51,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
+@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
 @TypeDef(
   name = "list-array",
@@ -82,15 +80,16 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @OneToMany(fetch = FetchType.LAZY,
-      mappedBy = "collectingEvent",
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
-      )
+  @OneToMany(fetch = FetchType.EAGER,
+    mappedBy = "collectingEvent",
+    cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
+  )
+  @ToString.Exclude
   private List<GeoreferenceAssertion> geoReferenceAssertions;
 
   private String dwcVerbatimCoordinates;
 
-  @Size(max = 250)  
+  @Size(max = 250)
   private String dwcRecordedBy;
 
   // Set by applyStartISOEventDateTime
@@ -108,7 +107,7 @@ public class CollectingEvent implements DinaEntity {
   private Byte endEventDateTimePrecision;
 
   private String verbatimEventDateTime;
-  
+
   @Column(insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
@@ -125,31 +124,31 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
 
-  @Size(max = 250)  
+  @Size(max = 250)
   private String dwcVerbatimLocality;
 
-  @Size(max = 25)  
+  @Size(max = 25)
   private String dwcVerbatimLatitude;
 
-  @Size(max = 25)  
+  @Size(max = 25)
   private String dwcVerbatimLongitude;
 
-  @Size(max = 50)  
+  @Size(max = 50)
   private String dwcVerbatimCoordinateSystem;
 
-  @Size(max = 50)  
+  @Size(max = 50)
   private String dwcVerbatimSRS;
 
-  @Size(max = 25)  
+  @Size(max = 25)
   private String dwcVerbatimElevation;
 
-  @Size(max = 25)  
+  @Size(max = 25)
   private String dwcVerbatimDepth;
 
   @Type(type = "string-array")
   private String[] dwcOtherRecordNumbers;
 
-  @Size(max = 50)  
+  @Size(max = 50)
   private String dwcRecordNumber;
 
   @Size(max = 100)
@@ -160,6 +159,9 @@ public class CollectingEvent implements DinaEntity {
   private String dwcStateProvince;
   @Size(max = 100)
   private String geographicPlaceName;
+
+  @Size(max = 500)
+  private String habitat;
 
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
@@ -176,8 +178,9 @@ public class CollectingEvent implements DinaEntity {
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
   /**
-   * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
-   * are always in sync.
+   * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
+   * in sync.
+   *
    * @param startISOEventDateTime the startEventDate time as ISODateTime or null.
    */
   public void applyStartISOEventDateTime(ISODateTime startISOEventDateTime) {
@@ -196,13 +199,14 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(startEventDateTime)
-        .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
-        .build();
+      .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
+      .build();
   }
 
   /**
-   *  Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields
-   * are always in sync.
+   * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
+   * in sync.
+   *
    * @param endISOEventDateTime the ISODateTime
    */
   public void applyEndISOEventDateTime(ISODateTime endISOEventDateTime) {
@@ -222,8 +226,8 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(endEventDateTime)
-        .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
-        .build();
+      .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
+      .build();
   }
 
   @Data
