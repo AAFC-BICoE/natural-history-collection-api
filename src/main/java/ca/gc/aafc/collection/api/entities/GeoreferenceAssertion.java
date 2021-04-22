@@ -42,11 +42,6 @@ import java.util.UUID;
 @Table(name = "georeference_assertion")
 public class GeoreferenceAssertion {
 
-  @Override
-  public UUID getUuid() {
-    return null;
-  }
-
   public enum GeoreferenceVerificationStatus {
     GEOREFERENCING_NOT_POSSIBLE
   }
