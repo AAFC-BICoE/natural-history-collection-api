@@ -62,7 +62,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private void resolveIncomingAssertion(CollectingEvent entity) {
     List<GeoreferenceAssertion> incomingAssertions = entity.getGeoReferenceAssertions();
-    entity.setGeoReferenceAssertions(null);
+    entity.setGeoReferenceAssertions(null);// Set null due to flushing mechanics with fetch
     List<GeoreferenceAssertion> currentAssertions = fetchAssertions(entity);
 
     if (CollectionUtils.isEmpty(incomingAssertions) && CollectionUtils.isNotEmpty(currentAssertions)) {
@@ -78,8 +78,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
       if (i < currentSize) {
         GeoreferenceAssertion current = currentAssertions.get(i);
-        in.setId(current.getId());
-        baseDAO.createWithEntityManager(entityManager -> entityManager.merge(in));
+        in.setId(current.getId());// Set id so hibernate will merge over current
+        baseDAO.update(in);
       }
     }
     entity.setGeoReferenceAssertions(new ArrayList<>(incomingAssertions));
