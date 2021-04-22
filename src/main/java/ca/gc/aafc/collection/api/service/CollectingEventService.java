@@ -61,9 +61,26 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private void resolveIncomingAssertion(CollectingEvent entity) {
-    List<GeoreferenceAssertion> incoming = entity.getGeoReferenceAssertions();
+    List<GeoreferenceAssertion> incomingAssertions = entity.getGeoReferenceAssertions();
     entity.setGeoReferenceAssertions(null);
-    fetchAssertions(entity).forEach(baseDAO::delete);
+    List<GeoreferenceAssertion> currentAssertions = fetchAssertions(entity);
+
+    int currentSize = currentAssertions.size();
+
+    for (int i = 0; i < incomingAssertions.size(); i++) {
+      GeoreferenceAssertion in = incomingAssertions.get(i);
+
+      if(i < currentSize){
+        GeoreferenceAssertion current = currentAssertions.get(i);
+        in.setId(current.getId());
+        in.setIndex(i);
+        in.setCollectingEvent(entity);
+        baseDAO.createWithEntityManager(entityManager -> entityManager.merge(in));
+      }
+    }
+    //TODO not even close to finished half way through context switch commit
+
+    currentAssertions.forEach(baseDAO::delete);
 
     // flush to Update hibernate session
     baseDAO.createWithEntityManager(entityManager -> {
@@ -71,9 +88,9 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
       return null;
     });
 
-    if (CollectionUtils.isNotEmpty(incoming)) {
-      linkAssertions(entity, incoming);
-      entity.setGeoReferenceAssertions(new ArrayList<>(incoming));
+    if (CollectionUtils.isNotEmpty(incomingAssertions)) {
+      linkAssertions(entity, incomingAssertions);
+      entity.setGeoReferenceAssertions(new ArrayList<>(incomingAssertions));
     }
   }
 
