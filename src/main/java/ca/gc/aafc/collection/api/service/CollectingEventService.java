@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
+import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
@@ -26,18 +27,18 @@ import java.util.stream.Collectors;
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
 
   private final CollectingEventValidator collectingEventValidator;
-  private final GeoReferenceAssertionService geoReferenceAssertionService;
   private final BaseDAO baseDAO;
+  private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
     @NonNull CollectingEventValidator collectingEventValidator,
-    @NonNull GeoReferenceAssertionService geoReferenceAssertionService
+    @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator
   ) {
     super(baseDAO);
     this.collectingEventValidator = collectingEventValidator;
-    this.geoReferenceAssertionService = geoReferenceAssertionService;
     this.baseDAO = baseDAO;
+    this.georeferenceAssertionValidator = georeferenceAssertionValidator;
   }
 
   @Override
@@ -47,6 +48,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     assignAutomaticValues(entity);
     linkAssertions(entity, entity.getGeoReferenceAssertions());
     validateCollectingEvent(entity);
+    validateAssertions(entity);
   }
 
   @Override
@@ -55,12 +57,13 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     assignAutomaticValues(entity);
     resolveIncomingAssertion(entity);
     validateCollectingEvent(entity);
+    validateAssertions(entity);
   }
 
   private void resolveIncomingAssertion(CollectingEvent entity) {
     List<GeoreferenceAssertion> incoming = entity.getGeoReferenceAssertions();
     entity.setGeoReferenceAssertions(null);
-    fetchAssertions(entity).forEach(geoReferenceAssertionService::delete);
+    fetchAssertions(entity).forEach(baseDAO::delete);
 
     // flush to Update hibernate session
     baseDAO.createWithEntityManager(entityManager -> {
@@ -106,6 +109,28 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateCollectingEvent(CollectingEvent entity) {
     Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
     collectingEventValidator.validate(entity, errors);
+
+    if (!errors.hasErrors()) {
+      return;
+    }
+
+    Optional<String> errorMsg = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).findAny();
+    errorMsg.ifPresent(msg -> {
+      throw new IllegalArgumentException(msg);
+    });
+  }
+
+  private void validateAssertions(@NonNull CollectingEvent entity) {
+    if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
+      entity.getGeoReferenceAssertions().forEach(geo -> validateGeoreferenceAssertion(
+        geo,
+        entity.getUuid().toString()));
+    }
+  }
+
+  public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertion geo, @NonNull String eventUUID) {
+    Errors errors = new BeanPropertyBindingResult(geo, eventUUID + "/" + geo.getIndex());
+    georeferenceAssertionValidator.validate(geo, errors);
 
     if (!errors.hasErrors()) {
       return;
