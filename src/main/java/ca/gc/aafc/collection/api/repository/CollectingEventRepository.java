@@ -51,26 +51,8 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
 
   @Override
   public <S extends CollectingEventDto> S create(S resource) {
-    if (authenticatedUser.isPresent()) {
-      String username = authenticatedUser.get().getUsername();
-      resource.setCreatedBy(username);
-      if (CollectionUtils.isNotEmpty(resource.getGeoReferenceAssertions())) {
-        resource.getGeoReferenceAssertions()
-          .forEach(georeferenceAssertion -> georeferenceAssertion.setCreatedBy(username));
-      }
-    }
+    authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
     return super.create(resource);
-  }
-
-  @Override
-  public <S extends CollectingEventDto> S save(S resource) {
-    if (authenticatedUser.isPresent()) {
-      if (CollectionUtils.isNotEmpty(resource.getGeoReferenceAssertions())) {
-        resource.getGeoReferenceAssertions().forEach(
-          assertion -> assertion.setCreatedBy(authenticatedUser.get().getUsername()));
-      }
-    }
-    return super.save(resource);
   }
 }
 

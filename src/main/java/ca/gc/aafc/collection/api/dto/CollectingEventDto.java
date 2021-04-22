@@ -9,6 +9,8 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
+import ca.gc.aafc.dina.mapper.DinaMapper;
+import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,6 +30,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -188,44 +191,28 @@ public class CollectingEventDto {
     List<GeoreferenceAssertionDto>,
     List<GeoreferenceAssertion>> {
 
+    private static final DinaMappingRegistry registry = new DinaMappingRegistry(GeoreferenceAssertionDto.class);
+    private static final DinaMapper<GeoreferenceAssertionDto, GeoreferenceAssertion> mapper;
+
+    static {
+      mapper = new DinaMapper<>(GeoreferenceAssertionDto.class, registry);
+    }
+
     @Override
     public List<GeoreferenceAssertionDto> toDTO(List<GeoreferenceAssertion> assertionList) {
       return assertionList == null ? null : assertionList.stream()
-        .map(assertion -> GeoreferenceAssertionDto.builder()
-          .createdOn(assertion.getCreatedOn())
-          .dwcDecimalLatitude(assertion.getDwcDecimalLatitude())
-          .dwcDecimalLongitude(assertion.getDwcDecimalLongitude())
-          .dwcCoordinateUncertaintyInMeters(assertion.getDwcCoordinateUncertaintyInMeters())
-          .dwcGeodeticDatum(assertion.getDwcGeodeticDatum())
-          .dwcGeoreferencedDate(assertion.getDwcGeoreferencedDate())
-          .dwcGeoreferenceProtocol(assertion.getDwcGeoreferenceProtocol())
-          .dwcGeoreferenceRemarks(assertion.getDwcGeoreferenceRemarks())
-          .dwcGeoreferenceSources(assertion.getDwcGeoreferenceSources())
-          .dwcGeoreferenceVerificationStatus(assertion.getDwcGeoreferenceVerificationStatus())
-          .georeferencedBy(assertion.getGeoreferencedBy())
-          .literalGeoreferencedBy(assertion.getLiteralGeoreferencedBy())
-          .build())
+        .map(assertion -> mapper.toDto(assertion, registry.getAttributesPerClass(), Set.of()))
         .collect(Collectors.toList());
     }
 
     @Override
     public List<GeoreferenceAssertion> toEntity(List<GeoreferenceAssertionDto> assertionList) {
       return assertionList == null ? null : assertionList.stream()
-        .map(assertion -> GeoreferenceAssertion.builder()
-          .createdOn(assertion.getCreatedOn())
-          .dwcDecimalLatitude(assertion.getDwcDecimalLatitude())
-          .dwcDecimalLongitude(assertion.getDwcDecimalLongitude())
-          .dwcCoordinateUncertaintyInMeters(assertion.getDwcCoordinateUncertaintyInMeters())
-          .dwcGeodeticDatum(assertion.getDwcGeodeticDatum())
-          .dwcGeoreferencedDate(assertion.getDwcGeoreferencedDate())
-          .dwcGeoreferenceProtocol(assertion.getDwcGeoreferenceProtocol())
-          .dwcGeoreferenceRemarks(assertion.getDwcGeoreferenceRemarks())
-          .dwcGeoreferenceSources(assertion.getDwcGeoreferenceSources())
-          .dwcGeoreferenceVerificationStatus(assertion.getDwcGeoreferenceVerificationStatus())
-          .georeferencedBy(assertion.getGeoreferencedBy())
-          .literalGeoreferencedBy(assertion.getLiteralGeoreferencedBy())
-          .build())
-        .collect(Collectors.toList());
+        .map(assertion -> {
+          GeoreferenceAssertion newAssertion = new GeoreferenceAssertion();
+          mapper.applyDtoToEntity(assertion, newAssertion, registry.getAttributesPerClass(), Set.of());
+          return newAssertion;
+        }).collect(Collectors.toList());
     }
 
     @Override
