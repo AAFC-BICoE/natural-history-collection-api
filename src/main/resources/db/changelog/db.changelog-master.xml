@@ -1,5 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
   <include file="db/changelog/db.changelog-init.xml"/>
   <include file="db/changelog/migrations/1-Add_collector_group_table.xml"/>
   <include file="db/changelog/migrations/2-Add_attachment_collecting_event.xml"/>
@@ -9,19 +11,19 @@
   <include file="db/changelog/migrations/6-Add_dwcRecordedBy_collecting_event.xml"/>
   <include file="db/changelog/migrations/7-Add_dwcVerbatimLocality_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/8-Remove_verbatimCollectors_etc_collecting_event.xml"/>
-  <include file="db/changelog/migrations/9-Add_dwcVerbatimLatitude_etc_collecting_event.xml"/>  
+  <include file="db/changelog/migrations/9-Add_dwcVerbatimLatitude_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/10-Add_dwcRecordNumber_collecting_event.xml"/>
   <include file="db/changelog/migrations/11-Add_managed_attribute.xml"/>
-  <include file="db/changelog/migrations/12-Add_geoReference_assertion_table.xml"/>  
-  <include file="db/changelog/migrations/13-Update_dwcRecordNumber_collecting_event_table.xml"/>  
-  <include file="db/changelog/migrations/14-Remove_dwcDecimalLatitude_etc_collecting_event.xml"/>    
+  <include file="db/changelog/migrations/12-Add_geoReference_assertion_table.xml"/>
+  <include file="db/changelog/migrations/13-Update_dwcRecordNumber_collecting_event_table.xml"/>
+  <include file="db/changelog/migrations/14-Remove_dwcDecimalLatitude_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/15-Add_dwcOtherRecordNumbers_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/16-Add_managed_attribute_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/17-Add_dwcGeoreferencedDate_etc_georeference_assertion.xml"/>
   <include file="db/changelog/migrations/18-Add_Javers_audit_tables.xml"/>
   <include file="db/changelog/migrations/19-Remove_dwcGeoreferencedBy_etc_collecting_event.xml"/>
   <include file="db/changelog/migrations/20-Add_dwcGeodeticDatum_georeference_assertion.xml"/>
-  <include file="db/changelog/migrations/21-Change-dwcGeoreferencedDate-to-LocalDate.xml"/>    
+  <include file="db/changelog/migrations/21-Change-dwcGeoreferencedDate-to-LocalDate.xml"/>
   <include file="db/changelog/migrations/22-Add_georeferencedBy_to_GeoreferenceAssertion.xml"/>
   <include file="db/changelog/migrations/23-Add_initial_place_fields_to_coll_event.xml"/>
   <include file="db/changelog/migrations/24-Add-dwcGeoreferenceVerificationStatus.xml"/>
@@ -33,5 +35,5 @@
   <include file="db/changelog/migrations/30-Move_managed_attributes_to_jsonb_based_column.xml"/>
   <include file="db/changelog/migrations/31-Add_habitat_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/32-Nest_GeoReference_In_Coll_Event.xml"/>
+  <include file="db/changelog/migrations/33-Add_Preparation_Process.xml"/>
 </databaseChangeLog>
-
