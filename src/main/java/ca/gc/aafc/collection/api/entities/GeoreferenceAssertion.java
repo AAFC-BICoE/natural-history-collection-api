@@ -52,7 +52,7 @@ public class GeoreferenceAssertion implements DinaEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "index", unique = true)
+  @Column(name = "index")
   private int index;
 
   @DecimalMin(value = "-90.0")
