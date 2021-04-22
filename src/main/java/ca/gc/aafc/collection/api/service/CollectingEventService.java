@@ -66,32 +66,18 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     List<GeoreferenceAssertion> currentAssertions = fetchAssertions(entity);
 
     int currentSize = currentAssertions.size();
-
     for (int i = 0; i < incomingAssertions.size(); i++) {
       GeoreferenceAssertion in = incomingAssertions.get(i);
+      in.setCollectingEvent(entity);
+      in.setIndex(i);
 
-      if(i < currentSize){
+      if (i < currentSize) {
         GeoreferenceAssertion current = currentAssertions.get(i);
         in.setId(current.getId());
-        in.setIndex(i);
-        in.setCollectingEvent(entity);
         baseDAO.createWithEntityManager(entityManager -> entityManager.merge(in));
       }
     }
-    //TODO not even close to finished half way through context switch commit
-
-    currentAssertions.forEach(baseDAO::delete);
-
-    // flush to Update hibernate session
-    baseDAO.createWithEntityManager(entityManager -> {
-      entityManager.flush();
-      return null;
-    });
-
-    if (CollectionUtils.isNotEmpty(incomingAssertions)) {
-      linkAssertions(entity, incomingAssertions);
-      entity.setGeoReferenceAssertions(new ArrayList<>(incomingAssertions));
-    }
+    entity.setGeoReferenceAssertions(new ArrayList<>(incomingAssertions));
   }
 
   private List<GeoreferenceAssertion> fetchAssertions(CollectingEvent entity) {
