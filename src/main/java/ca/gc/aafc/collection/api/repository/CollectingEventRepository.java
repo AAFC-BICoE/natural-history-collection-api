@@ -12,7 +12,6 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
 import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import lombok.NonNull;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
