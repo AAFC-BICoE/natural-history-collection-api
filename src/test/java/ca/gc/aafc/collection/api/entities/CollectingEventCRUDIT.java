@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -83,6 +84,33 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .build();
     assertNull(collectingEvent.getId());
     collectingEventService.create(collectingEvent);
+  }
+
+  @Test
+  public void nullStartTimeNonNullEndTime_throwsIllegalArgumentException() {
+    collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
+      .build();
+    ValidationException exception = assertThrows(ValidationException.class, () -> collectingEventService.create(collectingEvent));
+
+    String expectedMessage = "The start and end dates do not create a valid timeline";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  public void startTimeAfterEndTime_throwsIllegalArgumentException() {
+    collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
+      .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
+      .build();
+    ValidationException exception = assertThrows(ValidationException.class, () -> collectingEventService.create(collectingEvent));
+
+    String expectedMessage = "The start and end dates do not create a valid timeline";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test

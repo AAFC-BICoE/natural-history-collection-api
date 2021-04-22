@@ -182,7 +182,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
     assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
-    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
     assertEquals(habitat, result.getHabitat());
   }
 

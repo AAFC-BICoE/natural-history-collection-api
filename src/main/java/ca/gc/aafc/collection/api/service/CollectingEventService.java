@@ -9,16 +9,12 @@ import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 
 import javax.persistence.criteria.Predicate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -104,17 +100,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   public void validateCollectingEvent(CollectingEvent entity) {
-    Errors errors = new BeanPropertyBindingResult(entity, entity.getUuid().toString());
-    collectingEventValidator.validate(entity, errors);
-
-    if (!errors.hasErrors()) {
-      return;
-    }
-
-    Optional<String> errorMsg = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).findAny();
-    errorMsg.ifPresent(msg -> {
-      throw new IllegalArgumentException(msg);
-    });
+    validateBusinessRules(entity, collectingEventValidator);
   }
 
   private void cleanupManagedAttributeValues(CollectingEvent entity) {
