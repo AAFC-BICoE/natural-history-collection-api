@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +24,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -42,7 +40,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Table(name = "georeference_assertion")
-public class GeoreferenceAssertion implements DinaEntity {
+public class GeoreferenceAssertion {
 
   public enum GeoreferenceVerificationStatus {
     GEOREFERENCING_NOT_POSSIBLE
@@ -66,10 +64,6 @@ public class GeoreferenceAssertion implements DinaEntity {
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
-
-  @NotBlank
-  @Column(name = "created_by", updatable = false)
-  private String createdBy;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull

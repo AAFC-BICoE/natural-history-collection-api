@@ -18,7 +18,6 @@ public class GeoreferenceAssertionFactory implements TestableEntityFactory<Geore
    */
   public static GeoreferenceAssertion.GeoreferenceAssertionBuilder newGeoreferenceAssertion() {
     return GeoreferenceAssertion
-      .builder()
-      .createdBy("test user");
+      .builder();
   }
 }

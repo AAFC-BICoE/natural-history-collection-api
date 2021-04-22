@@ -192,7 +192,6 @@ public class CollectingEventDto {
     public List<GeoreferenceAssertionDto> toDTO(List<GeoreferenceAssertion> assertionList) {
       return assertionList == null ? null : assertionList.stream()
         .map(assertion -> GeoreferenceAssertionDto.builder()
-          .createdBy(assertion.getCreatedBy())
           .createdOn(assertion.getCreatedOn())
           .dwcDecimalLatitude(assertion.getDwcDecimalLatitude())
           .dwcDecimalLongitude(assertion.getDwcDecimalLongitude())
@@ -213,7 +212,6 @@ public class CollectingEventDto {
     public List<GeoreferenceAssertion> toEntity(List<GeoreferenceAssertionDto> assertionList) {
       return assertionList == null ? null : assertionList.stream()
         .map(assertion -> GeoreferenceAssertion.builder()
-          .createdBy(assertion.getCreatedBy())
           .createdOn(assertion.getCreatedOn())
           .dwcDecimalLatitude(assertion.getDwcDecimalLatitude())
           .dwcDecimalLongitude(assertion.getDwcDecimalLongitude())
