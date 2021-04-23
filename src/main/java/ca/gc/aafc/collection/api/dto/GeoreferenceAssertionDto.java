@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.javers.core.metamodel.annotation.Value;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(GeoreferenceAssertion.class)
+@Value
 public class GeoreferenceAssertionDto {
   private Double dwcDecimalLatitude;
   private Double dwcDecimalLongitude;
