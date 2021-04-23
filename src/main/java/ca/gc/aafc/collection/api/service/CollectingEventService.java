@@ -65,13 +65,13 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     entity.setGeoReferenceAssertions(null);// Set null due to flushing mechanics with fetch
     List<GeoreferenceAssertion> currentAssertions = fetchAssertions(entity);
 
-    if (CollectionUtils.isEmpty(incomingAssertions) && CollectionUtils.isNotEmpty(currentAssertions)) {
+    if (CollectionUtils.isEmpty(incomingAssertions)) {
       currentAssertions.forEach(baseDAO::delete);
-      return;
+      return; // Clear assertions and exit
     }
 
     int currentSize = currentAssertions.size();
-    for (int i = 0; i < incomingAssertions.size(); i++) {
+    for (int i = 0; i < incomingAssertions.size(); i++) {// Merge over existing assertions
       GeoreferenceAssertion in = incomingAssertions.get(i);
       in.setCollectingEvent(entity);
       in.setIndex(i);
@@ -82,6 +82,12 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
         baseDAO.update(in);
       }
     }
+
+    while (currentSize > incomingAssertions.size()) {// Remove remaining current assertions
+      baseDAO.delete(currentAssertions.get(currentSize - 1));
+      currentSize--;
+    }
+
     entity.setGeoReferenceAssertions(new ArrayList<>(incomingAssertions));
   }
 

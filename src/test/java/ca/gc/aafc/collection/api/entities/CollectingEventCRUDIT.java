@@ -206,6 +206,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     // remove last
     fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo));
+    collectingEventService.update(fetchedCollectingEvent);
 
     results = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
