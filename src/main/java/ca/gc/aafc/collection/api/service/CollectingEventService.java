@@ -62,7 +62,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private void resolveIncomingAssertion(CollectingEvent entity) {
     List<GeoreferenceAssertion> incomingAssertions = entity.getGeoReferenceAssertions();
-    entity.setGeoReferenceAssertions(null);// Set null due to flushing mechanics with fetch
+    entity.setGeoReferenceAssertions(null); // Set null due to flushing mechanics with fetch
     List<GeoreferenceAssertion> currentAssertions = fetchAssertions(entity);
 
     if (CollectionUtils.isEmpty(incomingAssertions)) {
@@ -71,19 +71,19 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     }
 
     int currentSize = currentAssertions.size();
-    for (int i = 0; i < incomingAssertions.size(); i++) {// Merge over existing assertions
+    for (int i = 0; i < incomingAssertions.size(); i++) { // Merge over existing assertions
       GeoreferenceAssertion in = incomingAssertions.get(i);
       in.setCollectingEvent(entity);
       in.setIndex(i);
 
       if (i < currentSize) {
         GeoreferenceAssertion current = currentAssertions.get(i);
-        in.setId(current.getId());// Set id so hibernate will merge over current
+        in.setId(current.getId()); // Set id so hibernate will merge over current
         baseDAO.update(in);
       }
     }
 
-    while (currentSize > incomingAssertions.size()) {// Remove remaining current assertions
+    while (currentSize > incomingAssertions.size()) { // Remove remaining current assertions
       baseDAO.delete(currentAssertions.get(currentSize - 1));
       currentSize--;
     }

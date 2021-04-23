@@ -191,17 +191,17 @@ public class CollectingEventDto {
     List<GeoreferenceAssertionDto>,
     List<GeoreferenceAssertion>> {
 
-    private static final DinaMappingRegistry registry = new DinaMappingRegistry(GeoreferenceAssertionDto.class);
-    private static final DinaMapper<GeoreferenceAssertionDto, GeoreferenceAssertion> mapper;
+    private static final DinaMappingRegistry REGISTRY = new DinaMappingRegistry(GeoreferenceAssertionDto.class);
+    private static final DinaMapper<GeoreferenceAssertionDto, GeoreferenceAssertion> MAPPER;
 
     static {
-      mapper = new DinaMapper<>(GeoreferenceAssertionDto.class, registry);
+      MAPPER = new DinaMapper<>(GeoreferenceAssertionDto.class, REGISTRY);
     }
 
     @Override
     public List<GeoreferenceAssertionDto> toDTO(List<GeoreferenceAssertion> assertionList) {
       return assertionList == null ? null : assertionList.stream()
-        .map(assertion -> mapper.toDto(assertion, registry.getAttributesPerClass(), Set.of()))
+        .map(assertion -> MAPPER.toDto(assertion, REGISTRY.getAttributesPerClass(), Set.of()))
         .collect(Collectors.toList());
     }
 
@@ -210,7 +210,7 @@ public class CollectingEventDto {
       return assertionList == null ? null : assertionList.stream()
         .map(assertion -> {
           GeoreferenceAssertion newAssertion = new GeoreferenceAssertion();
-          mapper.applyDtoToEntity(assertion, newAssertion, registry.getAttributesPerClass(), Set.of());
+          MAPPER.applyDtoToEntity(assertion, newAssertion, REGISTRY.getAttributesPerClass(), Set.of());
           return newAssertion;
         }).collect(Collectors.toList());
     }
