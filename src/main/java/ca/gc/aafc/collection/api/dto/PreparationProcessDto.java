@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.collection.api.entities.PreparationProcess;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
@@ -10,6 +9,7 @@ import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 
+import java.time.LocalDateTime;
 import java.time.OffsetTime;
 import java.util.UUID;
 
@@ -37,11 +37,9 @@ public class PreparationProcessDto {
 
   private UUID agentId;
 
-  @IgnoreDinaMapping
-  private String startDateTime;
+  private LocalDateTime startDateTime;
 
-  @IgnoreDinaMapping
-  private String endDateTime;
+  private LocalDateTime endDateTime;
 
   @JsonApiRelation
   private PreparationProcessDefinitionDto preparationProcessDefinition;
