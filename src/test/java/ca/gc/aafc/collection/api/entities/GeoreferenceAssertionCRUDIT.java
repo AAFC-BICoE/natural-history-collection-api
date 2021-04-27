@@ -16,6 +16,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
 
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
   private static final List<UUID> agentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
+  public static final boolean PRIMARY = true;
 
   private CollectingEvent event;
 
@@ -48,6 +49,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(45.01, fetchedGeoreferenceAssertion.getDwcDecimalLongitude());
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
     assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
+    assertEquals(PRIMARY, fetchedGeoreferenceAssertion.getIsPrimary());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
   }
 
@@ -57,6 +59,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
       .dwcDecimalLongitude(45.01)
       .dwcCoordinateUncertaintyInMeters(10)
       .dwcGeoreferencedDate(testGeoreferencedDate)
+      .isPrimary(PRIMARY)
       .collectingEvent(event)
       .georeferencedBy(agentIdentifiers)
       .build();
