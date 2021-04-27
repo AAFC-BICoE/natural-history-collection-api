@@ -1,5 +1,9 @@
 package ca.gc.aafc.collection.api.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
@@ -10,19 +14,14 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import javax.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
-public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
+public class PreparationProcessElementRepositoryIT extends CollectionModuleBaseIT {
 
   // @Inject 
-  // private PreparationProcessRepository preparationProcessRepository;
-
+  // private PreparationProcessElementRepository preparationProcessElementRepository;
+  
   private static final String dwcCatalogNumber = "R-4313";
   private static final String group = "aafc";
   private static final String name = "preparation process definition";
@@ -66,5 +65,4 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
     ce.setCreatedBy("dina");
     return ce;
   }
-  
 }
