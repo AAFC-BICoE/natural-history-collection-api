@@ -36,4 +36,5 @@
   <include file="db/changelog/migrations/31-Add_habitat_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/32-Nest_GeoReference_In_Coll_Event.xml"/>
   <include file="db/changelog/migrations/33-Add_Preparation_Process.xml"/>
+  <include file="db/changelog/migrations/34-Update_geo_assertion_remove_createdBy.xml"/>
 </databaseChangeLog>

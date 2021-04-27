@@ -114,7 +114,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void create() {
+  void create() {
     //Assert generated fields
     assertNotNull(collectingEvent.getId());
     assertNotNull(collectingEvent.getCreatedOn());
@@ -122,7 +122,25 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void find() {
+  void create_WithInvalidGeo_throwsIllegalArgumentException() {
+    collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
+      geo.setDwcGeoreferenceVerificationStatus(
+        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+      geo.setDwcDecimalLatitude(2.0);
+    });
+
+    IllegalArgumentException exception = assertThrows(
+      IllegalArgumentException.class,
+      () -> collectingEventService.create(collectingEvent));
+
+    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void find() {
     CollectingEvent fetchedCollectingEvent = dbService
       .find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
@@ -172,16 +190,60 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     GeoreferenceAssertion geo = newAssertion(1);
     GeoreferenceAssertion geo2 = newAssertion(2);
 
+    // Pop one, add two
     fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo, geo2));
+
+    collectingEventService.update(fetchedCollectingEvent);
+
+    List<GeoreferenceAssertion> results = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
+    assertEquals(2, results.size());
+    assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
+    assertEquals(geo2.getDwcDecimalLatitude(), results.get(1).getDwcDecimalLatitude());
+
+    fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    // remove last
+    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo));
+    collectingEventService.update(fetchedCollectingEvent);
+
+    results = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
+    assertEquals(1, results.size());
+    assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
+  }
+
+  @Test
+  void update_whenGeoAssertionsCleared_GeosRemoved() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setGeoReferenceAssertions(null);
 
     collectingEventService.update(fetchedCollectingEvent);
     CollectingEvent result = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    List<GeoreferenceAssertion> list = result.getGeoReferenceAssertions();
-    assertEquals(2, list.size());
-    assertEquals(geo.getDwcDecimalLatitude(), list.get(0).getDwcDecimalLatitude());
-    assertEquals(geo2.getDwcDecimalLatitude(), list.get(1).getDwcDecimalLatitude());
+    assertNull(result.getGeoReferenceAssertions());
+  }
+
+  @Test
+  void update_WithInvalidGeo_throwsIllegalArgumentException() {
+    collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
+      geo.setDwcGeoreferenceVerificationStatus(
+        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+      geo.setDwcDecimalLatitude(2.0);
+    });
+
+    IllegalArgumentException exception = assertThrows(
+      IllegalArgumentException.class,
+      () -> collectingEventService.update(collectingEvent));
+
+    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   private static GeoreferenceAssertion newAssertion(double latitude) {
@@ -190,4 +252,5 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcDecimalLongitude(45.01)
       .build();
   }
+
 }
