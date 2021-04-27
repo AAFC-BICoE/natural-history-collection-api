@@ -15,7 +15,7 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 
 import lombok.NonNull;
 
-
+@Repository
 public class PreparationProcessDefinitonRepository extends DinaRepository<PreparationProcessDefinitionDto, PreparationProcessDefinition> {
   
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;  
