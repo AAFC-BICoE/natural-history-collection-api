@@ -41,7 +41,6 @@ public class PreparationProcess implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull
   @Column(name = "uuid", unique = true)
   private UUID uuid;
 

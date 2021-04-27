@@ -16,11 +16,11 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 
 @Repository
-public class PreparationProcessDefinitonRepository extends DinaRepository<PreparationProcessDefinitionDto, PreparationProcessDefinition> {
+public class PreparationProcessDefinitionRepository extends DinaRepository<PreparationProcessDefinitionDto, PreparationProcessDefinition> {
   
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;  
 
-  public PreparationProcessDefinitonRepository(
+  public PreparationProcessDefinitionRepository(
     @NonNull PreparationProcessDefinitionService dinaService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,

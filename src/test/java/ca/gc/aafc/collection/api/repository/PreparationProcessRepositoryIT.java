@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.PhysicalEntityDto;
 import ca.gc.aafc.collection.api.dto.PreparationProcessDefinitionDto;
 import ca.gc.aafc.collection.api.dto.PreparationProcessDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,12 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
   @Inject 
   private PreparationProcessRepository preparationProcessRepository;
 
+  @Inject
+  private PhysicalEntityRepository physicalEntityRepository;
+
+  @Inject 
+  private PreparationProcessDefinitionRepository preparationProcessDefinitionRepository;
+
   private static final String dwcCatalogNumber = "R-4313";
   private static final String group = "aafc";
   private static final String name = "preparation process definition";
@@ -38,8 +45,12 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
   @Test
   @WithMockKeycloakUser(username = "test user")
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
-    PhysicalEntityDto pe = newPhysicalEntityDto(null);
-    PreparationProcessDefinitionDto ppd = newPreparationProcessDefinitionDto();
+    PhysicalEntityDto pe = physicalEntityRepository.findOne(
+      physicalEntityRepository.create(newPhysicalEntityDto(null)).getUuid(), new QuerySpec(PhysicalEntityDto.class));
+    PreparationProcessDefinitionDto ppd = preparationProcessDefinitionRepository.findOne(
+      preparationProcessDefinitionRepository.create(newPreparationProcessDefinitionDto()).getUuid(),
+      new QuerySpec(PreparationProcessDefinitionDto.class));
+
     PreparationProcessDto pp = newPreparationProcessDto(pe, ppd);
     PreparationProcessDto result = preparationProcessRepository.findOne(
       preparationProcessRepository.create(pp).getUuid(),
@@ -61,6 +72,7 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
       pp.setAgentId(UUID.randomUUID());
       pp.setSourcePhysicalEntity(pe);
       pp.setPreparationProcessDefinition(ppd);
+      pp.setUuid(UUID.randomUUID());
     return pp;
   }
 
@@ -68,6 +80,8 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
     PreparationProcessDefinitionDto ppd = new PreparationProcessDefinitionDto();
     ppd.setName(name);
     ppd.setGroup(group);
+    ppd.setUuid(UUID.randomUUID());
+    ppd.setCreatedBy("test user");
     return ppd;
   }
   
@@ -77,17 +91,9 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
     pe.setDwcCatalogNumber(dwcCatalogNumber);
     pe.setCollectingEvent(event);
     pe.setGroup(group);
+    pe.setUuid(UUID.randomUUID());
     pe.setAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     return pe;
   }
-
-  private CollectingEventDto newEventDto() {
-    CollectingEventDto ce = new CollectingEventDto();
-    ce.setGroup(group);
-    ce.setStartEventDateTime(ISODateTime.parse("2020").toString());
-    ce.setCreatedBy("dina");
-    return ce;
-  }
-  
 }
