@@ -4,7 +4,11 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.PhysicalEntityDto;
+import ca.gc.aafc.collection.api.dto.PreparationProcessDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -19,9 +23,8 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
   // For Physical Entity
   private static final String dwcCatalogNumber = "R-4313";
   private static final String group = "aafc";
-
   
-  private PhysicalEntityDto newPhysicalEntity(
+  private PhysicalEntityDto newPhysicalEntityDto(
     String dwcCatalogNumber, 
     CollectingEventDto event) {
     PhysicalEntityDto pe = new PhysicalEntityDto();
