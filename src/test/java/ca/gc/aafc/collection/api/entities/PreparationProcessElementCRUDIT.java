@@ -1,11 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.PhysicalEntityService;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
 import ca.gc.aafc.collection.api.service.PreparationProcessElementService;
 import ca.gc.aafc.collection.api.service.PreparationProcessService;
-import ca.gc.aafc.collection.api.testsupport.factories.PhysicalEntityFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -23,37 +23,37 @@ class PreparationProcessElementCRUDIT extends CollectionModuleBaseIT {
   private PreparationProcessElementService elementService;
   private PreparationProcess preparation;
   private PreparationProcessElement elementUnderTest;
-  private PhysicalEntity physicalEntity;
+  private MaterialSample materialSample;
 
   @BeforeEach
   void setUp() {
     PreparationProcessService processService = new PreparationProcessService(baseDAO);
     PreparationProcessDefinitionService definitionService = new PreparationProcessDefinitionService(baseDAO);
-    PhysicalEntityService physicalEntityService = new PhysicalEntityService(baseDAO);
+    MaterialSampleService materialSampleService = new MaterialSampleService(baseDAO);
     this.elementService = new PreparationProcessElementService(baseDAO);
 
     PreparationProcessDefinition definition = newDefinition();
     definitionService.create(definition);
 
-    PhysicalEntity sourcePhysicalEntity = newPhysical();
-    physicalEntityService.create(sourcePhysicalEntity);
+    MaterialSample sourceMaterialSample = newPhysical();
+    materialSampleService.create(sourceMaterialSample);
 
-    this.preparation = newPrep(definition, sourcePhysicalEntity);
+    this.preparation = newPrep(definition, sourceMaterialSample);
     processService.create(preparation);
 
-    this.physicalEntity = newPhysical();
-    physicalEntityService.create(physicalEntity);
+    this.materialSample = newPhysical();
+    materialSampleService.create(materialSample);
 
     this.elementUnderTest = PreparationProcessElement.builder()
       .createdBy(CREATED_BY)
       .preparationProcess(this.preparation)
-      .physicalEntity(this.physicalEntity)
+      .materialSample(this.materialSample)
       .build();
     this.elementService.create(this.elementUnderTest);
   }
 
-  private PhysicalEntity newPhysical() {
-    return PhysicalEntityFactory.newPhysicalEntity()
+  private MaterialSample newPhysical() {
+    return MaterialSampleFactory.newMaterialSample()
       .dwcCatalogNumber("dwcCatalogNumber")
       .createdBy("expectedCreatedBy")
       .build();
@@ -72,18 +72,18 @@ class PreparationProcessElementCRUDIT extends CollectionModuleBaseIT {
       elementUnderTest.getUuid(),
       PreparationProcessElement.class);
     Assertions.assertEquals(preparation.getUuid(), result.getPreparationProcess().getUuid());
-    Assertions.assertEquals(physicalEntity.getUuid(), result.getPhysicalEntity().getUuid());
+    Assertions.assertEquals(materialSample.getUuid(), result.getMaterialSample().getUuid());
     Assertions.assertEquals(CREATED_BY, result.getCreatedBy());
   }
 
   private static PreparationProcess newPrep(
     PreparationProcessDefinition def,
-    PhysicalEntity physicalEntity
+    MaterialSample materialSample
   ) {
     return PreparationProcess.builder()
       .createdBy("CREATED_BY")
       .agentId(UUID.randomUUID())
-      .sourcePhysicalEntity(physicalEntity)
+      .sourceMaterialSample(materialSample)
       .preparationProcessDefinition(def)
       .startDateTime(LocalDateTime.now().minusYears(1))
       .endDateTime(LocalDateTime.now().minusDays(1))

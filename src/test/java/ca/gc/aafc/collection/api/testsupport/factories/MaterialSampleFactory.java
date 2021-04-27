@@ -2,14 +2,14 @@ package ca.gc.aafc.collection.api.testsupport.factories;
 
 import java.util.UUID;
 
-import ca.gc.aafc.collection.api.entities.PhysicalEntity;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
-public class PhysicalEntityFactory implements TestableEntityFactory<PhysicalEntity> {
+public class MaterialSampleFactory implements TestableEntityFactory<MaterialSample> {
 
     @Override
-    public PhysicalEntity getEntityInstance() {
-        return newPhysicalEntity().build();
+    public MaterialSample getEntityInstance() {
+        return newMaterialSample().build();
     }
 
     /**
@@ -19,8 +19,8 @@ public class PhysicalEntityFactory implements TestableEntityFactory<PhysicalEnti
      *
      * @return Pre-configured builder with all mandatory fields set
      */
-    public static PhysicalEntity.PhysicalEntityBuilder newPhysicalEntity() {
-        return PhysicalEntity
+    public static MaterialSample.MaterialSampleBuilder newMaterialSample() {
+        return MaterialSample
             .builder()
             .uuid(UUID.randomUUID())
             .createdBy("test user")

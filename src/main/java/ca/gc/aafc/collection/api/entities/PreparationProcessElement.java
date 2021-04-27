@@ -59,7 +59,7 @@ public class PreparationProcessElement implements DinaEntity {
 
   @OneToOne
   @NotNull
-  @JoinColumn(name = "physical_entity_id", referencedColumnName = "id", unique = true)
-  private PhysicalEntity physicalEntity;
+  @JoinColumn(name = "material_sample_id", referencedColumnName = "id", unique = true)
+  private MaterialSample materialSample;
 
 }

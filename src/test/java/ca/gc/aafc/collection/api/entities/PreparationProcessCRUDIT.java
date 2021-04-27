@@ -1,10 +1,10 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.PhysicalEntityService;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
 import ca.gc.aafc.collection.api.service.PreparationProcessService;
-import ca.gc.aafc.collection.api.testsupport.factories.PhysicalEntityFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -26,24 +26,24 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
   private PreparationProcessService processService;
   private PreparationProcess prepUnderTest;
   private PreparationProcessDefinition definition;
-  private PhysicalEntity sourcePhysicalEntity;
+  private MaterialSample sourceMaterialSample;
 
   @BeforeEach
   void setUp() {
     this.processService = new PreparationProcessService(baseDAO);
     PreparationProcessDefinitionService definitionService = new PreparationProcessDefinitionService(baseDAO);
-    PhysicalEntityService physicalEntityService = new PhysicalEntityService(baseDAO);
+    MaterialSampleService materialSampleService = new MaterialSampleService(baseDAO);
 
     this.definition = newDefinition();
     definitionService.create(definition);
 
-    this.sourcePhysicalEntity = PhysicalEntityFactory.newPhysicalEntity()
+    this.sourceMaterialSample = MaterialSampleFactory.newMaterialSample()
       .dwcCatalogNumber("dwcCatalogNumber")
       .createdBy("expectedCreatedBy")
       .build();
-    physicalEntityService.create(sourcePhysicalEntity);
+    materialSampleService.create(sourceMaterialSample);
 
-    this.prepUnderTest = persistPrepProcess(definition, sourcePhysicalEntity);
+    this.prepUnderTest = persistPrepProcess(definition, sourceMaterialSample);
   }
 
   @Test
@@ -59,19 +59,19 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(AGENT_ID, result.getAgentId());
     Assertions.assertEquals(CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(definition.getUuid(), result.getPreparationProcessDefinition().getUuid());
-    Assertions.assertEquals(sourcePhysicalEntity.getUuid(), result.getSourcePhysicalEntity().getUuid());
+    Assertions.assertEquals(sourceMaterialSample.getUuid(), result.getSourceMaterialSample().getUuid());
     Assertions.assertEquals(START_DATE_TIME, result.getStartDateTime());
     Assertions.assertEquals(END_DATE_TIME, result.getEndDateTime());
   }
 
   private PreparationProcess persistPrepProcess(
     PreparationProcessDefinition def,
-    PhysicalEntity physicalEntity
+    MaterialSample materialSample
   ) {
     PreparationProcess build = PreparationProcess.builder()
       .createdBy(CREATED_BY)
       .agentId(AGENT_ID)
-      .sourcePhysicalEntity(physicalEntity)
+      .sourceMaterialSample(materialSample)
       .preparationProcessDefinition(def)
       .startDateTime(START_DATE_TIME)
       .endDateTime(END_DATE_TIME)
