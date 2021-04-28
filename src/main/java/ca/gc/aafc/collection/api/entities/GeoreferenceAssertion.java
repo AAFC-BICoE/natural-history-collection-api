@@ -95,6 +95,10 @@ public class GeoreferenceAssertion {
   @Enumerated(EnumType.STRING)
   private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 
+  @NotNull
+  @Column(name = "is_primary")
+  private Boolean isPrimary;
+
   public List<UUID> getGeoreferencedBy() {
     return CollectionUtils.isNotEmpty(georeferencedBy) ? georeferencedBy : Collections.emptyList();
   }

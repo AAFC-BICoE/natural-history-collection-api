@@ -31,5 +31,6 @@ public class GeoreferenceAssertionDto {
   private String dwcGeoreferenceSources;
   private String dwcGeoreferenceRemarks;
   private String dwcGeodeticDatum;
+  private Boolean isPrimary;
   private GeoreferenceAssertion.GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
 }
