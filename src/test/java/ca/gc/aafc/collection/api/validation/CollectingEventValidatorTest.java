@@ -49,6 +49,38 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
+  void validate_AssertionSizeIsOneAndPrimary_ValidationSuccess() {
+    GeoreferenceAssertion assertion = newAssertion();
+    assertion.setIsPrimary(true);
+
+    CollectingEvent event = newEvent();
+    event.setGeoReferenceAssertions(List.of(assertion));
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    Assertions.assertEquals(0, errors.getAllErrors().size());
+  }
+
+  @Test
+  void validate_AssertionSizeIsOneAndNotPrimary_ErrorsReturned() {
+    String expectedErrorMessage = messageSource.getMessage(
+      CollectingEventValidator.VALID_PRIMARY_KEY,
+      null,
+      LocaleContextHolder.getLocale());
+
+    GeoreferenceAssertion assertion = newAssertion();
+    assertion.setIsPrimary(false);
+
+    CollectingEvent event = newEvent();
+    event.setGeoReferenceAssertions(List.of(assertion));
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
   void validate_MoreThenOnePrimaryAssertion_ErrorsReturned() {
     String expectedErrorMessage = messageSource.getMessage(
       CollectingEventValidator.VALID_PRIMARY_KEY,
