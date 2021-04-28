@@ -9,8 +9,18 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <changeSet id="35-Rename_table_physical_entity_to_material_sample" context="schema-change" author="ganx">
-       <!-- drop the table and recreate with new name material sample-->
-        <dropTable cascadeConstraints="true" tableName="physical_entity"/>
+        <!-- Drop the table columns whose name has physical_entity -->
+        <dropColumn tableName="preparation_process_element">
+            <column name="physical_entity_id"/>
+        </dropColumn>
+
+        <dropColumn tableName="preparation_process">
+            <column name="source_physical_entity_id"/>
+        </dropColumn>
+
+        <!-- Drop the table and recreate with new name material sample-->
+        <dropTable tableName="physical_entity"/>
+
         <createTable tableName="material_sample">
             <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_material_sample_id" />
@@ -39,21 +49,23 @@
 
         </createTable>      
          
-       <!-- Rename columns having physical entity in it to material sample-->   
-        <addColumn tableName="preparation_process" >
+        <!-- Rename columns whose name having physical entity to material sample-->   
+        <addColumn tableName="preparation_process_element" >
             <column name="material_sample_id" type="integer">
                 <constraints
-                  foreignKeyName="fk_material_sample_id"
-                  references="material_sample(id)"
-                  unique="true"
-                  nullable="false"/>
+                    foreignKeyName="fk_material_sample_id"
+                    references="material_sample(id)"
+                    unique="true"
+                    nullable="false"/>
             </column>        
+        </addColumn>
+        <addColumn tableName="preparation_process" >
             <column name="source_material_sample_id" type="integer">
                 <constraints
-                        foreignKeyName="fk_source_material_sample_id"
-                        references="material_sample(id)"
-                        unique="true"
-                        nullable="false"/>
+                    foreignKeyName="fk_source_material_sample_id"
+                    references="material_sample(id)"
+                    unique="true"
+                    nullable="false"/>
             </column>  
         </addColumn>         
 
