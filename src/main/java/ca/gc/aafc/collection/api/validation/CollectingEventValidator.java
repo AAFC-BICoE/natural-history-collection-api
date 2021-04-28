@@ -31,7 +31,7 @@ public class CollectingEventValidator implements Validator {
 
   @Override
   public void validate(@NonNull Object target, @NonNull Errors errors) {
-    if (!supports(target.getClass())) {//TODO need test cases
+    if (!supports(target.getClass())) {
       throw new IllegalArgumentException("CollectingEventValidator not supported for class " + target.getClass());
     }
     CollectingEvent collectingEvent = (CollectingEvent) target;
@@ -65,6 +65,6 @@ public class CollectingEventValidator implements Validator {
     if (CollectionUtils.isEmpty(geoReferenceAssertions)) {
       return 0;
     }
-    return geoReferenceAssertions.stream().filter(GeoreferenceAssertion::getIsPrimary).count();
+    return geoReferenceAssertions.stream().filter(g -> g.getIsPrimary() != null && g.getIsPrimary()).count();
   }
 }
