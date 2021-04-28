@@ -85,6 +85,7 @@ public class PreparationProcessElementRepositoryIT extends CollectionModuleBaseI
     pp.setAgentId(UUID.randomUUID());
     pp.setSourcePhysicalEntity(pe);
     pp.setPreparationProcessDefinition(ppd);
+    pp.setUuid(UUID.randomUUID());
     return pp;
   }
 
