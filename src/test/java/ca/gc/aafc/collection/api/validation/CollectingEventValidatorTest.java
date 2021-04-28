@@ -63,10 +63,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_AssertionSizeIsOneAndNotPrimary_ErrorsReturned() {
-    String expectedErrorMessage = messageSource.getMessage(
-      CollectingEventValidator.VALID_PRIMARY_KEY,
-      null,
-      LocaleContextHolder.getLocale());
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_PRIMARY_KEY);
 
     GeoreferenceAssertion assertion = newAssertion();
     assertion.setIsPrimary(false);
@@ -82,10 +79,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_MoreThenOnePrimaryAssertion_ErrorsReturned() {
-    String expectedErrorMessage = messageSource.getMessage(
-      CollectingEventValidator.VALID_PRIMARY_KEY,
-      null,
-      LocaleContextHolder.getLocale());
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_PRIMARY_KEY);
 
     GeoreferenceAssertion assertion = newAssertion();
     assertion.setIsPrimary(true);
@@ -101,10 +95,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_NoAssertionsArePrimary_ErrorsReturned() {
-    String expectedErrorMessage = messageSource.getMessage(
-      CollectingEventValidator.VALID_PRIMARY_KEY,
-      null,
-      LocaleContextHolder.getLocale());
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_PRIMARY_KEY);
 
     GeoreferenceAssertion assertion = newAssertion();
     assertion.setIsPrimary(false);
@@ -116,6 +107,10 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     validator.validate(event, errors);
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  private String getExpectedErrorMessage(String key) {
+    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
   }
 
   private static CollectingEvent newEvent() {
