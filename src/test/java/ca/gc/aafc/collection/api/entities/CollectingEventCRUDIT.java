@@ -39,10 +39,12 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
-  private static final String dwcCountry = "Atlantis";
-  private static final String dwcCountryCode = "Al";
-  private static final String dwcStateProvince = "Island of Pharo's";
+
+  private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY = GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis").build();
+  private static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE = GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F").type("N").name("Island of Pharo's").build();
+
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
+
   private static final String geographicPlaceName = "Morocco";
   public static final LocalDateTime TEST_DATE_TIME = LocalDateTime.of(2000, 2, 3, 0, 0);
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
@@ -52,10 +54,11 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @SneakyThrows
   @BeforeAll
   static void beforeAll() {
-    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
-      .sourceID("1")
-      .sourceIdType("N")
-      .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard")).build();
+    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail
+        .builder()
+        .country(TEST_COUNTRY)
+        .stateProvince(TEST_PROVINCE)
+        .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard")).build();
   }
 
   @BeforeEach
@@ -76,10 +79,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-      .dwcCountry(dwcCountry)
+     // .dwcCountry(dwcCountry)
       .habitat(habitat)
-      .dwcCountryCode(dwcCountryCode)
-      .dwcStateProvince(dwcStateProvince)
+     // .dwcCountryCode(dwcCountryCode)
+    //  .dwcStateProvince(dwcStateProvince)
       .geographicPlaceNameSource(geographicPlaceNameSource)
       .geographicPlaceName(geographicPlaceName)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
@@ -197,18 +200,18 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
     assertArrayEquals(dwcOtherRecordNumbers, fetchedCollectingEvent.getDwcOtherRecordNumbers());
-    assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
-    assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
-    assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
+    //assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
+   // assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
+   // assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
     assertEquals(geographicPlaceName, fetchedCollectingEvent.getGeographicPlaceName());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
-      geographicPlaceNameSourceDetail.getSourceID(),
-      fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceID());
-    assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceUrl());
+      geographicPlaceNameSourceDetail.getCountry(),
+      fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getCountry());
     assertEquals(
-      geographicPlaceNameSourceDetail.getSourceIdType(),
-      fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceIdType());
+        geographicPlaceNameSourceDetail.getStateProvince(),
+        fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getStateProvince());
+    assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceUrl());
     assertEquals(habitat, fetchedCollectingEvent.getHabitat());
   }
 
