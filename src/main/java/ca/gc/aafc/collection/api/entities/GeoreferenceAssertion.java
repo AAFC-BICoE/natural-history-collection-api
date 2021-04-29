@@ -51,6 +51,7 @@ public class GeoreferenceAssertion {
   private Integer id;
 
   @Column(name = "index")
+  @NotNull
   private int index;
 
   @DecimalMin(value = "-90.0")
