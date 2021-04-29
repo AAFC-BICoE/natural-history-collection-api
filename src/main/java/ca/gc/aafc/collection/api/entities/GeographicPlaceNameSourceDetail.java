@@ -36,7 +36,8 @@ public class GeographicPlaceNameSourceDetail {
   @Value
   public static class SourceAdministrativeLevel {
     private String id;
-    private String type;
+    private String element; // on OSM it's the osm_type (N, W or R: Node, Way or Relation) https://wiki.openstreetmap.org/wiki/Elements
+    private String placeType; // on OSM it's usually the place_type (https://wiki.openstreetmap.org/wiki/Key:place) with a fallback on class:type
     private String name;
   }
 

@@ -40,8 +40,13 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
 
-  private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY = GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis").build();
-  private static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE = GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F").type("N").name("Island of Pharo's").build();
+  private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
+      GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
+          .build();
+  private static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE =
+      GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F")
+          .element("N").placeType("province").name("Island of Pharo's")
+          .build();
 
   private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
 
