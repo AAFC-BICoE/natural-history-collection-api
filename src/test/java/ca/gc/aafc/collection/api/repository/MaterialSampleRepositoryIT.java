@@ -15,17 +15,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.PhysicalEntityDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
-public class PhysicalEntityRepositoryIT extends CollectionModuleBaseIT {
+public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     @Inject
-    private PhysicalEntityRepository physicalEntityRepository;
+    private MaterialSampleRepository materialSampleRepository;
 
     @Inject
     private CollectingEventRepository eventRepository;
@@ -37,9 +37,9 @@ public class PhysicalEntityRepositoryIT extends CollectionModuleBaseIT {
     @Test
     @WithMockKeycloakUser(username = "test user")
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
-        PhysicalEntityDto pe = newPhysicalEntity(dwcCatalogNumber, null);
-        PhysicalEntityDto result = physicalEntityRepository.findOne(physicalEntityRepository.create(pe).getUuid(), 
-                new QuerySpec(PhysicalEntityDto.class));
+        MaterialSampleDto pe = newMaterialSample(dwcCatalogNumber, null);
+        MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(pe).getUuid(), 
+                new QuerySpec(MaterialSampleDto.class));
         assertNotNull(result.getCreatedBy());
         assertEquals(pe.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
@@ -50,18 +50,18 @@ public class PhysicalEntityRepositoryIT extends CollectionModuleBaseIT {
     public void create_recordCreated() {
         CollectingEventDto event = eventRepository.findOne(
             eventRepository.create(newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
-        PhysicalEntityDto result = physicalEntityRepository.findOne(
-            physicalEntityRepository.create(newPhysicalEntity(dwcCatalogNumber, event)).getUuid(),
-            new QuerySpec(PhysicalEntityDto.class)
+        MaterialSampleDto result = materialSampleRepository.findOne(
+            materialSampleRepository.create(newMaterialSample(dwcCatalogNumber, event)).getUuid(),
+            new QuerySpec(MaterialSampleDto.class)
             );
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
         }
 
-    private PhysicalEntityDto newPhysicalEntity(
+    private MaterialSampleDto newMaterialSample(
         String dwcCatalogNumber, 
         CollectingEventDto event) {
-        PhysicalEntityDto pe = new PhysicalEntityDto();
+        MaterialSampleDto pe = new MaterialSampleDto();
         pe.setDwcCatalogNumber(dwcCatalogNumber);
         pe.setCollectingEvent(event);
         pe.setGroup(group);

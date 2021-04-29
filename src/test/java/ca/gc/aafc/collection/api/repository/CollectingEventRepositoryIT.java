@@ -60,6 +60,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcDecimalLatitude(12.123456)
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(testGeoreferencedDate)
+    .isPrimary(true)
     .build();
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
@@ -158,9 +159,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertNotNull(result.getCreatedBy());
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
-    assertEquals(
-      ce.getGeoReferenceAssertions().get(0).getDwcDecimalLongitude(),
-      result.getGeoReferenceAssertions().get(0).getDwcDecimalLongitude());
     assertEquals(dwcRecordedBy, result.getDwcRecordedBy());
     assertEquals(dwcVerbatimLocality, result.getDwcVerbatimLocality());
     assertEquals(dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
@@ -182,8 +180,22 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimElevation, result.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, result.getDwcVerbatimDepth());
     assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
-    assertEquals(dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
     assertEquals(habitat, result.getHabitat());
+    assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
+  }
+
+  private void assertAssertion(
+    GeoreferenceAssertionDto resultAssertion,
+    GeoreferenceAssertionDto expectedAssertion
+  ) {
+    if (expectedAssertion == null) {
+      assertNull(resultAssertion);
+      return;
+    }
+    assertNotNull(resultAssertion);
+    assertEquals(expectedAssertion.getDwcDecimalLongitude(), resultAssertion.getDwcDecimalLongitude());
+    assertEquals(expectedAssertion.getDwcDecimalLatitude(), resultAssertion.getDwcDecimalLatitude());
+    assertEquals(expectedAssertion.getIsPrimary(), resultAssertion.getIsPrimary());
   }
 
   private CollectingEventDto newEventDto(String startDateTime, String endDateTime) {

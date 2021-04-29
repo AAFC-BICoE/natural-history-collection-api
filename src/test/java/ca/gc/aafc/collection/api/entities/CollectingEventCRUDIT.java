@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private CollectingEventService collectingEventService;
 
-  private final GeoreferenceAssertion geoReferenceAssertion = newAssertion(12.123456);
+  private GeoreferenceAssertion geoReferenceAssertion;
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
@@ -59,6 +60,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setUp() {
+    geoReferenceAssertion = newAssertion(12.123456);
+    geoReferenceAssertion.setIsPrimary(true);
+
     collectingEvent = CollectingEventFactory.newCollectingEvent()
       .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
       .startEventDateTime(TEST_DATE_TIME)
@@ -86,7 +90,38 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void create() {
+  public void nullStartTimeNonNullEndTime_throwsIllegalArgumentException() {
+    collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
+      .build();
+    ValidationException exception = assertThrows(
+      ValidationException.class,
+      () -> collectingEventService.create(collectingEvent));
+
+    String expectedMessage = "The start and end dates do not create a valid timeline";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  public void startTimeAfterEndTime_throwsIllegalArgumentException() {
+    collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
+      .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
+      .build();
+    ValidationException exception = assertThrows(
+      ValidationException.class,
+      () -> collectingEventService.create(collectingEvent));
+
+    String expectedMessage = "The start and end dates do not create a valid timeline";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void create() {
     //Assert generated fields
     assertNotNull(collectingEvent.getId());
     assertNotNull(collectingEvent.getCreatedOn());
@@ -94,7 +129,54 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void find() {
+  void create_WithInvalidGeo_throwsIllegalArgumentException() {
+    collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
+      geo.setDwcGeoreferenceVerificationStatus(
+        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+      geo.setDwcDecimalLatitude(2.0);
+    });
+
+    IllegalArgumentException exception = assertThrows(
+      IllegalArgumentException.class,
+      () -> collectingEventService.create(collectingEvent));
+
+    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void create_WithInvalidGeoPrimaries_ValidationException() {
+    final CollectingEvent eventToManyPrimaries = newEvent();
+
+    GeoreferenceAssertion geo = newAssertion(1);
+    geo.setIsPrimary(true);
+    GeoreferenceAssertion geo2 = newAssertion(1);
+    geo2.setIsPrimary(true);
+
+    eventToManyPrimaries.setGeoReferenceAssertions(List.of(geo, geo2));
+    assertThrows(ValidationException.class, () -> collectingEventService.create(eventToManyPrimaries));
+
+    final CollectingEvent noPrimaries = newEvent();
+    geo.setIsPrimary(false);
+    geo2.setIsPrimary(false);
+    noPrimaries.setGeoReferenceAssertions(List.of(geo, geo2));
+    assertThrows(ValidationException.class, () -> collectingEventService.create(noPrimaries));
+
+    final CollectingEvent singleNonPrimary = newEvent();
+    geo.setIsPrimary(false);
+    singleNonPrimary.setGeoReferenceAssertions(List.of(geo));
+    assertThrows(ValidationException.class, () -> collectingEventService.create(singleNonPrimary));
+
+    final CollectingEvent singleValid = newEvent();
+    geo.setIsPrimary(true);
+    singleValid.setGeoReferenceAssertions(List.of(geo));
+    assertDoesNotThrow(() -> collectingEventService.create(singleValid));
+  }
+
+  @Test
+  void find() {
     CollectingEvent fetchedCollectingEvent = dbService
       .find(CollectingEvent.class, collectingEvent.getId());
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
@@ -142,24 +224,80 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
     GeoreferenceAssertion geo = newAssertion(1);
+    geo.setIsPrimary(true);
     GeoreferenceAssertion geo2 = newAssertion(2);
 
+    // Pop one, add two
     fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo, geo2));
+
+    collectingEventService.update(fetchedCollectingEvent);
+
+    List<GeoreferenceAssertion> results = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
+    assertEquals(2, results.size());
+    assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
+    assertEquals(geo2.getDwcDecimalLatitude(), results.get(1).getDwcDecimalLatitude());
+
+    fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    // remove last
+    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo));
+    collectingEventService.update(fetchedCollectingEvent);
+
+    results = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
+    assertEquals(1, results.size());
+    assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
+  }
+
+  @Test
+  void update_whenGeoAssertionsCleared_GeosRemoved() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setGeoReferenceAssertions(null);
 
     collectingEventService.update(fetchedCollectingEvent);
     CollectingEvent result = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    List<GeoreferenceAssertion> list = result.getGeoReferenceAssertions();
-    assertEquals(2, list.size());
-    assertEquals(geo.getDwcDecimalLatitude(), list.get(0).getDwcDecimalLatitude());
-    assertEquals(geo2.getDwcDecimalLatitude(), list.get(1).getDwcDecimalLatitude());
+    assertNull(result.getGeoReferenceAssertions());
+  }
+
+  @Test
+  void update_WithInvalidGeo_throwsIllegalArgumentException() {
+    collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
+      geo.setDwcGeoreferenceVerificationStatus(
+        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+      geo.setDwcDecimalLatitude(2.0);
+    });
+
+    IllegalArgumentException exception = assertThrows(
+      IllegalArgumentException.class,
+      () -> collectingEventService.update(collectingEvent));
+
+    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  private static CollectingEvent newEvent() {
+    return CollectingEvent.builder()
+      .uuid(UUID.randomUUID())
+      .createdBy("dina")
+      .group("group")
+      .startEventDateTime(LocalDateTime.now().minusDays(1))
+      .build();
   }
 
   private static GeoreferenceAssertion newAssertion(double latitude) {
     return GeoreferenceAssertionFactory.newGeoreferenceAssertion()
       .dwcDecimalLatitude(latitude)
+      .isPrimary(false)
       .dwcDecimalLongitude(45.01)
       .build();
   }
+
 }

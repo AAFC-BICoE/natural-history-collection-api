@@ -9,7 +9,7 @@ import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
-import ca.gc.aafc.collection.api.entities.PhysicalEntity;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
@@ -19,14 +19,14 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 
-@RelatedEntity(PhysicalEntity.class)
+@RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
-@JsonApiResource(type = PhysicalEntityDto.TYPENAME)
-@TypeName(PhysicalEntityDto.TYPENAME)
-public class PhysicalEntityDto {
+@JsonApiResource(type = MaterialSampleDto.TYPENAME)
+@TypeName(MaterialSampleDto.TYPENAME)
+public class MaterialSampleDto {
 
-    public static final String TYPENAME = "physical-entity";
+    public static final String TYPENAME = "material-sample";
     
     @JsonApiId
     @Id

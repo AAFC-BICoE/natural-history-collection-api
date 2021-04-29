@@ -1,15 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
-import ca.gc.aafc.collection.api.service.GeoReferenceAssertionService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -18,14 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
 
-  @Inject
-  private DatabaseSupportService dbService;
-
-  @Inject
-  private GeoReferenceAssertionService service;
-
   private static final LocalDate testGeoreferencedDate = LocalDate.now();
   private static final List<UUID> agentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
+  public static final boolean PRIMARY = true;
 
   private CollectingEvent event;
 
@@ -33,14 +24,14 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
   void setUp() {
     event = CollectingEventFactory.newCollectingEvent()
       .uuid(UUID.randomUUID()).build();
-    dbService.save(event);
+    service.save(event);
   }
 
   @Test
   public void create() {
     GeoreferenceAssertion geoReferenceAssertion = newAssertion();
     assertNull(geoReferenceAssertion.getId());
-    service.create(geoReferenceAssertion);
+    service.save(geoReferenceAssertion);
     assertNotNull(geoReferenceAssertion.getId());
     assertEquals(agentIdentifiers, geoReferenceAssertion.getGeoreferencedBy());
   }
@@ -48,9 +39,9 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
   @Test
   public void testFind() {
     GeoreferenceAssertion geoReferenceAssertion = newAssertion();
-    service.create(geoReferenceAssertion);
+    service.save(geoReferenceAssertion);
 
-    GeoreferenceAssertion fetchedGeoreferenceAssertion = dbService.find(
+    GeoreferenceAssertion fetchedGeoreferenceAssertion = service.find(
       GeoreferenceAssertion.class,
       geoReferenceAssertion.getId());
     assertEquals(geoReferenceAssertion.getId(), fetchedGeoreferenceAssertion.getId());
@@ -58,23 +49,8 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
     assertEquals(45.01, fetchedGeoreferenceAssertion.getDwcDecimalLongitude());
     assertEquals(10, fetchedGeoreferenceAssertion.getDwcCoordinateUncertaintyInMeters());
     assertEquals(testGeoreferencedDate, fetchedGeoreferenceAssertion.getDwcGeoreferencedDate());
+    assertEquals(PRIMARY, fetchedGeoreferenceAssertion.getIsPrimary());
     assertNotNull(fetchedGeoreferenceAssertion.getCreatedOn());
-  }
-
-  @Test
-  public void georeferenceVerificationStatusEqualsGeoreferencingNotPossible_throwsIllegalArgumentException() {
-    GeoreferenceAssertion ga = newAssertion();
-    ga.setDwcGeoreferenceVerificationStatus(GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
-
-    IllegalArgumentException exception = assertThrows(
-      IllegalArgumentException.class,
-      () -> service.create(ga));
-
-    String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
-
   }
 
   private GeoreferenceAssertion newAssertion() {
@@ -83,6 +59,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
       .dwcDecimalLongitude(45.01)
       .dwcCoordinateUncertaintyInMeters(10)
       .dwcGeoreferencedDate(testGeoreferencedDate)
+      .isPrimary(PRIMARY)
       .collectingEvent(event)
       .georeferencedBy(agentIdentifiers)
       .build();
