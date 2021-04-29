@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="36_add_Not_Null_geo_assertion_index" context="schema-change" author="Keyuk">
+    <changeSet id="37_add_Not_Null_geo_assertion_index" context="schema-change" author="Keyuk">
         <addNotNullConstraint columnName="index" tableName="georeference_assertion"/>
     </changeSet>
 </databaseChangeLog>

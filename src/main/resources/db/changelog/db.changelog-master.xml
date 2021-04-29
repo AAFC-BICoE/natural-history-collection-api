@@ -38,5 +38,7 @@
   <include file="db/changelog/migrations/33-Add_Preparation_Process.xml"/>
   <include file="db/changelog/migrations/34-Update_geo_assertion_remove_createdBy.xml"/>
   <include file="db/changelog/migrations/35_add_isPrimary_GeoAssertion.xml"/>
-  <include file="db/changelog/migrations/36_add_Not_Null_geo_assertion_index.xml"/>
+  <include file="db/changelog/migrations/36-Rename_table_physical_entity_to_material_sample.xml"/>
+  <include file="db/changelog/migrations/37_add_Not_Null_geo_assertion_index.xml"/>
+
 </databaseChangeLog>

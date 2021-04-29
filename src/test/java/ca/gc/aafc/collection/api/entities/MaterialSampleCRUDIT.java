@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.testsupport.factories.PhysicalEntityFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
-public class PhysicalEntityCRUDIT extends CollectionModuleBaseIT {
+public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     @Inject
     private DatabaseSupportService dbService;
@@ -30,17 +30,17 @@ public class PhysicalEntityCRUDIT extends CollectionModuleBaseIT {
         String dwcCatalogNumber = "S-4313";
         String expectedCreatedBy = "dina-save";
 
-        PhysicalEntity  physicalEntity = PhysicalEntityFactory.newPhysicalEntity()
+        MaterialSample  materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .build();
-        assertNull(physicalEntity.getId());
-        dbService.save(physicalEntity);
-        assertNotNull(physicalEntity.getId());
-        assertEquals(dwcCatalogNumber, physicalEntity.getDwcCatalogNumber());
-        assertEquals(expectedCreatedBy, physicalEntity.getCreatedBy());
-        assertEquals(attachmentIdentifiers, physicalEntity.getAttachment());
+        assertNull(materialSample.getId());
+        dbService.save(materialSample);
+        assertNotNull(materialSample.getId());
+        assertEquals(dwcCatalogNumber, materialSample.getDwcCatalogNumber());
+        assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
+        assertEquals(attachmentIdentifiers, materialSample.getAttachment());
     }
 
     @Test
@@ -48,19 +48,19 @@ public class PhysicalEntityCRUDIT extends CollectionModuleBaseIT {
         String dwcCatalogNumber = "F-4313";
         String expectedCreatedBy = "dina-find";
 
-        PhysicalEntity physicalEntity = PhysicalEntityFactory.newPhysicalEntity()
+        MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .build();
-        dbService.save(physicalEntity);
+        dbService.save(materialSample);
 
-        PhysicalEntity fetchedPhysicalEntity = dbService.find(PhysicalEntity.class, physicalEntity.getId());
-        assertEquals(physicalEntity.getId(), fetchedPhysicalEntity.getId());
-        assertEquals(dwcCatalogNumber, fetchedPhysicalEntity.getDwcCatalogNumber());
-        assertEquals(expectedCreatedBy, physicalEntity.getCreatedBy());
-        assertEquals(attachmentIdentifiers, physicalEntity.getAttachment());
-        assertNotNull(fetchedPhysicalEntity.getCreatedOn());
+        MaterialSample fetchedMaterialSample = dbService.find(MaterialSample.class, materialSample.getId());
+        assertEquals(materialSample.getId(), fetchedMaterialSample.getId());
+        assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
+        assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
+        assertEquals(attachmentIdentifiers, materialSample.getAttachment());
+        assertNotNull(fetchedMaterialSample.getCreatedOn());
     }
     
 }
