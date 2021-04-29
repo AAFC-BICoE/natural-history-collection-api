@@ -64,8 +64,8 @@ public class PreparationProcess implements DinaEntity {
 
   @OneToOne
   @NotNull
-  @JoinColumn(name = "source_physical_entity_id", referencedColumnName = "id", unique = true)
-  private PhysicalEntity sourcePhysicalEntity;
+  @JoinColumn(name = "source_material_sample_id", referencedColumnName = "id", unique = true)
+  private MaterialSample sourceMaterialSample;
 
   @Past
   private LocalDateTime startDateTime;

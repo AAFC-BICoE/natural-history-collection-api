@@ -37,7 +37,7 @@ public class PreparationProcessElementDto {
   private PreparationProcessDto preparationProcess;
 
   @JsonApiRelation
-  private PhysicalEntityDto physicalEntity;
+  private MaterialSampleDto materialSample;
 
   
 }
