@@ -8,7 +8,7 @@ import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 
-import java.time.OffsetTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
@@ -29,7 +29,7 @@ public class PreparationProcessElementDto {
   @PropertyName("id")
   private UUID uuid;
 
-  private OffsetTime createdOn;
+  private OffsetDateTime createdOn;
 
   private String createdBy;
 

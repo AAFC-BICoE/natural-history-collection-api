@@ -28,7 +28,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private CollectingEventService collectingEventService;
 
-  private final GeoreferenceAssertion geoReferenceAssertion = newAssertion(12.123456);
+  private GeoreferenceAssertion geoReferenceAssertion;
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
@@ -60,6 +60,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setUp() {
+    geoReferenceAssertion = newAssertion(12.123456);
+    geoReferenceAssertion.setIsPrimary(true);
+
     collectingEvent = CollectingEventFactory.newCollectingEvent()
       .geoReferenceAssertions(Collections.singletonList((geoReferenceAssertion)))
       .startEventDateTime(TEST_DATE_TIME)
@@ -91,7 +94,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     collectingEvent = CollectingEventFactory.newCollectingEvent()
       .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
       .build();
-    ValidationException exception = assertThrows(ValidationException.class, () -> collectingEventService.create(collectingEvent));
+    ValidationException exception = assertThrows(
+      ValidationException.class,
+      () -> collectingEventService.create(collectingEvent));
 
     String expectedMessage = "The start and end dates do not create a valid timeline";
     String actualMessage = exception.getMessage();
@@ -105,7 +110,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
       .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
       .build();
-    ValidationException exception = assertThrows(ValidationException.class, () -> collectingEventService.create(collectingEvent));
+    ValidationException exception = assertThrows(
+      ValidationException.class,
+      () -> collectingEventService.create(collectingEvent));
 
     String expectedMessage = "The start and end dates do not create a valid timeline";
     String actualMessage = exception.getMessage();
@@ -137,6 +144,35 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void create_WithInvalidGeoPrimaries_ValidationException() {
+    final CollectingEvent eventToManyPrimaries = newEvent();
+
+    GeoreferenceAssertion geo = newAssertion(1);
+    geo.setIsPrimary(true);
+    GeoreferenceAssertion geo2 = newAssertion(1);
+    geo2.setIsPrimary(true);
+
+    eventToManyPrimaries.setGeoReferenceAssertions(List.of(geo, geo2));
+    assertThrows(ValidationException.class, () -> collectingEventService.create(eventToManyPrimaries));
+
+    final CollectingEvent noPrimaries = newEvent();
+    geo.setIsPrimary(false);
+    geo2.setIsPrimary(false);
+    noPrimaries.setGeoReferenceAssertions(List.of(geo, geo2));
+    assertThrows(ValidationException.class, () -> collectingEventService.create(noPrimaries));
+
+    final CollectingEvent singleNonPrimary = newEvent();
+    geo.setIsPrimary(false);
+    singleNonPrimary.setGeoReferenceAssertions(List.of(geo));
+    assertThrows(ValidationException.class, () -> collectingEventService.create(singleNonPrimary));
+
+    final CollectingEvent singleValid = newEvent();
+    geo.setIsPrimary(true);
+    singleValid.setGeoReferenceAssertions(List.of(geo));
+    assertDoesNotThrow(() -> collectingEventService.create(singleValid));
   }
 
   @Test
@@ -188,6 +224,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
     GeoreferenceAssertion geo = newAssertion(1);
+    geo.setIsPrimary(true);
     GeoreferenceAssertion geo2 = newAssertion(2);
 
     // Pop one, add two
@@ -246,9 +283,19 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertTrue(actualMessage.contains(expectedMessage));
   }
 
+  private static CollectingEvent newEvent() {
+    return CollectingEvent.builder()
+      .uuid(UUID.randomUUID())
+      .createdBy("dina")
+      .group("group")
+      .startEventDateTime(LocalDateTime.now().minusDays(1))
+      .build();
+  }
+
   private static GeoreferenceAssertion newAssertion(double latitude) {
     return GeoreferenceAssertionFactory.newGeoreferenceAssertion()
       .dwcDecimalLatitude(latitude)
+      .isPrimary(false)
       .dwcDecimalLongitude(45.01)
       .build();
   }

@@ -8,7 +8,7 @@
 
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="35-Rename_table_physical_entity_to_material_sample" context="schema-change" author="ganx">
+    <changeSet id="36-Rename_table_physical_entity_to_material_sample" context="schema-change" author="ganx">
         <!-- Drop the table columns whose name has physical_entity -->
         <dropColumn tableName="preparation_process_element">
             <column name="physical_entity_id"/>
