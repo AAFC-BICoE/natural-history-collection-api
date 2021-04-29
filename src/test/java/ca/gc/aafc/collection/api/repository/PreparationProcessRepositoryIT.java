@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.PhysicalEntityDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationProcessDefinitionDto;
 import ca.gc.aafc.collection.api.dto.PreparationProcessDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -31,7 +31,7 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
   private PreparationProcessRepository preparationProcessRepository;
 
   @Inject
-  private PhysicalEntityRepository physicalEntityRepository;
+  private MaterialSampleRepository materialSampleRepository;
 
   @Inject 
   private PreparationProcessDefinitionRepository preparationProcessDefinitionRepository;
@@ -45,8 +45,8 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
   @Test
   @WithMockKeycloakUser(username = "test user")
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
-    PhysicalEntityDto pe = physicalEntityRepository.findOne(
-      physicalEntityRepository.create(newPhysicalEntityDto(null)).getUuid(), new QuerySpec(PhysicalEntityDto.class));
+    MaterialSampleDto pe = materialSampleRepository.findOne(
+      materialSampleRepository.create(newMaterialSampleDto(null)).getUuid(), new QuerySpec(MaterialSampleDto.class));
     PreparationProcessDefinitionDto ppd = preparationProcessDefinitionRepository.findOne(
       preparationProcessDefinitionRepository.create(newPreparationProcessDefinitionDto()).getUuid(),
       new QuerySpec(PreparationProcessDefinitionDto.class));
@@ -60,17 +60,17 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(pp.getStartDateTime(), result.getStartDateTime());
     assertEquals(pp.getEndDateTime(), result.getEndDateTime());
     assertEquals(pp.getPreparationProcessDefinition().getUuid(), result.getPreparationProcessDefinition().getUuid());
-    assertEquals(pp.getSourcePhysicalEntity().getUuid(), result.getSourcePhysicalEntity().getUuid());
+    assertEquals(pp.getSourceMaterialSample().getUuid(), result.getSourceMaterialSample().getUuid());
   }
 
   private PreparationProcessDto newPreparationProcessDto(
-    PhysicalEntityDto pe,
+    MaterialSampleDto pe,
     PreparationProcessDefinitionDto ppd) {
       PreparationProcessDto pp = new PreparationProcessDto();
       pp.setStartDateTime(startDateTime);
       pp.setEndDateTime(endDateTime);
       pp.setAgentId(UUID.randomUUID());
-      pp.setSourcePhysicalEntity(pe);
+      pp.setSourceMaterialSample(pe);
       pp.setPreparationProcessDefinition(ppd);
       pp.setUuid(UUID.randomUUID());
     return pp;
@@ -85,9 +85,9 @@ public class PreparationProcessRepositoryIT extends CollectionModuleBaseIT {
     return ppd;
   }
   
-  private PhysicalEntityDto newPhysicalEntityDto(
+  private MaterialSampleDto newMaterialSampleDto(
     CollectingEventDto event) {
-    PhysicalEntityDto pe = new PhysicalEntityDto();
+    MaterialSampleDto pe = new MaterialSampleDto();
     pe.setDwcCatalogNumber(dwcCatalogNumber);
     pe.setCollectingEvent(event);
     pe.setGroup(group);
