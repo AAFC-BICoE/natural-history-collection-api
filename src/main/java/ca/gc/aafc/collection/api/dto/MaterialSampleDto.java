@@ -47,4 +47,6 @@ public class MaterialSampleDto {
     @JsonApiRelation
     private List<ExternalRelationDto> attachment = new ArrayList<>();
 
+    private String materialSampleName;
+
 }
