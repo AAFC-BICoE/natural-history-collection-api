@@ -77,4 +77,7 @@ public class MaterialSample implements DinaEntity {
     @Column(name = "attachment", columnDefinition = "uuid[]")
     private List<UUID> attachment = new ArrayList<>();
 
+    @Column(name = "material_sample_name")
+    private String materialSampleName;
+
 }

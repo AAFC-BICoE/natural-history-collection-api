@@ -23,6 +23,7 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
         return MaterialSample
             .builder()
             .uuid(UUID.randomUUID())
+            .materialSampleName("soil sample")
             .createdBy("test user")
             .group("aafc");
     }

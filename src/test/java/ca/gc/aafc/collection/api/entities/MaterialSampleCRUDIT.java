@@ -29,11 +29,13 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     public void testSave() {
         String dwcCatalogNumber = "S-4313";
         String expectedCreatedBy = "dina-save";
+        String sampleMaterialName = "lake water sample";
 
         MaterialSample  materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
+            .materialSampleName(sampleMaterialName)
             .build();
         assertNull(materialSample.getId());
         dbService.save(materialSample);
@@ -41,17 +43,20 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(dwcCatalogNumber, materialSample.getDwcCatalogNumber());
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
+        assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
     }
 
     @Test
     public void testFind() {
         String dwcCatalogNumber = "F-4313";
         String expectedCreatedBy = "dina-find";
+        String sampleMaterialName = "lake water sample";
 
         MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
+            .materialSampleName(sampleMaterialName)
             .build();
         dbService.save(materialSample);
 
@@ -60,6 +65,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
+        assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
         assertNotNull(fetchedMaterialSample.getCreatedOn());
     }
     

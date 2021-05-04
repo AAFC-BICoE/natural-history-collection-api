@@ -32,7 +32,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     private static final String dwcCatalogNumber = "R-4313";
     private static final String group = "aafc";
-
+    private static final String materialSampleName = "ocean water sample";
 
     @Test
     @WithMockKeycloakUser(username = "test user")
@@ -43,6 +43,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertNotNull(result.getCreatedBy());
         assertEquals(pe.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
+        assertEquals(group, result.getGroup());
+        assertEquals(materialSampleName, result.getMaterialSampleName());
         }
 
     @Test
@@ -65,6 +67,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         pe.setDwcCatalogNumber(dwcCatalogNumber);
         pe.setCollectingEvent(event);
         pe.setGroup(group);
+        pe.setMaterialSampleName(materialSampleName);
         pe.setAttachment(List.of(
             ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
         return pe;
