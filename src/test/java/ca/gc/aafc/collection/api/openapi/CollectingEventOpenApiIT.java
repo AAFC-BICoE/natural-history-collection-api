@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,6 +22,8 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -52,6 +56,14 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";   
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79"};   
+  private static final String habitat = "desert";
+  private static final String dwcCountry = "Canada";
+  private static final String dwcCountryCode = "CA";
+  private static final String dwcStateProvince = "British-Columbia";
+  private static final String geographicPlaceName = "North Vancouver";
+  private static final String dwcRecordNumber = "79";
+
+  private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
 
   static {
     URI_BUILDER.setScheme("https");
@@ -70,6 +82,15 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
+    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
+    .sourceID("1")
+    .sourceIdType("N")
+    .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
+    // recordedOn should be overwritten by the server side generated value
+    .recordedOn(OffsetDateTime.of(
+      LocalDateTime.of(2000, 1, 1, 11, 10),
+      ZoneOffset.ofHoursMinutes(1, 0)))
+    .build();
     CollectingEventDto ce = new CollectingEventDto();
     ce.setCreatedBy("test user");  
     ce.setGroup("test group");  
@@ -87,7 +108,14 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     ce.setDwcVerbatimSRS(dwcVerbatimSRS);
     ce.setDwcVerbatimElevation(dwcVerbatimElevation);
     ce.setDwcVerbatimDepth(dwcVerbatimDepth); 
-    ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);         
+    ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);
+    ce.setHabitat(habitat);
+    ce.setDwcCountry(dwcCountry);
+    ce.setDwcCountryCode(dwcCountryCode);
+    ce.setDwcStateProvince(dwcStateProvince);
+    ce.setGeographicPlaceName(geographicPlaceName);
+    ce.setGeographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail);
+    ce.setDwcRecordNumber(dwcRecordNumber);
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
