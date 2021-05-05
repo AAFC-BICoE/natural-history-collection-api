@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
         context="schema-change">
 
-  <changeSet context="schema-change" id="38-Remove_geographic_place_name" author="cgendreau">
+  <changeSet context="schema-change" id="39-Remove_geographic_place_name" author="cgendreau">
     <dropColumn tableName="collecting_event">
       <column name="geographic_place_name"/>
     </dropColumn>
