@@ -17,6 +17,9 @@ import javax.validation.constraints.Size;
 public class GeographicPlaceNameSourceDetail {
 
   private URL sourceUrl;
+
+  // It is customGeographicPlace OR selectedGeographicPlace but not both
+  private String customGeographicPlace;
   private SourceAdministrativeLevel selectedGeographicPlace;
 
   // all SourceAdministrativeLevel (ordered) between selectedGeographicPlace and stateProvince/country
