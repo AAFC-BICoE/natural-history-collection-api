@@ -39,6 +39,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
+  private static final String dwcCountry = "Atlantis";
+  private static final String dwcCountryCode = "Al";
+  private static final String dwcStateProvince = "Island of Pharo's";
 
   private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
       GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
@@ -83,10 +86,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-     // .dwcCountry(dwcCountry)
+      .dwcCountry(dwcCountry)
       .habitat(habitat)
-     // .dwcCountryCode(dwcCountryCode)
-    //  .dwcStateProvince(dwcStateProvince)
+      .dwcCountryCode(dwcCountryCode)
+      .dwcStateProvince(dwcStateProvince)
       .geographicPlaceNameSource(geographicPlaceNameSource)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .uuid(UUID.randomUUID())
@@ -203,9 +206,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
     assertArrayEquals(dwcOtherRecordNumbers, fetchedCollectingEvent.getDwcOtherRecordNumbers());
-    //assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
-   // assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
-   // assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
+    assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
+    assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
+    assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
     assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
       geographicPlaceNameSourceDetail.getCountry(),
