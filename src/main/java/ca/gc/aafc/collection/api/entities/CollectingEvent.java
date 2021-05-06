@@ -157,8 +157,6 @@ public class CollectingEvent implements DinaEntity {
   private String dwcCountryCode;
   @Size(max = 100)
   private String dwcStateProvince;
-  @Size(max = 100)
-  private String geographicPlaceName;
 
   @Size(max = 500)
   private String habitat;

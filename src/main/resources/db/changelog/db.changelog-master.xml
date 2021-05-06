@@ -41,5 +41,6 @@
   <include file="db/changelog/migrations/36-Rename_table_physical_entity_to_material_sample.xml"/>
   <include file="db/changelog/migrations/37_add_Not_Null_geo_assertion_index.xml"/>
   <include file="db/changelog/migrations/38-Add_materialSampleName_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/39-Remove_geographic_place_name.xml"/>
 
 </databaseChangeLog>

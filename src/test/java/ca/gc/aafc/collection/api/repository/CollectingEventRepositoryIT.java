@@ -62,6 +62,15 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     .dwcGeoreferencedDate(testGeoreferencedDate)
     .isPrimary(true)
     .build();
+  private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
+      GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
+          .build();
+
+  private static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE =
+      GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F")
+          .element("N").placeType("province").name("Island of Pharo's")
+          .build();
+
   private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = null;
   private static final String habitat = "Tropical";
@@ -71,8 +80,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   public void setup() {
     geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail.builder()
-      .sourceID("1")
-      .sourceIdType("N")
+      .country(TEST_COUNTRY)
+      .stateProvince(TEST_PROVINCE)
       .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
       // recordedOn should be overwritten by the server side generated value
       .recordedOn(OffsetDateTime.of(
@@ -137,15 +146,15 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
     assertEquals(geographicPlaceNameSource, collectingEventDto.getGeographicPlaceNameSource());
     assertEquals(
-      geographicPlaceNameSourceDetail.getSourceID(),
-      collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceID());
+      geographicPlaceNameSourceDetail.getCountry(),
+      collectingEventDto.getGeographicPlaceNameSourceDetail().getCountry());
     // assigned server-side
     assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn());
     assertNotEquals(2000, collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn().getYear());
     assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceUrl());
     assertEquals(
-      geographicPlaceNameSourceDetail.getSourceIdType(),
-      collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceIdType());
+      geographicPlaceNameSourceDetail.getStateProvince(),
+      collectingEventDto.getGeographicPlaceNameSourceDetail().getStateProvince());
     assertEquals(habitat, collectingEventDto.getHabitat());
   }
 
