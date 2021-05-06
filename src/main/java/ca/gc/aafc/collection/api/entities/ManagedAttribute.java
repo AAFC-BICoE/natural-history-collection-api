@@ -54,7 +54,8 @@ public class ManagedAttribute implements DinaEntity {
   }
 
   public enum ManagedAttributeComponent {
-    COLLECTING_EVENT
+    COLLECTING_EVENT,
+    MATERIAL_SAMPLE 
   }
 
   @Id
