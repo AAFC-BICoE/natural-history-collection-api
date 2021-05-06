@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import io.crnk.core.engine.parser.StringMapper;
 
 @SuppressWarnings("unchecked")
-public class ManagedAttributeIdMapperTest {
+public class CollectionManagedAttributeIdMapperTest {
 
   @Test
   public void parseId_whenIdIsUuid_returnDefaultMapping() {

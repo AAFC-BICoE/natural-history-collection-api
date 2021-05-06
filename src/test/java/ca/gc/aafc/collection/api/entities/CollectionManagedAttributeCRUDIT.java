@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.ManagedAttributeService;
+import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
+class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
   @Inject
   private BaseDAO baseDAO;
-  private DefaultDinaService<ManagedAttribute> maService;
+  private DefaultDinaService<CollectionManagedAttribute> maService;
 
   @BeforeEach
   void setUp() {
-    maService = new ManagedAttributeService(baseDAO);
+    maService = new CollectionManagedAttributeService(baseDAO);
   }
 
   @Test
@@ -32,26 +32,26 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedValue = "value";
     String expectedCreatedBy = "dina";
     String expectedName = "dina test attribute";
-    UUID uuid = maService.create(ManagedAttribute.builder()
+    UUID uuid = maService.create(CollectionManagedAttribute.builder()
       .uuid(UUID.randomUUID())
-      .managedAttributeType(ManagedAttribute.ManagedAttributeType.STRING)
+      .managedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING)
       .acceptedValues(new String[]{expectedValue})
-      .managedAttributeComponent(ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
+      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
       .createdBy(expectedCreatedBy)
       .name(expectedName)
       .build()).getUuid();
 
-    ManagedAttribute result = maService.findOne(uuid, ManagedAttribute.class);
+    CollectionManagedAttribute result = maService.findOne(uuid, CollectionManagedAttribute.class);
     assertNotNull(result.getId());
     assertNotNull(result.getCreatedOn());
     assertEquals(expectedCreatedBy, result.getCreatedBy());
     assertEquals(expectedName, result.getName());
     assertEquals(expectedValue, result.getAcceptedValues()[0]);
     assertEquals(
-      ManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
+      CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
     assertEquals(
-      ManagedAttribute.ManagedAttributeType.STRING,
+      CollectionManagedAttribute.ManagedAttributeType.STRING,
       result.getManagedAttributeType());
 
 
@@ -63,12 +63,12 @@ class ManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     //detach the object to force a reload from the database
     service.detach(result);
 
-    result = maService.findOne(uuid, ManagedAttribute.class);
+    result = maService.findOne(uuid, CollectionManagedAttribute.class);
     assertNotEquals("abc", result.getKey());
     assertNotEquals("new name", result.getName());
 
     // delete is disabled for now
-    ManagedAttribute finalResult = result;
+    CollectionManagedAttribute finalResult = result;
     assertThrows(HttpRequestMethodNotSupportedException.class, () -> maService.delete(finalResult));
   }
 
