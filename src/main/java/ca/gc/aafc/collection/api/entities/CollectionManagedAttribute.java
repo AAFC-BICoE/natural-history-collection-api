@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
+import ca.gc.aafc.dina.entity.ManagedAttribute;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 
@@ -26,7 +27,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.service.OnCreate;
 import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -36,7 +36,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "managed_attribute")
 @Getter
 @Setter
 @TypeDefs({
@@ -47,11 +47,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
-public class ManagedAttribute implements DinaEntity {
-
-  public enum ManagedAttributeType {
-    INTEGER, STRING
-  }
+public class CollectionManagedAttribute implements ManagedAttribute {
 
   public enum ManagedAttributeComponent {
     COLLECTING_EVENT,

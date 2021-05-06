@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import ca.gc.aafc.dina.repository.GoneException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
@@ -91,7 +92,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
 
   @WithMockKeycloakUser(groupRole = { "amf: staff" })
   @Test
-  public void when_deleteAsUserFromEventGroup_Eventdeleted(){
+  public void when_deleteAsUserFromEventGroup_EventDeleted(){
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("amf");
     ce.setUuid(null);
@@ -102,7 +103,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
 
     assertNotNull(retrievedEvent.getUuid());
     collectingEventRepository.delete(retrievedEvent.getUuid());        
-    Assertions.assertThrows(ResourceNotFoundException.class, ()->collectingEventRepository.findOne(retrievedEvent.getUuid(),
+    Assertions.assertThrows(GoneException.class, ()->collectingEventRepository.findOne(retrievedEvent.getUuid(),
          new QuerySpec(CollectingEventDto.class)));    
 
   }

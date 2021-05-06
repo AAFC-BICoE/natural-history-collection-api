@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.dto.ManagedAttributeDto;
-import ca.gc.aafc.collection.api.entities.ManagedAttribute;
-import ca.gc.aafc.collection.api.service.ManagedAttributeService;
+import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -21,14 +21,14 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Repository
-public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, ManagedAttribute> {
+public class CollectionManagedAttributeRepo extends DinaRepository<CollectionManagedAttributeDto, CollectionManagedAttribute> {
 
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
   public static final Pattern KEY_LOOKUP_PATTERN = Pattern.compile("(.*)\\.(.*)");
 
-  public ManagedAttributeRepo(
-    @NonNull ManagedAttributeService service,
+  public CollectionManagedAttributeRepo(
+    @NonNull CollectionManagedAttributeService service,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
@@ -37,9 +37,9 @@ public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, Ma
       service,
       Optional.empty(),
       Optional.empty(),
-      new DinaMapper<>(ManagedAttributeDto.class),
-      ManagedAttributeDto.class,
-      ManagedAttribute.class,
+      new DinaMapper<>(CollectionManagedAttributeDto.class),
+      CollectionManagedAttributeDto.class,
+      CollectionManagedAttribute.class,
       null,
       externalResourceProvider,
       buildProperties);
@@ -47,14 +47,14 @@ public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, Ma
   }
 
   @Override
-  public <S extends ManagedAttributeDto> S create(S resource) {
+  public <S extends CollectionManagedAttributeDto> S create(S resource) {
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
   }
 
   @Override
-  public ManagedAttributeDto findOne(Serializable id, QuerySpec querySpec) {
+  public CollectionManagedAttributeDto findOne(Serializable id, QuerySpec querySpec) {
 
     // Allow lookup by component type + key.
     // e.g. collecting_event.attribute_name
@@ -64,7 +64,7 @@ public class ManagedAttributeRepo extends DinaRepository<ManagedAttributeDto, Ma
         String componentType = matcher.group(1).toUpperCase();
         String attributeKey = matcher.group(2);
 
-        QuerySpec keyQuerySpec = new QuerySpec(ManagedAttributeDto.class);
+        QuerySpec keyQuerySpec = new QuerySpec(CollectionManagedAttributeDto.class);
         keyQuerySpec.addFilter(
           new FilterSpec(List.of("key"), FilterOperator.EQ, attributeKey));
         keyQuerySpec.addFilter(
