@@ -7,14 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.PreparationType;
-import ca.gc.aafc.dina.filter.DinaFilterResolver;
+import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.service.AuditService;
-import ca.gc.aafc.dina.service.DinaAuthorizationService;
-import ca.gc.aafc.dina.service.DinaService;
 import lombok.NonNull;
 
 
@@ -42,6 +39,11 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
       this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
-  private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
+  @Override
+  public <S extends PreparationTypeDto> S create(S resource) {
+    dinaAuthenticatedUser.ifPresent(
+      authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
+    return super.create(resource);
+  }
   
 }

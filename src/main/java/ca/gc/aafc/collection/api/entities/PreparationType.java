@@ -56,5 +56,7 @@ public class PreparationType implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  
+  @NotBlank
+  private String name;
+
 }
