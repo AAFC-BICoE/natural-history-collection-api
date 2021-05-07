@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+  context="schema-change">
+  
+  <changeSet context="schema-change" id="41-Add_initial_PreparationType.xml" author="Steven Luu">
+    <createTable tableName="preparation_type">
+	    <column autoIncrement="true" name="id" type="SERIAL">
+			<constraints primaryKey="true" primaryKeyName="pk_preparation_type_id" />
+	    </column>
+		<column name="uuid" type="uuid">
+			<constraints nullable="false" unique="true" />
+		</column>
+    <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+    <column name="created_by" type="VARCHAR(250)">
+      <constraints nullable="false"/>
+    </column>
+    <column name="_group" type="VARCHAR(50)">
+      <constraints nullable="false"/>
+    </column>
+    <column name="name" type="VARCHAR(50)">
+      <constraints nullable="false"/>
+    </column>
+    </createTable>        
+  </changeSet>
+</databaseChangeLog>
+
