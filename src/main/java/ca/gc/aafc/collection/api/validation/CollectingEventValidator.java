@@ -1,7 +1,10 @@
 package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.MessageSource;
@@ -17,6 +20,11 @@ public class CollectingEventValidator implements Validator {
 
   public static final String VALID_PRIMARY_KEY = "validation.constraint.violation.validPrimaryAssertions";
   public static final String VALID_EVENT_DATE_KEY = "validation.constraint.violation.validEventDateTime";
+  public static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE = "validation.constraint.violation.validGeographicPlaceNameSource";
+  public static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL = "validation.constraint.violation.validGeoGraphicPlaceNameSourceDetail";
+  public static final String VALID_SOURCE_ADMINISTRATION_LEVEL = "validation.constraint.violation.validSourceAdministrativeLevel";
+
+
 
   private final MessageSource messageSource;
 
@@ -37,6 +45,7 @@ public class CollectingEventValidator implements Validator {
     CollectingEvent collectingEvent = (CollectingEvent) target;
     validateDateTimes(errors, collectingEvent);
     validatePrimaryAssertion(errors, collectingEvent.getGeoReferenceAssertions());
+    validateGeographicPlaceNameSourceDetail(errors, collectingEvent);
   }
 
   private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertion> geoReferenceAssertions) {
@@ -58,6 +67,47 @@ public class CollectingEventValidator implements Validator {
         null,
         LocaleContextHolder.getLocale());
       errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
+    }
+  }
+
+  private void validateGeographicPlaceNameSourceDetail(Errors errors, CollectingEvent collectingEvent) {
+    GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = collectingEvent.getGeographicPlaceNameSourceDetail();
+    if (geographicPlaceNameSourceDetail != null) {
+      if (!collectingEvent.getGeographicPlaceNameSource().equals(GeographicPlaceNameSource.OSM)) {
+        String errorMessage = messageSource.getMessage(
+          VALID_EVENT_DATE_KEY,
+          null,
+          LocaleContextHolder.getLocale());
+        errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
+      }
+      if (geographicPlaceNameSourceDetail.getCustomGeographicPlace() != null
+        && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
+        String errorMessage = messageSource.getMessage(
+          VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL,
+          null,
+          LocaleContextHolder.getLocale());
+        errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
+        } 
+      validateSourceAdministrativeLevel(errors, geographicPlaceNameSourceDetail.getSelectedGeographicPlace());
+      for (SourceAdministrativeLevel sal : geographicPlaceNameSourceDetail.getHigherGeographicPlaces()) {
+        validateSourceAdministrativeLevel(errors, sal);
+      }
+    }
+  }
+
+  private void validateSourceAdministrativeLevel(Errors errors, SourceAdministrativeLevel sal) {
+    switch(sal.getElement()) {
+      case "N":
+      case "W":
+      case "R":
+        break;
+      default:
+        String errorMessage = messageSource.getMessage(
+          VALID_SOURCE_ADMINISTRATION_LEVEL,
+          null,
+          LocaleContextHolder.getLocale());
+        errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
+        break;
     }
   }
 
