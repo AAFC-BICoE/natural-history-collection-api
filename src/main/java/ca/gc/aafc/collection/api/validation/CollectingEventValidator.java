@@ -75,22 +75,28 @@ public class CollectingEventValidator implements Validator {
     if (geographicPlaceNameSourceDetail != null) {
       if (!collectingEvent.getGeographicPlaceNameSource().equals(GeographicPlaceNameSource.OSM)) {
         String errorMessage = messageSource.getMessage(
-          VALID_EVENT_DATE_KEY,
+          VALID_GEOGRAPHIC_PLACE_NAME_SOURCE,
           null,
           LocaleContextHolder.getLocale());
         errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
       }
       if (geographicPlaceNameSourceDetail.getCustomGeographicPlace() != null
-        && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
+        && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null 
+        || (geographicPlaceNameSourceDetail.getCustomGeographicPlace() == null 
+        || geographicPlaceNameSourceDetail.getSelectedGeographicPlace() == null)) {
         String errorMessage = messageSource.getMessage(
           VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL,
           null,
           LocaleContextHolder.getLocale());
         errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
         } 
-      validateSourceAdministrativeLevel(errors, geographicPlaceNameSourceDetail.getSelectedGeographicPlace());
-      for (SourceAdministrativeLevel sal : geographicPlaceNameSourceDetail.getHigherGeographicPlaces()) {
-        validateSourceAdministrativeLevel(errors, sal);
+      if (geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
+        validateSourceAdministrativeLevel(errors, geographicPlaceNameSourceDetail.getSelectedGeographicPlace());
+      }
+      if (CollectionUtils.isNotEmpty(geographicPlaceNameSourceDetail.getHigherGeographicPlaces())) {
+        for (SourceAdministrativeLevel sal : geographicPlaceNameSourceDetail.getHigherGeographicPlaces()) {
+          validateSourceAdministrativeLevel(errors, sal);
+        }
       }
     }
   }
