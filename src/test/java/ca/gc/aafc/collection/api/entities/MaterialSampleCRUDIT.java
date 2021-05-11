@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
@@ -31,11 +32,23 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         String expectedCreatedBy = "dina-save";
         String sampleMaterialName = "lake water sample";
 
+        String preparationExpectedCreatedBy = "preparation-dina-save";
+        String preparationExpectedGroup = "dina";
+        String preparationExpectedName = "isolate";
+
+        PreparationType preparationType = PreparationTypeFactory.newPreparationType()
+            .createdBy(preparationExpectedCreatedBy)
+            .group(preparationExpectedGroup)
+            .name(preparationExpectedName)
+            .build();
+        dbService.save(preparationType);
+
         MaterialSample  materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .materialSampleName(sampleMaterialName)
+            .preparationType(preparationType)
             .build();
         assertNull(materialSample.getId());
         dbService.save(materialSample);
@@ -44,6 +57,11 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
         assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
+        assertNotNull(preparationType.getId());
+        assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
+        assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
+        assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
+        assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());
     }
 
     @Test
@@ -52,11 +70,23 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         String expectedCreatedBy = "dina-find";
         String sampleMaterialName = "lake water sample";
 
+        String preparationExpectedCreatedBy = "preparation-dina-find";
+        String preparationExpectedGroup = "dina";
+        String preparationExpectedName = "isolate";
+
+        PreparationType preparationType = PreparationTypeFactory.newPreparationType()
+            .createdBy(preparationExpectedCreatedBy)
+            .group(preparationExpectedGroup)
+            .name(preparationExpectedName)
+            .build();
+        dbService.save(preparationType);
+
         MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .materialSampleName(sampleMaterialName)
+            .preparationType(preparationType)
             .build();
         dbService.save(materialSample);
 
@@ -67,6 +97,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
         assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
         assertNotNull(fetchedMaterialSample.getCreatedOn());
-    }
+        assertNotNull(preparationType.getId());
+        assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
+        assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
+        assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
+        assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());    }
     
 }

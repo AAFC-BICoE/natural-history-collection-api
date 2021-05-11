@@ -44,5 +44,6 @@
   <include file="db/changelog/migrations/39-Remove_geographic_place_name.xml"/>
   <include file="db/changelog/migrations/40-Add_materialsample_to_managedattributecomponent.xml"/>
   <include file="db/changelog/migrations/41-Add_initial_PreparationType.xml"/>
+  <include file="db/changelog/migrations/42-Add_relationship_between_MaterialSample_And_PreparationType.xml"/>
 
 </databaseChangeLog>
