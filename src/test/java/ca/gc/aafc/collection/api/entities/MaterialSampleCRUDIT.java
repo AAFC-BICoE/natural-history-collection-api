@@ -9,10 +9,13 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
+import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
@@ -22,37 +25,48 @@ import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     @Inject
-    private DatabaseSupportService dbService;
+    private PreparationTypeService preparationTypeService;
+
+    @Inject
+    private MaterialSampleService materialSampleService;
 
     private List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
-    @Test
-    public void testSave() {
-        String dwcCatalogNumber = "S-4313";
-        String expectedCreatedBy = "dina-save";
-        String sampleMaterialName = "lake water sample";
+    private static final String dwcCatalogNumber = "S-4313";
+    private static final String expectedCreatedBy = "dina-save";
+    private static final String sampleMaterialName = "lake water sample";
 
-        String preparationExpectedCreatedBy = "preparation-dina-save";
-        String preparationExpectedGroup = "dina";
-        String preparationExpectedName = "isolate";
+    private static final String preparationExpectedCreatedBy = "preparation-dina-save";
+    private static final String preparationExpectedGroup = "dina-group-save";
+    private static final String preparationExpectedName = "isolate lake water sample";
 
-        PreparationType preparationType = PreparationTypeFactory.newPreparationType()
+    private PreparationType preparationType;
+    private MaterialSample materialSample;
+
+    @BeforeEach
+    void setup() {
+        preparationType = PreparationTypeFactory.newPreparationType()
             .createdBy(preparationExpectedCreatedBy)
             .group(preparationExpectedGroup)
             .name(preparationExpectedName)
             .build();
-        dbService.save(preparationType);
+        preparationTypeService.create(preparationType);
 
-        MaterialSample  materialSample = MaterialSampleFactory.newMaterialSample()
+        materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .materialSampleName(sampleMaterialName)
             .preparationType(preparationType)
             .build();
-        assertNull(materialSample.getId());
-        dbService.save(materialSample);
+        materialSampleService.create(materialSample);
+    }
+
+    @Test
+    public void testCreate() {
+
         assertNotNull(materialSample.getId());
+
         assertEquals(dwcCatalogNumber, materialSample.getDwcCatalogNumber());
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
@@ -66,31 +80,9 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     @Test
     public void testFind() {
-        String dwcCatalogNumber = "F-4313";
-        String expectedCreatedBy = "dina-find";
-        String sampleMaterialName = "lake water sample";
 
-        String preparationExpectedCreatedBy = "preparation-dina-find";
-        String preparationExpectedGroup = "dina";
-        String preparationExpectedName = "isolate";
+        MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
-        PreparationType preparationType = PreparationTypeFactory.newPreparationType()
-            .createdBy(preparationExpectedCreatedBy)
-            .group(preparationExpectedGroup)
-            .name(preparationExpectedName)
-            .build();
-        dbService.save(preparationType);
-
-        MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
-            .dwcCatalogNumber(dwcCatalogNumber)
-            .createdBy(expectedCreatedBy)
-            .attachment(attachmentIdentifiers)
-            .materialSampleName(sampleMaterialName)
-            .preparationType(preparationType)
-            .build();
-        dbService.save(materialSample);
-
-        MaterialSample fetchedMaterialSample = dbService.find(MaterialSample.class, materialSample.getId());
         assertEquals(materialSample.getId(), fetchedMaterialSample.getId());
         assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
@@ -101,6 +93,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
         assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
         assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
-        assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());    }
+        assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());    
+    }
     
 }
