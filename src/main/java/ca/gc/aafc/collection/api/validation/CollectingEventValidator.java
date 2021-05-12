@@ -24,8 +24,6 @@ public class CollectingEventValidator implements Validator {
   public static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL = "validation.constraint.violation.validGeoGraphicPlaceNameSourceDetail";
   public static final String VALID_SOURCE_ADMINISTRATION_LEVEL = "validation.constraint.violation.validSourceAdministrativeLevel";
 
-
-
   private final MessageSource messageSource;
 
   public CollectingEventValidator(MessageSource messageSource) {
@@ -73,7 +71,8 @@ public class CollectingEventValidator implements Validator {
   private void validateGeographicPlaceNameSourceDetail(Errors errors, CollectingEvent collectingEvent) {
     GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = collectingEvent.getGeographicPlaceNameSourceDetail();
     if (geographicPlaceNameSourceDetail != null) {
-      if (!collectingEvent.getGeographicPlaceNameSource().equals(GeographicPlaceNameSource.OSM)) {
+      if (collectingEvent.getGeographicPlaceNameSource() == null 
+        || !collectingEvent.getGeographicPlaceNameSource().equals(GeographicPlaceNameSource.OSM)) {
         String errorMessage = messageSource.getMessage(
           VALID_GEOGRAPHIC_PLACE_NAME_SOURCE,
           null,
