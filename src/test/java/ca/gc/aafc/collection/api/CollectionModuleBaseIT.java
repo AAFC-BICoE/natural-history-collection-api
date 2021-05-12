@@ -32,7 +32,7 @@ public class CollectionModuleBaseIT {
   protected CollectionManagedAttributeService collectionManagedAttributeService;
 
   @Inject
-  protected CollectorGroupService CollectorGroupService;
+  protected CollectorGroupService collectorGroupService;
 
   @Inject
   protected MaterialSampleService materialSampleService;

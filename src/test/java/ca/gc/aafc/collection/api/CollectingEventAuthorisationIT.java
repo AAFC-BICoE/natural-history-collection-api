@@ -52,9 +52,10 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
      .endEventDateTime(LocalDateTime.of(endDate, endTime)).endEventDateTimePrecision((byte) 8)
      .verbatimEventDateTime("XI-02-1798").uuid(UUID.randomUUID()).build();
 
-     testCollectingEvent.setGroup("amf");
+    testCollectingEvent.setGroup("amf");
 
-    service.save(testCollectingEvent);
+    collectingEventService.create(testCollectingEvent);
+
     return testCollectingEvent;
   }
 
@@ -74,7 +75,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
         new QuerySpec(CollectingEventDto.class));
     retrievedEventDto.setDwcVerbatimDepth("10-20m");        
     collectingEventRepository.save(retrievedEventDto);
-    CollectingEvent updatedEvent = service.findUnique(CollectingEvent.class, "uuid", retrievedEventDto.getUuid());
+    CollectingEvent updatedEvent = collectingEventService.findOne(retrievedEventDto.getUuid(), CollectingEvent.class);
     assertEquals("10-20m", updatedEvent.getDwcVerbatimDepth());       
   }
 
@@ -83,9 +84,9 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   public void when_deleteAsUserFromGroupOtherthanEventGroup_AccessDenied() {
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
         new QuerySpec(CollectingEventDto.class));
-    assertNotNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
+    assertNotNull(collectingEventService.findOne(testCollectingEvent.getUuid(), CollectingEvent.class));
     Assertions.assertThrows(AccessDeniedException.class,()-> collectingEventRepository.delete(retrievedEvent.getUuid()));    
-    assertNotNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
+    assertNotNull(collectingEventService.findOne(testCollectingEvent.getUuid(), CollectingEvent.class));
   }
 
   @WithMockKeycloakUser(groupRole = { "amf: staff" })

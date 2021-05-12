@@ -33,7 +33,7 @@ public class CollectorGroupCRUDIT extends CollectionModuleBaseIT {
        .name(TEST_COLLECTOR_GROUP)
        .build();
     assertNull(collectorGroup.getId());
-    service.save(collectorGroup);
+    collectorGroupService.create(collectorGroup);
     assertNotNull(collectorGroup.getId());
   }
 
@@ -43,9 +43,9 @@ public class CollectorGroupCRUDIT extends CollectionModuleBaseIT {
         .name(TEST_COLLECTOR_GROUP)
         .agentIdentifiers(identifiers)
         .build();
-    service.save(collectorGroup);
+    collectorGroupService.create(collectorGroup);
 
-    CollectorGroup fetchedCollectorGroup = service.find(CollectorGroup.class, collectorGroup.getId());
+    CollectorGroup fetchedCollectorGroup = collectorGroupService.findOne(collectorGroup.getUuid(), CollectorGroup.class);
     assertEquals(collectorGroup.getId(), fetchedCollectorGroup.getId());
     assertEquals(2, fetchedCollectorGroup.getAgentIdentifiers().size());
     assertEquals(collectorGroup.getAgentIdentifiers().get(0), fetchedCollectorGroup.getAgentIdentifiers().get(0));
