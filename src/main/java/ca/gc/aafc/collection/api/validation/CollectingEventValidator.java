@@ -81,9 +81,7 @@ public class CollectingEventValidator implements Validator {
         errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
       }
       if (geographicPlaceNameSourceDetail.getCustomGeographicPlace() != null
-        && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null 
-        || (geographicPlaceNameSourceDetail.getCustomGeographicPlace() == null 
-        || geographicPlaceNameSourceDetail.getSelectedGeographicPlace() == null)) {
+        && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
         String errorMessage = messageSource.getMessage(
           VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL,
           null,
