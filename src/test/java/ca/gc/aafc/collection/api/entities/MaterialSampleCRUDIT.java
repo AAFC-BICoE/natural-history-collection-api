@@ -18,7 +18,6 @@ import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
@@ -64,14 +63,14 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     @Test
     public void testCreate() {
-
+        
+        assertNotNull(preparationType.getId());
         assertNotNull(materialSample.getId());
 
         assertEquals(dwcCatalogNumber, materialSample.getDwcCatalogNumber());
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
         assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
-        assertNotNull(preparationType.getId());
         assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
         assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
         assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
@@ -85,15 +84,13 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
         assertEquals(materialSample.getId(), fetchedMaterialSample.getId());
         assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
-        assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
-        assertEquals(attachmentIdentifiers, materialSample.getAttachment());
-        assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
-        assertNotNull(fetchedMaterialSample.getCreatedOn());
-        assertNotNull(preparationType.getId());
-        assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
-        assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
-        assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
-        assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());    
+        assertEquals(expectedCreatedBy, fetchedMaterialSample.getCreatedBy());
+        assertEquals(attachmentIdentifiers, fetchedMaterialSample.getAttachment());
+        assertEquals(sampleMaterialName, fetchedMaterialSample.getMaterialSampleName());
+        assertEquals(preparationType.getId(), fetchedMaterialSample.getPreparationType().getId());
+        assertEquals(preparationExpectedCreatedBy, fetchedMaterialSample.getPreparationType().getCreatedBy());
+        assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
+        assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());    
     }
     
 }
