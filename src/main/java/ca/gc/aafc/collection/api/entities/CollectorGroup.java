@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,7 +44,7 @@ public class CollectorGroup implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull(groups = OnUpdate.class)
+  @NotNull
   @Column(unique = true)
   private UUID uuid;
 

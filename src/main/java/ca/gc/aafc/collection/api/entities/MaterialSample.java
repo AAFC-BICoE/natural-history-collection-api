@@ -24,7 +24,6 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,7 +48,7 @@ public class MaterialSample implements DinaEntity {
     private Integer id;
   
     @NaturalId
-    @NotNull(groups = OnUpdate.class)
+    @NotNull
     @Column(unique = true)
     private UUID uuid;
 

@@ -1,5 +1,13 @@
 package ca.gc.aafc.collection.api;
 
+import ca.gc.aafc.collection.api.service.CollectingEventService;
+import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
+import ca.gc.aafc.collection.api.service.CollectorGroupService;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
+import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
+import ca.gc.aafc.collection.api.service.PreparationProcessElementService;
+import ca.gc.aafc.collection.api.service.PreparationProcessService;
+import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,5 +24,29 @@ import javax.transaction.Transactional;
 public class CollectionModuleBaseIT {
   @Inject
   protected DatabaseSupportService service;    
+
+  @Inject
+  protected CollectingEventService collectingEventService;
+
+  @Inject
+  protected CollectionManagedAttributeService collectionManagedAttributeService;
+
+  @Inject
+  protected CollectorGroupService CollectorGroupService;
+
+  @Inject
+  protected MaterialSampleService materialSampleService;
+
+  @Inject
+  protected PreparationProcessDefinitionService preparationProcessDefinitionService;
+
+  @Inject
+  protected PreparationProcessElementService preparationProcessElementService;
+
+  @Inject
+  protected PreparationProcessService preparationProcessService;
+
+  @Inject
+  protected PreparationTypeService preparationTypeService;
 }
 

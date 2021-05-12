@@ -1,14 +1,10 @@
 package ca.gc.aafc.collection.api.entities;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.PreparationTypeService;
-import ca.gc.aafc.dina.jpa.BaseDAO;
 
 public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
 
@@ -16,15 +12,10 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
   public static final String EXPECTED_GROUP = "DINA GROUP";
   public static final String EXPECTED_CREATED_BY = "createdBy";
 
-  @Inject
-  private BaseDAO baseDAO;
-
-  private PreparationTypeService preparationTypeService;
   private PreparationType preparationType;
 
   @BeforeEach
   void setup() {
-    this.preparationTypeService = new PreparationTypeService(baseDAO);
     preparationType = newPreparationType();
     preparationTypeService.create(preparationType);
   }

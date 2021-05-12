@@ -1,17 +1,12 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.MaterialSampleService;
-import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
-import ca.gc.aafc.collection.api.service.PreparationProcessService;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.dina.jpa.BaseDAO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,21 +16,15 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
   public static final LocalDateTime START_DATE_TIME = LocalDateTime.now().minusDays(2);
   public static final LocalDateTime END_DATE_TIME = LocalDateTime.now().minusDays(1);
 
-  @Inject
-  private BaseDAO baseDAO;
-  private PreparationProcessService processService;
   private PreparationProcess prepUnderTest;
   private PreparationProcessDefinition definition;
   private MaterialSample sourceMaterialSample;
 
   @BeforeEach
   void setUp() {
-    this.processService = new PreparationProcessService(baseDAO);
-    PreparationProcessDefinitionService definitionService = new PreparationProcessDefinitionService(baseDAO);
-    MaterialSampleService materialSampleService = new MaterialSampleService(baseDAO);
 
     this.definition = newDefinition();
-    definitionService.create(definition);
+    preparationProcessDefinitionService.create(definition);
 
     this.sourceMaterialSample = MaterialSampleFactory.newMaterialSample()
       .dwcCatalogNumber("dwcCatalogNumber")
@@ -55,7 +44,7 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void find() {
-    PreparationProcess result = processService.findOne(prepUnderTest.getUuid(), PreparationProcess.class);
+    PreparationProcess result = preparationProcessService.findOne(prepUnderTest.getUuid(), PreparationProcess.class);
     Assertions.assertEquals(AGENT_ID, result.getAgentId());
     Assertions.assertEquals(CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(definition.getUuid(), result.getPreparationProcessDefinition().getUuid());
@@ -76,7 +65,7 @@ public class PreparationProcessCRUDIT extends CollectionModuleBaseIT {
       .startDateTime(START_DATE_TIME)
       .endDateTime(END_DATE_TIME)
       .build();
-    processService.create(build);
+    preparationProcessService.create(build);
     return build;
   }
 
