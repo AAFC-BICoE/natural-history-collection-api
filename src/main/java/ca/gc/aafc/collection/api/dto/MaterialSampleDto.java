@@ -49,4 +49,7 @@ public class MaterialSampleDto {
 
     private String materialSampleName;
 
+    @JsonApiRelation
+    private PreparationTypeDto preparationType;
+
 }

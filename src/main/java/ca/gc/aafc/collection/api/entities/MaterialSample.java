@@ -80,4 +80,8 @@ public class MaterialSample implements DinaEntity {
     @Column(name = "material_sample_name")
     private String materialSampleName;
 
+    @ManyToOne
+    @ToString.Exclude
+    private PreparationType preparationType;
+
 }
