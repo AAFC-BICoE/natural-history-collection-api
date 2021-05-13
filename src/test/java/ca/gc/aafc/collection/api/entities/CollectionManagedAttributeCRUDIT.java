@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-
 class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
 
   @Test
@@ -58,8 +56,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
 
     // delete is disabled for now
     CollectionManagedAttribute finalResult = result;
-    UndeclaredThrowableException undeclaredThrowableException = assertThrows(UndeclaredThrowableException.class, () -> collectionManagedAttributeService.delete(finalResult));
-    assertTrue(undeclaredThrowableException.getCause().getClass().equals(HttpRequestMethodNotSupportedException.class));
+    assertThrows(UnsupportedOperationException.class, () -> collectionManagedAttributeService.delete(finalResult));
   }
 
 }
