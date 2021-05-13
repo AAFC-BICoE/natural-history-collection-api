@@ -39,7 +39,7 @@ public class CollectorGroupRepositoryIT extends CollectionModuleBaseIT{
         .agentIdentifiers(identifiers)
         .build();
   
-      service.save(testCollectorGroup);
+      collectorGroupService.create(testCollectorGroup);
       return testCollectorGroup;
     }
   

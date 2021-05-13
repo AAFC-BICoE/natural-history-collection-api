@@ -24,7 +24,7 @@ public class GeoreferenceAssertionCRUDIT extends CollectionModuleBaseIT {
   void setUp() {
     event = CollectingEventFactory.newCollectingEvent()
       .uuid(UUID.randomUUID()).build();
-    service.save(event);
+    collectingEventService.create(event);
   }
 
   @Test

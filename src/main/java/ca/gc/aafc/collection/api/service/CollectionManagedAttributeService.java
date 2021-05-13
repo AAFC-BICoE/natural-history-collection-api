@@ -6,7 +6,6 @@ import ca.gc.aafc.dina.service.ManagedAttributeService;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ public class CollectionManagedAttributeService extends
   @SneakyThrows
   @Override
   public void delete(CollectionManagedAttribute entity) {
-    throw new HttpRequestMethodNotSupportedException("DELETE");
+    throw new UnsupportedOperationException("DELETE");
   }
 
 }

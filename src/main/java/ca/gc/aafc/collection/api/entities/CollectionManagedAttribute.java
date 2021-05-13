@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import ca.gc.aafc.dina.entity.ManagedAttribute;
@@ -27,8 +26,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import ca.gc.aafc.dina.service.OnCreate;
-import ca.gc.aafc.dina.service.OnUpdate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,7 +56,7 @@ public class CollectionManagedAttribute implements ManagedAttribute {
   private Integer id;
 
   @NaturalId
-  @NotNull(groups = OnUpdate.class)
+  @NotNull
   @Column(name = "uuid", unique = true)
   private UUID uuid;
 
@@ -68,8 +65,7 @@ public class CollectionManagedAttribute implements ManagedAttribute {
   @Column(updatable = false)
   private String name;
 
-  @Null(groups = OnCreate.class)
-  @NotBlank(groups = OnUpdate.class)
+  @NotBlank
   @Size(max = 50)
   @Column(updatable = false)
   private String key;

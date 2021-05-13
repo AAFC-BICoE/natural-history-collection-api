@@ -1,16 +1,13 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -21,12 +18,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
-
-  @Inject
-  private DatabaseSupportService dbService;
-
-  @Inject
-  private CollectingEventService collectingEventService;
 
   private GeoreferenceAssertion geoReferenceAssertion;
 
@@ -186,8 +177,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void find() {
-    CollectingEvent fetchedCollectingEvent = dbService
-      .find(CollectingEvent.class, collectingEvent.getId());
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
     assertEquals(collectingEvent.getId(), fetchedCollectingEvent.getId());
     assertEquals(TEST_DATE_TIME, fetchedCollectingEvent.getStartEventDateTime());
     assertEquals((byte) 8, fetchedCollectingEvent.getStartEventDateTimePrecision());
@@ -223,8 +214,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void delete_Orphans_Removed() {
     collectingEventService.delete(collectingEvent);
-    assertNull(dbService.find(CollectingEvent.class, collectingEvent.getId()));
-    assertNull(dbService.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId()));
+    assertNull(collectingEventService.findOne(collectingEvent.getUuid(), CollectingEvent.class));
+    assertNull(service.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId()));
   }
 
   @Test

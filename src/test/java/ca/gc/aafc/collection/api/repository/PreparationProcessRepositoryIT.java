@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationProcessDefinitionDto;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

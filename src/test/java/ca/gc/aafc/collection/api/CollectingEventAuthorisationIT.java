@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +21,6 @@ import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 
 import org.junit.jupiter.api.Assertions;
@@ -54,9 +52,10 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
      .endEventDateTime(LocalDateTime.of(endDate, endTime)).endEventDateTimePrecision((byte) 8)
      .verbatimEventDateTime("XI-02-1798").uuid(UUID.randomUUID()).build();
 
-     testCollectingEvent.setGroup("amf");
+    testCollectingEvent.setGroup("amf");
 
-    service.save(testCollectingEvent);
+    collectingEventService.create(testCollectingEvent);
+
     return testCollectingEvent;
   }
 
@@ -76,7 +75,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
         new QuerySpec(CollectingEventDto.class));
     retrievedEventDto.setDwcVerbatimDepth("10-20m");        
     collectingEventRepository.save(retrievedEventDto);
-    CollectingEvent updatedEvent = service.findUnique(CollectingEvent.class, "uuid", retrievedEventDto.getUuid());
+    CollectingEvent updatedEvent = collectingEventService.findOne(retrievedEventDto.getUuid(), CollectingEvent.class);
     assertEquals("10-20m", updatedEvent.getDwcVerbatimDepth());       
   }
 
@@ -85,9 +84,9 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   public void when_deleteAsUserFromGroupOtherthanEventGroup_AccessDenied() {
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
         new QuerySpec(CollectingEventDto.class));
-    assertNotNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
+    assertNotNull(collectingEventService.findOne(testCollectingEvent.getUuid(), CollectingEvent.class));
     Assertions.assertThrows(AccessDeniedException.class,()-> collectingEventRepository.delete(retrievedEvent.getUuid()));    
-    assertNotNull(service.find(CollectingEvent.class, testCollectingEvent.getId()));
+    assertNotNull(collectingEventService.findOne(testCollectingEvent.getUuid(), CollectingEvent.class));
   }
 
   @WithMockKeycloakUser(groupRole = { "amf: staff" })

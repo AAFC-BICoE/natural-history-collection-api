@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.OnUpdate;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
@@ -72,7 +71,7 @@ public class CollectingEvent implements DinaEntity {
   private Integer id;
 
   @NaturalId
-  @NotNull(groups = OnUpdate.class)
+  @NotNull
   @Column(unique = true)
   private UUID uuid;
 

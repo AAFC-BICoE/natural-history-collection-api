@@ -1,45 +1,33 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.MaterialSampleService;
-import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
-import ca.gc.aafc.collection.api.service.PreparationProcessElementService;
-import ca.gc.aafc.collection.api.service.PreparationProcessService;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.dina.jpa.BaseDAO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 class PreparationProcessElementCRUDIT extends CollectionModuleBaseIT {
   public static final String CREATED_BY = "d1af";
-  @Inject
-  private BaseDAO baseDAO;
-  private PreparationProcessElementService elementService;
+
   private PreparationProcess preparation;
   private PreparationProcessElement elementUnderTest;
   private MaterialSample materialSample;
 
   @BeforeEach
   void setUp() {
-    PreparationProcessService processService = new PreparationProcessService(baseDAO);
-    PreparationProcessDefinitionService definitionService = new PreparationProcessDefinitionService(baseDAO);
-    MaterialSampleService materialSampleService = new MaterialSampleService(baseDAO);
-    this.elementService = new PreparationProcessElementService(baseDAO);
 
     PreparationProcessDefinition definition = newDefinition();
-    definitionService.create(definition);
+    preparationProcessDefinitionService.create(definition);
 
     MaterialSample sourceMaterialSample = newPhysical();
     materialSampleService.create(sourceMaterialSample);
 
     this.preparation = newPrep(definition, sourceMaterialSample);
-    processService.create(preparation);
+    preparationProcessService.create(preparation);
 
     this.materialSample = newPhysical();
     materialSampleService.create(materialSample);
@@ -49,7 +37,7 @@ class PreparationProcessElementCRUDIT extends CollectionModuleBaseIT {
       .preparationProcess(this.preparation)
       .materialSample(this.materialSample)
       .build();
-    this.elementService.create(this.elementUnderTest);
+    preparationProcessElementService.create(this.elementUnderTest);
   }
 
   private MaterialSample newPhysical() {
@@ -68,7 +56,7 @@ class PreparationProcessElementCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void find() {
-    PreparationProcessElement result = elementService.findOne(
+    PreparationProcessElement result = preparationProcessElementService.findOne(
       elementUnderTest.getUuid(),
       PreparationProcessElement.class);
     Assertions.assertEquals(preparation.getUuid(), result.getPreparationProcess().getUuid());

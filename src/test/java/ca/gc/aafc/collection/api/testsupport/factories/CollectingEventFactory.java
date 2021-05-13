@@ -3,8 +3,6 @@ package ca.gc.aafc.collection.api.testsupport.factories;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
-import java.util.UUID;
-
 public class CollectingEventFactory implements TestableEntityFactory<CollectingEvent> {
 
     @Override
