@@ -120,7 +120,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_GeographicPlaceNameSourceDetailExistsButGeoGraphicPlaceNameSourceNotOSM_ErrorsReturned() {
-    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_GEOGRAPHIC_PLACE_NAME_SOURCE);
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_KEY);
     
     CollectingEvent event = newEvent();
     event.setGeographicPlaceNameSourceDetail(newGeographicPlaceNameSourceDetail());
@@ -133,7 +133,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_BothCustomGeographicPlaceAndSelectedGeographicPlaceExist_ErrorsReturned() {
-    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL);
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL_KEY);
 
     GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = newGeographicPlaceNameSourceDetail();
     geographicPlaceNameSourceDetail.setCustomGeographicPlace("custom place");
@@ -150,7 +150,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_SourceAdministrativeLevelElementFieldNotNWRSelectedGeographicPlace_ErrorsReturned() {
-    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_SOURCE_ADMINISTRATION_LEVEL);
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_SOURCE_ADMINISTRATION_LEVEL_KEY);
 
     SourceAdministrativeLevel sourceAdministrativeLevel = newSourceAdministrativeLevel();
     sourceAdministrativeLevel.setElement("not N W or R");

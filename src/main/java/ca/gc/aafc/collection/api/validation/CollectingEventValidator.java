@@ -14,15 +14,18 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class CollectingEventValidator implements Validator {
 
-  public static final String VALID_PRIMARY_KEY = "validation.constraint.violation.validPrimaryAssertions";
-  public static final String VALID_EVENT_DATE_KEY = "validation.constraint.violation.validEventDateTime";
-  public static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE = "validation.constraint.violation.validGeographicPlaceNameSource";
-  public static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL = "validation.constraint.violation.validGeoGraphicPlaceNameSourceDetail";
-  public static final String VALID_SOURCE_ADMINISTRATION_LEVEL = "validation.constraint.violation.validSourceAdministrativeLevel";
+  private static final Set<String> OSM_ELEMENTS = Set.of("N", "W", "R");
+
+  static final String VALID_PRIMARY_KEY = "validation.constraint.violation.validPrimaryAssertions";
+  static final String VALID_EVENT_DATE_KEY = "validation.constraint.violation.validEventDateTime";
+  static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_KEY = "validation.constraint.violation.validGeographicPlaceNameSource";
+  static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL_KEY = "validation.constraint.violation.validGeoGraphicPlaceNameSourceDetail";
+  static final String VALID_SOURCE_ADMINISTRATION_LEVEL_KEY = "validation.constraint.violation.validSourceAdministrativeLevel";
 
   private final MessageSource messageSource;
 
@@ -48,45 +51,31 @@ public class CollectingEventValidator implements Validator {
 
   private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertion> geoReferenceAssertions) {
     if (CollectionUtils.isNotEmpty(geoReferenceAssertions) && countPrimaries(geoReferenceAssertions) != 1) {
-      String errorMessage = messageSource.getMessage(
-        VALID_PRIMARY_KEY,
-        null,
-        LocaleContextHolder.getLocale());
-      errors.reject(VALID_PRIMARY_KEY, errorMessage);
+      addError(errors,  VALID_PRIMARY_KEY);
     }
   }
 
   private void validateDateTimes(Errors errors, CollectingEvent collectingEvent) {
-    if ((collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null)
-      || (collectingEvent.getEndEventDateTime() != null
-      && collectingEvent.getStartEventDateTime().isAfter(collectingEvent.getEndEventDateTime()))) {
-      String errorMessage = messageSource.getMessage(
-        VALID_EVENT_DATE_KEY,
-        null,
-        LocaleContextHolder.getLocale());
-      errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
+    if ((collectingEvent.getStartEventDateTime() == null &&
+        collectingEvent.getEndEventDateTime() != null) ||
+        (collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime()
+            .isAfter(collectingEvent.getEndEventDateTime()))) {
+      addError(errors, VALID_EVENT_DATE_KEY);
     }
   }
 
   private void validateGeographicPlaceNameSourceDetail(Errors errors, CollectingEvent collectingEvent) {
     GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = collectingEvent.getGeographicPlaceNameSourceDetail();
     if (geographicPlaceNameSourceDetail != null) {
-      if (collectingEvent.getGeographicPlaceNameSource() == null 
-        || !collectingEvent.getGeographicPlaceNameSource().equals(GeographicPlaceNameSource.OSM)) {
-        String errorMessage = messageSource.getMessage(
-          VALID_GEOGRAPHIC_PLACE_NAME_SOURCE,
-          null,
-          LocaleContextHolder.getLocale());
-        errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
+      if (collectingEvent.getGeographicPlaceNameSource() == null ||
+          !collectingEvent.getGeographicPlaceNameSource().equals(GeographicPlaceNameSource.OSM)) {
+        addError(errors, VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_KEY);
       }
+
       if (geographicPlaceNameSourceDetail.getCustomGeographicPlace() != null
-        && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
-        String errorMessage = messageSource.getMessage(
-          VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL,
-          null,
-          LocaleContextHolder.getLocale());
-        errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
-        } 
+          && geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
+        addError(errors, VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL_KEY);
+      }
       if (geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
         validateSourceAdministrativeLevel(errors, geographicPlaceNameSourceDetail.getSelectedGeographicPlace());
       }
@@ -99,18 +88,8 @@ public class CollectingEventValidator implements Validator {
   }
 
   private void validateSourceAdministrativeLevel(Errors errors, SourceAdministrativeLevel sal) {
-    switch(sal.getElement()) {
-      case "N":
-      case "W":
-      case "R":
-        break;
-      default:
-        String errorMessage = messageSource.getMessage(
-          VALID_SOURCE_ADMINISTRATION_LEVEL,
-          null,
-          LocaleContextHolder.getLocale());
-        errors.reject(VALID_EVENT_DATE_KEY, errorMessage);
-        break;
+    if (!OSM_ELEMENTS.contains(sal.getElement())) {
+      addError(errors, VALID_SOURCE_ADMINISTRATION_LEVEL_KEY);
     }
   }
 
@@ -119,5 +98,19 @@ public class CollectingEventValidator implements Validator {
       return 0;
     }
     return geoReferenceAssertions.stream().filter(g -> g.getIsPrimary() != null && g.getIsPrimary()).count();
+  }
+
+  /**
+   * Internal method to add an error to the provided Errors object with a message from the
+   * message bundle.
+   * @param errors
+   * @param messageBundleKey
+   */
+  private void addError(Errors errors, String messageBundleKey) {
+    String errorMessage = messageSource.getMessage(
+        messageBundleKey,
+        null,
+        LocaleContextHolder.getLocale());
+    errors.reject(messageBundleKey, errorMessage);
   }
 }
