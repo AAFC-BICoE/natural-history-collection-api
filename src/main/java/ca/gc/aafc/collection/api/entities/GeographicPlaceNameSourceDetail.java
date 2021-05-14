@@ -9,6 +9,7 @@ import org.javers.core.metamodel.annotation.Value;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
@@ -16,6 +17,7 @@ import javax.validation.constraints.Size;
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
 public class GeographicPlaceNameSourceDetail {
 
+  @NotBlank
   private URL sourceUrl;
 
   // It is customGeographicPlace OR selectedGeographicPlace but not both
@@ -26,7 +28,9 @@ public class GeographicPlaceNameSourceDetail {
   // excluding them.
   private List<SourceAdministrativeLevel> higherGeographicPlaces;
 
+  @NotBlank
   private SourceAdministrativeLevel stateProvince;
+  @NotBlank
   private Country country;
   private OffsetDateTime recordedOn;
 
@@ -38,9 +42,13 @@ public class GeographicPlaceNameSourceDetail {
   @Builder
   @Value
   public static class SourceAdministrativeLevel {
+    @NotBlank
     private String id;
+    @NotBlank
     private String element; // on OSM it's the osm_type (N, W or R: Node, Way or Relation) https://wiki.openstreetmap.org/wiki/Elements
+    @NotBlank
     private String placeType; // on OSM it's usually the place_type (https://wiki.openstreetmap.org/wiki/Key:place) with a fallback on class:type
+    @NotBlank
     private String name;
   }
 
