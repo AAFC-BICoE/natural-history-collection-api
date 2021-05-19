@@ -91,5 +91,25 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
         assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());    
     }
+
+    @Test
+    public void testParentChildRelationship() {
+        MaterialSample child = MaterialSampleFactory.newMaterialSample()
+            .dwcCatalogNumber("child-" + dwcCatalogNumber)
+            .createdBy("child-" + expectedCreatedBy)
+            .attachment(attachmentIdentifiers)
+            .materialSampleName("child-" + sampleMaterialName)
+            .preparationType(preparationType)
+            .parentMaterialSample(materialSample)
+            .build();
+
+        materialSampleService.create(child);
+
+        MaterialSample fetchedParent = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+
+        assertEquals(fetchedParent.getUuid(), child.getParentMaterialSample().getUuid());
+        assertEquals(fetchedParent.getSubMaterialSamples().get(0).getUuid(), child.getUuid());
+
+    }
     
 }
