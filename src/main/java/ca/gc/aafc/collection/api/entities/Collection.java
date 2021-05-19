@@ -48,6 +48,8 @@ public class Collection implements DinaEntity {
   @NotBlank
   private String name;
 
+  private String code;
+
   @Column(insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
