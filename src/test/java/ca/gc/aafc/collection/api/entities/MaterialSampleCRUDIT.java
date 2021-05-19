@@ -110,6 +110,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         MaterialSample fetchedParent = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
         assertEquals(fetchedParent.getUuid(), child.getParentMaterialSample().getUuid());
+        assertEquals(1, fetchedParent.getSubMaterialSamples().size());
     }
 
     @Test
@@ -120,7 +121,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             materialSampleService.update(materialSample));
 
         String expected = "Looping MaterialSample parent relationship.";
-        String actual =exception.getLocalizedMessage();
+        String actual = exception.getLocalizedMessage();
 
         assertEquals(expected, actual);
     }

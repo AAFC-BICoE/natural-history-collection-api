@@ -28,6 +28,7 @@ import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,11 +77,12 @@ public class MaterialSample implements DinaEntity {
     private CollectingEvent collectingEvent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="parent_material_sample_id", referencedColumnName = "id")
+    @JoinColumn(name = "parent_material_sample_id", 
+        referencedColumnName = "id")
     @ToString.Exclude
     private MaterialSample parentMaterialSample;
 
-    @OneToMany(fetch = FetchType.LAZY,
+    @OneToMany(fetch = FetchType.EAGER,
         mappedBy = "parentMaterialSample",
         cascade = {CascadeType.ALL},
         orphanRemoval = true)
