@@ -19,6 +19,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -48,6 +50,7 @@ public class Collection implements DinaEntity {
   @NotBlank
   private String name;
 
+  @Size(max = 10)
   private String code;
 
   @Column(insertable = false, updatable = false)
