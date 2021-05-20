@@ -45,9 +45,11 @@ public class Collection implements DinaEntity {
 
   @NotBlank
   @Column(name = "_group")
+  @Size(max = 250)
   private String group;
 
   @NotBlank
+  @Size(max = 250)
   private String name;
 
   @Size(max = 10)
