@@ -25,7 +25,7 @@
             </column>
         </createTable>
         <sql>
-            CREATE UNIQUE INDEX name_unique on collection (LOWER(name));
+            CREATE UNIQUE INDEX collection_name_unique on collection (LOWER(name));
         </sql>
 
     </changeSet>
