@@ -2,7 +2,10 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -77,16 +80,15 @@ public class MaterialSample implements DinaEntity {
     private CollectingEvent collectingEvent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_material_sample_id", 
-        referencedColumnName = "id")
+    @JoinColumn(name = "parent_material_sample_id")
     @ToString.Exclude
     private MaterialSample parentMaterialSample;
 
     @OneToMany(fetch = FetchType.EAGER,
         mappedBy = "parentMaterialSample",
-        cascade = {CascadeType.ALL},
+        cascade = CascadeType.ALL, 
         orphanRemoval = true)
-    private List<MaterialSample> subMaterialSamples = new ArrayList<MaterialSample>();
+    private List<MaterialSample> subMaterialSamples = new ArrayList<>();
 
     @Type(type = "list-array")
     @Column(name = "attachment", columnDefinition = "uuid[]")

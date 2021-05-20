@@ -29,28 +29,15 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
     @Override
     protected void preCreate(MaterialSample entity) {
         entity.setUuid(UUID.randomUUID());
-        linkParentRelationship(entity);
         validateMaterialSample(entity);
     }
 
     @Override
     protected void preUpdate(MaterialSample entity) {
-        linkParentRelationship(entity);
         validateMaterialSample(entity);
     }
 
     public void validateMaterialSample(MaterialSample entity) {
         validateBusinessRules(entity, materialSampleValidator);
-    }
-
-    private void linkParentRelationship(MaterialSample entity) {
-        MaterialSample parent = entity.getParentMaterialSample();
-        if (parent != null) {
-            List<MaterialSample> subMaterialSamples = 
-                Optional.ofNullable(parent.getSubMaterialSamples()).orElse(Collections.emptyList());
-            subMaterialSamples.add(entity);
-            parent.setSubMaterialSamples(subMaterialSamples);
-            update(parent);
-        }
     }
 }

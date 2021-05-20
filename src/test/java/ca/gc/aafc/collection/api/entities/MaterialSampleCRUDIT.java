@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -96,21 +98,33 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     @Test
     public void testParentChildRelationship() {
+        MaterialSample parent = MaterialSampleFactory.newMaterialSample()
+            .dwcCatalogNumber("parent-" + dwcCatalogNumber)
+            .createdBy("parent-" + expectedCreatedBy)
+            .attachment(attachmentIdentifiers)
+            .materialSampleName("parent-" + sampleMaterialName)
+            .preparationType(preparationType)
+            .build();
+
         MaterialSample child = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber("child-" + dwcCatalogNumber)
             .createdBy("child-" + expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .materialSampleName("child-" + sampleMaterialName)
             .preparationType(preparationType)
-            .parentMaterialSample(materialSample)
+            .parentMaterialSample(parent)
             .build();
 
+        parent.setSubMaterialSamples(Collections.singletonList(child));
+        
+        materialSampleService.create(parent);
         materialSampleService.create(child);
 
-        MaterialSample fetchedParent = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+        MaterialSample fetchedParent = materialSampleService.findOne(parent.getUuid(), MaterialSample.class);
 
         assertEquals(fetchedParent.getUuid(), child.getParentMaterialSample().getUuid());
         assertEquals(1, fetchedParent.getSubMaterialSamples().size());
+        assertEquals(child.getUuid(), fetchedParent.getSubMaterialSamples().get(0).getUuid());
     }
 
     @Test
