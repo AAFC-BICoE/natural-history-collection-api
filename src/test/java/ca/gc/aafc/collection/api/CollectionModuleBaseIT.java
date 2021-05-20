@@ -4,8 +4,8 @@ import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectorGroupService;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
-import ca.gc.aafc.collection.api.service.PreparationProcessDefinitionService;
-import ca.gc.aafc.collection.api.service.PreparationProcessService;
+import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
+import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -37,10 +37,10 @@ public class CollectionModuleBaseIT {
   protected MaterialSampleService materialSampleService;
 
   @Inject
-  protected PreparationProcessDefinitionService preparationProcessDefinitionService;
+  protected MaterialSampleActionDefinitionService materialSampleActionDefinitionService;
 
   @Inject
-  protected PreparationProcessService preparationProcessService;
+  protected MaterialSampleActionRunService materialSampleActionRunService;
 
   @Inject
   protected PreparationTypeService preparationTypeService;

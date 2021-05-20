@@ -30,7 +30,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
-public class PreparationProcessDefinition implements DinaEntity {
+public class MaterialSampleActionDefinition implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

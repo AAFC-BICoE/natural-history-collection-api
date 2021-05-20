@@ -13,6 +13,64 @@
         <!-- Drop the table -->
         <dropTable tableName="preparation_process_element"/>
 
+        <!-- MaterialSampleActionDefinition -->
+        <!-- <dropTable tableName="preparation_process_definition"/> -->
+
+        <createTable tableName="material_sample_action_definition">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_material_sample_action_definition_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="prep_group" type="VARCHAR(250)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="created_by" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <!-- MaterialSampleActionRun -->
+        <!-- <dropTable tableName="preparation_process"/> -->
+
+        <createTable tableName="material_sample_action_run">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_material_sample_action_run_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="created_by" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="material_sample_action_definition_id" type="integer">
+                <constraints
+                        foreignKeyName="fk_material_sample_action_definition_id"
+                        references="material_sample_action_definition(id)"
+                        unique="true"
+                        nullable="false"/>
+            </column>
+            <column name="source_material_sample_id" type="integer">
+                <constraints
+                    foreignKeyName="fk_source_material_sample_id"
+                    references="material_sample(id)"
+                    unique="true"
+                    nullable="false"/>
+            </column>  
+            <column name="start_date_time" type="timestamp"/>
+            <column name="end_date_time" type="timestamp"/>
+        </createTable>
+
+
     </changeSet>
 
 </databaseChangeLog>
