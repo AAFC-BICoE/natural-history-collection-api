@@ -45,6 +45,6 @@
   <include file="db/changelog/migrations/40-Add_materialsample_to_managedattributecomponent.xml"/>
   <include file="db/changelog/migrations/41-Add_initial_PreparationType.xml"/>
   <include file="db/changelog/migrations/42-Add_relationship_between_MaterialSample_And_PreparationType.xml"/>
-  <include file="db/changelog/migrations/43-Add_parent_MaterialSample_to_materialSample.xml"/>
-
+  <include file="db/changelog/migrations/43-Collection_Resource.xml"/>
+  <include file="db/changelog/migrations/44-Add_parent_MaterialSample_to_materialSample.xml"/>
 </databaseChangeLog>
