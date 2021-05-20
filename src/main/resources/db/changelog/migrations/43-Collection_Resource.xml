@@ -24,6 +24,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <sql>
+            CREATE UNIQUE INDEX name_unique on collection (LOWER(name));
+        </sql>
 
     </changeSet>
 
