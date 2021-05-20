@@ -12,10 +12,10 @@
         
         <!-- Drop the table -->
         <dropTable tableName="preparation_process_element"/>
+        <dropTable tableName="preparation_process"/>
+        <dropTable tableName="preparation_process_definition"/>
 
         <!-- MaterialSampleActionDefinition -->
-        <dropTable tableName="preparation_process" cascadeConstraints="true"/>
-        <dropTable tableName="preparation_process_definition" />
 
         <createTable tableName="material_sample_action_definition">
             <column autoIncrement="true" name="id" type="SERIAL">
