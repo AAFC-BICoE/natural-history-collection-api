@@ -75,15 +75,13 @@ public class MaterialSample implements DinaEntity {
     @ToString.Exclude
     private CollectingEvent collectingEvent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_material_sample_id")
     @ToString.Exclude
     private MaterialSample parentMaterialSample;
 
-    @OneToMany(fetch = FetchType.EAGER,
-        mappedBy = "parentMaterialSample",
-        cascade = CascadeType.ALL, 
-        orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+        mappedBy = "parentMaterialSample")
     private List<MaterialSample> subMaterialSamples = new ArrayList<>();
 
     @Type(type = "list-array")

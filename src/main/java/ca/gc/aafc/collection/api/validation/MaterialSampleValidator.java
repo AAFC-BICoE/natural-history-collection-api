@@ -30,30 +30,14 @@ public class MaterialSampleValidator implements Validator {
       throw new IllegalArgumentException("MaterialSampleValidator not supported for class " + target.getClass());
     }    
     MaterialSample materialSample = (MaterialSample) target;
-    detectLoop(materialSample, errors);
-  }
-
-  private void detectLoop(MaterialSample materialSample, Errors errors) {
-    MaterialSample slow = materialSample.getParentMaterialSample();
-    MaterialSample fast = materialSample.getParentMaterialSample();
-    boolean isLooping = false;
-
-    while (slow != null && fast != null && fast.getParentMaterialSample() != null) {
-      slow = slow.getParentMaterialSample();
-      fast = fast.getParentMaterialSample().getParentMaterialSample();
-      if (slow == fast) {
-        isLooping = true;
-        break;
+    if (materialSample.getParentMaterialSample() != null
+      && materialSample.getParentMaterialSample().getUuid().equals(materialSample.getUuid())) {
+        String errorMessage = messageSource.getMessage(VALID_PARENT_RELATIONSHIP_LOOP,
+          null, LocaleContextHolder.getLocale());
+        errors.rejectValue(
+          "parentMaterialSample",
+          VALID_PARENT_RELATIONSHIP_LOOP,
+          errorMessage);
       }
-    }
-    if (isLooping) {
-      String errorMessage = messageSource.getMessage(VALID_PARENT_RELATIONSHIP_LOOP,
-        null, LocaleContextHolder.getLocale());
-      errors.rejectValue(
-        "parentMaterialSample",
-        VALID_PARENT_RELATIONSHIP_LOOP,
-        errorMessage);
-    }
   }
-  
 }
