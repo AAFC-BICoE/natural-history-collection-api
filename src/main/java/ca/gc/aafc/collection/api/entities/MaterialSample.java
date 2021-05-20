@@ -2,10 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -31,7 +28,6 @@ import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
