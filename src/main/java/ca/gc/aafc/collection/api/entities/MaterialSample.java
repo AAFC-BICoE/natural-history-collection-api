@@ -11,7 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -71,6 +73,15 @@ public class MaterialSample implements DinaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private CollectingEvent collectingEvent;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_material_sample_id")
+    @ToString.Exclude
+    private MaterialSample parentMaterialSample;
+
+    @OneToMany(fetch = FetchType.LAZY,
+        mappedBy = "parentMaterialSample")
+    private List<MaterialSample> subMaterialSamples = new ArrayList<>();
 
     @Type(type = "list-array")
     @Column(name = "attachment", columnDefinition = "uuid[]")

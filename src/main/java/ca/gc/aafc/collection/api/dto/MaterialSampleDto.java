@@ -52,4 +52,10 @@ public class MaterialSampleDto {
     @JsonApiRelation
     private PreparationTypeDto preparationType;
 
+    @JsonApiRelation
+    private MaterialSampleDto parentMaterialSample;
+
+    @JsonApiRelation
+    private List<MaterialSampleDto> subMaterialSample;
+
 }
