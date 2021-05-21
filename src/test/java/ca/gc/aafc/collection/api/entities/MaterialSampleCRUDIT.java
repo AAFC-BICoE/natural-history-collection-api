@@ -2,11 +2,15 @@ package ca.gc.aafc.collection.api.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,6 +94,50 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationExpectedCreatedBy, fetchedMaterialSample.getPreparationType().getCreatedBy());
         assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
         assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());    
+    }
+
+    @Test
+    public void testParentChildRelationship() {
+        MaterialSample parent = MaterialSampleFactory.newMaterialSample()
+            .dwcCatalogNumber("parent-" + dwcCatalogNumber)
+            .createdBy("parent-" + expectedCreatedBy)
+            .attachment(attachmentIdentifiers)
+            .materialSampleName("parent-" + sampleMaterialName)
+            .preparationType(preparationType)
+            .build();
+
+        MaterialSample child = MaterialSampleFactory.newMaterialSample()
+            .dwcCatalogNumber("child-" + dwcCatalogNumber)
+            .createdBy("child-" + expectedCreatedBy)
+            .attachment(attachmentIdentifiers)
+            .materialSampleName("child-" + sampleMaterialName)
+            .preparationType(preparationType)
+            .parentMaterialSample(parent)
+            .build();
+
+        parent.setSubMaterialSamples(Collections.singletonList(child));
+        
+        materialSampleService.create(parent);
+        materialSampleService.create(child);
+
+        MaterialSample fetchedParent = materialSampleService.findOne(parent.getUuid(), MaterialSample.class);
+
+        assertEquals(fetchedParent.getUuid(), child.getParentMaterialSample().getUuid());
+        assertEquals(1, fetchedParent.getSubMaterialSamples().size());
+        assertEquals(child.getUuid(), fetchedParent.getSubMaterialSamples().get(0).getUuid());
+    }
+
+    @Test
+    public void testLoopingRelationship_ThrowsValidationException() {
+        materialSample.setParentMaterialSample(materialSample);
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> 
+            materialSampleService.update(materialSample));
+
+        String expected = "Looping MaterialSample parent relationship.";
+        String actual = exception.getLocalizedMessage();
+
+        assertEquals(expected, actual);
     }
     
 }
