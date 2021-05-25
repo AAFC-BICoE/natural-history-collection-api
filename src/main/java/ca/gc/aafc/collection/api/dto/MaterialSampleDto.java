@@ -56,6 +56,6 @@ public class MaterialSampleDto {
     private MaterialSampleDto parentMaterialSample;
 
     @JsonApiRelation
-    private List<MaterialSampleDto> subMaterialSample;
+    private List<MaterialSampleDto> materialSampleChildren;
 
 }
