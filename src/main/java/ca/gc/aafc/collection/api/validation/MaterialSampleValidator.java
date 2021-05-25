@@ -31,18 +31,18 @@ public class MaterialSampleValidator implements Validator {
       throw new IllegalArgumentException("MaterialSampleValidator not supported for class " + target.getClass());
     }
     MaterialSample materialSample = (MaterialSample) target;
-    checkParentIsSelfError(errors, materialSample);
-    checkHasParentAndEventError(errors, materialSample);
+    checkParentIsNotSelf(errors, materialSample);
+    checkHasParentOrEvent(errors, materialSample);
   }
 
-  private void checkHasParentAndEventError(Errors errors, MaterialSample materialSample) {
+  private void checkHasParentOrEvent(Errors errors, MaterialSample materialSample) {
     if (materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null) {
       String errorMessage = getMessage(PARENT_AND_EVENT_ERROR_KEY);
       errors.rejectValue("parentMaterialSample", PARENT_AND_EVENT_ERROR_KEY, errorMessage);
     }
   }
 
-  private void checkParentIsSelfError(Errors errors, MaterialSample materialSample) {
+  private void checkParentIsNotSelf(Errors errors, MaterialSample materialSample) {
     if (materialSample.getParentMaterialSample() != null
       && materialSample.getParentMaterialSample().getUuid().equals(materialSample.getUuid())) {
       String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
