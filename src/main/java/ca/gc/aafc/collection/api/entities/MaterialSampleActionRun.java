@@ -34,7 +34,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
-public class PreparationProcess implements DinaEntity {
+public class MaterialSampleActionRun implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +59,8 @@ public class PreparationProcess implements DinaEntity {
 
   @OneToOne
   @NotNull
-  @JoinColumn(name = "preparation_process_definition_id", referencedColumnName = "id", unique = true)
-  private PreparationProcessDefinition preparationProcessDefinition;
+  @JoinColumn(name = "material_sample_action_definition_id", referencedColumnName = "id", unique = true)
+  private MaterialSampleActionDefinition materialSampleActionDefinition;
 
   @OneToOne
   @NotNull

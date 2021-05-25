@@ -2,14 +2,14 @@ package ca.gc.aafc.collection.api.testsupport.factories;
 
 import java.util.UUID;
 
-import ca.gc.aafc.collection.api.entities.PreparationProcess;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionRun;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
-public class PreparationProcessFactory implements TestableEntityFactory<PreparationProcess> {
+public class MaterialSampleActionRunFactory implements TestableEntityFactory<MaterialSampleActionRun> {
 
   @Override
-  public PreparationProcess getEntityInstance() {
-    return newPreparationProcess().build();
+  public MaterialSampleActionRun getEntityInstance() {
+    return newMaterialSampleActionRun().build();
   }
 
   /**
@@ -19,8 +19,8 @@ public class PreparationProcessFactory implements TestableEntityFactory<Preparat
    *
    * @return Pre-configured builder with all mandatory fields set
    */
-  public static PreparationProcess.PreparationProcessBuilder newPreparationProcess() {
-    return PreparationProcess
+  public static MaterialSampleActionRun.MaterialSampleActionRunBuilder newMaterialSampleActionRun() {
+    return MaterialSampleActionRun
         .builder()
         .uuid(UUID.randomUUID())
         .createdBy("test user");
