@@ -125,18 +125,5 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(1, fetchedParent.getMaterialSampleChildren().size());
         assertEquals(child.getUuid(), fetchedParent.getMaterialSampleChildren().get(0).getUuid());
     }
-
-    @Test
-    public void testLoopingRelationship_ThrowsValidationException() {
-        materialSample.setParentMaterialSample(materialSample);
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> 
-            materialSampleService.update(materialSample));
-
-        String expected = "Looping MaterialSample parent relationship.";
-        String actual = exception.getLocalizedMessage();
-
-        assertEquals(expected, actual);
-    }
     
 }
