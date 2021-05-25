@@ -17,8 +17,8 @@ public class MaterialSampleValidator implements Validator {
     this.messageSource = messageSource;
   }
 
-  private static final String VALID_PARENT_RELATIONSHIP_LOOP = "validation.constraint.violation.loopingParentMaterialSample";
-  private static final String PARENT_AND_EVENT_ERROR_KEY = "validation.constraint.violation.sample.parentWithEvent";
+  public static final String VALID_PARENT_RELATIONSHIP_LOOP = "validation.constraint.violation.loopingParentMaterialSample";
+  public static final String PARENT_AND_EVENT_ERROR_KEY = "validation.constraint.violation.sample.parentWithEvent";
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
