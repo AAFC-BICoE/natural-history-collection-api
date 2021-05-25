@@ -18,14 +18,26 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenValid_NoErrors() {
-    MaterialSample sample = MaterialSample.builder()
-      .uuid(UUID.randomUUID())
-      .group(RandomStringUtils.randomAlphabetic(3))
-      .createdBy(RandomStringUtils.randomAlphabetic(3))
-      .build();
+    MaterialSample sample = newSample();
     Errors errors = new BeanPropertyBindingResult(sample, "name");
     sampleValidator.validate(sample, errors);
     Assertions.assertFalse(errors.hasErrors());
   }
 
+  @Test
+  void validate_WhenParentIsSelf_HasError() {
+    MaterialSample sample = newSample();
+    sample.setParentMaterialSample(sample);
+    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    sampleValidator.validate(sample, errors);
+    Assertions.assertTrue(errors.hasErrors());
+  }
+
+  private static MaterialSample newSample() {
+    return MaterialSample.builder()
+      .uuid(UUID.randomUUID())
+      .group(RandomStringUtils.randomAlphabetic(3))
+      .createdBy(RandomStringUtils.randomAlphabetic(3))
+      .build();
+  }
 }
