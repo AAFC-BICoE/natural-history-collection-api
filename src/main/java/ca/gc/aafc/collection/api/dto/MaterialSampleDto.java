@@ -39,6 +39,7 @@ public class MaterialSampleDto {
     private String createdBy;
 
     private String dwcCatalogNumber;
+    private String[] dwcOtherCatalogNumbers;
 
     @JsonApiRelation
     private CollectingEventDto collectingEvent;
