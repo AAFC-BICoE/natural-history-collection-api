@@ -67,7 +67,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setAttachment(null);
     ms.setCollectingEvent(null);
     ms.setParentMaterialSample(null);
-    ms.setSubMaterialSample(null);
+    ms.setMaterialSampleChildren(null);
 
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSample",
