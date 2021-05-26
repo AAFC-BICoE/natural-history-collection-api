@@ -66,9 +66,9 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
     materialSampleActionRunDto.setAgentId(agentId);
 
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = new MaterialSampleActionDefinitionDto();
-    materialSampleActionDefinitionDto.setCreatedBy("test user");
-    materialSampleActionDefinitionDto.setGroup("aafc");
-    materialSampleActionDefinitionDto.setName("definition name");
+    materialSampleActionDefinitionDto.setCreatedBy("materialSample test user");
+    materialSampleActionDefinitionDto.setGroup("materialSample aafc");
+    materialSampleActionDefinitionDto.setName("materialSample definition name");
 
     MaterialSampleDto materialSampleDto = new MaterialSampleDto();
     materialSampleDto.setCreatedBy("test user");  
