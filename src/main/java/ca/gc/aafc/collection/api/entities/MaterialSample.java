@@ -81,7 +81,7 @@ public class MaterialSample implements DinaEntity {
 
     @OneToMany(fetch = FetchType.LAZY,
         mappedBy = "parentMaterialSample")
-    private List<MaterialSample> subMaterialSamples = new ArrayList<>();
+    private List<MaterialSample> materialSampleChildren = new ArrayList<>();
 
     @Type(type = "list-array")
     @Column(name = "attachment", columnDefinition = "uuid[]")
