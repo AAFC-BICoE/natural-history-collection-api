@@ -17,6 +17,9 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
@@ -27,6 +30,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     @Inject
     private MaterialSampleRepository materialSampleRepository;
+
+    @Inject
+    private MaterialSampleService materialSampleService;
 
     @Inject
     private CollectingEventRepository eventRepository;
@@ -64,11 +70,18 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         }
 
     @Test
-    @WithMockKeycloakUser(username = "test user", groupRole = {"notAAFC: staff"})
-    public void createDifferentGroup_throwAccessDenied() {
-        MaterialSampleDto pe = newMaterialSample(dwcCatalogNumber, null);
-        assertThrows(AccessDeniedException.class, () -> materialSampleRepository.create(pe));
+    @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
+    public void updateFromDifferentGroup_throwAccessDenied() {
+        MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
+            .group(group)
+            .createdBy("dina")
+            .build();
+        materialSampleService.create(testMaterialSample);
+        MaterialSampleDto retrievedMaterialSample = materialSampleRepository.findOne(testMaterialSample.getUuid(),
+            new QuerySpec(MaterialSampleDto.class));
+        assertThrows(AccessDeniedException.class, () -> materialSampleRepository.save(retrievedMaterialSample));
     }
+
 
     private MaterialSampleDto newMaterialSample(
         String dwcCatalogNumber, 
