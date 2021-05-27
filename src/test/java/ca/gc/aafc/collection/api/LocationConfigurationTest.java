@@ -12,6 +12,7 @@ import javax.inject.Inject;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 class LocationConfigurationTest extends CollectionModuleBaseIT {
+  
   @Inject
   private LocationConfiguration locationConfiguration;
 
