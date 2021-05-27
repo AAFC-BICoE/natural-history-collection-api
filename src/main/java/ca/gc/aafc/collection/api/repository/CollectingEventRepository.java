@@ -10,7 +10,6 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
-import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.GroupAuthorizationService;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
@@ -26,7 +25,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
 
     public CollectingEventRepository(
     @NonNull CollectingEventService dinaService,
-    @NonNull GroupAuthorizationService groupAuthService,
+    Optional<GroupAuthorizationService> groupAuthService,
     @NonNull AuditService auditService,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> authenticatedUser,
@@ -34,7 +33,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   ) {
     super(
       dinaService,
-      Optional.of(groupAuthService),
+      Optional.ofNullable(groupAuthService.orElse(null)),
       Optional.of(auditService),
       new DinaMapper<>(CollectingEventDto.class),
       CollectingEventDto.class,
