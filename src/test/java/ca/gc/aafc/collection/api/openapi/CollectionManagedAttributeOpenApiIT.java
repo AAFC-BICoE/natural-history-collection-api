@@ -32,8 +32,7 @@ import lombok.SneakyThrows;
 public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
-  //TODO REPLACE URL 
-  private static final String SPEC_PATH = "luusteve/collection-specs/22765_update_open_api_specs-CollectionManagedAttribute/schema/collectionManagedAttribute.yml";
+  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/collectionManagedAttribute.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
   public static final String TYPE_NAME = "managed-attribute";
