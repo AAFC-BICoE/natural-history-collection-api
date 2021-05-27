@@ -70,6 +70,9 @@ public class MaterialSample implements DinaEntity {
     @Size(max = 25)  
     private String dwcCatalogNumber;
 
+    @Type(type = "string-array")
+    private String[] dwcOtherCatalogNumbers;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private CollectingEvent collectingEvent;

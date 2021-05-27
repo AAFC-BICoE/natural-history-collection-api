@@ -3,14 +3,12 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
 
