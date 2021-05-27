@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
+import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,6 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.service.GroupAuthorizationService;
 import lombok.NonNull;
 
 @Repository
@@ -24,12 +24,12 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
         @NonNull MaterialSampleService dinaService,
         ExternalResourceProvider externalResourceProvider,
         Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
-        Optional<GroupAuthorizationService> groupService,
+        Optional<DinaAuthorizationService> groupAuthService,
         @NonNull BuildProperties buildProperties
     ) {
         super(
             dinaService,
-            Optional.ofNullable(groupService.orElse(null)),
+            groupAuthService,
             Optional.empty(),
             new DinaMapper<>(MaterialSampleDto.class),
             MaterialSampleDto.class,

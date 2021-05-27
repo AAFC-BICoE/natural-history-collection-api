@@ -30,6 +30,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     private List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
     private static final String dwcCatalogNumber = "S-4313";
+    private static final String[] dwcOtherCatalogNumbers = new String[]{"A-1111", "B-2222"};
     private static final String expectedCreatedBy = "dina-save";
     private static final String sampleMaterialName = "lake water sample";
 
@@ -51,6 +52,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
         materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
+            .dwcOtherCatalogNumbers(dwcOtherCatalogNumbers)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
             .materialSampleName(sampleMaterialName)
@@ -66,6 +68,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertNotNull(materialSample.getId());
 
         assertEquals(dwcCatalogNumber, materialSample.getDwcCatalogNumber());
+        assertEquals(dwcOtherCatalogNumbers, materialSample.getDwcOtherCatalogNumbers());
         assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, materialSample.getAttachment());
         assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
@@ -82,6 +85,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
         assertEquals(materialSample.getId(), fetchedMaterialSample.getId());
         assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
+        assertEquals(dwcOtherCatalogNumbers, fetchedMaterialSample.getDwcOtherCatalogNumbers());
         assertEquals(expectedCreatedBy, fetchedMaterialSample.getCreatedBy());
         assertEquals(attachmentIdentifiers, fetchedMaterialSample.getAttachment());
         assertEquals(sampleMaterialName, fetchedMaterialSample.getMaterialSampleName());

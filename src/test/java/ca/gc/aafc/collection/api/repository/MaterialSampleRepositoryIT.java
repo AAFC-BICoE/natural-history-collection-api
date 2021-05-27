@@ -32,6 +32,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     private CollectingEventRepository eventRepository;
 
     private static final String dwcCatalogNumber = "R-4313";
+    private static final String[] dwcOtherCatalogNumbers= new String[]{"A-1111", "B-2222"};
     private static final String group = "aafc";
     private static final String materialSampleName = "ocean water sample";
 
@@ -44,6 +45,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertNotNull(result.getCreatedBy());
         assertEquals(pe.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
+        assertEquals(dwcOtherCatalogNumbers, result.getDwcOtherCatalogNumbers());
         assertEquals(group, result.getGroup());
         assertEquals(materialSampleName, result.getMaterialSampleName());
         }
@@ -73,6 +75,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         CollectingEventDto event) {
         MaterialSampleDto pe = new MaterialSampleDto();
         pe.setDwcCatalogNumber(dwcCatalogNumber);
+        pe.setDwcOtherCatalogNumbers(dwcOtherCatalogNumbers);
         pe.setCollectingEvent(event);
         pe.setGroup(group);
         pe.setMaterialSampleName(materialSampleName);
