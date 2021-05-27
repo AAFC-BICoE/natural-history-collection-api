@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.AccessDeniedException;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
@@ -58,6 +60,13 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
         }
+
+    @Test
+    @WithMockKeycloakUser(username = "test user", groupRole = {"notAAFC: staff"})
+    public void createDifferentGroup_throwAccessDenied() {
+        MaterialSampleDto pe = newMaterialSample(dwcCatalogNumber, null);
+        assertThrows(AccessDeniedException.class, () -> materialSampleRepository.create(pe));
+    }
 
     private MaterialSampleDto newMaterialSample(
         String dwcCatalogNumber, 
