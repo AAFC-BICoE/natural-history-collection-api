@@ -2,13 +2,17 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
+import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 
 import javax.inject.Inject;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +25,19 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   private static final String group = "aafc";
   private static final String name = "preparation process definition";
   private static final String code = "YUL";
+  private Collection persisted;
+
+  @BeforeEach
+  void setUp() {
+    persisted = Collection.builder()
+      .name("name")
+      .uuid(UUID.randomUUID())
+      .group("group")
+      .createdBy("by")
+      .code("DNA")
+      .build();
+    service.save(persisted);
+  }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"CNC:DINA_ADMIN"})
@@ -40,6 +57,19 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   public void create_WhenManager_AccessDeniedException() {
     CollectionDto collectionDto = newCollectionDto();
     assertThrows(AccessDeniedException.class, () -> collectionRepository.create(collectionDto));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
+  public void delete_WhenManager_AccessDeniedException() {
+    assertThrows(AccessDeniedException.class, () -> collectionRepository.delete(persisted.getUuid()));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
+  public void update_WhenManager_AccessDeniedException() {
+    CollectionDto collectionDto = newCollectionDto();
+    assertThrows(AccessDeniedException.class, () -> collectionRepository.save(collectionDto));
   }
 
   private CollectionDto newCollectionDto() {
