@@ -34,7 +34,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     private static final String materialSampleName = "ocean water sample";
 
     @Test
-    @WithMockKeycloakUser(username = "test user")
+    @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
         MaterialSampleDto pe = newMaterialSample(dwcCatalogNumber, null);
         MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(pe).getUuid(), 

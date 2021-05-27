@@ -41,7 +41,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
   private static final LocalDateTime endDateTime= LocalDateTime.of(2019, 12, 3, 10, 15, 30);
   
   @Test
-  @WithMockKeycloakUser(username = "test user")
+  @WithMockKeycloakUser(username = "test user", groupRole = "aafc: staff")
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleDto ms = materialSampleRepository.findOne(
       materialSampleRepository.create(newMaterialSampleDto(null)).getUuid(), new QuerySpec(MaterialSampleDto.class));

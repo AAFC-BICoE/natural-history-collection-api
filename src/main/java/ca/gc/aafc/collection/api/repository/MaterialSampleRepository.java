@@ -12,6 +12,7 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.service.GroupAuthorizationService;
 import lombok.NonNull;
 
 @Repository
@@ -22,12 +23,13 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
     public MaterialSampleRepository(
         @NonNull MaterialSampleService dinaService,
         ExternalResourceProvider externalResourceProvider,
-        @NonNull BuildProperties buildProperties,
-        Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+        Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+        Optional<GroupAuthorizationService> groupService,
+        @NonNull BuildProperties buildProperties
     ) {
         super(
             dinaService,
-            Optional.empty(),
+            Optional.ofNullable(groupService.orElse(null)),
             Optional.empty(),
             new DinaMapper<>(MaterialSampleDto.class),
             MaterialSampleDto.class,
