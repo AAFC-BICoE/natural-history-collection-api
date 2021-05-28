@@ -3,19 +3,23 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
 import java.util.UUID;
 
+@SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionCollectionManagedAttributeRepoIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectionManagedAttributeRepo repo;
 
   @Test
+  @WithMockKeycloakUser(groupRole = "dinaGroup:STAFF")
   void create_recordCreated() {
     String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
@@ -37,7 +41,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     Assertions.assertEquals(expectedName, result.getName());
     Assertions.assertEquals("dina_attribute_12", result.getKey());
     Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
-    Assertions.assertEquals(expectedCreatedBy, result.getCreatedBy());
+    Assertions.assertNotNull(result.getCreatedBy());
     Assertions.assertEquals(expectedGroup, result.getGroup());
     Assertions.assertEquals(CollectionManagedAttribute.ManagedAttributeType.INTEGER, result.getManagedAttributeType());
     Assertions.assertEquals(
@@ -46,6 +50,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   }
 
   @Test
+  @WithMockKeycloakUser(groupRole = "group:STAFF")
   void findOneByKey_whenKeyProvided_managedAttributeFetched() {
     CollectionManagedAttributeDto newAttribute = new CollectionManagedAttributeDto();
     newAttribute.setName("Collecting Event Attribute 1");
