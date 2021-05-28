@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +41,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     private static final String group = "aafc";
     private static final String materialSampleName = "ocean water sample";
     private static final UUID preparedBy = UUID.randomUUID();
+    private static final LocalDate preparationDate = LocalDate.now();
+
 
     @Test
     @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
@@ -54,7 +57,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(group, result.getGroup());
         assertEquals(materialSampleName, result.getMaterialSampleName());
         assertEquals(preparedBy.toString(),result.getPreparedBy().getId());
-        }
+        assertEquals(preparationDate, result.getPreparationDate());
+    }
 
     @Test
     @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
@@ -68,7 +72,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
         assertEquals(preparedBy.toString(), result.getPreparedBy().getId());
-        }
+        assertEquals(preparationDate, result.getPreparationDate());
+    }
 
     @Test
     @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
@@ -92,6 +97,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         pe.setDwcOtherCatalogNumbers(dwcOtherCatalogNumbers);
         pe.setCollectingEvent(event);
         pe.setPreparedBy(ExternalRelationDto.builder().id(preparedBy.toString()).type("agent").build());
+        pe.setPreparationDate(preparationDate);
         pe.setGroup(group);
         pe.setMaterialSampleName(materialSampleName);
         pe.setAttachment(List.of(

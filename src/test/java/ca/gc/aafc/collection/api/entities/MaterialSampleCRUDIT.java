@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     private static final String preparationExpectedCreatedBy = "preparation-dina-save";
     private static final String preparationExpectedGroup = "dina-group-save";
     private static final String preparationExpectedName = "isolate lake water sample";
-
+    private static final LocalDate preparationDate = LocalDate.now();
     private PreparationType preparationType;
     private MaterialSample materialSample;
 
@@ -57,6 +58,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             .attachment(attachmentIdentifiers)
             .preparedBy(preparedBy)
             .materialSampleName(sampleMaterialName)
+            .preparationDate(preparationDate)
             .preparationType(preparationType)
             .build();
         materialSampleService.create(materialSample);
@@ -78,6 +80,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
         assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());
         assertEquals(preparedBy, materialSample.getPreparedBy());
+        assertEquals(preparationDate, materialSample.getPreparationDate());
     }
 
     @Test
@@ -96,6 +99,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
         assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());
         assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy());
+        assertEquals(preparationDate, fetchedMaterialSample.getPreparationDate());
     }
 
     @Test
