@@ -6,7 +6,7 @@
 
     <changeSet id="48-Add_Group_managed_attribute" context="schema-change" author="keyuk">
         <addColumn tableName="managed_attribute">
-            <column name="_group" type="VARCHAR(250)">
+            <column name="_group" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
