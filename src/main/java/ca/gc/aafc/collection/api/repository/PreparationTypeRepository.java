@@ -12,6 +12,7 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import lombok.NonNull;
 
 
@@ -23,12 +24,13 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
   public PreparationTypeRepository(
     @NonNull PreparationTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
+    Optional<DinaAuthorizationService> authService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
       super(
           dinaService,
-          Optional.empty(),
+          authService,
           Optional.empty(),
           new DinaMapper<>(PreparationTypeDto.class),
           PreparationTypeDto.class,
