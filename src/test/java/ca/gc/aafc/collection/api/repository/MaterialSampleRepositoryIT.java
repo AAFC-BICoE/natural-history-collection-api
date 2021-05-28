@@ -1,16 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.List;
-import java.util.UUID;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
@@ -18,6 +7,15 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
@@ -33,6 +31,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     private static final String[] dwcOtherCatalogNumbers= new String[]{"A-1111", "B-2222"};
     private static final String group = "aafc";
     private static final String materialSampleName = "ocean water sample";
+    private static final UUID preparedBy = UUID.randomUUID();
 
     @Test
     @WithMockKeycloakUser(username = "test user")
@@ -46,6 +45,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(dwcOtherCatalogNumbers, result.getDwcOtherCatalogNumbers());
         assertEquals(group, result.getGroup());
         assertEquals(materialSampleName, result.getMaterialSampleName());
+        assertEquals(preparedBy.toString(),result.getPreparedBy().getId());
         }
 
     @Test
@@ -59,6 +59,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
             );
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
+        assertEquals(preparedBy.toString(),result.getPreparedBy().getId());
         }
 
     private MaterialSampleDto newMaterialSample(
@@ -68,6 +69,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         pe.setDwcCatalogNumber(dwcCatalogNumber);
         pe.setDwcOtherCatalogNumbers(dwcOtherCatalogNumbers);
         pe.setCollectingEvent(event);
+        pe.setPreparedBy(ExternalRelationDto.builder().id(preparedBy.toString()).type("agent").build());
         pe.setGroup(group);
         pe.setMaterialSampleName(materialSampleName);
         pe.setAttachment(List.of(
