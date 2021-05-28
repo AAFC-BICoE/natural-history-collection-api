@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,5 +100,7 @@ public class MaterialSample implements DinaEntity {
 
     @Column(name = "prepared_by")
     private UUID preparedBy;
+
+    private LocalDate preparationDate;
 
 }
