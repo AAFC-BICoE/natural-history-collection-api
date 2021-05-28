@@ -67,7 +67,7 @@ public class CollectionManagedAttribute implements ManagedAttribute {
 
   @NotBlank
   @Column(name = "_group")
-  @Size(max = 250)
+  @Size(max = 50)
   private String group;
 
   @NotBlank
