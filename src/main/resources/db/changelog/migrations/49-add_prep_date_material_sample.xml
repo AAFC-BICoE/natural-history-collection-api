@@ -4,9 +4,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="48-add_prep_date_material_sample" context="schema-change" author="keyuk">
+    <changeSet id="49-add_prep_date_material_sample" context="schema-change" author="keyuk">
         <addColumn tableName="material_sample">
-            <column name="preparation_date" type="timestamptz" />
+            <column name="preparation_date" type="date" />
         </addColumn>
     </changeSet>
 
