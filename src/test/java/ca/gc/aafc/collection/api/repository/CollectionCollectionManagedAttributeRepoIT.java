@@ -20,6 +20,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
     String expectedCreatedBy = "dina";
+    String expectedGroup = "dinaGroup";
 
     CollectionManagedAttributeDto dto = new CollectionManagedAttributeDto();
     dto.setName(expectedName);
@@ -27,6 +28,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     dto.setAcceptedValues(new String[]{expectedValue});
     dto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     dto.setCreatedBy(expectedCreatedBy);
+    dto.setGroup(expectedGroup);
 
     UUID uuid = repo.create(dto).getUuid();
     CollectionManagedAttributeDto result = repo.findOne(uuid, new QuerySpec(
@@ -36,6 +38,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     Assertions.assertEquals("dina_attribute_12", result.getKey());
     Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
     Assertions.assertEquals(expectedCreatedBy, result.getCreatedBy());
+    Assertions.assertEquals(expectedGroup, result.getGroup());
     Assertions.assertEquals(CollectionManagedAttribute.ManagedAttributeType.INTEGER, result.getManagedAttributeType());
     Assertions.assertEquals(
       CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
@@ -49,6 +52,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     newAttribute.setCreatedBy("poffm");
+    newAttribute.setGroup("group");
 
     UUID newAttributeUuid = repo.create(newAttribute).getUuid();
 
