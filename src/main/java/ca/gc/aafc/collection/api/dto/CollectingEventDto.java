@@ -15,9 +15,11 @@ import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
+import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -87,6 +89,7 @@ public class CollectingEventDto {
   /**
    * Map of Managed attribute key to value object.
    */
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
 
   private String dwcVerbatimLatitude;
