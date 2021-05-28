@@ -4,11 +4,15 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -17,6 +21,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
@@ -24,6 +29,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     @Inject
     private MaterialSampleRepository materialSampleRepository;
+
+    @Inject
+    private MaterialSampleService materialSampleService;
 
     @Inject
     private CollectingEventRepository eventRepository;
@@ -37,7 +45,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
 
     @Test
-    @WithMockKeycloakUser(username = "test user")
+    @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
         MaterialSampleDto pe = newMaterialSample(dwcCatalogNumber, null);
         MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(pe).getUuid(), 
@@ -63,9 +71,23 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
             );
         assertEquals(dwcCatalogNumber, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
-        assertEquals(preparedBy.toString(),result.getPreparedBy().getId());
+        assertEquals(preparedBy.toString(), result.getPreparedBy().getId());
         assertEquals(preparationDate, result.getPreparationDate());
     }
+
+    @Test
+    @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
+    public void updateFromDifferentGroup_throwAccessDenied() {
+        MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
+            .group(group)
+            .createdBy("dina")
+            .build();
+        materialSampleService.create(testMaterialSample);
+        MaterialSampleDto retrievedMaterialSample = materialSampleRepository.findOne(testMaterialSample.getUuid(),
+            new QuerySpec(MaterialSampleDto.class));
+        assertThrows(AccessDeniedException.class, () -> materialSampleRepository.save(retrievedMaterialSample));
+    }
+
 
     private MaterialSampleDto newMaterialSample(
         String dwcCatalogNumber, 
