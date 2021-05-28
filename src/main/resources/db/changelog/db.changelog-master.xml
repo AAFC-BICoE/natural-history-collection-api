@@ -50,4 +50,5 @@
   <include file="db/changelog/migrations/45-Rename_PreparationProcess_related_classes.xml"/>
   <include file="db/changelog/migrations/46-Add_otherCatalogNumbers_field_to_material_sample.xml"/>
   <include file="db/changelog/migrations/47-Add_prepared_by_material_sample.xml"/>
+  <include file="db/changelog/migrations/48-Add_Group_managed_attribute.xml"/>
 </databaseChangeLog>

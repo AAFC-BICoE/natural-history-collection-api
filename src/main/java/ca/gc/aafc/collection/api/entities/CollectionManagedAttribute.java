@@ -66,6 +66,11 @@ public class CollectionManagedAttribute implements ManagedAttribute {
   private String name;
 
   @NotBlank
+  @Column(name = "_group")
+  @Size(max = 50)
+  private String group;
+
+  @NotBlank
   @Size(max = 50)
   @Column(updatable = false)
   private String key;
