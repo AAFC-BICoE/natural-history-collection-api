@@ -61,6 +61,7 @@ public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
 
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName(name);
+    collectionManagedAttributeDto.setGroup("group");
     collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
     collectionManagedAttributeDto.setAcceptedValues(new String[]{value});
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
