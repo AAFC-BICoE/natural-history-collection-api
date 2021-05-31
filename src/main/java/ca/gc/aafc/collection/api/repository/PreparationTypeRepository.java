@@ -24,13 +24,13 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
   public PreparationTypeRepository(
     @NonNull PreparationTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    Optional<DinaAuthorizationService> authService,
+    Optional<DinaAuthorizationService> groupAuthService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
       super(
           dinaService,
-          authService,
+          groupAuthService,
           Optional.empty(),
           new DinaMapper<>(PreparationTypeDto.class),
           PreparationTypeDto.class,
