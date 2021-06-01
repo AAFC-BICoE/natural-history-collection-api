@@ -96,6 +96,7 @@ public class MaterialSampleActionDefinition implements DinaEntity {
     @NotNull
     private Boolean allowExisting;
 
+    /** Map of field names to tempalte field config. */
     @NotNull
     private Map<String, TemplateField> templateFields;
   }
