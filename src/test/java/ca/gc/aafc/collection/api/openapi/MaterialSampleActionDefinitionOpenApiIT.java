@@ -17,6 +17,7 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -63,7 +64,7 @@ public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest
     materialSampleActionDefinitionDto.setGroup("aafc");
     materialSampleActionDefinitionDto.setName(name);
     materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
-    materialSampleActionDefinitionDto.setFormTemplates(Map.of("materialSample", FormTemplate.builder()
+    materialSampleActionDefinitionDto.setFormTemplates(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()
       .allowNew(true)
       .allowExisting(true)
       .templateFields(Map.of("materialSampleName", TemplateField.builder()

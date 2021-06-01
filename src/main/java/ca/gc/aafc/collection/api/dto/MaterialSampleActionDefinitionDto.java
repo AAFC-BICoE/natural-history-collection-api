@@ -9,6 +9,7 @@ import org.javers.core.metamodel.annotation.PropertyName;
 
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
@@ -41,5 +42,5 @@ public class MaterialSampleActionDefinitionDto {
   private MaterialSampleActionDefinition.ActionType actionType;
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
-  private Map<String, FormTemplate> formTemplates;
+  private Map<MaterialSampleFormComponent, FormTemplate> formTemplates;
 }

@@ -51,6 +51,11 @@ public class MaterialSampleActionDefinition implements DinaEntity {
     SPLIT, MERGE, ADD
   }
 
+  public enum MaterialSampleFormComponent {
+    COLLECTING_EVENT,
+    MATERIAL_SAMPLE 
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -84,7 +89,7 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   /** Map of form names to form templates */
   @NotNull
   @Type(type = "jsonb")
-  private Map<String, FormTemplate> formTemplates;
+  private Map<MaterialSampleFormComponent, FormTemplate> formTemplates;
 
   /** Form template config and default values. */
   @Data

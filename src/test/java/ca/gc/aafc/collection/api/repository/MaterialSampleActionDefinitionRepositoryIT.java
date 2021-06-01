@@ -17,6 +17,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
@@ -51,7 +52,7 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
     materialSampleActionDefinitionDto.setGroup(group);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
     materialSampleActionDefinitionDto.setActionType(ACTION_TYPE);
-    materialSampleActionDefinitionDto.setFormTemplates(new HashMap<>(Map.of("materialSample", FormTemplate.builder()
+    materialSampleActionDefinitionDto.setFormTemplates(new HashMap<>(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()
       .allowNew(true)
       .allowExisting(true)
       .templateFields(new HashMap<>(Map.of("materialSampleName", TemplateField.builder()
