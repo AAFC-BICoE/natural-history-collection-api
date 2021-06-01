@@ -53,4 +53,5 @@
   <include file="db/changelog/migrations/48-Add_Group_managed_attribute.xml"/>
   <include file="db/changelog/migrations/49-add_prep_date_material_sample.xml"/>
   <include file="db/changelog/migrations/50-Add_ActionType_To_MatSampActionDef.xml"/>
+  <include file="db/changelog/migrations/51-Create_MaterialSampleType.xml"/>
 </databaseChangeLog>

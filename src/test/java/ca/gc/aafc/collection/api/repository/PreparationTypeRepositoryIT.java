@@ -15,7 +15,6 @@ import org.springframework.security.access.AccessDeniedException;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.PreparationType;
-import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
@@ -25,9 +24,6 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private PreparationTypeRepository preparationTypeRepository;
-
-  @Inject
-  private PreparationTypeService preparationTypeService;
 
   private static final String group = "aafc";
   private static final String name = "preparation process definition";
