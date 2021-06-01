@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionRunDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
@@ -80,6 +81,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
     materialSampleActionDefinitionDto.setGroup(group);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
     materialSampleActionDefinitionDto.setCreatedBy("test user");
+    materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
     return materialSampleActionDefinitionDto;
   }
   
