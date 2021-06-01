@@ -42,14 +42,12 @@ import lombok.Setter;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @RequiredArgsConstructor
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
-@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
+@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
 public class MaterialSampleActionDefinition implements DinaEntity {
 
   public enum ActionType {
-    SPLIT,
-    MERGE,
-    ADD
+    SPLIT, MERGE, ADD
   }
 
   @Id
@@ -81,36 +79,34 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "action_type")
   private ActionType actionType;
-  
+
   @Type(type = "jsonb")
   private FormTemplate materialSampleFormTemplate;
 
   @Type(type = "jsonb")
   private FormTemplate collectingEventFormTemplate;
 
+  /** Form template config and default values. */
   @Data
   @Builder
   public static class FormTemplate {
     @NotNull
-    private ComponentProperties componentProperties;
+    private Boolean allowNew;
+
+    @NotNull
+    private Boolean allowExisting;
+
     @NotNull
     private Map<String, TemplateField> templateFields;
   }
 
-  @Data
-  @Builder
-  public static class ComponentProperties {
-    @NotNull
-    private Boolean allowNew;
-    @NotNull
-    private Boolean allowExisting;
-  }
-  
+  /** Configures one field in a form template. */
   @Data
   @Builder
   public static class TemplateField {
     @NotNull
     private Boolean enabled;
+
     @NotNull
     private Serializable defaultValue;
   }
