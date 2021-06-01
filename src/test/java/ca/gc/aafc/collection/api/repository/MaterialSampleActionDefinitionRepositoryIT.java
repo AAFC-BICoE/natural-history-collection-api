@@ -4,8 +4,10 @@ import java.util.UUID;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,9 +26,11 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
   
   private static final String group = "aafc";
   private static final String name = "preparation process definition";
+  public static final MaterialSampleActionDefinition.ActionType ACTION_TYPE = MaterialSampleActionDefinition.ActionType.ADD;
+
 
   @Test
-  @WithMockKeycloakUser(username = "test user")
+  @WithMockKeycloakUser()
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = newMaterialSampleActionDefinitionDto();
     MaterialSampleActionDefinitionDto result = materialSampleActionDefinitionRepository.findOne(
@@ -35,6 +39,7 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
     assertNotNull(result.getCreatedBy());
     assertEquals(materialSampleActionDefinitionDto.getName(), result.getName());
     assertEquals(materialSampleActionDefinitionDto.getGroup(), result.getGroup());
+    Assertions.assertEquals(ACTION_TYPE, result.getActionType());
   }
 
   private MaterialSampleActionDefinitionDto newMaterialSampleActionDefinitionDto() {
@@ -42,6 +47,7 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
     materialSampleActionDefinitionDto.setName(name);
     materialSampleActionDefinitionDto.setGroup(group);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
+    materialSampleActionDefinitionDto.setActionType(ACTION_TYPE);
     return materialSampleActionDefinitionDto;
   }
 }

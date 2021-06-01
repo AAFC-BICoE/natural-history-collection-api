@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -69,6 +70,7 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
     materialSampleActionDefinitionDto.setCreatedBy("materialSample test user");
     materialSampleActionDefinitionDto.setGroup("materialSample aafc");
     materialSampleActionDefinitionDto.setName("materialSample definition name");
+    materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
 
     MaterialSampleDto materialSampleDto = new MaterialSampleDto();
     materialSampleDto.setCreatedBy("test user");  

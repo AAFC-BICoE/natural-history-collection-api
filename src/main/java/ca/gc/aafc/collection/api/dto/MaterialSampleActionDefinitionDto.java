@@ -35,4 +35,6 @@ public class MaterialSampleActionDefinitionDto {
   private String name;
 
   private String group;
+
+  private MaterialSampleActionDefinition.ActionType actionType;
 }

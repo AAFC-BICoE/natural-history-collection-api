@@ -74,6 +74,7 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
       .name(RandomStringUtils.randomAlphabetic(5))
       .group(RandomStringUtils.randomAlphabetic(5))
       .createdBy(RandomStringUtils.randomAlphabetic(5))
+      .actionType(MaterialSampleActionDefinition.ActionType.ADD)
       .build();
   }
 }

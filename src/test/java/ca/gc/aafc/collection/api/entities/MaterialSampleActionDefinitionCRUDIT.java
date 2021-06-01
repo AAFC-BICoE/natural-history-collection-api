@@ -10,6 +10,7 @@ class MaterialSampleActionDefinitionCRUDIT extends CollectionModuleBaseIT {
   public static final String EXPECTED_NAME = "name";
   public static final String EXPECTED_GROUP = "DINA GROUP";
   public static final String EXPECTED_CREATED_BY = "createdBy";
+  public static final MaterialSampleActionDefinition.ActionType ACTION_TYPE = MaterialSampleActionDefinition.ActionType.ADD;
 
   private MaterialSampleActionDefinition definition;
 
@@ -34,6 +35,7 @@ class MaterialSampleActionDefinitionCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
     Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
+    Assertions.assertEquals(ACTION_TYPE, result.getActionType());
   }
 
   private static MaterialSampleActionDefinition newDefinition() {
@@ -41,6 +43,7 @@ class MaterialSampleActionDefinitionCRUDIT extends CollectionModuleBaseIT {
       .name(EXPECTED_NAME)
       .group(EXPECTED_GROUP)
       .createdBy(EXPECTED_CREATED_BY)
+      .actionType(ACTION_TYPE)
       .build();
   }
 }
