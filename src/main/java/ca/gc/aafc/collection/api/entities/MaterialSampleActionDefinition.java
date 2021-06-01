@@ -1,19 +1,9 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,14 +14,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.UUID;
+
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import ca.gc.aafc.dina.entity.DinaEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @RequiredArgsConstructor
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -73,5 +81,37 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "action_type")
   private ActionType actionType;
+  
+  @Type(type = "jsonb")
+  private FormTemplate materialSampleFormTemplate;
 
+  @Type(type = "jsonb")
+  private FormTemplate collectingEventFormTemplate;
+
+  @Data
+  @Builder
+  public static class FormTemplate {
+    @NotNull
+    private ComponentProperties componentProperties;
+    @NotNull
+    private Map<String, TemplateField> templateFields;
+  }
+
+  @Data
+  @Builder
+  public static class ComponentProperties {
+    @NotNull
+    private Boolean allowNew;
+    @NotNull
+    private Boolean allowExisting;
+  }
+  
+  @Data
+  @Builder
+  public static class TemplateField {
+    @NotNull
+    private Boolean enabled;
+    @NotNull
+    private Serializable defaultValue;
+  }
 }
