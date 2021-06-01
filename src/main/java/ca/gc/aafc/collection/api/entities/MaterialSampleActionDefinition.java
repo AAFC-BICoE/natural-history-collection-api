@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
@@ -79,16 +80,17 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "action_type")
   private ActionType actionType;
-
+  
+  /** Map of form names to form templates */
+  @NotNull
   @Type(type = "jsonb")
-  private FormTemplate materialSampleFormTemplate;
-
-  @Type(type = "jsonb")
-  private FormTemplate collectingEventFormTemplate;
+  private Map<String, FormTemplate> formTemplates;
 
   /** Form template config and default values. */
   @Data
   @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class FormTemplate {
     @NotNull
     private Boolean allowNew;
@@ -96,7 +98,7 @@ public class MaterialSampleActionDefinition implements DinaEntity {
     @NotNull
     private Boolean allowExisting;
 
-    /** Map of field names to tempalte field config. */
+    /** Map of field names to template field config. */
     @NotNull
     private Map<String, TemplateField> templateFields;
   }
@@ -104,6 +106,8 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   /** Configures one field in a form template. */
   @Data
   @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class TemplateField {
     @NotNull
     private Boolean enabled;

@@ -1,14 +1,19 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 
 public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
   public static final UUID AGENT_ID = UUID.randomUUID();
@@ -75,6 +80,14 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
       .group(RandomStringUtils.randomAlphabetic(5))
       .createdBy(RandomStringUtils.randomAlphabetic(5))
       .actionType(MaterialSampleActionDefinition.ActionType.ADD)
+      .formTemplates(new HashMap<>(Map.of("materialSample", FormTemplate.builder()
+        .allowNew(true)
+        .allowExisting(true)
+        .templateFields(new HashMap<>(Map.of("materialSampleName", TemplateField.builder()
+          .enabled(true)  
+          .defaultValue("test-default-value")
+          .build())))
+        .build())))
       .build();
   }
 }

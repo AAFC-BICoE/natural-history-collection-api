@@ -1,22 +1,25 @@
 package ca.gc.aafc.collection.api.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
-import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
-import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import javax.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModuleBaseIT {
@@ -48,6 +51,14 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
     materialSampleActionDefinitionDto.setGroup(group);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
     materialSampleActionDefinitionDto.setActionType(ACTION_TYPE);
+    materialSampleActionDefinitionDto.setFormTemplates(new HashMap<>(Map.of("materialSample", FormTemplate.builder()
+      .allowNew(true)
+      .allowExisting(true)
+      .templateFields(new HashMap<>(Map.of("materialSampleName", TemplateField.builder()
+        .enabled(true)  
+        .defaultValue("test-default-value")
+        .build())))
+      .build())));
     return materialSampleActionDefinitionDto;
   }
 }

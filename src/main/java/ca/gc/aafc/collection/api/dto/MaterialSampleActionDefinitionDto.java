@@ -1,18 +1,20 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
-import ca.gc.aafc.dina.dto.RelatedEntity;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
-
 import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.dina.dto.RelatedEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.crnk.core.resource.annotations.JsonApiField;
+import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiResource;
+import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 
 @Data
@@ -37,4 +39,7 @@ public class MaterialSampleActionDefinitionDto {
   private String group;
 
   private MaterialSampleActionDefinition.ActionType actionType;
+
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, FormTemplate> formTemplates;
 }

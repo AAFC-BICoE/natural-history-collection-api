@@ -3,12 +3,12 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +19,9 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleActionRunDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -71,6 +74,14 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
     materialSampleActionDefinitionDto.setGroup("materialSample aafc");
     materialSampleActionDefinitionDto.setName("materialSample definition name");
     materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
+    materialSampleActionDefinitionDto.setFormTemplates(new HashMap<>(Map.of("materialSample", FormTemplate.builder()
+      .allowNew(true)
+      .allowExisting(true)
+      .templateFields(new HashMap<>(Map.of("materialSampleName", TemplateField.builder()
+        .enabled(true)  
+        .defaultValue("test-default-value")
+        .build())))
+      .build())));
 
     MaterialSampleDto materialSampleDto = new MaterialSampleDto();
     materialSampleDto.setCreatedBy("test user");  
