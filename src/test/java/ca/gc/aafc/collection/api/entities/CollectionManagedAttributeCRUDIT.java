@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -18,8 +20,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedCreatedBy = "dina";
     String expectedName = "dina test attribute";
     String expectedGroup = "dinaGroup";
-    UUID uuid = collectionManagedAttributeService.create(CollectionManagedAttribute.builder()
-      .uuid(UUID.randomUUID())
+    UUID uuid = collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
       .managedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING)
       .acceptedValues(new String[]{expectedValue})
       .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)

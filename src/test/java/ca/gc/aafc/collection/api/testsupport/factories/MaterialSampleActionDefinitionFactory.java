@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
@@ -28,6 +30,9 @@ public class MaterialSampleActionDefinitionFactory implements TestableEntityFact
       return MaterialSampleActionDefinition
           .builder()
           .uuid(UUID.randomUUID())
+          .name(RandomStringUtils.randomAlphabetic(5))
+          .group(RandomStringUtils.randomAlphabetic(5))
+          .actionType(MaterialSampleActionDefinition.ActionType.ADD)
           .formTemplates(new HashMap<>(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()
             .allowNew(true)
             .allowExisting(true)
