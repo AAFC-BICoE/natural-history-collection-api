@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 
 public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
 
@@ -16,7 +17,11 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setup() {
-    preparationType = newPreparationType();
+    preparationType = PreparationTypeFactory.newPreparationType()
+      .name(EXPECTED_NAME)
+      .group(EXPECTED_GROUP)
+      .createdBy(EXPECTED_CREATED_BY)
+      .build();
     preparationTypeService.create(preparationType);
   }
 
@@ -35,13 +40,5 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
     Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
-  }
-
-  private static PreparationType newPreparationType() {
-    return PreparationType.builder()
-      .name(EXPECTED_NAME)
-      .group(EXPECTED_GROUP)
-      .createdBy(EXPECTED_CREATED_BY)
-      .build();
   }
 }
