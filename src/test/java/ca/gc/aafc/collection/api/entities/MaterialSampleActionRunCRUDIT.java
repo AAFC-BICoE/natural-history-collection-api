@@ -1,14 +1,22 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionDefinitionFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionRunFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 
 public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
   public static final UUID AGENT_ID = UUID.randomUUID();
@@ -23,7 +31,7 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
   @BeforeEach
   void setUp() {
 
-    this.definition = newDefinition();
+    this.definition = MaterialSampleActionDefinitionFactory.newMaterialSampleActionDefinition().build();
     materialSampleActionDefinitionService.create(definition);
 
     this.sourceMaterialSample = MaterialSampleFactory.newMaterialSample()
@@ -57,7 +65,7 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
     MaterialSampleActionDefinition def,
     MaterialSample materialSample
   ) {
-    MaterialSampleActionRun build = MaterialSampleActionRun.builder()
+    MaterialSampleActionRun build = MaterialSampleActionRunFactory.newMaterialSampleActionRun()
       .createdBy(CREATED_BY)
       .agentId(AGENT_ID)
       .sourceMaterialSample(materialSample)
@@ -65,15 +73,8 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
       .startDateTime(START_DATE_TIME)
       .endDateTime(END_DATE_TIME)
       .build();
+        
     materialSampleActionRunService.create(build);
     return build;
-  }
-
-  private static MaterialSampleActionDefinition newDefinition() {
-    return MaterialSampleActionDefinition.builder()
-      .name(RandomStringUtils.randomAlphabetic(5))
-      .group(RandomStringUtils.randomAlphabetic(5))
-      .createdBy(RandomStringUtils.randomAlphabetic(5))
-      .build();
   }
 }

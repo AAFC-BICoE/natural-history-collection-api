@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -25,15 +25,15 @@ import java.net.URL;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
+public class CollectionOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
   private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
-  public static final String TYPE_NAME = "preparation-type";
+  public static final String TYPE_NAME = "collection";
 
-  private static final String name = "isolate ocean water";
+  private static final String name = "collection A";
 
   static {
     URI_BUILDER.setScheme("https");
@@ -41,7 +41,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
     URI_BUILDER.setPath(SPEC_PATH);
   }
 
-  protected PreparationTypeOpenApiIT() {
+  protected CollectionOpenApiIT() {
     super("/api/v1/");
   }
 
@@ -52,13 +52,14 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
-    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
-    preparationTypeDto.setCreatedBy("test user");
-    preparationTypeDto.setGroup("aafc");
-    preparationTypeDto.setName(name);      
+    CollectionDto collectionDto = new CollectionDto();
+    collectionDto.setCode("CODE");
+    collectionDto.setName(name);
+    collectionDto.setCreatedBy("test user");
+    collectionDto.setGroup("aafc");
 
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "PreparationType",
-      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto),
+    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Collection",
+      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
         null,
         null)
       ).extract().asString());

@@ -18,6 +18,9 @@ public class GeoreferenceAssertionFactory implements TestableEntityFactory<Geore
    */
   public static GeoreferenceAssertion.GeoreferenceAssertionBuilder newGeoreferenceAssertion() {
     return GeoreferenceAssertion
-      .builder();
+      .builder()
+      .dwcDecimalLatitude(12.3)
+      .isPrimary(false)
+      .dwcDecimalLongitude(4.321);
   }
 }
