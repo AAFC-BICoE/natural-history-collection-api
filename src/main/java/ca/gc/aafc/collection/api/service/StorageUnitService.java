@@ -30,6 +30,25 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     linkChildAssociations(entity);
   }
 
+  @Override
+  protected void preDelete(StorageUnit entity) {
+    unlinkParent(entity);
+    unlinkChildren(entity);
+  }
+
+  private void unlinkChildren(StorageUnit entity) {
+    if (CollectionUtils.isNotEmpty(entity.getStorageUnitChildren())) {
+      entity.getStorageUnitChildren().forEach(c -> c.setParentStorageUnit(null));
+    }
+  }
+
+  private void unlinkParent(StorageUnit entity) {
+    StorageUnit parentStorageUnit = entity.getParentStorageUnit();
+    if (parentStorageUnit != null && CollectionUtils.isNotEmpty(parentStorageUnit.getStorageUnitChildren())) {
+      parentStorageUnit.getStorageUnitChildren().removeIf(c -> entity.getUuid().equals(c.getUuid()));
+    }
+  }
+
   private void linkChildAssociations(StorageUnit entity) {
     if (CollectionUtils.isNotEmpty(entity.getStorageUnitChildren())) {
       entity.getStorageUnitChildren().forEach(c -> c.setParentStorageUnit(entity));

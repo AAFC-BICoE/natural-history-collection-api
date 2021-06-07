@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
@@ -102,6 +103,40 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertNotNull(parentResult.getStorageUnitChildren());
     Assertions.assertEquals(1, parentResult.getStorageUnitChildren().size());
     Assertions.assertEquals(child.getUuid(), parentResult.getStorageUnitChildren().get(0).getUuid());
+  }
+
+  @Test
+  void deleteChild() {
+    StorageUnit parent = newUnit();
+    storageUnitService.create(parent);
+    StorageUnit child = newUnit();
+    child.setParentStorageUnit(parent);
+    storageUnitService.create(child);
+
+    Assertions.assertEquals(
+      parent.getUuid(),
+      storageUnitService.findOne(child.getUuid(), StorageUnit.class).getParentStorageUnit().getUuid());
+
+    storageUnitService.delete(child);
+    Assertions.assertTrue(CollectionUtils.isEmpty(
+      storageUnitService.findOne(parent.getUuid(), StorageUnit.class).getStorageUnitChildren()));
+  }
+
+  @Test
+  void deleteParent() {
+    StorageUnit parent = newUnit();
+    storageUnitService.create(parent);
+    StorageUnit child = newUnit();
+    child.setParentStorageUnit(parent);
+    storageUnitService.create(child);
+
+    Assertions.assertEquals(
+      parent.getUuid(),
+      storageUnitService.findOne(child.getUuid(), StorageUnit.class).getParentStorageUnit().getUuid());
+
+    storageUnitService.delete(parent);
+    Assertions.assertNull(
+      storageUnitService.findOne(child.getUuid(), StorageUnit.class).getParentStorageUnit());
   }
 
   private StorageUnit newUnit() {
