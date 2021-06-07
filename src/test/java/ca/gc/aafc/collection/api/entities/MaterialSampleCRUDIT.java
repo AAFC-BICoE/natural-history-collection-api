@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -33,11 +34,11 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     private static final String[] dwcOtherCatalogNumbers = new String[]{"A-1111", "B-2222"};
     private static final String expectedCreatedBy = "dina-save";
     private static final String sampleMaterialName = "lake water sample";
-
+    private static final UUID preparedBy = UUID.randomUUID();
     private static final String preparationExpectedCreatedBy = "preparation-dina-save";
     private static final String preparationExpectedGroup = "dina-group-save";
     private static final String preparationExpectedName = "isolate lake water sample";
-
+    private static final LocalDate preparationDate = LocalDate.now();
     private PreparationType preparationType;
     private MaterialSample materialSample;
 
@@ -55,7 +56,9 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             .dwcOtherCatalogNumbers(dwcOtherCatalogNumbers)
             .createdBy(expectedCreatedBy)
             .attachment(attachmentIdentifiers)
+            .preparedBy(preparedBy)
             .materialSampleName(sampleMaterialName)
+            .preparationDate(preparationDate)
             .preparationType(preparationType)
             .build();
         materialSampleService.create(materialSample);
@@ -76,6 +79,8 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
         assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
         assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());
+        assertEquals(preparedBy, materialSample.getPreparedBy());
+        assertEquals(preparationDate, materialSample.getPreparationDate());
     }
 
     @Test
@@ -92,7 +97,9 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationType.getId(), fetchedMaterialSample.getPreparationType().getId());
         assertEquals(preparationExpectedCreatedBy, fetchedMaterialSample.getPreparationType().getCreatedBy());
         assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
-        assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());    
+        assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());
+        assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy());
+        assertEquals(preparationDate, fetchedMaterialSample.getPreparationDate());
     }
 
     @Test

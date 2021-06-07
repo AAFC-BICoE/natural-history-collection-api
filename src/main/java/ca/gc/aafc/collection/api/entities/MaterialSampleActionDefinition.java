@@ -1,36 +1,60 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
+import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.UUID;
+
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import ca.gc.aafc.dina.entity.DinaEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @RequiredArgsConstructor
-@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
+@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @NaturalIdCache
 public class MaterialSampleActionDefinition implements DinaEntity {
+
+  public enum ActionType {
+    SPLIT, MERGE, ADD
+  }
+
+  public enum MaterialSampleFormComponent {
+    COLLECTING_EVENT,
+    MATERIAL_SAMPLE 
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +69,7 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   private String name;
 
   @NotBlank
-  @Column(name = "prep_group", unique = true)
+  @Column(name = "prep_group")
   private String group;
 
   @Column(name = "created_on", insertable = false, updatable = false)
@@ -56,4 +80,44 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
+  @NotNull
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "action_type")
+  private ActionType actionType;
+  
+  /** Map of form names to form templates */
+  @NotNull
+  @Type(type = "jsonb")
+  private Map<MaterialSampleFormComponent, FormTemplate> formTemplates;
+
+  /** Form template config and default values. */
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class FormTemplate {
+    @NotNull
+    private Boolean allowNew;
+
+    @NotNull
+    private Boolean allowExisting;
+
+    /** Map of field names to template field config. */
+    @NotNull
+    private Map<String, TemplateField> templateFields;
+  }
+
+  /** Configures one field in a form template. */
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class TemplateField {
+    @NotNull
+    private Boolean enabled;
+
+    @NotNull
+    private Serializable defaultValue;
+  }
 }

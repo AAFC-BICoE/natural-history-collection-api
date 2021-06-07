@@ -1,26 +1,31 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleActionRunDto;
-import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import io.crnk.core.queryspec.QuerySpec;
-
 import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleActionRunDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
+import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import io.crnk.core.queryspec.QuerySpec;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT {
@@ -41,7 +46,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
   private static final LocalDateTime endDateTime= LocalDateTime.of(2019, 12, 3, 10, 15, 30);
   
   @Test
-  @WithMockKeycloakUser(username = "test user")
+  @WithMockKeycloakUser(username = "test user", groupRole = "aafc: staff")
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleDto ms = materialSampleRepository.findOne(
       materialSampleRepository.create(newMaterialSampleDto(null)).getUuid(), new QuerySpec(MaterialSampleDto.class));
@@ -80,6 +85,15 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
     materialSampleActionDefinitionDto.setGroup(group);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
     materialSampleActionDefinitionDto.setCreatedBy("test user");
+    materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
+    materialSampleActionDefinitionDto.setFormTemplates(new HashMap<>(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()
+      .allowNew(true)
+      .allowExisting(true)
+      .templateFields(new HashMap<>(Map.of("materialSampleName", TemplateField.builder()
+        .enabled(true)  
+        .defaultValue("test-default-value")
+        .build())))
+      .build())));
     return materialSampleActionDefinitionDto;
   }
   

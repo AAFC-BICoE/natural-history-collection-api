@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,4 +60,9 @@ public class MaterialSampleDto {
     @JsonApiRelation
     private List<MaterialSampleDto> materialSampleChildren;
 
+    @JsonApiExternalRelation(type = "agent")
+    @JsonApiRelation
+    private ExternalRelationDto preparedBy;
+
+    private LocalDate preparationDate;
 }

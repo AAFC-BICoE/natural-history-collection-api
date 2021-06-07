@@ -14,7 +14,7 @@ public class CollectionManagedAttributeService extends
     ManagedAttributeService<CollectionManagedAttribute> {
 
   public CollectionManagedAttributeService(@NonNull BaseDAO baseDAO) {
-    super(baseDAO);
+    super(baseDAO, CollectionManagedAttribute.class);
   }
 
   @Override
