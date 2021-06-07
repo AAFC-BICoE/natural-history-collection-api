@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +21,13 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
   protected void preCreate(StorageUnit entity) {
     entity.setUuid(UUID.randomUUID());
     linkParentAssociation(entity);
+    linkChildAssociations(entity);
+  }
+
+  private void linkChildAssociations(StorageUnit entity) {
+    if (CollectionUtils.isNotEmpty(entity.getStorageUnitChildren())) {
+      entity.getStorageUnitChildren().forEach(c -> c.setParentStorageUnit(entity));
+    }
   }
 
   private void linkParentAssociation(StorageUnit entity) {

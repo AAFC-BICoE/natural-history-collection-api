@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+import java.util.List;
 
 class StorageUnitCRUDIT extends CollectionModuleBaseIT {
 
@@ -33,6 +34,24 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
     StorageUnit child = newUnit();
     child.setParentStorageUnit(parent);
     storageUnitService.create(child);
+
+    StorageUnit result = storageUnitService.findOne(child.getUuid(), StorageUnit.class);
+    Assertions.assertEquals(parent.getUuid(), result.getParentStorageUnit().getUuid());
+
+    StorageUnit parentResult = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    Assertions.assertNotNull(parentResult.getStorageUnitChildren());
+    Assertions.assertEquals(1, parentResult.getStorageUnitChildren().size());
+    Assertions.assertEquals(child.getUuid(), parentResult.getStorageUnitChildren().get(0).getUuid());
+  }
+
+  @Test
+  void create_linkParentThroughParent() {
+    StorageUnit child = newUnit();
+    storageUnitService.create(child);
+
+    StorageUnit parent = newUnit();
+    parent.setStorageUnitChildren(List.of(storageUnitService.findOne(child.getUuid(), StorageUnit.class)));
+    storageUnitService.create(parent);
 
     StorageUnit result = storageUnitService.findOne(child.getUuid(), StorageUnit.class);
     Assertions.assertEquals(parent.getUuid(), result.getParentStorageUnit().getUuid());
