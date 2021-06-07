@@ -29,6 +29,28 @@
         <sql>
             CREATE UNIQUE INDEX storage_unit_name_group_unique on storage_unit (LOWER(name), LOWER(_group));
         </sql>
+
+        <createTable tableName="storage_unit_type">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_storage_unit_type_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="_group" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="created_by" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <sql>
+            CREATE UNIQUE INDEX storage_unit_type_name_group_unique on storage_unit_type (LOWER(name), LOWER(_group));
+        </sql>
     </changeSet>
 
 </databaseChangeLog>
