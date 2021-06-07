@@ -15,7 +15,7 @@
             <column name="_group" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(250)">
+            <column name="name" type="VARCHAR(150)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>

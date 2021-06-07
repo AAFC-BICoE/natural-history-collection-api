@@ -48,7 +48,7 @@ public class StorageUnit implements DinaEntity {
   private UUID uuid;
 
   @NotBlank
-  @Size(max = 250)
+  @Size(max = 150)
   @Column(unique = true)
   private String name;
 
