@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,9 @@ public class MaterialSample implements DinaEntity {
     @Size(max = 25)  
     private String dwcCatalogNumber;
 
+    @Type(type = "string-array")
+    private String[] dwcOtherCatalogNumbers;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private CollectingEvent collectingEvent;
@@ -93,5 +97,10 @@ public class MaterialSample implements DinaEntity {
     @ManyToOne
     @ToString.Exclude
     private PreparationType preparationType;
+
+    @Column(name = "prepared_by")
+    private UUID preparedBy;
+
+    private LocalDate preparationDate;
 
 }

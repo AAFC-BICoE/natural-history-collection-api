@@ -2,8 +2,10 @@ package ca.gc.aafc.collection.api;
 
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
+import ca.gc.aafc.collection.api.service.CollectionService;
 import ca.gc.aafc.collection.api.service.CollectorGroupService;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
+import ca.gc.aafc.collection.api.service.MaterialSampleTypeService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
@@ -44,5 +46,11 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected PreparationTypeService preparationTypeService;
+
+  @Inject
+  protected MaterialSampleTypeService materialSampleTypeService;
+
+  @Inject
+  protected CollectionService collectionService;
 }
 

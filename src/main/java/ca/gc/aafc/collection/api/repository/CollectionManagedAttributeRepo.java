@@ -7,6 +7,7 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.FilterSpec;
@@ -29,13 +30,14 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
 
   public CollectionManagedAttributeRepo(
     @NonNull CollectionManagedAttributeService service,
+    Optional<DinaAuthorizationService> groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       service,
-      Optional.empty(),
+      Optional.ofNullable(groupAuthorizationService.orElse(null)),
       Optional.empty(),
       new DinaMapper<>(CollectionManagedAttributeDto.class),
       CollectionManagedAttributeDto.class,

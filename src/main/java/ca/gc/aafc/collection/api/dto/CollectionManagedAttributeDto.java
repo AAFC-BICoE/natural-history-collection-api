@@ -25,5 +25,5 @@ public class CollectionManagedAttributeDto {
   private String[] acceptedValues;
   private OffsetDateTime createdOn;
   private String createdBy;
-
+  private String group;
 }

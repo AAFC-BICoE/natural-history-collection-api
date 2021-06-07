@@ -25,7 +25,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
 
     public CollectingEventRepository(
     @NonNull CollectingEventService dinaService,
-    Optional<DinaAuthorizationService> groupAuthService,
+    Optional<DinaAuthorizationService> groupAuthorizationService,
     @NonNull AuditService auditService,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> authenticatedUser,
@@ -33,7 +33,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   ) {
     super(
       dinaService,
-      groupAuthService,
+      groupAuthorizationService,
       Optional.of(auditService),
       new DinaMapper<>(CollectingEventDto.class),
       CollectingEventDto.class,
