@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 class StorageUnitCRUDIT extends CollectionModuleBaseIT {
@@ -52,6 +53,47 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
     StorageUnit parent = newUnit();
     parent.setStorageUnitChildren(List.of(storageUnitService.findOne(child.getUuid(), StorageUnit.class)));
     storageUnitService.create(parent);
+
+    StorageUnit result = storageUnitService.findOne(child.getUuid(), StorageUnit.class);
+    Assertions.assertEquals(parent.getUuid(), result.getParentStorageUnit().getUuid());
+
+    StorageUnit parentResult = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    Assertions.assertNotNull(parentResult.getStorageUnitChildren());
+    Assertions.assertEquals(1, parentResult.getStorageUnitChildren().size());
+    Assertions.assertEquals(child.getUuid(), parentResult.getStorageUnitChildren().get(0).getUuid());
+  }
+
+  @Test
+  void update_linkParentThroughChild() {
+    StorageUnit parent = newUnit();
+    storageUnitService.create(parent);
+    StorageUnit child = newUnit();
+    storageUnitService.create(child);
+
+    StorageUnit toUpdate = storageUnitService.findOne(child.getUuid(), StorageUnit.class);
+    toUpdate.setParentStorageUnit(parent);
+    storageUnitService.update(toUpdate);
+
+    StorageUnit result = storageUnitService.findOne(toUpdate.getUuid(), StorageUnit.class);
+    Assertions.assertEquals(parent.getUuid(), result.getParentStorageUnit().getUuid());
+
+    StorageUnit parentResult = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    Assertions.assertNotNull(parentResult.getStorageUnitChildren());
+    Assertions.assertEquals(1, parentResult.getStorageUnitChildren().size());
+    Assertions.assertEquals(child.getUuid(), parentResult.getStorageUnitChildren().get(0).getUuid());
+  }
+
+  @Test
+  void update_linkParentThroughParent() {
+    StorageUnit parent = newUnit();
+    storageUnitService.create(parent);
+    StorageUnit child = newUnit();
+    storageUnitService.create(child);
+
+    StorageUnit toUpdate = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    toUpdate.setStorageUnitChildren(new ArrayList<>());
+    toUpdate.getStorageUnitChildren().add(storageUnitService.findOne(child.getUuid(), StorageUnit.class));
+    storageUnitService.update(toUpdate);
 
     StorageUnit result = storageUnitService.findOne(child.getUuid(), StorageUnit.class);
     Assertions.assertEquals(parent.getUuid(), result.getParentStorageUnit().getUuid());

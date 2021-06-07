@@ -24,6 +24,12 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     linkChildAssociations(entity);
   }
 
+  @Override
+  protected void preUpdate(StorageUnit entity) {
+    linkParentAssociation(entity);
+    linkChildAssociations(entity);
+  }
+
   private void linkChildAssociations(StorageUnit entity) {
     if (CollectionUtils.isNotEmpty(entity.getStorageUnitChildren())) {
       entity.getStorageUnitChildren().forEach(c -> c.setParentStorageUnit(entity));
