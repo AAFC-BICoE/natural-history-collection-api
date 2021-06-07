@@ -14,18 +14,40 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
   private StorageUnitService storageUnitService;
 
   @Test
-  void find() {
-    StorageUnit unit = StorageUnit.builder()
-      .name(RandomStringUtils.randomAlphabetic(4))
-      .group(RandomStringUtils.randomAlphabetic(5))
-      .createdBy("dina")
-      .build();
-
+  void create() {
+    StorageUnit unit = newUnit();
     storageUnitService.create(unit);
+
     StorageUnit result = storageUnitService.findOne(unit.getUuid(), StorageUnit.class);
     Assertions.assertNotNull(result.getId());
     Assertions.assertNotNull(result.getCreatedOn());
     Assertions.assertEquals(unit.getName(), result.getName());
     Assertions.assertEquals(unit.getGroup(), result.getGroup());
+  }
+
+  @Test
+  void create_linkParentThroughChild() {
+    StorageUnit parent = newUnit();
+    storageUnitService.create(parent);
+
+    StorageUnit child = newUnit();
+    child.setParentStorageUnit(parent);
+    storageUnitService.create(child);
+
+    StorageUnit result = storageUnitService.findOne(child.getUuid(), StorageUnit.class);
+    Assertions.assertEquals(parent.getUuid(), result.getParentStorageUnit().getUuid());
+
+    StorageUnit parentResult = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    Assertions.assertNotNull(parentResult.getStorageUnitChildren());
+    Assertions.assertEquals(1, parentResult.getStorageUnitChildren().size());
+    Assertions.assertEquals(child.getUuid(), parentResult.getStorageUnitChildren().get(0).getUuid());
+  }
+
+  private StorageUnit newUnit() {
+    return StorageUnit.builder()
+      .name(RandomStringUtils.randomAlphabetic(4))
+      .group(RandomStringUtils.randomAlphabetic(5))
+      .createdBy("dina")
+      .build();
   }
 }

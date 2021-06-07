@@ -6,6 +6,7 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -18,6 +19,22 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
   @Override
   protected void preCreate(StorageUnit entity) {
     entity.setUuid(UUID.randomUUID());
+    linkParentAssociation(entity);
+  }
+
+  private void linkParentAssociation(StorageUnit entity) {
+    if (entity.getParentStorageUnit() == null) {
+      return;
+    }
+
+    StorageUnit parent = entity.getParentStorageUnit();
+    if (parent.getStorageUnitChildren() == null) {
+      parent.setStorageUnitChildren(new ArrayList<>());
+    }
+
+    if (parent.getStorageUnitChildren().stream().noneMatch(c -> c.getUuid().equals(entity.getUuid()))) {
+      parent.getStorageUnitChildren().add(entity);
+    }
   }
 
 }
