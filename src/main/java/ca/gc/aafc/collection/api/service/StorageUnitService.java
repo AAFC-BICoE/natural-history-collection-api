@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -41,11 +42,10 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
   }
 
   private void resolveChildAssociations(StorageUnit entity) {
-    if (CollectionUtils.isEmpty(entity.getStorageUnitChildren())) {
-      return;
-    }
+    List<StorageUnit> incomingChildren =
+      entity.getStorageUnitChildren() == null ? new ArrayList<>() : entity.getStorageUnitChildren();
 
-    Map<UUID, StorageUnit> incoming = entity.getStorageUnitChildren().stream()
+    Map<UUID, StorageUnit> incoming = incomingChildren.stream()
       .collect(Collectors.toMap(StorageUnit::getUuid, Function.identity()));
     Map<UUID, StorageUnit> currentChildren = findStorageUnitsWithParent(entity);
 
