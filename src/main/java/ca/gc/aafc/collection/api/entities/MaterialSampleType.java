@@ -58,5 +58,7 @@ public class MaterialSampleType implements DinaEntity {
   private String group;
 
   @NotBlank
+  @Size(max = 150)
+  @Column(unique = true)
   private String name;
 }

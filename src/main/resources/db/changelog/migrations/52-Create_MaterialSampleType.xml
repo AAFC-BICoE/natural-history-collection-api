@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
   context="schema-change">
   
-  <changeSet context="schema-change" id="51-Create_MaterialSampleType.xml" author="Steven Luu">
+  <changeSet context="schema-change" id="52-Create_MaterialSampleType.xml" author="Steven Luu">
     <createTable tableName="material_sample_type">
 	    <column autoIncrement="true" name="id" type="SERIAL">
 			<constraints primaryKey="true" primaryKeyName="pk_material_sample_type_id" />
@@ -21,8 +21,8 @@
     <column name="_group" type="VARCHAR(50)">
       <constraints nullable="false"/>
     </column>
-    <column name="name" type="VARCHAR(50)">
-      <constraints nullable="false"/>
+    <column name="name" type="VARCHAR(150)">
+      <constraints nullable="false" unique="true" />
     </column>
     </createTable>        
   </changeSet>
