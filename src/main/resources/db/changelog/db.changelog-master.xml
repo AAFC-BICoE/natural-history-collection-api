@@ -54,5 +54,6 @@
   <include file="db/changelog/migrations/49-add_prep_date_material_sample.xml"/>
   <include file="db/changelog/migrations/50-Add_ActionType_To_MatSampActionDef.xml"/>
   <include file="db/changelog/migrations/51-Add_formTemplates_to_MaterialSampleActionDefinition.xml"/>
+  <include file="db/changelog/migrations/52-Create_MaterialSampleType.xml"/>
   <include file="db/changelog/migrations/52-Add_Storage_Unit.xml"/>
 </databaseChangeLog>
