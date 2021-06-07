@@ -7,8 +7,12 @@ import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class StorageUnitService extends DefaultDinaService<StorageUnit> {
@@ -27,13 +31,39 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
   @Override
   protected void preUpdate(StorageUnit entity) {
     linkParentAssociation(entity);
-    linkChildAssociations(entity);
+    resolveChildAssociations(entity);
   }
 
   @Override
   protected void preDelete(StorageUnit entity) {
     unlinkParent(entity);
     unlinkChildren(entity);
+  }
+
+  private void resolveChildAssociations(StorageUnit entity) {
+    if (CollectionUtils.isEmpty(entity.getStorageUnitChildren())) {
+      return;
+    }
+
+    Map<UUID, StorageUnit> incoming = entity.getStorageUnitChildren().stream()
+      .collect(Collectors.toMap(StorageUnit::getUuid, Function.identity()));
+    Map<UUID, StorageUnit> currentChildren = findStorageUnitsWithParent(entity);
+
+    currentChildren.forEach((uuid, storageUnit) -> {
+      if (!incoming.containsKey(uuid)) {
+        storageUnit.setParentStorageUnit(null);
+      }
+    });
+    linkChildAssociations(entity);
+  }
+
+  private Map<UUID, StorageUnit> findStorageUnitsWithParent(StorageUnit parent) {
+    return this.findAll(
+      StorageUnit.class,
+      (criteriaBuilder, storageUnitRoot) -> new Predicate[]{
+        criteriaBuilder.equal(storageUnitRoot.get("parentStorageUnit"), parent)
+      }, null, 0, Integer.MAX_VALUE
+    ).stream().collect(Collectors.toMap(StorageUnit::getUuid, Function.identity()));
   }
 
   private void unlinkChildren(StorageUnit entity) {

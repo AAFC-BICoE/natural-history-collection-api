@@ -106,6 +106,31 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void update_AddAndRemoveChildren() {
+    StorageUnit child = newUnit();
+    storageUnitService.create(child);
+    StorageUnit parent = newUnit();
+    parent.setStorageUnitChildren(List.of(storageUnitService.findOne(child.getUuid(), StorageUnit.class)));
+    storageUnitService.create(parent);
+    StorageUnit newChild = newUnit();
+    storageUnitService.create(newChild);
+
+    StorageUnit toUpdate = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    Assertions.assertEquals(child.getUuid(), toUpdate.getStorageUnitChildren().get(0).getUuid());
+    toUpdate.setStorageUnitChildren(new ArrayList<>());
+    toUpdate.getStorageUnitChildren().add(newChild);
+    storageUnitService.update(toUpdate);
+
+    StorageUnit parentResult = storageUnitService.findOne(parent.getUuid(), StorageUnit.class);
+    Assertions.assertNull(
+      storageUnitService.findOne(child.getUuid(), StorageUnit.class).getParentStorageUnit());
+    Assertions.assertNotNull(
+      storageUnitService.findOne(newChild.getUuid(), StorageUnit.class).getParentStorageUnit());
+    Assertions.assertEquals(1, parentResult.getStorageUnitChildren().size());
+    Assertions.assertEquals(newChild.getUuid(), parentResult.getStorageUnitChildren().get(0).getUuid());
+  }
+
+  @Test
   void deleteChild() {
     StorageUnit parent = newUnit();
     storageUnitService.create(parent);
