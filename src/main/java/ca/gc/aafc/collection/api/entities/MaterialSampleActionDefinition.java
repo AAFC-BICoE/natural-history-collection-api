@@ -69,7 +69,7 @@ public class MaterialSampleActionDefinition implements DinaEntity {
   private String name;
 
   @NotBlank
-  @Column(name = "prep_group", unique = true)
+  @Column(name = "prep_group")
   private String group;
 
   @Column(name = "created_on", insertable = false, updatable = false)
