@@ -59,6 +59,5 @@ public class MaterialSampleType implements DinaEntity {
 
   @NotBlank
   @Size(max = 150)
-  @Column(unique = true)
   private String name;
 }

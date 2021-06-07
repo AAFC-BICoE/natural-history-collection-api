@@ -22,9 +22,12 @@
       <constraints nullable="false"/>
     </column>
     <column name="name" type="VARCHAR(150)">
-      <constraints nullable="false" unique="true" />
+      <constraints nullable="false"/>
     </column>
-    </createTable>        
+    </createTable>   
+    <sql>
+      CREATE UNIQUE INDEX material_sample_type_name_unique on material_sample_type (LOWER(name));
+    </sql>     
   </changeSet>
 </databaseChangeLog>
 
