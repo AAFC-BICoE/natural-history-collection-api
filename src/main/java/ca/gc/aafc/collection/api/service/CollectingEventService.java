@@ -1,24 +1,21 @@
 package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
-import ca.gc.aafc.dina.validation.ManagedAttributeValueValidator;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
-import javax.inject.Named;
 import javax.persistence.criteria.Predicate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -36,21 +33,19 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final CollectingEventValidator collectingEventValidator;
   private final BaseDAO baseDAO;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
-  private final ManagedAttributeValueValidator<CollectionManagedAttribute> managedAttributeValueValidator;
+  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
-    @Named("validationMessageSource") MessageSource messageSource,
-    CollectionManagedAttributeService collectionManagedAttributeService
-    
+    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator
   ) {
     super(baseDAO);
     this.collectingEventValidator = collectingEventValidator;
     this.baseDAO = baseDAO;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
-    this.managedAttributeValueValidator = new ManagedAttributeValueValidator<CollectionManagedAttribute>(messageSource, collectionManagedAttributeService);
+    this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
   }
 
   @Override
@@ -149,9 +144,9 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private void validateManagedAttribute(CollectingEvent entity) {
     Map<String, String> newMap = new HashMap<String, String>();
     for (Map.Entry<String, ManagedAttributeValue> entry : entity.getManagedAttributeValues().entrySet()) {
-        newMap.put(entry.getKey(), entry.getValue().getAssignedValue());
-      }
-    managedAttributeValueValidator.validate(entity, newMap);
+      newMap.put(entry.getKey(), entry.getValue().getAssignedValue());
+    }
+    collectionManagedAttributeValueValidator.validate(entity, newMap);
   }
 
   public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertion geo, @NonNull String eventUUID) {
