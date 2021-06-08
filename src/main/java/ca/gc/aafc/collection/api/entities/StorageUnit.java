@@ -49,7 +49,6 @@ public class StorageUnit implements DinaEntity {
 
   @NotBlank
   @Size(max = 150)
-  @Column(unique = true)
   private String name;
 
   @NotBlank
