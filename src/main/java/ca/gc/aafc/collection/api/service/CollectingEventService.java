@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.SmartValidator;
 
 import javax.persistence.criteria.Predicate;
 import java.time.OffsetDateTime;
@@ -32,10 +33,11 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
+    @NonNull SmartValidator sv,
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator
   ) {
-    super(baseDAO);
+    super(baseDAO, sv);
     this.collectingEventValidator = collectingEventValidator;
     this.baseDAO = baseDAO;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
@@ -47,8 +49,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     cleanupManagedAttributeValues(entity);
     assignAutomaticValues(entity);
     linkAssertions(entity, entity.getGeoReferenceAssertions());
-    validateCollectingEvent(entity);
-    validateAssertions(entity);
   }
 
   @Override
@@ -56,7 +56,11 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     cleanupManagedAttributeValues(entity);
     assignAutomaticValues(entity);
     resolveIncomingAssertion(entity);
-    validateCollectingEvent(entity);
+  }
+
+  @Override
+  public void validateBusinessRules(CollectingEvent entity) {
+    applyBusinessRule(entity, collectingEventValidator);
     validateAssertions(entity);
   }
 
@@ -118,10 +122,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     if (entity.getGeographicPlaceNameSourceDetail() != null) {
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
-  }
-
-  public void validateCollectingEvent(CollectingEvent entity) {
-    validateBusinessRules(entity, collectingEventValidator);
   }
 
   private void validateAssertions(@NonNull CollectingEvent entity) {

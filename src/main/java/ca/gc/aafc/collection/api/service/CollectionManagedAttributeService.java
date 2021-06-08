@@ -6,6 +6,7 @@ import ca.gc.aafc.dina.service.ManagedAttributeService;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
 
 import java.util.UUID;
 
@@ -13,8 +14,8 @@ import java.util.UUID;
 public class CollectionManagedAttributeService extends
     ManagedAttributeService<CollectionManagedAttribute> {
 
-  public CollectionManagedAttributeService(@NonNull BaseDAO baseDAO) {
-    super(baseDAO, CollectionManagedAttribute.class);
+  public CollectionManagedAttributeService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
+    super(baseDAO, sv, CollectionManagedAttribute.class);
   }
 
   @Override
