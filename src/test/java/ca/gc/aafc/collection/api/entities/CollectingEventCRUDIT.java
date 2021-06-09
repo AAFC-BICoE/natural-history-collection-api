@@ -2,8 +2,12 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
+import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +15,12 @@ import org.junit.jupiter.api.Test;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -289,6 +297,87 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void validate_WhenValidStringType() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{})
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
+      .assignedValue("new string value")
+      .build();
+
+    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
+    mavMap.put(testManagedAttribute.getKey(), mav);
+
+    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEventService.update(collectingEvent);
+    //Assert generated fields
+    assertNotNull(collectingEvent.getId());
+    assertNotNull(collectingEvent.getCreatedOn());
+    assertNotNull(collectingEvent.getUuid());
+  }
+
+  @Test
+  void validate_WhenInvalidIntegerTypeExceptionThrown() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{})
+      .managedAttributeType(ManagedAttributeType.INTEGER)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
+      .assignedValue("1.2")
+      .build();
+
+    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
+    mavMap.put(testManagedAttribute.getKey(), mav);
+
+    collectingEvent.setManagedAttributeValues(mavMap);
+    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
+  }
+
+  @Test
+  void assignedValueContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{"val1", "val2"})
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
+      .assignedValue("val1")
+      .build();
+
+    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
+    mavMap.put(testManagedAttribute.getKey(), mav);
+
+    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEventService.update(collectingEvent);
+  }
+
+  @Test
+  void assignedValueNotContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{"val1", "val2"})
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
+      .assignedValue("val3")
+      .build();
+
+    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
+    mavMap.put(testManagedAttribute.getKey(), mav);
+
+    collectingEvent.setManagedAttributeValues(mavMap);
+    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 
 }
