@@ -106,7 +106,7 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
           "sourceMaterialSample", getRelationshipType("material-sample", materialSampleUUID),
           "materialSampleActionDefinition", getRelationshipType("material-sample-action-definition", materialSampleActionDefinitionUUID)),
         null)
-      ).extract().asString());
+      ).extract().asString(),false);
   }
 
   private Map<String, Object> getRelationshipType(String type, String uuid) {

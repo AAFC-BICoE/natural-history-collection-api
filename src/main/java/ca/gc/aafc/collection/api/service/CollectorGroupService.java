@@ -8,12 +8,13 @@ import ca.gc.aafc.collection.api.entities.CollectorGroup;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
+import org.springframework.validation.SmartValidator;
 
 @Service
 public class CollectorGroupService extends DefaultDinaService<CollectorGroup> {
 
-  public CollectorGroupService(@NonNull BaseDAO baseDAO) {
-    super(baseDAO);
+  public CollectorGroupService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
+    super(baseDAO, sv);
   }
 
   @Override

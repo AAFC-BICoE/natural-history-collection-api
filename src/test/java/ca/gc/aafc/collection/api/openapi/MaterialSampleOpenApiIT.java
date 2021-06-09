@@ -106,7 +106,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         "parentMaterialSample", getRelationType("material-sample", parentUUID),
         "materialSampleChildren", getRelationListType("material-sample", childUUID)),
         null)
-      ).extract().asString());
+      ).extract().asString(), false);
   }
 
   private Map<String, Object> getRelationType(String type, String uuid) {

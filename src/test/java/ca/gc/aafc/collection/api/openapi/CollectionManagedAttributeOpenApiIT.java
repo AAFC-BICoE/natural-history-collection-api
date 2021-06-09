@@ -71,7 +71,7 @@ public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto),
         null,
         null)
-      ).extract().asString());
+      ).extract().asString(), false);
   }
 
 }

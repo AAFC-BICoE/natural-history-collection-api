@@ -62,7 +62,7 @@ public class CollectionOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
         null,
         null)
-      ).extract().asString());
+      ).extract().asString(), false);
   }
 
 }
