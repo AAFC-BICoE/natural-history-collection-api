@@ -4,17 +4,13 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
-import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,14 +18,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,18 +32,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private CollectingEventRepository collectingEventRepository;
 
-  // @BeforeEach
-  // @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
-  // public void setup() {
-  //   geographicPlaceNameSourceDetail = CollectingEventTestFixture.newGeographicPlaceNameSourceDetail();
-  // }
-
   @Test
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
-    CollectingEventDto testCollectingEvent = collectingEventRepository.create(CollectingEventTestFixture.newEventDto(
-      CollectingEventTestFixture.startDate.toString(),
-      CollectingEventTestFixture.endDate.toString()));
+    CollectingEventDto testCollectingEvent = collectingEventRepository.create(CollectingEventTestFixture.newEventDto());
 
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
 
@@ -82,26 +65,26 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
       collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcDecimalLatitude());
 
     assertEquals(
-      CollectingEventTestFixture.testGeoreferencedDate,
+      CollectingEventTestFixture.TEST_GEOREFERENCE_DATE,
       collectingEventDto.getGeoReferenceAssertions().iterator().next().getDwcGeoreferencedDate());
 
     assertEquals(CollectingEventTestFixture.VER_COOR, collectingEventDto.getDwcVerbatimCoordinates());
-    assertEquals(CollectingEventTestFixture.dwcRecordedBy, collectingEventDto.getDwcRecordedBy());
+    assertEquals(CollectingEventTestFixture.DWC_RECORDED_BY, collectingEventDto.getDwcRecordedBy());
     assertEquals(
       testCollectingEvent.getAttachment().get(0).getId(),
       collectingEventDto.getAttachment().get(0).getId());
     assertEquals(
       testCollectingEvent.getCollectors().get(0).getId(),
       collectingEventDto.getCollectors().get(0).getId());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLocality, collectingEventDto.getDwcVerbatimLocality());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLatitude, collectingEventDto.getDwcVerbatimLatitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLongitude, collectingEventDto.getDwcVerbatimLongitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimCoordinateSystem, collectingEventDto.getDwcVerbatimCoordinateSystem());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimSRS, collectingEventDto.getDwcVerbatimSRS());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimElevation, collectingEventDto.getDwcVerbatimElevation());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimDepth, collectingEventDto.getDwcVerbatimDepth());
-    assertEquals(CollectingEventTestFixture.dwcOtherRecordNumbers[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
-    assertEquals(CollectingEventTestFixture.geographicPlaceNameSource, collectingEventDto.getGeographicPlaceNameSource());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_LOCALITY, collectingEventDto.getDwcVerbatimLocality());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_LATITUDE, collectingEventDto.getDwcVerbatimLatitude());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_LONGITUDE, collectingEventDto.getDwcVerbatimLongitude());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_COORDINATE_SYSTEM, collectingEventDto.getDwcVerbatimCoordinateSystem());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_SRS, collectingEventDto.getDwcVerbatimSRS());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_ELEVATION, collectingEventDto.getDwcVerbatimElevation());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, collectingEventDto.getDwcVerbatimDepth());
+    assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
+    assertEquals(CollectingEventTestFixture.GEOGRAPHIC_PLACE_NAME_SOURCE, collectingEventDto.getGeographicPlaceNameSource());
     assertEquals(
       CollectingEventTestFixture.TEST_COUNTRY,
       collectingEventDto.getGeographicPlaceNameSourceDetail().getCountry());
@@ -112,41 +95,31 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(
       CollectingEventTestFixture.TEST_PROVINCE,
       collectingEventDto.getGeographicPlaceNameSourceDetail().getStateProvince());
-    assertEquals(CollectingEventTestFixture.habitat, collectingEventDto.getHabitat());
+    assertEquals(CollectingEventTestFixture.HABITAT, collectingEventDto.getHabitat());
   }
 
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
-    CollectingEventDto ce = CollectingEventTestFixture.newEventDto("2007-12-03T10:15:30", "2007-12-04T11:20:20");
+    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
+    ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
       new QuerySpec(CollectingEventDto.class));
     assertNotNull(result.getCreatedBy());
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
-    assertEquals(CollectingEventTestFixture.dwcRecordedBy, result.getDwcRecordedBy());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLocality, result.getDwcVerbatimLocality());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimSRS, result.getDwcVerbatimSRS());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimElevation, result.getDwcVerbatimElevation());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimSRS, result.getDwcVerbatimSRS());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimElevation, result.getDwcVerbatimElevation());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLatitude, result.getDwcVerbatimLatitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimLongitude, result.getDwcVerbatimLongitude());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimCoordinateSystem, result.getDwcVerbatimCoordinateSystem());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimSRS, result.getDwcVerbatimSRS());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimElevation, result.getDwcVerbatimElevation());
-    assertEquals(CollectingEventTestFixture.dwcVerbatimDepth, result.getDwcVerbatimDepth());
-    assertEquals(CollectingEventTestFixture.dwcOtherRecordNumbers[1], result.getDwcOtherRecordNumbers()[1]);
-    assertEquals(CollectingEventTestFixture.habitat, result.getHabitat());
+    assertEquals(CollectingEventTestFixture.DWC_RECORDED_BY, result.getDwcRecordedBy());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_LOCALITY, result.getDwcVerbatimLocality());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_LATITUDE, result.getDwcVerbatimLatitude());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_LONGITUDE, result.getDwcVerbatimLongitude());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_COORDINATE_SYSTEM, result.getDwcVerbatimCoordinateSystem());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_SRS, result.getDwcVerbatimSRS());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_ELEVATION, result.getDwcVerbatimElevation());
+    assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, result.getDwcVerbatimDepth());
+    assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], result.getDwcOtherRecordNumbers()[1]);
+    assertEquals(CollectingEventTestFixture.HABITAT, result.getHabitat());
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
   }
 
@@ -168,7 +141,10 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
   @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
-    collectingEventRepository.create(CollectingEventTestFixture.newEventDto(startDate, "2020"));
+    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ce.setStartEventDateTime(ISODateTime.parse(startDate).toString());
+    ce.setEndEventDateTime(ISODateTime.parse("2020").toString());
+    collectingEventRepository.create(ce);
     assertEquals(expectedSize, collectingEventRepository.findAll(newRsqlQuerySpec(input)).size());
   }
 
