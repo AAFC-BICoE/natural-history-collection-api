@@ -68,7 +68,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
           "collectors", getExternalListType("agent"),
           "attachment", getExternalListType("metadata")),
         null)
-      ).extract().asString());
+      ).extract().asString(), false);
   }
 
   private Map<String, Object> getExternalListType(String type) {
