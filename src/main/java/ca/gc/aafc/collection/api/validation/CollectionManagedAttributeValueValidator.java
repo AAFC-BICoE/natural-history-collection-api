@@ -16,6 +16,7 @@ import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.service.ManagedAttributeService;
 import ca.gc.aafc.dina.validation.ManagedAttributeValueValidator;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.NonNull;
 
 @Component
@@ -27,18 +28,13 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
     super(messageSource, dinaService);
   }
 
-  /**
-   * Validates the managedAttributes attached to the provided entity.
-   * @param entity
-   * @param managedAttributes
-   * @param <D>
-   * @throws javax.validation.ValidationException
-   */
+  @Override
+  @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
   public <D extends DinaEntity> void validate(D entity, Map<String, String> managedAttributes) {
     Errors errors = ValidationErrorsHelper.newErrorsObject(entity);
     validate(managedAttributes, errors);
 
-    if (errors == null || !errors.hasErrors()) {
+    if (!errors.hasErrors()) {
       return;
     }
 
