@@ -57,4 +57,5 @@
   <include file="db/changelog/migrations/52-Create_MaterialSampleType.xml"/>
   <include file="db/changelog/migrations/53-MatSampActionDef_Remove_group_unique.xml"/>
   <include file="db/changelog/migrations/54-Add_MaterialSampleType_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/55-Add_structured_elevation_depth_fields.xml"/>
 </databaseChangeLog>

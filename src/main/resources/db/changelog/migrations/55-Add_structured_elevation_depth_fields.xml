@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!--  Add column documents to collecting event -->
+    <changeSet id="55-Add_structured_elevation_depth_fields" context="schema-change" author="stevenluu">
+        <addColumn tableName="collecting_event">
+            <column name="dwc_minimum_elevation_in_meters" type="INT"/>
+			<column name="dwc_minimum_depth_in_meters" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -33,6 +33,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -159,6 +160,12 @@ public class CollectingEvent implements DinaEntity {
 
   @Size(max = 500)
   private String habitat;
+
+  @Min(value = 0)
+  private int dwcMinimumElevationInMeters;
+
+  @Min(value = 0)
+  private int dwcMinimumDepthInMeters;
 
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
