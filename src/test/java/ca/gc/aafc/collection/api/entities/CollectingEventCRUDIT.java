@@ -301,7 +301,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void update_WithInvalidMinimumValue_throwsConstraintViolationException() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
-    .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
     fetchedCollectingEvent.setDwcMinimumDepthInMeters(-1);
     fetchedCollectingEvent.setDwcMinimumElevationInMeters(-2);
@@ -309,6 +309,17 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
 
+  }
+
+  @Test
+  void update_WithNullMinimumValue_NoExceptionThrown() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(null);
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(null);
+
+    collectingEventService.update(fetchedCollectingEvent);
   }
 
 }

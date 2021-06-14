@@ -162,10 +162,10 @@ public class CollectingEvent implements DinaEntity {
   private String habitat;
 
   @Min(value = 0)
-  private int dwcMinimumElevationInMeters;
+  private Integer dwcMinimumElevationInMeters;
 
   @Min(value = 0)
-  private int dwcMinimumDepthInMeters;
+  private Integer dwcMinimumDepthInMeters;
 
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")

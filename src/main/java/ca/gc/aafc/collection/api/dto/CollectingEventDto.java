@@ -104,8 +104,8 @@ public class CollectingEventDto {
   private String dwcCountryCode;
   private String dwcStateProvince;
   private String habitat;
-  private int dwcMinimumElevationInMeters;
-  private int dwcMinimumDepthInMeters;
+  private Integer dwcMinimumElevationInMeters;
+  private Integer dwcMinimumDepthInMeters;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
