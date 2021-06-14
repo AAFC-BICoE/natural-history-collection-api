@@ -59,22 +59,6 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
       assertThrows(AccessDeniedException.class, () -> preparationTypeRepository.save(retrievedPreparationType));
   }
 
-  @ParameterizedTest
-  @MethodSource("equalFilterSource")
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
-  void findAll_GroupFilteredCorrectly(String input, int expectedSize) {
-    PreparationTypeDto preparationType = newPreparationTypeDto();
-    preparationTypeRepository.create(preparationType);
-    assertEquals(expectedSize, preparationTypeRepository.findAll(newRsqlQuerySpec(input)).size());
-  }
-
-  private static Stream<Arguments> equalFilterSource() {
-    return Stream.of(
-      Arguments.of("group==aafc", 1),
-      Arguments.of("group==notAAFC", 0)
-    );
-  }
-
   private PreparationTypeDto newPreparationTypeDto() {
     PreparationTypeDto pt = new PreparationTypeDto();
     pt.setName(name);
@@ -82,11 +66,4 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
     pt.setUuid(UUID.randomUUID());
     return pt;
   }
-
-  private static QuerySpec newRsqlQuerySpec(String rsql) {
-    QuerySpec spec = new QuerySpec(PreparationTypeDto.class);
-    spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ, rsql));
-    return spec;
-  }
-  
 }

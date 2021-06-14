@@ -14,6 +14,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -33,7 +37,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "preparation-type";
 
-  private static final String name = "isolate ocean water";
+  private static final String name = "water";
 
   static {
     URI_BUILDER.setScheme("https");
@@ -49,9 +53,20 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
     return URI_BUILDER.build().toURL();
   }
 
+  @Test
+  void preparationType_filterByGroup() {
+    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
+    preparationTypeDto.setCreatedBy("test user");
+    preparationTypeDto.setGroup("aafc");
+    preparationTypeDto.setName(name);  
+    sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto)));
+
+    assertTrue(sendGet(TYPE_NAME+"?filter[group]=aafc", "").extract().response().body().path("data[0].group").equals("aafc"));
+  }
+
   @SneakyThrows
   @Test
-  void collectingEvent_SpecValid() {
+  void preparationType_SpecValid() {
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
