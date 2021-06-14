@@ -16,7 +16,6 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -59,9 +58,17 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
     preparationTypeDto.setName(name);  
-    sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto)));
+    String uuid = sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data[0].id");
 
-    assertTrue(sendGet(TYPE_NAME+"?filter[group]=aafc", "").extract().response().body().path("data[0].group").equals("aafc"));
+    PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
+    preparationTypeDto_differentGroup.setCreatedBy("nottest user");
+    preparationTypeDto_differentGroup.setGroup("aafcNOTaafc");
+    preparationTypeDto_differentGroup.setName("NOT" + name);  
+    sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
+
+    String actualUuid = sendGet(TYPE_NAME+"?filter[group][eq]=aafc", "").extract().response().body().path("data[0].id");
+
+    assertEquals(uuid, actualUuid);
   }
 
   @SneakyThrows
