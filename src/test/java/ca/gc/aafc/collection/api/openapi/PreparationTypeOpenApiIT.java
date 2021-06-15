@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -53,7 +54,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void preparationType_filterByGroup() {
+  void preparationType_filterByGroupWithOperator() {
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
@@ -62,13 +63,31 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
 
     PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
     preparationTypeDto_differentGroup.setCreatedBy("nottest user");
-    preparationTypeDto_differentGroup.setGroup("aafcNOTaafc");
+    preparationTypeDto_differentGroup.setGroup("NOTaafc");
     preparationTypeDto_differentGroup.setName("NOT" + name);  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
 
     String actualUuid = sendGet(TYPE_NAME+"?filter[group][eq]=aafc", "").extract().response().body().path("data[0].id");
 
     assertEquals(uuid, actualUuid);
+  }
+
+  @Test
+  //TODO: Replace preparationType_filterByGroupWithOperator when this tests returns OK code 200
+  void preparationType_filterByGroupWithoutOperator_BadRequest() {
+    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
+    preparationTypeDto.setCreatedBy("test user");
+    preparationTypeDto.setGroup("aafc");
+    preparationTypeDto.setName(name);  
+
+    PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
+    preparationTypeDto_differentGroup.setCreatedBy("nottest user");
+    preparationTypeDto_differentGroup.setGroup("NOTaafc");
+    preparationTypeDto_differentGroup.setName("NOT" + name);  
+    sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
+
+    sendGet(TYPE_NAME+"?filter[group]=aafc", "", HttpStatus.BAD_REQUEST.value());
+
   }
 
   @SneakyThrows
