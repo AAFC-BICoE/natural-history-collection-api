@@ -10,13 +10,10 @@ import lombok.SneakyThrows;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -51,43 +48,6 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
 
   public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
     return URI_BUILDER.build().toURL();
-  }
-
-  @Test
-  void preparationType_filterByGroupWithOperator() {
-    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
-    preparationTypeDto.setCreatedBy("test user");
-    preparationTypeDto.setGroup("aafc");
-    preparationTypeDto.setName(name);  
-    String uuid = sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data[0].id");
-
-    PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
-    preparationTypeDto_differentGroup.setCreatedBy("nottest user");
-    preparationTypeDto_differentGroup.setGroup("NOTaafc");
-    preparationTypeDto_differentGroup.setName("NOT" + name);  
-    sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
-
-    String actualUuid = sendGet(TYPE_NAME+"?filter[group][eq]=aafc", "").extract().response().body().path("data[0].id");
-
-    assertEquals(uuid, actualUuid);
-  }
-
-  @Test
-  //TODO: Replace preparationType_filterByGroupWithOperator when this tests returns OK code 200
-  void preparationType_filterByGroupWithoutOperator_BadRequest() {
-    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
-    preparationTypeDto.setCreatedBy("test user");
-    preparationTypeDto.setGroup("aafc");
-    preparationTypeDto.setName(name);  
-
-    PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
-    preparationTypeDto_differentGroup.setCreatedBy("nottest user");
-    preparationTypeDto_differentGroup.setGroup("NOTaafc");
-    preparationTypeDto_differentGroup.setName("NOT" + name);  
-    sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
-
-    sendGet(TYPE_NAME+"?filter[group]=aafc", "", HttpStatus.BAD_REQUEST.value());
-
   }
 
   @SneakyThrows
