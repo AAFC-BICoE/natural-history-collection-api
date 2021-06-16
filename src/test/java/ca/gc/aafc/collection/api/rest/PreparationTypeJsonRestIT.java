@@ -23,13 +23,12 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-public class PreparationTypeJsonApiIT extends BaseRestAssuredTest {
+public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
   private static final String TYPE_NAME = "preparation-type";
-  private static final String group = "aafc";
   private static final String name = "preparation process definition";
 
-  protected PreparationTypeJsonApiIT() {
+  protected PreparationTypeJsonRestIT() {
     super("/api/v1/");
   }
 
