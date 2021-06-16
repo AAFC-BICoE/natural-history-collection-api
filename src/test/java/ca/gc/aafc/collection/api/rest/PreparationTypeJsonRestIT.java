@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  //TODO: Replace preparationType_filterByGroupWithOperator when this tests returns OK code 200
+  @DisplayName("Assuming that we cannot use a filter called \"group\" with the default operator")
   void preparationType_filterByGroupWithoutOperator_BadRequest() {
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
