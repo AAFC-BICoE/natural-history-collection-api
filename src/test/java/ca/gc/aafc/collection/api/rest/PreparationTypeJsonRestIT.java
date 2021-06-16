@@ -54,7 +54,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
   @Test
   @DisplayName("Assuming that we cannot use a filter called \"group\" with the default operator")
-  void preparationType_filterByGroupWithoutOperator() {
+  void preparationType_filterByGroupWithoutOperator_BadRequest() {
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
@@ -66,7 +66,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
     preparationTypeDto_differentGroup.setName("NOT" + name);  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
 
-    sendGet(TYPE_NAME+"?filter[group]=aafc", "");
+    sendGet(TYPE_NAME+"?filter[group]=aafc", "", HttpStatus.BAD_REQUEST.value());
 
   }
   
