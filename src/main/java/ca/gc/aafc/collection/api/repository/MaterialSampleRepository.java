@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
-import ca.gc.aafc.dina.service.DinaAuthorizationService;
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
