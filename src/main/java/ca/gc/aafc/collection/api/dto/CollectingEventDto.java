@@ -76,7 +76,7 @@ public class CollectingEventDto {
 
   private String verbatimEventDateTime;
 
-  @JsonApiExternalRelation(type = "agent")
+  @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
   private List<ExternalRelationDto> collectors = new ArrayList<>();
 
@@ -104,6 +104,8 @@ public class CollectingEventDto {
   private String dwcCountryCode;
   private String dwcStateProvince;
   private String habitat;
+  private Integer dwcMinimumElevationInMeters;
+  private Integer dwcMinimumDepthInMeters;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;

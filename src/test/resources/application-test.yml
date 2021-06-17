@@ -13,5 +13,8 @@ embedded.postgresql:
   init-script-file: init-collection-module.sql
   database: collection_test
   schema: collection
+logging:
+  level:
+    org.springframework: ERROR
 dev-user:
   enabled: false

@@ -1,25 +1,16 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.CollectionService;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
-
 class CollectionCRUDIT extends CollectionModuleBaseIT {
-
-  @Inject
-  private CollectionService collectionService;
 
   @Test
   void create() {
-    Collection collection = Collection.builder()
-      .name("name")
-      .group("group")
-      .code("code")
-      .createdBy("someone")
-      .build();
+    Collection collection = CollectionFactory.newCollection().build();
     collectionService.create(collection);
     Assertions.assertNotNull(collection.getUuid());
 

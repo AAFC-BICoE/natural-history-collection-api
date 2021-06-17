@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionDefinitionFactory;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,12 @@ class MaterialSampleActionDefinitionCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setUp() {
-    definition = newDefinition();
+    definition = MaterialSampleActionDefinitionFactory.newMaterialSampleActionDefinition()
+      .name(EXPECTED_NAME)
+      .group(EXPECTED_GROUP)
+      .createdBy(EXPECTED_CREATED_BY)
+      .actionType(ACTION_TYPE)
+      .build();
     materialSampleActionDefinitionService.create(definition);
   }
 
@@ -36,14 +43,5 @@ class MaterialSampleActionDefinitionCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(ACTION_TYPE, result.getActionType());
-  }
-
-  private static MaterialSampleActionDefinition newDefinition() {
-    return MaterialSampleActionDefinition.builder()
-      .name(EXPECTED_NAME)
-      .group(EXPECTED_GROUP)
-      .createdBy(EXPECTED_CREATED_BY)
-      .actionType(ACTION_TYPE)
-      .build();
   }
 }

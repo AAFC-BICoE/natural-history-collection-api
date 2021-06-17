@@ -55,12 +55,15 @@ public class MaterialSampleDto {
     private PreparationTypeDto preparationType;
 
     @JsonApiRelation
+    private MaterialSampleTypeDto materialSampleType;
+
+    @JsonApiRelation
     private MaterialSampleDto parentMaterialSample;
 
     @JsonApiRelation
     private List<MaterialSampleDto> materialSampleChildren;
 
-    @JsonApiExternalRelation(type = "agent")
+    @JsonApiExternalRelation(type = "person")
     @JsonApiRelation
     private ExternalRelationDto preparedBy;
 

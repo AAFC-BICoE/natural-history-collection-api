@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
-import ca.gc.aafc.collection.api.dto.CollectionDto;
-import ca.gc.aafc.collection.api.entities.Collection;
-import ca.gc.aafc.collection.api.service.CollectionService;
+import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleType;
+import ca.gc.aafc.collection.api.service.MaterialSampleTypeService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -15,25 +15,26 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import lombok.NonNull;
 
-@Repository
-public class CollectionRepository extends DinaRepository<CollectionDto, Collection> {
 
-  private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
-  
-  public CollectionRepository(
-    @NonNull CollectionService dinaService,
+@Repository
+public class MaterialSampleTypeRepository extends DinaRepository<MaterialSampleTypeDto, MaterialSampleType> {
+
+  private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;  
+
+  public MaterialSampleTypeRepository(
+    @NonNull MaterialSampleTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    Optional<DinaAuthorizationService> dinaAdminOnlyAuthorizationService,
+    Optional<DinaAuthorizationService> groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
       super(
           dinaService,
-          dinaAdminOnlyAuthorizationService,
+          groupAuthorizationService,
           Optional.empty(),
-          new DinaMapper<>(CollectionDto.class),
-          CollectionDto.class,
-          Collection.class,
+          new DinaMapper<>(MaterialSampleTypeDto.class),
+          MaterialSampleTypeDto.class,
+          MaterialSampleType.class,
           null,
           externalResourceProvider,
           buildProperties);
@@ -41,9 +42,10 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
   }
 
   @Override
-  public <S extends CollectionDto> S create(S resource) {
+  public <S extends MaterialSampleTypeDto> S create(S resource) {
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
   }
+  
 }

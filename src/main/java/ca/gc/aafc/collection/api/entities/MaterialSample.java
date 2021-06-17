@@ -98,6 +98,10 @@ public class MaterialSample implements DinaEntity {
     @ToString.Exclude
     private PreparationType preparationType;
 
+    @ManyToOne
+    @ToString.Exclude
+    private MaterialSampleType materialSampleType;
+
     @Column(name = "prepared_by")
     private UUID preparedBy;
 

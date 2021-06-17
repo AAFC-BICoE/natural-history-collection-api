@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -33,7 +34,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "preparation-type";
 
-  private static final String name = "isolate ocean water";
+  private static final String name = "water";
 
   static {
     URI_BUILDER.setScheme("https");
@@ -51,7 +52,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
 
   @SneakyThrows
   @Test
-  void collectingEvent_SpecValid() {
+  void preparationType_SpecValid() {
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
@@ -61,7 +62,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto),
         null,
         null)
-      ).extract().asString());
+      ).extract().asString(), false);
   }
 
 }
