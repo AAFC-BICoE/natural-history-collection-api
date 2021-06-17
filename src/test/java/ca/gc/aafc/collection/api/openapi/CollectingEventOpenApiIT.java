@@ -65,7 +65,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
         Map.of(
-          "collectors", getExternalListType("agent"),
+          "collectors", getExternalListType("person"),
           "attachment", getExternalListType("metadata")),
         null)
       ).extract().asString(), true);

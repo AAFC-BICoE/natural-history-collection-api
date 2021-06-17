@@ -76,7 +76,7 @@ public class CollectingEventDto {
 
   private String verbatimEventDateTime;
 
-  @JsonApiExternalRelation(type = "agent")
+  @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
   private List<ExternalRelationDto> collectors = new ArrayList<>();
 
