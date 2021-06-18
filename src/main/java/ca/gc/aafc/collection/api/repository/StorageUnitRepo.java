@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class StorageRepo extends DinaRepository<StorageUnitDto, StorageUnit> {
+public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit> {
 
   private Optional<DinaAuthenticatedUser> authenticatedUser;
 
-  public StorageRepo(
+  public StorageUnitRepo(
     @NonNull StorageUnitService sus,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull BuildProperties buildProperties
