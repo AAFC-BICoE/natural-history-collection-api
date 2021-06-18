@@ -5,6 +5,8 @@ import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+import io.restassured.RestAssured;
+import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -25,22 +29,54 @@ import javax.transaction.Transactional;
 public class StorageUnitRestIt extends BaseRestAssuredTest {
 
   protected StorageUnitRestIt() {
-    super("/api/v1");
+    super("/api/v1/");
   }
 
   @Test
   void post() {
-    StorageUnitDto unit = newUnit();
-    String unitId = sendPost(
-      StorageUnitDto.TYPENAME,
-      JsonAPITestHelper.toJsonAPIMap(StorageUnitDto.TYPENAME, unit)
-    ).extract().body().jsonPath().getString("data.id");
+    StorageUnitDto parent = newUnit();
+    String parentId = postUnit(parent);
 
-    sendGet(StorageUnitDto.TYPENAME, unitId)
+    StorageUnitDto child = newUnit();
+    String childId = postUnit(child);
+
+    StorageUnitDto unit = newUnit();
+    String unitId = postUnitWithRelations(parentId, childId, unit);
+
+    findUnit(unitId)
       .body("data.attributes.name", Matchers.is(unit.getName()))
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
-      .body("data.attributes.createdOn", Matchers.notNullValue());
+      .body("data.attributes.createdOn", Matchers.notNullValue())
+      .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(childId))
+      .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId));
+  }
+
+  private ValidatableResponse findUnit(String unitId) {
+    return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
+      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=parentStorageUnit,storageUnitChildren").then();
+  }
+
+  private String postUnitWithRelations(String parentId, String childId, StorageUnitDto unit) {
+    return sendPost(
+      StorageUnitDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(unit),
+        Map.of(
+          "parentStorageUnit",
+          Map.of("data", Map.of("type", StorageUnitDto.TYPENAME, "id", parentId)),
+          "storageUnitChildren",
+          Map.of("data", List.of(Map.of("type", StorageUnitDto.TYPENAME, "id", childId)))),
+        null)
+    ).extract().body().jsonPath().getString("data.id");
+  }
+
+  private String postUnit(StorageUnitDto unit) {
+    return sendPost(
+      StorageUnitDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(StorageUnitDto.TYPENAME, unit)
+    ).extract().body().jsonPath().getString("data.id");
   }
 
   private StorageUnitDto newUnit() {
