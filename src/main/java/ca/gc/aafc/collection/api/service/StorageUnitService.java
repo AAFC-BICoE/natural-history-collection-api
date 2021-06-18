@@ -6,6 +6,7 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class StorageUnitService extends DefaultDinaService<StorageUnit> {
 
-  public StorageUnitService(@NonNull BaseDAO baseDAO) {
-    super(baseDAO);
+  public StorageUnitService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
+    super(baseDAO, sv);
   }
 
   @Override
