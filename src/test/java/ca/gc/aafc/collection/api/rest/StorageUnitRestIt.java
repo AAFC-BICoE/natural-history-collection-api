@@ -58,6 +58,26 @@ public class StorageUnitRestIt extends BaseRestAssuredTest {
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 
+  @Test
+  void delete() {
+    StorageUnitDto parent = newUnit();
+    String parentId = postUnit(parent);
+
+    StorageUnitDto child = newUnit();
+    String childId = postUnit(child);
+
+    StorageUnitDto unit = newUnit();
+    String unitId = postUnitWithRelations(parentId, childId, unit);
+
+    sendDelete(StorageUnitDto.TYPENAME, unitId);
+    findUnit(childId)
+      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
+      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
+    findUnit(parentId)
+      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
+      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
+  }
+
   private ValidatableResponse findUnit(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
       .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=parentStorageUnit,storageUnitChildren").then();
