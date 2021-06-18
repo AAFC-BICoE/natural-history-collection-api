@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -38,12 +39,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "material-sample";
 
-  private static final String dwcCatalogNumber = "55342";
-  private static final String materialSampleName = "S-412";
-
-  private static final String createdBy = "test user";
-  private static final String group = "test group";
-
   static {
     URI_BUILDER.setScheme("https");
     URI_BUILDER.setHost(SPEC_HOST);
@@ -61,35 +56,29 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
-    MaterialSampleDto ms = new MaterialSampleDto();
-    ms.setCreatedBy(createdBy);  
-    ms.setGroup(group);  
-    ms.setDwcCatalogNumber(dwcCatalogNumber);
-    ms.setMaterialSampleName(materialSampleName);
+    MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
-    ms.setCollectingEvent(null);
     ms.setParentMaterialSample(null);
     ms.setMaterialSampleChildren(null);
+    ms.setPreparedBy(null);
 
-    MaterialSampleDto parent = new MaterialSampleDto();
-    parent.setCreatedBy(createdBy);
-    parent.setGroup(group);
-    parent.setDwcCatalogNumber("parent" + dwcCatalogNumber);
-    parent.setMaterialSampleName("parent" + materialSampleName);
+    MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
+    parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
+    parent.setMaterialSampleName("parent" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
     parent.setAttachment(null);
-    parent.setCollectingEvent(null);
     parent.setParentMaterialSample(null);
     parent.setMaterialSampleChildren(null);
+    parent.setPreparedBy(null);
 
-    MaterialSampleDto child = new MaterialSampleDto();
-    child.setCreatedBy(createdBy);
-    child.setGroup(group);
-    child.setDwcCatalogNumber("child" + dwcCatalogNumber);
-    child.setMaterialSampleName("child" + materialSampleName); 
+
+    MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
+    child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
+    child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME); 
     child.setAttachment(null);
-    child.setCollectingEvent(null);
     child.setParentMaterialSample(null);
     child.setMaterialSampleChildren(null);
+    child.setPreparedBy(null);
+
     
     sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent)));
     sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child)));
