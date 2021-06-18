@@ -50,6 +50,12 @@ public class StorageUnitRestIt extends BaseRestAssuredTest {
       .body("data.attributes.createdOn", Matchers.notNullValue())
       .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(childId))
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId));
+    findUnit(childId)
+      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
+      .body("data.relationships.parentStorageUnit.data.id", Matchers.is(unitId));
+    findUnit(parentId)
+      .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(unitId))
+      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 
   private ValidatableResponse findUnit(String unitId) {
