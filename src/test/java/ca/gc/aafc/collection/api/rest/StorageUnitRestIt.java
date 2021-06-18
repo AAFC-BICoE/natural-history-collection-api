@@ -8,6 +8,7 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,21 +29,29 @@ import java.util.Map;
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class StorageUnitRestIt extends BaseRestAssuredTest {
 
+  private String parentId;
+  private String childId;
+  private StorageUnitDto unit;
+  private String unitId;
+
   protected StorageUnitRestIt() {
     super("/api/v1/");
   }
 
-  @Test
-  void post() {
+  @BeforeEach
+  void setUp() {
     StorageUnitDto parent = newUnit();
-    String parentId = postUnit(parent);
+    parentId = postUnit(parent);
 
     StorageUnitDto child = newUnit();
-    String childId = postUnit(child);
+    childId = postUnit(child);
 
-    StorageUnitDto unit = newUnit();
-    String unitId = postUnitWithRelations(parentId, childId, unit);
+    unit = newUnit();
+    unitId = postUnitWithRelations(parentId, childId, unit);
+  }
 
+  @Test
+  void find() {
     findUnit(unitId)
       .body("data.attributes.name", Matchers.is(unit.getName()))
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
@@ -60,15 +69,6 @@ public class StorageUnitRestIt extends BaseRestAssuredTest {
 
   @Test
   void delete() {
-    StorageUnitDto parent = newUnit();
-    String parentId = postUnit(parent);
-
-    StorageUnitDto child = newUnit();
-    String childId = postUnit(child);
-
-    StorageUnitDto unit = newUnit();
-    String unitId = postUnitWithRelations(parentId, childId, unit);
-
     sendDelete(StorageUnitDto.TYPENAME, unitId);
     findUnit(childId)
       .body("data.relationships.storageUnitChildren.data", Matchers.empty())
