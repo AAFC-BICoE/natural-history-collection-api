@@ -17,9 +17,12 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.PreparationType;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+
 import io.crnk.core.queryspec.QuerySpec;
 
-@SpringBootTest(properties = "keycloak.enabled=true")
+@SpringBootTest(
+  properties = "keycloak.enabled = true"
+)
 public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
@@ -29,7 +32,7 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
   private static final String name = "preparation process definition";
 
   @Test
-  @WithMockKeycloakUser(username = "user", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc: staff"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     PreparationTypeDto pt = newPreparationTypeDto();
     PreparationTypeDto result = preparationTypeRepository.findOne(
@@ -60,5 +63,4 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
     pt.setUuid(UUID.randomUUID());
     return pt;
   }
-  
 }

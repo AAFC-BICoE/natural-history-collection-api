@@ -28,7 +28,7 @@ public class CollectorGroupDto {
 
   private String name;  
 
-  @JsonApiExternalRelation(type = "agent")
+  @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
   private List<ExternalRelationDto> agentIdentifiers;
 

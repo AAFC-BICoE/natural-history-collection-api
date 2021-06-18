@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -32,6 +33,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
+  private static final int dwcMinimumElevationInMeters = 11;
+  private static final int dwcMinimumDepthInMeters = 10;
 
   private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
       GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
@@ -84,6 +87,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcStateProvince(dwcStateProvince)
       .geographicPlaceNameSource(geographicPlaceNameSource)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+      .dwcMinimumElevationInMeters(dwcMinimumElevationInMeters)
+      .dwcMinimumDepthInMeters(dwcMinimumDepthInMeters)
       .build();
     assertNull(collectingEvent.getId());
     collectingEventService.create(collectingEvent);
@@ -216,6 +221,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getStateProvince());
     assertNotNull(fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getSourceUrl());
     assertEquals(habitat, fetchedCollectingEvent.getHabitat());
+    assertEquals(dwcMinimumDepthInMeters, fetchedCollectingEvent.getDwcMinimumDepthInMeters());
+    assertEquals(dwcMinimumElevationInMeters, fetchedCollectingEvent.getDwcMinimumElevationInMeters());
   }
 
   @Test
@@ -289,6 +296,30 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void update_WithInvalidMinimumValue_throwsConstraintViolationException() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(-1);
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(-2);
+
+    assertThrows(ConstraintViolationException.class, 
+      () -> collectingEventService.update(fetchedCollectingEvent));
+
+  }
+
+  @Test
+  void update_WithNullMinimumValue_NoExceptionThrown() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(null);
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(null);
+
+    collectingEventService.update(fetchedCollectingEvent);
   }
 
 }

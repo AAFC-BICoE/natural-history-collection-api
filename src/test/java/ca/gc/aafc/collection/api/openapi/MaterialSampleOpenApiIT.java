@@ -2,10 +2,12 @@ package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import io.restassured.response.ResponseBody;
 import lombok.SneakyThrows;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
@@ -37,11 +39,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "material-sample";
 
-  private static final String dwcCatalogNumber = "55342";
-  private static final String materialSampleName = "S-412";
-
-
-
   static {
     URI_BUILDER.setScheme("https");
     URI_BUILDER.setHost(SPEC_HOST);
@@ -59,29 +56,58 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
-    MaterialSampleDto ms = new MaterialSampleDto();
-    ms.setCreatedBy("test user");  
-    ms.setGroup("test group");  
-    ms.setDwcCatalogNumber(dwcCatalogNumber);
-    ms.setMaterialSampleName(materialSampleName);
+    MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
-    ms.setCollectingEvent(null);
     ms.setParentMaterialSample(null);
     ms.setMaterialSampleChildren(null);
+    ms.setPreparedBy(null);
 
+    MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
+    parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
+    parent.setMaterialSampleName("parent" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
+    parent.setAttachment(null);
+    parent.setParentMaterialSample(null);
+    parent.setMaterialSampleChildren(null);
+    parent.setPreparedBy(null);
+
+
+    MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
+    child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
+    child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME); 
+    child.setAttachment(null);
+    child.setParentMaterialSample(null);
+    child.setMaterialSampleChildren(null);
+    child.setPreparedBy(null);
+
+    
+    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent)));
+    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child)));
+    
+    ResponseBody materialSampleResponseBody = sendGet("material-sample", "").extract().response().body();
+
+    String parentUUID = materialSampleResponseBody.path("data[0].id");
+    String childUUID = materialSampleResponseBody.path("data[1].id");
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSample",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ms),
       Map.of(
-        "attachment", getExternalListType("metadata")),
+        "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
+        "parentMaterialSample", getRelationType("material-sample", parentUUID),
+        "materialSampleChildren", getRelationListType("material-sample", childUUID)),
         null)
-      ).extract().asString());
+      ).extract().asString(), false);
   }
 
-  private Map<String, Object> getExternalListType(String type) {
+  private Map<String, Object> getRelationType(String type, String uuid) {
+    return Map.of("data", Map.of(
+      "id", uuid,
+      "type", type));
+  }
+
+  private Map<String, Object> getRelationListType(String type, String uuid) {
+
     return Map.of("data", List.of(Map.of(
-      "id", UUID.randomUUID().toString(),
+      "id", uuid,
       "type", type)));
   }
-
 }

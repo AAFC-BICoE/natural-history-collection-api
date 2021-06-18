@@ -16,8 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -40,17 +40,6 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "collecting-event";
 
-  private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
-  private static final String dwcVerbatimLocality  = "25 km NNE Bariloche por R. Nac. 237";
-  
-  private static final String dwcVerbatimLatitude = "latitude 12.123456";
-  private static final String dwcVerbatimLongitude = "long 45.01";
-  private static final String dwcVerbatimCoordinateSystem = "decimal degrees";
-  private static final String dwcVerbatimSRS = "EPSG:4326";
-  private static final String dwcVerbatimElevation = "100-200 m";
-  private static final String dwcVerbatimDepth = "10-20 m ";   
-  private static final String[] dwcOtherRecordNumbers = new String[]{"80-79"};   
-
   static {
     URI_BUILDER.setScheme("https");
     URI_BUILDER.setHost(SPEC_HOST);
@@ -68,32 +57,18 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
-    CollectingEventDto ce = new CollectingEventDto();
-    ce.setCreatedBy("test user");  
-    ce.setGroup("test group");  
-    ce.setVerbatimEventDateTime("a cold winter morning in the winter of 2099");
-    ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
-    ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
-    ce.setDwcVerbatimCoordinates("26.089, 106.36");
-    ce.setCollectors(null);
+    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ce.setGeoReferenceAssertions(null);
     ce.setAttachment(null);
-    ce.setDwcRecordedBy(dwcRecordedBy);
-    ce.setDwcVerbatimLocality(dwcVerbatimLocality);
-    ce.setDwcVerbatimLatitude(dwcVerbatimLatitude);
-    ce.setDwcVerbatimLongitude(dwcVerbatimLongitude);
-    ce.setDwcVerbatimCoordinateSystem(dwcVerbatimCoordinateSystem);
-    ce.setDwcVerbatimSRS(dwcVerbatimSRS);
-    ce.setDwcVerbatimElevation(dwcVerbatimElevation);
-    ce.setDwcVerbatimDepth(dwcVerbatimDepth); 
-    ce.setDwcOtherRecordNumbers(dwcOtherRecordNumbers);         
+    ce.setCollectors(null);
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
         Map.of(
-          "collectors", getExternalListType("agent"),
+          "collectors", getExternalListType("person"),
           "attachment", getExternalListType("metadata")),
         null)
-      ).extract().asString());
+      ).extract().asString(), true);
   }
 
   private Map<String, Object> getExternalListType(String type) {
