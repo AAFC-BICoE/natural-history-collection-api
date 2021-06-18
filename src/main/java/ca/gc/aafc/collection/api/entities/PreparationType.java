@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,5 +61,9 @@ public class PreparationType implements DinaEntity {
 
   @NotBlank
   private String name;
+
+  @Type(type = "jsonb")
+  @Column(name = "multilingual_description")
+  private MultilingualDescription multilingualDescription;
 
 }

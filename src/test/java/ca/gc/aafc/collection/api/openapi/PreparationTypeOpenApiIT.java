@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -34,8 +35,6 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "preparation-type";
 
-  private static final String name = "water";
-
   static {
     URI_BUILDER.setScheme("https");
     URI_BUILDER.setHost(SPEC_HOST);
@@ -53,10 +52,8 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void preparationType_SpecValid() {
-    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
-    preparationTypeDto.setCreatedBy("test user");
-    preparationTypeDto.setGroup("aafc");
-    preparationTypeDto.setName(name);      
+    PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
+    preparationTypeDto.setCreatedBy("test user");  
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "PreparationType",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto),
