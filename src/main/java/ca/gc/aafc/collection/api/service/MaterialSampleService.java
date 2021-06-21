@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -42,10 +40,6 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
-    Map<String, String> newMap = new HashMap<String, String>();
-    for (Map.Entry<String, String> entry : entity.getManagedAttributeValues().entrySet()) {
-      newMap.put(entry.getKey(), entry.getValue());
-    }
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributeValues());
   }
 
