@@ -60,4 +60,5 @@
   <include file="db/changelog/migrations/55-Add_structured_elevation_depth_fields.xml"/>
   <include file="db/changelog/migrations/56-Add_Storage_Unit.xml"/>
   <include file="db/changelog/migrations/57-Remove_CollectorGroup.xml"/>
+  <include file="db/changelog/migrations/58-Add_new_MultilingualDescription_related_classes.xml"/>
 </databaseChangeLog>
