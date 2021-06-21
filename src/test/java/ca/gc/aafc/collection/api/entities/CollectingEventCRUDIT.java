@@ -7,7 +7,6 @@ import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFact
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +15,10 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -323,10 +320,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     collectingEvent.setManagedAttributeValues(mavMap);
     collectingEventService.update(collectingEvent);
-    //Assert generated fields
-    assertNotNull(collectingEvent.getId());
-    assertNotNull(collectingEvent.getCreatedOn());
-    assertNotNull(collectingEvent.getUuid());
   }
 
   @Test
