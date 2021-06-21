@@ -5,7 +5,7 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <!--  Add column documents to collecting event -->
-    <changeSet id="57-Add_new_MultilingualDescription_related_classes" context="schema-change" author="stevenluu">
+    <changeSet id="58-Add_new_MultilingualDescription_related_classes" context="schema-change" author="stevenluu">
         <addColumn tableName="preparation_type">
             <column name="multilingual_description" type="jsonb"/>
         </addColumn>

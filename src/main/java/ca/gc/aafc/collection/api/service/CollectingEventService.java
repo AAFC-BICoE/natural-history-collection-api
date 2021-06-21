@@ -2,7 +2,9 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
@@ -19,7 +21,9 @@ import javax.persistence.criteria.Predicate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,17 +34,20 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final CollectingEventValidator collectingEventValidator;
   private final BaseDAO baseDAO;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
+  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull CollectingEventValidator collectingEventValidator,
-    @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator
+    @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
+    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator
   ) {
     super(baseDAO, sv);
     this.collectingEventValidator = collectingEventValidator;
     this.baseDAO = baseDAO;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
+    this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
   }
 
   @Override
@@ -62,6 +69,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateBusinessRules(CollectingEvent entity) {
     applyBusinessRule(entity, collectingEventValidator);
     validateAssertions(entity);
+    validateManagedAttribute(entity);
   }
 
   private void resolveIncomingAssertion(CollectingEvent entity) {
@@ -130,6 +138,14 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
         geo,
         entity.getUuid().toString()));
     }
+  }
+
+  private void validateManagedAttribute(CollectingEvent entity) {
+    Map<String, String> newMap = new HashMap<String, String>();
+    for (Map.Entry<String, ManagedAttributeValue> entry : entity.getManagedAttributeValues().entrySet()) {
+      newMap.put(entry.getKey(), entry.getValue().getAssignedValue());
+    }
+    collectionManagedAttributeValueValidator.validate(entity, newMap);
   }
 
   public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertion geo, @NonNull String eventUUID) {
