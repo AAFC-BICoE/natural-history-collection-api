@@ -59,4 +59,5 @@
   <include file="db/changelog/migrations/54-Add_MaterialSampleType_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/55-Add_structured_elevation_depth_fields.xml"/>
   <include file="db/changelog/migrations/56-Add_Storage_Unit.xml"/>
+  <include file="db/changelog/migrations/57-Remove_CollectorGroup.xml"/>
 </databaseChangeLog>
