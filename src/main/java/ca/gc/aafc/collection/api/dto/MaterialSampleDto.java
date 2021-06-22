@@ -3,7 +3,9 @@ package ca.gc.aafc.collection.api.dto;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
@@ -15,9 +17,11 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
+import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 
 @RelatedEntity(MaterialSample.class)
@@ -68,4 +72,7 @@ public class MaterialSampleDto {
     private ExternalRelationDto preparedBy;
 
     private LocalDate preparationDate;
+
+    @JsonApiField(patchStrategy = PatchStrategy.SET)
+    private Map<String, String> managedAttributes = new HashMap<>();
 }
