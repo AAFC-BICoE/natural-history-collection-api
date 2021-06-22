@@ -7,7 +7,6 @@ import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFact
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +15,10 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -309,7 +306,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void validate_WhenValidStringType() {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{})
+      .acceptedValues(null)
       .build();
 
     collectionManagedAttributeService.create(testManagedAttribute);
@@ -322,17 +319,13 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     mavMap.put(testManagedAttribute.getKey(), mav);
 
     collectingEvent.setManagedAttributes(mavMap);
-    collectingEventService.update(collectingEvent);
-    //Assert generated fields
-    assertNotNull(collectingEvent.getId());
-    assertNotNull(collectingEvent.getCreatedOn());
-    assertNotNull(collectingEvent.getUuid());
+    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
   }
 
   @Test
   void validate_WhenInvalidIntegerTypeExceptionThrown() {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{})
+      .acceptedValues(null)
       .managedAttributeType(ManagedAttributeType.INTEGER)
       .build();
 
@@ -365,7 +358,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     mavMap.put(testManagedAttribute.getKey(), mav);
 
     collectingEvent.setManagedAttributes(mavMap);
-    collectingEventService.update(collectingEvent);
+    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
   }
 
   @Test

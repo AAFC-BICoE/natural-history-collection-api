@@ -3,21 +3,29 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
+import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
@@ -61,6 +69,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             .group(materialSampleTypeExpectedGroup)
             .name(materialSampleTypeExpectedName)
             .build();
+        materialSampleTypeService.create(materialSampleType);
 
         materialSample = MaterialSampleFactory.newMaterialSample()
             .dwcCatalogNumber(dwcCatalogNumber)
@@ -157,6 +166,56 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(fetchedParent.getUuid(), child.getParentMaterialSample().getUuid());
         assertEquals(1, fetchedParent.getMaterialSampleChildren().size());
         assertEquals(child.getUuid(), fetchedParent.getMaterialSampleChildren().get(0).getUuid());
+    }
+
+    @Test
+    void validate_WhenValidStringType() {
+      CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .build();
+  
+      collectionManagedAttributeService.create(testManagedAttribute);
+ 
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "anything"));
+      assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+    }
+  
+    @Test
+    void validate_WhenInvalidIntegerTypeExceptionThrown() {
+      CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .managedAttributeType(ManagedAttributeType.INTEGER)
+        .build();
+  
+      collectionManagedAttributeService.create(testManagedAttribute);
+  
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"));
+
+      assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
+    }
+  
+    @Test
+    void assignedValueContainedInAcceptedValues_validationPasses() {
+      CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(new String[]{"val1", "val2"})
+        .build();
+  
+      collectionManagedAttributeService.create(testManagedAttribute);
+  
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]));
+      assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+    }
+  
+    @Test
+    void assignedValueNotContainedInAcceptedValues_validationPasses() {
+      CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(new String[]{"val1", "val2"})
+        .build();
+  
+      collectionManagedAttributeService.create(testManagedAttribute);
+  
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val3"));
+      assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
     }
     
 }

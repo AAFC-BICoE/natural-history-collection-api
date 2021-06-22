@@ -3,7 +3,9 @@ package ca.gc.aafc.collection.api.entities;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -106,5 +108,10 @@ public class MaterialSample implements DinaEntity {
     private UUID preparedBy;
 
     private LocalDate preparationDate;
+
+    @Type(type = "jsonb")
+    @NotNull
+    @Builder.Default
+    private Map<String, String> managedAttributes = new HashMap<>();
 
 }

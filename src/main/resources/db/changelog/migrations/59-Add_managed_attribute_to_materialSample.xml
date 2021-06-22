@@ -4,11 +4,8 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="60-Update_collecting-event_managed_attributes" context="schema-change" author="stevenluu">
-        <dropColumn tableName="collecting_event">
-            <column name="managed_attribute_values"/>
-        </dropColumn>
-        <addColumn tableName="collecting_event">
+    <changeSet id="59-Add_managed_attribute_to_materialSample" context="schema-change" author="stevenluu">
+        <addColumn tableName="material_sample">
             <column name="managed_attributes" type="jsonb" defaultValue="{}" />
         </addColumn>
     </changeSet>
