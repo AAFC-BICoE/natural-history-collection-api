@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
@@ -21,9 +20,7 @@ import javax.persistence.criteria.Predicate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -141,11 +138,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
-    Map<String, String> newMap = new HashMap<String, String>();
-    for (Map.Entry<String, ManagedAttributeValue> entry : entity.getManagedAttributes().entrySet()) {
-      newMap.put(entry.getKey(), entry.getValue().getAssignedValue());
-    }
-    collectionManagedAttributeValueValidator.validate(entity, newMap);
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes());
   }
 
   public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertion geo, @NonNull String eventUUID) {
@@ -169,7 +162,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     }
     // Remove blank Managed Attribute values:
     values.entrySet().removeIf(
-      entry -> StringUtils.isBlank(entry.getValue().getAssignedValue())
+      entry -> StringUtils.isBlank(entry.getValue())
     );
   }
 
