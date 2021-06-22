@@ -90,7 +90,7 @@ public class CollectingEventDto {
    * Map of Managed attribute key to value object.
    */
   @JsonApiField(patchStrategy = PatchStrategy.SET)
-  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, ManagedAttributeValue> managedAttributes = Map.of();
 
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;

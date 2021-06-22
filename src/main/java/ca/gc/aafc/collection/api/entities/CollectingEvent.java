@@ -171,7 +171,7 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "jsonb")
   @NotNull
   @Builder.Default
-  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, ManagedAttributeValue> managedAttributes = Map.of();
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)

@@ -321,7 +321,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
     mavMap.put(testManagedAttribute.getKey(), mav);
 
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(mavMap);
     collectingEventService.update(collectingEvent);
     //Assert generated fields
     assertNotNull(collectingEvent.getId());
@@ -345,7 +345,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
     mavMap.put(testManagedAttribute.getKey(), mav);
 
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(mavMap);
     assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 
@@ -364,7 +364,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
     mavMap.put(testManagedAttribute.getKey(), mav);
 
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(mavMap);
     collectingEventService.update(collectingEvent);
   }
 
@@ -383,7 +383,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
     mavMap.put(testManagedAttribute.getKey(), mav);
 
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(mavMap);
     assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 

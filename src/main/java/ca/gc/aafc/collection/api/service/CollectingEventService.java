@@ -53,14 +53,14 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   @Override
   protected void preCreate(CollectingEvent entity) {
     entity.setUuid(UUID.randomUUID());
-    cleanupManagedAttributeValues(entity);
+    cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
     linkAssertions(entity, entity.getGeoReferenceAssertions());
   }
 
   @Override
   public void preUpdate(CollectingEvent entity) {
-    cleanupManagedAttributeValues(entity);
+    cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
     resolveIncomingAssertion(entity);
   }
@@ -142,7 +142,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private void validateManagedAttribute(CollectingEvent entity) {
     Map<String, String> newMap = new HashMap<String, String>();
-    for (Map.Entry<String, ManagedAttributeValue> entry : entity.getManagedAttributeValues().entrySet()) {
+    for (Map.Entry<String, ManagedAttributeValue> entry : entity.getManagedAttributes().entrySet()) {
       newMap.put(entry.getKey(), entry.getValue().getAssignedValue());
     }
     collectionManagedAttributeValueValidator.validate(entity, newMap);
@@ -162,8 +162,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     });
   }
 
-  private void cleanupManagedAttributeValues(CollectingEvent entity) {
-    var values = entity.getManagedAttributeValues();
+  private void cleanupManagedAttributes(CollectingEvent entity) {
+    var values = entity.getManagedAttributes();
     if (values == null) {
       return;
     }
