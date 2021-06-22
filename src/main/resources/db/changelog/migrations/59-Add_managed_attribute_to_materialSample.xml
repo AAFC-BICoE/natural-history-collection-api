@@ -6,7 +6,7 @@
 
     <changeSet id="59-Add_managed_attribute_to_materialSample" context="schema-change" author="stevenluu">
         <addColumn tableName="material_sample">
-            <column name="managed_attribute_values" type="jsonb" defaultValue="{}" />
+            <column name="managed_attributes" type="jsonb" defaultValue="{}" />
         </addColumn>
     </changeSet>
 

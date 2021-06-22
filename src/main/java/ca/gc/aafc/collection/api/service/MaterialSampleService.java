@@ -40,7 +40,7 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributeValues());
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes());
   }
 
 }

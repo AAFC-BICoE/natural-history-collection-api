@@ -112,6 +112,6 @@ public class MaterialSample implements DinaEntity {
     @Type(type = "jsonb")
     @NotNull
     @Builder.Default
-    private Map<String, String> managedAttributeValues = new HashMap<>();
+    private Map<String, String> managedAttributes = new HashMap<>();
 
 }

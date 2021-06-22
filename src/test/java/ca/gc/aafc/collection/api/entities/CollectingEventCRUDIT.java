@@ -306,7 +306,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void validate_WhenValidStringType() {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{})
+      .acceptedValues(null)
       .build();
 
     collectionManagedAttributeService.create(testManagedAttribute);
@@ -319,13 +319,13 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     mavMap.put(testManagedAttribute.getKey(), mav);
 
     collectingEvent.setManagedAttributeValues(mavMap);
-    collectingEventService.update(collectingEvent);
+    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
   }
 
   @Test
   void validate_WhenInvalidIntegerTypeExceptionThrown() {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{})
+      .acceptedValues(null)
       .managedAttributeType(ManagedAttributeType.INTEGER)
       .build();
 
@@ -358,7 +358,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     mavMap.put(testManagedAttribute.getKey(), mav);
 
     collectingEvent.setManagedAttributeValues(mavMap);
-    collectingEventService.update(collectingEvent);
+    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
   }
 
   @Test

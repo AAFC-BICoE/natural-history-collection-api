@@ -18,11 +18,11 @@ import javax.validation.ValidationException;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -171,25 +171,25 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     @Test
     void validate_WhenValidStringType() {
       CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(new String[]{})
+        .acceptedValues(null)
         .build();
   
       collectionManagedAttributeService.create(testManagedAttribute);
  
-      materialSample.setManagedAttributeValues(Map.of(testManagedAttribute.getKey(), "anything"));
-      materialSampleService.update(materialSample);
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "anything"));
+      assertDoesNotThrow(() -> materialSampleService.update(materialSample));
     }
   
     @Test
     void validate_WhenInvalidIntegerTypeExceptionThrown() {
       CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(new String[]{})
+        .acceptedValues(null)
         .managedAttributeType(ManagedAttributeType.INTEGER)
         .build();
   
       collectionManagedAttributeService.create(testManagedAttribute);
   
-      materialSample.setManagedAttributeValues(Map.of(testManagedAttribute.getKey(), "1.2"));
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"));
 
       assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
     }
@@ -202,8 +202,8 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   
       collectionManagedAttributeService.create(testManagedAttribute);
   
-      materialSample.setManagedAttributeValues(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]));
-      materialSampleService.update(materialSample);
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]));
+      assertDoesNotThrow(() -> materialSampleService.update(materialSample));
     }
   
     @Test
@@ -214,7 +214,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   
       collectionManagedAttributeService.create(testManagedAttribute);
   
-      materialSample.setManagedAttributeValues(Map.of(testManagedAttribute.getKey(), "val3"));
+      materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val3"));
       assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
     }
     

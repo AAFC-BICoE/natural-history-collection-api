@@ -74,5 +74,5 @@ public class MaterialSampleDto {
     private LocalDate preparationDate;
 
     @JsonApiField(patchStrategy = PatchStrategy.SET)
-    private Map<String, String> managedAttributeValues = new HashMap<>();
+    private Map<String, String> managedAttributes = new HashMap<>();
 }
