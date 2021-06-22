@@ -5,12 +5,7 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <changeSet id="60-Update_collecting-event_managed_attributes" context="schema-change" author="stevenluu">
-        <dropColumn tableName="collecting_event">
-            <column name="managed_attribute_values"/>
-        </dropColumn>
-        <addColumn tableName="collecting_event">
-            <column name="managed_attributes" type="jsonb" defaultValue="{}" />
-        </addColumn>
+        <renameColumn tableName="collecting_event" oldColumnName="managed_attribute_values" newColumnName="managed_attributes"/>
     </changeSet>
 
 </databaseChangeLog>
