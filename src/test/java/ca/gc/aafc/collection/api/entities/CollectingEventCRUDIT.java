@@ -311,14 +311,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     collectionManagedAttributeService.create(testManagedAttribute);
 
-    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
-      .assignedValue("new string value")
-      .build();
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "anything");
 
-    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
-    mavMap.put(testManagedAttribute.getKey(), mav);
-
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(maMap);
     assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
   }
 
@@ -331,14 +327,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     collectionManagedAttributeService.create(testManagedAttribute);
 
-    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
-      .assignedValue("1.2")
-      .build();
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "1.2");
 
-    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
-    mavMap.put(testManagedAttribute.getKey(), mav);
-
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(maMap);
     assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 
@@ -350,14 +342,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     collectionManagedAttributeService.create(testManagedAttribute);
 
-    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
-      .assignedValue("val1")
-      .build();
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]);
 
-    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
-    mavMap.put(testManagedAttribute.getKey(), mav);
-
-    collectingEvent.setManagedAttributeValues(mavMap);
+    collectingEvent.setManagedAttributes(maMap);
     assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
   }
 
@@ -369,14 +357,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     collectionManagedAttributeService.create(testManagedAttribute);
 
-    CollectingEvent.ManagedAttributeValue mav = CollectingEvent.ManagedAttributeValue.builder()
-      .assignedValue("val3")
-      .build();
-
-    Map<String, CollectingEvent.ManagedAttributeValue> mavMap = new HashMap<>();
-    mavMap.put(testManagedAttribute.getKey(), mav);
-
-    collectingEvent.setManagedAttributeValues(mavMap);
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "val3");
+    
+    collectingEvent.setManagedAttributes(maMap);
     assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 

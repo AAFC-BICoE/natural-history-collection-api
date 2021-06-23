@@ -10,9 +10,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -171,7 +169,7 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "jsonb")
   @NotNull
   @Builder.Default
-  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, String> managedAttributes = Map.of();
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
@@ -232,14 +230,6 @@ public class CollectingEvent implements DinaEntity {
     return ISODateTime.builder().localDateTime(endEventDateTime)
       .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
       .build();
-  }
-
-  @Data
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class ManagedAttributeValue {
-    private String assignedValue;
   }
 
 }

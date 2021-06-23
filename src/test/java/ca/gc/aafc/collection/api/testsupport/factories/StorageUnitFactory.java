@@ -1,5 +1,7 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
@@ -21,6 +23,7 @@ public class StorageUnitFactory implements TestableEntityFactory<StorageUnit> {
       return StorageUnit
           .builder()
           .group("test group")
+          .name(RandomStringUtils.randomAlphabetic(4))
           .createdBy("test user");
     }
 

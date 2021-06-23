@@ -1,7 +1,9 @@
 package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -56,11 +58,22 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
+    CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
+    collectionManagedAttributeDto.setName("name");
+    collectionManagedAttributeDto.setGroup("group");
+    collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING);
+    collectionManagedAttributeDto.setAcceptedValues(null);
+    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    collectionManagedAttributeDto.setCreatedBy("dina");     
+
+    sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
+
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setParentMaterialSample(null);
     ms.setMaterialSampleChildren(null);
     ms.setPreparedBy(null);
+    ms.setManagedAttributes(Map.of("name", "anything"));
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);

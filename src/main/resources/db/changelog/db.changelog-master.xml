@@ -62,5 +62,6 @@
   <include file="db/changelog/migrations/57-Remove_CollectorGroup.xml"/>
   <include file="db/changelog/migrations/58-Add_new_MultilingualDescription_related_classes.xml"/>
   <include file="db/changelog/migrations/59-Add_managed_attribute_to_materialSample.xml"/>
+  <include file="db/changelog/migrations/60-Update_collecting-event_managed_attributes.xml"/>
   <include file="db/changelog/migrations/61-Add_relationship_from_MaterialSample_to_StorageUnit.xml"/>
 </databaseChangeLog>
