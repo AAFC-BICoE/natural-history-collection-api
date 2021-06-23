@@ -114,4 +114,8 @@ public class MaterialSample implements DinaEntity {
     @Builder.Default
     private Map<String, String> managedAttributes = new HashMap<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "storage_unit_id")
+    private StorageUnit storageUnit;
+
 }

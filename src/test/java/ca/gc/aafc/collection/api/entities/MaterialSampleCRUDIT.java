@@ -1,19 +1,17 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.MaterialSampleService;
-import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.inject.Inject;
 import javax.validation.ValidationException;
 
 import java.time.LocalDate;
@@ -31,12 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
-    @Inject
-    private PreparationTypeService preparationTypeService;
-
-    @Inject
-    private MaterialSampleService materialSampleService;
-
     private List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
     private static final String dwcCatalogNumber = "S-4313";
@@ -50,13 +42,25 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     private static final String materialSampleTypeExpectedCreatedBy = "material-sample-type-save";
     private static final String materialSampleTypeExpectedGroup = "material-sample-type-group-save";
     private static final String materialSampleTypeExpectedName = "liquid lake water sample";
+    private static final String storageUnitExpectedCreatedBy = "su-createdBy";
+    private static final String storageUnitExpectedGroup = "su-dina";
+    private static final String storageUnitExpectedName = "su-name";
     private static final LocalDate preparationDate = LocalDate.now();
     private PreparationType preparationType;
     private MaterialSampleType materialSampleType;
     private MaterialSample materialSample;
+    private StorageUnit storageUnit;
+
 
     @BeforeEach
     void setup() {
+        storageUnit = StorageUnitFactory.newStorageUnit()
+            .createdBy(storageUnitExpectedCreatedBy)
+            .group(storageUnitExpectedGroup)
+            .name(storageUnitExpectedName)
+            .build();
+        storageUnitService.create(storageUnit);
+
         preparationType = PreparationTypeFactory.newPreparationType()
             .createdBy(preparationExpectedCreatedBy)
             .group(preparationExpectedGroup)
@@ -81,6 +85,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             .preparationDate(preparationDate)
             .preparationType(preparationType)
             .materialSampleType(materialSampleType)
+            .storageUnit(storageUnit)
             .build();
         materialSampleService.create(materialSample);
     }
@@ -109,6 +114,11 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
         assertEquals(preparedBy, materialSample.getPreparedBy());
         assertEquals(preparationDate, materialSample.getPreparationDate());
+
+        assertEquals(storageUnit.getId(), materialSample.getStorageUnit().getId());
+        assertEquals(storageUnitExpectedCreatedBy, materialSample.getStorageUnit().getCreatedBy());
+        assertEquals(storageUnitExpectedGroup, materialSample.getStorageUnit().getGroup());
+        assertEquals(storageUnitExpectedName, materialSample.getStorageUnit().getName());
     }
 
     @Test
@@ -128,10 +138,15 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
         assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());
 
-        assertEquals(materialSampleType.getId(), materialSample.getMaterialSampleType().getId());
-        assertEquals(materialSampleTypeExpectedCreatedBy, materialSample.getMaterialSampleType().getCreatedBy());
-        assertEquals(materialSampleTypeExpectedGroup, materialSample.getMaterialSampleType().getGroup());
-        assertEquals(materialSampleTypeExpectedName, materialSample.getMaterialSampleType().getName());
+        assertEquals(materialSampleType.getId(), fetchedMaterialSample.getMaterialSampleType().getId());
+        assertEquals(materialSampleTypeExpectedCreatedBy, fetchedMaterialSample.getMaterialSampleType().getCreatedBy());
+        assertEquals(materialSampleTypeExpectedGroup, fetchedMaterialSample.getMaterialSampleType().getGroup());
+        assertEquals(materialSampleTypeExpectedName, fetchedMaterialSample.getMaterialSampleType().getName());
+
+        assertEquals(storageUnit.getId(), fetchedMaterialSample.getStorageUnit().getId());
+        assertEquals(storageUnitExpectedCreatedBy, fetchedMaterialSample.getStorageUnit().getCreatedBy());
+        assertEquals(storageUnitExpectedGroup, fetchedMaterialSample.getStorageUnit().getGroup());
+        assertEquals(storageUnitExpectedName, fetchedMaterialSample.getStorageUnit().getName());
         
         assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy());
         assertEquals(preparationDate, fetchedMaterialSample.getPreparationDate());

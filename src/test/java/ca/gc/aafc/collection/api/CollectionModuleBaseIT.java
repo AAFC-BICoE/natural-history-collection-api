@@ -8,6 +8,8 @@ import ca.gc.aafc.collection.api.service.MaterialSampleTypeService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
+import ca.gc.aafc.collection.api.service.StorageUnitService;
+import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,5 +50,11 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected CollectionService collectionService;
+
+  @Inject
+  protected StorageUnitService storageUnitService;
+
+  @Inject
+  protected StorageUnitTypeService storageUnitTypeService;
 }
 

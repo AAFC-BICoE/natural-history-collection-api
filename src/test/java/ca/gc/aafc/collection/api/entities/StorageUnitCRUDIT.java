@@ -1,21 +1,17 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.StorageUnitService;
+import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
-
-import javax.inject.Inject;
 
 class StorageUnitCRUDIT extends CollectionModuleBaseIT {
 
-  @Inject
-  private StorageUnitService storageUnitService;
-
   @Test
   void create() {
-    StorageUnit unit = newUnit();
+    StorageUnit unit = StorageUnitFactory.newStorageUnit()
+      .build();
     storageUnitService.create(unit);
 
     StorageUnit result = storageUnitService.findOne(unit.getUuid(), StorageUnit.class);
@@ -25,11 +21,4 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(unit.getGroup(), result.getGroup());
   }
 
-  private StorageUnit newUnit() {
-    return StorageUnit.builder()
-      .name(RandomStringUtils.randomAlphabetic(4))
-      .group(RandomStringUtils.randomAlphabetic(5))
-      .createdBy("dina")
-      .build();
-  }
 }

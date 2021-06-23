@@ -75,4 +75,7 @@ public class MaterialSampleDto {
 
     @JsonApiField(patchStrategy = PatchStrategy.SET)
     private Map<String, String> managedAttributes = new HashMap<>();
+
+    @JsonApiRelation
+    private StorageUnitDto storageUnit;
 }
