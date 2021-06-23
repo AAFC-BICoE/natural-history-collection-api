@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -90,7 +89,7 @@ public class CollectingEventDto {
    * Map of Managed attribute key to value object.
    */
   @JsonApiField(patchStrategy = PatchStrategy.SET)
-  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, String> managedAttributes = Map.of();
 
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;
