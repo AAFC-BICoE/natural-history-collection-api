@@ -66,7 +66,15 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateBusinessRules(CollectingEvent entity) {
     applyBusinessRule(entity, collectingEventValidator);
     validateAssertions(entity);
+
+    List<GeoreferenceAssertion> incomingAssertions = entity.getGeoReferenceAssertions();
+    entity.setGeoReferenceAssertions(null); // Set null due to flushing mechanics with validateManagedAttribute
+
     validateManagedAttribute(entity);
+
+    if (CollectionUtils.isNotEmpty(incomingAssertions)) {
+      entity.setGeoReferenceAssertions(incomingAssertions);
+    }
   }
 
   private void resolveIncomingAssertion(CollectingEvent entity) {
