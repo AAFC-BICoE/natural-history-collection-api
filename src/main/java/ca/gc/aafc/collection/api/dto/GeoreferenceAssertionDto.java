@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
-import ca.gc.aafc.dina.dto.RelatedEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RelatedEntity(GeoreferenceAssertion.class)
 @Value
 public class GeoreferenceAssertionDto {
   private Double dwcDecimalLatitude;
