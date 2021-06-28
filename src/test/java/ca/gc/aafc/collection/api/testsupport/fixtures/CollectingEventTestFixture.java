@@ -49,7 +49,6 @@ public class CollectingEventTestFixture {
     .dwcGeoreferenceProtocol("protocol")
     .dwcGeoreferenceVerificationStatus(null)
     .dwcGeodeticDatum("datum")
-    .createdOn(OffsetDateTime.now())
     .dwcCoordinateUncertaintyInMeters(2)
     .build();
   

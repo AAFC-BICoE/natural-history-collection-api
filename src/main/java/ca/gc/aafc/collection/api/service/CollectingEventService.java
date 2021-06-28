@@ -65,6 +65,9 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     if (entity.getGeographicPlaceNameSourceDetail() != null) {
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
+    if(CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())){
+      entity.getGeoReferenceAssertions().forEach(geo -> geo.setCreatedOn(OffsetDateTime.now()));
+    }
   }
 
   private void validateAssertions(@NonNull CollectingEvent entity) {
