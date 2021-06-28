@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
 import lombok.NonNull;
 import org.springframework.context.MessageSource;
@@ -20,7 +20,7 @@ public class GeoreferenceAssertionValidator implements Validator {
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return GeoreferenceAssertion.class.isAssignableFrom(clazz);
+    return GeoreferenceAssertionDto.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -28,7 +28,7 @@ public class GeoreferenceAssertionValidator implements Validator {
     if (!supports(target.getClass())) {
       throw new IllegalArgumentException("GeorefenceAssertionValidator not supported for class " + target.getClass());
     }
-    GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
+    GeoreferenceAssertionDto georeferenceAssertion = (GeoreferenceAssertionDto) target;
 
     if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
       (georeferenceAssertion.getDwcDecimalLatitude() != null || georeferenceAssertion.getDwcDecimalLongitude() != null || georeferenceAssertion
