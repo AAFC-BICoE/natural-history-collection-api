@@ -1,20 +1,21 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class CollectingEventTestFixture {
 
@@ -41,6 +42,15 @@ public class CollectingEventTestFixture {
     .dwcDecimalLongitude(45.01)
     .dwcGeoreferencedDate(TEST_GEOREFERENCE_DATE)
     .isPrimary(true)
+    .georeferencedBy(Collections.singletonList(UUID.randomUUID()))
+    .literalGeoreferencedBy("dina literal by")
+    .dwcGeoreferenceSources("source")
+    .dwcGeoreferenceRemarks("remarks")
+    .dwcGeoreferenceProtocol("protocol")
+    .dwcGeoreferenceVerificationStatus(null)
+    .dwcGeodeticDatum("datum")
+    .createdOn(OffsetDateTime.now())
+    .dwcCoordinateUncertaintyInMeters(2)
     .build();
   
   public static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
