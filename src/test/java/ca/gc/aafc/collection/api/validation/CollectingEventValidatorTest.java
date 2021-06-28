@@ -1,15 +1,13 @@
 package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.Country;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import lombok.SneakyThrows;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
@@ -18,7 +16,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import javax.inject.Inject;
-
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -44,9 +41,9 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenOneAssertionIsPrimary_ValidationSuccess() {
-    GeoreferenceAssertion assertion = newAssertion();
+    GeoreferenceAssertionDto assertion = newAssertion();
     assertion.setIsPrimary(true);
-    GeoreferenceAssertion assertion2 = newAssertion();
+    GeoreferenceAssertionDto assertion2 = newAssertion();
     assertion2.setIsPrimary(false);
 
     CollectingEvent event = newEvent();
@@ -59,7 +56,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_AssertionSizeIsOneAndPrimary_ValidationSuccess() {
-    GeoreferenceAssertion assertion = newAssertion();
+    GeoreferenceAssertionDto assertion = newAssertion();
     assertion.setIsPrimary(true);
 
     CollectingEvent event = newEvent();
@@ -74,7 +71,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
   void validate_AssertionSizeIsOneAndNotPrimary_ErrorsReturned() {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_PRIMARY_KEY);
 
-    GeoreferenceAssertion assertion = newAssertion();
+    GeoreferenceAssertionDto assertion = newAssertion();
     assertion.setIsPrimary(false);
 
     CollectingEvent event = newEvent();
@@ -90,7 +87,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
   void validate_MoreThenOnePrimaryAssertion_ErrorsReturned() {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_PRIMARY_KEY);
 
-    GeoreferenceAssertion assertion = newAssertion();
+    GeoreferenceAssertionDto assertion = newAssertion();
     assertion.setIsPrimary(true);
 
     CollectingEvent event = newEvent();
@@ -106,7 +103,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
   void validate_NoAssertionsArePrimary_ErrorsReturned() {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_PRIMARY_KEY);
 
-    GeoreferenceAssertion assertion = newAssertion();
+    GeoreferenceAssertionDto assertion = newAssertion();
     assertion.setIsPrimary(false);
 
     CollectingEvent event = newEvent();
@@ -156,7 +153,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     sourceAdministrativeLevel.setElement("not N W or R");
 
     GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = newGeographicPlaceNameSourceDetail();
-    geographicPlaceNameSourceDetail.setSelectedGeographicPlace(sourceAdministrativeLevel);;
+    geographicPlaceNameSourceDetail.setSelectedGeographicPlace(sourceAdministrativeLevel);
     geographicPlaceNameSourceDetail.setHigherGeographicPlaces(Arrays.asList(sourceAdministrativeLevel));
     
     CollectingEvent event = newEventWithGeographicPlaceNameSource();
@@ -180,8 +177,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
       .build();
   }
 
-  private static GeoreferenceAssertion newAssertion() {
-    return GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+  private static GeoreferenceAssertionDto newAssertion() {
+    return GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(12.123456)
       .dwcDecimalLongitude(45.01)
       .dwcCoordinateUncertaintyInMeters(10)

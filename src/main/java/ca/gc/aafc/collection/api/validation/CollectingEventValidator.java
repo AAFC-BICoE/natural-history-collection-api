@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.validation;
 
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
@@ -49,7 +49,7 @@ public class CollectingEventValidator implements Validator {
     validateGeographicPlaceNameSourceDetail(errors, collectingEvent);
   }
 
-  private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertion> geoReferenceAssertions) {
+  private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertionDto> geoReferenceAssertions) {
     if (CollectionUtils.isNotEmpty(geoReferenceAssertions) && countPrimaries(geoReferenceAssertions) != 1) {
       addError(errors,  VALID_PRIMARY_KEY);
     }
@@ -93,7 +93,7 @@ public class CollectingEventValidator implements Validator {
     }
   }
 
-  private static long countPrimaries(List<GeoreferenceAssertion> geoReferenceAssertions) {
+  private static long countPrimaries(List<GeoreferenceAssertionDto> geoReferenceAssertions) {
     if (CollectionUtils.isEmpty(geoReferenceAssertions)) {
       return 0;
     }
