@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,6 +69,8 @@ public class CollectingEventTestFixture {
   }
 
   public static CollectingEventDto newEventDto() {
+    List<GeoreferenceAssertionDto> assertions = new ArrayList<>();
+    assertions.add(GEOREFERENCE_ASSERTION_DTO);
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("aafc");
     ce.setCreatedBy("test user");
@@ -78,7 +81,7 @@ public class CollectingEventTestFixture {
     ce.setDwcVerbatimCoordinates(VER_COOR);
     ce.setGeographicPlaceNameSourceDetail(newGeographicPlaceNameSourceDetail());
     ce.setGeographicPlaceNameSource(GEOGRAPHIC_PLACE_NAME_SOURCE);
-    ce.setGeoReferenceAssertions(List.of(GEOREFERENCE_ASSERTION_DTO));
+    ce.setGeoReferenceAssertions(assertions);
     ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(
