@@ -64,4 +64,5 @@
   <include file="db/changelog/migrations/59-Add_managed_attribute_to_materialSample.xml"/>
   <include file="db/changelog/migrations/60-Update_collecting-event_managed_attributes.xml"/>
   <include file="db/changelog/migrations/61-Add_relationship_from_MaterialSample_to_StorageUnit.xml"/>
+  <include file="db/changelog/initial-data/1-Create_MolecularSample_MaterialSampleType.xml"/>
 </databaseChangeLog>
