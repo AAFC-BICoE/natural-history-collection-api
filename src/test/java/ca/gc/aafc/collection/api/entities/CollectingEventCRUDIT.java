@@ -1,12 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
-  private GeoreferenceAssertion geoReferenceAssertion;
+  private GeoreferenceAssertionDto geoReferenceAssertion;
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
@@ -68,7 +68,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setUp() {
-    geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    geoReferenceAssertion = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(12.123456)
       .isPrimary(true)
       .build();
@@ -160,11 +160,11 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void create_WithInvalidGeoPrimaries_ValidationException() {
     final CollectingEvent eventToManyPrimaries = CollectingEventFactory.newCollectingEvent().build();
 
-    GeoreferenceAssertion geo = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(1.0)
       .isPrimary(true)
       .build();
-    GeoreferenceAssertion geo2 = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo2 =  GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(1.0)
       .isPrimary(true)
       .build();
@@ -186,8 +186,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertThrows(ValidationException.class, () -> collectingEventService.create(singleNonPrimary));
 
     geo.setIsPrimary(true);
+    ArrayList<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
+    geoReferenceAssertions.add(geo);
     final CollectingEvent singleValid = CollectingEventFactory.newCollectingEvent()
-      .geoReferenceAssertions(List.of(geo))
+      .geoReferenceAssertions(geoReferenceAssertions)
       .build();
     assertDoesNotThrow(() -> collectingEventService.create(singleValid));
   }
@@ -234,25 +236,27 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void delete_Orphans_Removed() {
     collectingEventService.delete(collectingEvent);
     assertNull(collectingEventService.findOne(collectingEvent.getUuid(), CollectingEvent.class));
-    assertNull(service.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId()));
   }
 
   @Test
   void update_whenGeoAssertionsUpdated_GeosUpdated() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
-    GeoreferenceAssertion geo = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(1.0).build();
     geo.setIsPrimary(true);
-    GeoreferenceAssertion geo2 = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo2 = GeoreferenceAssertionDto.builder()
     .dwcDecimalLatitude(2.0).build();
 
     // Pop one, add two
-    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo, geo2));
+    List<GeoreferenceAssertionDto> assertions = new ArrayList<>();
+    assertions.add(geo);
+    assertions.add(geo2);
+    fetchedCollectingEvent.setGeoReferenceAssertions(assertions);
 
     collectingEventService.update(fetchedCollectingEvent);
 
-    List<GeoreferenceAssertion> results = collectingEventService
+    List<GeoreferenceAssertionDto> results = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
     assertEquals(2, results.size());
     assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
@@ -262,7 +266,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
     // remove last
-    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo));
+    assertions.clear();
+    assertions.add(geo);
+    fetchedCollectingEvent.setGeoReferenceAssertions(assertions);
     collectingEventService.update(fetchedCollectingEvent);
 
     results = collectingEventService
