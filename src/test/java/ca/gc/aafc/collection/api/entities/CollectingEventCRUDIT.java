@@ -142,7 +142,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void create_WithInvalidGeo_throwsIllegalArgumentException() {
     collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
       geo.setDwcGeoreferenceVerificationStatus(
-        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+        GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
       geo.setDwcDecimalLatitude(2.0);
     });
 
@@ -295,7 +295,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void update_WithInvalidGeo_throwsIllegalArgumentException() {
     collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
       geo.setDwcGeoreferenceVerificationStatus(
-        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+        GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
       geo.setDwcDecimalLatitude(2.0);
     });
 

@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +29,9 @@ public class GeoreferenceAssertionDto {
   private String dwcGeoreferenceRemarks;
   private String dwcGeodeticDatum;
   private Boolean isPrimary;
-  private GeoreferenceAssertion.GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+  private GeoreferenceVerificationStatus dwcGeoreferenceVerificationStatus;
+
+  public enum GeoreferenceVerificationStatus {
+    GEOREFERENCING_NOT_POSSIBLE
+  }
 }

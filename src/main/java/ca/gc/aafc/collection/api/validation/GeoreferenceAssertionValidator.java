@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
 import lombok.NonNull;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,7 +29,7 @@ public class GeoreferenceAssertionValidator implements Validator {
     }
     GeoreferenceAssertionDto georeferenceAssertion = (GeoreferenceAssertionDto) target;
 
-    if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
+    if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
       (georeferenceAssertion.getDwcDecimalLatitude() != null || georeferenceAssertion.getDwcDecimalLongitude() != null || georeferenceAssertion
         .getDwcCoordinateUncertaintyInMeters() != null)) {
       String errorMessage = messageSource.getMessage("georeferenceAssertion.GeoreferenceVerificationStatus.invalid",
