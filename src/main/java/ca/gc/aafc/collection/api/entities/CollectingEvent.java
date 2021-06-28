@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -13,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -21,16 +21,13 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -58,7 +55,6 @@ import java.util.UUID;
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
   public enum GeographicPlaceNameSource {
@@ -78,12 +74,9 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @OneToMany(fetch = FetchType.EAGER,
-    mappedBy = "collectingEvent",
-    cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
-  )
-  @ToString.Exclude
-  private List<GeoreferenceAssertion> geoReferenceAssertions;
+  @Type(type = "jsonb")
+  @Builder.Default
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions =  new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
 
