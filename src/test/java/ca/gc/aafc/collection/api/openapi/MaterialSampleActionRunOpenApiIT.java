@@ -27,6 +27,7 @@ import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -106,7 +107,7 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
           "sourceMaterialSample", getRelationshipType("material-sample", materialSampleUUID),
           "materialSampleActionDefinition", getRelationshipType("material-sample-action-definition", materialSampleActionDefinitionUUID)),
         null)
-      ).extract().asString(),false);
+      ).extract().asString(), ValidationRestrictionOptions.FULL_RESTRICTIONS);
   }
 
   private Map<String, Object> getRelationshipType(String type, String uuid) {

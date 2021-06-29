@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,7 @@ import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -76,7 +78,7 @@ public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto),
         null,
         null)
-      ).extract().asString(), false);
+      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Collections.emptySet()).build());
   }
 
 }

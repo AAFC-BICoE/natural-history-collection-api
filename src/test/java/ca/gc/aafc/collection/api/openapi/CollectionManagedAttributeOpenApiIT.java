@@ -19,6 +19,7 @@ import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -71,7 +72,7 @@ public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto),
         null,
         null)
-      ).extract().asString(), false);
+      ).extract().asString(), ValidationRestrictionOptions.FULL_RESTRICTIONS);
   }
 
 }
