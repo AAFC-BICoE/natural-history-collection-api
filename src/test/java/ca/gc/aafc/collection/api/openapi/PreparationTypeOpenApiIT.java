@@ -61,7 +61,7 @@ public class PreparationTypeOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto),
         null,
         null)
-      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Collections.emptySet()).build());
+      ).extract().asString(), ValidationRestrictionOptions.FULL_RESTRICTIONS);
   }
 
 }

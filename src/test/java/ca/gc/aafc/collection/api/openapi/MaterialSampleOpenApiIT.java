@@ -115,7 +115,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         "preparationType", getRelationType("preparation-type", preparationTypeUUID),
         "materialSampleChildren", getRelationListType("material-sample", childUUID)),
         null)
-      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Collections.singleton("collectingEvent")).build());
+      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Collections.singleton("collectingEvent")).build());
   }
 
   private Map<String, Object> getRelationType(String type, String uuid) {
