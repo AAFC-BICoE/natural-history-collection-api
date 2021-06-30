@@ -64,6 +64,11 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void find_LoadsHierarchy() {
+    findUnit(unitId).body("data.attributes.hierarchy", Matchers.notNullValue()).log().all(true);
+  }
+
+  @Test
   void patch_WithNewRelations() {
     String newParentId = postUnit(newUnit());
     String newChildId = postUnit(newUnit());
