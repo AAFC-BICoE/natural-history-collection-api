@@ -27,14 +27,14 @@ import java.util.Map;
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
 @Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-public class StorageUnitRestIt extends BaseRestAssuredTest {
+public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   private String parentId;
   private String childId;
   private StorageUnitDto unit;
   private String unitId;
 
-  protected StorageUnitRestIt() {
+  protected StorageUnitRestIT() {
     super("/api/v1/");
   }
 
