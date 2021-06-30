@@ -3,12 +3,15 @@ package ca.gc.aafc.collection.api.openapi;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import io.restassured.response.ResponseBody;
 import lombok.SneakyThrows;
 import org.apache.http.client.utils.URIBuilder;
@@ -21,6 +24,7 @@ import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -70,8 +74,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
-    ms.setParentMaterialSample(null);
-    ms.setMaterialSampleChildren(null);
     ms.setPreparedBy(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
 
@@ -92,6 +94,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setMaterialSampleChildren(null);
     child.setPreparedBy(null);
 
+    PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
+    preparationTypeDto.setCreatedBy("test user");  
     
     sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent)));
     sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child)));
@@ -100,15 +104,18 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     String parentUUID = materialSampleResponseBody.path("data[0].id");
     String childUUID = materialSampleResponseBody.path("data[1].id");
+    String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSample",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ms),
       Map.of(
         "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
         "parentMaterialSample", getRelationType("material-sample", parentUUID),
+        "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
+        "preparationType", getRelationType("preparation-type", preparationTypeUUID),
         "materialSampleChildren", getRelationListType("material-sample", childUUID)),
         null)
-      ).extract().asString(), false);
+      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Collections.singleton("collectingEvent")).build());
   }
 
   private Map<String, Object> getRelationType(String type, String uuid) {
