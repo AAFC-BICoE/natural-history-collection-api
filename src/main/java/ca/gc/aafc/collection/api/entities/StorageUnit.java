@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.HierarchicalObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -71,5 +73,8 @@ public class StorageUnit implements DinaEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
   @ToString.Exclude
   private List<StorageUnit> storageUnitChildren = new ArrayList<>();
+
+  @Transient
+  private List<HierarchicalObject> hierarchy;
 
 }
