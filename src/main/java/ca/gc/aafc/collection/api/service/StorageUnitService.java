@@ -7,6 +7,7 @@ import ca.gc.aafc.dina.jpa.OneToManyFieldHandler;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -52,15 +53,17 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
     int maxResult
   ) {
     List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult);
-    all.forEach(t -> {
-      if (t instanceof StorageUnit) {
-        setHierarchy((StorageUnit) t);
-      }
-    });
+    if (CollectionUtils.isNotEmpty(all) && entityClass == StorageUnit.class) {
+      all.forEach(t -> {
+        if (t instanceof StorageUnit) {
+          setHierarchy((StorageUnit) t);
+        }
+      });
+    }
     return all;
   }
 
-  private <T> void setHierarchy(StorageUnit unit) {
+  private void setHierarchy(StorageUnit unit) {
     unit.setHierarchy(postgresHierarchicalDataService.getHierarchy(
       unit.getId(),
       "storage_unit",
