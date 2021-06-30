@@ -43,6 +43,5 @@ public class StorageUnitDto {
   @JsonApiRelation
   private List<StorageUnitDto> storageUnitChildren = new ArrayList<>();
 
-  @IgnoreDinaMapping
   private List<HierarchicalObject> hierarchy;
 }
