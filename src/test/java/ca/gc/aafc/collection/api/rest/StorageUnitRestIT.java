@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.rest;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
+import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -100,7 +101,8 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   private ValidatableResponse findUnit(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=parentStorageUnit,storageUnitChildren").then();
+      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=parentStorageUnit,storageUnitChildren,"
+        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
   }
 
   private void sendPatchWithRelations(String newParentId, String newChildId) {
