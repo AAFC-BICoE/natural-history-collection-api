@@ -199,6 +199,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     void validate_WhenInvalidIntegerTypeExceptionThrown() {
       CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
         .acceptedValues(null)
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
         .managedAttributeType(ManagedAttributeType.INTEGER)
         .build();
   
@@ -213,6 +214,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     void assignedValueContainedInAcceptedValues_validationPasses() {
       CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
         .acceptedValues(new String[]{"val1", "val2"})
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
         .build();
   
       collectionManagedAttributeService.create(testManagedAttribute);
@@ -225,6 +227,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     void assignedValueNotContainedInAcceptedValues_validationPasses() {
       CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
         .acceptedValues(new String[]{"val1", "val2"})
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
         .build();
   
       collectionManagedAttributeService.create(testManagedAttribute);
