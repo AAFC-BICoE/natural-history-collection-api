@@ -21,12 +21,12 @@ import java.util.Optional;
 @Component
 public class CollectionManagedAttributeValueValidator extends ManagedAttributeValueValidator<CollectionManagedAttribute> {
 
-  private static final String INVALID_VALIDATION_CONTEXT_KEY = "managedAttribute.context.invalid";
+  private static final String INVALID_VALIDATION_CONTEXT_KEY = "managedAttribute.validation.context.invalid";
 
   private final MessageSource messageSource;
 
   public CollectionManagedAttributeValueValidator(
-      @Named("validationMessageSource") MessageSource baseMessageSource,
+      @Named("validationMessageSource") MessageSource baseMessageSource, // from dina-base
       @NonNull MessageSource messageSource,
       @NonNull ManagedAttributeService<CollectionManagedAttribute> dinaService) {
     super(baseMessageSource, dinaService);
