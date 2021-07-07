@@ -1,7 +1,14 @@
 package ca.gc.aafc.collection.api.entities;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@Builder
+@RequiredArgsConstructor
 public class DeterminationDetail {
-  private String verbatimScientificName;
-  private String verbatimAgent;
-  private String verbatimDate;
+  private final String verbatimScientificName;
+  private final String verbatimAgent;
+  private final String verbatimDate;
 }
