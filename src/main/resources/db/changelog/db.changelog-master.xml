@@ -66,5 +66,5 @@
   <include file="db/changelog/migrations/61-Add_relationship_from_MaterialSample_to_StorageUnit.xml"/>
   <include file="db/changelog/initial-data/1-Create_MolecularSample_MaterialSampleType.xml"/>
   <include file="db/changelog/migrations/62-Coll_Event_Geo_Assertions_Moved_To_JsonB.xml"/>
-
+  <include file="db/changelog/migrations/63-Add_determination_entity.xml"/>
 </databaseChangeLog>
