@@ -30,7 +30,7 @@
             <column name="type_status_evidence" type="VARCHAR(250)"/>
             <column name="scientific_name_source" type="scientific_name_source"/>
             <column name="determiner" type="uuid"/>
-            <column name="determinedOn" type="DATE"/>
+            <column name="determined_on" type="DATE"/>
             <column name="qualifier" type="VARCHAR(150)"/>
             <column name="scientific_name_details" type="VARCHAR(150)"/>
         </createTable>
