@@ -78,7 +78,7 @@ public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto),
         null,
         null)
-      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Collections.emptySet()).build());
+      ).extract().asString(), ValidationRestrictionOptions.FULL_RESTRICTIONS);
   }
 
 }
