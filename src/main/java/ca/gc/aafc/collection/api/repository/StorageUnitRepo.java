@@ -6,15 +6,21 @@ import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import io.crnk.core.queryspec.QuerySpec;
+import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Optional;
 
 @Repository
 public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit> {
 
+  public static final String HIERARCHY_INCLUDE_PARAM = "hierarchy";
   private Optional<DinaAuthenticatedUser> authenticatedUser;
 
   public StorageUnitRepo(
@@ -41,4 +47,17 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
     return super.create(resource);
   }
 
+  @Override
+  public ResourceList<StorageUnitDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {
+    ResourceList<StorageUnitDto> resourceList = super.findAll(ids, querySpec);
+    if (CollectionUtils.isNotEmpty(resourceList) && !isHierarchyIncluded(querySpec)) {
+      resourceList.forEach(r -> r.setHierarchy(null));
+    }
+    return resourceList;
+  }
+
+  private static boolean isHierarchyIncluded(QuerySpec querySpec) {
+    return querySpec.getIncludedRelations().stream()
+      .anyMatch(r -> r.getAttributePath().get(0).equalsIgnoreCase(HIERARCHY_INCLUDE_PARAM));
+  }
 }

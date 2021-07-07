@@ -67,7 +67,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     collectionManagedAttributeDto.setGroup("group");
     collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
-    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     collectionManagedAttributeDto.setCreatedBy("dina");     
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));

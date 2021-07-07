@@ -15,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -37,10 +38,6 @@ public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
   public static final String TYPE_NAME = "managed-attribute";
-
-  private static final String name = "dina attribute #12";
-  private static final String value = "dina value";
-  private static final String createdBy = "dina";
     
   static {
     URI_BUILDER.setScheme("https");
@@ -60,13 +57,7 @@ public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
   @Test
   void collectingEvent_SpecValid() {
 
-    CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
-    collectionManagedAttributeDto.setName(name);
-    collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
-    collectionManagedAttributeDto.setAcceptedValues(new String[]{value});
-    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
-    collectionManagedAttributeDto.setCreatedBy(createdBy);        
+    CollectionManagedAttributeDto collectionManagedAttributeDto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();     
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectionManagedAttribute",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto),

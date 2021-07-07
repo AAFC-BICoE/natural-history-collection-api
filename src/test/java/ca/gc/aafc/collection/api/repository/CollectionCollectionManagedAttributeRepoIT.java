@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     String expectedCreatedBy = "dina";
     String expectedGroup = "dinaGroup";
 
-    CollectionManagedAttributeDto dto = new CollectionManagedAttributeDto();
+    CollectionManagedAttributeDto dto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     dto.setName(expectedName);
     dto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
     dto.setAcceptedValues(new String[]{expectedValue});

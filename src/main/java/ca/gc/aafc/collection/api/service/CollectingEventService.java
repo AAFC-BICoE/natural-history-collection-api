@@ -79,7 +79,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes());
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
+        CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.COLLECTING_EVENT);
   }
 
   public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertionDto geo, @NonNull String eventUUID) {
