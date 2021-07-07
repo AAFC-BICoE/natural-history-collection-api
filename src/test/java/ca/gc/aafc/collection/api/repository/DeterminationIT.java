@@ -40,7 +40,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
     // Assert determination detail
     Determination.DeterminationDetail resultDetail = resultDetermination.getDetails().get(0);
     Assertions.assertNotNull(resultDetail);
-    Assertions.assertEquals(resultDetail.getDeterminer(), resultDetail.getDeterminer());
+    Assertions.assertEquals(resultDetail.getDeterminer().get(0), resultDetail.getDeterminer().get(0));
     Assertions.assertEquals(resultDetail.getDeterminedOn(), resultDetail.getDeterminedOn());
     Assertions.assertEquals(resultDetail.getQualifier(), resultDetail.getQualifier());
     Assertions.assertEquals(resultDetail.getScientificNameDetails(), resultDetail.getScientificNameDetails());
@@ -60,7 +60,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
   private Determination.DeterminationDetail newDetail() {
     return Determination.DeterminationDetail.builder()
-      .determiner(UUID.randomUUID())
+      .determiner(List.of(UUID.randomUUID()))
       .determinedOn(LocalDate.now())
       .qualifier(RandomStringUtils.randomAlphabetic(3))
       .scientificNameDetails(RandomStringUtils.randomAlphabetic(3))

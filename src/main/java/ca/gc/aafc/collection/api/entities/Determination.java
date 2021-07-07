@@ -25,7 +25,7 @@ public class Determination {
   public static class DeterminationDetail {
     private final String typeStatus;
     private final String typeStatusEvidence;
-    private final UUID determiner;
+    private final List<UUID> determiner;
     private final LocalDate determinedOn;
     private final String qualifier;
     private final String scientificNameSource;
