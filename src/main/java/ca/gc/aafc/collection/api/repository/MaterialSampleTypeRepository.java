@@ -24,7 +24,7 @@ public class MaterialSampleTypeRepository extends DinaRepository<MaterialSampleT
   public MaterialSampleTypeRepository(
     @NonNull MaterialSampleTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    Optional<DinaAuthorizationService> groupAuthorizationService,
+    DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {

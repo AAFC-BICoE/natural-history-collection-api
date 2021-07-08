@@ -23,7 +23,7 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
   public CollectionRepository(
     @NonNull CollectionService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    Optional<DinaAuthorizationService> dinaAdminOnlyAuthorizationService,
+    DinaAuthorizationService dinaAdminOnlyAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {

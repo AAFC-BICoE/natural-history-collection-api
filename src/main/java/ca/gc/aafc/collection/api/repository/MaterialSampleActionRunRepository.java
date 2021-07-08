@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
+import ca.gc.aafc.dina.security.AllowAllAuthorizationService;
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +29,7 @@ public class MaterialSampleActionRunRepository extends DinaRepository<MaterialSa
   ) {
       super(
           dinaService,
-          Optional.empty(),
+          new AllowAllAuthorizationService(), // FIXME, should be group but group is missing from MaterialSampleActionRun
           Optional.empty(),
           new DinaMapper<>(MaterialSampleActionRunDto.class),
           MaterialSampleActionRunDto.class,

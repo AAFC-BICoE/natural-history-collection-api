@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -22,13 +23,14 @@ public class MaterialSampleActionDefinitionRepository extends DinaRepository<Mat
 
   public MaterialSampleActionDefinitionRepository(
     @NonNull MaterialSampleActionDefinitionService dinaService,
+    DinaAuthorizationService groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
       super(
           dinaService,
-          Optional.empty(),
+          groupAuthorizationService,
           Optional.empty(),
           new DinaMapper<>(MaterialSampleActionDefinitionDto.class),
           MaterialSampleActionDefinitionDto.class,
