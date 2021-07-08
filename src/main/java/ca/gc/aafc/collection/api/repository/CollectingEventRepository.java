@@ -23,7 +23,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
 
   private Optional<DinaAuthenticatedUser> authenticatedUser;  
 
-    public CollectingEventRepository(
+  public CollectingEventRepository(
     @NonNull CollectingEventService dinaService,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull AuditService auditService,

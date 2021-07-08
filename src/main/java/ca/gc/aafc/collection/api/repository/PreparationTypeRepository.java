@@ -28,17 +28,17 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
-      super(
-          dinaService,
-          groupAuthorizationService,
-          Optional.empty(),
-          new DinaMapper<>(PreparationTypeDto.class),
-          PreparationTypeDto.class,
-          PreparationType.class,
-          null,
-          externalResourceProvider,
-          buildProperties);
-      this.dinaAuthenticatedUser = dinaAuthenticatedUser;
+    super(
+      dinaService,
+      groupAuthorizationService,
+      Optional.empty(),
+      new DinaMapper<>(PreparationTypeDto.class),
+      PreparationTypeDto.class,
+      PreparationType.class,
+      null,
+      externalResourceProvider,
+      buildProperties);
+    this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
   @Override

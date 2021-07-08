@@ -28,17 +28,17 @@ public class MaterialSampleTypeRepository extends DinaRepository<MaterialSampleT
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
-      super(
-          dinaService,
-          groupAuthorizationService,
-          Optional.empty(),
-          new DinaMapper<>(MaterialSampleTypeDto.class),
-          MaterialSampleTypeDto.class,
-          MaterialSampleType.class,
-          null,
-          externalResourceProvider,
-          buildProperties);
-      this.dinaAuthenticatedUser = dinaAuthenticatedUser;
+    super(
+      dinaService,
+      groupAuthorizationService,
+      Optional.empty(),
+      new DinaMapper<>(MaterialSampleTypeDto.class),
+      MaterialSampleTypeDto.class,
+      MaterialSampleType.class,
+      null,
+      externalResourceProvider,
+      buildProperties);
+    this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
   @Override

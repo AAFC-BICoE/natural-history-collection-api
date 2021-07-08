@@ -31,51 +31,51 @@ import lombok.Data;
 @TypeName(MaterialSampleDto.TYPENAME)
 public class MaterialSampleDto {
 
-    public static final String TYPENAME = "material-sample";
-    
-    @JsonApiId
-    @Id
-    @PropertyName("id")
-    private UUID uuid;
+  public static final String TYPENAME = "material-sample";
 
-    private String group;
-  
-    private OffsetDateTime createdOn;
-    private String createdBy;
+  @JsonApiId
+  @Id
+  @PropertyName("id")
+  private UUID uuid;
 
-    private String dwcCatalogNumber;
-    private String[] dwcOtherCatalogNumbers;
+  private String group;
 
-    @JsonApiRelation
-    private CollectingEventDto collectingEvent;
+  private OffsetDateTime createdOn;
+  private String createdBy;
 
-    @JsonApiExternalRelation(type = "metadata")
-    @JsonApiRelation
-    private List<ExternalRelationDto> attachment = new ArrayList<>();
+  private String dwcCatalogNumber;
+  private String[] dwcOtherCatalogNumbers;
 
-    private String materialSampleName;
+  @JsonApiRelation
+  private CollectingEventDto collectingEvent;
 
-    @JsonApiRelation
-    private PreparationTypeDto preparationType;
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonApiRelation
+  private List<ExternalRelationDto> attachment = new ArrayList<>();
 
-    @JsonApiRelation
-    private MaterialSampleTypeDto materialSampleType;
+  private String materialSampleName;
 
-    @JsonApiRelation
-    private MaterialSampleDto parentMaterialSample;
+  @JsonApiRelation
+  private PreparationTypeDto preparationType;
 
-    @JsonApiRelation
-    private List<MaterialSampleDto> materialSampleChildren;
+  @JsonApiRelation
+  private MaterialSampleTypeDto materialSampleType;
 
-    @JsonApiExternalRelation(type = "person")
-    @JsonApiRelation
-    private ExternalRelationDto preparedBy;
+  @JsonApiRelation
+  private MaterialSampleDto parentMaterialSample;
 
-    private LocalDate preparationDate;
+  @JsonApiRelation
+  private List<MaterialSampleDto> materialSampleChildren;
 
-    @JsonApiField(patchStrategy = PatchStrategy.SET)
-    private Map<String, String> managedAttributes = new HashMap<>();
+  @JsonApiExternalRelation(type = "person")
+  @JsonApiRelation
+  private ExternalRelationDto preparedBy;
 
-    @JsonApiRelation
-    private StorageUnitDto storageUnit;
+  private LocalDate preparationDate;
+
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, String> managedAttributes = new HashMap<>();
+
+  @JsonApiRelation
+  private StorageUnitDto storageUnit;
 }

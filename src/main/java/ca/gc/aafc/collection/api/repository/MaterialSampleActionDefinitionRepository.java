@@ -28,17 +28,17 @@ public class MaterialSampleActionDefinitionRepository extends DinaRepository<Mat
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
-      super(
-          dinaService,
-          groupAuthorizationService,
-          Optional.empty(),
-          new DinaMapper<>(MaterialSampleActionDefinitionDto.class),
-          MaterialSampleActionDefinitionDto.class,
-          MaterialSampleActionDefinition.class,
-          null,
-          externalResourceProvider,
-          buildProperties);
-      this.dinaAuthenticatedUser = dinaAuthenticatedUser;
+    super(
+      dinaService,
+      groupAuthorizationService,
+      Optional.empty(),
+      new DinaMapper<>(MaterialSampleActionDefinitionDto.class),
+      MaterialSampleActionDefinitionDto.class,
+      MaterialSampleActionDefinition.class,
+      null,
+      externalResourceProvider,
+      buildProperties);
+    this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
   @Override
   public <S extends MaterialSampleActionDefinitionDto> S create(S resource) {
