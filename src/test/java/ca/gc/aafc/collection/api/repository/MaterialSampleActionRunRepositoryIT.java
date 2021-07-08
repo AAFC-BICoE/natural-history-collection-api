@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -64,6 +65,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
     assertEquals(msar.getEndDateTime(), result.getEndDateTime());
     assertEquals(msar.getMaterialSampleActionDefinition().getUuid(), result.getMaterialSampleActionDefinition().getUuid());
     assertEquals(msar.getSourceMaterialSample().getUuid(), result.getSourceMaterialSample().getUuid());
+    assertEquals(msar.getGroup(), result.getGroup());
   }
 
   private MaterialSampleActionRunDto newMaterialSampleActionRunDto(
@@ -72,6 +74,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
       MaterialSampleActionRunDto materialSampleActionRunDto = new MaterialSampleActionRunDto();
       materialSampleActionRunDto.setStartDateTime(startDateTime);
       materialSampleActionRunDto.setEndDateTime(endDateTime);
+      materialSampleActionRunDto.setGroup(RandomStringUtils.randomAlphabetic(4));
       materialSampleActionRunDto.setAgentId(UUID.randomUUID());
       materialSampleActionRunDto.setSourceMaterialSample(materialSampleDto);
       materialSampleActionRunDto.setMaterialSampleActionDefinition(materialSampleActionDefinitionDto);
