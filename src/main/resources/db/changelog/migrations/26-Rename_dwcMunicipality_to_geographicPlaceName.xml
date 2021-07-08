@@ -2,7 +2,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog ../xsd/dbchangelog-4.4.xsd"
         context="schema-change">
 
     <changeSet context="schema-change" id="26-Rename_dwcMunicipality_to_geographicPlaceName" author="Keyuk">
