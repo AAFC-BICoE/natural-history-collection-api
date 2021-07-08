@@ -56,10 +56,9 @@ public class CollectingEventValidator implements Validator {
   }
 
   private void validateDateTimes(Errors errors, CollectingEvent collectingEvent) {
-    if ((collectingEvent.getStartEventDateTime() == null &&
-        collectingEvent.getEndEventDateTime() != null) ||
-        (collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime()
-            .isAfter(collectingEvent.getEndEventDateTime()))) {
+    if (collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null ||
+        collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime()
+            .isAfter(collectingEvent.getEndEventDateTime())) {
       addError(errors, VALID_EVENT_DATE_KEY);
     }
   }

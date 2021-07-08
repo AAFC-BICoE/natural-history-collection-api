@@ -47,75 +47,75 @@ import lombok.ToString;
 @NaturalIdCache
 @Table(name = "material_sample")
 public class MaterialSample implements DinaEntity {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-  
-    @NaturalId
-    @NotNull
-    @Column(unique = true)
-    private UUID uuid;
 
-    @NotBlank
-    @Size(max = 50) 
-    @Column(name = "_group")
-    private String group;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "created_on", insertable = false, updatable = false)
-    @Generated(value = GenerationTime.INSERT)
-    private OffsetDateTime createdOn;
+  @NaturalId
+  @NotNull
+  @Column(unique = true)
+  private UUID uuid;
 
-    @NotBlank
-    @Column(name = "created_by", updatable = false)
-    private String createdBy;  
+  @NotBlank
+  @Size(max = 50)
+  @Column(name = "_group")
+  private String group;
 
-    @Size(max = 25)  
-    private String dwcCatalogNumber;
+  @Column(name = "created_on", insertable = false, updatable = false)
+  @Generated(value = GenerationTime.INSERT)
+  private OffsetDateTime createdOn;
 
-    @Type(type = "string-array")
-    private String[] dwcOtherCatalogNumbers;
+  @NotBlank
+  @Column(name = "created_by", updatable = false)
+  private String createdBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private CollectingEvent collectingEvent;
+  @Size(max = 25)
+  private String dwcCatalogNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_material_sample_id")
-    @ToString.Exclude
-    private MaterialSample parentMaterialSample;
+  @Type(type = "string-array")
+  private String[] dwcOtherCatalogNumbers;
 
-    @OneToMany(fetch = FetchType.LAZY,
-        mappedBy = "parentMaterialSample")
-    private List<MaterialSample> materialSampleChildren = new ArrayList<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  @ToString.Exclude
+  private CollectingEvent collectingEvent;
 
-    @Type(type = "list-array")
-    @Column(name = "attachment", columnDefinition = "uuid[]")
-    private List<UUID> attachment = new ArrayList<>();
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "parent_material_sample_id")
+  @ToString.Exclude
+  private MaterialSample parentMaterialSample;
 
-    @Column(name = "material_sample_name")
-    private String materialSampleName;
+  @OneToMany(fetch = FetchType.LAZY,
+      mappedBy = "parentMaterialSample")
+  private List<MaterialSample> materialSampleChildren = new ArrayList<>();
 
-    @ManyToOne
-    @ToString.Exclude
-    private PreparationType preparationType;
+  @Type(type = "list-array")
+  @Column(name = "attachment", columnDefinition = "uuid[]")
+  private List<UUID> attachment = new ArrayList<>();
 
-    @ManyToOne
-    @ToString.Exclude
-    private MaterialSampleType materialSampleType;
+  @Column(name = "material_sample_name")
+  private String materialSampleName;
 
-    @Column(name = "prepared_by")
-    private UUID preparedBy;
+  @ManyToOne
+  @ToString.Exclude
+  private PreparationType preparationType;
 
-    private LocalDate preparationDate;
+  @ManyToOne
+  @ToString.Exclude
+  private MaterialSampleType materialSampleType;
 
-    @Type(type = "jsonb")
-    @NotNull
-    @Builder.Default
-    private Map<String, String> managedAttributes = new HashMap<>();
+  @Column(name = "prepared_by")
+  private UUID preparedBy;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "storage_unit_id")
-    private StorageUnit storageUnit;
+  private LocalDate preparationDate;
+
+  @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, String> managedAttributes = new HashMap<>();
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "storage_unit_id")
+  private StorageUnit storageUnit;
 
 }

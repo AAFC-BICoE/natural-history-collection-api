@@ -30,14 +30,14 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
 
   public CollectionManagedAttributeRepo(
     @NonNull CollectionManagedAttributeService service,
-    Optional<DinaAuthorizationService> groupAuthorizationService,
+    DinaAuthorizationService groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       service,
-      Optional.ofNullable(groupAuthorizationService.orElse(null)),
+      groupAuthorizationService,
       Optional.empty(),
       new DinaMapper<>(CollectionManagedAttributeDto.class),
       CollectionManagedAttributeDto.class,
