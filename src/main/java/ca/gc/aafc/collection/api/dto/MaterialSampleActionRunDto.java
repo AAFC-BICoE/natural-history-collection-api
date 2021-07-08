@@ -35,6 +35,8 @@ public class MaterialSampleActionRunDto {
 
   private String createdBy;
 
+  private String group;
+
   private UUID agentId;
 
   private LocalDateTime startDateTime;
