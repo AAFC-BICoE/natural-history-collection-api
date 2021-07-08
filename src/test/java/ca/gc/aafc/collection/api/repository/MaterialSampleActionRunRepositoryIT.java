@@ -74,7 +74,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
       MaterialSampleActionRunDto materialSampleActionRunDto = new MaterialSampleActionRunDto();
       materialSampleActionRunDto.setStartDateTime(startDateTime);
       materialSampleActionRunDto.setEndDateTime(endDateTime);
-      materialSampleActionRunDto.setGroup(RandomStringUtils.randomAlphabetic(4));
+      materialSampleActionRunDto.setGroup(GROUP);
       materialSampleActionRunDto.setAgentId(UUID.randomUUID());
       materialSampleActionRunDto.setSourceMaterialSample(materialSampleDto);
       materialSampleActionRunDto.setMaterialSampleActionDefinition(materialSampleActionDefinitionDto);
