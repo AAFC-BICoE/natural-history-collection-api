@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
@@ -18,12 +19,17 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
   @Inject
   private MaterialSampleRepository materialSampleRepository;
+  private Determination.DeterminationDetail detail;
+  private Determination determination;
+
+  @BeforeEach
+  void setUp() {
+    detail = newDetail();
+    determination = newDetermination(detail);
+  }
 
   @Test
   void find() {
-    Determination.DeterminationDetail detail = newDetail();
-    Determination determination = newDetermination(detail);
-
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
     dto.setDetermination(determination);
     Determination resultDetermination = materialSampleRepository.findOne(
@@ -40,13 +46,13 @@ class DeterminationIT extends CollectionModuleBaseIT {
     // Assert determination detail
     Determination.DeterminationDetail resultDetail = resultDetermination.getDetails().get(0);
     Assertions.assertNotNull(resultDetail);
-    Assertions.assertEquals(resultDetail.getDeterminer().get(0), resultDetail.getDeterminer().get(0));
-    Assertions.assertEquals(resultDetail.getDeterminedOn(), resultDetail.getDeterminedOn());
-    Assertions.assertEquals(resultDetail.getQualifier(), resultDetail.getQualifier());
-    Assertions.assertEquals(resultDetail.getScientificNameDetails(), resultDetail.getScientificNameDetails());
-    Assertions.assertEquals(resultDetail.getScientificNameSource(), resultDetail.getScientificNameSource());
-    Assertions.assertEquals(resultDetail.getTypeStatus(), resultDetail.getTypeStatus());
-    Assertions.assertEquals(resultDetail.getTypeStatusEvidence(), resultDetail.getTypeStatusEvidence());
+    Assertions.assertEquals(detail.getDeterminer().get(0), resultDetail.getDeterminer().get(0));
+    Assertions.assertEquals(detail.getDeterminedOn(), resultDetail.getDeterminedOn());
+    Assertions.assertEquals(detail.getQualifier(), resultDetail.getQualifier());
+    Assertions.assertEquals(detail.getScientificNameDetails(), resultDetail.getScientificNameDetails());
+    Assertions.assertEquals(detail.getScientificNameSource(), resultDetail.getScientificNameSource());
+    Assertions.assertEquals(detail.getTypeStatus(), resultDetail.getTypeStatus());
+    Assertions.assertEquals(detail.getTypeStatusEvidence(), resultDetail.getTypeStatusEvidence());
   }
 
   private Determination newDetermination(Determination.DeterminationDetail detail) {
