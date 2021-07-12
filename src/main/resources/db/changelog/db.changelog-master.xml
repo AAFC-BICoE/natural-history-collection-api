@@ -68,5 +68,6 @@
   <include file="db/changelog/migrations/62-Coll_Event_Geo_Assertions_Moved_To_JsonB.xml"/>
   <include file="db/changelog/migrations/63-Add_link_from_storageUnit_to_storageType.xml"/>
   <include file="db/changelog/migrations/64-Add_group_material_sample_action_run.xml"/>
+  <include file="db/changelog/migrations/65-Remove_unique_index_on_storage_unit_table.xml"/>
   <include file="db/changelog/migrations/66_Add_Determination_to_material_sample.xml"/>
 </databaseChangeLog>
