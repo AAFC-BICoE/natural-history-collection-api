@@ -54,6 +54,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(detail.getScientificNameSource(), resultDetail.getScientificNameSource());
     Assertions.assertEquals(detail.getTypeStatus(), resultDetail.getTypeStatus());
     Assertions.assertEquals(detail.getTypeStatusEvidence(), resultDetail.getTypeStatusEvidence());
+    Assertions.assertEquals(detail.getScientificName(), resultDetail.getScientificName());
   }
 
   @Test
@@ -86,6 +87,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
   private Determination.DeterminationDetail newDetail() {
     return Determination.DeterminationDetail.builder()
+      .scientificName(RandomStringUtils.randomAlphabetic(4))
       .determiner(List.of(UUID.randomUUID()))
       .determinedOn(LocalDate.now())
       .qualifier(RandomStringUtils.randomAlphabetic(3))

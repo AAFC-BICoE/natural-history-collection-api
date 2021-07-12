@@ -30,6 +30,9 @@ public class Determination {
   @RequiredArgsConstructor
   public static class DeterminationDetail {
 
+    @Size(max = 250)
+    private final String scientificName;
+
     @Size(max = 50)
     private final String typeStatus;
 
