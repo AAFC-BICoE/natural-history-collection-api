@@ -50,25 +50,21 @@ public class MaterialSampleValidator implements Validator {
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     Determination determination = materialSample.getDetermination();
     if (determination != null) {
-      Errors determinationErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
-      validator.validate(determination, determinationErrors);
-
-      determinationErrors.getFieldErrors()
-        .forEach(fieldError -> errors.rejectValue("determination", DETERMINATION_ERROR_KEY,
-          getMessage(DETERMINATION_ERROR_KEY, fieldErrorToObjects(fieldError))));
+      checkDeterminationObj(errors, materialSample, determination, DETERMINATION_ERROR_KEY);
 
       List<Determination.DeterminationDetail> details = determination.getDetails();
       if (CollectionUtils.isNotEmpty(details)) {
-        details.forEach(determinationDetail -> {
-          Errors detailErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
-          validator.validate(determinationDetail, detailErrors);
-          detailErrors.getFieldErrors()
-            .forEach(fieldError -> errors.rejectValue("determination", DETERMINATION_DETAIL_ERROR_KEY,
-              getMessage(DETERMINATION_DETAIL_ERROR_KEY, fieldErrorToObjects(fieldError))));
-        });
-
+        details.forEach(determinationDetail -> checkDeterminationObj(
+          errors, materialSample, determinationDetail, DETERMINATION_DETAIL_ERROR_KEY));
       }
     }
+  }
+
+  private void checkDeterminationObj(Errors errors, MaterialSample materialSample, Object obj, String key) {
+    Errors determinationErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
+    validator.validate(obj, determinationErrors);
+    determinationErrors.getFieldErrors().forEach(fieldError ->
+      errors.rejectValue("determination", key, getMessage(key, fieldErrorToObjects(fieldError))));
   }
 
   private void checkHasParentOrEvent(Errors errors, MaterialSample materialSample) {
