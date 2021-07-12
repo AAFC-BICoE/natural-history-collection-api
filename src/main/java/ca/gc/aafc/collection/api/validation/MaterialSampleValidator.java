@@ -27,6 +27,8 @@ public class MaterialSampleValidator implements Validator {
 
   public static final String VALID_PARENT_RELATIONSHIP_LOOP = "validation.constraint.violation.loopingParentMaterialSample";
   public static final String PARENT_AND_EVENT_ERROR_KEY = "validation.constraint.violation.sample.parentWithEvent";
+  public static final String DETERMINATION_ERROR_KEY = "validation.constraint.violation.sample.determination.constraintError";
+  public static final String DETERMINATION_DETAIL_ERROR_KEY = "validation.constraint.violation.sample.determination.detail.constraintError";
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
@@ -51,8 +53,13 @@ public class MaterialSampleValidator implements Validator {
       validator.validate(determination, determinationErrors);
 
       determinationErrors.getFieldErrors()
-        .forEach(fieldError -> errors.rejectValue("Determination", "Determination",
-          "Determination." + fieldError.getField() + ": " + fieldError.getDefaultMessage()));
+        .forEach(fieldError ->
+          errors.rejectValue(
+            "determination",
+            DETERMINATION_ERROR_KEY,
+            getMessage(DETERMINATION_ERROR_KEY, new Object[]{
+              fieldError.getField(), fieldError.getDefaultMessage()
+            })));
 
       List<Determination.DeterminationDetail> details = determination.getDetails();
       if (CollectionUtils.isNotEmpty(details)) {
@@ -60,8 +67,12 @@ public class MaterialSampleValidator implements Validator {
           Errors detailErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
           validator.validate(determinationDetail, detailErrors);
           detailErrors.getFieldErrors()
-            .forEach(fieldError -> errors.rejectValue("Determination", "Determination",
-              "DeterminationDetail." + fieldError.getField() + ": " + fieldError.getDefaultMessage()));
+            .forEach(fieldError -> errors.rejectValue(
+              "determination",
+              DETERMINATION_DETAIL_ERROR_KEY,
+              getMessage(DETERMINATION_DETAIL_ERROR_KEY, new Object[]{
+                fieldError.getField(), fieldError.getDefaultMessage()
+              })));
         });
 
       }
@@ -83,7 +94,11 @@ public class MaterialSampleValidator implements Validator {
     }
   }
 
+  private String getMessage(String key, Object[] objects) {
+    return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
+  }
+
   private String getMessage(String key) {
-    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+    return this.getMessage(key, null);
   }
 }
