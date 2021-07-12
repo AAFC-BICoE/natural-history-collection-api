@@ -90,7 +90,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
           "collectors", getExternalListType("person"),
           "attachment", getExternalListType("metadata")),
         null)
-      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Set.of("geographicPlaceName", "verbatimCollectors")).build());
+      ).extract().asString(), ValidationRestrictionOptions.FULL_RESTRICTIONS);
   }
 
   private Map<String, Object> getExternalListType(String type) {

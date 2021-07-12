@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -19,12 +20,13 @@ public class StorageUnitTypeRepo extends DinaRepository<StorageUnitTypeDto, Stor
 
   public StorageUnitTypeRepo(
     @NonNull StorageUnitTypeService service,
+    DinaAuthorizationService groupAuthorizationService,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull BuildProperties buildProperties
   ) {
     super(
       service,
-      Optional.empty(),
+      groupAuthorizationService,
       Optional.empty(),
       new DinaMapper<>(StorageUnitTypeDto.class),
       StorageUnitTypeDto.class,

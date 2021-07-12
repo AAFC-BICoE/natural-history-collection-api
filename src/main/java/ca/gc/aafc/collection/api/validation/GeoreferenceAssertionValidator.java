@@ -29,9 +29,10 @@ public class GeoreferenceAssertionValidator implements Validator {
     }
     GeoreferenceAssertionDto georeferenceAssertion = (GeoreferenceAssertionDto) target;
 
-    if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
-      (georeferenceAssertion.getDwcDecimalLatitude() != null || georeferenceAssertion.getDwcDecimalLongitude() != null || georeferenceAssertion
-        .getDwcCoordinateUncertaintyInMeters() != null)) {
+    if (georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE &&
+        (georeferenceAssertion.getDwcDecimalLatitude() != null
+            || georeferenceAssertion.getDwcDecimalLongitude() != null
+            || georeferenceAssertion.getDwcCoordinateUncertaintyInMeters() != null)) {
       String errorMessage = messageSource.getMessage("georeferenceAssertion.GeoreferenceVerificationStatus.invalid",
         null,
         LocaleContextHolder.getLocale());

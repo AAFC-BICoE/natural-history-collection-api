@@ -1,28 +1,22 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.commons.lang3.RandomStringUtils;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionDefinitionFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionRunFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
-import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.MaterialSampleFormComponent;
-import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionDefinitionFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleActionRunFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
   public static final UUID AGENT_ID = UUID.randomUUID();
   public static final String CREATED_BY = "dina";
   public static final LocalDateTime START_DATE_TIME = LocalDateTime.now().minusDays(2);
   public static final LocalDateTime END_DATE_TIME = LocalDateTime.now().minusDays(1);
+  public static final String GROUP = "group";
 
   private MaterialSampleActionRun prepUnderTest;
   private MaterialSampleActionDefinition definition;
@@ -59,6 +53,7 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(sourceMaterialSample.getUuid(), result.getSourceMaterialSample().getUuid());
     Assertions.assertEquals(START_DATE_TIME, result.getStartDateTime());
     Assertions.assertEquals(END_DATE_TIME, result.getEndDateTime());
+    Assertions.assertEquals(GROUP, result.getGroup());
   }
 
   private MaterialSampleActionRun persistMaterialSampleActionRun(
@@ -67,6 +62,7 @@ public class MaterialSampleActionRunCRUDIT extends CollectionModuleBaseIT {
   ) {
     MaterialSampleActionRun build = MaterialSampleActionRunFactory.newMaterialSampleActionRun()
       .createdBy(CREATED_BY)
+      .group(GROUP)
       .agentId(AGENT_ID)
       .sourceMaterialSample(materialSample)
       .materialSampleActionDefinition(def)

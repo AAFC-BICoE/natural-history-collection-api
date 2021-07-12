@@ -43,4 +43,7 @@ public class StorageUnitDto {
   private List<StorageUnitDto> storageUnitChildren = new ArrayList<>();
 
   private List<HierarchicalObject> hierarchy;
+
+  @JsonApiRelation
+  private StorageUnitTypeDto storageUnitType;
 }

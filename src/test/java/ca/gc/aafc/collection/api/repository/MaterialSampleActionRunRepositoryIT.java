@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -40,13 +41,13 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
   private MaterialSampleActionDefinitionRepository materialSampleActionDefinitionRepository;
 
   private static final String dwcCatalogNumber = "R-4313";
-  private static final String group = "aafc";
+  private static final String GROUP = "aafc";
   private static final String name = "preparation process definition";
   private static final LocalDateTime startDateTime= LocalDateTime.of(2007, 12, 3, 10, 15, 30);
   private static final LocalDateTime endDateTime= LocalDateTime.of(2019, 12, 3, 10, 15, 30);
   
   @Test
-  @WithMockKeycloakUser(username = "test user", groupRole = "aafc: staff")
+  @WithMockKeycloakUser(username = "test user", groupRole = GROUP + ":staff")
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleDto ms = materialSampleRepository.findOne(
       materialSampleRepository.create(newMaterialSampleDto(null)).getUuid(), new QuerySpec(MaterialSampleDto.class));
@@ -64,6 +65,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
     assertEquals(msar.getEndDateTime(), result.getEndDateTime());
     assertEquals(msar.getMaterialSampleActionDefinition().getUuid(), result.getMaterialSampleActionDefinition().getUuid());
     assertEquals(msar.getSourceMaterialSample().getUuid(), result.getSourceMaterialSample().getUuid());
+    assertEquals(msar.getGroup(), result.getGroup());
   }
 
   private MaterialSampleActionRunDto newMaterialSampleActionRunDto(
@@ -72,6 +74,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
       MaterialSampleActionRunDto materialSampleActionRunDto = new MaterialSampleActionRunDto();
       materialSampleActionRunDto.setStartDateTime(startDateTime);
       materialSampleActionRunDto.setEndDateTime(endDateTime);
+      materialSampleActionRunDto.setGroup(GROUP);
       materialSampleActionRunDto.setAgentId(UUID.randomUUID());
       materialSampleActionRunDto.setSourceMaterialSample(materialSampleDto);
       materialSampleActionRunDto.setMaterialSampleActionDefinition(materialSampleActionDefinitionDto);
@@ -82,7 +85,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
   private MaterialSampleActionDefinitionDto newMaterialSampleActionDefinitionDto() {
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = new MaterialSampleActionDefinitionDto();
     materialSampleActionDefinitionDto.setName(name);
-    materialSampleActionDefinitionDto.setGroup(group);
+    materialSampleActionDefinitionDto.setGroup(GROUP);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
     materialSampleActionDefinitionDto.setCreatedBy("test user");
     materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
@@ -102,7 +105,7 @@ public class MaterialSampleActionRunRepositoryIT extends CollectionModuleBaseIT 
     MaterialSampleDto materialSampleDto = new MaterialSampleDto();
     materialSampleDto.setDwcCatalogNumber(dwcCatalogNumber);
     materialSampleDto.setCollectingEvent(event);
-    materialSampleDto.setGroup(group);
+    materialSampleDto.setGroup(GROUP);
     materialSampleDto.setUuid(UUID.randomUUID());
     materialSampleDto.setAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));

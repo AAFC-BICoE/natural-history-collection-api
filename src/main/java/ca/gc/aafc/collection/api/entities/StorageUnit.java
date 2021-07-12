@@ -77,4 +77,8 @@ public class StorageUnit implements DinaEntity {
   @Transient
   private List<HierarchicalObject> hierarchy;
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "storage_unit_type_id")
+  private StorageUnitType storageUnitType;
+
 }

@@ -4,9 +4,11 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog src/main/resources/db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="59-Add_managed_attribute_to_materialSample" context="schema-change" author="stevenluu">
-        <addColumn tableName="material_sample">
-            <column name="managed_attributes" type="jsonb" defaultValue="{}" />
+    <changeSet id="64-Add_group_material_sample_action_run" context="schema-change" author="keyuk">
+        <addColumn tableName="material_sample_action_run">
+            <column name="_group" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
         </addColumn>
     </changeSet>
 

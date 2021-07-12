@@ -4,10 +4,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog src/main/resources/db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="59-Add_managed_attribute_to_materialSample" context="schema-change" author="stevenluu">
-        <addColumn tableName="material_sample">
-            <column name="managed_attributes" type="jsonb" defaultValue="{}" />
-        </addColumn>
+    <changeSet id="65-Remove_unique_index_on_storage_unit_table" context="schema-change" author="steven luu">
+        <dropIndex indexName="storage_unit_name_group_unique"
+            tableName="storage_unit"/>  
     </changeSet>
 
 </databaseChangeLog>
