@@ -4,12 +4,15 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import lombok.NonNull;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.Validator;
+
+import java.util.List;
 
 @Component
 public class MaterialSampleValidator implements Validator {
@@ -46,7 +49,22 @@ public class MaterialSampleValidator implements Validator {
     if (determination != null) {
       Errors determinationErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
       validator.validate(determination, determinationErrors);
-      errors.addAllErrors(determinationErrors);
+
+      determinationErrors.getFieldErrors()
+        .forEach(fieldError -> errors.rejectValue("Determination", "Determination",
+          "Determination." + fieldError.getField() + ": " + fieldError.getDefaultMessage()));
+
+      List<Determination.DeterminationDetail> details = determination.getDetails();
+      if (CollectionUtils.isNotEmpty(details)) {
+        details.forEach(determinationDetail -> {
+          Errors detailErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
+          validator.validate(determinationDetail, detailErrors);
+          detailErrors.getFieldErrors()
+            .forEach(fieldError -> errors.rejectValue("Determination", "Determination",
+              "DeterminationDetail." + fieldError.getField() + ": " + fieldError.getDefaultMessage()));
+        });
+
+      }
     }
   }
 
