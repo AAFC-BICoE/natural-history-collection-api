@@ -20,8 +20,7 @@ public class Determination {
 
     @JsonCreator
     public static ScientificNameSource forValue(String v) {
-      for (ScientificNameSource source :
-        ScientificNameSource.values()) {
+      for (ScientificNameSource source : ScientificNameSource.values()) {
         if (source.name().equalsIgnoreCase(v)) {
           return source;
         }
