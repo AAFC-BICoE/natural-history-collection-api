@@ -1,11 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.Optional;
-
-import ca.gc.aafc.dina.security.DinaAuthorizationService;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Repository;
-
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
@@ -13,7 +7,13 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.service.AuditService;
 import lombok.NonNull;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, MaterialSample> {
@@ -25,12 +25,13 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
       ExternalResourceProvider externalResourceProvider,
       Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
       DinaAuthorizationService groupAuthorizationService,
-      @NonNull BuildProperties buildProperties
-  ) {
+      @NonNull BuildProperties buildProperties,
+      @NonNull AuditService auditService
+      ) {
     super(
         dinaService,
         groupAuthorizationService,
-        Optional.empty(),
+        Optional.of(auditService),
         new DinaMapper<>(MaterialSampleDto.class),
         MaterialSampleDto.class,
         MaterialSample.class,
