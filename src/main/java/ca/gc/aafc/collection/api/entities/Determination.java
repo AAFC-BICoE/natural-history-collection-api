@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,18 @@ import java.util.UUID;
 public class Determination {
 
   public enum ScientificNameSource {
-    COLPLUS
+    COLPLUS;
+
+    @JsonCreator
+    public static ScientificNameSource forValue(String v) {
+      for (ScientificNameSource source :
+        ScientificNameSource.values()) {
+        if (source.name().equalsIgnoreCase(v)) {
+          return source;
+        }
+      }
+      return null;
+    }
   }
 
   @Size(max = 250)
