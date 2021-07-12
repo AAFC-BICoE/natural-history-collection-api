@@ -92,7 +92,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .determinedOn(LocalDate.now())
       .qualifier(RandomStringUtils.randomAlphabetic(3))
       .scientificNameDetails(RandomStringUtils.randomAlphabetic(3))
-      .scientificNameSource(RandomStringUtils.randomAlphabetic(3))
+      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
       .typeStatus(RandomStringUtils.randomAlphabetic(3))
       .typeStatusEvidence(RandomStringUtils.randomAlphabetic(3))
       .build();

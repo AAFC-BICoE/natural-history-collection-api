@@ -14,6 +14,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class Determination {
 
+  public enum ScientificNameSource {
+    COLPLUS
+  }
+
   @Size(max = 250)
   private final String verbatimScientificName;
 
@@ -46,8 +50,7 @@ public class Determination {
     @Size(max = 150)
     private final String qualifier;
 
-    @Size(max = 50)
-    private final String scientificNameSource;
+    private final ScientificNameSource scientificNameSource;
 
     @Size(max = 250)
     private final String scientificNameDetails;
