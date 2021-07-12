@@ -9,6 +9,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.SmartValidator;
 import org.springframework.validation.Validator;
 
@@ -53,13 +54,8 @@ public class MaterialSampleValidator implements Validator {
       validator.validate(determination, determinationErrors);
 
       determinationErrors.getFieldErrors()
-        .forEach(fieldError ->
-          errors.rejectValue(
-            "determination",
-            DETERMINATION_ERROR_KEY,
-            getMessage(DETERMINATION_ERROR_KEY, new Object[]{
-              fieldError.getField(), fieldError.getDefaultMessage()
-            })));
+        .forEach(fieldError -> errors.rejectValue("determination", DETERMINATION_ERROR_KEY,
+          getMessage(DETERMINATION_ERROR_KEY, fieldErrorToObjects(fieldError))));
 
       List<Determination.DeterminationDetail> details = determination.getDetails();
       if (CollectionUtils.isNotEmpty(details)) {
@@ -67,12 +63,8 @@ public class MaterialSampleValidator implements Validator {
           Errors detailErrors = ValidationErrorsHelper.newErrorsObject(materialSample);
           validator.validate(determinationDetail, detailErrors);
           detailErrors.getFieldErrors()
-            .forEach(fieldError -> errors.rejectValue(
-              "determination",
-              DETERMINATION_DETAIL_ERROR_KEY,
-              getMessage(DETERMINATION_DETAIL_ERROR_KEY, new Object[]{
-                fieldError.getField(), fieldError.getDefaultMessage()
-              })));
+            .forEach(fieldError -> errors.rejectValue("determination", DETERMINATION_DETAIL_ERROR_KEY,
+              getMessage(DETERMINATION_DETAIL_ERROR_KEY, fieldErrorToObjects(fieldError))));
         });
 
       }
@@ -100,5 +92,11 @@ public class MaterialSampleValidator implements Validator {
 
   private String getMessage(String key) {
     return this.getMessage(key, null);
+  }
+
+  private static Object[] fieldErrorToObjects(FieldError fieldError) {
+    return new Object[]{
+      fieldError.getField(), fieldError.getDefaultMessage()
+    };
   }
 }
