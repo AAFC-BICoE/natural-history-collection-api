@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -54,6 +55,25 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(detail.getTypeStatus(), resultDetail.getTypeStatus());
     Assertions.assertEquals(detail.getTypeStatusEvidence(), resultDetail.getTypeStatusEvidence());
     Assertions.assertEquals(detail.getScientificName(), resultDetail.getScientificName());
+  }
+
+  @Test
+  void create_WhenDetailHasValidationConstraintViolation_ThrowsValidationException() {
+    Determination.DeterminationDetail invalidDetail = Determination.DeterminationDetail.builder()
+      .typeStatus(RandomStringUtils.randomAlphabetic(100)) // Status to long
+      .build();
+    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
+    dto.setDetermination(Determination.builder().details(List.of(invalidDetail)).build());
+    Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
+  }
+
+  @Test
+  void create_WhenDeterminationHasValidationConstraintViolation_ThrowsValidationException() {
+    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
+    dto.setDetermination(Determination.builder()
+      .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
+      .build());
+    Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
   }
 
   private Determination newDetermination(Determination.DeterminationDetail detail) {
