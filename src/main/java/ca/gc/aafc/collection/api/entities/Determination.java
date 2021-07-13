@@ -41,7 +41,6 @@ public class Determination {
   @Size(max = 50)
   private final String verbatimDate;
 
-  @Valid
   private final List<DeterminationDetail> details;
 
   @Getter

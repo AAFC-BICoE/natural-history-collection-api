@@ -120,7 +120,6 @@ public class MaterialSample implements DinaEntity {
   private StorageUnit storageUnit;
 
   @Type(type = "jsonb")
-  @Valid
   private Determination determination;
 
 }
