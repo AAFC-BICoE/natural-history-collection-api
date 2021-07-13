@@ -21,23 +21,23 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
   public MaterialSampleRepository(
-      @NonNull MaterialSampleService dinaService,
-      ExternalResourceProvider externalResourceProvider,
-      Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
-      DinaAuthorizationService groupAuthorizationService,
-      @NonNull BuildProperties buildProperties,
-      @NonNull AuditService auditService
-      ) {
+    @NonNull MaterialSampleService dinaService,
+    ExternalResourceProvider externalResourceProvider,
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    DinaAuthorizationService groupAuthorizationService,
+    @NonNull BuildProperties buildProperties,
+    @NonNull AuditService auditService
+  ) {
     super(
-        dinaService,
-        groupAuthorizationService,
-        Optional.of(auditService),
-        new DinaMapper<>(MaterialSampleDto.class),
-        MaterialSampleDto.class,
-        MaterialSample.class,
-        null,
-        externalResourceProvider,
-        buildProperties);
+      dinaService,
+      groupAuthorizationService,
+      Optional.of(auditService),
+      new DinaMapper<>(MaterialSampleDto.class),
+      MaterialSampleDto.class,
+      MaterialSample.class,
+      null,
+      externalResourceProvider,
+      buildProperties);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
