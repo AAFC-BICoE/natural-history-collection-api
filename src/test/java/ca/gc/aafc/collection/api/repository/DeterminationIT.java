@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
-import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
