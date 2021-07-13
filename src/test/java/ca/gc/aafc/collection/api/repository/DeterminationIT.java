@@ -57,25 +57,6 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(detail.getScientificName(), resultDetail.getScientificName());
   }
 
-  @Test
-  void create_WhenDetailHasValidationConstraintViolation_ThrowsValidationException() {
-    Determination.DeterminationDetail invalidDetail = Determination.DeterminationDetail.builder()
-      .typeStatus(RandomStringUtils.randomAlphabetic(100)) // Status to long
-      .build();
-    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(Determination.builder().details(List.of(invalidDetail)).build());
-    Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
-  }
-
-  @Test
-  void create_WhenDeterminationHasValidationConstraintViolation_ThrowsValidationException() {
-    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(Determination.builder()
-      .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
-      .build());
-    Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
-  }
-
   private Determination newDetermination(Determination.DeterminationDetail detail) {
     return Determination.builder()
       .verbatimAgent(RandomStringUtils.randomAlphabetic(3))
