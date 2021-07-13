@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,6 +41,7 @@ public class Determination {
   @Size(max = 50)
   private final String verbatimDate;
 
+  @Valid
   private final List<DeterminationDetail> details;
 
   @Getter
