@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
@@ -46,6 +48,7 @@ public class Determination {
   public static class DeterminationDetail {
 
     @Size(max = 250)
+    @NotBlank
     private final String scientificName;
 
     @Size(max = 50)
@@ -61,6 +64,7 @@ public class Determination {
     @Size(max = 150)
     private final String qualifier;
 
+    @NotNull
     private final ScientificNameSource scientificNameSource;
 
     @Size(max = 250)
