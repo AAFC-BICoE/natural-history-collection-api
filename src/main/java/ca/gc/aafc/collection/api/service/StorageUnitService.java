@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.OneToManyDinaService;
 import ca.gc.aafc.dina.jpa.OneToManyFieldHandler;
@@ -21,11 +22,13 @@ import java.util.function.BiFunction;
 @Service
 public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
 
+  private final StorageUnitValidator storageUnitValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
 
   public StorageUnitService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
+    @NonNull StorageUnitValidator storageUnitValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService
   ) {
     super(baseDAO, sv, List.of(
@@ -37,11 +40,17 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
         storageUnit -> storageUnit.setParentStorageUnit(null))
     ));
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
+    this.storageUnitValidator = storageUnitValidator;
   }
 
   @Override
   protected void preCreate(StorageUnit entity) {
     entity.setUuid(UUID.randomUUID());
+  }
+
+  @Override
+  public void validateBusinessRules(StorageUnit entity) {
+    applyBusinessRule(entity, storageUnitValidator);
   }
 
   @Override
