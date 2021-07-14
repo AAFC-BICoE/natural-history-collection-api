@@ -28,6 +28,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -170,6 +171,7 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "jsonb")
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
+  @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
   /**
