@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -154,6 +155,68 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void geographicPlaceNameSourceDetail_ConstraintValidation_ConstraintViolationExceptionThrown() {
+    collectingEvent.setGeographicPlaceNameSourceDetail(GeographicPlaceNameSourceDetail.builder().build());
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @SneakyThrows
+  @Test
+  void geoDetailStateProvince_HasConstraintValidation_ConstraintViolationExceptionThrown() {
+    GeographicPlaceNameSourceDetail.SourceAdministrativeLevel invalid = GeographicPlaceNameSourceDetail
+      .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
+
+    GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
+      .sourceUrl(new URL("http://example.com"))
+      .stateProvince(invalid)
+      .country(TEST_COUNTRY)
+      .higherGeographicPlaces(List.of(TEST_PROVINCE))
+      .build();
+    collectingEvent.setGeographicPlaceNameSourceDetail(detail);
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @SneakyThrows
+  @Test
+  void geoDetailHigherGeographicPlaces_HasConstraintValidation_ConstraintViolationExceptionThrown() {
+    GeographicPlaceNameSourceDetail.SourceAdministrativeLevel invalid = GeographicPlaceNameSourceDetail
+      .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
+
+    GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
+      .sourceUrl(new URL("http://example.com"))
+      .stateProvince(TEST_PROVINCE)
+      .country(TEST_COUNTRY)
+      .higherGeographicPlaces(List.of(invalid))
+      .build();
+    collectingEvent.setGeographicPlaceNameSourceDetail(detail);
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @SneakyThrows
+  @Test
+  void geoDetailCountry_HasConstraintValidation_ConstraintViolationExceptionThrown() {
+    GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
+      .sourceUrl(new URL("http://example.com"))
+      .stateProvince(TEST_PROVINCE)
+      .country(GeographicPlaceNameSourceDetail.Country.builder().code("1").name("name").build())
+      .higherGeographicPlaces(List.of(TEST_PROVINCE))
+      .build();
+    collectingEvent.setGeographicPlaceNameSourceDetail(detail);
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
   }
 
   @Test
