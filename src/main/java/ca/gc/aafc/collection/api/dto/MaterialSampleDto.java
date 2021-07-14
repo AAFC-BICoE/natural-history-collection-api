@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ca.gc.aafc.collection.api.entities.Determination;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -78,4 +79,6 @@ public class MaterialSampleDto {
 
   @JsonApiRelation
   private StorageUnitDto storageUnit;
+
+  private Determination determination;
 }
