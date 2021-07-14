@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -26,7 +28,7 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenValid_NoErrors() {
-    StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().build();
+    StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
     Errors errors = new BeanPropertyBindingResult(storageUnit, storageUnit.getName());
     storageUnitValidator.validate(storageUnit, errors);
     assertFalse(errors.hasErrors());
@@ -35,7 +37,7 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
   @Test
   void validate_WhenParentIsSelf_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(StorageUnitValidator.VALID_PARENT_RELATIONSHIP_LOOP);
-    StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().build();
+    StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
     storageUnit.setParentStorageUnit(storageUnit);
     Errors errors = new BeanPropertyBindingResult(storageUnit, storageUnit.getName());
     storageUnitValidator.validate(storageUnit, errors);

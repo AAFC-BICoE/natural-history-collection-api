@@ -39,7 +39,7 @@ public class StorageUnitValidator implements Validator {
     if (storageUnit.getParentStorageUnit() != null
       && storageUnit.getParentStorageUnit().getUuid().equals(storageUnit.getUuid())) {
       String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
-      errors.rejectValue("parentMaterialSample", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
+      errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
     }
   }
 
