@@ -9,7 +9,9 @@ import org.javers.core.metamodel.annotation.Value;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -17,21 +19,28 @@ import javax.validation.constraints.Size;
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
 public class GeographicPlaceNameSourceDetail {
 
-  @NotBlank
+  @NotNull
   private URL sourceUrl;
 
   // It is customGeographicPlace OR selectedGeographicPlace but not both
   private String customGeographicPlace;
+
+  @Valid
   private SourceAdministrativeLevel selectedGeographicPlace;
 
   // all SourceAdministrativeLevel (ordered) between selectedGeographicPlace and stateProvince/country
   // excluding them.
+  @Valid
   private List<SourceAdministrativeLevel> higherGeographicPlaces;
 
-  @NotBlank
+  @NotNull
+  @Valid
   private SourceAdministrativeLevel stateProvince;
-  @NotBlank
+
+  @NotNull
+  @Valid
   private Country country;
+
   private OffsetDateTime recordedOn;
 
   /**
