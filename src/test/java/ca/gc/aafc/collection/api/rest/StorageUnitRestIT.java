@@ -57,6 +57,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
       .body("data.attributes.createdOn", Matchers.notNullValue())
+      .body("data.attributes.numberOfChildren", Matchers.is(1))
       .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(childId))
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId))
       .body("data.relationships.storageUnitType.data.id", Matchers.is(unitTypeId));

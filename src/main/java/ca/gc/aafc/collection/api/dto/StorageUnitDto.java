@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.service.HierarchicalObject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -46,4 +47,8 @@ public class StorageUnitDto {
 
   @JsonApiRelation
   private StorageUnitTypeDto storageUnitType;
+
+  @IgnoreDinaMapping
+  private Integer numberOfChildren = storageUnitChildren.size();
+
 }
