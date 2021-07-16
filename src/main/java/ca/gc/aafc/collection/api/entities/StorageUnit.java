@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.HierarchicalObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
