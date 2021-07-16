@@ -22,7 +22,6 @@ public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> 
     entity.setUuid(UUID.randomUUID());
   }
 
- // @Cacheable(value = "storage_unit_type_cache", key = "#id")
   @Cacheable(value = "storage_unit_type_cache")
   @Override
   public <T> T findOneById(Object id, Class<T> entityClass) {
