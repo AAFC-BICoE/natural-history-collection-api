@@ -37,7 +37,7 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
     storageUnitService.create(c);
 
     StorageUnit update_a = storageUnitService.findOne(a.getUuid(), StorageUnit.class);
-    update_a.setParentStorageUnit(b);
+    update_a.setParentStorageUnit(c);
 
     // A -> B -> C -> A
     storageUnitService.update(update_a);
