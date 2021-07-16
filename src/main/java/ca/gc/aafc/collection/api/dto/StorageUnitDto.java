@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.service.HierarchicalObject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -42,7 +43,7 @@ public class StorageUnitDto {
   @JsonApiRelation
   private List<StorageUnitDto> storageUnitChildren = new ArrayList<>();
 
-  private List<HierarchicalObject> hierarchy;
+  private List<StorageHierarchicalObject> hierarchy;
 
   @JsonApiRelation
   private StorageUnitTypeDto storageUnitType;

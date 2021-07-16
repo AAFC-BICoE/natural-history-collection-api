@@ -70,7 +70,8 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   @Test
   void find_LoadsHierarchy() {
-    findUnit(unitId).body("data.attributes.hierarchy", Matchers.notNullValue());
+    findUnit(unitId)
+      .body("data.attributes.hierarchy", Matchers.notNullValue());
   }
 
   @Test
