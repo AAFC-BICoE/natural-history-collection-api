@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +28,6 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
   private static final String TYPE_NAME = "preparation-type";
-  private static final String name = "preparation process definition";
 
   protected PreparationTypeJsonRestIT() {
     super("/api/v1/");
@@ -35,6 +35,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
   @Test
   void preparationType_filterByGroupWithOperator() {
+    String name = RandomStringUtils.randomAlphabetic(5);
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
@@ -55,6 +56,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
   @Test
   @DisplayName("Assuming that we cannot use a filter called \"group\" with the default operator")
   void preparationType_filterByGroupWithoutOperator_BadRequest() {
+    String name = RandomStringUtils.randomAlphabetic(5);
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setCreatedBy("test user");
     preparationTypeDto.setGroup("aafc");
