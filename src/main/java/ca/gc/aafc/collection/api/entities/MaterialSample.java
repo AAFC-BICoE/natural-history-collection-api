@@ -121,4 +121,8 @@ public class MaterialSample implements DinaEntity {
   @Valid
   private Determination determination;
 
+  @Size(max = 500)
+  @Column(name = "preparation_remarks")
+  private String preparationRemarks;
+
 }

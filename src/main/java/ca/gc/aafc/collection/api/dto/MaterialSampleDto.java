@@ -81,4 +81,6 @@ public class MaterialSampleDto {
   private StorageUnitDto storageUnit;
 
   private Determination determination;
+
+  private String preparationRemarks;
 }

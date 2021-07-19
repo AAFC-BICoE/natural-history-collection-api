@@ -70,4 +70,6 @@
   <include file="db/changelog/migrations/64-Add_group_material_sample_action_run.xml"/>
   <include file="db/changelog/migrations/65-Remove_unique_index_on_storage_unit_table.xml"/>
   <include file="db/changelog/migrations/66_Add_Determination_to_material_sample.xml"/>
+  <include file="db/changelog/migrations/67-PreparationType_name_should_be_unique_per_group.xml"/>
+  <include file="db/changelog/migrations/68-Add_preparationRemarks_field_to_MaterialSample.xml"/>
 </databaseChangeLog>
