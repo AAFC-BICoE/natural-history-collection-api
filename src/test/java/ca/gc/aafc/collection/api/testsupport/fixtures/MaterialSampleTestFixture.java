@@ -16,6 +16,8 @@ public class MaterialSampleTestFixture {
   public static final UUID PREPARED_BY = UUID.randomUUID();
   public static final LocalDate PREPARATION_DATE = LocalDate.now();
   public static final String CREATED_BY = "test user";
+  public static final String DWC_DEGREE_OF_ESTABLISHMENT = "established";
+  public static final String PREPARATION_REMARKS = "this is a remark on the preparation";
 
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto= new MaterialSampleDto();
@@ -29,6 +31,8 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     materialSampleDto.setCreatedBy(CREATED_BY);
+    materialSampleDto.setDwcDegreeOfEstablishment(DWC_DEGREE_OF_ESTABLISHMENT);
+    materialSampleDto.setPreparationRemarks(PREPARATION_REMARKS);
     return materialSampleDto;
   }
 }
