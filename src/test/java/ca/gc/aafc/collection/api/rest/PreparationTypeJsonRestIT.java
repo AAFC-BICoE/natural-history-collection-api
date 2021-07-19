@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -35,17 +35,14 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
   @Test
   void preparationType_filterByGroupWithOperator() {
-    String name = RandomStringUtils.randomAlphabetic(5);
-    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
+    PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();
     preparationTypeDto.setCreatedBy("test user");
-    preparationTypeDto.setGroup("aafc");
-    preparationTypeDto.setName(name);  
     String uuid = sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data[0].id");
 
     PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
     preparationTypeDto_differentGroup.setCreatedBy("nottest user");
     preparationTypeDto_differentGroup.setGroup("NOTaafc");
-    preparationTypeDto_differentGroup.setName("NOT" + name);  
+    preparationTypeDto_differentGroup.setName("NOT" + preparationTypeDto.getName());  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
 
     String actualUuid = sendGet(TYPE_NAME+"?filter[group][eq]=aafc", "").extract().response().body().path("data[0].id");
@@ -56,16 +53,13 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
   @Test
   @DisplayName("Assuming that we cannot use a filter called \"group\" with the default operator")
   void preparationType_filterByGroupWithoutOperator_BadRequest() {
-    String name = RandomStringUtils.randomAlphabetic(5);
-    PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
+    PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();
     preparationTypeDto.setCreatedBy("test user");
-    preparationTypeDto.setGroup("aafc");
-    preparationTypeDto.setName(name);  
 
     PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
     preparationTypeDto_differentGroup.setCreatedBy("nottest user");
     preparationTypeDto_differentGroup.setGroup("NOTaafc");
-    preparationTypeDto_differentGroup.setName("NOT" + name);  
+    preparationTypeDto_differentGroup.setName("NOT" + preparationTypeDto.getName());  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
 
     sendGet(TYPE_NAME+"?filter[group]=aafc", "", HttpStatus.BAD_REQUEST.value());
