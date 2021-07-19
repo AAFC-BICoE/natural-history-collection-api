@@ -69,9 +69,20 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void find_LoadsHierarchy() {
+  void find_LoadsFlattenHierarchy() {
     findUnit(unitId)
-      .body("data.attributes.hierarchy", Matchers.notNullValue());
+      .body("data.attributes.hierarchy", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].uuid", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].name", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].rank", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].type", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].typeName", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].typeUuid", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].hierarchicalObject", Matchers.nullValue())
+      .body("data.attributes.hierarchy[1].uuid", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[1].name", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[1].rank", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[1].hierarchicalObject", Matchers.nullValue());
   }
 
   @Test
