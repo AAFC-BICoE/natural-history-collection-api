@@ -40,7 +40,7 @@ public class StorageUnitDto {
   private StorageUnitDto parentStorageUnit;
 
   @JsonApiRelation
-  private List<StorageUnitDto> storageUnitChildren = new ArrayList<>();
+  private List<ImmutableStorageUnitChildDto> storageUnitChildren = new ArrayList<>();
 
   private List<StorageHierarchicalObject> hierarchy;
 

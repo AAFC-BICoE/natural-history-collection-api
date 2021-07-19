@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import ca.gc.aafc.collection.api.entities.ImmutableStorageUnitChild;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
@@ -7,6 +8,7 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.OneToManyDinaService;
 import ca.gc.aafc.dina.jpa.OneToManyFieldHandler;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
+import ca.gc.aafc.dina.service.DefaultDinaService;
 import ca.gc.aafc.dina.service.HierarchicalObject;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
@@ -24,7 +26,7 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 
 @Service
-public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
+public class StorageUnitService extends DefaultDinaService<StorageUnit> {
 
   private final StorageUnitValidator storageUnitValidator;
   private final StorageUnitTypeService storageUnitTypeService;
@@ -37,14 +39,7 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
     @NonNull StorageUnitTypeService storageUnitTypeService
   ) {
-    super(baseDAO, sv, List.of(
-      new OneToManyFieldHandler<>(
-        StorageUnit.class,
-        storageUnit -> storageUnit::setParentStorageUnit,
-        StorageUnit::getStorageUnitChildren,
-        "parentStorageUnit",
-        storageUnit -> storageUnit.setParentStorageUnit(null))
-    ));
+    super(baseDAO, sv);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitValidator = storageUnitValidator;
     this.storageUnitTypeService = storageUnitTypeService;
