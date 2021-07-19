@@ -45,6 +45,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String storageUnitExpectedCreatedBy = "su-createdBy";
   private static final String storageUnitExpectedGroup = "su-dina";
   private static final String storageUnitExpectedName = "su-name";
+  private static final String expectedPreparationRemarks = "this is a remark on the preparation";
   private static final LocalDate preparationDate = LocalDate.now();
   private PreparationType preparationType;
   private MaterialSampleType materialSampleType;
@@ -86,6 +87,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .preparationType(preparationType)
         .materialSampleType(materialSampleType)
         .storageUnit(storageUnit)
+        .preparationRemarks(expectedPreparationRemarks)
         .build();
     materialSampleService.create(materialSample);
   }
@@ -101,6 +103,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(expectedCreatedBy, materialSample.getCreatedBy());
     assertEquals(attachmentIdentifiers, materialSample.getAttachment());
     assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
+    assertEquals(expectedPreparationRemarks, materialSample.getPreparationRemarks());
 
     assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
     assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
@@ -132,6 +135,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(expectedCreatedBy, fetchedMaterialSample.getCreatedBy());
     assertEquals(attachmentIdentifiers, fetchedMaterialSample.getAttachment());
     assertEquals(sampleMaterialName, fetchedMaterialSample.getMaterialSampleName());
+    assertEquals(expectedPreparationRemarks, fetchedMaterialSample.getPreparationRemarks());
 
     assertEquals(preparationType.getId(), fetchedMaterialSample.getPreparationType().getId());
     assertEquals(preparationExpectedCreatedBy, fetchedMaterialSample.getPreparationType().getCreatedBy());
