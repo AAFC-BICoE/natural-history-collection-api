@@ -91,12 +91,8 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
     List<StorageHierarchicalObject> storageHierarchicalObjects = new ArrayList<>();
     for (HierarchicalObject hObject : hierarchicalObjects) {
       StorageHierarchicalObject storageHierarchicalObject = new StorageHierarchicalObject();
-      storageHierarchicalObject.setId(hObject.getId());
-      storageHierarchicalObject.setName(hObject.getName());
-      storageHierarchicalObject.setRank(hObject.getRank());
-      storageHierarchicalObject.setUuid(hObject.getUuid());
+      storageHierarchicalObject.setHierarchicalObject(hObject);
       if (hObject.getType() != null) {
-        storageHierarchicalObject.setType(hObject.getType());
         StorageUnitType storageUnitType = storageUnitTypeService.findOneById(Integer.parseInt(hObject.getType()), StorageUnitType.class);
         storageHierarchicalObject.setTypeName(storageUnitType.getName());
         storageHierarchicalObject.setTypeUuid(storageUnitType.getUuid());
