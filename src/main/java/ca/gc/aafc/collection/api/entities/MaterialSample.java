@@ -125,4 +125,8 @@ public class MaterialSample implements DinaEntity {
   @Column(name = "preparation_remarks")
   private String preparationRemarks;
 
+  @Size(max = 250)
+  @Column(name = "dwc_degree_of_establishment")
+  private String dwcDegreeOfEstablishment;
+
 }
