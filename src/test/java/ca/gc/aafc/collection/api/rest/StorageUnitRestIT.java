@@ -34,6 +34,8 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   private String parentId;
   private String childId;
   private StorageUnitDto unit;
+  private StorageUnitDto parentUnit;
+  private StorageUnitTypeDto unitType;
   private String unitId;
   private String unitTypeId;
 
@@ -43,10 +45,12 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   @BeforeEach
   void setUp() {
-    parentId = postUnit(newUnit());
+    parentUnit = newUnit();
+    parentId = postUnit(parentUnit);
     childId = postUnit(newUnit());
+    unitType = newUnitType();
+    unitTypeId = postUnitType(unitType);
     unit = newUnit();
-    unitTypeId = postUnitType(newUnitType());
     unitId = postUnitWithRelations(parentId, childId, unitTypeId, unit);
   }
 
@@ -69,8 +73,20 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void find_LoadsHierarchy() {
-    findUnit(unitId).body("data.attributes.hierarchy", Matchers.notNullValue());
+  void find_LoadsFlattenHierarchy() {
+    findUnit(unitId)
+      .body("data.attributes.hierarchy", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].uuid", Matchers.is(unitId))
+      .body("data.attributes.hierarchy[0].name", Matchers.is(unit.getName()))
+      .body("data.attributes.hierarchy[0].rank", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].type", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[0].typeName", Matchers.is(unitType.getName()))
+      .body("data.attributes.hierarchy[0].typeUuid", Matchers.is(unitTypeId))
+      .body("data.attributes.hierarchy[0].hierarchicalObject", Matchers.nullValue())
+      .body("data.attributes.hierarchy[1].uuid", Matchers.is(parentId))
+      .body("data.attributes.hierarchy[1].name", Matchers.is(parentUnit.getName()))
+      .body("data.attributes.hierarchy[1].rank", Matchers.notNullValue())
+      .body("data.attributes.hierarchy[1].hierarchicalObject", Matchers.nullValue());
   }
 
   @Test

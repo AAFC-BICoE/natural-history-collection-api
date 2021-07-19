@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.HierarchicalObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -75,7 +75,7 @@ public class StorageUnit implements DinaEntity {
   private List<StorageUnit> storageUnitChildren = new ArrayList<>();
 
   @Transient
-  private List<HierarchicalObject> hierarchy;
+  private List<StorageHierarchicalObject> hierarchy;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_type_id")

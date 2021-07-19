@@ -1,11 +1,13 @@
 package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.OneToManyDinaService;
 import ca.gc.aafc.dina.jpa.OneToManyFieldHandler;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
+import ca.gc.aafc.dina.service.HierarchicalObject;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
@@ -15,6 +17,8 @@ import org.springframework.validation.SmartValidator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -23,13 +27,15 @@ import java.util.function.BiFunction;
 public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
 
   private final StorageUnitValidator storageUnitValidator;
+  private final StorageUnitTypeService storageUnitTypeService;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
 
   public StorageUnitService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull StorageUnitValidator storageUnitValidator,
-    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService
+    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
+    @NonNull StorageUnitTypeService storageUnitTypeService
   ) {
     super(baseDAO, sv, List.of(
       new OneToManyFieldHandler<>(
@@ -41,6 +47,7 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
     ));
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitValidator = storageUnitValidator;
+    this.storageUnitTypeService = storageUnitTypeService;
   }
 
   @Override
@@ -73,12 +80,25 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
   }
 
   private void setHierarchy(StorageUnit unit) {
-    unit.setHierarchy(postgresHierarchicalDataService.getHierarchy(
+    List<HierarchicalObject> hierarchicalObjects = postgresHierarchicalDataService.getHierarchyWithType(
       unit.getId(),
       "storage_unit",
       "id",
       "uuid",
       "parent_storage_unit_id",
-      "name"));
+      "name",
+      "storage_unit_type_id");
+    List<StorageHierarchicalObject> storageHierarchicalObjects = new ArrayList<>();
+    for (HierarchicalObject hObject : hierarchicalObjects) {
+      StorageHierarchicalObject storageHierarchicalObject = new StorageHierarchicalObject();
+      storageHierarchicalObject.setHierarchicalObject(hObject);
+      if (hObject.getType() != null) {
+        StorageUnitType storageUnitType = storageUnitTypeService.findOneById(Integer.parseInt(hObject.getType()), StorageUnitType.class);
+        storageHierarchicalObject.setTypeName(storageUnitType.getName());
+        storageHierarchicalObject.setTypeUuid(storageUnitType.getUuid());
+      }
+      storageHierarchicalObjects.add(storageHierarchicalObject);
+    }
+    unit.setHierarchy(storageHierarchicalObjects);
   }
 }
