@@ -46,6 +46,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String storageUnitExpectedGroup = "su-dina";
   private static final String storageUnitExpectedName = "su-name";
   private static final String expectedPreparationRemarks = "this is a remark on the preparation";
+  private static final String expectDwcDegreeOfEstablishment = "established";
   private static final LocalDate preparationDate = LocalDate.now();
   private PreparationType preparationType;
   private MaterialSampleType materialSampleType;
@@ -88,6 +89,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .materialSampleType(materialSampleType)
         .storageUnit(storageUnit)
         .preparationRemarks(expectedPreparationRemarks)
+        .dwcDegreeOfEstablishment(expectDwcDegreeOfEstablishment)
         .build();
     materialSampleService.create(materialSample);
   }
@@ -104,6 +106,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(attachmentIdentifiers, materialSample.getAttachment());
     assertEquals(sampleMaterialName, materialSample.getMaterialSampleName());
     assertEquals(expectedPreparationRemarks, materialSample.getPreparationRemarks());
+    assertEquals(expectDwcDegreeOfEstablishment, materialSample.getDwcDegreeOfEstablishment());
 
     assertEquals(preparationType.getId(), materialSample.getPreparationType().getId());
     assertEquals(preparationExpectedCreatedBy, materialSample.getPreparationType().getCreatedBy());
@@ -136,6 +139,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(attachmentIdentifiers, fetchedMaterialSample.getAttachment());
     assertEquals(sampleMaterialName, fetchedMaterialSample.getMaterialSampleName());
     assertEquals(expectedPreparationRemarks, fetchedMaterialSample.getPreparationRemarks());
+    assertEquals(expectDwcDegreeOfEstablishment, fetchedMaterialSample.getDwcDegreeOfEstablishment());
 
     assertEquals(preparationType.getId(), fetchedMaterialSample.getPreparationType().getId());
     assertEquals(preparationExpectedCreatedBy, fetchedMaterialSample.getPreparationType().getCreatedBy());

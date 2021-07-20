@@ -72,4 +72,5 @@
   <include file="db/changelog/migrations/66_Add_Determination_to_material_sample.xml"/>
   <include file="db/changelog/migrations/67-PreparationType_name_should_be_unique_per_group.xml"/>
   <include file="db/changelog/migrations/68-Add_preparationRemarks_field_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/69-Add_dwcDegreeOfEstablishment_to_MaterialSample.xml"/>
 </databaseChangeLog>
