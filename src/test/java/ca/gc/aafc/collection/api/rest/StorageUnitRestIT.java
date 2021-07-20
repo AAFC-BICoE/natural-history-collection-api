@@ -51,7 +51,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     unitType = newUnitType();
     unitTypeId = postUnitType(unitType);
     unit = newUnit();
-    unitId = postUnitWithRelations(parentId, childId, unitTypeId, unit);
+    unitId = postUnitWithRelations(parentId, unitTypeId, unit);
   }
 
   @Test
@@ -94,7 +94,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     String newParentId = postUnit(newUnit());
     String newChildId = postUnit(newUnit());
     String newUnitTypeId = postUnitType(newUnitType());
-    sendPatchWithRelations(newParentId, newChildId, newUnitTypeId);
+    sendPatchWithRelations(newParentId, newUnitTypeId);
     findUnit(childId)
       .body("data.relationships.storageUnitChildren.data", Matchers.empty())
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
@@ -128,21 +128,21 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
   }
 
-  private void sendPatchWithRelations(String newParentId, String newChildId, String newUnitTypeId) {
+  private void sendPatchWithRelations(String newParentId, String newUnitTypeId) {
     sendPatch(StorageUnitDto.TYPENAME, unitId,
       JsonAPITestHelper.toJsonAPIMap(
         StorageUnitDto.TYPENAME,
         JsonAPITestHelper.toAttributeMap(unit),
-        getRelationshipMap(newParentId, newChildId, newUnitTypeId),
+        getRelationshipMap(newParentId, newUnitTypeId),
         null)
     );
   }
 
-  private String postUnitWithRelations(String parentId, String childId, String unitTypeId, StorageUnitDto unit) {
+  private String postUnitWithRelations(String parentId, String unitTypeId, StorageUnitDto unit) {
     return sendPost(StorageUnitDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
       StorageUnitDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(unit),
-      getRelationshipMap(parentId, childId, unitTypeId),
+      getRelationshipMap(parentId, unitTypeId),
       null)
     ).extract().body().jsonPath().getString("data.id");
   }
@@ -165,7 +165,6 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     StorageUnitDto unitDto = new StorageUnitDto();
     unitDto.setName(RandomStringUtils.randomAlphabetic(3));
     unitDto.setGroup(RandomStringUtils.randomAlphabetic(4));
-    unitDto.setStorageUnitChildren(null);
     unitDto.setParentStorageUnit(null);
     unitDto.setStorageUnitType(null);
     return unitDto;
@@ -178,12 +177,10 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     return unitTypeDto;
   }
 
-  private Map<String, Object> getRelationshipMap(String newParentId, String newChildId, String newUnitTypeId) {
+  private Map<String, Object> getRelationshipMap(String newParentId, String newUnitTypeId) {
     return Map.of(
       "parentStorageUnit",
       Map.of("data", Map.of("type", StorageUnitDto.TYPENAME, "id", newParentId)),
-      "storageUnitChildren",
-      Map.of("data", List.of(Map.of("type", StorageUnitDto.TYPENAME, "id", newChildId))),
       "storageUnitType",
       Map.of("data", Map.of("type", StorageUnitTypeDto.TYPENAME, "id", newUnitTypeId)));
   }

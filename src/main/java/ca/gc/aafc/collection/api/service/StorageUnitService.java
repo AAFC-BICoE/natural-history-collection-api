@@ -1,12 +1,9 @@
 package ca.gc.aafc.collection.api.service;
 
-import ca.gc.aafc.collection.api.entities.ImmutableStorageUnitChild;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.jpa.OneToManyDinaService;
-import ca.gc.aafc.dina.jpa.OneToManyFieldHandler;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import ca.gc.aafc.dina.service.HierarchicalObject;
