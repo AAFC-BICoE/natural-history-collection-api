@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
@@ -13,6 +14,7 @@ public class VocabularyConfigurationRepositoryIT extends CollectionModuleBaseIT 
   @Inject
   private VocabularyConfigurationRepository vocabularyConfigurationRepository;
 
+  @Test
   public void findAll_VocabularyConfiguration() {
     VocabularyConfigurationDto vocabularyConfigurationDto =
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyConfigurationDto.class)).get(0);

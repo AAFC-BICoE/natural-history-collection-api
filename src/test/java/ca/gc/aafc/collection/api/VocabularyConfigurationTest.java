@@ -18,10 +18,10 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getDegreeOfEstablishment() {
-    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().values().iterator().next().getName());
-    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", vocabularyConfiguration.getDegreeOfEstablishment().values().iterator().next().getTerm());
-    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().values().iterator().next().getLabels().get("en"));
-    assertEquals("Indigène", vocabularyConfiguration.getDegreeOfEstablishment().values().iterator().next().getLabels().get("fr"));
+    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().get(0).getName());
+    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", vocabularyConfiguration.getDegreeOfEstablishment().get(0).getTerm());
+    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().get(0).getLabels().get("en"));
+    assertEquals("Indigène", vocabularyConfiguration.getDegreeOfEstablishment().get(0).getLabels().get("fr"));
   }
   
 }

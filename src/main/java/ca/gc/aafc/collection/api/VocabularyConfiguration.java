@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +15,15 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @ConfigurationProperties
 public class VocabularyConfiguration {
   
-  private Map<String, VocabularyConfigurationDto> degreeOfEstablishment;
+  private List<VocabularyConfigurationDto> degreeOfEstablishment;
 
   public VocabularyConfiguration(
-    Map<String, VocabularyConfigurationDto> degreeOfEstablishment
+    List<VocabularyConfigurationDto> degreeOfEstablishment
   ) {
     this.degreeOfEstablishment = degreeOfEstablishment;
   }
   
-  public Map<String, VocabularyConfigurationDto> getDegreeOfEstablishment() {
+  public List<VocabularyConfigurationDto> getDegreeOfEstablishment() {
     return degreeOfEstablishment;
   }
 
