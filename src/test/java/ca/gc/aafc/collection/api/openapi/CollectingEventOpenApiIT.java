@@ -3,18 +3,13 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.javers.common.collections.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,15 +18,12 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
-import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -90,7 +82,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
           "collectors", getExternalListType("person"),
           "attachment", getExternalListType("metadata")),
         null)
-      ).extract().asString(), ValidationRestrictionOptions.FULL_RESTRICTIONS);
+      ).extract().asString());
   }
 
   private Map<String, Object> getExternalListType(String type) {

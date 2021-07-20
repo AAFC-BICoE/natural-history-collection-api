@@ -83,4 +83,6 @@ public class MaterialSampleDto {
   private Determination determination;
 
   private String preparationRemarks;
+  
+  private String dwcDegreeOfEstablishment;
 }

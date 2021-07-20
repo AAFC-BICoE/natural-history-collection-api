@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import ca.gc.aafc.collection.api.entities.ImmutableStorageUnitChild;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -39,8 +40,7 @@ public class StorageUnitDto {
   @JsonApiRelation
   private StorageUnitDto parentStorageUnit;
 
-  @JsonApiRelation
-  private List<ImmutableStorageUnitChildDto> storageUnitChildren = new ArrayList<>();
+  private List<ImmutableStorageUnitChild> storageUnitChildren = new ArrayList<>();
 
   private List<StorageHierarchicalObject> hierarchy;
 
