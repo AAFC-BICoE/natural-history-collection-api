@@ -13,14 +13,14 @@ import org.springframework.context.annotation.PropertySource;
 import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 
 @Configuration
-@PropertySource(value = "classpath:vocabulary/doe.yml",
-  factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/doe.yml", factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/srs.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class VocabularyConfiguration {
   
   private final Map<String, List<VocabularyElement>> vocabulary;
 
-  public VocabularyConfiguration( Map<String, List<VocabularyElement>> vocabulary) {
+  public VocabularyConfiguration(Map<String, List<VocabularyElement>> vocabulary) {
     this.vocabulary = vocabulary;
   }
 
