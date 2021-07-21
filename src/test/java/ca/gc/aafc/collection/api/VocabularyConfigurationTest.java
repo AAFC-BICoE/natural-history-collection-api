@@ -1,11 +1,15 @@
 package ca.gc.aafc.collection.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -18,10 +22,13 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getDegreeOfEstablishment() {
-    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getName());
-    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getTerm());
-    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getLabels().get("en"));
-    assertEquals("Indigène", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getLabels().get("fr"));
+    List<VocabularyConfiguration.VocabularyElement> degreeOfEstablishment = vocabularyConfiguration.getVocabulary().get("degreeOfEstablishment");
+
+    assertNotNull(degreeOfEstablishment);
+    assertEquals("native", degreeOfEstablishment.get(0).getName());
+    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", degreeOfEstablishment.get(0).getTerm());
+    assertEquals("native", degreeOfEstablishment.get(0).getLabels().get("en"));
+    assertEquals("Indigène", degreeOfEstablishment.get(0).getLabels().get("fr"));
   }
   
 }

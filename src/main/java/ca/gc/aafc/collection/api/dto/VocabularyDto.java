@@ -1,18 +1,21 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.util.List;
-
+import ca.gc.aafc.collection.api.VocabularyConfiguration;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+import java.util.List;
+
+@AllArgsConstructor
+@Getter
 @JsonApiResource(type = "vocabulary")
 public class VocabularyDto {
   
   @JsonApiId
-  private String id;
+  private final String id;
 
-  private List<VocabularyElementDto> vocabularyElements;
+  private final List<VocabularyConfiguration.VocabularyElement> vocabularyElements;
 
 }

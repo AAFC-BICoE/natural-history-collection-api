@@ -1,12 +1,15 @@
 package ca.gc.aafc.collection.api;
 
+import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import ca.gc.aafc.collection.api.dto.VocabularyDto;
 import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 
 @Configuration
@@ -15,16 +18,21 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @ConfigurationProperties
 public class VocabularyConfiguration {
   
-  private Map<String, VocabularyDto> degreeOfEstablishment;
+  private final Map<String, List<VocabularyElement>> vocabulary;
 
-  public VocabularyConfiguration(
-    Map<String, VocabularyDto> degreeOfEstablishment
-  ) {
-    this.degreeOfEstablishment = degreeOfEstablishment;
-  }
-  
-  public Map<String, VocabularyDto> getDegreeOfEstablishment() {
-    return degreeOfEstablishment;
+  public VocabularyConfiguration( Map<String, List<VocabularyElement>> vocabulary) {
+    this.vocabulary = vocabulary;
   }
 
+  public Map<String, List<VocabularyElement>> getVocabulary() {
+    return vocabulary;
+  }
+
+  @NoArgsConstructor
+  @Getter
+  @Setter public static class VocabularyElement {
+    private String name;
+    private String term;
+    private Map<String, String> labels;
+  }
 }

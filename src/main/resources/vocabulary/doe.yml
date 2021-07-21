@@ -1,9 +1,7 @@
-degreeOfEstablishment:
+vocabulary:
   degreeOfEstablishment:
-    vocabularyElements:
-      - name: native
-        term: https://dwc.tdwg.org/doe/#dwcdoe_d001
-        labels:
-          en: native
-          fr: Indigène
-    
+    - name: native
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d001
+      labels:
+        en: native
+        fr: Indigène
