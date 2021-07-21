@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import ca.gc.aafc.collection.api.dto.VocabularyConfigurationDto;
+import ca.gc.aafc.collection.api.dto.VocabularyDto;
 import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 
 @Configuration
@@ -15,16 +15,16 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @ConfigurationProperties
 public class VocabularyConfiguration {
   
-  private List<VocabularyConfigurationDto> degreeOfEstablishment;
+  private List<VocabularyDto> groups;
 
   public VocabularyConfiguration(
-    List<VocabularyConfigurationDto> degreeOfEstablishment
+    List<VocabularyDto> groups
   ) {
-    this.degreeOfEstablishment = degreeOfEstablishment;
+    this.groups = groups;
   }
   
-  public List<VocabularyConfigurationDto> getDegreeOfEstablishment() {
-    return degreeOfEstablishment;
+  public List<VocabularyDto> getGroups() {
+    return groups;
   }
 
 }

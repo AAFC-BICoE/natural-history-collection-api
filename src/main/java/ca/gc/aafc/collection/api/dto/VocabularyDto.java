@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.util.Map;
+import java.util.List;
 
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -8,12 +8,11 @@ import lombok.Data;
 
 @Data
 @JsonApiResource(type = "vocabulary")
-public class VocabularyConfigurationDto {
+public class VocabularyDto {
   
   @JsonApiId
   private String id;
-  private String name;
-  private String term;
-  private Map<String, String> labels;
+
+  private List<VocabularyElementDto> vocabularyElements;
 
 }
