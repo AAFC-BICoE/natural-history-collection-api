@@ -1,5 +1,5 @@
-groups:
-  - id: degreeOfEstablishment
+degreeOfEstablishment:
+  degreeOfEstablishment:
     vocabularyElements:
       - name: native
         term: https://dwc.tdwg.org/doe/#dwcdoe_d001

@@ -18,7 +18,6 @@ public class VocabularyConfigurationRepositoryIT extends CollectionModuleBaseIT 
   public void findAll_VocabularyConfiguration() {
     VocabularyDto vocabularyConfigurationDto =
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class)).get(0);
-    assertEquals("degreeOfEstablishment", vocabularyConfigurationDto.getId());
     assertEquals("native", vocabularyConfigurationDto.getVocabularyElements().get(0).getName());
     assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", vocabularyConfigurationDto.getVocabularyElements().get(0).getTerm());
     assertEquals("native", vocabularyConfigurationDto.getVocabularyElements().get(0).getLabels().get("en"));

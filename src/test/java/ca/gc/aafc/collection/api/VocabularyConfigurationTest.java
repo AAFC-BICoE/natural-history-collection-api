@@ -18,11 +18,10 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getDegreeOfEstablishment() {
-    assertEquals("degreeOfEstablishment", vocabularyConfiguration.getGroups().get(0).getId());
-    assertEquals("native", vocabularyConfiguration.getGroups().get(0).getVocabularyElements().get(0).getName());
-    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", vocabularyConfiguration.getGroups().get(0).getVocabularyElements().get(0).getTerm());
-    assertEquals("native", vocabularyConfiguration.getGroups().get(0).getVocabularyElements().get(0).getLabels().get("en"));
-    assertEquals("Indigène", vocabularyConfiguration.getGroups().get(0).getVocabularyElements().get(0).getLabels().get("fr"));
+    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getName());
+    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getTerm());
+    assertEquals("native", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getLabels().get("en"));
+    assertEquals("Indigène", vocabularyConfiguration.getDegreeOfEstablishment().get("degreeOfEstablishment").getVocabularyElements().get(0).getLabels().get("fr"));
   }
   
 }

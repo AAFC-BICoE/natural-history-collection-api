@@ -22,6 +22,6 @@ public class VocabularyRepository extends ReadOnlyResourceRepositoryBase<Vocabul
 
   @Override
   public ResourceList<VocabularyDto> findAll(QuerySpec querySpec) {
-    return querySpec.apply(vocabularyConfiguration.getGroups());
+    return querySpec.apply(vocabularyConfiguration.getDegreeOfEstablishment().values());
   }
 }
