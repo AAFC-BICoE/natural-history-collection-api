@@ -30,7 +30,8 @@ public class VocabularyConfiguration {
 
   @NoArgsConstructor
   @Getter
-  @Setter public static class VocabularyElement {
+  @Setter
+  public static class VocabularyElement {
     private String name;
     private String term;
     private Map<String, String> labels;
