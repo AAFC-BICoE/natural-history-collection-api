@@ -12,6 +12,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,8 +71,8 @@ public class StorageUnit implements DinaEntity {
   @JoinColumn(name = "parent_storage_unit_id")
   private StorageUnit parentStorageUnit;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
-  @ToString.Exclude
+  @Type(type = "jsonb")
+  @Builder.Default
   private List<ImmutableStorageUnitChild> storageUnitChildren = new ArrayList<>();
 
   @Transient

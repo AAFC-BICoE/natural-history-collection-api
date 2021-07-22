@@ -47,7 +47,6 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   void setUp() {
     parentUnit = newUnit();
     parentId = postUnit(parentUnit);
-    childId = postUnit(newUnit());
     unitType = newUnitType();
     unitTypeId = postUnitType(unitType);
     unit = newUnit();
@@ -61,14 +60,9 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
       .body("data.attributes.createdOn", Matchers.notNullValue())
-      .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(childId))
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId))
       .body("data.relationships.storageUnitType.data.id", Matchers.is(unitTypeId));
-    findUnit(childId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
-      .body("data.relationships.parentStorageUnit.data.id", Matchers.is(unitId));
     findUnit(parentId)
-      .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(unitId))
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 
@@ -92,20 +86,11 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   @Test
   void patch_WithNewRelations() {
     String newParentId = postUnit(newUnit());
-    String newChildId = postUnit(newUnit());
     String newUnitTypeId = postUnitType(newUnitType());
     sendPatchWithRelations(newParentId, newUnitTypeId);
-    findUnit(childId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
-      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
     findUnit(parentId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
-    findUnit(newChildId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
-      .body("data.relationships.parentStorageUnit.data.id", Matchers.is(unitId));
     findUnit(newParentId)
-      .body("data.relationships.storageUnitChildren.data[0].id", Matchers.is(unitId))
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
     findUnit(unitId)
       .body("data.relationships.storageUnitType.data.id", Matchers.is(newUnitTypeId));
@@ -114,11 +99,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   @Test
   void delete_RelationsResolved() {
     sendDelete(StorageUnitDto.TYPENAME, unitId);
-    findUnit(childId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
-      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
     findUnit(parentId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 
