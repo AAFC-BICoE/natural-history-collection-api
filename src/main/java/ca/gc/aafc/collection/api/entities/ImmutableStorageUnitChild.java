@@ -75,6 +75,6 @@ public class ImmutableStorageUnitChild implements DinaEntity {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "parent_storage_unit_id")
-  private StorageUnit parentStorageUnit;
+  private ImmutableStorageUnitChild parentStorageUnit;
 
 }
