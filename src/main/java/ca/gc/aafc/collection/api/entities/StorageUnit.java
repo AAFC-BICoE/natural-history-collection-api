@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
@@ -73,7 +72,6 @@ public class StorageUnit implements DinaEntity {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
   @ToString.Exclude
-  @Immutable
   private List<ImmutableStorageUnitChild> storageUnitChildren = new ArrayList<>();
 
   @Transient

@@ -124,7 +124,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   private ValidatableResponse findUnit(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=storageUnitType,parentStorageUnit,storageUnitChildren,"
+      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=storageUnitType,parentStorageUnit,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
   }
 
