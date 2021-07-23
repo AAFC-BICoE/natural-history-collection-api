@@ -14,6 +14,7 @@ spring:
         properties:
           validation:
             mode: none
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
   # Allow grace timeout period for 20 seconds
   lifecycle.timeout-per-shutdown-phase: 20s
 crnk:
