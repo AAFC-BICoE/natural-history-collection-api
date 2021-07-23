@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -40,6 +41,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -228,6 +230,16 @@ public class CollectingEvent implements DinaEntity {
     return ISODateTime.builder().localDateTime(endEventDateTime)
       .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
       .build();
+  }
+
+  public Optional<GeoreferenceAssertionDto> getPrimaryAssertion() {
+    if (CollectionUtils.isEmpty(this.getGeoReferenceAssertions())) {
+      return Optional.empty();
+    }
+    return this.getGeoReferenceAssertions()
+      .stream()
+      .filter(geo -> geo.getIsPrimary() != null && geo.getIsPrimary())
+      .findFirst();
   }
 
 }
