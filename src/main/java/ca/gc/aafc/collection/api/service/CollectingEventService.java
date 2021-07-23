@@ -10,6 +10,10 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.geolatte.geom.builder.DSL;
+import org.geolatte.geom.crs.CoordinateReferenceSystems;
+import org.geolatte.geom.jts.JTS;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -60,15 +64,21 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     validateManagedAttribute(entity);
   }
 
-
   private static void assignAutomaticValues(CollectingEvent entity) {
-    if (entity.getGeographicPlaceNameSourceDetail() != null) {
+    if (entity.getGeographicPlaceNameSourceDetail() != null) { // Assign Detail recorded on
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
-      entity.getGeoReferenceAssertions().forEach(geo -> geo.setCreatedOn(OffsetDateTime.now()));
+      entity.getGeoReferenceAssertions().forEach(geo -> {
+        geo.setCreatedOn(OffsetDateTime.now()); // Assign Geo created on
+        if (geo.getIsPrimary()) {
+          entity.setEventGeom(mapAssertionToGeometry(geo)); //Set event Geom from primary assertion
+        }
+      });
     }
   }
+
+
 
   private void validateAssertions(@NonNull CollectingEvent entity) {
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
@@ -108,4 +118,12 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     );
   }
 
+  private static Geometry mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
+    if (geo == null) {
+      return JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(0, 0)));
+    }
+    return JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
+      geo.getDwcDecimalLongitude() == null ? 0.0 : geo.getDwcDecimalLongitude(),
+      geo.getDwcDecimalLatitude() == null ? 0.0 : geo.getDwcDecimalLatitude())));
+  }
 }
