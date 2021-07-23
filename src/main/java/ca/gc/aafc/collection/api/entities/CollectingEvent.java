@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -238,7 +239,7 @@ public class CollectingEvent implements DinaEntity {
     }
     return this.getGeoReferenceAssertions()
       .stream()
-      .filter(geo -> geo.getIsPrimary() != null && geo.getIsPrimary())
+      .filter(geo -> BooleanUtils.isTrue(geo.getIsPrimary()))
       .findFirst();
   }
 
