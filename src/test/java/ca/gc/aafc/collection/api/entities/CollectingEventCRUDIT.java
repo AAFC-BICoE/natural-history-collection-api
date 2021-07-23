@@ -6,14 +6,10 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
-import org.geolatte.geom.builder.DSL;
-import org.geolatte.geom.crs.CoordinateReferenceSystems;
-import org.geolatte.geom.jts.JTS;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Geometry;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -45,7 +41,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcStateProvince = "Island of Pharo's";
   private static final int dwcMinimumElevationInMeters = 11;
   private static final int dwcMinimumDepthInMeters = 10;
-  private final Geometry expectedPoint = JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(1, 1)));
 
   private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
       GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
@@ -76,6 +71,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void setUp() {
     geoReferenceAssertion = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(12.123456)
+      .dwcDecimalLongitude(33.3)
       .isPrimary(true)
       .build();
 
@@ -100,7 +96,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .dwcMinimumElevationInMeters(dwcMinimumElevationInMeters)
       .dwcMinimumDepthInMeters(dwcMinimumDepthInMeters)
-      .eventGeom(expectedPoint)
       .build();
     assertNull(collectingEvent.getId());
     collectingEventService.create(collectingEvent);
@@ -299,7 +294,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(habitat, fetchedCollectingEvent.getHabitat());
     assertEquals(dwcMinimumDepthInMeters, fetchedCollectingEvent.getDwcMinimumDepthInMeters());
     assertEquals(dwcMinimumElevationInMeters, fetchedCollectingEvent.getDwcMinimumElevationInMeters());
-    assertEquals(expectedPoint.getCoordinate().getX(), fetchedCollectingEvent.getEventGeom().getCoordinate().getX());
+    assertEquals(geoReferenceAssertion.getDwcDecimalLongitude(), fetchedCollectingEvent.getEventGeom().getCoordinate().getX());
+    assertEquals(geoReferenceAssertion.getDwcDecimalLatitude(), fetchedCollectingEvent.getEventGeom().getCoordinate().getY());
   }
 
   @Test
