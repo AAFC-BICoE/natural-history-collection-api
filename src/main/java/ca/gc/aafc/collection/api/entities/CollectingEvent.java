@@ -20,6 +20,8 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -173,6 +175,8 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
+
+  private Geometry eventGeom;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
