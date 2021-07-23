@@ -71,7 +71,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
       entity.getGeoReferenceAssertions().forEach(geo -> {
         geo.setCreatedOn(OffsetDateTime.now()); // Assign Geo created on
-        if (geo.getIsPrimary()) {
+        if (geo.getIsPrimary() != null && geo.getIsPrimary()) {
           entity.setEventGeom(mapAssertionToGeometry(geo)); //Set event Geom from primary assertion
         }
       });
