@@ -65,17 +65,15 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private static void assignAutomaticValues(CollectingEvent entity) {
-    if (entity.getGeographicPlaceNameSourceDetail() != null) { // Assign Detail recorded on
+    if (entity.getGeographicPlaceNameSourceDetail() != null) {
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
-      entity.getGeoReferenceAssertions().forEach(geo -> {
-        geo.setCreatedOn(OffsetDateTime.now()); // Assign Geo created on
-        if (geo.getIsPrimary() != null && geo.getIsPrimary()) {
-          entity.setEventGeom(mapAssertionToGeometry(geo)); //Set event Geom from primary assertion
-        }
-      });
+      entity.getGeoReferenceAssertions().forEach(geo -> geo.setCreatedOn(OffsetDateTime.now()));
     }
+    entity.getPrimaryAssertion().ifPresentOrElse(//Set event Geom from primary assertion
+      geo -> entity.setEventGeom(mapAssertionToGeometry(geo)),
+      () -> entity.setEventGeom(null));
   }
 
   private void validateAssertions(@NonNull CollectingEvent entity) {
