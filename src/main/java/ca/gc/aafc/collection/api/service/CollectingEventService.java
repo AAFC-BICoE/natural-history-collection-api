@@ -115,11 +115,10 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private static Geometry mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
-    if (geo == null) {
+    if (geo == null || geo.getDwcDecimalLongitude() == null || geo.getDwcDecimalLatitude() == null) {
       return null;
     }
     return JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
-      geo.getDwcDecimalLongitude() == null ? 0.0 : geo.getDwcDecimalLongitude(),
-      geo.getDwcDecimalLatitude() == null ? 0.0 : geo.getDwcDecimalLatitude())));
+      geo.getDwcDecimalLongitude(), geo.getDwcDecimalLatitude())));
   }
 }
