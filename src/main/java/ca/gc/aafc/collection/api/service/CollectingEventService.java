@@ -78,8 +78,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     }
   }
 
-
-
   private void validateAssertions(@NonNull CollectingEvent entity) {
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
       entity.getGeoReferenceAssertions().forEach(geo -> validateGeoreferenceAssertion(
