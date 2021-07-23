@@ -70,7 +70,7 @@ public class AbstractStorageUnit implements DinaEntity {
   @JoinColumn(name = "parent_storage_unit_id")
   private StorageUnit parentStorageUnit;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "parentStorageUnit")
   @ToString.Exclude
   private List<ImmutableStorageUnitChild> storageUnitChildren = new ArrayList<>();
 
