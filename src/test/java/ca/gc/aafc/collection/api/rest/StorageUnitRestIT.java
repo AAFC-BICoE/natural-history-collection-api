@@ -56,14 +56,14 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   @Test
   void find_WithRelations() {
     findUnit(unitId)
-      .body("data", Matchers.is(unit.getName()))
+      .body("data.attributes.name", Matchers.is(unit.getName()))
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
       .body("data.attributes.createdOn", Matchers.notNullValue())
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId))
       .body("data.relationships.storageUnitType.data.id", Matchers.is(unitTypeId));
     findUnit(parentId)
-      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
+      .body("data", Matchers.is(unit.getName()));
   }
 
   @Test
@@ -105,7 +105,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   private ValidatableResponse findUnit(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(StorageUnitDto.TYPENAME + "?include=storageUnitType,parentStorageUnit,"
+      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=storageUnitType,parentStorageUnit,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
   }
 

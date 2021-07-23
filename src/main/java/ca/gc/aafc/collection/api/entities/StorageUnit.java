@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class StorageUnit extends AbstractStorageUnit {
       List<ImmutableStorageUnitChild> storageUnitChildren, 
       List<StorageHierarchicalObject> hierarchy, 
       StorageUnitType storageUnitType
-    ) {
+  ) {
     super(id, uuid, name, group, createdOn, createdBy, parentStorageUnit, storageUnitChildren, hierarchy, storageUnitType);
   }
 }

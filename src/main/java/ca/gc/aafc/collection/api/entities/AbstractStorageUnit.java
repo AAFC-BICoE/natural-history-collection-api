@@ -27,7 +27,6 @@ import org.hibernate.annotations.NaturalIdCache;
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -71,7 +70,7 @@ public class AbstractStorageUnit implements DinaEntity {
   @JoinColumn(name = "parent_storage_unit_id")
   private StorageUnit parentStorageUnit;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "parentStorageUnit")
   @ToString.Exclude
   private List<ImmutableStorageUnitChild> storageUnitChildren = new ArrayList<>();
 
