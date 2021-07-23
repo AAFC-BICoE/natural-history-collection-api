@@ -29,7 +29,6 @@
     <dina-base-api.version>0.62</dina-base-api.version>
     <hibernate-types-52.version>2.10.2</hibernate-types-52.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
-    <hibernate-spatial-version>5.4.32.Final</hibernate-spatial-version>
   </properties>
 
   <dependencies>
@@ -69,7 +68,6 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-spatial</artifactId>
-      <version>${hibernate-spatial-version}</version>
     </dependency>
 
 
