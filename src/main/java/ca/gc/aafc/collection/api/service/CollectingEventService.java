@@ -120,7 +120,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private static Geometry mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
     if (geo == null) {
-      return JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(0, 0)));
+      return null;
     }
     return JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
       geo.getDwcDecimalLongitude() == null ? 0.0 : geo.getDwcDecimalLongitude(),
