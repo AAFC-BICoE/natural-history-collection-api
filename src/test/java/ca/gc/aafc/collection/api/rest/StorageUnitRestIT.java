@@ -56,7 +56,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   @Test
   void find_WithRelations() {
     findUnit(unitId)
-      .body("data.attributes.name", Matchers.is(unit.getName()))
+      .body("", Matchers.is(unit.getName()))
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
       .body("data.attributes.createdOn", Matchers.notNullValue())
