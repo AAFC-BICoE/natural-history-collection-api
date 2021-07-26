@@ -30,7 +30,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_VocabularyConfiguration() {
     List<VocabularyDto> listOfVocabularies =
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class));
-    assertEquals(2, listOfVocabularies.size());
+    assertEquals(3, listOfVocabularies.size());
 
     List<List<VocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
@@ -40,7 +40,8 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
     assertThat(listOfVocabularyElements, 
       Matchers.containsInAnyOrder(
         vocabularyConfiguration.getVocabulary().get("degreeOfEstablishment"),
-        vocabularyConfiguration.getVocabulary().get("srs")
+        vocabularyConfiguration.getVocabulary().get("srs"),
+        vocabularyConfiguration.getVocabulary().get("coordinateSystem")
       ));
   }
   
