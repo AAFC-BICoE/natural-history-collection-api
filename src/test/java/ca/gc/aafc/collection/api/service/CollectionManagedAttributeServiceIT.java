@@ -17,6 +17,20 @@ import java.util.Map;
 public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT {
 
   @Test
+  void delete_WhenNotInUse_DeleteAccepted() {
+    CollectionManagedAttribute attribute = newAttribute(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    collectionManagedAttributeService.create(attribute);
+
+    Assertions.assertNotNull(
+      collectionManagedAttributeService.findOne(attribute.getUuid(), CollectionManagedAttribute.class));
+
+    collectionManagedAttributeService.delete(attribute);
+
+    Assertions.assertNull(
+      collectionManagedAttributeService.findOne(attribute.getUuid(), CollectionManagedAttribute.class));
+  }
+
+  @Test
   void delete_WhenKeyInUseByEvent_DeniesDelete() {
     CollectionManagedAttribute attribute = newAttribute(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collectionManagedAttributeService.create(attribute);
