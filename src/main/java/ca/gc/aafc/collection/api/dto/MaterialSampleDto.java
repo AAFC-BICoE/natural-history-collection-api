@@ -80,7 +80,7 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private StorageUnitDto storageUnit;
 
-  private Determination determination;
+  private List<Determination> determination;
 
   private String preparationRemarks;
   

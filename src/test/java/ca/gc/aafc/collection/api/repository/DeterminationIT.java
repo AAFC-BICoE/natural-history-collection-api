@@ -13,6 +13,7 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,10 +31,10 @@ class DeterminationIT extends CollectionModuleBaseIT {
   @Test
   void find() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(determination);
+    dto.setDetermination(new ArrayList<>(List.of(determination)));
     Determination result = materialSampleRepository.findOne(
       materialSampleRepository.create(dto).getUuid(), new QuerySpec(MaterialSampleDto.class)
-    ).getDetermination();
+    ).getDetermination().get(0);
 
     // Assert determination
     Assertions.assertNotNull(result);
@@ -53,9 +54,9 @@ class DeterminationIT extends CollectionModuleBaseIT {
   @Test
   void create_WhenDeterminationHasValidationConstraintViolation_ThrowsValidationException() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(Determination.builder()
+    dto.setDetermination(new ArrayList<>(List.of(Determination.builder()
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
-      .build());
+      .build())));
     Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
   }
 
