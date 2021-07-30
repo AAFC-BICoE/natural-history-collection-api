@@ -44,6 +44,9 @@ public class Determination {
   @Valid
   private final List<DeterminationDetail> details;
 
+  @Size(max = 250)
+  private final String transcriberRemarks;
+
   @Getter
   @Builder
   @RequiredArgsConstructor
