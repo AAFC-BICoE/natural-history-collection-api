@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@RelatedEntity(StorageUnit.class)
+@RelatedEntity(ImmutableStorageUnitChild.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-@JsonApiResource(type = StorageUnitDto.TYPENAME)
-public class StorageUnitDto {
+@JsonApiResource(type = ImmutableStorageUnitChildDto.TYPENAME)
+public class ImmutableStorageUnitChildDto {
 
-  public static final String TYPENAME = "storage-unit";
+  public static final String TYPENAME = "immutable-storage-unit-child";
 
   @JsonApiId
   @Id
