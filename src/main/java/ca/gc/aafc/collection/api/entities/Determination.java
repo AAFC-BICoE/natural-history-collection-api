@@ -41,7 +41,6 @@ public class Determination {
   private final String verbatimDate;
 
   @Size(max = 250)
-  @NotBlank
   private final String scientificName;
 
   @Size(max = 250)
