@@ -13,6 +13,7 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,84 +21,48 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
   @Inject
   private MaterialSampleRepository materialSampleRepository;
-  private Determination.DeterminationDetail detail;
-  private Determination determination;
-
-  @BeforeEach
-  void setUp() {
-    detail = newDetail();
-    determination = newDetermination(detail);
-  }
 
   @Test
   void find() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(determination);
-    Determination resultDetermination = materialSampleRepository.findOne(
-      materialSampleRepository.create(dto).getUuid(), new QuerySpec(MaterialSampleDto.class))
-      .getDetermination();
+    Determination determination = newDetermination()
+        .determiner(List.of(UUID.randomUUID())).build();
+    dto.setDetermination(new ArrayList<>(List.of(determination)));
+
+    Determination result = materialSampleRepository
+        .findOne(materialSampleRepository.create(dto).getUuid(),
+            new QuerySpec(MaterialSampleDto.class)).getDetermination().get(0);
 
     // Assert determination
-    Assertions.assertNotNull(resultDetermination);
-    Assertions.assertEquals(determination.getVerbatimAgent(), resultDetermination.getVerbatimAgent());
-    Assertions.assertEquals(determination.getVerbatimDate(), resultDetermination.getVerbatimDate());
-    Assertions.assertEquals(determination.getTranscriberRemarks(), resultDetermination.getTranscriberRemarks());
-    Assertions.assertEquals(
-      determination.getVerbatimScientificName(), resultDetermination.getVerbatimScientificName());
-
-    // Assert determination detail
-    Determination.DeterminationDetail resultDetail = resultDetermination.getDetails().get(0);
-    Assertions.assertNotNull(resultDetail);
-    Assertions.assertEquals(detail.getDeterminer().get(0), resultDetail.getDeterminer().get(0));
-    Assertions.assertEquals(detail.getDeterminedOn(), resultDetail.getDeterminedOn());
-    Assertions.assertEquals(detail.getQualifier(), resultDetail.getQualifier());
-    Assertions.assertEquals(detail.getScientificNameDetails(), resultDetail.getScientificNameDetails());
-    Assertions.assertEquals(detail.getScientificNameSource(), resultDetail.getScientificNameSource());
-    Assertions.assertEquals(detail.getTypeStatus(), resultDetail.getTypeStatus());
-    Assertions.assertEquals(detail.getTypeStatusEvidence(), resultDetail.getTypeStatusEvidence());
-    Assertions.assertEquals(detail.getScientificName(), resultDetail.getScientificName());
-  }
-
-  @Test
-  void create_WhenDetailHasValidationConstraintViolation_ThrowsValidationException() {
-    Determination.DeterminationDetail invalidDetail = Determination.DeterminationDetail.builder()
-      .typeStatus(RandomStringUtils.randomAlphabetic(100)) // Status to long
-      .build();
-    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(Determination.builder().details(List.of(invalidDetail)).build());
-    Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(determination.getVerbatimAgent(), result.getVerbatimAgent());
+    Assertions.assertEquals(determination.getVerbatimDate(), result.getVerbatimDate());
+    Assertions.assertEquals(determination.getVerbatimScientificName(), result.getVerbatimScientificName());
+    Assertions.assertEquals(determination.getDeterminedOn(), result.getDeterminedOn());
+    Assertions.assertEquals(determination.getDeterminer().get(0), result.getDeterminer().get(0));
+    Assertions.assertEquals(determination.getQualifier(), result.getQualifier());
+    Assertions.assertEquals(determination.getScientificNameDetails(), result.getScientificNameDetails());
+    Assertions.assertEquals(determination.getScientificNameSource(), result.getScientificNameSource());
+    Assertions.assertEquals(determination.getTypeStatus(), result.getTypeStatus());
+    Assertions.assertEquals(determination.getTypeStatusEvidence(), result.getTypeStatusEvidence());
+    Assertions.assertEquals(determination.getScientificName(), result.getScientificName());
   }
 
   @Test
   void create_WhenDeterminationHasValidationConstraintViolation_ThrowsValidationException() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(Determination.builder()
+    dto.setDetermination(new ArrayList<>(List.of(Determination.builder()
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
-      .build());
+      .build())));
     Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
   }
 
-  private Determination newDetermination(Determination.DeterminationDetail detail) {
+  private Determination.DeterminationBuilder newDetermination() {
     return Determination.builder()
       .verbatimAgent(RandomStringUtils.randomAlphabetic(3))
       .verbatimDate(LocalDate.now().toString())
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
-      .transcriberRemarks(RandomStringUtils.randomAlphabetic(50))
-      .details(List.of(detail))
-      .build();
-  }
-
-  private Determination.DeterminationDetail newDetail() {
-    return Determination.DeterminationDetail.builder()
-      .scientificName(RandomStringUtils.randomAlphabetic(4))
-      .determiner(List.of(UUID.randomUUID()))
-      .determinedOn(LocalDate.now())
-      .qualifier(RandomStringUtils.randomAlphabetic(3))
-      .scientificNameDetails(RandomStringUtils.randomAlphabetic(3))
-      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .typeStatus(RandomStringUtils.randomAlphabetic(3))
-      .typeStatusEvidence(RandomStringUtils.randomAlphabetic(3))
-      .build();
+      .transcriberRemarks(RandomStringUtils.randomAlphabetic(50));
   }
 
 }
