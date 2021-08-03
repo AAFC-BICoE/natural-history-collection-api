@@ -44,6 +44,9 @@ public class Determination {
   @NotBlank
   private final String scientificName;
 
+  @Size(max = 250)
+  private final String transcriberRemarks;
+
   @Size(max = 50)
   private final String typeStatus;
 

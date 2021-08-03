@@ -65,14 +65,8 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .verbatimAgent(RandomStringUtils.randomAlphabetic(3))
       .verbatimDate(LocalDate.now().toString())
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
-      .scientificName(RandomStringUtils.randomAlphabetic(4))
-      .determiner(List.of(UUID.randomUUID()))
-      .determinedOn(LocalDate.now())
-      .qualifier(RandomStringUtils.randomAlphabetic(3))
-      .scientificNameDetails(RandomStringUtils.randomAlphabetic(3))
-      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .typeStatus(RandomStringUtils.randomAlphabetic(3))
-      .typeStatusEvidence(RandomStringUtils.randomAlphabetic(3))
+      .transcriberRemarks(RandomStringUtils.randomAlphabetic(50))
+      .details(List.of(detail))
       .build();
   }
 

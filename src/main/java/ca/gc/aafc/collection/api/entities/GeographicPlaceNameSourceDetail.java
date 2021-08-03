@@ -19,7 +19,6 @@ import javax.validation.constraints.Size;
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
 public class GeographicPlaceNameSourceDetail {
 
-  @NotNull
   private URL sourceUrl;
 
   // It is customGeographicPlace OR selectedGeographicPlace but not both
