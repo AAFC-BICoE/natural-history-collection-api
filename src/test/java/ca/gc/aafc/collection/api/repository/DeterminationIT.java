@@ -15,7 +15,6 @@ import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 class DeterminationIT extends CollectionModuleBaseIT {
 
@@ -66,7 +65,6 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .verbatimDate(LocalDate.now().toString())
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
       .transcriberRemarks(RandomStringUtils.randomAlphabetic(50))
-      .details(List.of(detail))
       .build();
   }
 
