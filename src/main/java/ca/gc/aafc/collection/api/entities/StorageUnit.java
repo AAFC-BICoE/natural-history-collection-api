@@ -2,12 +2,14 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -33,46 +35,20 @@ import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Setter
 @Getter
 @RequiredArgsConstructor
-@NaturalIdCache
-public class StorageUnit implements DinaEntity {
+public class StorageUnit extends AbstractStorageUnit {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
-  @NaturalId
-  @NotNull
-  @Column(unique = true)
-  private UUID uuid;
-
-  @NotBlank
-  @Size(max = 150)
-  private String name;
-
-  @NotBlank
-  @Size(max = 50)
-  @Column(name = "_group")
-  private String group;
-
-  @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
-  private OffsetDateTime createdOn;
-
-  @NotBlank
-  @Column(name = "created_by", updatable = false)
-  private String createdBy;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "parent_storage_unit_id")
   private StorageUnit parentStorageUnit;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
-  @ToString.Exclude
-  private List<StorageUnit> storageUnitChildren = new ArrayList<>();
+  @OneToMany(fetch = FetchType.EAGER)
+  @JoinColumn(name = "parent_storage_unit_id", referencedColumnName = "id")
+  private List<ImmutableStorageUnit> storageUnitChildren = new ArrayList<>();
 
   @Transient
   private List<StorageHierarchicalObject> hierarchy;

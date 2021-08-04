@@ -21,4 +21,28 @@ class StorageUnitCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(unit.getGroup(), result.getGroup());
   }
 
+
+  @Test
+  void createParentChild() {
+
+    StorageUnit parentUnit = StorageUnitFactory.newStorageUnit()
+        .build();
+    storageUnitService.create(parentUnit);
+
+    StorageUnit childUnit = StorageUnitFactory.newStorageUnit()
+        .build();
+    storageUnitService.create(childUnit);
+
+    //Set relationship
+    childUnit.setParentStorageUnit(parentUnit);
+    storageUnitService.update(childUnit);
+
+    StorageUnit resultParent = storageUnitService.findOne(parentUnit.getUuid(), StorageUnit.class);
+    // hack since hibernate doesn't see that an update to parent can affect the Immutable part
+    storageUnitService.refresh(resultParent);
+
+    Assertions.assertEquals(1, resultParent.getStorageUnitChildren().size());
+    Assertions.assertEquals(childUnit.getUuid(), resultParent.getStorageUnitChildren().get(0).getUuid());
+  }
+
 }
