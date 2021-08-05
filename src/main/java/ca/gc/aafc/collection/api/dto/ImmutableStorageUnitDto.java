@@ -10,6 +10,7 @@ import java.util.UUID;
 @Data
 @RelatedEntity(ImmutableStorageUnit.class)
 public class ImmutableStorageUnitDto {
+  
   private UUID uuid;
 
   private OffsetDateTime createdOn;
