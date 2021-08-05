@@ -5,3 +5,51 @@ vocabulary:
       labels:
         en: native
         fr: Indigène
+    - name: captive 
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d002
+      labels:
+        en: captive 
+        fr: captif
+    - name: cultivated 
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d003
+      labels:
+        en: cultivated 
+        fr: cultivé
+    - name: released  
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d004
+      labels:
+        en: released  
+        fr: relâché
+    - name: failing  
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d005
+      labels:
+        en: failing  
+    - name: casual 
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d006
+      labels:
+        en: casual 
+    - name: reproducing  
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d007
+      labels:
+        en: reproducing  
+        fr: reproduisant
+    - name: established  
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d008
+      labels:
+        en: established  
+        fr: établi
+    - name: colonising
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d009
+      labels:
+        en: colonising
+        fr: colonisant
+    - name: invasive  
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d010
+      labels:
+        en: invasive  
+        fr: envahissant
+    - name: widespread invasive 
+      term: https://dwc.tdwg.org/doe/#dwcdoe_d011
+      labels:
+        en: widespread invasive 
+        fr: envahissant répandu
