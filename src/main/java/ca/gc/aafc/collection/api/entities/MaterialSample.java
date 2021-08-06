@@ -119,7 +119,7 @@ public class MaterialSample implements DinaEntity {
 
   @Type(type = "jsonb")
   @Valid
-  private Determination determination;
+  private List<Determination> determination;
 
   @Size(max = 500)
   @Column(name = "preparation_remarks")
