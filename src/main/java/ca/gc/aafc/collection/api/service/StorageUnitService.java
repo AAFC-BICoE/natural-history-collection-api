@@ -25,7 +25,6 @@ import java.util.function.BiFunction;
 @Service
 public class StorageUnitService extends DefaultDinaService<StorageUnit> {
 
-  private final BaseDAO baseDAO;
   private final StorageUnitValidator storageUnitValidator;
   private final StorageUnitTypeService storageUnitTypeService;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
@@ -38,7 +37,6 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     @NonNull StorageUnitTypeService storageUnitTypeService
   ) {
     super(baseDAO, sv);
-    this.baseDAO = baseDAO;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitValidator = storageUnitValidator;
     this.storageUnitTypeService = storageUnitTypeService;
@@ -50,19 +48,18 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
   }
 
   @Override
-  public void validateBusinessRules(StorageUnit entity) {
-    applyBusinessRule(entity, storageUnitValidator);
+  public StorageUnit update(StorageUnit entity) {
+    StorageUnit updatedEntity = super.update(entity);
+    if (updatedEntity.getParentStorageUnit() != null) {
+      // detach the parent to make sure it reloads its children list
+      detach(updatedEntity.getParentStorageUnit());
+    }
+    return updatedEntity;
   }
 
-  /**
-   * ugly hack until dina-base supports it
-   * @param obj
-   */
-  public void refresh(Object obj) {
-    baseDAO.createWithEntityManager(em -> {
-      em.refresh(obj);
-      return Boolean.TRUE;
-    });
+  @Override
+  public void validateBusinessRules(StorageUnit entity) {
+    applyBusinessRule(entity, storageUnitValidator);
   }
 
   @Override

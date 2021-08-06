@@ -44,7 +44,6 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     sendPatchWithRelations(unit, childId, getRelationshipMap(unitId, unitTypeId));
 
     findUnit(unitId)
-        .log().everything()
       .body("data.attributes.name", Matchers.is(unit.getName()))
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
