@@ -4,52 +4,51 @@ vocabulary:
       term: https://dwc.tdwg.org/doe/#dwcdoe_d001
       labels:
         en: native
-        fr: Indigène
-    - name: captive 
+        fr: indigène
+    - name: captive
       term: https://dwc.tdwg.org/doe/#dwcdoe_d002
       labels:
-        en: captive 
+        en: captive
         fr: captif
-    - name: cultivated 
+    - name: cultivated
       term: https://dwc.tdwg.org/doe/#dwcdoe_d003
       labels:
-        en: cultivated 
+        en: cultivated
         fr: cultivé
-    - name: released  
+    - name: released
       term: https://dwc.tdwg.org/doe/#dwcdoe_d004
       labels:
-        en: released  
+        en: released
         fr: relâché
-    - name: failing  
+    - name: failing
       term: https://dwc.tdwg.org/doe/#dwcdoe_d005
       labels:
-        en: failing  
-    - name: casual 
+        en: failing
+    - name: casual
       term: https://dwc.tdwg.org/doe/#dwcdoe_d006
       labels:
-        en: casual 
-    - name: reproducing  
+        en: casual
+    - name: reproducing
       term: https://dwc.tdwg.org/doe/#dwcdoe_d007
       labels:
-        en: reproducing  
-        fr: reproduisant
-    - name: established  
+        en: reproducing
+    - name: established
       term: https://dwc.tdwg.org/doe/#dwcdoe_d008
       labels:
-        en: established  
+        en: established
         fr: établi
     - name: colonising
       term: https://dwc.tdwg.org/doe/#dwcdoe_d009
       labels:
         en: colonising
-        fr: colonisant
-    - name: invasive  
+    - name: invasive
       term: https://dwc.tdwg.org/doe/#dwcdoe_d010
       labels:
-        en: invasive  
+        en: invasive
         fr: envahissant
-    - name: widespread invasive 
+    - name: widespread invasive
       term: https://dwc.tdwg.org/doe/#dwcdoe_d011
       labels:
-        en: widespread invasive 
+        en: widespread invasive
         fr: envahissant répandu
+ 
