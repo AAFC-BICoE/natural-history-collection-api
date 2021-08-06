@@ -7,7 +7,6 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaMapper;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 @RelatedEntity(StorageUnit.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = StorageUnitDto.TYPENAME)
-@CustomFieldAdapter(adapters = { StorageUnitDto.ImmutableStorageUnitAdapter.class})
+@CustomFieldAdapter(adapters = StorageUnitDto.ImmutableStorageUnitAdapter.class)
 public class StorageUnitDto {
 
   public static final String TYPENAME = "storage-unit";
@@ -83,7 +82,7 @@ public class StorageUnitDto {
     @Override
     public Consumer<List<ImmutableStorageUnit>> entityApplyMethod(StorageUnit entityRef) {
       // should not be called so no-op
-      return (l) -> {};
+      return l -> { };
     }
 
     @Override

@@ -59,7 +59,7 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
    * @param obj
    */
   public void refresh(Object obj) {
-    baseDAO.createWithEntityManager( (em) -> {
+    baseDAO.createWithEntityManager(em -> {
       em.refresh(obj);
       return Boolean.TRUE;
     });
