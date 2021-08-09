@@ -5,7 +5,6 @@ import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.entity.ManagedAttribute;
-import io.crnk.core.exception.BadRequestException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
         .containsKey(attribute.getKey()));
 
     Assertions.assertThrows(
-      BadRequestException.class, () -> collectionManagedAttributeService.delete(attribute));
+      IllegalArgumentException.class, () -> collectionManagedAttributeService.delete(attribute));
   }
 
   @Test
@@ -60,7 +59,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
         .containsKey(attribute.getKey()));
 
     Assertions.assertThrows(
-      BadRequestException.class, () -> collectionManagedAttributeService.delete(attribute));
+      IllegalArgumentException.class, () -> collectionManagedAttributeService.delete(attribute));
   }
 
   private static CollectionManagedAttribute newAttribute(CollectionManagedAttribute.ManagedAttributeComponent component) {
