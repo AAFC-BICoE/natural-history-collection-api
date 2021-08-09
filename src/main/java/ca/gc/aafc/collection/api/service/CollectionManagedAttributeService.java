@@ -4,7 +4,6 @@ import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.ManagedAttributeService;
 import ca.gc.aafc.dina.service.PostgresJsonbService;
-import io.crnk.core.exception.BadRequestException;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
@@ -53,7 +52,7 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
     Integer countFirstLevelKeys = jsonbService.countFirstLevelKeys(
       tableName, CollectionManagedAttributeService.MANAGED_ATTRIBUTES_COL_NAME, key);
     if (countFirstLevelKeys > 0) {
-      throw new BadRequestException("Managed attribute key: " + key + ", is currently in use.");
+      throw new IllegalArgumentException("Managed attribute key: " + key + ", is currently in use.");
     }
   }
 }
