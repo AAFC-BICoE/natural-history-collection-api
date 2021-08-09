@@ -52,7 +52,7 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
     Integer countFirstLevelKeys = jsonbService.countFirstLevelKeys(
       tableName, CollectionManagedAttributeService.MANAGED_ATTRIBUTES_COL_NAME, key);
     if (countFirstLevelKeys > 0) {
-      throw new IllegalArgumentException("Managed attribute key: " + key + ", is currently in use.");
+      throw new IllegalStateException("Managed attribute key: " + key + ", is currently in use.");
     }
   }
 }

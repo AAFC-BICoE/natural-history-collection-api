@@ -42,7 +42,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
         .containsKey(attribute.getKey()));
 
     Assertions.assertThrows(
-      IllegalArgumentException.class, () -> collectionManagedAttributeService.delete(attribute));
+      IllegalStateException.class, () -> collectionManagedAttributeService.delete(attribute));
   }
 
   @Test
@@ -59,7 +59,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
         .containsKey(attribute.getKey()));
 
     Assertions.assertThrows(
-      IllegalArgumentException.class, () -> collectionManagedAttributeService.delete(attribute));
+      IllegalStateException.class, () -> collectionManagedAttributeService.delete(attribute));
   }
 
   private static CollectionManagedAttribute newAttribute(CollectionManagedAttribute.ManagedAttributeComponent component) {
