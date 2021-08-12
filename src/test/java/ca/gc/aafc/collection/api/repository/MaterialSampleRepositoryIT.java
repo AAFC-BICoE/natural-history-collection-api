@@ -9,6 +9,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,8 +35,10 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
         MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-        MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(materialSampleDto).getUuid(), 
-                new QuerySpec(MaterialSampleDto.class));
+        QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
+        querySpec.includeRelation(PathSpec.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
+        MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(materialSampleDto).getUuid(),
+          querySpec);
         assertNotNull(result.getCreatedBy());
         assertEquals(materialSampleDto.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
         assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
