@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -24,6 +25,8 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
+
+import javax.persistence.Transient;
 
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -85,4 +88,6 @@ public class MaterialSampleDto {
   private String preparationRemarks;
   
   private String dwcDegreeOfEstablishment;
+
+  private List<StorageHierarchicalObject> hierarchy;
 }
