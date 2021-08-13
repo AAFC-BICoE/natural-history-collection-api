@@ -1,57 +1,57 @@
 vocabulary:
   typeStatus:
     - name: None
-      terms: No Value
+      term: No Value
       labels:
         en: None
         fr: rien
     - name: Holotype
-        terms: https://www.wikidata.org/wiki/Q1061403
-        labels:
-          en: Holotype
-          fr: Holotype
+      term: https://www.wikidata.org/wiki/Q1061403
+      labels:
+        en: Holotype
+        fr: Holotype
     - name: Paratype
-        terms: https://www.wikidata.org/wiki/Q926578
-        labels:
-          en: Paratype
-          fr: Paratype
+      term: https://www.wikidata.org/wiki/Q926578
+      labels:
+        en: Paratype
+        fr: Paratype
     - name: Allotype
-        terms: https://www.wikidata.org/wiki/Q19353437
-        labels:
-          en: Allotype
-          fr: Allotype
+      term: https://www.wikidata.org/wiki/Q19353437
+      labels:
+        en: Allotype
+        fr: Allotype
     - name: Neotype
-        terms: https://www.wikidata.org/wiki/Q19353453
-        labels:
-          en: Neotype
-          fr: Neotype
+      term: https://www.wikidata.org/wiki/Q19353453
+      labels:
+        en: Neotype
+        fr: Neotype
     - name: Syntype
-        terms: https://www.wikidata.org/wiki/Q719822
-        labels:
-          en: Syntype
-          fr: Syntype
+      term: https://www.wikidata.org/wiki/Q719822
+      labels:
+        en: Syntype
+        fr: Syntype
     - name: Lectotype
-        terms: https://www.wikidata.org/wiki/Q2439719
-        labels:
-          en: Lectotype
-          fr: Lectotype
+      term: https://www.wikidata.org/wiki/Q2439719
+      labels:
+        en: Lectotype
+        fr: Lectotype
     - name: Paralectotype
-        terms: https://www.wikidata.org/wiki/Q19353473
-        labels:
-          en: Paralectotype
-          fr: Paralectotype
+      term: https://www.wikidata.org/wiki/Q19353473
+      labels:
+        en: Paralectotype
+        fr: Paralectotype
     - name: Hapantotype
-        terms: https://www.wikidata.org/wiki/Q19353478
-        labels:
-          en: Hapantotype
-          fr: Hapantotype
+      term: https://www.wikidata.org/wiki/Q19353478
+      labels:
+        en: Hapantotype
+        fr: Hapantotype
     - name: Iconotype
-        terms: https://en.wikipedia.org/wiki/Type_(biology)
-        labels:
-          en: Iconotype
-          fr: Iconotype
+      term: https://en.wikipedia.org/wiki/Type_(biology)
+      labels:
+        en: Iconotype
+        fr: Iconotype
     - name: Ergatotype
-        terms: https://www.wikidata.org/wiki/Q19353481
-        labels:
-          en: Ergatotype
-          fr: Ergatotype
+      term: https://www.wikidata.org/wiki/Q19353481
+      labels:
+        en: Ergatotype
+        fr: Ergatotype
