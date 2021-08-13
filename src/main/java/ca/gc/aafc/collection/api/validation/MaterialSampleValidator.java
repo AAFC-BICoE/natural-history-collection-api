@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import lombok.NonNull;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -59,11 +60,11 @@ public class MaterialSampleValidator implements Validator {
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
       for (Determination determination : materialSample.getDetermination()) {
-        if (determination.getScientificNameSource() != null && determination.getScientificName() == null) {
+        if (determination.getScientificNameSource() != null && StringUtils.isBlank(determination.getScientificName())) {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
         }
-        if (determination.getVerbatimScientificName() == null && determination.getScientificName() == null) {
+        if (StringUtils.isBlank(determination.getVerbatimScientificName()) && StringUtils.isBlank(determination.getScientificName())) {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
         }
