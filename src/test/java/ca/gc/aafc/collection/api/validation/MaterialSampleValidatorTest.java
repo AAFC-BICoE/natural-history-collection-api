@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.springframework.validation.Errors;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+
+import java.util.List;
 import java.util.UUID;
 
 class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
@@ -54,6 +57,45 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
+
+  @Test
+  void validate_WhenScientificNameSourceIsSetButScientificIsNotSet_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
+    
+    Determination determination = Determination.builder()
+      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
+      .verbatimScientificName("verbatimScientificName")
+      .build();
+
+    List<Determination> determinations = List.of(determination);
+    
+    MaterialSample sample = newSample();
+    sample.setDetermination(determinations);
+    
+    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    sampleValidator.validate(sample, errors);
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_WhenScientificNameAndVerbtimScientificNameIsNotSet_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAME);
+
+    List<Determination> determinations = List.of(Determination.builder().build());
+    
+    MaterialSample sample = newSample();
+    sample.setDetermination(determinations);
+    
+    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    sampleValidator.validate(sample, errors);
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+
 
   private static MaterialSample newSample() {
     return MaterialSample.builder()
