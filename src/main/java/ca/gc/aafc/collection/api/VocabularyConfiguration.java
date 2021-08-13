@@ -16,13 +16,23 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @PropertySource(value = "classpath:vocabulary/doe.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/srs.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/coordinateSystem.yml", factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/typeStatus.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class VocabularyConfiguration {
-  
-  private final Map<String, List<VocabularyElement>> vocabulary;
 
-  public VocabularyConfiguration(Map<String, List<VocabularyElement>> vocabulary) {
+  private final Map<String, List<VocabularyElement>> vocabulary;
+  private final List<String> typeStatus;
+
+  public VocabularyConfiguration(
+    Map<String, List<VocabularyElement>> vocabulary,
+    List<String> typeStatus
+  ) {
     this.vocabulary = vocabulary;
+    this.typeStatus = typeStatus;
+  }
+
+  public List<String> getTypeStatus() {
+    return typeStatus;
   }
 
   public Map<String, List<VocabularyElement>> getVocabulary() {

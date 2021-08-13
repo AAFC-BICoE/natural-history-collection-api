@@ -28,6 +28,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
     assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", degreeOfEstablishment.get(0).getTerm());
     assertEquals("native", degreeOfEstablishment.get(0).getLabels().get("en"));
     assertEquals("indigène", degreeOfEstablishment.get(0).getLabels().get("fr"));
+    assertEquals(11, vocabularyConfiguration.getTypeStatus().size());
   }
   
 }
