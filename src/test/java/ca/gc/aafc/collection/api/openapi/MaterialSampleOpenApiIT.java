@@ -24,8 +24,8 @@ import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 import java.util.UUID;
 
@@ -115,7 +115,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         "preparationType", getRelationType("preparation-type", preparationTypeUUID),
         "materialSampleChildren", getRelationListType("material-sample", childUUID)),
         null)
-      ).extract().asString(), ValidationRestrictionOptions.builder().allowAdditionalFields(true).allowableMissingFields(Collections.singleton("collectingEvent")).build());
+      ).extract().asString(), ValidationRestrictionOptions.builder().allowableMissingFields(Set.of("collectingEvent")).build());
   }
 
   private Map<String, Object> getRelationType(String type, String uuid) {
