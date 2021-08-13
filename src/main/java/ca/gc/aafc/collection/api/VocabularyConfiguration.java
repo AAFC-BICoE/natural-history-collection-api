@@ -21,18 +21,9 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 public class VocabularyConfiguration {
 
   private final Map<String, List<VocabularyElement>> vocabulary;
-  private final List<String> typeStatus;
 
-  public VocabularyConfiguration(
-    Map<String, List<VocabularyElement>> vocabulary,
-    List<String> typeStatus
-  ) {
+  public VocabularyConfiguration(Map<String, List<VocabularyElement>> vocabulary) {
     this.vocabulary = vocabulary;
-    this.typeStatus = typeStatus;
-  }
-
-  public List<String> getTypeStatus() {
-    return typeStatus;
   }
 
   public Map<String, List<VocabularyElement>> getVocabulary() {
