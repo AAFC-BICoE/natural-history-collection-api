@@ -1,13 +1,12 @@
-vocabulary:
-  typeStatus:
-    - None
-    - Holotype
-    - Paratype
-    - Allotype
-    - Neotype
-    - Syntype
-    - Lectotype
-    - Paralectotype
-    - Hapantotype
-    - Iconotype
-    - Ergatotype
+typeStatus:
+  - None
+  - Holotype
+  - Paratype
+  - Allotype
+  - Neotype
+  - Syntype
+  - Lectotype
+  - Paralectotype
+  - Hapantotype
+  - Iconotype
+  - Ergatotype
