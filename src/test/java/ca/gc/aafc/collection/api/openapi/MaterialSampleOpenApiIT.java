@@ -124,18 +124,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String childUUID = materialSampleResponseBody.path("data[1].id");
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
-    sendPost(TYPE_NAME + "?include=hierarchy", JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ms),
-      Map.of(
-        "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
-        "parentMaterialSample", getRelationType("material-sample", parentUUID),
-        "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-        "preparationType", getRelationType("preparation-type", preparationTypeUUID),
-        "materialSampleChildren", getRelationListType("material-sample", childUUID)),
-        null)
-      ).log().everything();
-
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSample",
-      sendPost(TYPE_NAME + "/?include=hierarchy", JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ms),
+      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ms),
       Map.of(
         "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
         "parentMaterialSample", getRelationType("material-sample", parentUUID),
