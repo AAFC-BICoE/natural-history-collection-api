@@ -1,22 +1,11 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import ca.gc.aafc.collection.api.entities.Determination;
-import org.javers.core.metamodel.annotation.Id;
-import org.javers.core.metamodel.annotation.PropertyName;
-import org.javers.core.metamodel.annotation.TypeName;
-
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
+import ca.gc.aafc.dina.service.HierarchicalObject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -24,6 +13,17 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
+
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -85,4 +85,6 @@ public class MaterialSampleDto {
   private String preparationRemarks;
   
   private String dwcDegreeOfEstablishment;
+
+  private List<HierarchicalObject> hierarchy;
 }
