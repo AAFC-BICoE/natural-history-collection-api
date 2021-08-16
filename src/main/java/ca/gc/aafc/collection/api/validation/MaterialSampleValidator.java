@@ -23,8 +23,8 @@ public class MaterialSampleValidator implements Validator {
 
   public static final String VALID_PARENT_RELATIONSHIP_LOOP = "validation.constraint.violation.loopingParentMaterialSample";
   public static final String PARENT_AND_EVENT_ERROR_KEY = "validation.constraint.violation.sample.parentWithEvent";
-  public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.dertermination.scientificnamesource";
-  public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.dertermination.scientificname";
+  public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
+  public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
