@@ -2,11 +2,13 @@ package ca.gc.aafc.collection.api.validation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
@@ -44,6 +46,23 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
     assertTrue(errors.hasErrors());
     assertEquals(1, errors.getAllErrors().size());
     assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_CyclicParent_HasError() {
+    StorageUnit storageUnitA = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
+    storageUnitService.create(storageUnitA);
+    
+    StorageUnit storageUnitB = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
+    storageUnitB.setParentStorageUnit(storageUnitA);
+    storageUnitService.create(storageUnitB);
+
+    storageUnitA.setParentStorageUnit(storageUnitB);
+
+    assertThrows(ValidationException.class, 
+      () -> storageUnitService.update(storageUnitA));
+
+
   }
 
   private String getExpectedErrorMessage(String key) {

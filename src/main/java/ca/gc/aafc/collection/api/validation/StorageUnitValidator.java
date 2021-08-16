@@ -43,6 +43,7 @@ public class StorageUnitValidator implements Validator {
     }
 
     StorageUnit storageUnit = (StorageUnit) target;
+    checkParentIsNotSelf(errors, storageUnit);
     checkParentIsNotInHierarchy(errors, storageUnit);
   }
 
@@ -63,18 +64,13 @@ public class StorageUnitValidator implements Validator {
         }
       }
     } 
-    else {
-      StorageUnit slow = storageUnit;
-      StorageUnit fast = storageUnit;
-      while (slow != null && fast != null && fast.getParentStorageUnit() != null) {
-        slow = slow.getParentStorageUnit();
-        fast = fast.getParentStorageUnit().getParentStorageUnit();
-        if (slow.equals(fast)) {
-          String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
-          errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
-          break;
-        }
-      }
+  }
+
+  private void checkParentIsNotSelf(Errors errors, StorageUnit storageUnit) {
+    if (storageUnit.getParentStorageUnit() != null
+      && storageUnit.getParentStorageUnit().getUuid().equals(storageUnit.getUuid())) {
+      String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
+      errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
     }
   }
 
