@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import lombok.NonNull;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -60,7 +61,8 @@ public class MaterialSampleValidator implements Validator {
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
       for (Determination determination : materialSample.getDetermination()) {
-        if (determination.getScientificNameSource() != null && StringUtils.isBlank(determination.getScientificName())) {
+        // XOR, both set or both not set but never only one of them
+        if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
         }
@@ -75,4 +77,6 @@ public class MaterialSampleValidator implements Validator {
   private String getMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
   }
+
+
 }

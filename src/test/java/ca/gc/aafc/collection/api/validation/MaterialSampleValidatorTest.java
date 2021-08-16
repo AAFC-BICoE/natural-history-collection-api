@@ -4,11 +4,11 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
@@ -28,7 +28,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   @Test
   void validate_WhenValid_NoErrors() {
     MaterialSample sample = newSample();
-    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);
     Assertions.assertFalse(errors.hasErrors());
   }
@@ -38,7 +38,9 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_PARENT_RELATIONSHIP_LOOP);
     MaterialSample sample = newSample();
     sample.setParentMaterialSample(sample);
-    Errors errors = new BeanPropertyBindingResult(sample, "name");
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
+
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
@@ -51,7 +53,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     MaterialSample sample = newSample();
     sample.setParentMaterialSample(newSample());
     sample.setCollectingEvent(CollectingEvent.builder().build());
-    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
@@ -72,7 +74,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     MaterialSample sample = newSample();
     sample.setDetermination(determinations);
     
-    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
@@ -80,7 +82,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_WhenScientificNameAndVerbtimScientificNameIsNotSet_HasError() {
+  void validate_WhenScientificNameAndVerbatimScientificNameIsNotSet_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAME);
 
     List<Determination> determinations = List.of(Determination.builder().build());
@@ -88,7 +90,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     MaterialSample sample = newSample();
     sample.setDetermination(determinations);
     
-    Errors errors = new BeanPropertyBindingResult(sample, "name");
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
