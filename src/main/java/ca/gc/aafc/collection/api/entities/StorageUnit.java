@@ -40,6 +40,13 @@ import java.util.UUID;
 @NaturalIdCache
 public class StorageUnit implements DinaEntity {
 
+  public static final String TABLE_NAME = "storage_unit";
+  public static final String ID_COLUMN_NAME = "id";
+  public static final String UUID_COLUMN_NAME = "uuid";
+  public static final String PARENT_ID_COLUMN_NAME = "parent_storage_unit_id";
+  public static final String NAME_COLUMN_NAME = "name";
+  public static final String TYPE_COLUMN_NAME = "storage_unit_type_id";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

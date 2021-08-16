@@ -82,12 +82,12 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
   private void setHierarchy(StorageUnit unit) {
     List<HierarchicalObject> hierarchicalObjects = postgresHierarchicalDataService.getHierarchyWithType(
       unit.getId(),
-      "storage_unit",
-      "id",
-      "uuid",
-      "parent_storage_unit_id",
-      "name",
-      "storage_unit_type_id");
+      StorageUnit.TABLE_NAME,
+      StorageUnit.ID_COLUMN_NAME,
+      StorageUnit.UUID_COLUMN_NAME,
+      StorageUnit.PARENT_ID_COLUMN_NAME,
+      StorageUnit.NAME_COLUMN_NAME,
+      StorageUnit.TYPE_COLUMN_NAME);
     List<StorageHierarchicalObject> storageHierarchicalObjects = new ArrayList<>();
     for (HierarchicalObject hObject : hierarchicalObjects) {
       StorageHierarchicalObject storageHierarchicalObject = new StorageHierarchicalObject();

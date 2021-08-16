@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.validation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
   @Test
   void validate_WhenValid_NoErrors() {
     StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
+    assertNotNull(storageUnit.getId());
     Errors errors = new BeanPropertyBindingResult(storageUnit, storageUnit.getName());
     storageUnitValidator.validate(storageUnit, errors);
     assertFalse(errors.hasErrors());
