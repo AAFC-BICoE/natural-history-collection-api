@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
@@ -52,6 +53,7 @@ public class Determination {
 
   private final List<UUID> determiner;
 
+  @PastOrPresent
   private final LocalDate determinedOn;
 
   @Size(max = 150)
