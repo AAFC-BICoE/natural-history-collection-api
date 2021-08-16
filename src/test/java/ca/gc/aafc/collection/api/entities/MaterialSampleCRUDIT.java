@@ -262,7 +262,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   void determinedOnIsInFuture_Exception() {
     Determination determination = Determination.builder()
       .verbatimScientificName("verbatimScientificName")
-      .determinedOn(LocalDate.of(9999, 1, 1))
+      .determinedOn(LocalDate.now().plusDays(2))
       .build();
 
     List<Determination> determinations = List.of(determination);
