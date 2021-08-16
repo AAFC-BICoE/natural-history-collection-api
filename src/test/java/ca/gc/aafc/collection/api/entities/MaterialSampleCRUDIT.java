@@ -258,4 +258,19 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
   }
 
+  @Test
+  void determinedOnIsInFuture_Exception() {
+    Determination determination = Determination.builder()
+      .verbatimScientificName("verbatimScientificName")
+      .determinedOn(LocalDate.now().plusDays(2))
+      .build();
+
+    List<Determination> determinations = List.of(determination);
+    
+    materialSample.setDetermination(determinations);
+    
+    assertThrows(ValidationException.class, 
+      () -> materialSampleService.update(materialSample));
+  }
+
 }

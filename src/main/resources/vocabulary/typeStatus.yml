@@ -1,0 +1,57 @@
+vocabulary:
+  typeStatus:
+    - name: None
+      term: No Value
+      labels:
+        en: None
+        fr: rien
+    - name: Holotype
+      term: https://www.wikidata.org/wiki/Q1061403
+      labels:
+        en: Holotype
+        fr: Holotype
+    - name: Paratype
+      term: https://www.wikidata.org/wiki/Q926578
+      labels:
+        en: Paratype
+        fr: Paratype
+    - name: Allotype
+      term: https://www.wikidata.org/wiki/Q19353437
+      labels:
+        en: Allotype
+        fr: Allotype
+    - name: Neotype
+      term: https://www.wikidata.org/wiki/Q19353453
+      labels:
+        en: Neotype
+        fr: Neotype
+    - name: Syntype
+      term: https://www.wikidata.org/wiki/Q719822
+      labels:
+        en: Syntype
+        fr: Syntype
+    - name: Lectotype
+      term: https://www.wikidata.org/wiki/Q2439719
+      labels:
+        en: Lectotype
+        fr: Lectotype
+    - name: Paralectotype
+      term: https://www.wikidata.org/wiki/Q19353473
+      labels:
+        en: Paralectotype
+        fr: Paralectotype
+    - name: Hapantotype
+      term: https://www.wikidata.org/wiki/Q19353478
+      labels:
+        en: Hapantotype
+        fr: Hapantotype
+    - name: Iconotype
+      term: https://en.wikipedia.org/wiki/Type_(biology)
+      labels:
+        en: Iconotype
+        fr: Iconotype
+    - name: Ergatotype
+      term: https://www.wikidata.org/wiki/Q19353481
+      labels:
+        en: Ergatotype
+        fr: Ergatotype
