@@ -74,7 +74,7 @@ public class StorageUnit implements DinaEntity {
   private String createdBy;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "parent_storage_unit_id")
+  @JoinColumn(name = PARENT_ID_COLUMN_NAME)
   private StorageUnit parentStorageUnit;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
@@ -85,7 +85,7 @@ public class StorageUnit implements DinaEntity {
   private List<StorageHierarchicalObject> hierarchy;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "storage_unit_type_id")
+  @JoinColumn(name = TYPE_COLUMN_NAME)
   private StorageUnitType storageUnitType;
 
 }

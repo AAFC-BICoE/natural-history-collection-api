@@ -43,34 +43,40 @@ public class StorageUnitValidator implements Validator {
     }
 
     StorageUnit storageUnit = (StorageUnit) target;
-    // checkParentIsNotSelf(errors, storageUnit);
     checkParentIsNotInHierarchy(errors, storageUnit);
   }
 
   private void checkParentIsNotInHierarchy(Errors errors, StorageUnit storageUnit) {
-    List<HierarchicalObject> hierarchicalObjects = postgresHierarchicalDataService.getHierarchy(
-      storageUnit.getId(),
-      StorageUnit.TABLE_NAME,
-      StorageUnit.ID_COLUMN_NAME,
+    if (storageUnit.getId() != null && storageUnit.getUuid() != null) {
+      List<HierarchicalObject> hierarchicalObjects = postgresHierarchicalDataService.getHierarchy(
+        storageUnit.getId(),
+        StorageUnit.TABLE_NAME,
+        StorageUnit.ID_COLUMN_NAME,
       StorageUnit.UUID_COLUMN_NAME,
       StorageUnit.PARENT_ID_COLUMN_NAME,
       StorageUnit.NAME_COLUMN_NAME);
-    UUID parentUuid = storageUnit.getParentStorageUnit().getUuid();
-    for (HierarchicalObject hierarchicalObject : hierarchicalObjects) {
-      if (hierarchicalObject.getUuid().equals(parentUuid)) {
-        String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
-        errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
+      UUID parentUuid = storageUnit.getParentStorageUnit().getUuid();
+      for (HierarchicalObject hierarchicalObject : hierarchicalObjects) {
+        if (hierarchicalObject.getRank() != 1 && hierarchicalObject.getUuid().equals(parentUuid)) {
+          String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
+          errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
+        }
+      }
+    } 
+    else {
+      StorageUnit slow = storageUnit;
+      StorageUnit fast = storageUnit;
+      while (slow != null && fast != null && fast.getParentStorageUnit() != null) {
+        slow = slow.getParentStorageUnit();
+        fast = fast.getParentStorageUnit().getParentStorageUnit();
+        if (slow.equals(fast)) {
+          String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
+          errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
+          break;
+        }
       }
     }
   }
-
-  // private void checkParentIsNotSelf(Errors errors, StorageUnit storageUnit) {
-  //   if (storageUnit.getParentStorageUnit() != null
-  //     && storageUnit.getParentStorageUnit().getUuid().equals(storageUnit.getUuid())) {
-  //     String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
-  //     errors.rejectValue("parentStorageUnit", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
-  //   }
-  // }
 
   private String getMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
