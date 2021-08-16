@@ -13,7 +13,9 @@ import org.springframework.validation.Errors;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +95,22 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_WhenDeterminedOnIsInFuture_ConstraintViolation() {
+    Determination determination = Determination.builder()
+      .verbatimScientificName("verbatimScientificName")
+      .determinedOn(LocalDate.of(9999, 1, 1))
+      .build();
+
+    List<Determination> determinations = List.of(determination);
+    
+    MaterialSample sample = newSample();
+    sample.setDetermination(determinations);
+    
+    Assertions.assertThrows(ConstraintViolationException.class, 
+      () -> materialSampleService.create(sample));
   }
 
 
