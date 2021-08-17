@@ -85,6 +85,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, collectingEventDto.getDwcVerbatimDepth());
     assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
     assertEquals(CollectingEventTestFixture.GEOGRAPHIC_PLACE_NAME_SOURCE, collectingEventDto.getGeographicPlaceNameSource());
+    assertEquals(CollectingEventTestFixture.HOST, collectingEventDto.getHost());
     assertEquals(
       CollectingEventTestFixture.TEST_COUNTRY,
       collectingEventDto.getGeographicPlaceNameSourceDetail().getCountry());
@@ -120,6 +121,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, result.getDwcVerbatimDepth());
     assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], result.getDwcOtherRecordNumbers()[1]);
     assertEquals(CollectingEventTestFixture.HABITAT, result.getHabitat());
+    assertEquals(CollectingEventTestFixture.HOST, result.getHost());
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
   }
 

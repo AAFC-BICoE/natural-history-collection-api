@@ -133,4 +133,7 @@ public class MaterialSample implements DinaEntity {
 
   @Transient
   private List<HierarchicalObject> hierarchy;
+
+  @Size(max = 250)
+  private String host;
 }

@@ -77,6 +77,8 @@ public class CollectingEventDto {
 
   private String dwcVerbatimLocality;
 
+  private String host;
+
   /**
    * Map of Managed attribute key to value object.
    */

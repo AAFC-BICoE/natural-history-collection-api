@@ -18,6 +18,7 @@ public class MaterialSampleTestFixture {
   public static final String CREATED_BY = "test user";
   public static final String DWC_DEGREE_OF_ESTABLISHMENT = "established";
   public static final String PREPARATION_REMARKS = "this is a remark on the preparation";
+  public static final String HOST = "host";
 
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto= new MaterialSampleDto();
@@ -33,6 +34,7 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setCreatedBy(CREATED_BY);
     materialSampleDto.setDwcDegreeOfEstablishment(DWC_DEGREE_OF_ESTABLISHMENT);
     materialSampleDto.setPreparationRemarks(PREPARATION_REMARKS);
+    materialSampleDto.setHost(HOST);
     return materialSampleDto;
   }
 }
