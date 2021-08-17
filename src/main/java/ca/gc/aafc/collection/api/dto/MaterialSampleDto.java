@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
@@ -80,12 +82,14 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private StorageUnitDto storageUnit;
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<Determination> determination;
 
   private String preparationRemarks;
   
   private String dwcDegreeOfEstablishment;
 
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<HierarchicalObject> hierarchy;
 
   private String host;
