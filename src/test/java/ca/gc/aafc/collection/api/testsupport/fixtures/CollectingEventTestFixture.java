@@ -36,6 +36,7 @@ public class CollectingEventTestFixture {
   public static final String DWC_VERBATIM_ELEVATION = "100-200 m";
   public static final String DWC_VERBATIM_DEPTH = "10-20 m ";
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
+  public static final String HOST = "host";
   public static final CollectingEvent.GeographicPlaceNameSource GEOGRAPHIC_PLACE_NAME_SOURCE = CollectingEvent.GeographicPlaceNameSource.OSM;
   public static final GeoreferenceAssertionDto GEOREFERENCE_ASSERTION_DTO = GeoreferenceAssertionDto.builder()
     .dwcDecimalLatitude(12.123456)
@@ -104,6 +105,7 @@ public class CollectingEventTestFixture {
     ce.setDwcVerbatimDepth(DWC_VERBATIM_DEPTH);
     ce.setDwcOtherRecordNumbers(DWC_OTHER_RECORD_NUMBERS);
     ce.setHabitat(HABITAT);
+    ce.setHost(HOST);
     return ce;
   }
   

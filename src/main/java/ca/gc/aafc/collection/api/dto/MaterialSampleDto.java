@@ -87,4 +87,6 @@ public class MaterialSampleDto {
   private String dwcDegreeOfEstablishment;
 
   private List<HierarchicalObject> hierarchy;
+
+  private String host;
 }
