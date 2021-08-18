@@ -4,28 +4,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
     <changeSet id="71-Issue_with_circular_dependency_in_storage_unit" context="schema-change" author="steven luu">
-        <!-- CREATE TABLE hierarchy_test_table
-        (
-            id integer NOT NULL,
-            uuid uuid NOT NULL,
-            name text NOT NULL,
-            parent_identifier integer,
-            type_uuid uuid,
-            CONSTRAINT hierarchy_table_pkey PRIMARY KEY (id)
-        );
-
-        ALTER TABLE hierarchy_test_table ADD CONSTRAINT fk_parent
-            FOREIGN KEY (parent_identifier) references hierarchy_test_table(id);
-
-        INSERT INTO public.hierarchy_test_table(
-            id, uuid, name, parent_identifier, type_uuid)
-        VALUES 
-        (1, '7e0c2c3a-8113-427c-b8ed-83247a82ba43', 'a1', NULL, '02bd39da-5471-4ca2-b82d-b407551c7f31'),
-        (2, 'c779eea7-3e6b-42a2-9ce6-88ca66857dad', 'a2', 1, '8d8c6339-4725-4b80-8d04-8e0fa9c5eec8'),
-        (3, 'cdeec1e6-9e24-477a-a598-e32af0447d43', 'a3', 1, '8d8c6339-4725-4b80-8d04-8e0fa9c5eec8'),
-        (4, '42cb7ad4-6600-4067-90f2-87d81e045172', 'a4', 2, 'bc090507-bcee-48f8-b7bc-4c5551a2c52a'),
-        (5, '61a75686-a964-451a-86de-b15a89cbcebd', 'a5', 2, 'bc090507-bcee-48f8-b7bc-4c5551a2c52a'),
-        (6, 'ffe87eae-5a10-44d2-8beb-cd2db7b116b9', 'a6', NULL, '02bd39da-5471-4ca2-b82d-b407551c7f31'); -->
        <sql>
         CREATE FUNCTION is_in_storage_hierarchy(id integer, parent_id integer) RETURNS boolean AS 
         '
@@ -34,7 +12,7 @@
                 FROM storage_unit AS initial_t where initial_t.id = $2 UNION ALL 
                 SELECT node.id, node.parent_storage_unit_id, gh.rank + 1 
                 FROM get_hierarchy gh, storage_unit AS node WHERE node.id = gh.parent_id)
-            SELECT EXISTS (select * from get_hierarchy where id = $1 AND rank > 2)
+            SELECT EXISTS (select * from get_hierarchy where id = $1 AND rank > 2);
         '
         LANGUAGE SQL
         RETURNS NULL ON NULL INPUT;
