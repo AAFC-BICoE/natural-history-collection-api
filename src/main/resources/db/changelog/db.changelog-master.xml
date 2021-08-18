@@ -74,5 +74,6 @@
   <include file="db/changelog/migrations/68-Add_preparationRemarks_field_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/69-Add_dwcDegreeOfEstablishment_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/70-Add_host_fields.xml"/>
+  <include file="db/changelog/migrations/71-Issue_with_circular_dependency_in_storage_unit.xml"/>
 
 </databaseChangeLog>

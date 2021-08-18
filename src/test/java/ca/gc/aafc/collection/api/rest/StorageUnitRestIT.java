@@ -144,7 +144,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       JsonAPITestHelper.toAttributeMap(unit),
       getRelationshipMap(parentId, childId, unitTypeId),
       null)
-    ).extract().body().jsonPath().getString("data.id");
+    ).log().all().extract().body().jsonPath().getString("data.id");
   }
 
   private String postUnit(StorageUnitDto unit) {

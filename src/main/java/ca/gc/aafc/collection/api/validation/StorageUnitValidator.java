@@ -44,7 +44,7 @@ public class StorageUnitValidator implements Validator {
 
     StorageUnit storageUnit = (StorageUnit) target;
     checkParentIsNotSelf(errors, storageUnit);
-    checkParentIsNotInHierarchy(errors, storageUnit);
+    //checkParentIsNotInHierarchy(errors, storageUnit);
   }
 
   private void checkParentIsNotInHierarchy(Errors errors, StorageUnit storageUnit) {
