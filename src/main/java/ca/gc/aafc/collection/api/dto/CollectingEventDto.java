@@ -101,6 +101,7 @@ public class CollectingEventDto {
   private Integer dwcMinimumDepthInMeters;
   private Integer dwcMaximumElevationInMeters;
   private Integer dwcMaximumDepthInMeters;
+  private String substrate;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;

@@ -170,6 +170,8 @@ public class CollectingEvent implements DinaEntity {
   @Max(value = 15000)
   private Integer dwcMaximumDepthInMeters;
 
+  private String substrate;
+
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
   @NotNull
