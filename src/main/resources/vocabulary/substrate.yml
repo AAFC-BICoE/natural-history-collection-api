@@ -1,0 +1,42 @@
+vocabulary:
+  substrate:
+    - name: rocks
+      term: https://www.wikidata.org/wiki/Q8063
+      labels:
+        en: rocks
+        fr: roches
+    - name: gravel
+      term: https://www.wikidata.org/wiki/Q133833
+      labels:
+        en: gravel
+        fr: gravier
+    - name: detritus
+      term: https://www.wikidata.org/wiki/Q736879
+      labels:
+        en: detritus
+        fr: détritus
+    - name: silt
+      term: https://www.wikidata.org/wiki/Q270699
+      labels:
+        en: silt
+        fr: limon
+    - name: weed beds
+      term: 
+      labels:
+        en: weed beds
+        fr: 
+    - name: sand
+      term: https://www.wikidata.org/wiki/Q34679
+      labels:
+        en: sand
+        fr: sable
+    - name: moss mats
+      term: 
+      labels:
+        en: moss mats
+        fr: 
+    - name: mud
+      term: https://www.wikidata.org/wiki/Q170449
+      labels:
+        en: mud
+        fr: terre
