@@ -174,6 +174,9 @@ public class CollectingEvent implements DinaEntity {
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
+  @Size(max = 250)
+  private String host;
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
    * in sync.
