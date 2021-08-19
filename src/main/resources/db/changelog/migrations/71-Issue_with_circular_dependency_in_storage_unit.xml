@@ -12,7 +12,7 @@
                 FROM storage_unit AS initial_t where initial_t.id = $2 UNION ALL 
                 SELECT node.id, node.parent_storage_unit_id, gh.rank + 1 
                 FROM get_hierarchy gh, storage_unit AS node WHERE node.id = gh.parent_id)
-            SELECT EXISTS (select * from get_hierarchy where id = $1 AND rank > 2);
+            SELECT EXISTS (select * from get_hierarchy where id = $1 AND rank > 1);
         '
         LANGUAGE SQL
         RETURNS NULL ON NULL INPUT;

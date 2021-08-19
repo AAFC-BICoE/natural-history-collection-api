@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
 
     storageUnitA.setParentStorageUnit(storageUnitB);
 
-    assertThrows(ValidationException.class, 
+    assertThrows(PersistenceException.class, 
       () -> storageUnitService.update(storageUnitA));
 
 
