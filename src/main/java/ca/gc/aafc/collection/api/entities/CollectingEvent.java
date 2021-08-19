@@ -159,6 +159,12 @@ public class CollectingEvent implements DinaEntity {
   @Min(value = 0)
   private Integer dwcMinimumDepthInMeters;
 
+  @Min(value = 0)
+  private Integer dwcMaximumElevationInMeters;
+
+  @Min(value = 0)
+  private Integer dwcMaximumDepthInMeters;
+
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
   @NotNull
