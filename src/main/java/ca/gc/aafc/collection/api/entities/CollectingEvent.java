@@ -170,6 +170,7 @@ public class CollectingEvent implements DinaEntity {
   @Max(value = 15000)
   private Integer dwcMaximumDepthInMeters;
 
+  @Size(max = 50)
   private String substrate;
 
   /** Map of Managed attribute key to value object. */
