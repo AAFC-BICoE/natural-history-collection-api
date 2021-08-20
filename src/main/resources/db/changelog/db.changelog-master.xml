@@ -76,5 +76,6 @@
   <include file="db/changelog/migrations/70-Add_host_fields.xml"/>
   <include file="db/changelog/migrations/71-Add_maxmimum_elevation_and_depth_fields.xml"/>
   <include file="db/changelog/migrations/72-Add_substrate_to_collecting_event.xml"/>
+  <include file="db/changelog/migrations/73-Add_new_field_remarks_on_collecting-event.xml"/>
 
 </databaseChangeLog>
