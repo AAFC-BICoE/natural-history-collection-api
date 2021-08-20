@@ -447,6 +447,22 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void update_WithInvalidMinimumMaximumValue_throwsConstraintViolationException() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(15001);
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(15002);
+    fetchedCollectingEvent.setDwcMaximumDepthInMeters(15003);
+    fetchedCollectingEvent.setDwcMaximumElevationInMeters(15004);
+
+    assertThrows(ConstraintViolationException.class, 
+      () -> collectingEventService.update(fetchedCollectingEvent));
+      
+  }
+
+
+  @Test
   void update_WithNullMinimumValue_NoExceptionThrown() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
