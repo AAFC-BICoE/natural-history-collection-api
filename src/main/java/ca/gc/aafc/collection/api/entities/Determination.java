@@ -34,7 +34,7 @@ public class Determination {
   private final String verbatimScientificName;
 
   @Size(max = 150)
-  private final String verbatimAgent;
+  private final String verbatimDeterminer;
 
   @Size(max = 50)
   private final String verbatimDate;
