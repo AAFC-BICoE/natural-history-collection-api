@@ -26,7 +26,7 @@
     <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
     <checkstyle.version>8.44</checkstyle.version>
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.63</dina-base-api.version>
+    <dina-base-api.version>0.65-SNAPSHOT</dina-base-api.version>
     <hibernate-types-52.version>2.10.2</hibernate-types-52.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
   </properties>
