@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 @RelatedEntity(CollectionMethod.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-@JsonApiResource(type = PreparationTypeDto.TYPENAME)
+@JsonApiResource(type = CollectionMethodDto.TYPENAME)
 public class CollectionMethodDto {
 
   public static final String TYPENAME = "collection-method";
