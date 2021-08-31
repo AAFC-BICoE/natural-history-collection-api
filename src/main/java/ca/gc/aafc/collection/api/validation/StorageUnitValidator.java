@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
+import ca.gc.aafc.dina.dto.HierarchicalObject;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
-import ca.gc.aafc.dina.service.HierarchicalObject;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 
 import java.util.List;
