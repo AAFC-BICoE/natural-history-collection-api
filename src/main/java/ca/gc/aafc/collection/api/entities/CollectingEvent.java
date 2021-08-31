@@ -173,6 +173,9 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 50)
   private String substrate;
 
+  @Size(max = 250)
+  private String remarks;
+
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
   @NotNull

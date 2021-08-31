@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.service.HierarchicalObject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

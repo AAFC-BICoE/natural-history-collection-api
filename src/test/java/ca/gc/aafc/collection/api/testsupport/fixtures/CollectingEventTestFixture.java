@@ -40,6 +40,7 @@ public class CollectingEventTestFixture {
   public static final Integer DWC_MINIMUM_ELEVATION_IN_METERS = 50;
   public static final Integer DWC_MINIMUM_DEPTH_IN_METERS = 10;
   public static final String SUBSTRATE = "rock";
+  public static final String REMARKS = "this is a remark";
 
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
   public static final String HOST = "host";
@@ -117,6 +118,7 @@ public class CollectingEventTestFixture {
     ce.setDwcMinimumDepthInMeters(DWC_MINIMUM_DEPTH_IN_METERS);
     ce.setDwcMinimumElevationInMeters(DWC_MINIMUM_ELEVATION_IN_METERS);
     ce.setSubstrate(SUBSTRATE);
+    ce.setRemarks(REMARKS);
     return ce;
   }
   

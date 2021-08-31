@@ -35,7 +35,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
     // Assert determination
     Assertions.assertNotNull(result);
-    Assertions.assertEquals(determination.getVerbatimAgent(), result.getVerbatimAgent());
+    Assertions.assertEquals(determination.getVerbatimDeterminer(), result.getVerbatimDeterminer());
     Assertions.assertEquals(determination.getVerbatimDate(), result.getVerbatimDate());
     Assertions.assertEquals(determination.getVerbatimScientificName(), result.getVerbatimScientificName());
     Assertions.assertEquals(determination.getDeterminedOn(), result.getDeterminedOn());
@@ -59,7 +59,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
   private Determination.DeterminationBuilder newDetermination() {
     return Determination.builder()
-      .verbatimAgent(RandomStringUtils.randomAlphabetic(3))
+      .verbatimDeterminer(RandomStringUtils.randomAlphabetic(3))
       .verbatimDate(LocalDate.now().toString())
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
       .transcriberRemarks(RandomStringUtils.randomAlphabetic(50));
