@@ -35,6 +35,13 @@ public class CollectingEventTestFixture {
   public static final String DWC_VERBATIM_SRS = "EPSG:4326";
   public static final String DWC_VERBATIM_ELEVATION = "100-200 m";
   public static final String DWC_VERBATIM_DEPTH = "10-20 m ";
+  public static final Integer DWC_MAXIMUM_ELEVATION_IN_METERS = 100;
+  public static final Integer DWC_MAXIMUM_DEPTH_IN_METERS = 20;
+  public static final Integer DWC_MINIMUM_ELEVATION_IN_METERS = 50;
+  public static final Integer DWC_MINIMUM_DEPTH_IN_METERS = 10;
+  public static final String SUBSTRATE = "rock";
+  public static final String REMARKS = "this is a remark";
+
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
   public static final String HOST = "host";
   public static final CollectingEvent.GeographicPlaceNameSource GEOGRAPHIC_PLACE_NAME_SOURCE = CollectingEvent.GeographicPlaceNameSource.OSM;
@@ -106,6 +113,12 @@ public class CollectingEventTestFixture {
     ce.setDwcOtherRecordNumbers(DWC_OTHER_RECORD_NUMBERS);
     ce.setHabitat(HABITAT);
     ce.setHost(HOST);
+    ce.setDwcMaximumDepthInMeters(DWC_MAXIMUM_DEPTH_IN_METERS);
+    ce.setDwcMaximumElevationInMeters(DWC_MAXIMUM_ELEVATION_IN_METERS);
+    ce.setDwcMinimumDepthInMeters(DWC_MINIMUM_DEPTH_IN_METERS);
+    ce.setDwcMinimumElevationInMeters(DWC_MINIMUM_ELEVATION_IN_METERS);
+    ce.setSubstrate(SUBSTRATE);
+    ce.setRemarks(REMARKS);
     return ce;
   }
   

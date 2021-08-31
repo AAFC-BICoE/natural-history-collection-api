@@ -78,7 +78,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     Determination determination = Determination.builder()
       .verbatimScientificName("verbatimScientificName")
-      .verbatimAgent("verbatimAgent")
+      .verbatimDeterminer("verbatimDeterminer")
       .verbatimDate("2021-01-01")
       .scientificName("scientificName")
       .transcriberRemarks("transcriberRemarks")

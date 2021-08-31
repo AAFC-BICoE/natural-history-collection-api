@@ -74,6 +74,9 @@
   <include file="db/changelog/migrations/68-Add_preparationRemarks_field_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/69-Add_dwcDegreeOfEstablishment_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/70-Add_host_fields.xml"/>
-  <include file="db/changelog/migrations/71-Issue_with_circular_dependency_in_storage_unit.xml"/>
-
+  <include file="db/changelog/migrations/71-Add_maxmimum_elevation_and_depth_fields.xml"/>
+  <include file="db/changelog/migrations/72-Add_substrate_to_collecting_event.xml"/>
+  <include file="db/changelog/migrations/73-Create_Table_Collection_Method.xml"/>
+  <include file="db/changelog/migrations/74-Add_new_field_remarks_on_collecting-event.xml"/>
+  <include file="db/changelog/migrations/75-Create_check_storage_hierarchy_trigger.xml"/>
 </databaseChangeLog>

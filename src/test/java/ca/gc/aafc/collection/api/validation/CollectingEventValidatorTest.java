@@ -166,6 +166,60 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(1).getDefaultMessage());
   }
 
+  @Test
+  void validate_MaxElevationSetMinElevationNotSet_ErrorsReturned() {
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MIN_MAX_ELEVATION);
+
+    CollectingEvent event = newEvent();
+    event.setDwcMaximumElevationInMeters(100);
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_MaxDepthSetMinDepthNotSet_ErrorsReturned() {
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MIN_MAX_DEPTH);
+
+    CollectingEvent event = newEvent();
+    event.setDwcMaximumDepthInMeters(100);
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_MaxElevationLessThanMinElevation_ErrorsReturned() {
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MAX_LESS_THAN_MIN_ELEVATION);
+
+    CollectingEvent event = newEvent();
+    event.setDwcMaximumElevationInMeters(100);
+    event.setDwcMinimumElevationInMeters(101);
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_MaxDepthLessThanMinDepth_ErrorsReturned() {
+    String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MAX_LESS_THAN_MIN_DEPTH);
+
+    CollectingEvent event = newEvent();
+    event.setDwcMaximumDepthInMeters(100);
+    event.setDwcMinimumDepthInMeters(101);
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
   private String getExpectedErrorMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
   }
