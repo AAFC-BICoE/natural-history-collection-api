@@ -17,6 +17,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -57,7 +59,19 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
+    CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
+    collectionManagedAttributeDto.setName("key");
+    collectionManagedAttributeDto.setGroup("group");
+    collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING);
+    collectionManagedAttributeDto.setAcceptedValues(null);
+    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    collectionManagedAttributeDto.setCreatedBy("dina");     
+
+    sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
+
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+
+    ce.setManagedAttributes(Map.of("key", "anything"));
     ce.setGeoReferenceAssertions(null);
     ce.setAttachment(null);
     ce.setCollectors(null);
@@ -68,7 +82,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
           "collectors", getExternalListType("person"),
           "attachment", getExternalListType("metadata")),
         null)
-      ).extract().asString(), true);
+      ).extract().asString());
   }
 
   private Map<String, Object> getExternalListType(String type) {

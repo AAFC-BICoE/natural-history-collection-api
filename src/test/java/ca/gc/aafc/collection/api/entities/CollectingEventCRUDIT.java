@@ -1,9 +1,12 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.GeoreferenceAssertionFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
+import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,14 +15,17 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
-  private GeoreferenceAssertion geoReferenceAssertion;
+  private GeoreferenceAssertionDto geoReferenceAssertion;
 
   private static final String dwcRecordedBy = "Julian Grant | Noah Hart";
   private static final String dwcVerbatimLocality = "25 km NNE Bariloche por R. Nac. 237";
@@ -63,7 +69,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setUp() {
-    geoReferenceAssertion = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    geoReferenceAssertion = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(12.123456)
       .isPrimary(true)
       .build();
@@ -137,7 +143,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void create_WithInvalidGeo_throwsIllegalArgumentException() {
     collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
       geo.setDwcGeoreferenceVerificationStatus(
-        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+        GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
       geo.setDwcDecimalLatitude(2.0);
     });
 
@@ -152,14 +158,76 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void geographicPlaceNameSourceDetail_ConstraintValidation_ConstraintViolationExceptionThrown() {
+    collectingEvent.setGeographicPlaceNameSourceDetail(GeographicPlaceNameSourceDetail.builder().build());
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @SneakyThrows
+  @Test
+  void geoDetailStateProvince_HasConstraintValidation_ConstraintViolationExceptionThrown() {
+    GeographicPlaceNameSourceDetail.SourceAdministrativeLevel invalid = GeographicPlaceNameSourceDetail
+      .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
+
+    GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
+      .sourceUrl(new URL("http://example.com"))
+      .stateProvince(invalid)
+      .country(TEST_COUNTRY)
+      .higherGeographicPlaces(List.of(TEST_PROVINCE))
+      .build();
+    collectingEvent.setGeographicPlaceNameSourceDetail(detail);
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @SneakyThrows
+  @Test
+  void geoDetailHigherGeographicPlaces_HasConstraintValidation_ConstraintViolationExceptionThrown() {
+    GeographicPlaceNameSourceDetail.SourceAdministrativeLevel invalid = GeographicPlaceNameSourceDetail
+      .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
+
+    GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
+      .sourceUrl(new URL("http://example.com"))
+      .stateProvince(TEST_PROVINCE)
+      .country(TEST_COUNTRY)
+      .higherGeographicPlaces(List.of(invalid))
+      .build();
+    collectingEvent.setGeographicPlaceNameSourceDetail(detail);
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @SneakyThrows
+  @Test
+  void geoDetailCountry_HasConstraintValidation_ConstraintViolationExceptionThrown() {
+    GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
+      .sourceUrl(new URL("http://example.com"))
+      .stateProvince(TEST_PROVINCE)
+      .country(GeographicPlaceNameSourceDetail.Country.builder().code("1").name("name").build())
+      .higherGeographicPlaces(List.of(TEST_PROVINCE))
+      .build();
+    collectingEvent.setGeographicPlaceNameSourceDetail(detail);
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> collectingEventService.create(collectingEvent));
+  }
+
+  @Test
   void create_WithInvalidGeoPrimaries_ValidationException() {
     final CollectingEvent eventToManyPrimaries = CollectingEventFactory.newCollectingEvent().build();
 
-    GeoreferenceAssertion geo = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(1.0)
       .isPrimary(true)
       .build();
-    GeoreferenceAssertion geo2 = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo2 =  GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(1.0)
       .isPrimary(true)
       .build();
@@ -181,8 +249,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertThrows(ValidationException.class, () -> collectingEventService.create(singleNonPrimary));
 
     geo.setIsPrimary(true);
+    ArrayList<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
+    geoReferenceAssertions.add(geo);
     final CollectingEvent singleValid = CollectingEventFactory.newCollectingEvent()
-      .geoReferenceAssertions(List.of(geo))
+      .geoReferenceAssertions(geoReferenceAssertions)
       .build();
     assertDoesNotThrow(() -> collectingEventService.create(singleValid));
   }
@@ -229,25 +299,27 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void delete_Orphans_Removed() {
     collectingEventService.delete(collectingEvent);
     assertNull(collectingEventService.findOne(collectingEvent.getUuid(), CollectingEvent.class));
-    assertNull(service.find(GeoreferenceAssertion.class, geoReferenceAssertion.getId()));
   }
 
   @Test
   void update_whenGeoAssertionsUpdated_GeosUpdated() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
-    GeoreferenceAssertion geo = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(1.0).build();
     geo.setIsPrimary(true);
-    GeoreferenceAssertion geo2 = GeoreferenceAssertionFactory.newGeoreferenceAssertion()
+    GeoreferenceAssertionDto geo2 = GeoreferenceAssertionDto.builder()
     .dwcDecimalLatitude(2.0).build();
 
     // Pop one, add two
-    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo, geo2));
+    List<GeoreferenceAssertionDto> assertions = new ArrayList<>();
+    assertions.add(geo);
+    assertions.add(geo2);
+    fetchedCollectingEvent.setGeoReferenceAssertions(assertions);
 
     collectingEventService.update(fetchedCollectingEvent);
 
-    List<GeoreferenceAssertion> results = collectingEventService
+    List<GeoreferenceAssertionDto> results = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class).getGeoReferenceAssertions();
     assertEquals(2, results.size());
     assertEquals(geo.getDwcDecimalLatitude(), results.get(0).getDwcDecimalLatitude());
@@ -257,7 +329,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
     // remove last
-    fetchedCollectingEvent.setGeoReferenceAssertions(List.of(geo));
+    assertions.clear();
+    assertions.add(geo);
+    fetchedCollectingEvent.setGeoReferenceAssertions(assertions);
     collectingEventService.update(fetchedCollectingEvent);
 
     results = collectingEventService
@@ -284,7 +358,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void update_WithInvalidGeo_throwsIllegalArgumentException() {
     collectingEvent.getGeoReferenceAssertions().forEach(geo -> {
       geo.setDwcGeoreferenceVerificationStatus(
-        GeoreferenceAssertion.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
+        GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE);
       geo.setDwcDecimalLatitude(2.0);
     });
 
@@ -299,6 +373,67 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void validate_WhenValidStringType() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(null)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "anything");
+
+    collectingEvent.setManagedAttributes(maMap);
+    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
+  }
+
+  @Test
+  void validate_WhenInvalidIntegerTypeExceptionThrown() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(null)
+      .managedAttributeType(ManagedAttributeType.INTEGER)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "1.2");
+
+    collectingEvent.setManagedAttributes(maMap);
+    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
+  }
+
+  @Test
+  void assignedValueContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{"val1", "val2"})
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]);
+
+    collectingEvent.setManagedAttributes(maMap);
+    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
+  }
+
+  @Test
+  void assignedValueNotContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{"val1", "val2"})
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "val3");
+    
+    collectingEvent.setManagedAttributes(maMap);
+    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
+  }
+
+  @Test
   void update_WithInvalidMinimumValue_throwsConstraintViolationException() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
@@ -310,6 +445,22 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       () -> collectingEventService.update(fetchedCollectingEvent));
 
   }
+
+  @Test
+  void update_WithInvalidMinimumMaximumValue_throwsConstraintViolationException() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(15001);
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(15002);
+    fetchedCollectingEvent.setDwcMaximumDepthInMeters(15003);
+    fetchedCollectingEvent.setDwcMaximumElevationInMeters(15004);
+
+    assertThrows(ConstraintViolationException.class, 
+      () -> collectingEventService.update(fetchedCollectingEvent));
+      
+  }
+
 
   @Test
   void update_WithNullMinimumValue_NoExceptionThrown() {

@@ -2,18 +2,13 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectingEvent.ManagedAttributeValue;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
-import ca.gc.aafc.dina.mapper.DinaMapper;
-import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -32,17 +27,14 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @RelatedEntity(CollectingEvent.class)
 @CustomFieldAdapter(adapters = {
   CollectingEventDto.StartEventDateTimeAdapter.class,
-  CollectingEventDto.EndEventDateTimeAdapter.class,
-  CollectingEventDto.AssertionAdapter.class})
+  CollectingEventDto.EndEventDateTimeAdapter.class})
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = CollectingEventDto.TYPENAME)
@@ -61,9 +53,8 @@ public class CollectingEventDto {
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  @IgnoreDinaMapping(reason = "custom mapped")
-  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions =  new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
@@ -86,11 +77,13 @@ public class CollectingEventDto {
 
   private String dwcVerbatimLocality;
 
+  private String host;
+
   /**
    * Map of Managed attribute key to value object.
    */
   @JsonApiField(patchStrategy = PatchStrategy.SET)
-  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, String> managedAttributes = Map.of();
 
   private String dwcVerbatimLatitude;
   private String dwcVerbatimLongitude;
@@ -106,6 +99,10 @@ public class CollectingEventDto {
   private String habitat;
   private Integer dwcMinimumElevationInMeters;
   private Integer dwcMinimumDepthInMeters;
+  private Integer dwcMaximumElevationInMeters;
+  private Integer dwcMaximumDepthInMeters;
+  private String substrate;
+  private String remarks;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
@@ -186,58 +183,6 @@ public class CollectingEventDto {
       return dtoRef::getEndEventDateTime;
     }
 
-  }
-
-  public static class AssertionAdapter
-    implements DinaFieldAdapter<
-    CollectingEventDto,
-    CollectingEvent,
-    List<GeoreferenceAssertionDto>,
-    List<GeoreferenceAssertion>> {
-
-    private static final DinaMappingRegistry REGISTRY = new DinaMappingRegistry(GeoreferenceAssertionDto.class);
-    private static final DinaMapper<GeoreferenceAssertionDto, GeoreferenceAssertion> MAPPER;
-
-    static {
-      MAPPER = new DinaMapper<>(GeoreferenceAssertionDto.class, REGISTRY);
-    }
-
-    @Override
-    public List<GeoreferenceAssertionDto> toDTO(List<GeoreferenceAssertion> assertionList) {
-      return assertionList == null ? null : assertionList.stream()
-        .map(assertion -> MAPPER.toDto(assertion, REGISTRY.getAttributesPerClass(), Set.of()))
-        .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<GeoreferenceAssertion> toEntity(List<GeoreferenceAssertionDto> assertionList) {
-      return assertionList == null ? null : assertionList.stream()
-        .map(assertion -> {
-          GeoreferenceAssertion newAssertion = new GeoreferenceAssertion();
-          MAPPER.applyDtoToEntity(assertion, newAssertion, REGISTRY.getAttributesPerClass(), Set.of());
-          return newAssertion;
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public Consumer<List<GeoreferenceAssertion>> entityApplyMethod(CollectingEvent entityRef) {
-      return entityRef::setGeoReferenceAssertions;
-    }
-
-    @Override
-    public Consumer<List<GeoreferenceAssertionDto>> dtoApplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::setGeoReferenceAssertions;
-    }
-
-    @Override
-    public Supplier<List<GeoreferenceAssertion>> entitySupplyMethod(CollectingEvent entityRef) {
-      return entityRef::getGeoReferenceAssertions;
-    }
-
-    @Override
-    public Supplier<List<GeoreferenceAssertionDto>> dtoSupplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::getGeoReferenceAssertions;
-    }
   }
 
 }

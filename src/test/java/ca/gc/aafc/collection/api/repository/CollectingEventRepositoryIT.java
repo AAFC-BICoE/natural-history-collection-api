@@ -33,7 +33,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   private CollectingEventRepository collectingEventRepository;
 
   @Test
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
     CollectingEventDto testCollectingEvent = collectingEventRepository.create(CollectingEventTestFixture.newEventDto());
 
@@ -85,6 +85,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, collectingEventDto.getDwcVerbatimDepth());
     assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
     assertEquals(CollectingEventTestFixture.GEOGRAPHIC_PLACE_NAME_SOURCE, collectingEventDto.getGeographicPlaceNameSource());
+    assertEquals(CollectingEventTestFixture.HOST, collectingEventDto.getHost());
     assertEquals(
       CollectingEventTestFixture.TEST_COUNTRY,
       collectingEventDto.getGeographicPlaceNameSourceDetail().getCountry());
@@ -98,7 +99,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.HABITAT, collectingEventDto.getHabitat());
   }
 
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
@@ -120,6 +121,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, result.getDwcVerbatimDepth());
     assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], result.getDwcOtherRecordNumbers()[1]);
     assertEquals(CollectingEventTestFixture.HABITAT, result.getHabitat());
+    assertEquals(CollectingEventTestFixture.HOST, result.getHost());
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
   }
 
@@ -135,11 +137,21 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(expectedAssertion.getDwcDecimalLongitude(), resultAssertion.getDwcDecimalLongitude());
     assertEquals(expectedAssertion.getDwcDecimalLatitude(), resultAssertion.getDwcDecimalLatitude());
     assertEquals(expectedAssertion.getIsPrimary(), resultAssertion.getIsPrimary());
+    assertEquals(expectedAssertion.getCreatedOn(), resultAssertion.getCreatedOn());
+    assertEquals(expectedAssertion.getDwcGeoreferencedDate(), resultAssertion.getDwcGeoreferencedDate());
+    assertEquals(expectedAssertion.getDwcCoordinateUncertaintyInMeters(), resultAssertion.getDwcCoordinateUncertaintyInMeters());
+    assertEquals(expectedAssertion.getDwcGeodeticDatum(), resultAssertion.getDwcGeodeticDatum());
+    assertEquals(expectedAssertion.getDwcGeoreferenceProtocol(), resultAssertion.getDwcGeoreferenceProtocol());
+    assertEquals(expectedAssertion.getDwcGeoreferenceRemarks(), resultAssertion.getDwcGeoreferenceRemarks());
+    assertEquals(expectedAssertion.getDwcGeoreferenceSources(), resultAssertion.getDwcGeoreferenceSources());
+    assertEquals(expectedAssertion.getDwcGeoreferenceVerificationStatus(), resultAssertion.getDwcGeoreferenceVerificationStatus());
+    assertEquals(expectedAssertion.getLiteralGeoreferencedBy(), resultAssertion.getLiteralGeoreferencedBy());
+    assertEquals(expectedAssertion.getGeoreferencedBy(), resultAssertion.getGeoreferencedBy());
   }
 
   @ParameterizedTest
   @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
-  @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
     ce.setStartEventDateTime(ISODateTime.parse(startDate).toString());

@@ -17,3 +17,7 @@ GRANT USAGE ON SCHEMA collection TO web_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA collection TO web_user;
 ALTER DEFAULT PRIVILEGES FOR USER migration_user IN SCHEMA collection GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES ON TABLES TO web_user;
 ALTER DEFAULT PRIVILEGES FOR USER migration_user IN SCHEMA collection GRANT SELECT, USAGE ON SEQUENCES TO web_user;
+
+-- By default the PostGIS image will use the public schema so we need to change it
+UPDATE pg_extension SET extrelocatable = TRUE WHERE extname = 'postgis';
+ALTER EXTENSION postgis SET SCHEMA collection;

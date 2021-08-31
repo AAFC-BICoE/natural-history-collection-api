@@ -65,7 +65,8 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
   @Test
   void materialSampleActionRun_SpecValid() {
     MaterialSampleActionRunDto materialSampleActionRunDto = new MaterialSampleActionRunDto();
-    materialSampleActionRunDto.setCreatedBy("test user");  
+    materialSampleActionRunDto.setCreatedBy("test user");
+    materialSampleActionRunDto.setGroup("group");
     materialSampleActionRunDto.setMaterialSampleActionDefinition(null);
     materialSampleActionRunDto.setSourceMaterialSample(null);
     materialSampleActionRunDto.setAgentId(agentId);
@@ -106,7 +107,7 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
           "sourceMaterialSample", getRelationshipType("material-sample", materialSampleUUID),
           "materialSampleActionDefinition", getRelationshipType("material-sample-action-definition", materialSampleActionDefinitionUUID)),
         null)
-      ).extract().asString(),false);
+      ).extract().asString()); // Allow group field
   }
 
   private Map<String, Object> getRelationshipType(String type, String uuid) {

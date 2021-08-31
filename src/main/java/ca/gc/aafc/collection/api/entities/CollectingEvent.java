@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -10,12 +11,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -23,16 +21,15 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -60,7 +57,6 @@ import java.util.UUID;
 @TypeDef(name = "string-array", typeClass = StringArrayType.class)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CollectingEvent implements DinaEntity {
 
   public enum GeographicPlaceNameSource {
@@ -80,12 +76,9 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @OneToMany(fetch = FetchType.EAGER,
-    mappedBy = "collectingEvent",
-    cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
-  )
-  @ToString.Exclude
-  private List<GeoreferenceAssertion> geoReferenceAssertions;
+  @Type(type = "jsonb")
+  @Builder.Default
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions =  new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
 
@@ -162,16 +155,32 @@ public class CollectingEvent implements DinaEntity {
   private String habitat;
 
   @Min(value = 0)
+  @Max(value = 15000)
   private Integer dwcMinimumElevationInMeters;
 
   @Min(value = 0)
+  @Max(value = 15000)
   private Integer dwcMinimumDepthInMeters;
+
+  @Min(value = 0)
+  @Max(value = 15000)
+  private Integer dwcMaximumElevationInMeters;
+
+  @Min(value = 0)
+  @Max(value = 15000)
+  private Integer dwcMaximumDepthInMeters;
+
+  @Size(max = 50)
+  private String substrate;
+
+  @Size(max = 250)
+  private String remarks;
 
   /** Map of Managed attribute key to value object. */
   @Type(type = "jsonb")
   @NotNull
   @Builder.Default
-  private Map<String, ManagedAttributeValue> managedAttributeValues = Map.of();
+  private Map<String, String> managedAttributes = Map.of();
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
@@ -179,7 +188,11 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "jsonb")
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
+  @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
+
+  @Size(max = 250)
+  private String host;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
@@ -232,14 +245,6 @@ public class CollectingEvent implements DinaEntity {
     return ISODateTime.builder().localDateTime(endEventDateTime)
       .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
       .build();
-  }
-
-  @Data
-  @Builder
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class ManagedAttributeValue {
-    private String assignedValue;
   }
 
 }

@@ -28,13 +28,13 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
   @Inject 
   private MaterialSampleActionDefinitionRepository materialSampleActionDefinitionRepository;
   
-  private static final String group = "aafc";
+  private static final String GROUP = "aafc";
   private static final String name = "preparation process definition";
   public static final MaterialSampleActionDefinition.ActionType ACTION_TYPE = MaterialSampleActionDefinition.ActionType.ADD;
 
 
   @Test
-  @WithMockKeycloakUser()
+  @WithMockKeycloakUser(groupRole = GROUP+":user")
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = newMaterialSampleActionDefinitionDto();
     MaterialSampleActionDefinitionDto result = materialSampleActionDefinitionRepository.findOne(
@@ -49,7 +49,7 @@ public class MaterialSampleActionDefinitionRepositoryIT extends CollectionModule
   private MaterialSampleActionDefinitionDto newMaterialSampleActionDefinitionDto() {
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = new MaterialSampleActionDefinitionDto();
     materialSampleActionDefinitionDto.setName(name);
-    materialSampleActionDefinitionDto.setGroup(group);
+    materialSampleActionDefinitionDto.setGroup(GROUP);
     materialSampleActionDefinitionDto.setUuid(UUID.randomUUID());
     materialSampleActionDefinitionDto.setActionType(ACTION_TYPE);
     materialSampleActionDefinitionDto.setFormTemplates(new HashMap<>(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()

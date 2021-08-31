@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion.GeoreferenceVerificationStatus;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import lombok.NonNull;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -20,7 +19,7 @@ public class GeoreferenceAssertionValidator implements Validator {
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return GeoreferenceAssertion.class.isAssignableFrom(clazz);
+    return GeoreferenceAssertionDto.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -28,11 +27,12 @@ public class GeoreferenceAssertionValidator implements Validator {
     if (!supports(target.getClass())) {
       throw new IllegalArgumentException("GeorefenceAssertionValidator not supported for class " + target.getClass());
     }
-    GeoreferenceAssertion georeferenceAssertion = (GeoreferenceAssertion) target;
+    GeoreferenceAssertionDto georeferenceAssertion = (GeoreferenceAssertionDto) target;
 
-    if ((georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE) &&
-      (georeferenceAssertion.getDwcDecimalLatitude() != null || georeferenceAssertion.getDwcDecimalLongitude() != null || georeferenceAssertion
-        .getDwcCoordinateUncertaintyInMeters() != null)) {
+    if (georeferenceAssertion.getDwcGeoreferenceVerificationStatus() == GeoreferenceAssertionDto.GeoreferenceVerificationStatus.GEOREFERENCING_NOT_POSSIBLE &&
+        (georeferenceAssertion.getDwcDecimalLatitude() != null
+            || georeferenceAssertion.getDwcDecimalLongitude() != null
+            || georeferenceAssertion.getDwcCoordinateUncertaintyInMeters() != null)) {
       String errorMessage = messageSource.getMessage("georeferenceAssertion.GeoreferenceVerificationStatus.invalid",
         null,
         LocaleContextHolder.getLocale());

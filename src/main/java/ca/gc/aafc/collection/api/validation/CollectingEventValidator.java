@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.validation;
 
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
-import ca.gc.aafc.collection.api.entities.GeoreferenceAssertion;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,6 +26,10 @@ public class CollectingEventValidator implements Validator {
   static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_KEY = "validation.constraint.violation.validGeographicPlaceNameSource";
   static final String VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL_KEY = "validation.constraint.violation.validGeoGraphicPlaceNameSourceDetail";
   static final String VALID_SOURCE_ADMINISTRATION_LEVEL_KEY = "validation.constraint.violation.validSourceAdministrativeLevel";
+  static final String VALID_MIN_MAX_ELEVATION = "validation.constraint.violation.validMinMaxElevation";
+  static final String VALID_MIN_MAX_DEPTH = "validation.constraint.violation.validMinMaxDepth";
+  static final String VALID_MAX_LESS_THAN_MIN_ELEVATION = "validation.constraint.violation.validMaxLessThanMinElevation";
+  static final String VALID_MAX_LESS_THAN_MIN_DEPTH = "validation.constraint.violation.validMaxLessThanMinDepth";
 
   private final MessageSource messageSource;
 
@@ -44,22 +48,39 @@ public class CollectingEventValidator implements Validator {
       throw new IllegalArgumentException("CollectingEventValidator not supported for class " + target.getClass());
     }
     CollectingEvent collectingEvent = (CollectingEvent) target;
+    validateMinMaxElevationDepth(errors, collectingEvent);
     validateDateTimes(errors, collectingEvent);
     validatePrimaryAssertion(errors, collectingEvent.getGeoReferenceAssertions());
     validateGeographicPlaceNameSourceDetail(errors, collectingEvent);
   }
 
-  private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertion> geoReferenceAssertions) {
+  private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertionDto> geoReferenceAssertions) {
     if (CollectionUtils.isNotEmpty(geoReferenceAssertions) && countPrimaries(geoReferenceAssertions) != 1) {
       addError(errors,  VALID_PRIMARY_KEY);
     }
   }
 
+  private void validateMinMaxElevationDepth(Errors errors, CollectingEvent collectingEvent) {
+    if (collectingEvent.getDwcMaximumDepthInMeters() != null && collectingEvent.getDwcMinimumDepthInMeters() != null &&
+        collectingEvent.getDwcMaximumDepthInMeters() < collectingEvent.getDwcMinimumDepthInMeters()) {
+      addError(errors, VALID_MAX_LESS_THAN_MIN_DEPTH);
+    }
+    if (collectingEvent.getDwcMaximumDepthInMeters() != null && collectingEvent.getDwcMinimumDepthInMeters() == null) {
+      addError(errors, VALID_MIN_MAX_DEPTH);
+    }
+    if (collectingEvent.getDwcMaximumElevationInMeters() != null && collectingEvent.getDwcMinimumElevationInMeters() != null &&
+        collectingEvent.getDwcMaximumElevationInMeters() < collectingEvent.getDwcMinimumElevationInMeters()) {
+      addError(errors, VALID_MAX_LESS_THAN_MIN_ELEVATION);
+    }
+    if (collectingEvent.getDwcMaximumElevationInMeters() != null && collectingEvent.getDwcMinimumElevationInMeters() == null) {
+      addError(errors, VALID_MIN_MAX_ELEVATION);
+    }
+  }
+
   private void validateDateTimes(Errors errors, CollectingEvent collectingEvent) {
-    if ((collectingEvent.getStartEventDateTime() == null &&
-        collectingEvent.getEndEventDateTime() != null) ||
-        (collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime()
-            .isAfter(collectingEvent.getEndEventDateTime()))) {
+    if (collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null ||
+        collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime()
+            .isAfter(collectingEvent.getEndEventDateTime())) {
       addError(errors, VALID_EVENT_DATE_KEY);
     }
   }
@@ -93,7 +114,7 @@ public class CollectingEventValidator implements Validator {
     }
   }
 
-  private static long countPrimaries(List<GeoreferenceAssertion> geoReferenceAssertions) {
+  private static long countPrimaries(List<GeoreferenceAssertionDto> geoReferenceAssertions) {
     if (CollectionUtils.isEmpty(geoReferenceAssertions)) {
       return 0;
     }

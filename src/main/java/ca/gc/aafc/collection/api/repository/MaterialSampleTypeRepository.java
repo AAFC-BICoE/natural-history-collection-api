@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,6 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.service.DinaAuthorizationService;
 import lombok.NonNull;
 
 
@@ -24,21 +24,21 @@ public class MaterialSampleTypeRepository extends DinaRepository<MaterialSampleT
   public MaterialSampleTypeRepository(
     @NonNull MaterialSampleTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    Optional<DinaAuthorizationService> groupAuthorizationService,
+    DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
-      super(
-          dinaService,
-          groupAuthorizationService,
-          Optional.empty(),
-          new DinaMapper<>(MaterialSampleTypeDto.class),
-          MaterialSampleTypeDto.class,
-          MaterialSampleType.class,
-          null,
-          externalResourceProvider,
-          buildProperties);
-      this.dinaAuthenticatedUser = dinaAuthenticatedUser;
+    super(
+      dinaService,
+      groupAuthorizationService,
+      Optional.empty(),
+      new DinaMapper<>(MaterialSampleTypeDto.class),
+      MaterialSampleTypeDto.class,
+      MaterialSampleType.class,
+      null,
+      externalResourceProvider,
+      buildProperties);
+    this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
   @Override

@@ -1,7 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
   <include file="db/changelog/db.changelog-init.xml"/>
   <include file="db/changelog/migrations/1-Add_collector_group_table.xml"/>
   <include file="db/changelog/migrations/2-Add_attachment_collecting_event.xml"/>
@@ -58,4 +58,24 @@
   <include file="db/changelog/migrations/53-MatSampActionDef_Remove_group_unique.xml"/>
   <include file="db/changelog/migrations/54-Add_MaterialSampleType_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/55-Add_structured_elevation_depth_fields.xml"/>
+  <include file="db/changelog/migrations/56-Add_Storage_Unit.xml"/>
+  <include file="db/changelog/migrations/57-Remove_CollectorGroup.xml"/>
+  <include file="db/changelog/migrations/58-Add_new_MultilingualDescription_related_classes.xml"/>
+  <include file="db/changelog/migrations/59-Add_managed_attribute_to_materialSample.xml"/>
+  <include file="db/changelog/migrations/60-Update_collecting-event_managed_attributes.xml"/>
+  <include file="db/changelog/migrations/61-Add_relationship_from_MaterialSample_to_StorageUnit.xml"/>
+  <include file="db/changelog/initial-data/1-Create_MolecularSample_MaterialSampleType.xml"/>
+  <include file="db/changelog/migrations/62-Coll_Event_Geo_Assertions_Moved_To_JsonB.xml"/>
+  <include file="db/changelog/migrations/63-Add_link_from_storageUnit_to_storageType.xml"/>
+  <include file="db/changelog/migrations/64-Add_group_material_sample_action_run.xml"/>
+  <include file="db/changelog/migrations/65-Remove_unique_index_on_storage_unit_table.xml"/>
+  <include file="db/changelog/migrations/66_Add_Determination_to_material_sample.xml"/>
+  <include file="db/changelog/migrations/67-PreparationType_name_should_be_unique_per_group.xml"/>
+  <include file="db/changelog/migrations/68-Add_preparationRemarks_field_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/69-Add_dwcDegreeOfEstablishment_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/70-Add_host_fields.xml"/>
+  <include file="db/changelog/migrations/71-Add_maxmimum_elevation_and_depth_fields.xml"/>
+  <include file="db/changelog/migrations/72-Add_substrate_to_collecting_event.xml"/>
+  <include file="db/changelog/migrations/73-Create_Table_Collection_Method.xml"/>
+  <include file="db/changelog/migrations/74-Add_new_field_remarks_on_collecting-event.xml"/>
 </databaseChangeLog>
