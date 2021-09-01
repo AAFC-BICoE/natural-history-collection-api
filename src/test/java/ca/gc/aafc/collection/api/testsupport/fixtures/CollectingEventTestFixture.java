@@ -19,7 +19,6 @@ import java.util.UUID;
 
 public class CollectingEventTestFixture {
 
-  
   public static final String XI_02_1798 = "XI-02-1798";
   public static final String VER_COOR = "26.089, 106.36";
 
@@ -39,7 +38,7 @@ public class CollectingEventTestFixture {
   public static final Integer DWC_MAXIMUM_DEPTH_IN_METERS = 20;
   public static final Integer DWC_MINIMUM_ELEVATION_IN_METERS = 50;
   public static final Integer DWC_MINIMUM_DEPTH_IN_METERS = 10;
-  public static final String SUBSTRATE = "rock";
+  public static final String[] SUBSTRATE = new String[]{"rock"};
   public static final String REMARKS = "this is a remark";
 
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
@@ -59,7 +58,7 @@ public class CollectingEventTestFixture {
     .dwcGeodeticDatum("datum")
     .dwcCoordinateUncertaintyInMeters(2)
     .build();
-  
+
   public static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
     GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
     .build();
@@ -67,7 +66,7 @@ public class CollectingEventTestFixture {
   public static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE =
     GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F")
     .element("N").placeType("province").name("Island of Pharo's")
-    .build();   
+    .build();
 
   public static final String[] DWC_OTHER_RECORD_NUMBERS = new String[]{"80-79", "80-80"};
   public static final String HABITAT = "Tropical";
@@ -121,5 +120,5 @@ public class CollectingEventTestFixture {
     ce.setRemarks(REMARKS);
     return ce;
   }
-  
+
 }

@@ -12,6 +12,8 @@ import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -130,6 +132,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.HOST, result.getHost());
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
     assertEquals(methodDto.getUuid(), result.getCollectionMethod().getUuid());
+    MatcherAssert.assertThat(CollectingEventTestFixture.SUBSTRATE, Matchers.is(result.getSubstrate()));
   }
 
   private void assertAssertion(
