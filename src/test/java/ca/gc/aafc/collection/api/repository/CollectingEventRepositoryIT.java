@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
@@ -16,7 +17,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -104,7 +104,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
-    CollectionMethodDto methodDto = collectionMethodRepository.create(newMethod());
+    CollectionMethodDto methodDto = collectionMethodRepository.create(CollectionMethodTestFixture.newMethod());
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
     ce.setCollectionMethod(methodDto);
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
@@ -259,14 +259,6 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     QuerySpec spec = new QuerySpec(CollectingEventDto.class);
     spec.addFilter(PathSpec.of("rsql").filter(FilterOperator.EQ, rsql));
     return spec;
-  }
-
-  private CollectionMethodDto newMethod() {
-    return CollectionMethodDto.builder()
-      .name(RandomStringUtils.randomAlphabetic(4))
-      .createdBy(RandomStringUtils.randomAlphabetic(4))
-      .group("aafc")
-      .build();
   }
 
 }
