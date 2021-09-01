@@ -21,11 +21,11 @@
         '
             BEGIN
                 IF NEW.parent_storage_unit_id IS NOT NULL AND NEW.parent_storage_unit_id = NEW.id THEN
-                    RAISE EXCEPTION ''parentidentifier can not be equal to id'' USING ERRCODE = ''dina_error_parent_is_self'';
+                    RAISE EXCEPTION ''parentidentifier can not be equal to id'' USING ERRCODE = ''23D66'', HINT = ''dina_error_parent_is_self'';
                 END IF;
 
                 IF NEW.id IS NOT NULL AND NEW.parent_storage_unit_id IS NOT NULL AND is_in_storage_hierarchy(NEW.id, NEW.parent_storage_unit_id) THEN
-                    RAISE EXCEPTION ''parentidentifier already in hierarchy'' USING ERRCODE = ''dina_error_parent_already_in_hierarchy'';
+                    RAISE EXCEPTION ''parentidentifier already in hierarchy'' USING ERRCODE = ''23D66'', HINT = ''dina_error_parent_already_in_hierarchy'';
                 END IF;
                 RETURN NEW;
             END;
