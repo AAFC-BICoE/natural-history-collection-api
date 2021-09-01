@@ -3,14 +3,15 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,7 +19,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +31,8 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectingEventRepository collectingEventRepository;
+  @Inject
+  CollectionMethodRepository collectionMethodRepository;
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc: staff"})
@@ -102,12 +104,16 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
   @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
+    CollectionMethodDto methodDto = collectionMethodRepository.create(CollectionMethodTestFixture.newMethod());
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ce.setCollectionMethod(methodDto);
     ce.setStartEventDateTime(ISODateTime.parse("2007-12-03T10:15:30").toString());
     ce.setEndEventDateTime(ISODateTime.parse("2007-12-04T11:20:20").toString());
+    QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
+    querySpec.includeRelation(PathSpec.of("collectionMethod"));
     CollectingEventDto result = collectingEventRepository.findOne(
       collectingEventRepository.create(ce).getUuid(),
-      new QuerySpec(CollectingEventDto.class));
+      querySpec);
     assertNotNull(result.getCreatedBy());
     assertEquals(ce.getAttachment().get(0).getId(), result.getAttachment().get(0).getId());
     assertEquals(ce.getCollectors().get(0).getId(), result.getCollectors().get(0).getId());
@@ -123,6 +129,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.HABITAT, result.getHabitat());
     assertEquals(CollectingEventTestFixture.HOST, result.getHost());
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
+    assertEquals(methodDto.getUuid(), result.getCollectionMethod().getUuid());
   }
 
   private void assertAssertion(

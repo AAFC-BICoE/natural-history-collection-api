@@ -75,6 +75,9 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
+  @JsonApiRelation
+  private CollectionMethodDto collectionMethod;
+
   private String dwcVerbatimLocality;
 
   private String host;
