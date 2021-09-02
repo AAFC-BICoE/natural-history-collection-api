@@ -17,7 +17,7 @@ public class CollectionMethodTestFixture {
       .build();
   }
 
-  private static MultilingualDescription newMulti() {
+  public static MultilingualDescription newMulti() {
     return MultilingualDescription.builder()
       .descriptions(List.of(MultilingualDescription.MultilingualPair.builder()
         .desc(RandomStringUtils.randomAlphabetic(4))
