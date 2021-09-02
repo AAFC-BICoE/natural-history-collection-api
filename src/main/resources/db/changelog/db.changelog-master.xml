@@ -82,4 +82,5 @@
   <include file="db/changelog/migrations/76-Update_CollEvent_change_substrate_to_array.xml"/>
   <include file="db/changelog/migrations/77-Add_Institution_resource.xml"/>
   <include file="db/changelog/migrations/78-Update_MatSamp_Add_Collection.xml"/>
+  <include file="db/changelog/migrations/79-Revert_substrate_to_a_string.xml"/>
 </databaseChangeLog>

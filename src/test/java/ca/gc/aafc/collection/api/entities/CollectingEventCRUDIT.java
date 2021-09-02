@@ -90,7 +90,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
-      .substrate(new String[]{RandomStringUtils.randomAlphabetic(3)})
+      .substrate(RandomStringUtils.randomAlphabetic(3))
       .dwcCountry(dwcCountry)
       .habitat(habitat)
       .dwcCountryCode(dwcCountryCode)

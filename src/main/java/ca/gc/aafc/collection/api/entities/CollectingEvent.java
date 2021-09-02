@@ -171,8 +171,7 @@ public class CollectingEvent implements DinaEntity {
   @Max(value = 15000)
   private Integer dwcMaximumDepthInMeters;
 
-  @Type(type = "string-array")
-  private String[] substrate;
+  private String substrate;
 
   @Size(max = 250)
   private String remarks;
