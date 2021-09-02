@@ -1,6 +1,5 @@
-package ca.gc.aafc.collection.api;
+package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.entities.DescribedDinaEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
