@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
-import ca.gc.aafc.collection.api.Institution;
+import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
