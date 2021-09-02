@@ -38,7 +38,7 @@ public class CollectingEventTestFixture {
   public static final Integer DWC_MAXIMUM_DEPTH_IN_METERS = 20;
   public static final Integer DWC_MINIMUM_ELEVATION_IN_METERS = 50;
   public static final Integer DWC_MINIMUM_DEPTH_IN_METERS = 10;
-  public static final String[] SUBSTRATE = new String[]{"rock"};
+  public static final String SUBSTRATE = "rock";
   public static final String REMARKS = "this is a remark";
 
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
