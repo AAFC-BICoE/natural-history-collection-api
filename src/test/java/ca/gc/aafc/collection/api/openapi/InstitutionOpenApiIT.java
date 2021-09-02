@@ -53,7 +53,6 @@ public class InstitutionOpenApiIT extends BaseRestAssuredTest {
   @Test
   void institution_SpecValid() {
     InstitutionDto institutionDto= InstitutionFixture.newInstitution();  
-    institutionDto.setCreatedBy("test user");  
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Institution",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(institutionDto),
