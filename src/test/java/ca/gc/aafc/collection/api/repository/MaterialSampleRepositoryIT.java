@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
@@ -11,6 +12,7 @@ import ca.gc.aafc.dina.repository.GoneException;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,10 +33,20 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     @Inject
     private CollectingEventRepository eventRepository;
 
+    @Inject
+    private CollectionRepository collectionRepository;
+
     @Test
-    @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+    @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
+      CollectionDto collectionDto = collectionRepository.create(CollectionDto.builder()
+        .code(RandomStringUtils.randomAlphabetic(4))
+        .name(RandomStringUtils.randomAlphabetic(3))
+        .createdBy(RandomStringUtils.randomAlphabetic(3))
+        .group(RandomStringUtils.randomAlphabetic(4))
+        .build());
         MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+        materialSampleDto.setCollection(collectionDto);
         QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
         querySpec.includeRelation(PathSpec.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
         MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(materialSampleDto).getUuid(),
@@ -48,11 +60,12 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
         assertEquals(MaterialSampleTestFixture.HOST, result.getHost());
+      assertEquals(collectionDto.getUuid(), result.getCollection().getUuid());
         assertEquals(1 , result.getHierarchy().size());
     }
 
     @Test
-    @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+    @WithMockKeycloakUser(groupRole = {"aafc: staff"})
     public void create_recordCreated() {
         CollectingEventDto event = eventRepository.findOne(
             eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
@@ -82,23 +95,23 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     }
 
     @Test
-    @WithMockKeycloakUser(username = "test user", groupRole = {"aafc: staff"})
+    @WithMockKeycloakUser(groupRole = {"aafc: staff"})
     public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted(){
         CollectingEventDto event = eventRepository.findOne(
             eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
         MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-        materialSampleDto.setCollectingEvent(event);  
+        materialSampleDto.setCollectingEvent(event);
 
         MaterialSampleDto result = materialSampleRepository.findOne(
             materialSampleRepository.create(materialSampleDto).getUuid(),
             new QuerySpec(MaterialSampleDto.class)
             );
-  
+
         assertNotNull(result.getUuid());
-        materialSampleRepository.delete(result.getUuid());        
+        materialSampleRepository.delete(result.getUuid());
         assertThrows(GoneException.class, () -> materialSampleRepository.findOne(result.getUuid(),
-            new QuerySpec(MaterialSampleDto.class)));    
-  
+            new QuerySpec(MaterialSampleDto.class)));
+
     }
-    
+
 }
