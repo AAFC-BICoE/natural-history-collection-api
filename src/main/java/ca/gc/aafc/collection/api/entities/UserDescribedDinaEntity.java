@@ -29,7 +29,7 @@ import java.util.UUID;
 @MappedSuperclass
 @NoArgsConstructor
 @SuperBuilder
-public abstract class DescribedDinaEntity implements DinaEntity {
+public abstract class UserDescribedDinaEntity implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

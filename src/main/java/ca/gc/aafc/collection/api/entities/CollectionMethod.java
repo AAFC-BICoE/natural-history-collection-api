@@ -12,6 +12,6 @@ import javax.persistence.Entity;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class CollectionMethod extends DescribedDinaEntity {
+public class CollectionMethod extends UserDescribedDinaEntity {
 
 }

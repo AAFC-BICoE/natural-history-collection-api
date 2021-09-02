@@ -12,6 +12,6 @@ import javax.persistence.Entity;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class Institution extends DescribedDinaEntity {
+public class Institution extends UserDescribedDinaEntity {
 
 }
