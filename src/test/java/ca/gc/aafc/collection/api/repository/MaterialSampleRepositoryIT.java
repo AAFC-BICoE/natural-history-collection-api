@@ -7,12 +7,12 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
@@ -39,12 +39,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     @Test
     @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
-      CollectionDto collectionDto = collectionRepository.create(CollectionDto.builder()
-        .code(RandomStringUtils.randomAlphabetic(4))
-        .name(RandomStringUtils.randomAlphabetic(3))
-        .createdBy(RandomStringUtils.randomAlphabetic(3))
-        .group(RandomStringUtils.randomAlphabetic(4))
-        .build());
+      CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection());
         MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
         materialSampleDto.setCollection(collectionDto);
         QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
@@ -64,7 +59,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(1 , result.getHierarchy().size());
     }
 
-    @Test
+  @Test
     @WithMockKeycloakUser(groupRole = {"aafc: staff"})
     public void create_recordCreated() {
         CollectingEventDto event = eventRepository.findOne(
