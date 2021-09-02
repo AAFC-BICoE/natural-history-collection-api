@@ -69,7 +69,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         materialSampleRepository.create(materialSampleDto).getUuid(),querySpec).getCollection().getUuid());
   }
 
-  @Test
+    @Test
     @WithMockKeycloakUser(groupRole = {"aafc: staff"})
     public void create_recordCreated() {
         CollectingEventDto event = eventRepository.findOne(
