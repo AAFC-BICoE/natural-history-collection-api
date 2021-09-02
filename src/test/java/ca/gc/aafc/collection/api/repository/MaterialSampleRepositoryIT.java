@@ -60,6 +60,19 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     }
 
   @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
+  public void create_WithCollection_PersistedWithCollection() {
+    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection());
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setCollection(collectionDto);
+    QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
+    querySpec.includeRelation(PathSpec.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
+    assertEquals(collectionDto.getUuid(),
+      materialSampleRepository.findOne(
+        materialSampleRepository.create(materialSampleDto).getUuid(),querySpec).getCollection().getUuid());
+  }
+
+  @Test
     @WithMockKeycloakUser(groupRole = {"aafc: staff"})
     public void create_recordCreated() {
         CollectingEventDto event = eventRepository.findOne(
