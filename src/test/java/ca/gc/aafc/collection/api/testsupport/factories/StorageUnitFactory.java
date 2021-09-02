@@ -19,7 +19,7 @@ public class StorageUnitFactory implements TestableEntityFactory<StorageUnit> {
      *
      * @return Pre-configured builder with all mandatory fields set
      */
-    public static StorageUnit.StorageUnitBuilder newStorageUnit() {
+    public static StorageUnit.StorageUnitBuilder<?, ?> newStorageUnit() {
       return StorageUnit
           .builder()
           .group("test group")
