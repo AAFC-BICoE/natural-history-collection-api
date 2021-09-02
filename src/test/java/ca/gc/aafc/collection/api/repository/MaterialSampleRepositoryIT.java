@@ -37,11 +37,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     private CollectionRepository collectionRepository;
 
     @Test
-    @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
+    @WithMockKeycloakUser(groupRole = {"aafc: staff"})
     public void create_WithAuthenticatedUser_SetsCreatedBy() {
-      CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection());
         MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-        materialSampleDto.setCollection(collectionDto);
         QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
         querySpec.includeRelation(PathSpec.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
         MaterialSampleDto result = materialSampleRepository.findOne(materialSampleRepository.create(materialSampleDto).getUuid(),
@@ -55,7 +53,6 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
         assertEquals(MaterialSampleTestFixture.HOST, result.getHost());
-      assertEquals(collectionDto.getUuid(), result.getCollection().getUuid());
         assertEquals(1 , result.getHierarchy().size());
     }
 
