@@ -28,6 +28,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -170,8 +171,8 @@ public class CollectingEvent implements DinaEntity {
   @Max(value = 15000)
   private Integer dwcMaximumDepthInMeters;
 
-  @Size(max = 50)
-  private String substrate;
+  @Type(type = "string-array")
+  private String[] substrate;
 
   @Size(max = 250)
   private String remarks;
@@ -193,6 +194,9 @@ public class CollectingEvent implements DinaEntity {
 
   @Size(max = 250)
   private String host;
+
+  @ManyToOne
+  private CollectionMethod collectionMethod;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always

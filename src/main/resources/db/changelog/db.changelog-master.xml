@@ -78,4 +78,6 @@
   <include file="db/changelog/migrations/72-Add_substrate_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/73-Create_Table_Collection_Method.xml"/>
   <include file="db/changelog/migrations/74-Add_new_field_remarks_on_collecting-event.xml"/>
+  <include file="db/changelog/migrations/75-Update_CollEvent_Add_CollMethod.xml"/>
+  <include file="db/changelog/migrations/76-Update_CollEvent_change_substrate_to_array.xml"/>
 </databaseChangeLog>
