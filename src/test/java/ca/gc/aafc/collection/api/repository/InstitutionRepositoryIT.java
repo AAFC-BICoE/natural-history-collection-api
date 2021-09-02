@@ -20,14 +20,13 @@ class InstitutionRepositoryIT extends CollectionModuleBaseIT {
   private InstitutionRepository institutionRepository;
 
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:DINA_ADMIN"})
   void find() {
     InstitutionDto expected = institutionRepository.create(InstitutionFixture.newInstitution());
     InstitutionDto result = institutionRepository.findOne(expected.getUuid(), new QuerySpec(InstitutionDto.class));
     Assertions.assertNotNull(result.getCreatedBy());
     Assertions.assertNotNull(result.getCreatedOn());
     Assertions.assertEquals(expected.getName(), result.getName());
-    Assertions.assertEquals(expected.getGroup(), result.getGroup());
     Assertions.assertEquals(
       expected.getMultilingualDescription().getDescriptions().get(0).getLang(),
       result.getMultilingualDescription().getDescriptions().get(0).getLang());

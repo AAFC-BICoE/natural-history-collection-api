@@ -15,16 +15,13 @@
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
-            <column name="_group" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
             <column name="name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="multilingual_description" type="jsonb"/>
         </createTable>
         <sql>
-            CREATE UNIQUE index institution_unique_name_group on institution(LOWER(name),LOWER(_group));
+            CREATE UNIQUE index institution_unique_name_group on institution(LOWER(name));
         </sql>
     </changeSet>
 </databaseChangeLog>

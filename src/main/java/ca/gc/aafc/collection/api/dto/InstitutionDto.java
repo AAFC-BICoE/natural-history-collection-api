@@ -34,8 +34,6 @@ public class InstitutionDto {
 
   private String createdBy;
 
-  private String group;
-
   private String name;
 
   private MultilingualDescription multilingualDescription;

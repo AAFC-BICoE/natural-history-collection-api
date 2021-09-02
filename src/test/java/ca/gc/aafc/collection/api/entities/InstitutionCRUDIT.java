@@ -20,7 +20,6 @@ class InstitutionCRUDIT extends CollectionModuleBaseIT {
     MultilingualDescription description = CollectionMethodTestFixture.newMulti();
     Institution institution = institutionService.create(Institution.builder()
       .name(RandomStringUtils.randomAlphabetic(3))
-      .group(RandomStringUtils.randomAlphabetic(3))
       .createdBy(RandomStringUtils.randomAlphabetic(3))
       .multilingualDescription(description)
       .build());

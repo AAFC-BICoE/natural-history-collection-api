@@ -12,7 +12,6 @@ public final class InstitutionFixture {
     return InstitutionDto.builder()
       .name(RandomStringUtils.randomAlphabetic(4))
       .createdBy(RandomStringUtils.randomAlphabetic(4))
-      .group("aafc")
       .multilingualDescription(CollectionMethodTestFixture.newMulti())
       .build();
   }
