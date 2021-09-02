@@ -24,12 +24,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StorageUnit extends AbstractStorageUnit {
 
-
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "parent_storage_unit_id")
   private StorageUnit parentStorageUnit;
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_storage_unit_id", referencedColumnName = "id")
   private List<ImmutableStorageUnit> storageUnitChildren = new ArrayList<>();
 
