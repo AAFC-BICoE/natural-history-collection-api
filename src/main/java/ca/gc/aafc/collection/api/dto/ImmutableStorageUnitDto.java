@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.ImmutableStorageUnit;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.crnk.core.resource.annotations.JsonApiId;
 import lombok.Data;
 
@@ -13,6 +15,8 @@ import java.util.UUID;
 public class ImmutableStorageUnitDto {
 
   @JsonApiId
+  @JsonProperty("id")
+  @JsonAlias("uuid")
   private UUID uuid;
 
   private OffsetDateTime createdOn;
