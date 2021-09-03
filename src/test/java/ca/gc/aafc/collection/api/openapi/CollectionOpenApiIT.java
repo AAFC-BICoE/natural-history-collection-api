@@ -2,8 +2,11 @@ package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
+import ca.gc.aafc.collection.api.dto.InstitutionDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
@@ -58,10 +61,18 @@ public class CollectionOpenApiIT extends BaseRestAssuredTest {
     collectionDto.setCreatedBy("test user");
     collectionDto.setGroup("aafc");
 
+    String institutionId = sendPost(
+      InstitutionDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        InstitutionDto.TYPENAME, JsonAPITestHelper.toAttributeMap(InstitutionFixture.newInstitution().build())
+        , null, null)).extract().body().jsonPath().getString("data.id");
+
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Collection",
-      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
-        null,
-        null)
+      sendPost(
+        TYPE_NAME,
+        JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
+          JsonAPITestHelper.toRelationshipMap(
+            JsonAPIRelationship.of("institution", InstitutionDto.TYPENAME, institutionId)),
+          null)
       ).extract().asString());
   }
 

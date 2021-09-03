@@ -3,11 +3,12 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
@@ -26,19 +27,6 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   private static final String group = "aafc";
   private static final String name = "preparation process definition";
   private static final String code = "YUL";
-  private Collection persisted;
-
-  @BeforeEach
-  void setUp() {
-    persisted = Collection.builder()
-      .name("name")
-      .uuid(UUID.randomUUID())
-      .group("group")
-      .createdBy("by")
-      .code("DNA")
-      .build();
-    service.save(persisted);
-  }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"CNC:DINA_ADMIN"})
@@ -65,12 +53,14 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   @Test
   @WithMockKeycloakUser(groupRole = {"CNC:DINA_ADMIN"})
   public void delete_WhenAdmin_AccessAccepted() {
+    Collection persisted = setupPersistedCollection();
     assertDoesNotThrow(() -> collectionRepository.delete(persisted.getUuid()));
   }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
   public void delete_WhenManager_AccessDeniedException() {
+    Collection persisted = setupPersistedCollection();
     assertThrows(AccessDeniedException.class, () -> collectionRepository.delete(persisted.getUuid()));
   }
 
@@ -90,12 +80,42 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   }
 
   private CollectionDto newCollectionDto() {
+    Institution institution = setupPersistedInstitution();
     CollectionDto collectionDto = new CollectionDto();
     collectionDto.setName(name);
+    collectionDto.setInstitution(InstitutionFixture.newInstitution().uuid(institution.getUuid()).build());
     collectionDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
     collectionDto.setGroup(group);
     collectionDto.setCode(code);
     return collectionDto;
   }
 
+  /**
+   * Setup with service to bypass authorization for tests.
+   *
+   * @return the persisted collection
+   */
+  private Collection setupPersistedCollection() {
+    Institution institution = setupPersistedInstitution();
+    Collection persisted = Collection.builder()
+      .name("name")
+      .institution(institution)
+      .uuid(UUID.randomUUID())
+      .group("group")
+      .createdBy("by")
+      .code("DNA")
+      .build();
+    service.save(persisted);
+    return persisted;
+  }
+
+  /**
+   * Setup with service to bypass Admin only authorization.
+   * @return persisted institution
+   */
+  private Institution setupPersistedInstitution() {
+    Institution institution = InstitutionFixture.newInstitutionEntity().build();
+    service.save(institution);
+    return institution;
+  }
 }

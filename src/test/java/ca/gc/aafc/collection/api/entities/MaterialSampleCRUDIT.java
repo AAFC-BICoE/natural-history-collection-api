@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -58,6 +59,9 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
   @BeforeEach
   void setup() {
+    Institution institution = InstitutionFixture.newInstitutionEntity().build();
+    service.save(institution);
+
     storageUnit = StorageUnitFactory.newStorageUnit()
         .createdBy(storageUnitExpectedCreatedBy)
         .group(storageUnitExpectedGroup)
@@ -82,6 +86,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     collection = collectionService.create(Collection.builder()
       .code(RandomStringUtils.randomAlphabetic(4))
       .name(RandomStringUtils.randomAlphabetic(3))
+      .institution(institution)
       .createdBy(RandomStringUtils.randomAlphabetic(3))
       .group(RandomStringUtils.randomAlphabetic(4))
       .build());
