@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
-import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
@@ -24,20 +23,17 @@ import java.util.function.BiFunction;
 @Service
 public class StorageUnitService extends DefaultDinaService<StorageUnit> {
 
-  private final StorageUnitValidator storageUnitValidator;
   private final StorageUnitTypeService storageUnitTypeService;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
 
   public StorageUnitService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
-    @NonNull StorageUnitValidator storageUnitValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
     @NonNull StorageUnitTypeService storageUnitTypeService
   ) {
     super(baseDAO, sv);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
-    this.storageUnitValidator = storageUnitValidator;
     this.storageUnitTypeService = storageUnitTypeService;
   }
 
@@ -54,11 +50,6 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
       detach(updatedEntity.getParentStorageUnit());
     }
     return updatedEntity;
-  }
-
-  @Override
-  public void validateBusinessRules(StorageUnit entity) {
-    applyBusinessRule(entity, storageUnitValidator);
   }
 
   @Override
