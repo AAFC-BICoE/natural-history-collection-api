@@ -3,8 +3,10 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,6 +51,8 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(collectionDto.getName(), result.getName());
     assertEquals(collectionDto.getGroup(), result.getGroup());
     assertEquals(collectionDto.getCode(), result.getCode());
+    Assertions.assertEquals(collectionDto.getMultilingualDescription().getDescriptions().get(0).getLang(),
+      result.getMultilingualDescription().getDescriptions().get(0).getLang());
   }
 
   @Test
@@ -88,6 +92,7 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   private CollectionDto newCollectionDto() {
     CollectionDto collectionDto = new CollectionDto();
     collectionDto.setName(name);
+    collectionDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
     collectionDto.setGroup(group);
     collectionDto.setCode(code);
     return collectionDto;

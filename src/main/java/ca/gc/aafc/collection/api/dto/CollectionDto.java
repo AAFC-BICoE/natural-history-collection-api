@@ -2,7 +2,9 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -42,4 +44,8 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   private String name;
 
   private String code;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private MultilingualDescription multilingualDescription;
+
 }
