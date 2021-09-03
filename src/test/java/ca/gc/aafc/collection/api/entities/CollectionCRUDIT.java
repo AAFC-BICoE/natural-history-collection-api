@@ -30,6 +30,9 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(collection.getCode(), result.getCode());
     Assertions.assertEquals(collection.getCreatedBy(), result.getCreatedBy());
     Assertions.assertEquals(collection.getInstitution().getUuid(), result.getInstitution().getUuid());
+    Assertions.assertEquals(
+      collection.getMultilingualDescription().getDescriptions().get(0).getLang(),
+      result.getMultilingualDescription().getDescriptions().get(0).getLang());
   }
 
 }

@@ -4,9 +4,11 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.Institution;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
@@ -37,6 +39,8 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(collectionDto.getName(), result.getName());
     assertEquals(collectionDto.getGroup(), result.getGroup());
     assertEquals(collectionDto.getCode(), result.getCode());
+    Assertions.assertEquals(collectionDto.getMultilingualDescription().getDescriptions().get(0).getLang(),
+      result.getMultilingualDescription().getDescriptions().get(0).getLang());
   }
 
   @Test
@@ -80,6 +84,7 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
     CollectionDto collectionDto = new CollectionDto();
     collectionDto.setName(name);
     collectionDto.setInstitution(InstitutionFixture.newInstitution().uuid(institution.getUuid()).build());
+    collectionDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
     collectionDto.setGroup(group);
     collectionDto.setCode(code);
     return collectionDto;
