@@ -39,8 +39,6 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
 
     storageUnitA.setParentStorageUnit(storageUnitB);
 
-    storageUnitService.update(storageUnitA);
-
     assertThrows(PersistenceException.class,
         () -> storageUnitService.update(storageUnitA));
   }
