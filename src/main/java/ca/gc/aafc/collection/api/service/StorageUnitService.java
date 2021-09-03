@@ -5,9 +5,8 @@ import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.jpa.OneToManyDinaService;
-import ca.gc.aafc.dina.jpa.OneToManyFieldHandler;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
+import ca.gc.aafc.dina.service.DefaultDinaService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
@@ -17,14 +16,13 @@ import org.springframework.validation.SmartValidator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
 @Service
-public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
+public class StorageUnitService extends DefaultDinaService<StorageUnit> {
 
   private final StorageUnitValidator storageUnitValidator;
   private final StorageUnitTypeService storageUnitTypeService;
@@ -37,14 +35,7 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
     @NonNull StorageUnitTypeService storageUnitTypeService
   ) {
-    super(baseDAO, sv, List.of(
-      new OneToManyFieldHandler<>(
-        StorageUnit.class,
-        storageUnit -> storageUnit::setParentStorageUnit,
-        StorageUnit::getStorageUnitChildren,
-        "parentStorageUnit",
-        storageUnit -> storageUnit.setParentStorageUnit(null))
-    ));
+    super(baseDAO, sv);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitValidator = storageUnitValidator;
     this.storageUnitTypeService = storageUnitTypeService;
@@ -53,6 +44,16 @@ public class StorageUnitService extends OneToManyDinaService<StorageUnit> {
   @Override
   protected void preCreate(StorageUnit entity) {
     entity.setUuid(UUID.randomUUID());
+  }
+
+  @Override
+  public StorageUnit update(StorageUnit entity) {
+    StorageUnit updatedEntity = super.update(entity);
+    if (updatedEntity.getParentStorageUnit() != null) {
+      // detach the parent to make sure it reloads its children list
+      detach(updatedEntity.getParentStorageUnit());
+    }
+    return updatedEntity;
   }
 
   @Override

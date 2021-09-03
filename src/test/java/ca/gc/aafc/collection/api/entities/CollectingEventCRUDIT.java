@@ -6,10 +6,13 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -87,6 +90,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+      .substrate(RandomStringUtils.randomAlphabetic(3))
       .dwcCountry(dwcCountry)
       .habitat(habitat)
       .dwcCountryCode(dwcCountryCode)
@@ -293,6 +297,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(habitat, fetchedCollectingEvent.getHabitat());
     assertEquals(dwcMinimumDepthInMeters, fetchedCollectingEvent.getDwcMinimumDepthInMeters());
     assertEquals(dwcMinimumElevationInMeters, fetchedCollectingEvent.getDwcMinimumElevationInMeters());
+    MatcherAssert.assertThat(collectingEvent.getSubstrate(), Matchers.is(fetchedCollectingEvent.getSubstrate()));
   }
 
   @Test

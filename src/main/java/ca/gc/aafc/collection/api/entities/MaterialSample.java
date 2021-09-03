@@ -77,6 +77,9 @@ public class MaterialSample implements DinaEntity {
   @Type(type = "string-array")
   private String[] dwcOtherCatalogNumbers;
 
+  @ManyToOne
+  private Collection collection;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @ToString.Exclude
   private CollectingEvent collectingEvent;

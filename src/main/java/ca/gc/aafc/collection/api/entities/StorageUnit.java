@@ -1,44 +1,28 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
-import ca.gc.aafc.dina.entity.DinaEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Setter
 @Getter
 @RequiredArgsConstructor
-@NaturalIdCache
-public class StorageUnit implements DinaEntity {
+public class StorageUnit extends AbstractStorageUnit {
 
   public static final String TABLE_NAME = "storage_unit";
   public static final String ID_COLUMN_NAME = "id";
@@ -47,39 +31,13 @@ public class StorageUnit implements DinaEntity {
   public static final String NAME_COLUMN_NAME = "name";
   public static final String TYPE_COLUMN_NAME = "storage_unit_type_id";
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
-  @NaturalId
-  @NotNull
-  @Column(unique = true)
-  private UUID uuid;
-
-  @NotBlank
-  @Size(max = 150)
-  private String name;
-
-  @NotBlank
-  @Size(max = 50)
-  @Column(name = "_group")
-  private String group;
-
-  @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
-  private OffsetDateTime createdOn;
-
-  @NotBlank
-  @Column(name = "created_by", updatable = false)
-  private String createdBy;
-
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = PARENT_ID_COLUMN_NAME)
   private StorageUnit parentStorageUnit;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentStorageUnit")
-  @ToString.Exclude
-  private List<StorageUnit> storageUnitChildren = new ArrayList<>();
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_storage_unit_id", referencedColumnName = "id")
+  private List<ImmutableStorageUnit> storageUnitChildren = new ArrayList<>();
 
   @Transient
   private List<StorageHierarchicalObject> hierarchy;
