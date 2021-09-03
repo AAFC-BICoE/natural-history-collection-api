@@ -5,6 +5,7 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,4 +43,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   private String name;
 
   private String code;
+
+  @JsonApiRelation
+  private InstitutionDto institution;
 }
