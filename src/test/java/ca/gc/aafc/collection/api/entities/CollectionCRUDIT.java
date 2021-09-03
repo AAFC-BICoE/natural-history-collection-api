@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.service.InstitutionService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
-import org.apache.commons.lang3.RandomStringUtils;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +16,9 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void create() {
-    Institution institution = institutionService.create(Institution.builder()
-      .name(RandomStringUtils.randomAlphabetic(5))
-      .createdBy(RandomStringUtils.randomAlphabetic(3))
-      .build());
-    Collection collection = CollectionFactory.newCollection().institution(institution).build();
+    Collection collection = CollectionFactory.newCollection()
+      .institution(institutionService.create(InstitutionFixture.newInstitutionEntity().build()))
+      .build();
     collectionService.create(collection);
     Assertions.assertNotNull(collection.getUuid());
 
@@ -31,6 +29,7 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(collection.getGroup(), result.getGroup());
     Assertions.assertEquals(collection.getCode(), result.getCode());
     Assertions.assertEquals(collection.getCreatedBy(), result.getCreatedBy());
+    Assertions.assertEquals(collection.getInstitution().getUuid(), result.getInstitution().getUuid());
   }
 
 }
