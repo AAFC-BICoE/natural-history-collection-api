@@ -3,11 +3,14 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
+import ca.gc.aafc.collection.api.dto.InstitutionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
@@ -59,7 +62,10 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
   public void create_WithCollection_PersistedWithCollection() {
-    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection());
+    Institution institution = InstitutionFixture.newInstitutionEntity().build();
+    service.save(institution);
+    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection().
+      institution(InstitutionDto.builder().uuid(institution.getUuid()).build()).build());
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setCollection(collectionDto);
     QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);

@@ -84,4 +84,5 @@
   <include file="db/changelog/migrations/78-Update_MatSamp_Add_Collection.xml"/>
   <include file="db/changelog/migrations/79-Revert_substrate_to_a_string.xml"/>
   <include file="db/changelog/migrations/80-Update_Collection_Add_MultiDescription.xml"/>
+  <include file="db/changelog/migrations/81-Update_Collection_add_Institution.xml"/>
 </databaseChangeLog>
