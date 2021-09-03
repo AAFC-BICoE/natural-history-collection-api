@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -42,4 +43,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   private String name;
 
   private String code;
+
+  private MultilingualDescription multilingualDescription;
+
 }
