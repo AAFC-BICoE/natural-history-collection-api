@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="80-Update_Collection_add_Institution" context="schema-change" author="Keyuk J">
+    <changeSet id="81-Update_Collection_add_Institution" context="schema-change" author="Keyuk J">
         <addColumn tableName="collection">
             <column name="institution_id" type="integer">
                 <constraints foreignKeyName="fk_collection_institution_id"
