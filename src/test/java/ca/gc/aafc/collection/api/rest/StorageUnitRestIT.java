@@ -88,7 +88,6 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     String unitId = postUnit(unit);
 
     findUnit(unitId)
-        .log().everything()
       .body("data.relationships.storageUnitType.data", Matchers.nullValue());
 
     String newUnitTypeId = postUnitType(newUnitType());
@@ -137,7 +136,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       JsonAPITestHelper.toAttributeMap(unit),
       relationshipMap,
       null)
-    ).log().all().extract().body().jsonPath().getString("data.id");
+    ).extract().body().jsonPath().getString("data.id");
   }
 
   private String postUnit(StorageUnitDto unit) {
