@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class MaterialSampleFactory implements TestableEntityFactory<MaterialSample> {
 
@@ -22,6 +23,7 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
     public static MaterialSample.MaterialSampleBuilder newMaterialSample() {
         return MaterialSample
             .builder()
+            .barcode(RandomStringUtils.randomAlphabetic(5))
             .uuid(UUID.randomUUID())
             .materialSampleName("soil sample")
             .createdBy("test user")
