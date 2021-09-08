@@ -19,11 +19,11 @@ public class PreparationTypeFactory implements TestableEntityFactory<Preparation
    *
    * @return Pre-configured builder with all mandatory fields set
    */
-  public static PreparationType.PreparationTypeBuilder newPreparationType() {
-    return PreparationType
+    public static PreparationType.PreparationTypeBuilder<?, ?> newPreparationType() {
+      return PreparationType
         .builder()
         .uuid(UUID.randomUUID())
         .createdBy("test user");
-  }
-  
+    }
+
 }
