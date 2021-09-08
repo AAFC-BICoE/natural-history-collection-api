@@ -51,14 +51,14 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
       .body("data.attributes.createdOn", Matchers.notNullValue())
-      .body("data.attributes.storageUnitChildren[0].uuid", Matchers.is(childId))
+      .body("data.attributes.storageUnitChildren[0].id", Matchers.is(childId))
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId))
       .body("data.relationships.storageUnitType.data.id", Matchers.is(unitTypeId));
     findUnit(childId)
       .body("data.attributes.storageUnitChildren", Matchers.empty())
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(unitId));
     findUnit(parentId)
-      .body("data.attributes.storageUnitChildren[0].uuid", Matchers.is(unitId))
+      .body("data.attributes.storageUnitChildren[0].id", Matchers.is(unitId))
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 

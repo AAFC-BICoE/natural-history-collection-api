@@ -139,4 +139,7 @@ public class MaterialSample implements DinaEntity {
 
   @Size(max = 250)
   private String host;
+
+  @Size(max = 50)
+  private String barcode;
 }

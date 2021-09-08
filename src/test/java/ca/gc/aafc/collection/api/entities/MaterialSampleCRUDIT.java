@@ -149,6 +149,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
     assertEquals(materialSample.getId(), fetchedMaterialSample.getId());
+    assertEquals(materialSample.getBarcode(), fetchedMaterialSample.getBarcode());
     assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
     assertEquals(dwcOtherCatalogNumbers, fetchedMaterialSample.getDwcOtherCatalogNumbers());
     assertEquals(expectedCreatedBy, fetchedMaterialSample.getCreatedBy());
