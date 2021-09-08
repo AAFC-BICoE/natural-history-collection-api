@@ -2,18 +2,23 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.exceptionmapping.PersistenceExceptionMapper;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import io.crnk.core.exception.BadRequestException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
+import org.postgresql.util.PSQLException;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
@@ -48,6 +53,20 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
     authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
     return super.create(resource);
   }
+
+  @Override
+  public <S extends StorageUnitDto> S save(S resource) {
+    try {
+      return super.save(resource);
+    } catch (PersistenceException e) {
+      if (PersistenceExceptionMapper.isHierarchyViolation(e)) {
+        throw new BadRequestException("");
+      } else {
+        throw e;//TODO refac to new method for usage in create
+      }
+    }
+  }
+
 
   @Override
   public ResourceList<StorageUnitDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {
