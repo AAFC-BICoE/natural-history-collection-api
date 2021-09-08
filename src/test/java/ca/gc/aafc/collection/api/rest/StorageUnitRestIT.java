@@ -111,7 +111,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
         Map.of(),
         getParentStorageUnitRelationshipMap(secondChildId),
         null)
-    , 400);
+    , 400).log().all(true);
   }
 
   @Test
@@ -171,7 +171,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
         relationshipMap,
         null),
       expectedCode
-    ).extract().body().jsonPath().getString("data.id");
+    ).log().all(true).extract().body().jsonPath().getString("data.id");
   }
 
   private String postUnit(StorageUnitDto unit) {

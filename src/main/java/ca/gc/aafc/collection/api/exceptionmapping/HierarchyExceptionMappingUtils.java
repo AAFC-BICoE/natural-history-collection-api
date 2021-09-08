@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.exceptionmapping;
 import io.crnk.core.exception.BadRequestException;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PSQLException;
+import org.postgresql.util.ServerErrorMessage;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -19,9 +20,10 @@ public final class HierarchyExceptionMappingUtils {
       PSQLException p = (PSQLException) nestedCause;
       if (p.getSQLState().equalsIgnoreCase(SQL_STATE_CODE)) {
         String message = p.getMessage();
-        if (p.getServerErrorMessage() != null) {
-          String messageKey = p.getServerErrorMessage().getHint();
-          if (messageSource != null && StringUtils.isNotBlank(messageKey)) {
+        ServerErrorMessage serverErrorMessage = p.getServerErrorMessage();
+        if (serverErrorMessage != null && messageSource != null) {
+          String messageKey = serverErrorMessage.getHint();
+          if (StringUtils.isNotBlank(messageKey)) {
             message = messageSource.getMessage(messageKey, null, LocaleContextHolder.getLocale());
           }
         }
