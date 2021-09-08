@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class MaterialSampleTestFixture {
 
@@ -35,6 +36,7 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setDwcDegreeOfEstablishment(DWC_DEGREE_OF_ESTABLISHMENT);
     materialSampleDto.setPreparationRemarks(PREPARATION_REMARKS);
     materialSampleDto.setHost(HOST);
+    materialSampleDto.setBarcode(RandomStringUtils.randomAlphabetic(4));
     return materialSampleDto;
   }
 }

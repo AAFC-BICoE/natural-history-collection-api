@@ -85,4 +85,5 @@
   <include file="db/changelog/migrations/79-Revert_substrate_to_a_string.xml"/>
   <include file="db/changelog/migrations/80-Update_Collection_Add_MultiDescription.xml"/>
   <include file="db/changelog/migrations/81-Update_Collection_add_Institution.xml"/>
+  <include file="db/changelog/migrations/82-Add_Barcode_To_MatSample.xml"/>
 </databaseChangeLog>

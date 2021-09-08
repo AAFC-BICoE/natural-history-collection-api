@@ -96,4 +96,6 @@ public class MaterialSampleDto {
   private List<HierarchicalObject> hierarchy;
 
   private String host;
+
+  private String barcode;
 }
