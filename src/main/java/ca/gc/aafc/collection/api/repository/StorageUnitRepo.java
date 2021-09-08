@@ -13,15 +13,14 @@ import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
-import org.postgresql.util.PSQLException;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Repository
 public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit> {
@@ -51,22 +50,25 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
   @Override
   public <S extends StorageUnitDto> S create(S resource) {
     authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
-    return super.create(resource);
+    return checkHierarchyViolation(() -> super.create(resource));
   }
 
   @Override
   public <S extends StorageUnitDto> S save(S resource) {
+    return checkHierarchyViolation(() -> super.save(resource));
+  }
+
+  private <S extends StorageUnitDto> S checkHierarchyViolation(Supplier<S> operation) {
     try {
-      return super.save(resource);
+      return operation.get();
     } catch (PersistenceException e) {
       if (PersistenceExceptionMapper.isHierarchyViolation(e)) {
-        throw new BadRequestException("");
+        throw new BadRequestException(""); //TODO get message from exception
       } else {
-        throw e;//TODO refac to new method for usage in create
+        throw e;
       }
     }
   }
-
 
   @Override
   public ResourceList<StorageUnitDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {

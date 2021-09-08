@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.rest;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.ImmutableStorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
@@ -17,7 +18,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -40,7 +43,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     String parentId = postUnit(newUnit());
     String childId = postUnit(newUnit());
     String unitTypeId = postUnitType(unitType);
-    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId));
+    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId), 201);
     sendPatchWithRelations(unit, childId, getRelationshipMap(unitId, unitTypeId));
 
     findUnit(unitId)
@@ -66,7 +69,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     StorageUnitTypeDto unitType = newUnitType();
     String parentId = postUnit(parentUnit);
     String unitTypeId = postUnitType(unitType);
-    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId));
+    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId), 201);
     findUnit(unitId)
       .body("data.attributes.hierarchy", Matchers.notNullValue())
       .body("data.attributes.hierarchy[0].uuid", Matchers.is(unitId))
@@ -100,8 +103,8 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   @Test
   void patch_CyclicParent_Returns400BadRequest() {
     String parentId = postUnit(newUnit());
-    String childId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(parentId));
-    String secondChildId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(childId));
+    String childId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(parentId), 201);
+    String secondChildId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(childId), 201);
     sendPatch(StorageUnitDto.TYPENAME, parentId,
       JsonAPITestHelper.toJsonAPIMap(
         StorageUnitDto.TYPENAME,
@@ -112,12 +115,29 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void post_CyclicParent_Returns400BadRequest() {
+    StorageUnitDto parent = newUnit();
+    String parentId = postUnit(parent);
+    parent.setUuid(UUID.fromString(parentId));
+
+    String childId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(parentId), 201);
+
+    StorageUnitDto second = newUnit();
+
+    ImmutableStorageUnitDto parentDto = new ImmutableStorageUnitDto();
+    parentDto.setUuid(parent.getUuid());
+    second.setStorageUnitChildren(List.of(parentDto));
+
+   postUnit(second, getParentStorageUnitRelationshipMap(childId), 400);
+  }
+
+  @Test
   void delete_RelationsResolved() {
     StorageUnitDto unit = newUnit();
     String parentId = postUnit(newUnit());
     String childId = postUnit(newUnit());
     String unitTypeId = postUnitType(newUnitType());
-    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId));
+    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId), 201);
     sendPatchWithRelations(unit, childId, getParentStorageUnitRelationshipMap(unitId));
     sendDelete(StorageUnitDto.TYPENAME, unitId);
     findUnit(childId)
@@ -144,17 +164,18 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     );
   }
 
-  private String postUnit(StorageUnitDto unit, Map<String,Object> relationshipMap) {
+  private String postUnit(StorageUnitDto unit, Map<String, Object> relationshipMap, int expectedCode) {
     return sendPost(StorageUnitDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      StorageUnitDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(unit),
-      relationshipMap,
-      null)
+        StorageUnitDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(unit),
+        relationshipMap,
+        null),
+      expectedCode
     ).extract().body().jsonPath().getString("data.id");
   }
 
   private String postUnit(StorageUnitDto unit) {
-    return postUnit(unit, null);
+    return postUnit(unit, null, 201);
   }
 
   private String postUnitType(StorageUnitTypeDto unitType) {
