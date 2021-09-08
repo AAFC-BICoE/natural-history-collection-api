@@ -2,13 +2,12 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
-import ca.gc.aafc.collection.api.exceptionmapping.PersistenceExceptionMapper;
+import ca.gc.aafc.collection.api.exceptionmapping.HierarchyExceptionMappingUtils;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
-import io.crnk.core.exception.BadRequestException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
@@ -50,23 +49,20 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
   @Override
   public <S extends StorageUnitDto> S create(S resource) {
     authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
-    return checkHierarchyViolation(() -> super.create(resource));
+    return listenForHierarchyViolation(() -> super.create(resource));
   }
 
   @Override
   public <S extends StorageUnitDto> S save(S resource) {
-    return checkHierarchyViolation(() -> super.save(resource));
+    return listenForHierarchyViolation(() -> super.save(resource));
   }
 
-  private <S extends StorageUnitDto> S checkHierarchyViolation(Supplier<S> operation) {
+  private <S extends StorageUnitDto> S listenForHierarchyViolation(Supplier<S> operation) {
     try {
       return operation.get();
     } catch (PersistenceException e) {
-      if (PersistenceExceptionMapper.isHierarchyViolation(e)) {
-        throw new BadRequestException(""); //TODO get message from exception
-      } else {
-        throw e;
-      }
+      HierarchyExceptionMappingUtils.throwIfHierarchyViolation(e);
+      throw e;
     }
   }
 
