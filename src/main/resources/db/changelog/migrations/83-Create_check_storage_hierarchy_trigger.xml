@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="82-Create_check_storage_hierarchy_trigger" context="schema-change" author="steven luu">
+    <changeSet id="83-Create_check_storage_hierarchy_trigger" context="schema-change" author="steven luu">
        <sql>
         CREATE FUNCTION is_in_storage_hierarchy(id integer, parent_id integer) RETURNS boolean AS 
         '
