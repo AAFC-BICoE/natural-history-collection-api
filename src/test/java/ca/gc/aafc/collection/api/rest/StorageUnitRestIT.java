@@ -98,6 +98,20 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void patch_CyclicParent_Returns400BadRequest() {
+    String parentId = postUnit(newUnit());
+    String childId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(parentId));
+    String secondChildId = postUnit(newUnit(), getParentStorageUnitRelationshipMap(childId));
+    sendPatch(StorageUnitDto.TYPENAME, parentId,
+      JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitDto.TYPENAME,
+        Map.of(),
+        getParentStorageUnitRelationshipMap(secondChildId),
+        null)
+    , 400);
+  }
+
+  @Test
   void delete_RelationsResolved() {
     StorageUnitDto unit = newUnit();
     String parentId = postUnit(newUnit());
