@@ -13,6 +13,7 @@ import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
@@ -26,12 +27,14 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
 
   public static final String HIERARCHY_INCLUDE_PARAM = "hierarchy";
   private Optional<DinaAuthenticatedUser> authenticatedUser;
+  private final MessageSource messageSource;
 
   public StorageUnitRepo(
     @NonNull StorageUnitService sus,
     DinaAuthorizationService groupAuthorizationService,
     Optional<DinaAuthenticatedUser> authenticatedUser,
-    @NonNull BuildProperties buildProperties
+    @NonNull BuildProperties buildProperties,
+    MessageSource messageSource
   ) {
     super(
       sus,
@@ -44,6 +47,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
       null,
       buildProperties);
     this.authenticatedUser = authenticatedUser;
+    this.messageSource = messageSource;
   }
 
   @Override
@@ -61,7 +65,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
     try {
       return operation.get();
     } catch (PersistenceException e) {
-      HierarchyExceptionMappingUtils.throwIfHierarchyViolation(e);
+      HierarchyExceptionMappingUtils.throwIfHierarchyViolation(e, messageSource);
       throw e;
     }
   }
