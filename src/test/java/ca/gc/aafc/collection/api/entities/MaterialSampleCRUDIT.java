@@ -8,24 +8,18 @@ import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ValidationException;
-
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
@@ -197,9 +191,8 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .parentMaterialSample(parent)
         .build();
 
-    parent.setMaterialSampleChildren(Collections.singletonList(child));
-
-    materialSampleService.create(parent);
+    parent = materialSampleService.create(parent);
+    child.setParentMaterialSample(parent);
     materialSampleService.create(child);
 
     MaterialSample fetchedParent = materialSampleService.findOne(parent.getUuid(), MaterialSample.class);

@@ -66,7 +66,7 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
       "uuid",
       "parent_material_sample_id",
       "material_sample_name"
-      ));
+    ));
   }
 
   @Override
@@ -82,7 +82,25 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
 
   private void validateManagedAttribute(MaterialSample entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
-        CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
+      CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
   }
 
+  @Override
+  public MaterialSample create(MaterialSample entity) {
+    MaterialSample sample = super.create(entity);
+    return detachParent(sample);
+  }
+
+  @Override
+  public MaterialSample update(MaterialSample entity) {
+    MaterialSample sample = super.update(entity);
+    return detachParent(sample);
+  }
+
+  private MaterialSample detachParent(MaterialSample sample) {
+    if (sample.getParentMaterialSample() != null) {
+      detach(sample.getParentMaterialSample());
+    }
+    return sample;
+  }
 }

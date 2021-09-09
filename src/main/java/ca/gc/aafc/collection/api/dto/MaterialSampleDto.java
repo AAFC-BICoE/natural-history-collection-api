@@ -70,8 +70,7 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private MaterialSampleDto parentMaterialSample;
 
-  @JsonApiRelation
-  private List<MaterialSampleDto> materialSampleChildren;
+  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
