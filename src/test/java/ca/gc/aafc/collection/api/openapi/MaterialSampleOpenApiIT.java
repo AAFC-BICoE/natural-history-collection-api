@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
+import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
@@ -29,8 +30,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @SpringBootTest(
@@ -124,6 +125,10 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     String parentUUID = materialSampleResponseBody.path("data[0].id");
     String childUUID = materialSampleResponseBody.path("data[1].id");
+    ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
+    childDto.setUuid(UUID.fromString(childUUID));
+    ms.setMaterialSampleChildren(List.of(childDto));
+
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
     String unitId = sendPost(
@@ -135,8 +140,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
           "parentMaterialSample", getRelationType("material-sample", parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-          "preparationType", getRelationType("preparation-type", preparationTypeUUID),
-          "materialSampleChildren", getRelationListType("material-sample", childUUID)),
+          "preparationType", getRelationType("preparation-type", preparationTypeUUID)),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
