@@ -16,6 +16,8 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,8 +44,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
-  private static final int dwcMinimumElevationInMeters = 11;
-  private static final int dwcMinimumDepthInMeters = 10;
+  private static final BigDecimal dwcMinimumElevationInMeters = new BigDecimal(11);
+  private static final BigDecimal dwcMinimumDepthInMeters = new BigDecimal(10);
 
   private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
       GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
@@ -443,8 +445,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setDwcMinimumDepthInMeters(-1);
-    fetchedCollectingEvent.setDwcMinimumElevationInMeters(-2);
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal(-1));
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal(-2));
 
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
@@ -456,10 +458,10 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setDwcMinimumDepthInMeters(15001);
-    fetchedCollectingEvent.setDwcMinimumElevationInMeters(15002);
-    fetchedCollectingEvent.setDwcMaximumDepthInMeters(15003);
-    fetchedCollectingEvent.setDwcMaximumElevationInMeters(15004);
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal(15001));
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal(15002));
+    fetchedCollectingEvent.setDwcMaximumDepthInMeters(new BigDecimal(15003));
+    fetchedCollectingEvent.setDwcMaximumElevationInMeters(new BigDecimal(15004));
 
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));

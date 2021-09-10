@@ -36,6 +36,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -157,19 +159,23 @@ public class CollectingEvent implements DinaEntity {
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMinimumElevationInMeters;
+  @Column(precision = 7, scale = 2)
+  private BigDecimal dwcMinimumElevationInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMinimumDepthInMeters;
+  @Column(precision = 7, scale = 2)
+  private BigDecimal dwcMinimumDepthInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMaximumElevationInMeters;
+  @Column(precision = 7, scale = 2)
+  private BigDecimal dwcMaximumElevationInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMaximumDepthInMeters;
+  @Column(precision = 7, scale = 2)
+  private BigDecimal dwcMaximumDepthInMeters;
 
   private String substrate;
 
