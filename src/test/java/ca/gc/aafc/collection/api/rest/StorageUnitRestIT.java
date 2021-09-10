@@ -11,6 +11,7 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -111,7 +112,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
         Map.of(),
         getParentStorageUnitRelationshipMap(secondChildId),
         null)
-    , 400);
+      , 400);
   }
 
   @Test
@@ -128,7 +129,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     parentDto.setUuid(parent.getUuid());
     second.setStorageUnitChildren(List.of(parentDto));
 
-   postUnit(second, getParentStorageUnitRelationshipMap(childId), 400);
+    postUnit(second, getParentStorageUnitRelationshipMap(childId), 400);
   }
 
   @Test
@@ -148,13 +149,30 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 
+  @Test
+  void post_CyclicParentOnOperationRequest_Returns400BadRequest() {
+    String topId = postUnit(newUnit());
+    String middleId = postUnit(newUnit());
+    String bottomId = postUnit(newUnit());
+    int returnCode = sendOperation(List.of(
+      opPatchRelationMap(topId, middleId),
+      opPatchRelationMap(middleId, bottomId),
+      opPatchRelationMap(bottomId, topId)))
+      .extract().jsonPath().getInt("status[2]");
+    Assertions.assertEquals(400, returnCode);
+  }
+
   private ValidatableResponse findUnit(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
       .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=storageUnitType,parentStorageUnit,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
   }
 
-  private void sendPatchWithRelations(StorageUnitDto unit, String sourceUnitId, Map<String,Object> relationshipMap) {
+  private void sendPatchWithRelations(
+    StorageUnitDto unit,
+    String sourceUnitId,
+    Map<String, Object> relationshipMap
+  ) {
     sendPatch(StorageUnitDto.TYPENAME, sourceUnitId,
       JsonAPITestHelper.toJsonAPIMap(
         StorageUnitDto.TYPENAME,
@@ -185,7 +203,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     ).extract().body().jsonPath().getString("data.id");
   }
 
-  private StorageUnitDto newUnit() {
+  private static StorageUnitDto newUnit() {
     StorageUnitDto unitDto = new StorageUnitDto();
     unitDto.setName(RandomStringUtils.randomAlphabetic(3));
     unitDto.setGroup(RandomStringUtils.randomAlphabetic(4));
@@ -220,5 +238,21 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     return Map.of(
       "parentStorageUnit",
       Map.of("data", Map.of("type", StorageUnitDto.TYPENAME, "id", newParentId)));
+  }
+
+  private static Map<String, Object> opPatchRelationMap(String parentID, String resourceId) {
+    return Map.of(
+      "op", "PATCH",
+      "path", StorageUnitDto.TYPENAME + "/" + resourceId,
+      "value", Map.of(
+        "id", resourceId,
+        "type", StorageUnitDto.TYPENAME,
+        "attributes", JsonAPITestHelper.toAttributeMap(newUnit()),
+        "relationships", Map.of(
+          "parentStorageUnit", Map.of(
+            "data", Map.of(
+              "type", "storage-unit",
+              "id", parentID
+            )))));
   }
 }
