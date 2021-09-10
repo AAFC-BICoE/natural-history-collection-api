@@ -61,6 +61,17 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     }
 
   @Test
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  public void create_WithAParent() {
+    MaterialSampleDto parent = materialSampleRepository.create(MaterialSampleTestFixture.newMaterialSample());
+    MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
+    child.setParentMaterialSample(parent);
+    child = materialSampleRepository.create(child);
+    MaterialSampleDto result = materialSampleRepository.findOne(parent.getUuid(), new QuerySpec(MaterialSampleDto.class));
+    assertEquals(child.getUuid(), result.getMaterialSampleChildren().get(0).getUuid());
+  }
+
+  @Test
   @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
   public void create_WithCollection_PersistedWithCollection() {
     Institution institution = InstitutionFixture.newInstitutionEntity().build();
