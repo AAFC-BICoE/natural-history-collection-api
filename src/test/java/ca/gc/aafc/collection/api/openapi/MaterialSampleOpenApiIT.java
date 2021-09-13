@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
-import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
@@ -125,10 +124,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     String parentUUID = materialSampleResponseBody.path("data[0].id");
     String childUUID = materialSampleResponseBody.path("data[1].id");
-    ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
-    childDto.setUuid(UUID.fromString(childUUID));
-    ms.setMaterialSampleChildren(List.of(childDto));
-
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
     String unitId = sendPost(
@@ -144,6 +139,13 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           null
         )
       ).extract().body().jsonPath().getString("data.id");
+
+    sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
+      TYPE_NAME,
+      Map.of(),
+      Map.of("parentMaterialSample", getRelationType("material-sample", unitId)),
+      null
+    ));
     
     OpenAPI3Assertions.assertRemoteSchema(
       getOpenAPISpecsURL(), 
