@@ -86,7 +86,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void post_withChild() {
+  void post_withChild_UpdateIgnored() {
     StorageUnitDto child = newUnit();
     String childID = postUnit(child);
     child.setUuid(UUID.fromString(childID));
@@ -97,7 +97,27 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     childDto.setUuid(child.getUuid());
     parent.setStorageUnitChildren(List.of(childDto));
 
-    postUnit(parent);
+    findUnit(postUnit(parent)).body("data.attributes.storageUnitChildren", Matchers.empty());
+  }
+
+  @Test
+  void patch_withChild_UpdateIgnored() {
+    StorageUnitDto parent = newUnit();
+    String parentID = postUnit(parent);
+
+    StorageUnitDto child = newUnit();
+    String childID = postUnit(child);
+    child.setUuid(UUID.fromString(childID));
+
+    ImmutableStorageUnitDto childDto = new ImmutableStorageUnitDto();
+    childDto.setUuid(child.getUuid());
+    parent.setStorageUnitChildren(List.of(childDto));
+
+    sendPatch(StorageUnitDto.TYPENAME, parentID,
+      JsonAPITestHelper.toJsonAPIMap(StorageUnitDto.TYPENAME, JsonAPITestHelper.toAttributeMap(parent),
+        null, null));
+
+    findUnit(parentID).body("data.attributes.storageUnitChildren", Matchers.empty());
   }
 
   @Test
