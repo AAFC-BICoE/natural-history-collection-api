@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.rest;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.ImmutableStorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
@@ -17,7 +18,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -80,6 +83,21 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       .body("data.attributes.hierarchy[1].name", Matchers.is(parentUnit.getName()))
       .body("data.attributes.hierarchy[1].rank", Matchers.notNullValue())
       .body("data.attributes.hierarchy[1].hierarchicalObject", Matchers.nullValue());
+  }
+
+  @Test
+  void post_withChild() {
+    StorageUnitDto child = newUnit();
+    String childID = postUnit(child);
+    child.setUuid(UUID.fromString(childID));
+
+    StorageUnitDto parent = newUnit();
+
+    ImmutableStorageUnitDto childDto = new ImmutableStorageUnitDto();
+    childDto.setUuid(child.getUuid());
+    parent.setStorageUnitChildren(List.of(childDto));
+
+    postUnit(parent);
   }
 
   @Test
