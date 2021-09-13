@@ -44,8 +44,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
-  private static final BigDecimal dwcMinimumElevationInMeters = new BigDecimal(11);
-  private static final BigDecimal dwcMinimumDepthInMeters = new BigDecimal(10);
+  private static final BigDecimal dwcMinimumElevationInMeters = new BigDecimal("11.11");
+  private static final BigDecimal dwcMinimumDepthInMeters = new BigDecimal("10.32");
 
   private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
       GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
@@ -445,8 +445,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal(-1));
-    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal(-2));
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("-1.01"));
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal("-2.02"));
 
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
@@ -458,14 +458,25 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal(15001));
-    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal(15002));
-    fetchedCollectingEvent.setDwcMaximumDepthInMeters(new BigDecimal(15003));
-    fetchedCollectingEvent.setDwcMaximumElevationInMeters(new BigDecimal(15004));
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("15000.01"));
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal("15000.02"));
+    fetchedCollectingEvent.setDwcMaximumDepthInMeters(new BigDecimal("15000.03"));
+    fetchedCollectingEvent.setDwcMaximumElevationInMeters(new BigDecimal("15000.04"));
 
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
       
+  }
+
+  @Test
+  void update_WithInvalidPrecision_throwsConstraintVIolationException() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+    .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("14000.011"));
+
+    assertThrows(ConstraintViolationException.class, 
+      () -> collectingEventService.update(fetchedCollectingEvent));
   }
 
 

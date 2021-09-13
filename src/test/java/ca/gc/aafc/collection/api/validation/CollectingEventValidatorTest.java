@@ -173,7 +173,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MIN_MAX_ELEVATION);
 
     CollectingEvent event = newEvent();
-    event.setDwcMaximumElevationInMeters(new BigDecimal(100));
+    event.setDwcMaximumElevationInMeters(new BigDecimal(100.10));
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
@@ -186,7 +186,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MIN_MAX_DEPTH);
 
     CollectingEvent event = newEvent();
-    event.setDwcMaximumDepthInMeters(new BigDecimal(100));
+    event.setDwcMaximumDepthInMeters(new BigDecimal(100.10));
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
@@ -199,8 +199,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MAX_LESS_THAN_MIN_ELEVATION);
 
     CollectingEvent event = newEvent();
-    event.setDwcMaximumElevationInMeters(new BigDecimal(100));
-    event.setDwcMinimumElevationInMeters(new BigDecimal(101));
+    event.setDwcMaximumElevationInMeters(new BigDecimal(100.01));
+    event.setDwcMinimumElevationInMeters(new BigDecimal(100.02));
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
@@ -213,8 +213,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(CollectingEventValidator.VALID_MAX_LESS_THAN_MIN_DEPTH);
 
     CollectingEvent event = newEvent();
-    event.setDwcMaximumDepthInMeters(new BigDecimal(100));
-    event.setDwcMinimumDepthInMeters(new BigDecimal(101));
+    event.setDwcMaximumDepthInMeters(new BigDecimal(100.01));
+    event.setDwcMinimumDepthInMeters(new BigDecimal(100.02));
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);

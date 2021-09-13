@@ -35,10 +35,10 @@ public class CollectingEventTestFixture {
   public static final String DWC_VERBATIM_SRS = "EPSG:4326";
   public static final String DWC_VERBATIM_ELEVATION = "100-200 m";
   public static final String DWC_VERBATIM_DEPTH = "10-20 m ";
-  public static final BigDecimal DWC_MAXIMUM_ELEVATION_IN_METERS = new BigDecimal(100);
-  public static final BigDecimal DWC_MAXIMUM_DEPTH_IN_METERS = new BigDecimal(20);
-  public static final BigDecimal DWC_MINIMUM_ELEVATION_IN_METERS = new BigDecimal(50);
-  public static final BigDecimal DWC_MINIMUM_DEPTH_IN_METERS = new BigDecimal(10);
+  public static final BigDecimal DWC_MAXIMUM_ELEVATION_IN_METERS = new BigDecimal("100.01");
+  public static final BigDecimal DWC_MAXIMUM_DEPTH_IN_METERS = new BigDecimal("20.02");
+  public static final BigDecimal DWC_MINIMUM_ELEVATION_IN_METERS = new BigDecimal("50.50");
+  public static final BigDecimal DWC_MINIMUM_DEPTH_IN_METERS = new BigDecimal("10.10");
   public static final String SUBSTRATE = "rock";
   public static final String REMARKS = "this is a remark";
 

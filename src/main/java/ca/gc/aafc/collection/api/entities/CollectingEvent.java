@@ -30,6 +30,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -160,21 +161,25 @@ public class CollectingEvent implements DinaEntity {
   @Min(value = 0)
   @Max(value = 15000)
   @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
   private BigDecimal dwcMinimumElevationInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
   @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
   private BigDecimal dwcMinimumDepthInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
   @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
   private BigDecimal dwcMaximumElevationInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
   @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
   private BigDecimal dwcMaximumDepthInMeters;
 
   private String substrate;
