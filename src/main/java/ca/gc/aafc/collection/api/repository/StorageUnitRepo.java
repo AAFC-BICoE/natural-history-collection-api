@@ -14,6 +14,7 @@ import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
@@ -53,19 +54,20 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
   @Override
   public <S extends StorageUnitDto> S create(S resource) {
     authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
-    return listenForHierarchyViolation(() -> super.create(resource));
+    return checkForHierarchyViolation(() -> super.create(resource));
   }
 
   @Override
   public <S extends StorageUnitDto> S save(S resource) {
-    return listenForHierarchyViolation(() -> super.save(resource));
+    return checkForHierarchyViolation(() -> super.save(resource));
   }
 
-  private <S extends StorageUnitDto> S listenForHierarchyViolation(Supplier<S> operation) {
+  private <S extends StorageUnitDto> S checkForHierarchyViolation(Supplier<S> operation) {
     try {
       return operation.get();
     } catch (PersistenceException e) {
-      HierarchyExceptionMappingUtils.throwIfHierarchyViolation(e, messageSource);
+      HierarchyExceptionMappingUtils.throwIfHierarchyViolation(e,
+          key -> messageSource.getMessage(key, null, LocaleContextHolder.getLocale()));
       throw e;
     }
   }
