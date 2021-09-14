@@ -140,14 +140,9 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   void delete_RelationsResolved() {
     StorageUnitDto unit = newUnit();
     String parentId = postUnit(newUnit());
-    String childId = postUnit(newUnit());
     String unitTypeId = postUnitType(newUnitType());
     String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId));
-    sendPatchWithRelations(unit, childId, getParentStorageUnitRelationshipMap(unitId));
     sendDelete(StorageUnitDto.TYPENAME, unitId);
-    findUnit(childId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.nullValue())
-      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
     findUnit(parentId)
       .body("data.relationships.storageUnitChildren.data", Matchers.nullValue())
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
@@ -218,11 +213,5 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     return Map.of(
       "storageUnitType",
       Map.of("data", Map.of("type", StorageUnitTypeDto.TYPENAME, "id", newUnitTypeId)));
-  }
-
-  private Map<String, Object> getParentStorageUnitRelationshipMap(String newParentId) {
-    return Map.of(
-      "parentStorageUnit",
-      Map.of("data", Map.of("type", StorageUnitDto.TYPENAME, "id", newParentId)));
   }
 }
