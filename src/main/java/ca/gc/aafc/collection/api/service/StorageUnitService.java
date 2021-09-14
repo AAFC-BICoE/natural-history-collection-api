@@ -102,4 +102,12 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     }
     unit.setHierarchy(storageHierarchicalObjects);
   }
+
+  @Override
+  protected void preDelete(StorageUnit entity) {
+    if (CollectionUtils.isNotEmpty(entity.getStorageUnitChildren())) {
+      entity.getStorageUnitChildren().forEach(child ->
+        this.findOne(child.getUuid(), StorageUnit.class).setParentStorageUnit(null));
+    }
+  }
 }
