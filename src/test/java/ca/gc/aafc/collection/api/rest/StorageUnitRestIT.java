@@ -87,6 +87,41 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void post_withChild_UpdateIgnored() {
+    StorageUnitDto child = newUnit();
+    String childID = postUnit(child);
+    child.setUuid(UUID.fromString(childID));
+
+    StorageUnitDto parent = newUnit();
+
+    ImmutableStorageUnitDto childDto = new ImmutableStorageUnitDto();
+    childDto.setUuid(child.getUuid());
+    parent.setStorageUnitChildren(List.of(childDto));
+
+    findUnit(postUnit(parent)).body("data.attributes.storageUnitChildren", Matchers.empty());
+  }
+
+  @Test
+  void patch_withChild_UpdateIgnored() {
+    StorageUnitDto parent = newUnit();
+    String parentID = postUnit(parent);
+
+    StorageUnitDto child = newUnit();
+    String childID = postUnit(child);
+    child.setUuid(UUID.fromString(childID));
+
+    ImmutableStorageUnitDto childDto = new ImmutableStorageUnitDto();
+    childDto.setUuid(child.getUuid());
+    parent.setStorageUnitChildren(List.of(childDto));
+
+    sendPatch(StorageUnitDto.TYPENAME, parentID,
+      JsonAPITestHelper.toJsonAPIMap(StorageUnitDto.TYPENAME, JsonAPITestHelper.toAttributeMap(parent),
+        null, null));
+
+    findUnit(parentID).body("data.attributes.storageUnitChildren", Matchers.empty());
+  }
+
+  @Test
   void patch_WithNewRelations() {
     StorageUnitDto unit = newUnit();
     String unitId = postUnit(unit);
@@ -136,14 +171,9 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   void delete_RelationsResolved() {
     StorageUnitDto unit = newUnit();
     String parentId = postUnit(newUnit());
-    String childId = postUnit(newUnit());
     String unitTypeId = postUnitType(newUnitType());
-    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId), 201);
-    sendPatchWithRelations(unit, childId, getParentStorageUnitRelationshipMap(unitId));
+    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId));
     sendDelete(StorageUnitDto.TYPENAME, unitId);
-    findUnit(childId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.nullValue())
-      .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
     findUnit(parentId)
       .body("data.relationships.storageUnitChildren.data", Matchers.nullValue())
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());

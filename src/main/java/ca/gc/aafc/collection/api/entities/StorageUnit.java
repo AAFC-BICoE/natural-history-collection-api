@@ -36,7 +36,7 @@ public class StorageUnit extends AbstractStorageUnit {
   private StorageUnit parentStorageUnit;
 
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "parent_storage_unit_id", referencedColumnName = "id")
+  @JoinColumn(name = "parent_storage_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableStorageUnit> storageUnitChildren = new ArrayList<>();
 
   @Transient
