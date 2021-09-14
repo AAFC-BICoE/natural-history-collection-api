@@ -102,4 +102,5 @@ public class MaterialSampleDto {
   private Boolean publiclyReleasable;
   
   private String notPubliclyReleasableReason;
+  private String[] tags;
 }

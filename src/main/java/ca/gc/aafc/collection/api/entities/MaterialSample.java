@@ -147,4 +147,6 @@ public class MaterialSample implements DinaEntity {
 
   @Size(max = 500)
   private String notPubliclyReleasableReason;
+  @Type(type = "string-array")
+  private String[] tags;
 }
