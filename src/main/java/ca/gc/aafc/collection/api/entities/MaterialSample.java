@@ -142,4 +142,7 @@ public class MaterialSample implements DinaEntity {
 
   @Size(max = 50)
   private String barcode;
+
+  @Type(type = "string-array")
+  private String[] tags;
 }

@@ -98,4 +98,6 @@ public class MaterialSampleDto {
   private String host;
 
   private String barcode;
+
+  private String[] tags;
 }
