@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.PatchStrategy;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +29,6 @@ public class ImmutableMaterialSampleDto {
   @JsonIgnore
   private UUID uuid;
 
-  @Setter(AccessLevel.NONE)
   @IgnoreDinaMapping
   private UUID id;
 
@@ -66,5 +64,10 @@ public class ImmutableMaterialSampleDto {
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
     this.id = uuid;
+  }
+
+  public void setId(UUID id) {
+    this.uuid = id;
+    this.id = id;
   }
 }
