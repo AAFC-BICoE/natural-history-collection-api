@@ -172,7 +172,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     StorageUnitDto unit = newUnit();
     String parentId = postUnit(newUnit());
     String unitTypeId = postUnitType(newUnitType());
-    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId));
+    String unitId = postUnit(unit, getRelationshipMap(parentId, unitTypeId), 201);
     sendDelete(StorageUnitDto.TYPENAME, unitId);
     findUnit(parentId)
       .body("data.relationships.storageUnitChildren.data", Matchers.nullValue())
