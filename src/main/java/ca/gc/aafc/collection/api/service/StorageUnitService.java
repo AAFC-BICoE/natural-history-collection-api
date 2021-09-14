@@ -102,4 +102,5 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     }
     unit.setHierarchy(storageHierarchicalObjects);
   }
+
 }
