@@ -62,14 +62,14 @@ public class CollectingEventValidator implements Validator {
 
   private void validateMinMaxElevationDepth(Errors errors, CollectingEvent collectingEvent) {
     if (collectingEvent.getDwcMaximumDepthInMeters() != null && collectingEvent.getDwcMinimumDepthInMeters() != null &&
-        collectingEvent.getDwcMaximumDepthInMeters() < collectingEvent.getDwcMinimumDepthInMeters()) {
+        collectingEvent.getDwcMaximumDepthInMeters().compareTo(collectingEvent.getDwcMinimumDepthInMeters()) < 0) {
       addError(errors, VALID_MAX_LESS_THAN_MIN_DEPTH);
     }
     if (collectingEvent.getDwcMaximumDepthInMeters() != null && collectingEvent.getDwcMinimumDepthInMeters() == null) {
       addError(errors, VALID_MIN_MAX_DEPTH);
     }
     if (collectingEvent.getDwcMaximumElevationInMeters() != null && collectingEvent.getDwcMinimumElevationInMeters() != null &&
-        collectingEvent.getDwcMaximumElevationInMeters() < collectingEvent.getDwcMinimumElevationInMeters()) {
+        collectingEvent.getDwcMaximumElevationInMeters().compareTo(collectingEvent.getDwcMinimumElevationInMeters()) < 0) {
       addError(errors, VALID_MAX_LESS_THAN_MIN_ELEVATION);
     }
     if (collectingEvent.getDwcMaximumElevationInMeters() != null && collectingEvent.getDwcMinimumElevationInMeters() == null) {

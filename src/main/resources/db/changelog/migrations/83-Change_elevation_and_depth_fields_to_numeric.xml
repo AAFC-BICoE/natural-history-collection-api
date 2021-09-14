@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="83-Change_elevation_and_depth_fields_to_numeric" context="schema-change" author="steven luu">
+      <modifyDataType tableName="collecting_event" columnName="dwc_minimum_elevation_in_meters" newDataType="NUMERIC(7,2)"/>
+      <modifyDataType tableName="collecting_event" columnName="dwc_minimum_depth_in_meters" newDataType="NUMERIC(7,2)"/>
+      <modifyDataType tableName="collecting_event" columnName="dwc_maximum_elevation_in_meters" newDataType="NUMERIC(7,2)"/>
+      <modifyDataType tableName="collecting_event" columnName="dwc_maximum_depth_in_meters" newDataType="NUMERIC(7,2)"/>
+    </changeSet>
+
+</databaseChangeLog>
