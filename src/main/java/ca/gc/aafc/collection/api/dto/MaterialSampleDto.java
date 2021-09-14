@@ -99,5 +99,8 @@ public class MaterialSampleDto {
 
   private String barcode;
 
+  private Boolean publiclyReleasable;
+  
+  private String notPubliclyReleasableReason;
   private String[] tags;
 }
