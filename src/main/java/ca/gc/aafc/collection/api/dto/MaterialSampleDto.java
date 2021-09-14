@@ -98,4 +98,8 @@ public class MaterialSampleDto {
   private String host;
 
   private String barcode;
+
+  private Boolean publiclyReleasable;
+  
+  private String notPubliclyReleasableReason;
 }

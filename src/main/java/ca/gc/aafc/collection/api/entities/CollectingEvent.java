@@ -208,6 +208,11 @@ public class CollectingEvent implements DinaEntity {
   @ManyToOne
   private CollectionMethod collectionMethod;
 
+  private Boolean publiclyReleasable;
+
+  @Size(max = 500)
+  private String notPubliclyReleasableReason;
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
    * in sync.
