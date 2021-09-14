@@ -38,7 +38,7 @@ public class MaterialSample extends AbstractMaterialSample {
   private MaterialSample parentMaterialSample;
 
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id")
+  @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
 
   @ManyToOne
