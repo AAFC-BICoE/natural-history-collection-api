@@ -10,8 +10,11 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
-
+/**
+ * Tests responsible to test the validations included in the database trigger called check_storage_hierarchy
+ * that prevents the creation of internal loops
+ */
+public class StorageUnitValidationTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenParentIsSel_ThrowsException() {
