@@ -18,7 +18,10 @@ public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
     StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
     storageUnit.setParentStorageUnit(storageUnit);
 
-    storageUnitService.createAndFlush(storageUnit);
+    assertThrows(PersistenceException.class, () -> {
+      //force a flush to send to db immediately
+      storageUnitService.createAndFlush(storageUnit);
+    });
   }
 
   @Test
