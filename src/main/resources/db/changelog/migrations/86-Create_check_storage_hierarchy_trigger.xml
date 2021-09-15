@@ -21,7 +21,7 @@
         '
             BEGIN
                 IF NEW.parent_storage_unit_id IS NOT NULL AND NEW.parent_storage_unit_id = NEW.id THEN
-                    RAISE EXCEPTION ''parentidentifier can not be equal to id'' USING ERRCODE = ''23D66'', HINT = ''dina_error_parent_is_self'';
+                    RAISE EXCEPTION ''parentidentifier can not be equal to id'' USING ERRCODE = ''23D66'', HINT = ''validation.constraint.violation.parentIsSelf'';
                 END IF;
 
                 IF (TG_OP = ''UPDATE'' AND NEW.parent_storage_unit_id = OLD.parent_storage_unit_id)
