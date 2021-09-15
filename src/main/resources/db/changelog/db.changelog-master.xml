@@ -87,5 +87,7 @@
   <include file="db/changelog/migrations/81-Update_Collection_add_Institution.xml"/>
   <include file="db/changelog/migrations/82-Add_Barcode_To_MatSample.xml"/>
   <include file="db/changelog/migrations/83-Change_elevation_and_depth_fields_to_numeric.xml"/>
+  <include file="db/changelog/migrations/84-Add_tags_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/85-Add_publiclyReleasable.xml"/>
   <include file="db/changelog/migrations/84-Create_check_storage_hierarchy_trigger.xml"/>
 </databaseChangeLog>
