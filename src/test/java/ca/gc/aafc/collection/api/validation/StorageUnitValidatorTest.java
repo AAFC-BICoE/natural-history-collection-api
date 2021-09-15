@@ -5,8 +5,6 @@ import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import java.util.UUID;
 
@@ -14,18 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StorageUnitValidatorTest extends CollectionModuleBaseIT {
 
-  @Inject
-  private EntityManager em;
 
   @Test
   void validate_WhenParentIsSel_ThrowsException() {
     StorageUnit storageUnit = StorageUnitFactory.newStorageUnit().uuid(UUID.randomUUID()).build();
     storageUnit.setParentStorageUnit(storageUnit);
 
-    assertThrows(PersistenceException.class, () -> {
-      storageUnitService.create(storageUnit);
-      em.flush(); //force a flush
-    });
+    storageUnitService.createAndFlush(storageUnit);
   }
 
   @Test
