@@ -1,11 +1,13 @@
 package ca.gc.aafc.collection.api.service;
 
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
-import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
+import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,7 +22,7 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 
 @Service
-public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
+public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
@@ -31,9 +33,10 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
     @NonNull SmartValidator sv,
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
-    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService
+    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
+      MessageProducer messageProducer
   ) {
-    super(baseDAO, sv);
+    super(baseDAO, sv, MaterialSampleDto.TYPENAME, messageProducer);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
