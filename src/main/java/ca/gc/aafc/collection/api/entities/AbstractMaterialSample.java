@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -96,13 +94,18 @@ public class AbstractMaterialSample implements DinaEntity {
   @Column(name = "dwc_degree_of_establishment")
   private String dwcDegreeOfEstablishment;
 
-  @Transient
-  private List<HierarchicalObject> hierarchy;
-
   @Size(max = 250)
   private String host;
 
   @Size(max = 50)
   private String barcode;
+
+  private Boolean publiclyReleasable;
+
+  @Size(max = 500)
+  private String notPubliclyReleasableReason;
+
+  @Type(type = "string-array")
+  private String[] tags;
 
 }

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.dina.dto.HierarchicalObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,31 +55,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "storage_unit_id")
   private StorageUnit storageUnit;
 
-  @Type(type = "jsonb")
-  @Valid
-  private List<Determination> determination;
-
-  @Size(max = 500)
-  @Column(name = "preparation_remarks")
-  private String preparationRemarks;
-
-  @Size(max = 250)
-  @Column(name = "dwc_degree_of_establishment")
-  private String dwcDegreeOfEstablishment;
-
   @Transient
   private List<HierarchicalObject> hierarchy;
 
-  @Size(max = 250)
-  private String host;
-
-  @Size(max = 50)
-  private String barcode;
-
-  private Boolean publiclyReleasable;
-
-  @Size(max = 500)
-  private String notPubliclyReleasableReason;
-  @Type(type = "string-array")
-  private String[] tags;
 }
