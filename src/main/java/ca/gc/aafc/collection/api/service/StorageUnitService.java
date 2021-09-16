@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
-import ca.gc.aafc.collection.api.validation.StorageUnitValidator;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
@@ -24,20 +23,17 @@ import java.util.function.BiFunction;
 @Service
 public class StorageUnitService extends DefaultDinaService<StorageUnit> {
 
-  private final StorageUnitValidator storageUnitValidator;
   private final StorageUnitTypeService storageUnitTypeService;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
 
   public StorageUnitService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
-    @NonNull StorageUnitValidator storageUnitValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
     @NonNull StorageUnitTypeService storageUnitTypeService
   ) {
     super(baseDAO, sv);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
-    this.storageUnitValidator = storageUnitValidator;
     this.storageUnitTypeService = storageUnitTypeService;
   }
 
@@ -54,11 +50,6 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
       detach(updatedEntity.getParentStorageUnit());
     }
     return updatedEntity;
-  }
-
-  @Override
-  public void validateBusinessRules(StorageUnit entity) {
-    applyBusinessRule(entity, storageUnitValidator);
   }
 
   @Override
@@ -83,12 +74,12 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
   private void setHierarchy(StorageUnit unit) {
     List<HierarchicalObject> hierarchicalObjects = postgresHierarchicalDataService.getHierarchyWithType(
       unit.getId(),
-      "storage_unit",
-      "id",
-      "uuid",
-      "parent_storage_unit_id",
-      "name",
-      "storage_unit_type_id");
+      StorageUnit.TABLE_NAME,
+      StorageUnit.ID_COLUMN_NAME,
+      StorageUnit.UUID_COLUMN_NAME,
+      StorageUnit.PARENT_ID_COLUMN_NAME,
+      StorageUnit.NAME_COLUMN_NAME,
+      StorageUnit.TYPE_COLUMN_NAME);
     List<StorageHierarchicalObject> storageHierarchicalObjects = new ArrayList<>();
     for (HierarchicalObject hObject : hierarchicalObjects) {
       StorageHierarchicalObject storageHierarchicalObject = new StorageHierarchicalObject();
@@ -102,4 +93,5 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     }
     unit.setHierarchy(storageHierarchicalObjects);
   }
+
 }

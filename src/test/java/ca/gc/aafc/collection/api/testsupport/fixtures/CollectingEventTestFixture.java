@@ -41,6 +41,8 @@ public class CollectingEventTestFixture {
   public static final BigDecimal DWC_MINIMUM_DEPTH_IN_METERS = new BigDecimal("10.10");
   public static final String SUBSTRATE = "rock";
   public static final String REMARKS = "this is a remark";
+  public static final Boolean PUBLICLY_RELEASABLE = false;
+  public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";
 
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
   public static final String HOST = "host";
@@ -119,6 +121,8 @@ public class CollectingEventTestFixture {
     ce.setDwcMinimumElevationInMeters(DWC_MINIMUM_ELEVATION_IN_METERS);
     ce.setSubstrate(SUBSTRATE);
     ce.setRemarks(REMARKS);
+    ce.setPubliclyReleasable(PUBLICLY_RELEASABLE);
+    ce.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
     return ce;
   }
 

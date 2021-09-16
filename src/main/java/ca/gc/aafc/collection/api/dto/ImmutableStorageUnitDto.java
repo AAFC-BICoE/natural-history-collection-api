@@ -5,9 +5,7 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.crnk.core.resource.annotations.JsonApiId;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -20,7 +18,6 @@ public class ImmutableStorageUnitDto {
   @JsonIgnore
   private UUID uuid;
 
-  @Setter(AccessLevel.NONE)
   @IgnoreDinaMapping
   private UUID id;
 
@@ -34,5 +31,10 @@ public class ImmutableStorageUnitDto {
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
     this.id = uuid;
+  }
+
+  public void setId(UUID id) {
+    this.uuid = id;
+    this.id = id;
   }
 }

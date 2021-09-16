@@ -108,6 +108,8 @@ public class CollectingEventDto {
   private BigDecimal dwcMaximumDepthInMeters;
   private String substrate;
   private String remarks;
+  private Boolean publiclyReleasable;
+  private String notPubliclyReleasableReason;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
