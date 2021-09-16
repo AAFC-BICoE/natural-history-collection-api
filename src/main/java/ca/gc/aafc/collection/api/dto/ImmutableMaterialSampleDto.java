@@ -6,6 +6,7 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.PatchStrategy;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @RelatedEntity(ImmutableMaterialSample.class)
 @Getter
 @Setter
+@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class ImmutableMaterialSampleDto {
 
   @JsonApiId
