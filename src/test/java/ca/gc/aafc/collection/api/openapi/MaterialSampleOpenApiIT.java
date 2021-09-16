@@ -29,8 +29,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @SpringBootTest(
@@ -135,11 +135,17 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
           "parentMaterialSample", getRelationType("material-sample", parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-          "preparationType", getRelationType("preparation-type", preparationTypeUUID),
-          "materialSampleChildren", getRelationListType("material-sample", childUUID)),
+          "preparationType", getRelationType("preparation-type", preparationTypeUUID)),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
+
+    sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
+      TYPE_NAME,
+      Map.of(),
+      Map.of("parentMaterialSample", getRelationType("material-sample", unitId)),
+      null
+    ));
     
     OpenAPI3Assertions.assertRemoteSchema(
       getOpenAPISpecsURL(), 

@@ -20,7 +20,7 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
      *
      * @return Pre-configured builder with all mandatory fields set
      */
-    public static MaterialSample.MaterialSampleBuilder newMaterialSample() {
+    public static MaterialSample.MaterialSampleBuilder<?, ?> newMaterialSample() {
         return MaterialSample
             .builder()
             .barcode(RandomStringUtils.randomAlphabetic(5))
