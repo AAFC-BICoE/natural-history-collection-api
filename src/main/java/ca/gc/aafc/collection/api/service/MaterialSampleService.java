@@ -61,11 +61,11 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
   private void setHierarchy(MaterialSample sample) {
     sample.setHierarchy(postgresHierarchicalDataService.getHierarchy(
       sample.getId(),
-      "material_sample",
-      "id",
-      "uuid",
-      "parent_material_sample_id",
-      "material_sample_name"
+        MaterialSample.TABLE_NAME,
+        MaterialSample.ID_COLUMN_NAME,
+        MaterialSample.UUID_COLUMN_NAME,
+        MaterialSample.PARENT_ID_COLUMN_NAME,
+        MaterialSample.NAME_COLUMN_NAME
     ));
   }
 
@@ -97,6 +97,11 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
     return detachParent(sample);
   }
 
+  /**
+   * Detaches the parent to make sure it reloads its children list
+   * @param sample
+   * @return
+   */
   private MaterialSample detachParent(MaterialSample sample) {
     if (sample.getParentMaterialSample() != null) {
       detach(sample.getParentMaterialSample());

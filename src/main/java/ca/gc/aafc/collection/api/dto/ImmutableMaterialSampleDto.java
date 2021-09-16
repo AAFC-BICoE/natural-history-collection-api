@@ -54,9 +54,6 @@ public class ImmutableMaterialSampleDto {
 
   private String dwcDegreeOfEstablishment;
 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<HierarchicalObject> hierarchy;
-
   private String host;
 
   private String barcode;

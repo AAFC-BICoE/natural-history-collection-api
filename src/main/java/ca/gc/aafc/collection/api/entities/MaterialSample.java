@@ -27,6 +27,12 @@ import java.util.List;
 @Table(name = "material_sample")
 public class MaterialSample extends AbstractMaterialSample {
 
+  public static final String TABLE_NAME = "material_sample";
+  public static final String ID_COLUMN_NAME = "id";
+  public static final String UUID_COLUMN_NAME = "uuid";
+  public static final String PARENT_ID_COLUMN_NAME = "parent_material_sample_id";
+  public static final String NAME_COLUMN_NAME = "material_sample_name";
+
   @ManyToOne
   private Collection collection;
 
