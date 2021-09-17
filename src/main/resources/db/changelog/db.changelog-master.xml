@@ -90,4 +90,6 @@
   <include file="db/changelog/migrations/84-Add_tags_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/85-Add_publiclyReleasable.xml"/>
   <include file="db/changelog/migrations/86-Create_check_storage_hierarchy_trigger.xml"/>
+  <include file="db/changelog/migrations/87-Add_Material_Sample_State_and_Remarks_field.xml"/>
+
 </databaseChangeLog>

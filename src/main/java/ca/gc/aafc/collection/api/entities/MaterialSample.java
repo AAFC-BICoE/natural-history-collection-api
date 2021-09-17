@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,5 +65,11 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Transient
   private List<HierarchicalObject> hierarchy;
+
+  @Size(max = 50)
+  private String materialSampleState;
+
+  @Size(max = 250)
+  private String materialSampleRemarks;
 
 }
