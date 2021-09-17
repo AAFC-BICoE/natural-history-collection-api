@@ -1,0 +1,24 @@
+vocabulary:
+  materialSampleState:
+    - name: Destroyed
+      term: https://www.wikidata.org/wiki/Property:P3082
+      labels:
+        en: Destroyed
+        fr: Détruit
+    - name: Damaged
+      term: https://www.wikidata.org/wiki/Property:P3081
+      labels:
+        en: Damaged
+        fr: Endommagé
+    - name: Lost
+      term:
+      labels:
+        en: Lost
+        fr: Perdu
+    - name: Decommissioned
+      term: https://www.wikidata.org/wiki/Q11639308
+      labels:
+        en: Decommissioned
+        fr: Déclassé
+
+
