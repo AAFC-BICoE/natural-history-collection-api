@@ -1,5 +1,5 @@
 vocabulary:
-  materialSampleState:
+  material-sample-state:
     - name: Destroyed
       term: https://www.wikidata.org/wiki/Property:P3082
       labels:

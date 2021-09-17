@@ -27,7 +27,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_VocabularyConfiguration() {
     List<VocabularyDto> listOfVocabularies =
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class));
-    assertEquals(5, listOfVocabularies.size());
+    assertEquals(6, listOfVocabularies.size());
 
     List<List<VocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
@@ -41,7 +41,8 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
         vocabularyConfiguration.getVocabulary().get("srs"),
         vocabularyConfiguration.getVocabulary().get("coordinateSystem"),
         vocabularyConfiguration.getVocabulary().get("typeStatus"),
-        vocabularyConfiguration.getVocabulary().get("substrate")
+        vocabularyConfiguration.getVocabulary().get("substrate"),
+        vocabularyConfiguration.getVocabulary().get("material-sample-state")
       ));
   }
 
