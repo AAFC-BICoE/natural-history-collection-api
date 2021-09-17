@@ -102,4 +102,7 @@ public class MaterialSampleDto {
   
   private String notPubliclyReleasableReason;
   private String[] tags;
+
+  private String materialSampleState;
+  private String materialSampleRemarks;
 }

@@ -23,6 +23,8 @@ public class MaterialSampleTestFixture {
   public static final Boolean PUBLICLY_RELEASABLE = false;
   public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";
   public static final String[] TAGS = new String[]{"0-Tag", "1-Tag"};
+  public static final String MATERIAL_SAMPLE_STATE = "Damaged";
+  public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
 
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto= new MaterialSampleDto();
@@ -43,6 +45,8 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setPubliclyReleasable(PUBLICLY_RELEASABLE);
     materialSampleDto.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
     materialSampleDto.setTags(TAGS);
+    materialSampleDto.setMaterialSampleState(MATERIAL_SAMPLE_STATE);
+    materialSampleDto.setMaterialSampleRemarks(MATERIAL_SAMPLE_REMARKS);
     return materialSampleDto;
   }
 }
