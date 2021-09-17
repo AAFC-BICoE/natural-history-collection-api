@@ -42,7 +42,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
         vocabularyConfiguration.getVocabulary().get("coordinateSystem"),
         vocabularyConfiguration.getVocabulary().get("typeStatus"),
         vocabularyConfiguration.getVocabulary().get("substrate"),
-        vocabularyConfiguration.getVocabulary().get("material-sample-state")
+        vocabularyConfiguration.getVocabulary().get("materialSampleState")
       ));
   }
 
