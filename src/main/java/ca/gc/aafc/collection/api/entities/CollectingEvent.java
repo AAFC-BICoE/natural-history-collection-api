@@ -213,6 +213,9 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 500)
   private String notPubliclyReleasableReason;
 
+  @Type(type = "string-array")
+  private String[] tags;
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
    * in sync.
