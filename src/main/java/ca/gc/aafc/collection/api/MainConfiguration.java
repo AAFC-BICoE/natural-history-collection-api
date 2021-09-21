@@ -2,7 +2,11 @@ package ca.gc.aafc.collection.api;
 
 import javax.inject.Inject;
 
+import ca.gc.aafc.dina.search.messaging.producer.LogBasedMessageProducer;
+import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +28,18 @@ public class MainConfiguration {
 
     resourceInfo.setIdStringMapper(
       new ManagedAttributeIdMapper(resourceInfo.getIdStringMapper()));
+  }
+
+  /**
+   * Provides a fallback MessageProducer when messaging.isProducer is false.
+   */
+  @Configuration
+  public static class FallbackMessageProducer {
+    @Bean
+    @ConditionalOnProperty(name = "messaging.isProducer", havingValue = "false")
+    public MessageProducer init() {
+      return new LogBasedMessageProducer();
+    }
   }
 
 }
