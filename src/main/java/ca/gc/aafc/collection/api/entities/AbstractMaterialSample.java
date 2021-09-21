@@ -88,6 +88,9 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private List<Determination> determination;
 
+  @Type(type = "jsonb")
+  private Organism organism;
+
   @Size(max = 500)
   @Column(name = "preparation_remarks")
   private String preparationRemarks;

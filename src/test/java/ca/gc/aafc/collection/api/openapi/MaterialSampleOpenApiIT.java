@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
@@ -90,12 +91,20 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
       .scientificNameDetails("scientificNameDetails")
       .build();
+    
+    Organism organism = Organism.builder()
+      .lifeStage("larva")
+      .sex("female")
+      .substrate("organism subtrate")
+      .remarks("remark")
+      .build();
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setPreparedBy(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setDetermination(List.of(determination));
+    ms.setOrganism(organism);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
