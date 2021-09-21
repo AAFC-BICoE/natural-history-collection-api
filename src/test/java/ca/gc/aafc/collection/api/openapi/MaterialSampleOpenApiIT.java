@@ -95,8 +95,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Organism organism = Organism.builder()
       .lifeStage("larva")
       .sex("female")
-      .substrate("rock")
-      .remarks("this organsim was found on a rock")
+      .substrate("organism subtrate")
+      .remarks("remark")
       .build();
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
