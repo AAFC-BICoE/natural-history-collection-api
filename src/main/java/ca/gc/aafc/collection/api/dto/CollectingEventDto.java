@@ -110,6 +110,7 @@ public class CollectingEventDto {
   private String remarks;
   private Boolean publiclyReleasable;
   private String notPubliclyReleasableReason;
+  private String[] tags;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
