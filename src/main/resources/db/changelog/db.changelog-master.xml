@@ -93,5 +93,6 @@
   <include file="db/changelog/migrations/87-Add_Material_Sample_State_and_Remarks_field.xml"/>
   <include file="db/changelog/migrations/88-Add_tags_to_collectingEvent.xml"/>
   <include file="db/changelog/migrations/89-Add_organism_to_materialSample.xml"/>
+  <include file="db/changelog/migrations/90-Add_collection_sequence_table.xml"/>
 
 </databaseChangeLog>

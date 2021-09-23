@@ -1,0 +1,29 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+  context="schema-change">
+  
+  <changeSet id="90-Add_collection_sequence_table.xml" context="schema-change" author="Steven Luu">
+    <sql>
+      CREATE TABLE collection_sequence
+      (
+          collection_id integer PRIMARY KEY REFERENCES collection(id),
+          counter integer NOT NULL DEFAULT 1
+      );
+    </sql>
+    <sql>
+      CREATE OR REPLACE FUNCTION collection_get_next_id(integer)
+      RETURNS integer VOLATILE LANGUAGE sql AS
+      $$
+      UPDATE collection_sequence
+      SET counter = counter + 1
+      WHERE collection_id = $1
+      RETURNING counter
+      $$;
+    </sql>
+  </changeSet>
+</databaseChangeLog>
+
