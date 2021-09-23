@@ -1,9 +1,0 @@
-coordinateSystem:
-  - decimal degrees
-  - degrees decimal minutes
-  - degrees minutes seconds
-  - UTM
-
-srs:
-  - WGS84 (EPSG:4326)
-  - NAD27 (EPSG:4276)

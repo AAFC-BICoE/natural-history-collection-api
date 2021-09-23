@@ -1,13 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.Optional;
-
-import ca.gc.aafc.dina.security.DinaAuthorizationService;
-import ca.gc.aafc.dina.service.AuditService;
-
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Repository;
-
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
@@ -15,7 +7,18 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.service.AuditService;
+import io.crnk.core.queryspec.QuerySpec;
+import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Repository;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, MaterialSample> {
@@ -48,5 +51,19 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
     dinaAuthenticatedUser.ifPresent(
         authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
+  }
+
+  @Override
+  public ResourceList<MaterialSampleDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {
+    ResourceList<MaterialSampleDto> resourceList = super.findAll(ids, querySpec);
+    if (CollectionUtils.isNotEmpty(resourceList) && !isHierarchyIncluded(querySpec)) {
+      resourceList.forEach(r -> r.setHierarchy(null));
+    }
+    return resourceList;
+  }
+
+  private static boolean isHierarchyIncluded(QuerySpec querySpec) {
+    return querySpec.getIncludedRelations().stream()
+      .anyMatch(r -> r.getAttributePath().get(0).equalsIgnoreCase(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
   }
 }

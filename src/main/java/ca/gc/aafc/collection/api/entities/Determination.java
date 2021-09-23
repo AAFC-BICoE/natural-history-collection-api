@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
@@ -36,41 +34,34 @@ public class Determination {
   private final String verbatimScientificName;
 
   @Size(max = 150)
-  private final String verbatimAgent;
+  private final String verbatimDeterminer;
 
   @Size(max = 50)
   private final String verbatimDate;
 
-  @Valid
-  private final List<DeterminationDetail> details;
+  @Size(max = 250)
+  private final String scientificName;
 
-  @Getter
-  @Builder
-  @RequiredArgsConstructor
-  public static class DeterminationDetail {
+  @Size(max = 250)
+  private final String transcriberRemarks;
 
-    @Size(max = 250)
-    @NotBlank
-    private final String scientificName;
+  @Size(max = 50)
+  private final String typeStatus;
 
-    @Size(max = 50)
-    private final String typeStatus;
+  @Size(max = 250)
+  private final String typeStatusEvidence;
 
-    @Size(max = 250)
-    private final String typeStatusEvidence;
+  private final List<UUID> determiner;
 
-    private final List<UUID> determiner;
+  @PastOrPresent
+  private final LocalDate determinedOn;
 
-    private final LocalDate determinedOn;
+  @Size(max = 150)
+  private final String qualifier;
 
-    @Size(max = 150)
-    private final String qualifier;
+  private final ScientificNameSource scientificNameSource;
 
-    @NotNull
-    private final ScientificNameSource scientificNameSource;
-
-    @Size(max = 250)
-    private final String scientificNameDetails;
-  }
+  @Size(max = 250)
+  private final String scientificNameDetails;
 
 }

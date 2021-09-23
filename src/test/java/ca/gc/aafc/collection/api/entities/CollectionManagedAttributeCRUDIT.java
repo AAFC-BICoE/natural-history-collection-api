@@ -10,7 +10,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
 
@@ -56,9 +56,9 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     assertNotEquals("abc", result.getKey());
     assertNotEquals("new name", result.getName());
 
-    // delete is disabled for now
-    CollectionManagedAttribute finalResult = result;
-    assertThrows(UnsupportedOperationException.class, () -> collectionManagedAttributeService.delete(finalResult));
+    // delete should work since the attribute is not used
+    collectionManagedAttributeService.delete(result);
+    assertNull(collectionManagedAttributeService.findOne(uuid, CollectionManagedAttribute.class));
   }
 
 }

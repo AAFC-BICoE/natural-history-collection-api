@@ -23,6 +23,8 @@ import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import javax.annotation.Nullable;
+
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +77,12 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
+  @JsonApiRelation
+  private CollectionMethodDto collectionMethod;
+
   private String dwcVerbatimLocality;
+
+  private String host;
 
   /**
    * Map of Managed attribute key to value object.
@@ -95,8 +102,15 @@ public class CollectingEventDto {
   private String dwcCountryCode;
   private String dwcStateProvince;
   private String habitat;
-  private Integer dwcMinimumElevationInMeters;
-  private Integer dwcMinimumDepthInMeters;
+  private BigDecimal dwcMinimumElevationInMeters;
+  private BigDecimal dwcMinimumDepthInMeters;
+  private BigDecimal dwcMaximumElevationInMeters;
+  private BigDecimal dwcMaximumDepthInMeters;
+  private String substrate;
+  private String remarks;
+  private Boolean publiclyReleasable;
+  private String notPubliclyReleasableReason;
+  private String[] tags;
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;

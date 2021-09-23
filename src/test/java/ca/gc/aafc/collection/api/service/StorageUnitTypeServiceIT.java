@@ -15,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class StorageUnitTypeServiceIT extends CollectionModuleBaseIT {
 
-  @Autowired CacheManager cacheManager;
+  @Autowired
+  CacheManager cacheManager;
 
   @Test
   public void storageUnitTypeService_onFindOne_objectInCache() {

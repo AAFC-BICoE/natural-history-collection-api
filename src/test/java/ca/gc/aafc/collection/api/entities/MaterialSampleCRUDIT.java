@@ -6,30 +6,26 @@ import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ValidationException;
-
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 
 public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
-  private List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
+  private final List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
 
   private static final String dwcCatalogNumber = "S-4313";
   private static final String[] dwcOtherCatalogNumbers = new String[]{"A-1111", "B-2222"};
@@ -52,10 +48,14 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private MaterialSampleType materialSampleType;
   private MaterialSample materialSample;
   private StorageUnit storageUnit;
+  private Collection collection;
 
 
   @BeforeEach
   void setup() {
+    Institution institution = InstitutionFixture.newInstitutionEntity().build();
+    service.save(institution);
+
     storageUnit = StorageUnitFactory.newStorageUnit()
         .createdBy(storageUnitExpectedCreatedBy)
         .group(storageUnitExpectedGroup)
@@ -77,6 +77,14 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .build();
     materialSampleTypeService.create(materialSampleType);
 
+    collection = collectionService.create(Collection.builder()
+      .code(RandomStringUtils.randomAlphabetic(4))
+      .name(RandomStringUtils.randomAlphabetic(3))
+      .institution(institution)
+      .createdBy(RandomStringUtils.randomAlphabetic(3))
+      .group(RandomStringUtils.randomAlphabetic(4))
+      .build());
+
     materialSample = MaterialSampleFactory.newMaterialSample()
         .dwcCatalogNumber(dwcCatalogNumber)
         .dwcOtherCatalogNumbers(dwcOtherCatalogNumbers)
@@ -90,6 +98,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .storageUnit(storageUnit)
         .preparationRemarks(expectedPreparationRemarks)
         .dwcDegreeOfEstablishment(expectDwcDegreeOfEstablishment)
+        .collection(collection)
         .build();
     materialSampleService.create(materialSample);
   }
@@ -125,6 +134,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(storageUnitExpectedCreatedBy, materialSample.getStorageUnit().getCreatedBy());
     assertEquals(storageUnitExpectedGroup, materialSample.getStorageUnit().getGroup());
     assertEquals(storageUnitExpectedName, materialSample.getStorageUnit().getName());
+    assertEquals(collection.getUuid(), materialSample.getCollection().getUuid());
   }
 
   @Test
@@ -133,6 +143,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
     assertEquals(materialSample.getId(), fetchedMaterialSample.getId());
+    assertEquals(materialSample.getBarcode(), fetchedMaterialSample.getBarcode());
     assertEquals(dwcCatalogNumber, fetchedMaterialSample.getDwcCatalogNumber());
     assertEquals(dwcOtherCatalogNumbers, fetchedMaterialSample.getDwcOtherCatalogNumbers());
     assertEquals(expectedCreatedBy, fetchedMaterialSample.getCreatedBy());
@@ -158,6 +169,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy());
     assertEquals(preparationDate, fetchedMaterialSample.getPreparationDate());
+    assertEquals(collection.getUuid(), fetchedMaterialSample.getCollection().getUuid());
   }
 
   @Test
@@ -179,9 +191,8 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .parentMaterialSample(parent)
         .build();
 
-    parent.setMaterialSampleChildren(Collections.singletonList(child));
-
-    materialSampleService.create(parent);
+    parent = materialSampleService.create(parent);
+    child.setParentMaterialSample(parent);
     materialSampleService.create(child);
 
     MaterialSample fetchedParent = materialSampleService.findOne(parent.getUuid(), MaterialSample.class);
@@ -256,6 +267,21 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
     assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void determinedOnIsInFuture_Exception() {
+    Determination determination = Determination.builder()
+      .verbatimScientificName("verbatimScientificName")
+      .determinedOn(LocalDate.now().plusDays(2))
+      .build();
+
+    List<Determination> determinations = List.of(determination);
+    
+    materialSample.setDetermination(determinations);
+    
+    assertThrows(ValidationException.class, 
+      () -> materialSampleService.update(materialSample));
   }
 
 }

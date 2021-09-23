@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +20,6 @@ import java.util.UUID;
 
 public class CollectingEventTestFixture {
 
-  
   public static final String XI_02_1798 = "XI-02-1798";
   public static final String VER_COOR = "26.089, 106.36";
 
@@ -35,7 +35,18 @@ public class CollectingEventTestFixture {
   public static final String DWC_VERBATIM_SRS = "EPSG:4326";
   public static final String DWC_VERBATIM_ELEVATION = "100-200 m";
   public static final String DWC_VERBATIM_DEPTH = "10-20 m ";
+  public static final BigDecimal DWC_MAXIMUM_ELEVATION_IN_METERS = new BigDecimal("100.01");
+  public static final BigDecimal DWC_MAXIMUM_DEPTH_IN_METERS = new BigDecimal("20.02");
+  public static final BigDecimal DWC_MINIMUM_ELEVATION_IN_METERS = new BigDecimal("50.50");
+  public static final BigDecimal DWC_MINIMUM_DEPTH_IN_METERS = new BigDecimal("10.10");
+  public static final String SUBSTRATE = "rock";
+  public static final String REMARKS = "this is a remark";
+  public static final Boolean PUBLICLY_RELEASABLE = false;
+  public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";
+  public static final String[] TAGS = new String[]{"0-Tag", "1-Tag"};
+
   public static final LocalDate TEST_GEOREFERENCE_DATE = LocalDate.now();
+  public static final String HOST = "host";
   public static final CollectingEvent.GeographicPlaceNameSource GEOGRAPHIC_PLACE_NAME_SOURCE = CollectingEvent.GeographicPlaceNameSource.OSM;
   public static final GeoreferenceAssertionDto GEOREFERENCE_ASSERTION_DTO = GeoreferenceAssertionDto.builder()
     .dwcDecimalLatitude(12.123456)
@@ -51,7 +62,7 @@ public class CollectingEventTestFixture {
     .dwcGeodeticDatum("datum")
     .dwcCoordinateUncertaintyInMeters(2)
     .build();
-  
+
   public static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
     GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
     .build();
@@ -59,7 +70,7 @@ public class CollectingEventTestFixture {
   public static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE =
     GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F")
     .element("N").placeType("province").name("Island of Pharo's")
-    .build();   
+    .build();
 
   public static final String[] DWC_OTHER_RECORD_NUMBERS = new String[]{"80-79", "80-80"};
   public static final String HABITAT = "Tropical";
@@ -104,7 +115,17 @@ public class CollectingEventTestFixture {
     ce.setDwcVerbatimDepth(DWC_VERBATIM_DEPTH);
     ce.setDwcOtherRecordNumbers(DWC_OTHER_RECORD_NUMBERS);
     ce.setHabitat(HABITAT);
+    ce.setHost(HOST);
+    ce.setDwcMaximumDepthInMeters(DWC_MAXIMUM_DEPTH_IN_METERS);
+    ce.setDwcMaximumElevationInMeters(DWC_MAXIMUM_ELEVATION_IN_METERS);
+    ce.setDwcMinimumDepthInMeters(DWC_MINIMUM_DEPTH_IN_METERS);
+    ce.setDwcMinimumElevationInMeters(DWC_MINIMUM_ELEVATION_IN_METERS);
+    ce.setSubstrate(SUBSTRATE);
+    ce.setRemarks(REMARKS);
+    ce.setPubliclyReleasable(PUBLICLY_RELEASABLE);
+    ce.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
+    ce.setTags(TAGS);
     return ce;
   }
-  
+
 }
