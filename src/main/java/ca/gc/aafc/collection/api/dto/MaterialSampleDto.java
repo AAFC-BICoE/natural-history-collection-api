@@ -110,6 +110,6 @@ public class MaterialSampleDto {
   private String materialSampleState;
   private String materialSampleRemarks;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 }

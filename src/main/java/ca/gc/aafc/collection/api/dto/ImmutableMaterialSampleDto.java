@@ -63,7 +63,7 @@ public class ImmutableMaterialSampleDto {
 
   private String barcode;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 
   public void setUuid(UUID uuid) {

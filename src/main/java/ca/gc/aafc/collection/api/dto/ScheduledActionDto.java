@@ -26,7 +26,7 @@ public class ScheduledActionDto {
   @Size(max = 120)
   private String actionStatus;
 
-  @JsonApiExternalRelation(type = "person")
+  @JsonApiExternalRelation(type = "user")
   @JsonApiRelation
   private ExternalRelationDto assignedTo;
 
