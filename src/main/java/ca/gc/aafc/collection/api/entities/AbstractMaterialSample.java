@@ -113,4 +113,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "string-array")
   private String[] tags;
 
+  @Type(type = "jsonb")
+  private List<ScheduledAction> scheduledActions;
+
 }

@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.entities.ScheduledAction;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
@@ -98,6 +99,14 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .substrate("organism subtrate")
       .remarks("remark")
       .build();
+    
+    ScheduledAction scheduledAction = ScheduledAction.builder()
+      .actionStatus("actionStatus")
+      .date(LocalDate.now())
+      .actionType("actionType")
+      .assignedTo(UUID.randomUUID())
+      .remarks("remarks")
+      .build();
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
@@ -105,6 +114,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setDetermination(List.of(determination));
     ms.setOrganism(organism);
+    ms.setScheduledActions(List.of(scheduledAction));
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
