@@ -11,6 +11,7 @@ import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -105,6 +106,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .date(LocalDate.now())
       .actionType("actionType")
       .remarks("remarks")
+      .assignedTo(
+        ExternalRelationDto.builder()
+        .id(UUID.randomUUID().toString())
+        .type("user")
+        .build())
       .build();
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
