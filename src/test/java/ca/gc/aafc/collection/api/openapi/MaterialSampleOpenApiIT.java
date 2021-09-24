@@ -4,10 +4,10 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.entities.ScheduledAction;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
@@ -100,11 +100,10 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .remarks("remark")
       .build();
     
-    ScheduledAction scheduledAction = ScheduledAction.builder()
+    ScheduledActionDto scheduledAction = ScheduledActionDto.builder()
       .actionStatus("actionStatus")
       .date(LocalDate.now())
       .actionType("actionType")
-      .assignedTo(UUID.randomUUID())
       .remarks("remarks")
       .build();
 

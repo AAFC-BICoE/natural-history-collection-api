@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.dto;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.entities.ScheduledAction;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -111,6 +110,6 @@ public class MaterialSampleDto {
   private String materialSampleState;
   private String materialSampleRemarks;
 
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<ScheduledAction> scheduledActions;
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private List<ScheduledActionDto> scheduledActions;
 }

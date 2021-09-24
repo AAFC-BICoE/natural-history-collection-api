@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.dto;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.entities.ScheduledAction;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -64,8 +63,8 @@ public class ImmutableMaterialSampleDto {
 
   private String barcode;
 
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<ScheduledAction> scheduledActions;
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private List<ScheduledActionDto> scheduledActions;
 
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
