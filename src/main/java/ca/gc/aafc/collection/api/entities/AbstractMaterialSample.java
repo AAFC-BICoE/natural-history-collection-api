@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Builder;
@@ -112,5 +113,8 @@ public class AbstractMaterialSample implements DinaEntity {
 
   @Type(type = "string-array")
   private String[] tags;
+
+  @Type(type = "jsonb")
+  private List<ScheduledActionDto> scheduledActions;
 
 }

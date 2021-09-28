@@ -63,6 +63,9 @@ public class ImmutableMaterialSampleDto {
 
   private String barcode;
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<ScheduledActionDto> scheduledActions;
+
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
     this.id = uuid;
