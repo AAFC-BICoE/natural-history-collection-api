@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="91-Add_ScheduledActions" context="schema-change" author="steven luu">
+    <changeSet id="90-Add_ScheduledActions" context="schema-change" author="steven luu">
        <addColumn tableName="material_sample">
            <column type="jsonb" name="scheduled_actions"/>
        </addColumn>
