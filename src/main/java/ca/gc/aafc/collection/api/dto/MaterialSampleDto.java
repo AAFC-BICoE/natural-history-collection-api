@@ -109,4 +109,7 @@ public class MaterialSampleDto {
 
   private String materialSampleState;
   private String materialSampleRemarks;
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<ScheduledActionDto> scheduledActions;
 }
