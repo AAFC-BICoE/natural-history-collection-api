@@ -31,7 +31,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -107,16 +106,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .date(LocalDate.now())
       .actionType("actionType")
       .remarks("remarks")
+      .assignedTo(ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("user").build())
       .build();
-    List<Object> scheduledActions = Collections.singletonList(Map.of(
-      "actionStatus", "actionStatus",
-      "date", LocalDate.now().toString(),
-      "actionType", "actionType",
-      "remarks", "remark",
-      "assignedTo", Map.of(
-        "id", UUID.randomUUID().toString(),
-        "type", "user")
-    ));
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
@@ -124,7 +115,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setDetermination(List.of(determination));
     ms.setOrganism(organism);
-    ms.setScheduledActions(null);
+    ms.setScheduledActions(List.of(scheduledAction));
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -155,7 +146,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
-    attributeMap.put("scheduledActions", scheduledActions);
     String unitId = sendPost(
       TYPE_NAME, 
       JsonAPITestHelper.toJsonAPIMap(
