@@ -2,8 +2,12 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 
 import ca.gc.aafc.collection.api.dto.InstitutionDto;
 import ca.gc.aafc.collection.api.entities.Institution;
+import lombok.SneakyThrows;
+
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 public final class InstitutionFixture {
@@ -18,11 +22,14 @@ public final class InstitutionFixture {
       .multilingualDescription(CollectionMethodTestFixture.newMulti());
   }
 
+  @SneakyThrows(MalformedURLException.class)
   public static Institution.InstitutionBuilder<?, ?> newInstitutionEntity() {
     return Institution.builder()
       .uuid(UUID.randomUUID())
       .name(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(3))
       .createdBy(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(3))
-      .multilingualDescription(CollectionMethodTestFixture.newMulti());
+      .multilingualDescription(CollectionMethodTestFixture.newMulti())
+      .webpage(new URL("https://github.com/DINA-Web"))
+      .physicalAddress("123 Street \n City");
   }
 }
