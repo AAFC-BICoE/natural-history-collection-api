@@ -7,7 +7,7 @@
     <changeSet id="91-Add_address_and_remarks_to_Institution" context="schema-change" author="steven luu">
        <addColumn tableName="institution">
           <column name="webpage" type="VARCHAR(255)"/>
-          <column name="physical_address" type="VARCHAR(500)"/>
+          <column name="address" type="VARCHAR(500)"/>
           <column name="remarks" type="TEXT"/>
        </addColumn>
     </changeSet>

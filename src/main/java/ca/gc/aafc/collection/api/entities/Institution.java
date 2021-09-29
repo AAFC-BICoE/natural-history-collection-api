@@ -20,7 +20,7 @@ public class Institution extends UserDescribedDinaEntity {
   private URL webpage;
 
   @Size(max = 500)
-  private String physicalAddress;
+  private String address;
 
   @Size(max = 500)
   private String remarks;

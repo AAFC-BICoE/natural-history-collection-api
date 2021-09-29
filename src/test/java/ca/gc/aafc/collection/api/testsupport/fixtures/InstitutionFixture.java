@@ -30,7 +30,7 @@ public final class InstitutionFixture {
       .createdBy(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(3))
       .multilingualDescription(CollectionMethodTestFixture.newMulti())
       .webpage(new URL("https://github.com/DINA-Web"))
-      .physicalAddress("123 Street \n City")
+      .address("123 Street \n City")
       .remarks(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30));
   }
 }

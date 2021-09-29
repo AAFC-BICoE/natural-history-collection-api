@@ -27,13 +27,13 @@ class InstitutionCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  void newline_physicalAddress() {
+  void newline_address() {
     Institution institution = institutionService.create(InstitutionFixture.newInstitutionEntity()
-      .physicalAddress("line1\nline2")
+      .address("line1\nline2")
       .build());
 
     Assertions.assertTrue(
-      institution.getPhysicalAddress().contains(System.getProperty("line.separator")));
+      institution.getAddress().contains(System.getProperty("line.separator")));
 
   }
 

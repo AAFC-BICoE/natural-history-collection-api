@@ -41,7 +41,7 @@ public class InstitutionDto extends AttributeMetaInfoProvider {
   private MultilingualDescription multilingualDescription;
   private URL webpage;
 
-  private String physicalAddress;
+  private String address;
 
   private String remarks;
 
