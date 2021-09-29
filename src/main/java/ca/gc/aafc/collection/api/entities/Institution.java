@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.net.URL;
+
 import javax.persistence.Entity;
+import javax.validation.constraints.Size;
 
 @Entity
 @SuperBuilder
@@ -14,4 +17,11 @@ import javax.persistence.Entity;
 @RequiredArgsConstructor
 public class Institution extends UserDescribedDinaEntity {
 
+  private URL webpage;
+
+  @Size(max = 500)
+  private String address;
+
+  @Size(max = 500)
+  private String remarks;
 }

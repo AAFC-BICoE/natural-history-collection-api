@@ -26,4 +26,15 @@ class InstitutionCRUDIT extends CollectionModuleBaseIT {
       result.getMultilingualDescription().getDescriptions().get(0).getLang());
   }
 
+  @Test
+  void newline_address() {
+    Institution institution = institutionService.create(InstitutionFixture.newInstitutionEntity()
+      .address("line1\nline2")
+      .build());
+
+    Assertions.assertTrue(
+      institution.getAddress().contains(System.getProperty("line.separator")));
+
+  }
+
 }
