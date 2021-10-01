@@ -96,5 +96,6 @@
   <include file="db/changelog/migrations/90-Add_ScheduledActions.xml"/>
   <include file="db/changelog/migrations/91-Add_address_and_remarks_to_Institution.xml"/>
   <include file="db/changelog/migrations/92-Add_field_filedAs_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/93-Add_fields_to_Collection.xml"/>
 
 </databaseChangeLog>
