@@ -25,6 +25,7 @@ public class MaterialSampleTestFixture {
   public static final String[] TAGS = new String[]{"0-Tag", "1-Tag"};
   public static final String MATERIAL_SAMPLE_STATE = "Damaged";
   public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
+  public static final String FILED_AS = "example of filedAs";
 
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto= new MaterialSampleDto();

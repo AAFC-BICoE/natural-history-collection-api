@@ -63,6 +63,8 @@ public class ImmutableMaterialSampleDto {
 
   private String barcode;
 
+  private String filedAs;
+
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 

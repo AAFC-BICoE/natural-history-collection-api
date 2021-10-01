@@ -117,4 +117,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "jsonb")
   private List<ScheduledActionDto> scheduledActions;
 
+  @Size(max = 255)
+  private String filedAs;
+
 }
