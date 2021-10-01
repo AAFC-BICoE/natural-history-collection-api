@@ -38,15 +38,14 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
   @Test
   void newline_contact_and_address() {
     Collection collection = collectionService.create(CollectionFactory.newCollection()
-      .institution(institutionService.create(InstitutionFixture.newInstitutionEntity().build()))
       .address("line1\nline2")
       .contact("line1\nline2")
       .build());
 
     Assertions.assertTrue(
-      collection.getAddress().contains(System.getProperty("line.separator")) &&
-      collection.getContact().contains(System.getProperty("line.separator"))
-    );
+      collection.getAddress().contains("\n"));
+    Assertions.assertTrue(
+      collection.getContact().contains("\n"));
   }
 
 }
