@@ -28,7 +28,6 @@ public class Collection extends UserDescribedDinaEntity {
   private String code;
 
   @ManyToOne
-  @NotNull
   private Institution institution;
 
 }
