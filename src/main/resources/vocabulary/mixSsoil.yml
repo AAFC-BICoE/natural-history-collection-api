@@ -1,0 +1,739 @@
+vocabulary:
+  mixSsoil:
+    - name: submitted to insdc
+      term: submitted_to_insdc
+      labels:
+        en: submitted to insdc
+        fr: ''
+    - name: investigation type
+      term: investigation_type
+      labels:
+        en: investigation type
+        fr: ''
+    - name: project name
+      term: project_name
+      labels:
+        en: project name
+        fr: ''
+    - name: experimental factor
+      term: experimental_factor
+      labels:
+        en: experimental factor
+        fr: ''
+    - name: geographic location (latitude and longitude)
+      term: lat_lon
+      labels:
+        en: geographic location (latitude and longitude)
+        fr: ''
+    - name: geographic location (depth)
+      term: depth
+      labels:
+        en: geographic location (depth)
+        fr: ''
+    - name: geographic location (altitude/elevation)
+      term: alt_elev
+      labels:
+        en: geographic location (altitude/elevation)
+        fr: ''
+    - name: 'geographic location (country and/or sea,region)'
+      term: geo_loc_name
+      labels:
+        en: 'geographic location (country and/or sea,region)'
+        fr: ''
+    - name: collection date
+      term: collection_date
+      labels:
+        en: collection date
+        fr: ''
+    - name: broad-scale environmental context
+      term: env_broad_scale
+      labels:
+        en: broad-scale environmental context
+        fr: ''
+    - name: local environmental context
+      term: env_local_scale
+      labels:
+        en: local environmental context
+        fr: ''
+    - name: environmental medium
+      term: env_medium
+      labels:
+        en: environmental medium
+        fr: ''
+    - name: environmental package
+      term: env_package
+      labels:
+        en: environmental package
+        fr: ''
+    - name: subspecific genetic lineage
+      term: subspecf_gen_lin
+      labels:
+        en: subspecific genetic lineage
+        fr: ''
+    - name: ploidy
+      term: ploidy
+      labels:
+        en: ploidy
+        fr: ''
+    - name: number of replicons
+      term: num_replicons
+      labels:
+        en: number of replicons
+        fr: ''
+    - name: extrachromosomal elements
+      term: extrachrom_elements
+      labels:
+        en: extrachromosomal elements
+        fr: ''
+    - name: estimated size
+      term: estimated_size
+      labels:
+        en: estimated size
+        fr: ''
+    - name: reference for biomaterial
+      term: ref_biomaterial
+      labels:
+        en: reference for biomaterial
+        fr: ''
+    - name: source material identifiers
+      term: source_mat_id
+      labels:
+        en: source material identifiers
+        fr: ''
+    - name: known pathogenicity
+      term: pathogenicity
+      labels:
+        en: known pathogenicity
+        fr: ''
+    - name: observed biotic relationship
+      term: biotic_relationship
+      labels:
+        en: observed biotic relationship
+        fr: ''
+    - name: specific host
+      term: specific_host
+      labels:
+        en: specific host
+        fr: ''
+    - name: host specificity or range
+      term: host_spec_range
+      labels:
+        en: host specificity or range
+        fr: ''
+    - name: health or disease status of specific host at time of collection
+      term: health_disease_stat
+      labels:
+        en: health or disease status of specific host at time of collection
+        fr: ''
+    - name: trophic level
+      term: trophic_level
+      labels:
+        en: trophic level
+        fr: ''
+    - name: propagation
+      term: propagation
+      labels:
+        en: propagation
+        fr: ''
+    - name: encoded traits
+      term: encoded_traits
+      labels:
+        en: encoded traits
+        fr: ''
+    - name: relationship to oxygen
+      term: rel_to_oxygen
+      labels:
+        en: relationship to oxygen
+        fr: ''
+    - name: isolation and growth condition
+      term: isol_growth_condt
+      labels:
+        en: isolation and growth condition
+        fr: ''
+    - name: sample collection device or method
+      term: samp_collect_device
+      labels:
+        en: sample collection device or method
+        fr: ''
+    - name: sample material processing
+      term: samp_mat_process
+      labels:
+        en: sample material processing
+        fr: ''
+    - name: size fraction selected
+      term: size_frac
+      labels:
+        en: size fraction selected
+        fr: ''
+    - name: amount or size of sample collected
+      term: samp_size
+      labels:
+        en: amount or size of sample collected
+        fr: ''
+    - name: source of UViGs
+      term: source_uvig
+      labels:
+        en: source of UViGs
+        fr: ''
+    - name: virus enrichment approach
+      term: virus_enrich_appr
+      labels:
+        en: virus enrichment approach
+        fr: ''
+    - name: nucleic acid extraction
+      term: nucl_acid_ext
+      labels:
+        en: nucleic acid extraction
+        fr: ''
+    - name: nucleic acid amplification
+      term: nucl_acid_amp
+      labels:
+        en: nucleic acid amplification
+        fr: ''
+    - name: library size
+      term: lib_size
+      labels:
+        en: library size
+        fr: ''
+    - name: library reads sequenced
+      term: lib_reads_seqd
+      labels:
+        en: library reads sequenced
+        fr: ''
+    - name: library layout
+      term: lib_layout
+      labels:
+        en: library layout
+        fr: ''
+    - name: library vector
+      term: lib_vector
+      labels:
+        en: library vector
+        fr: ''
+    - name: library screening strategy
+      term: lib_screen
+      labels:
+        en: library screening strategy
+        fr: ''
+    - name: target gene
+      term: target_gene
+      labels:
+        en: target gene
+        fr: ''
+    - name: target subfragment
+      term: target_subfragment
+      labels:
+        en: target subfragment
+        fr: ''
+    - name: pcr primers
+      term: pcr_primers
+      labels:
+        en: pcr primers
+        fr: ''
+    - name: multiplex identifiers
+      term: mid
+      labels:
+        en: multiplex identifiers
+        fr: ''
+    - name: adapters
+      term: adapters
+      labels:
+        en: adapters
+        fr: ''
+    - name: pcr conditions
+      term: pcr_cond
+      labels:
+        en: pcr conditions
+        fr: ''
+    - name: sequencing method
+      term: seq_meth
+      labels:
+        en: sequencing method
+        fr: ''
+    - name: sequence quality check
+      term: seq_quality_check
+      labels:
+        en: sequence quality check
+        fr: ''
+    - name: chimera check
+      term: chimera_check
+      labels:
+        en: chimera check
+        fr: ''
+    - name: taxonomic identity marker
+      term: tax_ident
+      labels:
+        en: taxonomic identity marker
+        fr: ''
+    - name: assembly quality
+      term: assembly_qual
+      labels:
+        en: assembly quality
+        fr: ''
+    - name: assembly name
+      term: assembly_name
+      labels:
+        en: assembly name
+        fr: ''
+    - name: assembly software
+      term: assembly_software
+      labels:
+        en: assembly software
+        fr: ''
+    - name: annotation
+      term: annot
+      labels:
+        en: annotation
+        fr: ''
+    - name: number of contigs
+      term: number_contig
+      labels:
+        en: number of contigs
+        fr: ''
+    - name: feature prediction
+      term: feat_pred
+      labels:
+        en: feature prediction
+        fr: ''
+    - name: reference database(s)
+      term: ref_db
+      labels:
+        en: reference database(s)
+        fr: ''
+    - name: similarity search method
+      term: sim_search_meth
+      labels:
+        en: similarity search method
+        fr: ''
+    - name: taxonomic classification
+      term: tax_class
+      labels:
+        en: taxonomic classification
+        fr: ''
+    - name: 16S recovered
+      term: 16s_recover
+      labels:
+        en: 16S recovered
+        fr: ''
+    - name: 16S recovery software
+      term: 16s_recover_software
+      labels:
+        en: 16S recovery software
+        fr: ''
+    - name: number of standard tRNAs extracted
+      term: trnas
+      labels:
+        en: number of standard tRNAs extracted
+        fr: ''
+    - name: tRNA extraction software
+      term: trna_ext_software
+      labels:
+        en: tRNA extraction software
+        fr: ''
+    - name: completeness score
+      term: compl_score
+      labels:
+        en: completeness score
+        fr: ''
+    - name: completeness software
+      term: compl_software
+      labels:
+        en: completeness software
+        fr: ''
+    - name: completeness approach
+      term: compl_appr
+      labels:
+        en: completeness approach
+        fr: ''
+    - name: 'contamination score '
+      term: contam_score
+      labels:
+        en: 'contamination score '
+        fr: ''
+    - name: contamination screening input
+      term: contam_screen_input
+      labels:
+        en: contamination screening input
+        fr: ''
+    - name: contamination screening parameters
+      term: contam_screen_param
+      labels:
+        en: contamination screening parameters
+        fr: ''
+    - name: decontamination software
+      term: decontam_software
+      labels:
+        en: decontamination software
+        fr: ''
+    - name: sorting technology
+      term: sort_tech
+      labels:
+        en: sorting technology
+        fr: ''
+    - name: single cell or viral particle lysis approach
+      term: single_cell_lysis_appr
+      labels:
+        en: single cell or viral particle lysis approach
+        fr: ''
+    - name: single cell or viral particle lysis kit protocol
+      term: single_cell_lysis_prot
+      labels:
+        en: single cell or viral particle lysis kit protocol
+        fr: ''
+    - name: WGA amplification approach
+      term: wga_amp_appr
+      labels:
+        en: WGA amplification approach
+        fr: ''
+    - name: WGA amplification kit
+      term: wga_amp_kit
+      labels:
+        en: WGA amplification kit
+        fr: ''
+    - name: binning parameters
+      term: bin_param
+      labels:
+        en: binning parameters
+        fr: ''
+    - name: binning software
+      term: bin_software
+      labels:
+        en: binning software
+        fr: ''
+    - name: reassembly post binning
+      term: reassembly_bin
+      labels:
+        en: reassembly post binning
+        fr: ''
+    - name: MAG coverage software
+      term: mag_cov_software
+      labels:
+        en: MAG coverage software
+        fr: ''
+    - name: viral identification software
+      term: vir_ident_software
+      labels:
+        en: viral identification software
+        fr: ''
+    - name: predicted genome type
+      term: pred_genome_type
+      labels:
+        en: predicted genome type
+        fr: ''
+    - name: predicted genome structure
+      term: pred_genome_struc
+      labels:
+        en: predicted genome structure
+        fr: ''
+    - name: detection type
+      term: detec_type
+      labels:
+        en: detection type
+        fr: ''
+    - name: vOTU classification approach
+      term: votu_class_appr
+      labels:
+        en: vOTU classification approach
+        fr: ''
+    - name: vOTU sequence comparison approach
+      term: votu_seq_comp_appr
+      labels:
+        en: vOTU sequence comparison approach
+        fr: ''
+    - name: vOTU database
+      term: votu_db
+      labels:
+        en: vOTU database
+        fr: ''
+    - name: host prediction approach
+      term: host_pred_appr
+      labels:
+        en: host prediction approach
+        fr: ''
+    - name: host prediction estimated accuracy
+      term: host_pred_est_acc
+      labels:
+        en: host prediction estimated accuracy
+        fr: ''
+    - name: relevant electronic resources
+      term: url
+      labels:
+        en: relevant electronic resources
+        fr: ''
+    - name: relevant standard operating procedures
+      term: sop
+      labels:
+        en: relevant standard operating procedures
+        fr: ''
+    - name: depth
+      term: depth
+      labels:
+        en: depth
+        fr: ''
+    - name: elevation
+      term: elev
+      labels:
+        en: elevation
+        fr: ''
+    - name: current land use
+      term: cur_land_use
+      labels:
+        en: current land use
+        fr: ''
+    - name: current vegetation
+      term: cur_vegetation
+      labels:
+        en: current vegetation
+        fr: ''
+    - name: current vegetation method
+      term: cur_vegetation_meth
+      labels:
+        en: current vegetation method
+        fr: ''
+    - name: history/previous land use
+      term: previous_land_use
+      labels:
+        en: history/previous land use
+        fr: ''
+    - name: history/previous land use method
+      term: previous_land_use_meth
+      labels:
+        en: history/previous land use method
+        fr: ''
+    - name: history/crop rotation
+      term: crop_rotation
+      labels:
+        en: history/crop rotation
+        fr: ''
+    - name: history/agrochemical additions
+      term: agrochem_addition
+      labels:
+        en: history/agrochemical additions
+        fr: ''
+    - name: history/tillage
+      term: tillage
+      labels:
+        en: history/tillage
+        fr: ''
+    - name: history/fire
+      term: fire
+      labels:
+        en: history/fire
+        fr: ''
+    - name: history/flooding
+      term: flooding
+      labels:
+        en: history/flooding
+        fr: ''
+    - name: history/extreme events
+      term: extreme_event
+      labels:
+        en: history/extreme events
+        fr: ''
+    - name: horizon
+      term: horizon
+      labels:
+        en: horizon
+        fr: ''
+    - name: horizon method
+      term: horizon_meth
+      labels:
+        en: horizon method
+        fr: ''
+    - name: composite design/sieving (if any)
+      term: sieving
+      labels:
+        en: composite design/sieving (if any)
+        fr: ''
+    - name: water content
+      term: water_content
+      labels:
+        en: water content
+        fr: ''
+    - name: water content method
+      term: water_content_soil_meth
+      labels:
+        en: water content method
+        fr: ''
+    - name: sample volume or weight for DNA extraction
+      term: samp_vol_we_dna_ext
+      labels:
+        en: sample volume or weight for DNA extraction
+        fr: ''
+    - name: pooling of DNA extracts (if done)
+      term: pool_dna_extracts
+      labels:
+        en: pooling of DNA extracts (if done)
+        fr: ''
+    - name: storage conditions (fresh/frozen/other)
+      term: store_cond
+      labels:
+        en: storage conditions (fresh/frozen/other)
+        fr: ''
+    - name: link to climate information
+      term: link_climate_info
+      labels:
+        en: link to climate information
+        fr: ''
+    - name: mean annual temperature
+      term: annual_temp
+      labels:
+        en: mean annual temperature
+        fr: ''
+    - name: mean seasonal temperature
+      term: season_temp
+      labels:
+        en: mean seasonal temperature
+        fr: ''
+    - name: mean annual precipitation
+      term: annual_precpt
+      labels:
+        en: mean annual precipitation
+        fr: ''
+    - name: mean seasonal precipitation
+      term: season_precpt
+      labels:
+        en: mean seasonal precipitation
+        fr: ''
+    - name: link to classification information
+      term: link_class_info
+      labels:
+        en: link to classification information
+        fr: ''
+    - name: soil_taxonomic/FAO classification
+      term: fao_class
+      labels:
+        en: soil_taxonomic/FAO classification
+        fr: ''
+    - name: soil_taxonomic/local classification
+      term: local_class
+      labels:
+        en: soil_taxonomic/local classification
+        fr: ''
+    - name: soil_taxonomic/local classification method
+      term: local_class_meth
+      labels:
+        en: soil_taxonomic/local classification method
+        fr: ''
+    - name: soil type
+      term: soil_type
+      labels:
+        en: soil type
+        fr: ''
+    - name: soil type method
+      term: soil_type_meth
+      labels:
+        en: soil type method
+        fr: ''
+    - name: slope gradient
+      term: slope_gradient
+      labels:
+        en: slope gradient
+        fr: ''
+    - name: slope aspect
+      term: slope_aspect
+      labels:
+        en: slope aspect
+        fr: ''
+    - name: profile position
+      term: profile_position
+      labels:
+        en: profile position
+        fr: ''
+    - name: drainage classification
+      term: drainage_class
+      labels:
+        en: drainage classification
+        fr: ''
+    - name: texture
+      term: texture
+      labels:
+        en: texture
+        fr: ''
+    - name: texture method
+      term: texture_meth
+      labels:
+        en: texture method
+        fr: ''
+    - name: pH
+      term: ph
+      labels:
+        en: pH
+        fr: ''
+    - name: pH method
+      term: ph_meth
+      labels:
+        en: pH method
+        fr: ''
+    - name: total organic carbon
+      term: tot_org_carb
+      labels:
+        en: total organic carbon
+        fr: ''
+    - name: total organic carbon method
+      term: tot_org_c_meth
+      labels:
+        en: total organic carbon method
+        fr: ''
+    - name: total nitrogen content
+      term: tot_nitro_content
+      labels:
+        en: total nitrogen content
+        fr: ''
+    - name: total nitrogen content method
+      term: tot_nitro_content_meth
+      labels:
+        en: total nitrogen content method
+        fr: ''
+    - name: microbial biomass
+      term: microbial_biomass
+      labels:
+        en: microbial biomass
+        fr: ''
+    - name: microbial biomass method
+      term: microbial_biomass_meth
+      labels:
+        en: microbial biomass method
+        fr: ''
+    - name: links to additional analysis
+      term: link_addit_analys
+      labels:
+        en: links to additional analysis
+        fr: ''
+    - name: extreme_unusual_properties/salinity
+      term: extreme_salinity
+      labels:
+        en: extreme_unusual_properties/salinity
+        fr: ''
+    - name: extreme_unusual_properties/salinity method
+      term: salinity_meth
+      labels:
+        en: extreme_unusual_properties/salinity method
+        fr: ''
+    - name: extreme_unusual_properties/heavy metals
+      term: heavy_metals
+      labels:
+        en: extreme_unusual_properties/heavy metals
+        fr: ''
+    - name: extreme_unusual_properties/heavy metals method
+      term: heavy_metals_meth
+      labels:
+        en: extreme_unusual_properties/heavy metals method
+        fr: ''
+    - name: extreme_unusual_properties/Al saturation
+      term: al_sat
+      labels:
+        en: extreme_unusual_properties/Al saturation
+        fr: ''
+    - name: extreme_unusual_properties/Al saturation method
+      term: al_sat_meth
+      labels:
+        en: extreme_unusual_properties/Al saturation method
+        fr: ''
+    - name: miscellaneous parameter
+      term: misc_param
+      labels:
+        en: miscellaneous parameter
+        fr: ''
+
+
