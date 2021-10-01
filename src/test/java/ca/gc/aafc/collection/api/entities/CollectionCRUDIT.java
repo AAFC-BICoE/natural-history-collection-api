@@ -35,4 +35,17 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
       result.getMultilingualDescription().getDescriptions().get(0).getLang());
   }
 
+  @Test
+  void newline_contact_and_address() {
+    Collection collection = collectionService.create(CollectionFactory.newCollection()
+      .address("line1\nline2")
+      .contact("line1\nline2")
+      .build());
+
+    Assertions.assertTrue(
+      collection.getAddress().contains("\n"));
+    Assertions.assertTrue(
+      collection.getContact().contains("\n"));
+  }
+
 }

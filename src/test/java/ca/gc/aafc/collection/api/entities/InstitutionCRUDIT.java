@@ -33,7 +33,7 @@ class InstitutionCRUDIT extends CollectionModuleBaseIT {
       .build());
 
     Assertions.assertTrue(
-      institution.getAddress().contains(System.getProperty("line.separator")));
+      institution.getAddress().contains("\n"));
 
   }
 

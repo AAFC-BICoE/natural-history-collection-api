@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.net.URL;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -28,5 +30,16 @@ public class Collection extends UserDescribedDinaEntity {
 
   @ManyToOne
   private Institution institution;
+
+  private URL webpage;
+
+  @Size(max = 500)
+  private String contact;
+  
+  @Size(max = 500)
+  private String address;
+
+  @Size(max = 500)
+  private String remarks;
 
 }
