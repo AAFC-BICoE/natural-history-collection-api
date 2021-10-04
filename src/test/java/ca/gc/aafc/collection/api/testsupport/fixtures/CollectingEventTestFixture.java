@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.FieldExtension;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
@@ -16,6 +17,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class CollectingEventTestFixture {
@@ -88,6 +90,13 @@ public class CollectingEventTestFixture {
     .build();
   }
 
+  public static FieldExtension newFieldExtension() {
+    return FieldExtension.builder()
+      .name("extension name")
+      .values(Map.of("key", "value"))
+      .build();
+  }
+
   public static CollectingEventDto newEventDto() {
     List<GeoreferenceAssertionDto> assertions = new ArrayList<>();
     assertions.add(GEOREFERENCE_ASSERTION_DTO);
@@ -125,6 +134,7 @@ public class CollectingEventTestFixture {
     ce.setPubliclyReleasable(PUBLICLY_RELEASABLE);
     ce.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
     ce.setTags(TAGS);
+    ce.setExtensions(Collections.singletonList(newFieldExtension()));
     return ce;
   }
 

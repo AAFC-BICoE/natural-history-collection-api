@@ -98,5 +98,6 @@
   <include file="db/changelog/migrations/92-Add_field_filedAs_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/93-Make_Collection_relationship_to_Institution_optional.xml"/>
   <include file="db/changelog/migrations/94-Add_fields_to_Collection.xml"/>
+  <include file="db/changelog/migrations/95-Add_extensions_to_CollectingEvent.xml"/>
 
 </databaseChangeLog>

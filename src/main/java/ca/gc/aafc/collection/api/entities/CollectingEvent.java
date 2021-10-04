@@ -216,6 +216,9 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "string-array")
   private String[] tags;
 
+  @Type(type = "jsonb")
+  private List<FieldExtension> extensions = new ArrayList<>();
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
    * in sync.
