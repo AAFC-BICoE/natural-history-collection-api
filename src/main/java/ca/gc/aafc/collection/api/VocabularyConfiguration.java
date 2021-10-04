@@ -19,8 +19,6 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @PropertySource(value = "classpath:vocabulary/typeStatus.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/substrate.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/materialSampleState.yml", factory = YamlPropertyLoaderFactory.class)
-@PropertySource(value = "classpath:vocabulary/mixSsediment.yml", factory = YamlPropertyLoaderFactory.class)
-@PropertySource(value = "classpath:vocabulary/mixSsoil.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class VocabularyConfiguration {
 

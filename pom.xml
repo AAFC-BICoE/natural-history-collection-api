@@ -37,6 +37,11 @@
       <artifactId>dina-base-api</artifactId>
       <version>${dina-base-api.version}</version>
     </dependency>
+    <dependency>
+			<groupId>io.github.aafc-bicoe</groupId>
+			<artifactId>dina-workbook</artifactId>
+			<version>${dina-base-api.version}</version>
+		</dependency>
     <!-- Spring -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
