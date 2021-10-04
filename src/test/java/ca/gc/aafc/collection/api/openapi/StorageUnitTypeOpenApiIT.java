@@ -32,15 +32,9 @@ public class StorageUnitTypeOpenApiIT extends BaseRestAssuredTest {
   
   private static final String SPEC_HOST = "raw.githubusercontent.com";
   private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = new URIBuilder();
+  private static final URIBuilder URI_BUILDER = createSchemaUriBuilder(SPEC_HOST, SPEC_PATH);
 
   public static final String TYPE_NAME = StorageUnitTypeDto.TYPENAME;
-
-  static {
-    URI_BUILDER.setScheme("https");
-    URI_BUILDER.setHost(SPEC_HOST);
-    URI_BUILDER.setPath(SPEC_PATH);
-  }
 
   protected StorageUnitTypeOpenApiIT() {
     super("/api/v1/");
