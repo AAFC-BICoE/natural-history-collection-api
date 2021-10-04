@@ -57,4 +57,6 @@ public class StorageUnitType implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
+  private Boolean isInseperable;
+
 }
