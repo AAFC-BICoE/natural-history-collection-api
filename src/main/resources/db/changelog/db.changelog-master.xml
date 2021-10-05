@@ -99,5 +99,6 @@
   <include file="db/changelog/migrations/93-Make_Collection_relationship_to_Institution_optional.xml"/>
   <include file="db/changelog/migrations/94-Add_fields_to_Collection.xml"/>
   <include file="db/changelog/migrations/95-Add_isInseperable_to_StorageUnitType.xml"/>
+  <include file="db/changelog/migrations/96-Add_associations_relationships.xml"/>
 
 </databaseChangeLog>
