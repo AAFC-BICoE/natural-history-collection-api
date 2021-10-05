@@ -3,6 +3,7 @@
 /.settings
 /.idea
 /target/
+*/target/
 .factorypath
 .vscode
 docker-compose.yml
