@@ -17,9 +17,13 @@ import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition.Extension;
 import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition.Field;
 import ca.gc.aafc.dina.workbook.WorkbookConverter;
 
-public class MIxSTransformer {
+public final class MIxSTransformer {
 
-  private static final ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER))
+  private MIxSTransformer() {
+    //not called
+  }
+
+  private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER))
     .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
   public static void handleMIxSSheetConversion(String extensionName, String extensionKey, String extensionVersion, String fileName, String spreadSheet) throws IOException {
@@ -35,7 +39,7 @@ public class MIxSTransformer {
       .extension(extension)
       .build();
 
-    mapper.writeValue(new File("src/main/resources/extension/" + fileName), fieldExtensionDefinition);
+    MAPPER.writeValue(new File("src/main/resources/extension/" + fileName), fieldExtensionDefinition);
   }
 
   public static List<Field> workbookRowToField (List<WorkbookConverter.WorkbookRow> workbookRows) {
@@ -44,11 +48,11 @@ public class MIxSTransformer {
       if (!StringUtils.isBlank(workbookRow.getContent()[0])) {
 
         Field fieldExtensionDefinition = Field.builder()
-        .term(workbookRow.getContent()[0])
-        .name(workbookRow.getContent()[1])
-        .definition(workbookRow.getContent()[2])
-        .dinaComponent("COLLECTING_EVENT")
-        .build();
+          .term(workbookRow.getContent()[0])
+          .name(workbookRow.getContent()[1])
+          .definition(workbookRow.getContent()[2])
+          .dinaComponent("COLLECTING_EVENT")
+          .build();
         
         fieldExtensionDefinitions.add(fieldExtensionDefinition);
       }
