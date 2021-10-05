@@ -1,5 +1,8 @@
 package ca.gc.aafc.collection.api.mixs;
 
+import lombok.Builder;
+
+@Builder
 public class FieldExtensionDefinition {
 
   private String term;
