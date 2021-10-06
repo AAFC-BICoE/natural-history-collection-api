@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.hibernate.validator.constraints.URL;
 import org.javers.core.metamodel.annotation.Value;
 
 import lombok.Builder;
@@ -19,7 +19,8 @@ import javax.validation.constraints.Size;
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
 public class GeographicPlaceNameSourceDetail {
 
-  private URL sourceUrl;
+  @URL
+  private String sourceUrl;
 
   // It is customGeographicPlace OR selectedGeographicPlace but not both
   private String customGeographicPlace;
