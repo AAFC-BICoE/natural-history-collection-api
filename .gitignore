@@ -1,6 +1,7 @@
 .classpath
 .project
 /.settings
+*/.settings
 /.idea
 /target/
 */target/
