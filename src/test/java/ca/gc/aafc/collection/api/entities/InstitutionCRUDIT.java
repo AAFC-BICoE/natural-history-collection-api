@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 class InstitutionCRUDIT extends CollectionModuleBaseIT {
 
@@ -34,6 +35,18 @@ class InstitutionCRUDIT extends CollectionModuleBaseIT {
 
     Assertions.assertTrue(
       institution.getAddress().contains("\n"));
+
+  }
+
+  @Test
+  void testInvalidURLValidation_throwsConstraintValidation() {
+
+    Institution institution = InstitutionFixture.newInstitutionEntity()
+      .webpage("invalidurl")
+      .build();
+
+    Assertions.assertThrows(ConstraintViolationException.class, 
+      () -> institutionService.create(institution));
 
   }
 

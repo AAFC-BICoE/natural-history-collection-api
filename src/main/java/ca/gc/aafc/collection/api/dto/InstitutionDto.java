@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -39,7 +38,7 @@ public class InstitutionDto extends AttributeMetaInfoProvider {
   private String name;
 
   private MultilingualDescription multilingualDescription;
-  private URL webpage;
+  private String webpage;
 
   private String address;
 

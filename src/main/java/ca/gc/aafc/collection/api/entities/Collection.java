@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.net.URL;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @SuperBuilder
@@ -31,7 +31,8 @@ public class Collection extends UserDescribedDinaEntity {
   @ManyToOne
   private Institution institution;
 
-  private URL webpage;
+  @URL
+  private String webpage;
 
   @Size(max = 500)
   private String contact;
