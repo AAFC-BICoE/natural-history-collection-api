@@ -39,7 +39,7 @@ public final class MIxSTransformer {
       .extension(extension)
       .build();
 
-    MAPPER.writeValue(new File("src/main/resources/extension/" + fileName), fieldExtensionDefinition);
+    MAPPER.writeValue(new File("../src/main/resources/extension/" + fileName), fieldExtensionDefinition);
   }
 
   public static List<Field> workbookRowToField (List<WorkbookConverter.WorkbookRow> workbookRows) {
