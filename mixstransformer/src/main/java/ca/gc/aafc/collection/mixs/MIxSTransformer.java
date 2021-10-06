@@ -1,4 +1,4 @@
-package ca.gc.aafc.collection.api.mixs;
+package ca.gc.aafc.collection.mixs;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +13,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition.Extension;
-import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition.Field;
+import ca.gc.aafc.collection.mixs.FieldExtensionDefinition.Extension;
+import ca.gc.aafc.collection.mixs.FieldExtensionDefinition.Field;
 import ca.gc.aafc.dina.workbook.WorkbookConverter;
 
 public final class MIxSTransformer {
