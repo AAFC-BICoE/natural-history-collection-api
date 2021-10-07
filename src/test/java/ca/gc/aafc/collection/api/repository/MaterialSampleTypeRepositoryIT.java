@@ -29,7 +29,7 @@ public class MaterialSampleTypeRepositoryIT extends CollectionModuleBaseIT {
   private static final String name = "preparation process definition";
 
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc: DINA_ADMIN"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:DINA_ADMIN"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleTypeDto mst = newMaterialSampleTypeDto();
     MaterialSampleTypeDto result = materialSampleTypeRepository.findOne(
