@@ -114,6 +114,7 @@
         <configuration>
           <includeSystemScope>true</includeSystemScope>
           <fork>${spring-boot-maven-plugin.fork}</fork>
+          <classifier>exec</classifier>
         </configuration>
         <executions>
           <execution>
