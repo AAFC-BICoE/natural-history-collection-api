@@ -1,4 +1,4 @@
-package ca.gc.aafc.collection.mixs;
+package ca.gc.aafc.collection.api.mixs;
 
 import java.util.List;
 

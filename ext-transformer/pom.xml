@@ -2,14 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
 
 
+  <groupId>ca.gc.aafc.mixs</groupId>
   <name>MIxSTransformer</name>
-  <artifactId>mixstransformer</artifactId>
+  <artifactId>ext-transformer</artifactId>
+  <version>0.31</version>
   <url>https://github.com/AAFC-BICoE/natural-history-collection-api</url>
 
   <parent>
-    <groupId>ca.gc.aafc</groupId>
-    <artifactId>natural-history-collection-api</artifactId>
-    <version>0.31</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.5</version>
   </parent>
 
   <properties>
@@ -26,9 +28,15 @@
     <dina-base-api.version>0.68</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <jackson-dataformat-yaml.version>2.11.2</jackson-dataformat-yaml.version>
+    <natural-history-collection-api.version>0.31</natural-history-collection-api.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>ca.gc.aafc</groupId>
+      <artifactId>natural-history-collection-api</artifactId>
+      <version>${natural-history-collection-api.version}</version>
+    </dependency>
     <dependency>
       <groupId>io.github.aafc-bicoe</groupId>
       <artifactId>dina-base-api</artifactId>
