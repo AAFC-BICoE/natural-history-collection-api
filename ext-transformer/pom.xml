@@ -3,7 +3,6 @@
 
   <name>MIxSTransformer</name>
   <artifactId>ext-transformer</artifactId>
-  <version>0.34-SNAPSHOT</version>
   <url>https://github.com/AAFC-BICoE/natural-history-collection-api</url>
 
   <parent>
