@@ -1,0 +1,20 @@
+# Test config:
+spring:
+  datasource:
+    username: web_user
+    password: test
+  liquibase:
+    liquibase-schema: collection
+    user: migration_user
+    password: test
+embedded.postgresql:
+  enabled: true
+  image: "postgis/postgis:12-3.1-alpine"
+  init-script-file: init-collection-module.sql
+  database: collection_test
+  schema: collection
+logging:
+  level:
+    org.springframework: ERROR
+dev-user:
+  enabled: false

@@ -1,0 +1,17 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+  context="schema-change">
+  
+  <changeSet context="schema-change" id="42-Add_relationship_between_MaterialSample_And_PreparationType.xml" author="steven luu">
+    <addColumn tableName="material_sample">
+      <column name="preparation_type_id" type="integer">
+        <constraints foreignKeyName="fk_material_sample_preparation_type_id" references="preparation_type(id)"/>
+      </column>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>
+

@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+        context="schema-change">
+
+    <changeSet context="schema-change" id="3-Add_support_for_collectors_collecting_event" author="Keyuk">
+        <addColumn tableName="collecting_event">
+            <column name="verbatim_collectors" type="VARCHAR(250)"/>
+            <column name="collectors" type="uuid[]"/>
+            <column name="collector_group_uuid" type="uuid"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

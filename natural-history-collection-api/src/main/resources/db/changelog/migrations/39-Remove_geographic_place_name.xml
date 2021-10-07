@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+        context="schema-change">
+
+  <changeSet context="schema-change" id="39-Remove_geographic_place_name" author="cgendreau">
+    <dropColumn tableName="collecting_event">
+      <column name="geographic_place_name"/>
+    </dropColumn>
+  </changeSet>
+
+</databaseChangeLog>

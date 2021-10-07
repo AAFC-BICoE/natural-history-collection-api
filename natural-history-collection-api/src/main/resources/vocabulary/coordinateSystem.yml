@@ -1,0 +1,24 @@
+vocabulary:
+  coordinateSystem:
+    - name: decimal degrees
+      term: https://www.wikidata.org/wiki/Q1798227
+      labels:
+        en: decimal degrees
+        fr: degrés décimaux
+    - name: degrees decimal minutes
+      term: http://wiki.gis.com/wiki/index.php/Decimal_degrees
+      labels:
+        en: degrees decimal minutes
+        fr: degrés décimales minutes
+    - name: degrees minutes seconds
+      term: https://gsp.humboldt.edu/olm/Lessons/GIS/01%20SphericalCoordinates/Reporting_Geographic_Coordinates.html
+      labels:
+        en: degrees minutes seconds
+        fr: Degrés Minutes Secondes
+    - name: UTM
+      term: https://www.wikidata.org/wiki/Q588975
+      labels:
+        en: UTM
+        fr: UTM
+
+

@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+  <changeSet id="25-Add_key_to_managedAttribute.xml" context="schema-change" author="gendreauc">
+    <addColumn tableName="managed_attribute">
+      <column name="key" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+
+    <addUniqueConstraint
+      columnNames="key, component"
+      constraintName="unique_key_per_component"
+      tableName="managed_attribute"/>
+  </changeSet>
+
+</databaseChangeLog>
