@@ -3,7 +3,7 @@
 
   <groupId>io.github.aafc-bicoe</groupId>
   <artifactId>collection-api-parent</artifactId>
-  <version>0.31</version>
+  <version>0.34-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Natural History Collection API</name>

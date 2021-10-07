@@ -3,13 +3,13 @@
 
   <name>MIxSTransformer</name>
   <artifactId>ext-transformer</artifactId>
-  <version>0.31</version>
+  <version>0.34-SNAPSHOT</version>
   <url>https://github.com/AAFC-BICoE/natural-history-collection-api</url>
 
   <parent>
     <groupId>io.github.aafc-bicoe</groupId>
     <artifactId>collection-api-parent</artifactId>
-    <version>0.31</version>
+    <version>0.34-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -21,7 +21,7 @@
     <dependency>
       <groupId>io.github.aafc-bicoe</groupId>
       <artifactId>natural-history-collection-api</artifactId>
-      <version>0.31</version>
+      <version>0.34-SNAPSHOT</version>
     </dependency>
 
     <dependency>
