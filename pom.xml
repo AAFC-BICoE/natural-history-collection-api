@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ca.gc.aafc</groupId>
-  <artifactId>natural-history-collection-api</artifactId>
+  <groupId>io.github.aafc-bicoe</groupId>
+  <artifactId>collection-api-parent</artifactId>
   <version>0.31</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
   <name>Natural History Collection API</name>
   <url>https://github.com/AAFC-BICoE/natural-history-collection-api</url>
@@ -30,6 +30,11 @@
     <hibernate-types-52.version>2.10.2</hibernate-types-52.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
   </properties>
+
+  <modules>
+    <module>natural-history-collection-api</module>
+    <module>ext-transformer</module>
+  </modules>
 
   <dependencies>
     <dependency>
@@ -171,30 +176,7 @@
           <logViolationsToConsole>true</logViolationsToConsole>
         </configuration>
       </plugin>
-      <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-dependency-plugin</artifactId>
-      <executions>
-          <execution>
-              <id>unpack</id>
-              <phase>generate-sources</phase>
-              <goals>
-                  <goal>unpack</goal>
-              </goals>
-              <configuration>
-                  <artifactItems>
-                      <artifactItem>
-                          <groupId>io.github.aafc-bicoe</groupId>
-                          <artifactId>dina-base-api</artifactId>
-                          <version>${dina-base-api.version}</version>
-                          <outputDirectory>${basedir}/src/main/resources/db/changelog/xsd</outputDirectory>
-                          <includes>dbchangelog-4.4.xsd</includes>
-                      </artifactItem>
-                  </artifactItems>
-              </configuration>
-          </execution>
-      </executions>
-      </plugin>
+
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>

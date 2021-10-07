@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.gc.aafc.collection.api.extension.FieldExtensionDefinition;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -13,9 +14,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition;
-import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition.Extension;
-import ca.gc.aafc.collection.api.mixs.FieldExtensionDefinition.Field;
+import ca.gc.aafc.collection.api.extension.FieldExtensionDefinition.Extension;
+import ca.gc.aafc.collection.api.extension.FieldExtensionDefinition.Field;
 import ca.gc.aafc.dina.workbook.WorkbookConverter;
 
 public final class MIxSTransformer {
