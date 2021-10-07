@@ -12,4 +12,5 @@ docker-compose.override.yml
 /*.env
 /*.iml
 /bin
+*/bin
 dbchangelog-4.4.xsd
