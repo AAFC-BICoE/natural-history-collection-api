@@ -33,14 +33,12 @@ public class MaterialSampleTypeCRUDIT extends CollectionModuleBaseIT {
       materialSampleType.getUuid(),
       MaterialSampleType.class);
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
-    Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
   }
 
   private static MaterialSampleType newMaterialSampleType() {
     return MaterialSampleType.builder()
       .name(EXPECTED_NAME)
-      .group(EXPECTED_GROUP)
       .createdBy(EXPECTED_CREATED_BY)
       .build();
   }

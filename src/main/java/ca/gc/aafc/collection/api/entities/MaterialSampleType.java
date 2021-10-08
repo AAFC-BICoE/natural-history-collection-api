@@ -53,11 +53,6 @@ public class MaterialSampleType implements DinaEntity {
   private String createdBy;
 
   @NotBlank
-  @Size(max = 50) 
-  @Column(name = "_group")
-  private String group;
-
-  @NotBlank
   @Size(max = 150)
   private String name;
 }
