@@ -9,7 +9,6 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -82,7 +81,7 @@ public class CollectingEventTestFixture {
     return GeographicPlaceNameSourceDetail.builder()
     .country(TEST_COUNTRY)
     .stateProvince(TEST_PROVINCE)
-    .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard"))
+    .sourceUrl("https://github.com/orgs/AAFC-BICoE/dashboard")
     // recordedOn should be overwritten by the server side generated value
     .recordedOn(OffsetDateTime.of(
       LocalDateTime.of(2000, 1, 1, 11, 10),
