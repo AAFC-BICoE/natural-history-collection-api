@@ -25,7 +25,6 @@ public class MaterialSampleTypeRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private MaterialSampleTypeRepository materialSampleTypeRepository;
 
-  private static final String group = "aafc";
   private static final String name = "preparation process definition";
 
   @Test
@@ -37,14 +36,12 @@ public class MaterialSampleTypeRepositoryIT extends CollectionModuleBaseIT {
       new QuerySpec(MaterialSampleTypeDto.class));
     assertNotNull(result.getCreatedBy());
     assertEquals(mst.getName(), result.getName());
-    assertEquals(mst.getGroup(), result.getGroup());
   }
 
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
   public void updateFromDifferentGroup_throwAccessDenied() {
       MaterialSampleType testMaterialSampleType = MaterialSampleTypeFactory.newMaterialSampleType()
-        .group(group)
         .name(name)
         .build();
       materialSampleTypeService.create(testMaterialSampleType);
@@ -56,7 +53,6 @@ public class MaterialSampleTypeRepositoryIT extends CollectionModuleBaseIT {
   private MaterialSampleTypeDto newMaterialSampleTypeDto() {
     MaterialSampleTypeDto mst = new MaterialSampleTypeDto();
     mst.setName(name);
-    mst.setGroup(group);
     mst.setUuid(UUID.randomUUID());
     return mst;
   }
