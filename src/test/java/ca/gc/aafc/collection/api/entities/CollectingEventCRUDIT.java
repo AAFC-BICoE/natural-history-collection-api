@@ -18,7 +18,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +68,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .builder()
         .country(TEST_COUNTRY)
         .stateProvince(TEST_PROVINCE)
-        .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard")).build();
+        .sourceUrl("https://github.com/orgs/AAFC-BICoE/dashboard").build();
   }
 
   @BeforeEach
@@ -178,7 +177,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
 
     GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
-      .sourceUrl(new URL("http://example.com"))
+      .sourceUrl("http://example.com")
       .stateProvince(invalid)
       .country(TEST_COUNTRY)
       .higherGeographicPlaces(List.of(TEST_PROVINCE))
@@ -197,7 +196,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
 
     GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
-      .sourceUrl(new URL("http://example.com"))
+      .sourceUrl("http://example.com")
       .stateProvince(TEST_PROVINCE)
       .country(TEST_COUNTRY)
       .higherGeographicPlaces(List.of(invalid))
@@ -213,7 +212,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void geoDetailCountry_HasConstraintValidation_ConstraintViolationExceptionThrown() {
     GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
-      .sourceUrl(new URL("http://example.com"))
+      .sourceUrl("http://example.com")
       .stateProvince(TEST_PROVINCE)
       .country(GeographicPlaceNameSourceDetail.Country.builder().code("1").name("name").build())
       .higherGeographicPlaces(List.of(TEST_PROVINCE))

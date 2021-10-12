@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 class CollectionCRUDIT extends CollectionModuleBaseIT {
 
@@ -46,6 +47,18 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
       collection.getAddress().contains("\n"));
     Assertions.assertTrue(
       collection.getContact().contains("\n"));
+  }
+
+  @Test
+  void testInvalidURLValidation_throwsConstraintValidation() {
+
+    Collection collection = CollectionFactory.newCollection()
+      .webpage("invalidurl")
+      .build();
+
+    Assertions.assertThrows(ConstraintViolationException.class, 
+      () -> collectionService.create(collection));
+
   }
 
 }

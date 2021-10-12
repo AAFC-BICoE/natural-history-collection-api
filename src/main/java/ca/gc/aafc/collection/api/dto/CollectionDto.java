@@ -17,7 +17,6 @@ import lombok.Setter;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 
-import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -53,7 +52,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private MultilingualDescription multilingualDescription;
 
-  private URL webpage;
+  private String webpage;
   private String contact;
   private String address;
   private String remarks;
