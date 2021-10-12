@@ -29,8 +29,6 @@ public class MaterialSampleTypeDto {
   
   private OffsetDateTime createdOn;
   private String createdBy;
-  
-  private String group;
 
   private String name;
 }
