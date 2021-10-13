@@ -5,7 +5,7 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
     <changeSet id="97-Add_associations_relationships" context="schema-change" author="keyuk j">
         <createTable tableName="association">
-            <column name="id" type="SERIAL">
+            <column name="sample_id" type="SERIAL">
                 <constraints nullable="false" foreignKeyName="fk_association_id" references="material_sample(id)"/>
             </column>
             <column name="associated_with_id" type="SERIAL">
@@ -13,7 +13,7 @@
             </column>
             <column name="association_type" type="VARCHAR(50)"/>
         </createTable>
-        <addPrimaryKey columnNames="id, associated_with_id"
+        <addPrimaryKey columnNames="sample_id, associated_with_id"
                        constraintName="pk_association_id"
                        tableName="association"
                        validate="true"/>
