@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -50,6 +51,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
+
+  @OneToMany(mappedBy = "sample")
+  private List<Association> associations = new ArrayList<>();
 
   @ManyToOne
   @ToString.Exclude
