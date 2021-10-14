@@ -1,11 +1,13 @@
 package ca.gc.aafc.collection.api.service;
 
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
-import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
+import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,7 +22,7 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 
 @Service
-public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
+public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
@@ -31,9 +33,10 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
     @NonNull SmartValidator sv,
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
-    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService
+    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
+      MessageProducer messageProducer
   ) {
-    super(baseDAO, sv);
+    super(baseDAO, sv, MaterialSampleDto.TYPENAME, messageProducer);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
@@ -61,12 +64,12 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
   private void setHierarchy(MaterialSample sample) {
     sample.setHierarchy(postgresHierarchicalDataService.getHierarchy(
       sample.getId(),
-      "material_sample",
-      "id",
-      "uuid",
-      "parent_material_sample_id",
-      "material_sample_name"
-      ));
+        MaterialSample.TABLE_NAME,
+        MaterialSample.ID_COLUMN_NAME,
+        MaterialSample.UUID_COLUMN_NAME,
+        MaterialSample.PARENT_ID_COLUMN_NAME,
+        MaterialSample.NAME_COLUMN_NAME
+    ));
   }
 
   @Override
@@ -82,7 +85,30 @@ public class MaterialSampleService extends DefaultDinaService<MaterialSample> {
 
   private void validateManagedAttribute(MaterialSample entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
-        CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
+      CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
   }
 
+  @Override
+  public MaterialSample create(MaterialSample entity) {
+    MaterialSample sample = super.create(entity);
+    return detachParent(sample);
+  }
+
+  @Override
+  public MaterialSample update(MaterialSample entity) {
+    MaterialSample sample = super.update(entity);
+    return detachParent(sample);
+  }
+
+  /**
+   * Detaches the parent to make sure it reloads its children list
+   * @param sample
+   * @return
+   */
+  private MaterialSample detachParent(MaterialSample sample) {
+    if (sample.getParentMaterialSample() != null) {
+      detach(sample.getParentMaterialSample());
+    }
+    return sample;
+  }
 }

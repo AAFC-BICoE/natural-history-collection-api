@@ -29,4 +29,5 @@ public class StorageUnitTypeDto {
   private String createdBy;
   private String group;
   private String name;
+  private Boolean isInseperable;
 }

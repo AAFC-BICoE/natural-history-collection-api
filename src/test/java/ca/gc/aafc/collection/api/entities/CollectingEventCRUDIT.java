@@ -6,14 +6,18 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import java.net.URL;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +43,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
-  private static final int dwcMinimumElevationInMeters = 11;
-  private static final int dwcMinimumDepthInMeters = 10;
+  private static final BigDecimal dwcMinimumElevationInMeters = new BigDecimal("11.11");
+  private static final BigDecimal dwcMinimumDepthInMeters = new BigDecimal("10.32");
 
   private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
       GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
@@ -64,7 +68,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
         .builder()
         .country(TEST_COUNTRY)
         .stateProvince(TEST_PROVINCE)
-        .sourceUrl(new URL("https://github.com/orgs/AAFC-BICoE/dashboard")).build();
+        .sourceUrl("https://github.com/orgs/AAFC-BICoE/dashboard").build();
   }
 
   @BeforeEach
@@ -87,6 +91,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
       .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+      .substrate(RandomStringUtils.randomAlphabetic(3))
       .dwcCountry(dwcCountry)
       .habitat(habitat)
       .dwcCountryCode(dwcCountryCode)
@@ -172,7 +177,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
 
     GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
-      .sourceUrl(new URL("http://example.com"))
+      .sourceUrl("http://example.com")
       .stateProvince(invalid)
       .country(TEST_COUNTRY)
       .higherGeographicPlaces(List.of(TEST_PROVINCE))
@@ -191,7 +196,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .SourceAdministrativeLevel.builder().element("N").id("").placeType("").build();
 
     GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
-      .sourceUrl(new URL("http://example.com"))
+      .sourceUrl("http://example.com")
       .stateProvince(TEST_PROVINCE)
       .country(TEST_COUNTRY)
       .higherGeographicPlaces(List.of(invalid))
@@ -207,7 +212,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void geoDetailCountry_HasConstraintValidation_ConstraintViolationExceptionThrown() {
     GeographicPlaceNameSourceDetail detail = GeographicPlaceNameSourceDetail.builder()
-      .sourceUrl(new URL("http://example.com"))
+      .sourceUrl("http://example.com")
       .stateProvince(TEST_PROVINCE)
       .country(GeographicPlaceNameSourceDetail.Country.builder().code("1").name("name").build())
       .higherGeographicPlaces(List.of(TEST_PROVINCE))
@@ -293,6 +298,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(habitat, fetchedCollectingEvent.getHabitat());
     assertEquals(dwcMinimumDepthInMeters, fetchedCollectingEvent.getDwcMinimumDepthInMeters());
     assertEquals(dwcMinimumElevationInMeters, fetchedCollectingEvent.getDwcMinimumElevationInMeters());
+    MatcherAssert.assertThat(collectingEvent.getSubstrate(), Matchers.is(fetchedCollectingEvent.getSubstrate()));
   }
 
   @Test
@@ -438,8 +444,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setDwcMinimumDepthInMeters(-1);
-    fetchedCollectingEvent.setDwcMinimumElevationInMeters(-2);
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("-1.01"));
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal("-2.02"));
 
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
@@ -451,14 +457,25 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setDwcMinimumDepthInMeters(15001);
-    fetchedCollectingEvent.setDwcMinimumElevationInMeters(15002);
-    fetchedCollectingEvent.setDwcMaximumDepthInMeters(15003);
-    fetchedCollectingEvent.setDwcMaximumElevationInMeters(15004);
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("15000.01"));
+    fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal("15000.02"));
+    fetchedCollectingEvent.setDwcMaximumDepthInMeters(new BigDecimal("15000.03"));
+    fetchedCollectingEvent.setDwcMaximumElevationInMeters(new BigDecimal("15000.04"));
 
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
       
+  }
+
+  @Test
+  void update_WithInvalidPrecision_throwsConstraintVIolationException() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+    .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("14000.011"));
+
+    assertThrows(ConstraintViolationException.class, 
+      () -> collectingEventService.update(fetchedCollectingEvent));
   }
 
 

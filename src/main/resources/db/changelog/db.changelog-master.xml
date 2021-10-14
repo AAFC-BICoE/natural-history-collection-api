@@ -78,4 +78,28 @@
   <include file="db/changelog/migrations/72-Add_substrate_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/73-Create_Table_Collection_Method.xml"/>
   <include file="db/changelog/migrations/74-Add_new_field_remarks_on_collecting-event.xml"/>
+  <include file="db/changelog/migrations/75-Update_CollEvent_Add_CollMethod.xml"/>
+  <include file="db/changelog/migrations/76-Update_CollEvent_change_substrate_to_array.xml"/>
+  <include file="db/changelog/migrations/77-Add_Institution_resource.xml"/>
+  <include file="db/changelog/migrations/78-Update_MatSamp_Add_Collection.xml"/>
+  <include file="db/changelog/migrations/79-Revert_substrate_to_a_string.xml"/>
+  <include file="db/changelog/migrations/80-Update_Collection_Add_MultiDescription.xml"/>
+  <include file="db/changelog/migrations/81-Update_Collection_add_Institution.xml"/>
+  <include file="db/changelog/migrations/82-Add_Barcode_To_MatSample.xml"/>
+  <include file="db/changelog/migrations/83-Change_elevation_and_depth_fields_to_numeric.xml"/>
+  <include file="db/changelog/migrations/84-Add_tags_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/85-Add_publiclyReleasable.xml"/>
+  <include file="db/changelog/migrations/86-Create_check_storage_hierarchy_trigger.xml"/>
+  <include file="db/changelog/migrations/87-Add_Material_Sample_State_and_Remarks_field.xml"/>
+  <include file="db/changelog/migrations/88-Add_tags_to_collectingEvent.xml"/>
+  <include file="db/changelog/migrations/89-Add_organism_to_materialSample.xml"/>
+  <include file="db/changelog/migrations/90-Add_ScheduledActions.xml"/>
+  <include file="db/changelog/migrations/91-Add_address_and_remarks_to_Institution.xml"/>
+  <include file="db/changelog/migrations/92-Add_field_filedAs_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/93-Make_Collection_relationship_to_Institution_optional.xml"/>
+  <include file="db/changelog/migrations/94-Add_fields_to_Collection.xml"/>
+  <include file="db/changelog/migrations/95-Add_isInseperable_to_StorageUnitType.xml"/>
+  <include file="db/changelog/migrations/96-MaterialSampleType_should_not_have_a_group.xml"/>
+  <include file="db/changelog/migrations/97-Add_preparation_method_to_abstractMaterialSample.xml"/>
+
 </databaseChangeLog>

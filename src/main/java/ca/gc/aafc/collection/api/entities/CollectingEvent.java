@@ -28,13 +28,17 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -156,21 +160,28 @@ public class CollectingEvent implements DinaEntity {
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMinimumElevationInMeters;
+  @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
+  private BigDecimal dwcMinimumElevationInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMinimumDepthInMeters;
+  @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
+  private BigDecimal dwcMinimumDepthInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMaximumElevationInMeters;
+  @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
+  private BigDecimal dwcMaximumElevationInMeters;
 
   @Min(value = 0)
   @Max(value = 15000)
-  private Integer dwcMaximumDepthInMeters;
+  @Column(precision = 7, scale = 2)
+  @Digits(integer = 5, fraction = 2)
+  private BigDecimal dwcMaximumDepthInMeters;
 
-  @Size(max = 50)
   private String substrate;
 
   @Size(max = 250)
@@ -193,6 +204,17 @@ public class CollectingEvent implements DinaEntity {
 
   @Size(max = 250)
   private String host;
+
+  @ManyToOne
+  private CollectionMethod collectionMethod;
+
+  private Boolean publiclyReleasable;
+
+  @Size(max = 500)
+  private String notPubliclyReleasableReason;
+
+  @Type(type = "string-array")
+  private String[] tags;
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always

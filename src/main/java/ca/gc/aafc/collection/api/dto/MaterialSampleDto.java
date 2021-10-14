@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -59,6 +60,9 @@ public class MaterialSampleDto {
   private String materialSampleName;
 
   @JsonApiRelation
+  private CollectionDto collection;
+
+  @JsonApiRelation
   private PreparationTypeDto preparationType;
 
   @JsonApiRelation
@@ -67,8 +71,7 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private MaterialSampleDto parentMaterialSample;
 
-  @JsonApiRelation
-  private List<MaterialSampleDto> materialSampleChildren;
+  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
@@ -85,6 +88,9 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<Determination> determination;
 
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private Organism organism;
+
   private String preparationRemarks;
   
   private String dwcDegreeOfEstablishment;
@@ -93,4 +99,21 @@ public class MaterialSampleDto {
   private List<HierarchicalObject> hierarchy;
 
   private String host;
+
+  private String barcode;
+
+  private Boolean publiclyReleasable;
+  
+  private String notPubliclyReleasableReason;
+  private String[] tags;
+
+  private String materialSampleState;
+  private String materialSampleRemarks;
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<ScheduledActionDto> scheduledActions;
+
+  private String filedAs;
+
+  private String preparationMethod;
 }

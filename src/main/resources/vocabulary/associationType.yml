@@ -1,0 +1,52 @@
+vocabulary:
+  associationType:
+    - name: has_host
+      term: http://purl.obolibrary.org/obo/RO_0002454
+      labels:
+        en: has_host
+        fr: 
+    - name: host_of
+      term: http://purl.obolibrary.org/obo/RO_0002453
+      labels:
+        en: host_of
+        fr: 
+    - name: parasite_of
+      term: http://purl.obolibrary.org/obo/RO_0002444
+      labels:
+        en: parasite_of
+        fr: 
+    - name: parasitized_by
+      term: http://purl.obolibrary.org/obo/RO_0002445
+      labels:
+        en: parasitized_by
+        fr: 
+    - name: pollinates
+      term: http://purl.obolibrary.org/obo/RO_0002455
+      labels:
+        en: pollinates
+        fr: 
+    - name: pollinated_by
+      term: http://purl.obolibrary.org/obo/RO_0002456
+      labels:
+        en: pollinated_by
+        fr: 
+    - name: has_vector
+      term: http://purl.obolibrary.org/obo/RO_0002460
+      labels:
+        en: has_vector
+        fr: 
+    - name: is_vector_for
+      term: http://purl.obolibrary.org/obo/RO_0002459
+      labels:
+        en: is_vector_for
+        fr: 
+    - name: has_pathogen
+      term: http://purl.obolibrary.org/obo/RO_0002557
+      labels:
+        en: has_pathogen
+        fr: 
+    - name: pathogen_of
+      term: http://purl.obolibrary.org/obo/RO_0002556
+      labels:
+        en: pathogen_of
+        fr: 
