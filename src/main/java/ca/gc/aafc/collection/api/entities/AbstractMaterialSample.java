@@ -120,4 +120,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 255)
   private String filedAs;
 
+  @Size(max = 250)
+  private String preparationMethod;
+
 }

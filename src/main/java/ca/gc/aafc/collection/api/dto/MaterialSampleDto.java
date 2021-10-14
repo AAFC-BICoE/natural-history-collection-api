@@ -114,4 +114,6 @@ public class MaterialSampleDto {
   private List<ScheduledActionDto> scheduledActions;
 
   private String filedAs;
+
+  private String preparationMethod;
 }
