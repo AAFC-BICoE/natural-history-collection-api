@@ -1,5 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.net.URI;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
