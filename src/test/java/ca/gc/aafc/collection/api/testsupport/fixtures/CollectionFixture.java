@@ -25,7 +25,7 @@ public final class CollectionFixture {
       .address("123 Street \n City")
       .remarks(RandomStringUtils.randomAlphabetic(30))
       .identifiers(Collections.singletonList(CollectionIdentifier.builder()
-        .type(CollectionIdentifier.IdentifierType.Index_Herbariorum)
+        .type(CollectionIdentifier.IdentifierType.INDEX_HERBARIORUM)
         .uri(URI.create("https://www.ORCID.org/ORCID/" +
           TestableEntityFactory.generateRandomName(5)))
         .build()));
