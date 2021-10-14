@@ -1,5 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.net.URI;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -7,11 +9,12 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @RequiredArgsConstructor
 @SuperBuilder
-public class InstitutionIdentifier extends AbstractIdentifier {
+public class InstitutionIdentifier {
   
   public enum IdentifierType {
-    GRSciColl
+    GRSCICOLL
   }
 
-  private IdentifierType type ;
+  private IdentifierType type;
+  private URI uri;
 }

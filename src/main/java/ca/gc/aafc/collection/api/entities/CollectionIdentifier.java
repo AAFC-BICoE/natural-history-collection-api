@@ -7,12 +7,13 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @RequiredArgsConstructor
 @SuperBuilder
-public class CollectionIdentifier extends AbstractIdentifier {
+public class CollectionIdentifier {
 
   public enum IdentifierType {
-    GRSciColl, Index_Herbariorum
+    GRSCICOLL, INDEX_HERBARIORUM
   }
 
   private IdentifierType type ;
+  private URI uri;
   
 }
