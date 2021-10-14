@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -23,20 +24,26 @@ import java.io.Serializable;
 @Getter
 @RequiredArgsConstructor
 @Table
-@IdClass(Association.class)
-public class Association implements Serializable {
+public class Association {
+  @EmbeddedId
+  private AssociationKey primaryKey;
 
-  @Id
   @ManyToOne(fetch = FetchType.EAGER)
+  @MapsId("sampleId")
   @JoinColumn(name = "sample_id", nullable = false, updatable = false)
   private MaterialSample sample;
 
-  @Id
   @ManyToOne(fetch = FetchType.EAGER)
+  @MapsId("associatedSampleId")
   @JoinColumn(name = "associated_with_id", nullable = false, updatable = false)
   private MaterialSample associatedSample;
 
   @Size(max = 50)
   private String associationType;
 
+  @Embeddable
+  private static class AssociationKey implements Serializable {
+    private Integer sampleId;
+    private Integer associatedSampleId;
+  }
 }
