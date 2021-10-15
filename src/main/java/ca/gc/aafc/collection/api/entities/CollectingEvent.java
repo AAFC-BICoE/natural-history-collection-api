@@ -3,6 +3,8 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
+
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
@@ -217,7 +219,7 @@ public class CollectingEvent implements DinaEntity {
   private String[] tags;
 
   @Type(type = "jsonb")
-  private List<FieldExtension> extensions = new ArrayList<>();
+  private List<Extension> extensions = new ArrayList<>();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always

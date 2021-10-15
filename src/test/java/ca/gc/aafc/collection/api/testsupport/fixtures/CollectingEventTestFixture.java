@@ -3,9 +3,10 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.FieldExtension;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
+import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
 import lombok.SneakyThrows;
 
 import java.math.BigDecimal;
@@ -16,7 +17,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class CollectingEventTestFixture {
@@ -89,11 +89,18 @@ public class CollectingEventTestFixture {
     .build();
   }
 
-  public static FieldExtension newFieldExtension() {
-    return FieldExtension.builder()
-      .name("extension name")
-      .values(Map.of("key", "value"))
-      .build();
+  public static Extension newFieldExtension() {
+    return Extension.builder()
+        .name("MixS Soil")
+        .key("mixs_soil_v5")
+        .version("v5")
+        .fields(Collections.singletonList(Field.builder()
+          .term("experimental_factor")
+          .name("experimental factor")
+          .definition("definition of experimentWal factor")
+          .dinaComponent("COLLECTING_EVENT")
+          .build()))
+        .build();
   }
 
   public static CollectingEventDto newEventDto() {
