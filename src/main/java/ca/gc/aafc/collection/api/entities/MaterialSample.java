@@ -54,6 +54,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @OneToMany(mappedBy = "sample", cascade = CascadeType.PERSIST)
   private List<Association> associations = new ArrayList<>();
 
+  @OneToMany(mappedBy = "associatedSample", cascade = CascadeType.PERSIST)
+  private List<Association> associatedBy = new ArrayList<>();
+
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;

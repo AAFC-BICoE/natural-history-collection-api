@@ -68,7 +68,18 @@ public class AssociationDto {
 
     @Override
     public Supplier<List<Association>> entitySupplyMethod(MaterialSample entityRef) {
-      return entityRef::getAssociations;
+      return () -> {
+        if (CollectionUtils.isNotEmpty(entityRef.getAssociatedBy())) {
+          return entityRef.getAssociatedBy().stream()
+            .peek(association -> association.setAssociatedSample(association.getSample()))
+            .collect(Collectors.toList());
+        }
+        if (CollectionUtils.isNotEmpty(entityRef.getAssociations())) {
+          return entityRef.getAssociations();
+        }
+
+        return Collections.emptyList();
+      };
     }
 
     @Override

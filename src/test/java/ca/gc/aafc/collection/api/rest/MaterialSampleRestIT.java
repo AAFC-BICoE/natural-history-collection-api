@@ -64,6 +64,9 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(sampleID)
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+    findSample(associatedWithId)
+      .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
+      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
   }
 
   @Test
