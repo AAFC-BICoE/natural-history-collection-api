@@ -54,7 +54,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Association> associations = new ArrayList<>();
 
-  @OneToMany(mappedBy = "associatedSample", cascade = CascadeType.PERSIST)
+  @OneToMany(mappedBy = "associatedSample")
   private List<Association> associatedBy = new ArrayList<>();
 
   @ManyToOne
