@@ -34,7 +34,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
-      MessageProducer messageProducer
+    MessageProducer messageProducer
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, messageProducer);
     this.materialSampleValidator = materialSampleValidator;
@@ -78,6 +78,11 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     linkAssociations(entity);
   }
 
+  @Override
+  protected void preUpdate(MaterialSample entity) {
+    linkAssociations(entity);
+  }
+
   private void linkAssociations(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
       entity.getAssociations().forEach(association -> {
@@ -113,6 +118,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   /**
    * Detaches the parent to make sure it reloads its children list
+   *
    * @param sample
    * @return
    */

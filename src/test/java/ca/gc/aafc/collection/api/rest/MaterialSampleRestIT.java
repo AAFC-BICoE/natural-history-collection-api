@@ -70,6 +70,30 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void patch_withAssociation() {
+    String ExpectedType = "type 1";
+    MaterialSampleDto associatedWith = newSample();
+    String associatedWithId = postSample(associatedWith);
+
+    MaterialSampleDto sample = newSample();
+    String sampleID = postSample(sample);
+
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(ExpectedType)
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+
+    sendPatch(sample,sampleID);
+
+    findSample(sampleID)
+      .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
+      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+    findSample(associatedWithId)
+      .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
+      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+  }
+
+  @Test
   void patch_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
     childDto.setUuid(UUID.fromString(postSample(newSample())));
