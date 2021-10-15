@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.rest;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
@@ -48,25 +49,45 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void post_withAssociation() {
+    String ExpectedType = "type 1";
+    MaterialSampleDto associatedWith = newSample();
+    String associatedWithId = postSample(associatedWith);
+
+    MaterialSampleDto sample = newSample();
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(ExpectedType)
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+
+    String sampleID = postSample(sample);
+    findSample(sampleID)
+      .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
+      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+  }
+
+  @Test
   void patch_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
     childDto.setUuid(UUID.fromString(postSample(newSample())));
 
     MaterialSampleDto parent = newSample();
     String parentId = postSample(parent);
-
     parent.setMaterialSampleChildren(List.of(childDto));
 
+    sendPatch(parent, parentId);
+    findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
+  }
+
+  private void sendPatch(MaterialSampleDto body, String id) {
     sendPatch(
-      MaterialSampleDto.TYPENAME, parentId,
+      MaterialSampleDto.TYPENAME, id,
       JsonAPITestHelper.toJsonAPIMap(
         MaterialSampleDto.TYPENAME,
-        JsonAPITestHelper.toAttributeMap(parent),
+        JsonAPITestHelper.toAttributeMap(body),
         null,
         null)
     );
-
-    findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
   }
 
   private MaterialSampleDto newSample() {

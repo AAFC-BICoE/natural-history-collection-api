@@ -75,6 +75,17 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   @Override
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
+    linkAssociations(entity);
+  }
+
+  private void linkAssociations(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      entity.getAssociations().forEach(association -> {
+        association.setSample(entity);
+        association.setAssociatedSample(
+          this.findOne(association.getAssociatedSample().getUuid(), MaterialSample.class));
+      });
+    }
   }
 
   @Override
