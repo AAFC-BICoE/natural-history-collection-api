@@ -12,14 +12,12 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,7 +83,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
 
-    sendPatch(sample, sampleID);
+    sendPatch(sample, sampleID, 200);
 
     findSample(sampleID)
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
@@ -93,6 +91,36 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(associatedWithId)
       .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+  }
+
+  @Test
+  void patch_SwapAssociation() {
+    String associatedWithId = postSample(newSample());
+    MaterialSampleDto sample = newSample();
+    String sampleID = postSample(sample);
+
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType("type 1")
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+    sendPatch(sample, sampleID, 200);
+
+    findSample(sampleID).body("data.attributes.associations", Matchers.hasSize(1));
+    findSample(associatedWithId).body("data.attributes.associations", Matchers.hasSize(1));
+
+    String updatedAssociationId = postSample(newSample());
+    String newType = "newType";
+
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(newType)
+      .associatedSample(UUID.fromString(updatedAssociationId))
+      .build()));
+    sendPatch(sample, sampleID, 200);
+
+    findSample(sampleID).log().all(true)
+      .body("data.attributes.associations", Matchers.hasSize(1))
+      .body("data.attributes.associations[0].associationType", Matchers.is(newType))
+      .body("data.attributes.associations[0].associatedSample", Matchers.is(updatedAssociationId));
   }
 
   @Test
@@ -113,9 +141,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associatedSample(UUID.fromString(sampleID))
       .build()));
 
-    Assertions.assertThrows(
-      ConstraintViolationException.class,
-      () -> sendPatch(associatedWith, associatedWithId));
+    sendPatch(associatedWith, associatedWithId, 422);
   }
 
   @Test
@@ -127,18 +153,19 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     String parentId = postSample(parent);
     parent.setMaterialSampleChildren(List.of(childDto));
 
-    sendPatch(parent, parentId);
+    sendPatch(parent, parentId, 200);
     findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
   }
 
-  private void sendPatch(MaterialSampleDto body, String id) {
+  private void sendPatch(MaterialSampleDto body, String id, int expectedCode) {
     sendPatch(
       MaterialSampleDto.TYPENAME, id,
       JsonAPITestHelper.toJsonAPIMap(
         MaterialSampleDto.TYPENAME,
         JsonAPITestHelper.toAttributeMap(body),
         null,
-        null)
+        null),
+      expectedCode
     );
   }
 
