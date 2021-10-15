@@ -117,6 +117,8 @@ public class MaterialSampleDto {
 
   private String filedAs;
 
+  private String preparationMethod;
+
   @IgnoreDinaMapping
   private List<AssociationDto> associations = new ArrayList<>();
 
