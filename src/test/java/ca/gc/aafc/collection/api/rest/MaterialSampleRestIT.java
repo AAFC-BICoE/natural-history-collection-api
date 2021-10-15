@@ -12,12 +12,14 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,7 +85,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
 
-    sendPatch(sample,sampleID);
+    sendPatch(sample, sampleID);
 
     findSample(sampleID)
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
@@ -91,6 +93,29 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(associatedWithId)
       .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+  }
+
+  @Test
+  void association_UniqueConstraint() {
+    String ExpectedType = "type 1";
+    MaterialSampleDto associatedWith = newSample();
+    String associatedWithId = postSample(associatedWith);
+
+    MaterialSampleDto sample = newSample();
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(ExpectedType)
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+    String sampleID = postSample(sample);
+
+    associatedWith.setAssociations(List.of(AssociationDto.builder()
+      .associationType(ExpectedType)
+      .associatedSample(UUID.fromString(sampleID))
+      .build()));
+
+    Assertions.assertThrows(
+      ConstraintViolationException.class,
+      () -> sendPatch(associatedWith, associatedWithId));
   }
 
   @Test
