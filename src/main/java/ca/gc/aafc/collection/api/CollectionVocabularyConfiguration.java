@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,15 +26,15 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @ConfigurationProperties
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration {
   
-  private final Map<String, List<CollectionVocabularyElement>> collectionVocabulary;
+  private final Map<String, List<CollectionVocabularyElement>> vocabulary;
   
-  public CollectionVocabularyConfiguration(Map<String, List<VocabularyElement>> vocabulary, Map<String, List<CollectionVocabularyElement>> collectionVocabulary) {
-    super(vocabulary);
-    this.collectionVocabulary = collectionVocabulary;
+  public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {
+    super(null);
+    this.vocabulary = vocabulary;
   }
 
   public Map<String, List<CollectionVocabularyElement>> getCollectionVocabulary() {
-    return collectionVocabulary;
+    return vocabulary;
   }
 
   @NoArgsConstructor

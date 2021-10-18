@@ -18,10 +18,10 @@ public class VocabularyRepository extends ReadOnlyResourceRepositoryBase<Vocabul
   private final List<VocabularyDto> vocabulary;
 
   protected VocabularyRepository(
-    @NonNull CollectionVocabularyConfiguration vocabularyConfiguration) {
+    @NonNull CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
     super(VocabularyDto.class);
 
-    vocabulary = vocabularyConfiguration.getCollectionVocabulary()
+    vocabulary = collectionVocabularyConfiguration.getCollectionVocabulary()
         .entrySet()
         .stream()
         .map( entry -> new VocabularyDto(entry.getKey(), entry.getValue()))
