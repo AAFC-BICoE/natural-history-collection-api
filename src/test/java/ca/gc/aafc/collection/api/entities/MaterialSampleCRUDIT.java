@@ -281,4 +281,19 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       () -> materialSampleService.update(materialSample));
   }
 
+  @Test
+  void nestedStructureValidation_Exception() {
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name(RandomStringUtils.randomAlphanumeric(151))
+      .remarks("host remark")
+      .build();
+    
+    materialSample.setHostOrganism(hostOrganism);
+    
+    assertEquals(151, materialSample.getHostOrganism().getName().length());
+
+    assertThrows(ValidationException.class, 
+    () -> materialSampleService.update(materialSample));
+  }
+
 }
