@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class AssociationCRUDIT extends CollectionModuleBaseIT {
     Association association = Association.builder()
       .sample(materialSample)
       .associatedSample(associated)
-      .associationType("type 1")
+      .associationType(RandomStringUtils.randomAlphabetic(4))
       .build();
 
     materialSample.setAssociations(List.of(association));

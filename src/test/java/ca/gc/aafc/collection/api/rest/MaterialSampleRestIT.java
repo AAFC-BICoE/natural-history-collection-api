@@ -11,6 +11,7 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,7 +51,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @Test
   void post_withAssociation() {
-    String ExpectedType = "type 1";
+    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
 
@@ -71,7 +72,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @Test
   void patch_withAssociation() {
-    String ExpectedType = "type 1";
+    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
 
@@ -100,7 +101,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     String sampleID = postSample(sample);
 
     sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType("type 1")
+      .associationType(RandomStringUtils.randomAlphabetic(4))
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
     sendPatch(sample, sampleID, 200);
@@ -125,7 +126,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @Test
   void association_UniqueConstraint() {
-    String ExpectedType = "type 1";
+    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
 
@@ -169,7 +170,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
   }
 
-  private MaterialSampleDto newSample() {
+  private static MaterialSampleDto newSample() {
     MaterialSampleDto sampleDto = MaterialSampleTestFixture.newMaterialSample();
     sampleDto.setAttachment(null);
     sampleDto.setPreparedBy(null);
