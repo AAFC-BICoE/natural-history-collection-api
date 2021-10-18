@@ -145,7 +145,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .build()));
     sendPatch(sample, sampleID, 200);
 
-    findSample(sampleID).log().all(true)
+    findSample(sampleID)
       .body("data.attributes.associations", Matchers.hasSize(1))
       .body("data.attributes.associations[0].associationType", Matchers.is(newType))
       .body("data.attributes.associations[0].associatedSample", Matchers.is(updatedAssociationId));
