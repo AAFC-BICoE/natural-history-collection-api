@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
+import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 
 @Configuration
 @PropertySource(value = "classpath:vocabulary/doe.yml", factory = YamlPropertyLoaderFactory.class)
@@ -21,24 +23,25 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @PropertySource(value = "classpath:vocabulary/materialSampleState.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/associationType.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
-public class VocabularyConfiguration {
-
-  private final Map<String, List<VocabularyElement>> vocabulary;
-
-  public VocabularyConfiguration(Map<String, List<VocabularyElement>> vocabulary) {
-    this.vocabulary = vocabulary;
+public class CollectionVocabularyConfiguration extends VocabularyConfiguration {
+  
+  private final Map<String, List<CollectionVocabularyElement>> collectionVocabulary;
+  
+  public CollectionVocabularyConfiguration(Map<String, List<VocabularyElement>> vocabulary, Map<String, List<CollectionVocabularyElement>> collectionVocabulary) {
+    super(vocabulary);
+    this.collectionVocabulary = collectionVocabulary;
   }
 
-  public Map<String, List<VocabularyElement>> getVocabulary() {
-    return vocabulary;
+  public Map<String, List<CollectionVocabularyElement>> getCollectionVocabulary() {
+    return collectionVocabulary;
   }
 
   @NoArgsConstructor
   @Getter
   @Setter
-  public static class VocabularyElement {
-    private String name;
-    private String term;
-    private Map<String, String> labels;
+  public static class CollectionVocabularyElement extends VocabularyElement {
+
+    private String inverseOf;
+
   }
 }

@@ -2,11 +2,13 @@ vocabulary:
   associationType:
     - name: has_host
       term: http://purl.obolibrary.org/obo/RO_0002454
+      inverseOf: host_of
       labels:
         en: has_host
         fr: 
     - name: host_of
       term: http://purl.obolibrary.org/obo/RO_0002453
+      inverseOf: has_host
       labels:
         en: host_of
         fr: 

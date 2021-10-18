@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.VocabularyConfiguration;
-import ca.gc.aafc.collection.api.VocabularyConfiguration.VocabularyElement;
+import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration.CollectionVocabularyElement;
 import ca.gc.aafc.collection.api.dto.VocabularyDto;
 import io.crnk.core.queryspec.QuerySpec;
 import org.hamcrest.MatcherAssert;
@@ -21,7 +21,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
   private VocabularyRepository vocabularyConfigurationRepository;
 
   @Inject
-  private VocabularyConfiguration vocabularyConfiguration;
+  private CollectionVocabularyConfiguration vocabularyConfiguration;
 
   @Test
   public void findAll_VocabularyConfiguration() {
@@ -29,7 +29,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class));
     assertEquals(7, listOfVocabularies.size());
 
-    List<List<VocabularyElement>> listOfVocabularyElements = new ArrayList<>();
+    List<List<CollectionVocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
       listOfVocabularyElements.add(vocabularyDto.getVocabularyElements());
     }
@@ -37,13 +37,13 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
     MatcherAssert.assertThat(
       listOfVocabularyElements,
       Matchers.containsInAnyOrder(
-        vocabularyConfiguration.getVocabulary().get("degreeOfEstablishment"),
-        vocabularyConfiguration.getVocabulary().get("srs"),
-        vocabularyConfiguration.getVocabulary().get("coordinateSystem"),
-        vocabularyConfiguration.getVocabulary().get("typeStatus"),
-        vocabularyConfiguration.getVocabulary().get("substrate"),
-        vocabularyConfiguration.getVocabulary().get("materialSampleState"),
-        vocabularyConfiguration.getVocabulary().get("associationType")
+        vocabularyConfiguration.getCollectionVocabulary().get("degreeOfEstablishment"),
+        vocabularyConfiguration.getCollectionVocabulary().get("srs"),
+        vocabularyConfiguration.getCollectionVocabulary().get("coordinateSystem"),
+        vocabularyConfiguration.getCollectionVocabulary().get("typeStatus"),
+        vocabularyConfiguration.getCollectionVocabulary().get("substrate"),
+        vocabularyConfiguration.getCollectionVocabulary().get("materialSampleState"),
+        vocabularyConfiguration.getCollectionVocabulary().get("associationType")
       ));
   }
 
