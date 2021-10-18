@@ -30,6 +30,7 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration {
     super(temporaryCopy(vocabulary));
   }
 
+  // to be fixed by #24967 Allow better extension of VocabularyConfiguration
   private static Map<String, List<VocabularyElement>> temporaryCopy(Map<String, List<CollectionVocabularyElement>> vocabulary) {
     Map<String, List<VocabularyElement>> newMap = new HashMap<>(vocabulary.size());
     for (Map.Entry<String, List<CollectionVocabularyElement>> entry : vocabulary.entrySet()) {
