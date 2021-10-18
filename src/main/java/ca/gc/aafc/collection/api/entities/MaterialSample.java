@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -51,8 +52,15 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
 
-  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "sample", cascade = {CascadeType.ALL}, orphanRemoval = true)
   private List<Association> associations = new ArrayList<>();
+
+  public void setAssociations(List<Association> associations) {
+    this.associations.clear();
+    if (CollectionUtils.isNotEmpty(associations)) {
+      this.associations.addAll(associations);
+    }
+  }
 
   @OneToMany(mappedBy = "associatedSample")
   private List<Association> associatedBy = new ArrayList<>();

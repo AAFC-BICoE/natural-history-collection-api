@@ -114,11 +114,11 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     sendPatch(sample, sampleID, 200);
     findSample(sampleID)
       .body("data.attributes.associations", Matchers.hasSize(1))
-      .body("data.attributes.associations[0].associatedSample", Matchers.contains(associatedWithId))
-      .body("data.attributes.associations[0].associationType", Matchers.contains(ExpectedType));
+      .body("data.attributes.associations[0].associatedSample", Matchers.is(associatedWithId))
+      .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
     findSample(associatedWithId)
-      .body("data.attributes.associations[0].associatedSample", Matchers.contains(sampleID))
-      .body("data.attributes.associations[0].associationType", Matchers.contains(ExpectedType));
+      .body("data.attributes.associations[0].associatedSample", Matchers.is(sampleID))
+      .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
   }
 
   @Test
