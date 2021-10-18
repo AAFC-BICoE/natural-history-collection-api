@@ -1,0 +1,25 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
+
+  <changeSet id="2-Create_new_MaterialSampleType" context="initial-data" author="cgendreau">
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="3a001690-7008-45be-b6a8-cc1808eefbc6"/>
+      <column  name="created_by"  value="cnc-cm"/>
+      <column  name="name"  value="Whole organism"/>
+    </insert>
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="6c2aedd0-220e-41de-b0e9-d36f0c6e09b9"/>
+      <column  name="created_by"  value="cnc-cm"/>
+      <column  name="name"  value="Organism Part"/>
+    </insert>
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="24d0a216-5967-4bb0-875a-47655e7c0ae8"/>
+      <column  name="created_by"  value="ccfc-cm"/>
+      <column  name="name"  value="Mixed Organisms"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
