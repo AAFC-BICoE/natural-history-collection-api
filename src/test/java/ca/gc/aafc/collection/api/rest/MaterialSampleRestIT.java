@@ -71,7 +71,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void patch_withAssociation() {
+  void patch_AddAssociation() {
     String ExpectedType = RandomStringUtils.randomAlphabetic(4);
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
@@ -92,6 +92,33 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(associatedWithId)
       .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+  }
+
+  @Test
+  void patch_ChangAssociationType() {
+    String associatedWithId = postSample(newSample());
+
+    MaterialSampleDto sample = newSample();
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(RandomStringUtils.randomAlphabetic(4))
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+    String sampleID = postSample(sample);
+
+    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(ExpectedType)
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+
+    sendPatch(sample, sampleID, 200);
+    findSample(sampleID)
+      .body("data.attributes.associations", Matchers.hasSize(1))
+      .body("data.attributes.associations[0].associatedSample", Matchers.contains(associatedWithId))
+      .body("data.attributes.associations[0].associationType", Matchers.contains(ExpectedType));
+    findSample(associatedWithId)
+      .body("data.attributes.associations[0].associatedSample", Matchers.contains(sampleID))
+      .body("data.attributes.associations[0].associationType", Matchers.contains(ExpectedType));
   }
 
   @Test
