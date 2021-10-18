@@ -16,6 +16,6 @@ public class VocabularyDto {
   @JsonApiId
   private final String id;
 
-  private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements;
+  private final List<CollectionVocabularyConfiguration.VocabularyElement> vocabularyElements;
 
 }

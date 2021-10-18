@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,6 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,24 +25,23 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/associationType.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration {
-  
-  private final Map<String, List<CollectionVocabularyElement>> vocabulary;
-  
+
   public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {
-    super(null);
-    this.vocabulary = vocabulary;
+    super(temporaryCopy(vocabulary));
   }
 
-  public Map<String, List<CollectionVocabularyElement>> getCollectionVocabulary() {
-    return vocabulary;
+  private static Map<String, List<VocabularyElement>> temporaryCopy(Map<String, List<CollectionVocabularyElement>> vocabulary) {
+    Map<String, List<VocabularyElement>> newMap = new HashMap<>(vocabulary.size());
+    for (Map.Entry<String, List<CollectionVocabularyElement>> entry : vocabulary.entrySet()) {
+      newMap.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+    }
+    return newMap;
   }
 
   @NoArgsConstructor
   @Getter
   @Setter
   public static class CollectionVocabularyElement extends VocabularyElement {
-
     private String inverseOf;
-
   }
 }
