@@ -4,20 +4,26 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
+import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.inject.Inject;
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
@@ -32,8 +38,25 @@ import java.util.UUID;
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
+  @Inject
+  private MaterialSampleService service;
+  @Inject
+  DatabaseSupportService supportService;
+
   protected MaterialSampleRestIT() {
     super("/api/v1/");
+  }
+
+  @AfterEach
+  void tearDown() {
+    deleteAllAssociations();
+  }
+
+  private void deleteAllAssociations() {
+    service.findAll(Association.class,
+        (criteriaBuilder, associationRoot) -> new Predicate[]{},
+        null, 0, Integer.MAX_VALUE)
+      .forEach(association -> supportService.deleteById(Association.class, association.getId()));
   }
 
   @Test
