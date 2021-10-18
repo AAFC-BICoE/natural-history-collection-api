@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.repository;
 
+import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 import org.springframework.stereotype.Repository;
 
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.VocabularyDto;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
@@ -18,10 +18,10 @@ public class VocabularyRepository extends ReadOnlyResourceRepositoryBase<Vocabul
   private final List<VocabularyDto> vocabulary;
 
   protected VocabularyRepository(
-    @NonNull CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
+    @NonNull VocabularyConfiguration vocabularyConfiguration) {
     super(VocabularyDto.class);
 
-    vocabulary = collectionVocabularyConfiguration.getVocabulary()
+    vocabulary = vocabularyConfiguration.getVocabulary()
         .entrySet()
         .stream()
         .map( entry -> new VocabularyDto(entry.getKey(), entry.getValue()))
