@@ -13,7 +13,7 @@
     <insert tableName="material_sample_type">
       <column  name="uuid"  value="3a001690-7008-45be-b6a8-cc1808eefbc6"/>
       <column  name="created_by"  value="system"/>
-      <column  name="name"  value="Whole organism"/>
+      <column  name="name"  value="Whole Organism"/>
     </insert>
   </changeSet>
   <changeSet id="2-Create_new_MaterialSampleType_2" context="initial-data" author="steven luu">
