@@ -102,5 +102,5 @@
   <include file="db/changelog/migrations/96-MaterialSampleType_should_not_have_a_group.xml"/>
   <include file="db/changelog/migrations/97-Add_preparation_method_to_abstractMaterialSample.xml"/>
   <include file="db/changelog/migrations/98-Add_identifier_to_Collection_and_Institution.xml"/>
-
+  <include file="db/changelog/migrations/99-Add_conditional_constraint_to_material_samples.xml"/>
 </databaseChangeLog>
