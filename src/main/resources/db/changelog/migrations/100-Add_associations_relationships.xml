@@ -14,7 +14,9 @@
             <column name="associated_with_id" type="integer">
                 <constraints nullable="false" foreignKeyName="fk_associated_with_id" references="material_sample(id)"/>
             </column>
-            <column name="association_type" type="VARCHAR(50)"/>
+            <column name="association_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>
