@@ -8,10 +8,10 @@
             <column name="id" type="SERIAL">
                 <constraints nullable="false" primaryKeyName="pk_association_id" primaryKey="true"/>
             </column>
-            <column name="sample_id" type="SERIAL">
+            <column name="sample_id" type="integer">
                 <constraints nullable="false" foreignKeyName="fk_association_id" references="material_sample(id)"/>
             </column>
-            <column name="associated_with_id" type="SERIAL">
+            <column name="associated_with_id" type="integer">
                 <constraints nullable="false" foreignKeyName="fk_associated_with_id" references="material_sample(id)"/>
             </column>
             <column name="association_type" type="VARCHAR(50)"/>
