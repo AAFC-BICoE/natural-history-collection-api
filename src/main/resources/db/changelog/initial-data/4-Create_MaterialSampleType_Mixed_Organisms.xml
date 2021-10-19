@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
+
+  <changeSet id="4-Create_MaterialSampleType_Mixed_Organisms" context="initial-data" author="steven luu">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          SELECT COUNT(*) FROM material_sample_type WHERE uuid='24d0a216-5967-4bb0-875a-47655e7c0ae8';
+      </sqlCheck>
+    </preConditions>
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="24d0a216-5967-4bb0-875a-47655e7c0ae8"/>
+      <column  name="created_by"  value="system"/>
+      <column  name="name"  value="Mixed Organisms"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
