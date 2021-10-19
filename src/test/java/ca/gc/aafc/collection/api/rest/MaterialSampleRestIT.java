@@ -63,9 +63,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(sampleID)
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
-    findSample(associatedWithId)
-      .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
-      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
   }
 
   @Test
@@ -82,13 +79,10 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
 
-    sendPatch(sample, sampleID, 200);
+    sendPatch(sample, sampleID);
 
     findSample(sampleID)
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
-      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
-    findSample(associatedWithId)
-      .body("data.attributes.associations.associatedSample", Matchers.contains(sampleID))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
   }
 
@@ -109,13 +103,10 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
 
-    sendPatch(sample, sampleID, 200);
+    sendPatch(sample, sampleID);
     findSample(sampleID)
       .body("data.attributes.associations", Matchers.hasSize(1))
       .body("data.attributes.associations[0].associatedSample", Matchers.is(associatedWithId))
-      .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
-    findSample(associatedWithId)
-      .body("data.attributes.associations[0].associatedSample", Matchers.is(sampleID))
       .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
   }
 
@@ -129,10 +120,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associationType(RandomStringUtils.randomAlphabetic(4))
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
-    sendPatch(sample, sampleID, 200);
-
-    findSample(sampleID).body("data.attributes.associations", Matchers.hasSize(1));
-    findSample(associatedWithId).body("data.attributes.associations", Matchers.hasSize(1));
+    sendPatch(sample, sampleID);
 
     String updatedAssociationId = postSample(newSample());
     String newType = "newType";
@@ -141,7 +129,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .associationType(newType)
       .associatedSample(UUID.fromString(updatedAssociationId))
       .build()));
-    sendPatch(sample, sampleID, 200);
+    sendPatch(sample, sampleID);
 
     findSample(sampleID)
       .body("data.attributes.associations", Matchers.hasSize(1))
@@ -158,7 +146,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     String parentId = postSample(parent);
     parent.setMaterialSampleChildren(List.of(childDto));
 
-    sendPatch(parent, parentId, 200);
+    sendPatch(parent, parentId);
     findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
   }
 
@@ -178,7 +166,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     sendDelete(MaterialSampleDto.TYPENAME, sampleID);
   }
 
-  private void sendPatch(MaterialSampleDto body, String id, int expectedCode) {
+  private void sendPatch(MaterialSampleDto body, String id) {
     sendPatch(
       MaterialSampleDto.TYPENAME, id,
       JsonAPITestHelper.toJsonAPIMap(
@@ -186,7 +174,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
         JsonAPITestHelper.toAttributeMap(body),
         null,
         null),
-      expectedCode
+      200
     );
   }
 

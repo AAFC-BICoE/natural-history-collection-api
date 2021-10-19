@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -69,18 +68,7 @@ public class AssociationDto {
 
     @Override
     public Supplier<List<Association>> entitySupplyMethod(MaterialSample entityRef) {
-      return () -> {
-        List<Association> list = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(entityRef.getAssociatedBy())) {
-          list.addAll(entityRef.getAssociatedBy().stream()
-            .peek(association -> association.setAssociatedSample(association.getSample()))
-            .collect(Collectors.toList()));
-        }
-        if (CollectionUtils.isNotEmpty(entityRef.getAssociations())) {
-          list.addAll(entityRef.getAssociations());
-        }
-        return list;
-      };
+      return entityRef::getAssociations;
     }
 
     @Override

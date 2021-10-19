@@ -62,9 +62,6 @@ public class MaterialSample extends AbstractMaterialSample {
     }
   }
 
-  @OneToMany(mappedBy = "associatedSample")
-  private List<Association> associatedBy = new ArrayList<>();
-
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
