@@ -105,5 +105,6 @@
   <include file="db/changelog/initial-data/2-Create_MaterialSampleType_Whole_organism.xml"/>
   <include file="db/changelog/initial-data/3-Create_MaterialSampleType_Organism_Part.xml"/>
   <include file="db/changelog/initial-data/4-Create_MaterialSampleType_Mixed_Organisms.xml"/>
+  <include file="db/changelog/migrations/99-Add_HostOrganism_to_MaterialSample.xml"/>
 
 </databaseChangeLog>

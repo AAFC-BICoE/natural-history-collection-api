@@ -16,5 +16,5 @@
       <column  name="created_by"  value="system"/>
       <column  name="name"  value="Whole organism"/>
     </insert>
-  </changeset>
+  </changeSet>
 </databaseChangeLog>
