@@ -39,30 +39,8 @@ import java.util.UUID;
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
-  @Inject
-  private MaterialSampleService service;
-  @Inject
-  DatabaseSupportService supportService;
-
   protected MaterialSampleRestIT() {
     super("/api/v1/");
-  }
-
-  @AfterEach
-  void tearDown() {
-    databaseCleanUp();
-  }
-
-  private void databaseCleanUp() {
-    service.findAll(Association.class, // remove associations
-        (criteriaBuilder, associationRoot) -> new Predicate[]{},
-        null, 0, Integer.MAX_VALUE)
-      .forEach(association -> supportService.deleteById(Association.class, association.getId()));
-    service.findAll( // remove samples
-        MaterialSample.class,
-        (criteriaBuilder, associationRoot) -> new Predicate[]{},
-        null, 0, Integer.MAX_VALUE)
-      .forEach(s -> service.delete(s));
   }
 
   @Test
