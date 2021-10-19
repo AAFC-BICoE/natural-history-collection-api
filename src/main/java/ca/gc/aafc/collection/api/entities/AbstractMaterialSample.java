@@ -123,4 +123,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 250)
   private String preparationMethod;
 
+  @Column(name = "allow_duplicate_name")
+  private Boolean allowDuplicateName;
 }

@@ -44,6 +44,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String expectedPreparationRemarks = "this is a remark on the preparation";
   private static final String expectDwcDegreeOfEstablishment = "established";
   private static final LocalDate preparationDate = LocalDate.now();
+  private static final String materialSampleUniqueName = "unique-test";
   private PreparationType preparationType;
   private MaterialSampleType materialSampleType;
   private MaterialSample materialSample;
@@ -279,6 +280,22 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     
     assertThrows(ValidationException.class, 
       () -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNames_allowDuplicatesFalse_Exception() {
+    MaterialSample materialSampleDuplicate = MaterialSampleFactory.newMaterialSample()
+        .dwcCatalogNumber("materialSample1-" + dwcCatalogNumber)
+        .createdBy("materialSample1-" + expectedCreatedBy)
+        .materialSampleName(materialSampleUniqueName)
+        .allowDuplicateName(false)
+        .build();
+
+    materialSampleService.create(materialSampleDuplicate);
+
+    // Creating another material sample with the same name (with allow duplicates set to false)
+    // should throw an error.
+    assertThrows(ValidationException.class, () -> materialSampleService.create(materialSampleDuplicate));
   }
 
 }

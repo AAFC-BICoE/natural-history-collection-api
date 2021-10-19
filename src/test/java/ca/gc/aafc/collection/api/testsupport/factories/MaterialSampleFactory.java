@@ -27,7 +27,8 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
             .uuid(UUID.randomUUID())
             .materialSampleName("soil sample")
             .createdBy("test user")
-            .group("aafc");
+            .group("aafc")
+            .allowDuplicateName(true);
     }
     
 }
