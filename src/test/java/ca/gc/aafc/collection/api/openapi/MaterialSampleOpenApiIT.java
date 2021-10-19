@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
@@ -100,6 +101,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .substrate("organism subtrate")
       .remarks("remark")
       .build();
+
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name("host name")
+      .remarks("host remark")
+      .build();
     
     ScheduledActionDto scheduledAction = ScheduledActionDto.builder()
       .actionStatus("actionStatus")
@@ -116,6 +122,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setDetermination(List.of(determination));
     ms.setOrganism(organism);
     ms.setScheduledActions(List.of(scheduledAction));
+    ms.setHostOrganism(hostOrganism);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);

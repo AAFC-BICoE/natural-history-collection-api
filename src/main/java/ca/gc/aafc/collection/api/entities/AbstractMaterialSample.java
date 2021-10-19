@@ -90,6 +90,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private List<Determination> determination;
 
   @Type(type = "jsonb")
+  @Valid
   private Organism organism;
 
   @Size(max = 500)
@@ -115,6 +116,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private String[] tags;
 
   @Type(type = "jsonb")
+  @Valid
   private List<ScheduledActionDto> scheduledActions;
 
   @Size(max = 255)
@@ -122,5 +124,9 @@ public class AbstractMaterialSample implements DinaEntity {
 
   @Size(max = 250)
   private String preparationMethod;
+
+  @Type(type = "jsonb")
+  @Valid
+  private HostOrganism hostOrganism;
 
 }
