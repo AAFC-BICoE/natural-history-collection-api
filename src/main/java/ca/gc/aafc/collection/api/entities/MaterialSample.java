@@ -52,7 +52,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
 
-  @OneToMany(mappedBy = "sample", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
   private List<Association> associations = new ArrayList<>();
 
   public void setAssociations(List<Association> associations) {
