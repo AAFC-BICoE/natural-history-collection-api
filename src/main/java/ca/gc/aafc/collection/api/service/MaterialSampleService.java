@@ -85,13 +85,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     linkAssociations(entity);
   }
 
-  @Override
-  protected void preDelete(MaterialSample entity) {
-    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
-      entity.getAssociations().forEach(baseDAO::delete);
-    }
-  }
-
   private void linkAssociations(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
       entity.getAssociations().forEach(association -> {
