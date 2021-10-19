@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
@@ -49,14 +50,19 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @AfterEach
   void tearDown() {
-    deleteAllAssociations();
+    databaseCleanUp();
   }
 
-  private void deleteAllAssociations() {
-    service.findAll(Association.class,
+  private void databaseCleanUp() {
+    service.findAll(Association.class, // remove associations
         (criteriaBuilder, associationRoot) -> new Predicate[]{},
         null, 0, Integer.MAX_VALUE)
       .forEach(association -> supportService.deleteById(Association.class, association.getId()));
+    service.findAll( // remove samples
+        MaterialSample.class,
+        (criteriaBuilder, associationRoot) -> new Predicate[]{},
+        null, 0, Integer.MAX_VALUE)
+      .forEach(s -> service.delete(s));
   }
 
   @Test
