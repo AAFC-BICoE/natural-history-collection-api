@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +27,6 @@ import java.util.UUID;
   properties = "dev-user.enabled=true"
 )
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
-@Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
