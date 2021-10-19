@@ -214,6 +214,22 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
   }
 
+  @Test
+  void delete_withAssociation() {
+    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    MaterialSampleDto associatedWith = newSample();
+    String associatedWithId = postSample(associatedWith);
+
+    MaterialSampleDto sample = newSample();
+    sample.setAssociations(List.of(AssociationDto.builder()
+      .associationType(ExpectedType)
+      .associatedSample(UUID.fromString(associatedWithId))
+      .build()));
+
+    String sampleID = postSample(sample);
+    sendDelete(MaterialSampleDto.TYPENAME, sampleID);
+  }
+
   private void sendPatch(MaterialSampleDto body, String id, int expectedCode) {
     sendPatch(
       MaterialSampleDto.TYPENAME, id,

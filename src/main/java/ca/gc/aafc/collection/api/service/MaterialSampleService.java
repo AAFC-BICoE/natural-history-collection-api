@@ -27,6 +27,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final MaterialSampleValidator materialSampleValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
+  private final BaseDAO baseDAO;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -40,6 +41,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
+    this.baseDAO = baseDAO;
   }
 
   @Override
@@ -81,6 +83,13 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   @Override
   protected void preUpdate(MaterialSample entity) {
     linkAssociations(entity);
+  }
+
+  @Override
+  protected void preDelete(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      entity.getAssociations().forEach(baseDAO::delete);
+    }
   }
 
   private void linkAssociations(MaterialSample entity) {
