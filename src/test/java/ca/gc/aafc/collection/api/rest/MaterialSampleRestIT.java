@@ -150,27 +150,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void association_UniqueConstraint() {
-    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
-    MaterialSampleDto associatedWith = newSample();
-    String associatedWithId = postSample(associatedWith);
-
-    MaterialSampleDto sample = newSample();
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-    String sampleID = postSample(sample);
-
-    associatedWith.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .associatedSample(UUID.fromString(sampleID))
-      .build()));
-
-    sendPatch(associatedWith, associatedWithId, 422);
-  }
-
-  @Test
   void patch_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
     childDto.setUuid(UUID.fromString(postSample(newSample())));

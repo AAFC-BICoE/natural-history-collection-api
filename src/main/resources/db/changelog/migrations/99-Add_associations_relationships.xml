@@ -16,13 +16,5 @@
             </column>
             <column name="association_type" type="VARCHAR(50)"/>
         </createTable>
-        <sql>
-            CREATE UNIQUE INDEX unique_association
-            ON association (
-                greatest(sample_id, associated_with_id),
-                least(sample_id, associated_with_id),
-                lower(association_type)
-            );
-        </sql>
     </changeSet>
 </databaseChangeLog>
