@@ -159,14 +159,14 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         TYPE_NAME, 
         attributeMap,
         Map.of(
-          // "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
+          "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
           "parentMaterialSample", getRelationType("material-sample", parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
           "preparationType", getRelationType("preparation-type", preparationTypeUUID),
           "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
           null
         )
-      ).log().all().extract().body().jsonPath().getString("data.id");
+      ).extract().body().jsonPath().getString("data.id");
 
     sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
       TYPE_NAME,
