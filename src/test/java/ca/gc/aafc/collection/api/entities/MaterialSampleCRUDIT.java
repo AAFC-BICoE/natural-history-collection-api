@@ -301,16 +301,16 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   @Test
   void materialSampleNameDuplicatedNames_allowDuplicatesFalse_Exception() {
     MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
-        .materialSampleName(materialSampleUniqueName)
+        .materialSampleName(materialSampleUniqueName.toLowerCase())
         .allowDuplicateName(false)
         .build();
 
     materialSampleService.create(materialSampleDuplicate1);
 
     // Creating another material sample with the same name (with allow duplicates set to false)
-    // should throw an error.
+    // should throw an error. This test also ensures that the index is case sensitive.
     MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
-        .materialSampleName(materialSampleUniqueName)
+        .materialSampleName(materialSampleUniqueName.toUpperCase())
         .allowDuplicateName(false)
         .build();
     assertThrows(PersistenceException.class, () -> materialSampleService.create(materialSampleDuplicate2));

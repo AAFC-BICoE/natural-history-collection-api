@@ -12,7 +12,7 @@
     <!-- Liquibase does not support partial unique indexes (with the WHERE statement) -->
     <sql>
       CREATE UNIQUE INDEX unique_material_sample_name
-      ON collection.material_sample(material_sample_name)
+      ON collection.material_sample(lower(material_sample_name))
       WHERE allow_duplicate_name IS FALSE;
     </sql>
   </changeSet>
