@@ -72,7 +72,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     materialSampleType = MaterialSampleTypeFactory.newMaterialSampleType()
         .createdBy(materialSampleTypeExpectedCreatedBy)
-        .group(materialSampleTypeExpectedGroup)
         .name(materialSampleTypeExpectedName)
         .build();
     materialSampleTypeService.create(materialSampleType);
@@ -124,7 +123,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     assertEquals(materialSampleType.getId(), materialSample.getMaterialSampleType().getId());
     assertEquals(materialSampleTypeExpectedCreatedBy, materialSample.getMaterialSampleType().getCreatedBy());
-    assertEquals(materialSampleTypeExpectedGroup, materialSample.getMaterialSampleType().getGroup());
     assertEquals(materialSampleTypeExpectedName, materialSample.getMaterialSampleType().getName());
 
     assertEquals(preparedBy, materialSample.getPreparedBy());
@@ -159,7 +157,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     assertEquals(materialSampleType.getId(), fetchedMaterialSample.getMaterialSampleType().getId());
     assertEquals(materialSampleTypeExpectedCreatedBy, fetchedMaterialSample.getMaterialSampleType().getCreatedBy());
-    assertEquals(materialSampleTypeExpectedGroup, fetchedMaterialSample.getMaterialSampleType().getGroup());
     assertEquals(materialSampleTypeExpectedName, fetchedMaterialSample.getMaterialSampleType().getName());
 
     assertEquals(storageUnit.getId(), fetchedMaterialSample.getStorageUnit().getId());
@@ -282,6 +279,21 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     
     assertThrows(ValidationException.class, 
       () -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void nestedStructureValidation_Exception() {
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name(RandomStringUtils.randomAlphanumeric(151))
+      .remarks("host remark")
+      .build();
+    
+    materialSample.setHostOrganism(hostOrganism);
+    
+    assertEquals(151, materialSample.getHostOrganism().getName().length());
+
+    assertThrows(ValidationException.class, 
+    () -> materialSampleService.update(materialSample));
   }
 
 }

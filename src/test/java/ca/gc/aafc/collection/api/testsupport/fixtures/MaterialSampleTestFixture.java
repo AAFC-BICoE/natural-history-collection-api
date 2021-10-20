@@ -25,6 +25,8 @@ public class MaterialSampleTestFixture {
   public static final String[] TAGS = new String[]{"0-Tag", "1-Tag"};
   public static final String MATERIAL_SAMPLE_STATE = "Damaged";
   public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
+  public static final String FILED_AS = "example of filedAs";
+  public static final String PREPARATION_METHOD = "microwaving";
 
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto= new MaterialSampleDto();
@@ -47,6 +49,9 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setTags(TAGS);
     materialSampleDto.setMaterialSampleState(MATERIAL_SAMPLE_STATE);
     materialSampleDto.setMaterialSampleRemarks(MATERIAL_SAMPLE_REMARKS);
+    materialSampleDto.setPreparationMethod(PREPARATION_METHOD);
+    materialSampleDto.setPreparationAttachment(List.of(
+        ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     return materialSampleDto;
   }
 }

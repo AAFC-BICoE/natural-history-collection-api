@@ -5,18 +5,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @SuperBuilder
 @Setter
 @Getter
 @RequiredArgsConstructor
+@TypeDef(
+  name = "jsonb",
+  typeClass = JsonBinaryType.class
+)
 public class Collection extends UserDescribedDinaEntity {
 
   @NotBlank
@@ -28,7 +41,22 @@ public class Collection extends UserDescribedDinaEntity {
   private String code;
 
   @ManyToOne
-  @NotNull
   private Institution institution;
+
+  @URL
+  private String webpage;
+
+  @Size(max = 500)
+  private String contact;
+  
+  @Size(max = 500)
+  private String address;
+
+  @Size(max = 500)
+  private String remarks;
+
+  @Type(type = "jsonb")
+  @Valid
+  private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
 }

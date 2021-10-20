@@ -1,10 +1,12 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -63,8 +65,15 @@ public class ImmutableMaterialSampleDto {
 
   private String barcode;
 
+  private String filedAs;
+
+  private String preparationMethod;
+
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private HostOrganism hostOrganism;
 
   public void setUuid(UUID uuid) {
     this.uuid = uuid;

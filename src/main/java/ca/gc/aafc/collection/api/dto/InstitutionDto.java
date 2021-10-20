@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Institution;
+import ca.gc.aafc.collection.api.entities.InstitutionIdentifier;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
@@ -14,7 +15,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Getter
 @Setter
@@ -38,5 +43,13 @@ public class InstitutionDto extends AttributeMetaInfoProvider {
   private String name;
 
   private MultilingualDescription multilingualDescription;
+  private String webpage;
+
+  private String address;
+
+  private String remarks;
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<InstitutionIdentifier> identifiers = new ArrayList<>();
 
 }

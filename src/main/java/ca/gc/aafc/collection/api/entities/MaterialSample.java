@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,9 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -51,6 +55,16 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
 
+  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+  private List<Association> associations = new ArrayList<>();
+
+  public void setAssociations(List<Association> associations) {
+    this.associations.clear();
+    if (CollectionUtils.isNotEmpty(associations)) {
+      this.associations.addAll(associations);
+    }
+  }
+
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
@@ -71,5 +85,13 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Size(max = 250)
   private String materialSampleRemarks;
+
+  @Type(type = "list-array")
+  @Column(name = "attachment", columnDefinition = "uuid[]")
+  private List<UUID> attachment = new ArrayList<>();
+
+  @Type(type = "list-array")
+  @Column(name = "preparation_attachment", columnDefinition = "uuid[]")
+  private List<UUID> preparationAttachment = new ArrayList<>();
 
 }

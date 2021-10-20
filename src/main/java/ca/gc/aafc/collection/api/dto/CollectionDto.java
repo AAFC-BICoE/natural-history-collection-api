@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.collection.api.entities.CollectionIdentifier;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
@@ -18,6 +19,8 @@ import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -51,5 +54,13 @@ public class CollectionDto extends AttributeMetaInfoProvider {
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private MultilingualDescription multilingualDescription;
+
+  private String webpage;
+  private String contact;
+  private String address;
+  private String remarks;
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
 }
