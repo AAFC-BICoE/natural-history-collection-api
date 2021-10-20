@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
@@ -26,7 +27,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -41,9 +41,7 @@ import java.util.UUID;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
@@ -100,6 +98,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .substrate("organism subtrate")
       .remarks("remark")
       .build();
+
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name("host name")
+      .remarks("host remark")
+      .build();
     
     ScheduledActionDto scheduledAction = ScheduledActionDto.builder()
       .actionStatus("actionStatus")
@@ -116,6 +119,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setDetermination(List.of(determination));
     ms.setOrganism(organism);
     ms.setScheduledActions(List.of(scheduledAction));
+    ms.setHostOrganism(hostOrganism);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);

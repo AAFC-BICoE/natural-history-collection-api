@@ -283,6 +283,21 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
+  void nestedStructureValidation_Exception() {
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name(RandomStringUtils.randomAlphanumeric(151))
+      .remarks("host remark")
+      .build();
+    
+    materialSample.setHostOrganism(hostOrganism);
+    
+    assertEquals(151, materialSample.getHostOrganism().getName().length());
+
+    assertThrows(ValidationException.class, 
+    () -> materialSampleService.update(materialSample));
+  }
+
+  @Test
   void materialSampleNameDuplicatedNames_allowDuplicatesFalse_Exception() {
     MaterialSample materialSampleDuplicate = MaterialSampleFactory.newMaterialSample()
         .dwcCatalogNumber("materialSample1-" + dwcCatalogNumber)
@@ -297,5 +312,4 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     // should throw an error.
     assertThrows(ValidationException.class, () -> materialSampleService.create(materialSampleDuplicate));
   }
-
 }
