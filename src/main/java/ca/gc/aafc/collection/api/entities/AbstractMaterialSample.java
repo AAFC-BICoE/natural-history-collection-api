@@ -129,4 +129,8 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private HostOrganism hostOrganism;
 
+  @Type(type = "list-array")
+  @Column(name = "preparation_attachment", columnDefinition = "uuid[]")
+  private List<UUID> preparationAttachment = new ArrayList<>();
+
 }

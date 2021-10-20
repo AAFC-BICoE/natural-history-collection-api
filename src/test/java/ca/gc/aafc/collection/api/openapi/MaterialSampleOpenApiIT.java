@@ -118,6 +118,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setPreparedBy(null);
+    ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setDetermination(List.of(determination));
     ms.setOrganism(organism);
@@ -162,7 +163,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
           "parentMaterialSample", getRelationType("material-sample", parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-          "preparationType", getRelationType("preparation-type", preparationTypeUUID)),
+          "preparationType", getRelationType("preparation-type", preparationTypeUUID),
+          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
