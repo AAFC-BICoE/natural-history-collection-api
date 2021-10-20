@@ -6,7 +6,6 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
@@ -46,6 +45,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(determination.getTypeStatus(), result.getTypeStatus());
     Assertions.assertEquals(determination.getTypeStatusEvidence(), result.getTypeStatusEvidence());
     Assertions.assertEquals(determination.getScientificName(), result.getScientificName());
+    Assertions.assertEquals(determination.getIsPrimary(), result.getIsPrimary());
   }
 
   @Test
@@ -61,6 +61,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
     return Determination.builder()
       .verbatimDeterminer(RandomStringUtils.randomAlphabetic(3))
       .verbatimDate(LocalDate.now().toString())
+      .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
       .transcriberRemarks(RandomStringUtils.randomAlphabetic(50));
   }
