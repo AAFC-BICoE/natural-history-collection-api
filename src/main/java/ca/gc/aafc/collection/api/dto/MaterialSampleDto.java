@@ -7,7 +7,10 @@ import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
+import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -27,13 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = MaterialSampleDto.TYPENAME)
 @TypeName(MaterialSampleDto.TYPENAME)
+@CustomFieldAdapter(adapters = AssociationDto.AssociationListMapperAdapter.class)
 public class MaterialSampleDto {
 
   public static final String TYPENAME = "material-sample";
@@ -120,4 +122,8 @@ public class MaterialSampleDto {
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
+
+  @IgnoreDinaMapping
+  private List<AssociationDto> associations = new ArrayList<>();
+
 }
