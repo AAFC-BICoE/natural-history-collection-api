@@ -25,6 +25,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
   void find() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
     Determination determination = newDetermination()
+        .isPrimary(true)
         .determiner(List.of(UUID.randomUUID())).build();
     dto.setDetermination(new ArrayList<>(List.of(determination)));
 
