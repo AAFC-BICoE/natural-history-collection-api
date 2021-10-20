@@ -186,6 +186,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     MaterialSampleDto sampleDto = MaterialSampleTestFixture.newMaterialSample();
     sampleDto.setAttachment(null);
     sampleDto.setPreparedBy(null);
+    sampleDto.setPreparationAttachment(null);
     return sampleDto;
   }
 
