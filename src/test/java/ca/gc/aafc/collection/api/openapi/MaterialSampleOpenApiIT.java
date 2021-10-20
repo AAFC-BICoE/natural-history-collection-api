@@ -86,6 +86,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .verbatimDate("2021-01-01")
       .scientificName("scientificName")
       .transcriberRemarks("transcriberRemarks")
+      .isPrimary(true)
       .typeStatus("typeStatus")
       .typeStatusEvidence("typeStatusEvidence")
       .determiner(List.of(UUID.randomUUID()))
