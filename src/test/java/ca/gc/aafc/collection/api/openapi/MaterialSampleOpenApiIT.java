@@ -159,14 +159,14 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         TYPE_NAME, 
         attributeMap,
         Map.of(
-          "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
+          // "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
           "parentMaterialSample", getRelationType("material-sample", parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
           "preparationType", getRelationType("preparation-type", preparationTypeUUID),
           "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
           null
         )
-      ).extract().body().jsonPath().getString("data.id");
+      ).log().all().extract().body().jsonPath().getString("data.id");
 
     sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
       TYPE_NAME,
@@ -179,7 +179,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,"
+      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).print(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent")).build()
       );
