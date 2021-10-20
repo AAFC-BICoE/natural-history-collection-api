@@ -50,19 +50,23 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   @Test
   void post_withAssociation() {
     String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    String expectedRemarks = RandomStringUtils.randomAlphabetic(13);
+
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
 
     MaterialSampleDto sample = newSample();
     sample.setAssociations(List.of(AssociationDto.builder()
       .associationType(ExpectedType)
+      .remarks(expectedRemarks)
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
 
     String sampleID = postSample(sample);
     findSample(sampleID)
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
-      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType))
+      .body("data.attributes.associations.remarks", Matchers.contains(expectedRemarks));
   }
 
   @Test

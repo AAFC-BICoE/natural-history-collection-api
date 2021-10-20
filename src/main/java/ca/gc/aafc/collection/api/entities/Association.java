@@ -40,4 +40,7 @@ public class Association {
   @Size(max = 50)
   private String associationType;
 
+  @Size(max = 250)
+  private String remarks;
+
 }

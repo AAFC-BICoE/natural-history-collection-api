@@ -17,6 +17,7 @@
             <column name="association_type" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="remarks" type="VARCHAR(250)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

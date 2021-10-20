@@ -26,6 +26,7 @@ public class AssociationDto {
 
   private UUID associatedSample;
   private String associationType;
+  private String remarks;
 
   public static class AssociationListMapperAdapter
     implements DinaFieldAdapter<MaterialSampleDto, MaterialSample, List<AssociationDto>, List<Association>> {
@@ -37,6 +38,7 @@ public class AssociationDto {
           .map(association -> AssociationDto.builder()
             .associatedSample(association.getAssociatedSample().getUuid())
             .associationType(association.getAssociationType())
+            .remarks(association.getRemarks())
             .build())
           .collect(Collectors.toList());
       }
@@ -50,6 +52,7 @@ public class AssociationDto {
           .map(association -> Association.builder()
             .associatedSample(MaterialSample.builder().uuid(association.getAssociatedSample()).build())
             .associationType(association.getAssociationType())
+            .remarks(association.getRemarks())
             .build())
           .collect(Collectors.toList());
       }
