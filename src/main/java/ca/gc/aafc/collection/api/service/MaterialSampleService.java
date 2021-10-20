@@ -27,6 +27,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final MaterialSampleValidator materialSampleValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
+  private final BaseDAO baseDAO;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -34,12 +35,13 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
-      MessageProducer messageProducer
+    MessageProducer messageProducer
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, messageProducer);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
+    this.baseDAO = baseDAO;
   }
 
   @Override
@@ -64,17 +66,33 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private void setHierarchy(MaterialSample sample) {
     sample.setHierarchy(postgresHierarchicalDataService.getHierarchy(
       sample.getId(),
-        MaterialSample.TABLE_NAME,
-        MaterialSample.ID_COLUMN_NAME,
-        MaterialSample.UUID_COLUMN_NAME,
-        MaterialSample.PARENT_ID_COLUMN_NAME,
-        MaterialSample.NAME_COLUMN_NAME
+      MaterialSample.TABLE_NAME,
+      MaterialSample.ID_COLUMN_NAME,
+      MaterialSample.UUID_COLUMN_NAME,
+      MaterialSample.PARENT_ID_COLUMN_NAME,
+      MaterialSample.NAME_COLUMN_NAME
     ));
   }
 
   @Override
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
+    linkAssociations(entity);
+  }
+
+  @Override
+  protected void preUpdate(MaterialSample entity) {
+    linkAssociations(entity);
+  }
+
+  private void linkAssociations(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      entity.getAssociations().forEach(association -> {
+        UUID associatedUuid = association.getAssociatedSample().getUuid();
+        association.setSample(entity);
+        association.setAssociatedSample(this.findOne(associatedUuid, MaterialSample.class));
+      });
+    }
   }
 
   @Override
@@ -102,6 +120,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   /**
    * Detaches the parent to make sure it reloads its children list
+   *
    * @param sample
    * @return
    */
