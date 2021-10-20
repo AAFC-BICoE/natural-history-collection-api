@@ -123,6 +123,10 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
 
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonApiRelation
+  private List<ExternalRelationDto> preparationAttachment = new ArrayList<>();
+  
   @IgnoreDinaMapping
   private List<AssociationDto> associations = new ArrayList<>();
 

@@ -105,5 +105,6 @@
   <include file="db/changelog/initial-data/2-Create_new_MaterialSampleType.xml"/>
   <include file="db/changelog/migrations/99-Add_HostOrganism_to_MaterialSample.xml"/>
   <include file="db/changelog/migrations/100-Add_associations_relationships.xml"/>
-  <include file="db/changelog/migrations/101-Add_conditional_constraint_to_material_samples.xml"/>
+  <include file="db/changelog/migrations/101-Add_list_of_attachments_to_preparation.xml"/>
+  <include file="db/changelog/migrations/102-Add_conditional_constraint_to_material_samples.xml"/>
 </databaseChangeLog>
