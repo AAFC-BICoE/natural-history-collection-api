@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
@@ -299,17 +300,36 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void materialSampleNameDuplicatedNames_allowDuplicatesFalse_Exception() {
-    MaterialSample materialSampleDuplicate = MaterialSampleFactory.newMaterialSample()
-        .dwcCatalogNumber("materialSample1-" + dwcCatalogNumber)
-        .createdBy("materialSample1-" + expectedCreatedBy)
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
         .materialSampleName(materialSampleUniqueName)
         .allowDuplicateName(false)
         .build();
 
-    materialSampleService.create(materialSampleDuplicate);
+    materialSampleService.create(materialSampleDuplicate1);
 
     // Creating another material sample with the same name (with allow duplicates set to false)
     // should throw an error.
-    assertThrows(ValidationException.class, () -> materialSampleService.create(materialSampleDuplicate));
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .allowDuplicateName(false)
+        .build();
+    assertThrows(PersistenceException.class, () -> materialSampleService.create(materialSampleDuplicate2));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNames_allowDuplicatesTrue_createRecord() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .allowDuplicateName(true)
+        .build();
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with the same name (with allow duplicates set to true)
+    // should not cause any issues since the allow duplicate boolean activated.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .allowDuplicateName(true)
+        .build();
+    assertDoesNotThrow(() -> materialSampleService.create(materialSampleDuplicate2));
   }
 }
