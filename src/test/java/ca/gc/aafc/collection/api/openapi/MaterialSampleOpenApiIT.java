@@ -69,7 +69,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   @SneakyThrows
   @Test
-  void collectingEvent_SpecValid() {
+  void materialSample_SpecValid() {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName("name");
     collectionManagedAttributeDto.setGroup("group");
@@ -132,6 +132,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setParentMaterialSample(null);
     parent.setMaterialSampleChildren(null);
     parent.setPreparedBy(null);
+    parent.setPreparationAttachment(null);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -140,6 +141,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setParentMaterialSample(null);
     child.setMaterialSampleChildren(null);
     child.setPreparedBy(null);
+    child.setPreparationAttachment(null);
 
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
