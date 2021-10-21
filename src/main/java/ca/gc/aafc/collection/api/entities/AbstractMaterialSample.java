@@ -25,7 +25,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +67,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "string-array")
   private String[] dwcOtherCatalogNumbers;
 
-  @Type(type = "list-array")
-  @Column(name = "attachment", columnDefinition = "uuid[]")
-  private List<UUID> attachment = new ArrayList<>();
-
   @Column(name = "material_sample_name")
   private String materialSampleName;
 
@@ -90,6 +85,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private List<Determination> determination;
 
   @Type(type = "jsonb")
+  @Valid
   private Organism organism;
 
   @Size(max = 500)
@@ -115,6 +111,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private String[] tags;
 
   @Type(type = "jsonb")
+  @Valid
   private List<ScheduledActionDto> scheduledActions;
 
   @Size(max = 255)
@@ -122,5 +119,9 @@ public class AbstractMaterialSample implements DinaEntity {
 
   @Size(max = 250)
   private String preparationMethod;
+
+  @Type(type = "jsonb")
+  @Valid
+  private HostOrganism hostOrganism;
 
 }

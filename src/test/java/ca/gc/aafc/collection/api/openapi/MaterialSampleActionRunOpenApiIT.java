@@ -94,6 +94,7 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
     materialSampleDto.setCollectingEvent(null);
     materialSampleDto.setParentMaterialSample(null);
     materialSampleDto.setMaterialSampleChildren(null);
+    materialSampleDto.setPreparationAttachment(null);
 
     sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(materialSampleDto)));
     sendPost("material-sample-action-definition", JsonAPITestHelper.toJsonAPIMap("material-sample-action-definition", JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto)));
