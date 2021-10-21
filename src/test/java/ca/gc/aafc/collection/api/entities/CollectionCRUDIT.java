@@ -1,14 +1,15 @@
 package ca.gc.aafc.collection.api.entities;
 
+import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.service.InstitutionService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
 
 class CollectionCRUDIT extends CollectionModuleBaseIT {
 
@@ -51,14 +52,31 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void testInvalidURLValidation_throwsConstraintValidation() {
+    Collection collection = CollectionFactory.newCollection().webpage("invalidurl").build();
 
-    Collection collection = CollectionFactory.newCollection()
-      .webpage("invalidurl")
-      .build();
+    Assertions.assertThrows(ConstraintViolationException.class, () -> collectionService.create(collection));
+  }
 
-    Assertions.assertThrows(ConstraintViolationException.class, 
-      () -> collectionService.create(collection));
+  @Test
+  void onCreateCollection_collectionSequenceCreated() {
+    Collection collection = collectionService.create(CollectionFactory.newCollection().build());
 
+    // Ensure that a collection sequence has been created when a collection is created.
+    Assertions.assertNotNull(collectionSequenceService.existsByProperty(CollectionSequence.class, "id", collection.getId()));
+  }
+
+  @Test
+  void onDeleteCollection_collectionSequenceDeleted() {
+    Collection collection = CollectionFactory.newCollection().build();
+    collectionService.create(collection);
+
+    // Ensure that a collection sequence has been created when a collection is created.
+    //Assertions.assertNotNull(collection.getCollectionSequence());
+
+    // Delete the collection
+    collectionService.delete(collection);
+
+    // Todo here.
   }
 
 }
