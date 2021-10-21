@@ -11,7 +11,7 @@
       CREATE TABLE collection_sequence
       (
           collection_id integer PRIMARY KEY REFERENCES collection(id),
-          counter integer NOT NULL DEFAULT 1
+          counter integer NOT NULL DEFAULT 0
       );
     </sql>
     <sql>
