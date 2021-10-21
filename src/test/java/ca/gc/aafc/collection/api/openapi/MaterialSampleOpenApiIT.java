@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
@@ -26,7 +27,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -41,9 +41,7 @@ import java.util.UUID;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
@@ -68,7 +66,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   @SneakyThrows
   @Test
-  void collectingEvent_SpecValid() {
+  void materialSample_SpecValid() {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName("name");
     collectionManagedAttributeDto.setGroup("group");
@@ -100,6 +98,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .substrate("organism subtrate")
       .remarks("remark")
       .build();
+
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name("host name")
+      .remarks("host remark")
+      .build();
     
     ScheduledActionDto scheduledAction = ScheduledActionDto.builder()
       .actionStatus("actionStatus")
@@ -112,10 +115,12 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setPreparedBy(null);
+    ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setDetermination(List.of(determination));
     ms.setOrganism(organism);
     ms.setScheduledActions(List.of(scheduledAction));
+    ms.setHostOrganism(hostOrganism);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -124,6 +129,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setParentMaterialSample(null);
     parent.setMaterialSampleChildren(null);
     parent.setPreparedBy(null);
+    parent.setPreparationAttachment(null);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -132,6 +138,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setParentMaterialSample(null);
     child.setMaterialSampleChildren(null);
     child.setPreparedBy(null);
+    child.setPreparationAttachment(null);
 
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
@@ -155,7 +162,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
           "parentMaterialSample", getRelationType("material-sample", parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-          "preparationType", getRelationType("preparation-type", preparationTypeUUID)),
+          "preparationType", getRelationType("preparation-type", preparationTypeUUID),
+          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
@@ -171,7 +179,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,"
+      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).print(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent")).build()
       );

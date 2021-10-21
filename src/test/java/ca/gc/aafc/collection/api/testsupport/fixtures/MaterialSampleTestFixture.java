@@ -50,6 +50,8 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setMaterialSampleState(MATERIAL_SAMPLE_STATE);
     materialSampleDto.setMaterialSampleRemarks(MATERIAL_SAMPLE_REMARKS);
     materialSampleDto.setPreparationMethod(PREPARATION_METHOD);
+    materialSampleDto.setPreparationAttachment(List.of(
+        ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     return materialSampleDto;
   }
 }
