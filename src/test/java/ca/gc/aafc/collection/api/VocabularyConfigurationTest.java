@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api;
 
 import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
+
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -10,6 +12,7 @@ import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -22,7 +25,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getDegreeOfEstablishment() {
-    List<VocabularyConfiguration.VocabularyElement> degreeOfEstablishment = vocabularyConfiguration.getVocabulary()
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> degreeOfEstablishment = vocabularyConfiguration.getVocabulary()
         .get("degreeOfEstablishment");
 
     assertNotNull(vocabularyConfiguration.getVocabulary());
@@ -34,7 +37,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void typeStatus() {
-    List<VocabularyConfiguration.VocabularyElement> typeStatus = vocabularyConfiguration.getVocabulary()
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> typeStatus = vocabularyConfiguration.getVocabulary()
       .get("typeStatus");
     assertEquals(11, typeStatus.size());
     typeStatus.forEach(assertVocabElement());
@@ -42,7 +45,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void coordinateSystem() {
-    List<VocabularyConfiguration.VocabularyElement> coordinateSystem = vocabularyConfiguration.getVocabulary()
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> coordinateSystem = vocabularyConfiguration.getVocabulary()
       .get("coordinateSystem");
     assertEquals(4, coordinateSystem.size());
     coordinateSystem.forEach(assertVocabElement());
@@ -50,12 +53,25 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void srs() {
-    List<VocabularyConfiguration.VocabularyElement> srs = vocabularyConfiguration.getVocabulary().get("srs");
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> srs = vocabularyConfiguration.getVocabulary().get("srs");
     assertEquals(2, srs.size());
     srs.forEach(assertVocabElement());
   }
 
-  private static Consumer<CollectionVocabularyConfiguration.VocabularyElement> assertVocabElement() {
+  @Test
+  void associationType() {
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> associationType = vocabularyConfiguration.getVocabulary().get("associationType");
+    assertEquals(10, associationType.size());
+    associationType.forEach(assertVocabElement());
+
+    assertTrue(
+      associationType
+        .stream()
+        .filter(o -> StringUtils.isNotBlank(o.getInverseOf())).count() == 10
+    );
+  }
+
+  private static Consumer<CollectionVocabularyConfiguration.CollectionVocabularyElement> assertVocabElement() {
     return vocabularyElement -> {
       assertNotNull(vocabularyElement.getName());
       assertNotNull(vocabularyElement.getTerm());

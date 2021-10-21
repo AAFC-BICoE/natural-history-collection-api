@@ -30,7 +30,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class));
     assertEquals(7, listOfVocabularies.size());
 
-    List<List<VocabularyConfiguration.VocabularyElement>> listOfVocabularyElements = new ArrayList<>();
+    List<List<CollectionVocabularyConfiguration.CollectionVocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
       listOfVocabularyElements.add(vocabularyDto.getVocabularyElements());
     }
