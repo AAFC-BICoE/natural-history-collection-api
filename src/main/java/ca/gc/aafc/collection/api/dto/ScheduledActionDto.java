@@ -31,4 +31,5 @@ public class ScheduledActionDto {
   private ExternalRelationDto assignedTo;
 
   @Size(max = 250)
-  private String remarks;}
+  private String remarks;
+}

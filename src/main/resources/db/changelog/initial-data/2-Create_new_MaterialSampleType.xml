@@ -1,0 +1,43 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+                   
+  <changeSet id="2-Create_new_MaterialSampleType_1" context="initial-data" author="steven luu">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          SELECT COUNT(*) FROM material_sample_type WHERE uuid='3a001690-7008-45be-b6a8-cc1808eefbc6';
+      </sqlCheck>
+    </preConditions>
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="3a001690-7008-45be-b6a8-cc1808eefbc6"/>
+      <column  name="created_by"  value="system"/>
+      <column  name="name"  value="Whole Organism"/>
+    </insert>
+  </changeSet>
+  <changeSet id="2-Create_new_MaterialSampleType_2" context="initial-data" author="steven luu">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          SELECT COUNT(*) FROM material_sample_type WHERE uuid='6c2aedd0-220e-41de-b0e9-d36f0c6e09b9';
+      </sqlCheck>
+    </preConditions>
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="6c2aedd0-220e-41de-b0e9-d36f0c6e09b9"/>
+      <column  name="created_by"  value="system"/>
+      <column  name="name"  value="Organism Part"/>
+    </insert>
+  </changeSet>
+  <changeSet id="2-Create_new_MaterialSampleType_3" context="initial-data" author="steven luu">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          SELECT COUNT(*) FROM material_sample_type WHERE uuid='24d0a216-5967-4bb0-875a-47655e7c0ae8';
+      </sqlCheck>
+    </preConditions>
+    <insert tableName="material_sample_type">
+      <column  name="uuid"  value="24d0a216-5967-4bb0-875a-47655e7c0ae8"/>
+      <column  name="created_by"  value="system"/>
+      <column  name="name"  value="Mixed Organisms"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
