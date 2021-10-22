@@ -46,7 +46,7 @@ public class AssociationValidator implements Validator {
   private void validateAssociationType(Errors errors, Association association) {
     if (StringUtils.isNotBlank(association.getAssociationType())) {
       if (!collectionVocabularyConfiguration.getVocabulary().get("associationType")
-      .stream().filter(o -> o.getName().equals(association.getAssociationType())).findFirst().isPresent()) {
+        .stream().filter(o -> o.getName().equals(association.getAssociationType())).findFirst().isPresent()) {
         String errorMessage = getMessage(ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
         errors.rejectValue("associationType", ASSOCIATION_TYPE_NOT_IN_VOCABULARY, errorMessage);
       }
