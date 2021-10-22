@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class CollectionSequence implements DinaEntity {
   private Integer id;
 
   @NotNull
+  @Builder.Default
   private Integer counter = 0;
 
   @Override

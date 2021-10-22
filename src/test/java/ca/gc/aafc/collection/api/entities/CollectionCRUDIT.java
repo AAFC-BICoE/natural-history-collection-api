@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.service.CollectionSequenceMapper;
 import ca.gc.aafc.collection.api.service.InstitutionService;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
@@ -15,6 +16,9 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
 
   @Inject
   private InstitutionService institutionService;
+
+  @Inject
+  private CollectionSequenceMapper collectionSequenceMapper;
 
   @Test
   void create() {
@@ -84,6 +88,13 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void collectionSequenceGetNextID_getExpectedValue() {
+    Collection collection = CollectionFactory.newCollection().build();
+    collectionService.create(collection);
 
+    // Should start at zero and increment.
+    int collectionID = collection.getId();
+    Assertions.assertEquals(1, collectionSequenceMapper.getNextId(collectionID));
+    Assertions.assertEquals(2, collectionSequenceMapper.getNextId(collectionID));
+    Assertions.assertEquals(3, collectionSequenceMapper.getNextId(collectionID));
   }
 }

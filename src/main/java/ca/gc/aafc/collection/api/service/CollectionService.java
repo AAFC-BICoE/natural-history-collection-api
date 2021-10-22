@@ -15,11 +15,14 @@ import lombok.NonNull;
 @Service
 public class CollectionService extends DefaultDinaService<Collection> {
 
-  private CollectionSequenceService collectionSequenceService;
+  private final CollectionSequenceService collectionSequenceService;
 
-  public CollectionService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
+  public CollectionService(
+    @NonNull BaseDAO baseDAO, 
+    @NonNull SmartValidator sv,
+    @NonNull CollectionSequenceService collectionSequenceService) {
     super(baseDAO, sv);
-    collectionSequenceService = new CollectionSequenceService(baseDAO, sv);
+    this.collectionSequenceService = collectionSequenceService;
   }
 
   @Override
@@ -43,7 +46,7 @@ public class CollectionService extends DefaultDinaService<Collection> {
     // When a collection is deleted, the collection sequence also needs to be deleted.
     collectionSequenceService.delete(
       collectionSequenceService.findOneById(entity.getId(), CollectionSequence.class)
-    );    
+    );
   }
 
 }
