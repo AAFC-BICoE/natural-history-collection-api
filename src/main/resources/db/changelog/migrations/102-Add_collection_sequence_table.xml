@@ -8,14 +8,14 @@
   
   <changeSet id="102-Add_collection_sequence_table.xml" context="schema-change" author="Steven Luu">
     <sql>
-      CREATE TABLE collection_sequence
+      CREATE TABLE collection.collection_sequence
       (
           collection_id integer PRIMARY KEY REFERENCES collection(id),
           counter integer NOT NULL DEFAULT 0
       );
     </sql>
     <sql>
-      CREATE OR REPLACE FUNCTION collection_get_next_id( collectionID int, amount int )
+      CREATE OR REPLACE FUNCTION collection.collection_get_next_id( collectionID int, amount int )
       RETURNS TABLE
       (
         low_reserved_id int, 
@@ -23,7 +23,7 @@
       )
       LANGUAGE sql AS
       $$
-        UPDATE collection_sequence
+        UPDATE collection.collection_sequence
         SET counter = counter + amount
         WHERE collection_id = collectionID
         RETURNING

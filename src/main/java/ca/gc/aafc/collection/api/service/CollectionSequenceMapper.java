@@ -1,10 +1,13 @@
 package ca.gc.aafc.collection.api.service;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Options.FlushCachePolicy;
+import org.apache.ibatis.mapping.StatementType;
 
 import ca.gc.aafc.collection.api.entities.CollectionSequenceReserved;
 
@@ -31,7 +34,8 @@ public interface CollectionSequenceMapper {
     @Result(property = "lowReservedID", column = "low_reserved_id"),
     @Result(property = "highReservedID", column = "high_reserved_id")
   })
-  @Select("SELECT * FROM collection_get_next_id(#{id}, #{amount}) LIMIT 1;")
+  @Options(statementType = StatementType.CALLABLE, flushCache = FlushCachePolicy.TRUE)
+  @Select("SELECT low_reserved_id, high_reserved_id FROM collection.collection_get_next_id(#{id}, #{amount}) LIMIT 1;")
   CollectionSequenceReserved getNextId(
     @Param("id") int id, 
     @Param("amount") int amount

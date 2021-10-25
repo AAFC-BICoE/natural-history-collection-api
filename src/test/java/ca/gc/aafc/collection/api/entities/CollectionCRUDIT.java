@@ -66,7 +66,7 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     Collection collection = collectionService.create(CollectionFactory.newCollection().build());
 
     // Ensure that a collection sequence has been created when a collection is created.
-    Assertions.assertTrue(collectionSequenceService.existsByProperty(CollectionSequence.class, "id", collection.getId()));
+    Assertions.assertNotNull(collectionSequenceService.findOneById(collection.getId(), CollectionSequence.class));
   }
 
   @Test
@@ -76,14 +76,14 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     int collectionID = collection.getId();
 
     // Ensure that a collection sequence has been created when a collection is created.
-    Assertions.assertTrue(collectionSequenceService.existsByProperty(CollectionSequence.class, "id", collectionID));
+    Assertions.assertNotNull(collectionSequenceService.findOneById(collectionID, CollectionSequence.class));
 
     // Delete the collection
     collectionService.delete(collection);
 
     // Since the record has been deleted, the Cascade type on the one to one
     // relationship should automatically delete the CollectionSequence.
-    Assertions.assertFalse(collectionSequenceService.existsByProperty(CollectionSequence.class, "id", collectionID));
+    Assertions.assertNull(collectionSequenceService.findOneById(collectionID, CollectionSequence.class));
   }
 
   @Test

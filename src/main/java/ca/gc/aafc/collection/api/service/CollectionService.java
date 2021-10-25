@@ -30,13 +30,32 @@ public class CollectionService extends DefaultDinaService<Collection> {
     entity.setUuid(UUID.randomUUID());
   }
 
+  /**
+   * When a collection is created, a matching collection sequence also needs to be made.
+   * 
+   * This keeps track of the current sequence number for that specific collection.
+   */
+  private void createAssociatedCollectionSequence(int id) {
+    CollectionSequence collectionSequence = new CollectionSequence(id);
+    collectionSequenceService.createAndFlush(collectionSequence);    
+  }
+
   @Override
   public Collection create(Collection entity) {
     super.create(entity);
 
     // When a collection is created, a collection sequence needs to be created.
-    CollectionSequence collectionSequence = new CollectionSequence(entity.getId());
-    collectionSequenceService.create(collectionSequence);
+    createAssociatedCollectionSequence(entity.getId());
+
+    return entity;
+  }
+
+  @Override
+  public Collection createAndFlush(Collection entity) {
+    super.createAndFlush(entity);
+
+    // When a collection is created, a collection sequence needs to be created.
+    createAssociatedCollectionSequence(entity.getId());
 
     return entity;
   }
