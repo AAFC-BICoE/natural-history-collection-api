@@ -36,7 +36,8 @@ public class CollectionService extends DefaultDinaService<Collection> {
    * This keeps track of the current sequence number for that specific collection.
    */
   private void createAssociatedCollectionSequence(int id) {
-    CollectionSequence collectionSequence = new CollectionSequence(id);
+    CollectionSequence collectionSequence = new CollectionSequence();
+    collectionSequence.setId(id);
     collectionSequenceService.createAndFlush(collectionSequence);    
   }
 

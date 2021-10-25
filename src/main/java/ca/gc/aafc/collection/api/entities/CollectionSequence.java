@@ -11,8 +11,8 @@ import ca.gc.aafc.dina.entity.DinaEntity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Setter
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class CollectionSequence implements DinaEntity {
 
   @Id
