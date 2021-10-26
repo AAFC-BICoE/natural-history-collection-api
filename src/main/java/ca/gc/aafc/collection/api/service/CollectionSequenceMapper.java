@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import lombok.Data;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -8,8 +9,6 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Options.FlushCachePolicy;
 import org.apache.ibatis.mapping.StatementType;
-
-import ca.gc.aafc.collection.api.entities.CollectionSequenceReserved;
 
 @Mapper
 public interface CollectionSequenceMapper {
@@ -40,4 +39,18 @@ public interface CollectionSequenceMapper {
     @Param("id") int id, 
     @Param("amount") int amount
   );
+
+
+  @Data
+  class CollectionSequenceReserved {
+    /**
+     * Lowest reserved ID in the range.
+     */
+    private int lowReservedID;
+
+    /**
+     * Highest reserved ID in the range.
+     */
+    private int highReservedID;
+  }
 }

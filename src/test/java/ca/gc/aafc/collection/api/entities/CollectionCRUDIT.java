@@ -102,7 +102,7 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(3, collectionSequenceMapper.getNextId(collectionID, 1).getLowReservedID());
 
     // Test incrementing by a higher amount.
-    CollectionSequenceReserved reservedIDs = collectionSequenceMapper.getNextId(collectionID, 20);
+    CollectionSequenceMapper.CollectionSequenceReserved reservedIDs = collectionSequenceMapper.getNextId(collectionID, 20);
     Assertions.assertEquals(4, reservedIDs.getLowReservedID());
     Assertions.assertEquals(23, reservedIDs.getHighReservedID());
   }
