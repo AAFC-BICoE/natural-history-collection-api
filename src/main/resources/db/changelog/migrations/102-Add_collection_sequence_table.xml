@@ -1,12 +1,10 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no" ?>
 <databaseChangeLog 
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
-  context="schema-change">
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
   
-  <changeSet id="102-Add_collection_sequence_table.xml" context="schema-change" author="Steven Luu">
+  <changeSet id="102-Add_collection_sequence_table" context="schema-change" author="Steven Luu">
     <sql>
       CREATE TABLE collection_sequence
       (
@@ -32,5 +30,10 @@
       $$;
     </sql>
   </changeSet>
-</databaseChangeLog>
 
+  <changeSet id="102-Add_collection_sequence_table_insert_data" context="data-migration" author="cgendreau">
+    <sql>
+      INSERT INTO collection_sequence VALUE (SELECT id, 0 FROM collection);
+    </sql>
+</changeSet>
+</databaseChangeLog>
