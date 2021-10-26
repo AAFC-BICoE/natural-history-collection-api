@@ -91,6 +91,10 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     Collection collection = CollectionFactory.newCollection().build();
     collectionService.create(collection);
 
+    // ugly hack until we can do service.flush
+    // update will flush so the mapper can see the record
+    collectionService.update(collection);
+
     // Should start at zero and increment.
     int collectionID = collection.getId();
     Assertions.assertEquals(1, collectionSequenceMapper.getNextId(collectionID, 1).getLowReservedID());

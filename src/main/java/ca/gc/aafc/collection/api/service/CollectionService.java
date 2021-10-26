@@ -30,10 +30,9 @@ public class CollectionService extends DefaultDinaService<Collection> {
     entity.setUuid(UUID.randomUUID());
   }
 
-
   @Override
   protected void postCreate(Collection entity) {
-    createAssociatedCollectionSequence(entity.getId());
+    createAssociatedCollectionSequence(entity);
   }
 
   /**
@@ -41,10 +40,10 @@ public class CollectionService extends DefaultDinaService<Collection> {
    *
    * This keeps track of the current sequence number for that specific collection.
    */
-  private void createAssociatedCollectionSequence(int id) {
+  private void createAssociatedCollectionSequence(Collection entity) {
     CollectionSequence collectionSequence = new CollectionSequence();
-    collectionSequence.setId(id);
-    collectionSequenceService.createAndFlush(collectionSequence);
+    collectionSequence.setCollection(entity);
+    collectionSequenceService.create(collectionSequence);
   }
 
   @Override

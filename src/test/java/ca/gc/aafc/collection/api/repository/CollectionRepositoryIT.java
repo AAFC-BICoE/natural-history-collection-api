@@ -105,7 +105,7 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
       .createdBy("by")
       .code("DNA")
       .build();
-    collectionService.createAndFlush(persisted);
+    collectionService.create(persisted);
     return persisted;
   }
 
