@@ -5,13 +5,15 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
   
   <changeSet id="102-Add_collection_sequence_table" context="schema-change" author="Steven Luu">
-    <sql>
-      CREATE TABLE collection_sequence
-      (
-          collection_id integer PRIMARY KEY REFERENCES collection(id),
-          counter integer NOT NULL DEFAULT 0
-      );
-    </sql>
+    <createTable tableName="collection_sequence">
+      <column name="collection_id" type="integer">
+        <constraints primaryKey="true" primaryKeyName="pk_collection_sequence_id" foreignKeyName="fk_collection_id" references="collection(id)" />
+      </column>
+      <column name="counter" type="integer" defaultValueNumeric="0">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
     <sql>
       CREATE OR REPLACE FUNCTION collection_get_next_id( collectionID int, amount int )
       RETURNS TABLE
@@ -33,7 +35,7 @@
 
   <changeSet id="102-Add_collection_sequence_table_insert_data" context="data-migration" author="cgendreau">
     <sql>
-      INSERT INTO collection_sequence VALUE (SELECT id, 0 FROM collection);
+      INSERT INTO collection_sequence SELECT id, 0 FROM collection;
     </sql>
-</changeSet>
+  </changeSet>
 </databaseChangeLog>
