@@ -34,6 +34,16 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
+  void validate_WhenUpperCaseAssociationType_NoErrors() {
+    Association association = newAssociation();
+    association.setAssociationType("HAS_HOST");
+    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
+    associationValidator.validate(association, errors);
+    Assertions.assertFalse(errors.hasErrors());
+    Assertions.assertEquals("has_host", association.getAssociationType());
+  }
+
+  @Test
   void validate_WhenAssociationTypeNotValid_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
 
