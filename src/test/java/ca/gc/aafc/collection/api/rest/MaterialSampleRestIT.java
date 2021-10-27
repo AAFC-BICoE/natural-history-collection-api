@@ -49,7 +49,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @Test
   void post_withAssociation() {
-    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    String ExpectedType = "host_of";
     String expectedRemarks = RandomStringUtils.randomAlphabetic(13);
 
     MaterialSampleDto associatedWith = newSample();
@@ -71,7 +71,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @Test
   void patch_AddAssociation() {
-    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    String ExpectedType = "host_of";
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
 
@@ -96,12 +96,12 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
     MaterialSampleDto sample = newSample();
     sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(RandomStringUtils.randomAlphabetic(4))
+      .associationType("host_of")
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
     String sampleID = postSample(sample);
 
-    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    String ExpectedType = "parasite_of";
     sample.setAssociations(List.of(AssociationDto.builder()
       .associationType(ExpectedType)
       .associatedSample(UUID.fromString(associatedWithId))
@@ -121,13 +121,13 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     String sampleID = postSample(sample);
 
     sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(RandomStringUtils.randomAlphabetic(4))
+      .associationType("host_of")
       .associatedSample(UUID.fromString(associatedWithId))
       .build()));
     sendPatch(sample, sampleID);
 
     String updatedAssociationId = postSample(newSample());
-    String newType = "newType";
+    String newType = "has_host";
 
     sample.setAssociations(List.of(AssociationDto.builder()
       .associationType(newType)
@@ -156,7 +156,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   @Test
   void delete_withAssociation() {
-    String ExpectedType = RandomStringUtils.randomAlphabetic(4);
+    String ExpectedType = "host_of";
     MaterialSampleDto associatedWith = newSample();
     String associatedWithId = postSample(associatedWith);
 
