@@ -32,15 +32,15 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(2, listOfExtensionDtos.size());
 
     List<Extension> listOfExtension = new ArrayList<>();
-    for (ExtensionDto vocabularyDto : listOfExtensionDtos) {
-      listOfExtension.add(vocabularyDto.getExtension());
+    for (ExtensionDto extensionDto : listOfExtensionDtos) {
+      listOfExtension.add(extensionDto.getExtension());
     }
 
     MatcherAssert.assertThat(
       listOfExtension,
       Matchers.containsInAnyOrder(
-        collectionExtensionConfiguration.getExtension().get(0),
-        collectionExtensionConfiguration.getExtension().get(1)
+        collectionExtensionConfiguration.getExtension().get("mixs_soil"),
+        collectionExtensionConfiguration.getExtension().get("mixs_sediment")
       ));
   }
   

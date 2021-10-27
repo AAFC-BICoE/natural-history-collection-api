@@ -21,11 +21,7 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getMixSSoil() {
-    Extension mixsSoil = extensionConfiguration.getExtension()
-      .stream()
-      .filter(entry -> "mixs_soil_v5".equals(entry.getKey()))
-      .findFirst()
-      .orElse(null);
+    Extension mixsSoil = extensionConfiguration.getExtension().get("mixs_soil");
 
     assertNotNull(mixsSoil);
     assertEquals("MIxS Soil", mixsSoil.getName());
@@ -35,11 +31,7 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getMixSSediment() {
-    Extension mixsSediment = extensionConfiguration.getExtension()
-      .stream()
-      .filter(entry -> "mixs_sediment_v5".equals(entry.getKey()))
-      .findFirst()
-      .orElse(null);
+    Extension mixsSediment = extensionConfiguration.getExtension().get("mixs_sediment");
 
     assertNotNull(mixsSediment);
     assertEquals("MIxS Sediment", mixsSediment.getName());

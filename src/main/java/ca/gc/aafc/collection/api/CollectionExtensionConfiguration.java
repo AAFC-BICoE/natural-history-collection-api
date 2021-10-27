@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +15,13 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @PropertySource(value = "classpath:extension/mixsSediment.yml", factory  = YamlPropertyLoaderFactory.class)
 public class CollectionExtensionConfiguration {
 
-  private final List<Extension> extension;
+  private final Map<String, Extension> extension;
   
-  public CollectionExtensionConfiguration(List<Extension> extension) {
+  public CollectionExtensionConfiguration(Map<String, Extension> extension) {
     this.extension = extension;
   }
 
-  public List<Extension> getExtension() {
+  public Map<String, Extension> getExtension() {
     return extension;
   }
 

@@ -21,11 +21,12 @@ public class ExtensionRepository extends ReadOnlyResourceRepositoryBase<Extensio
     @NonNull CollectionExtensionConfiguration extensionConfiguration) {
     super(ExtensionDto.class);
 
-      extension = extensionConfiguration.getExtension()
-        .stream()
-        .map( entry -> new ExtensionDto(entry.getKey(), entry))
-        .collect( Collectors.toList());
-    }
+    extension = extensionConfiguration.getExtension()
+      .entrySet()
+      .stream()
+      .map( entry -> new ExtensionDto(entry.getKey(), entry.getValue()))
+      .collect( Collectors.toList());
+  }
 
   @Override
   public ResourceList<ExtensionDto> findAll(QuerySpec querySpec) {
