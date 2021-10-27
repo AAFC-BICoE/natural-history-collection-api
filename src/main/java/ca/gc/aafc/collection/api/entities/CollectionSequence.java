@@ -4,7 +4,10 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -27,6 +30,10 @@ public class CollectionSequence implements DinaEntity {
   @NonNull
   @Column(name = "collection_id")
   private Integer id;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @MapsId
+  private Collection collection;
 
   @NotNull
   @Builder.Default
