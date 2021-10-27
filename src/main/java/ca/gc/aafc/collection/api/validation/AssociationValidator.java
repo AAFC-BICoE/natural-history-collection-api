@@ -1,5 +1,7 @@
 package ca.gc.aafc.collection.api.validation;
 
+import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -8,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration.CollectionVocabularyElement;
 import ca.gc.aafc.collection.api.entities.Association;
 import lombok.NonNull;
 
@@ -45,13 +48,13 @@ public class AssociationValidator implements Validator {
 
   private void validateAssociationType(Errors errors, Association association) {
     if (StringUtils.isNotBlank(association.getAssociationType())) {
-      String lowerAssociationType = association.getAssociationType().toLowerCase();
-      if (!collectionVocabularyConfiguration.getVocabulary().get("associationType")
-        .stream().filter(o -> o.getName().equals(lowerAssociationType)).findFirst().isPresent()) {
+      Optional<CollectionVocabularyElement> foundAssociationType = collectionVocabularyConfiguration.getVocabulary().get("associationType")
+        .stream().filter(o -> o.getName().equalsIgnoreCase(association.getAssociationType())).findFirst();
+      if (foundAssociationType.isPresent()) {
+        association.setAssociationType(foundAssociationType.get().getName());
+      } else {
         String errorMessage = getMessage(ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
         errors.rejectValue("associationType", ASSOCIATION_TYPE_NOT_IN_VOCABULARY, errorMessage);
-      } else {
-        association.setAssociationType(lowerAssociationType);
       }
     }
   }
