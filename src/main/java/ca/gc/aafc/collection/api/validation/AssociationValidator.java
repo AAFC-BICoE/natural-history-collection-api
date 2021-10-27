@@ -45,10 +45,13 @@ public class AssociationValidator implements Validator {
 
   private void validateAssociationType(Errors errors, Association association) {
     if (StringUtils.isNotBlank(association.getAssociationType())) {
+      String lowerAssociationType = association.getAssociationType().toLowerCase();
       if (!collectionVocabularyConfiguration.getVocabulary().get("associationType")
-        .stream().filter(o -> o.getName().equals(association.getAssociationType())).findFirst().isPresent()) {
+        .stream().filter(o -> o.getName().equals(lowerAssociationType)).findFirst().isPresent()) {
         String errorMessage = getMessage(ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
         errors.rejectValue("associationType", ASSOCIATION_TYPE_NOT_IN_VOCABULARY, errorMessage);
+      } else {
+        association.setAssociationType(lowerAssociationType);
       }
     }
   }
