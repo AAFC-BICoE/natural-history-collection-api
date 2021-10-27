@@ -6,15 +6,16 @@
 
   <changeSet id="102-Add_conditional_constraint_to_material_samples" context="schema-change" author="Brandon Andre">
     <addColumn tableName="material_sample">
-      <column name="allow_duplicate_name" type="boolean" defaultValueBoolean="false"/>
+      <column name="allow_duplicate_name" type="boolean" defaultValueBoolean="false">
+        <constraints nullable="false" />
+      </column>
     </addColumn>
 
     <!-- Liquibase does not support partial unique indexes (with the WHERE statement) -->
     <sql>
       CREATE UNIQUE INDEX unique_material_sample_name
-      ON collection.material_sample(lower(material_sample_name))
-      WHERE allow_duplicate_name IS FALSE;
+      ON material_sample(lower(material_sample_name), collection_id)
+      WHERE allow_duplicate_name IS FALSE AND collection_id IS NOT NULL;
     </sql>
   </changeSet>
-
 </databaseChangeLog>
