@@ -63,17 +63,18 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   @Test
   void validate_WhenScientificNameSourceIsSetButScientificIsNotSet_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-    
+
     Determination determination = Determination.builder()
+      .isPrimary(true)
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
       .verbatimScientificName("verbatimScientificName")
       .build();
 
     List<Determination> determinations = List.of(determination);
-    
+
     MaterialSample sample = newSample();
     sample.setDetermination(determinations);
-    
+
     Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());
@@ -85,11 +86,33 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   void validate_WhenScientificNameAndVerbatimScientificNameIsNotSet_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAME);
 
-    List<Determination> determinations = List.of(Determination.builder().build());
-    
+    List<Determination> determinations = List.of(Determination.builder()
+      .isPrimary(true)
+      .build());
+
     MaterialSample sample = newSample();
     sample.setDetermination(determinations);
-    
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
+    sampleValidator.validate(sample, errors);
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_WhenNoPrimaryDetermination() {
+    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION);
+
+    Determination determination = Determination.builder()
+      .isPrimary(false)
+      .verbatimScientificName("verbatimScientificName")
+      .build();
+
+    List<Determination> determinations = List.of(determination);
+    MaterialSample sample = newSample();
+    sample.setDetermination(determinations);
+
     Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());

@@ -1,0 +1,41 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
+  
+  <changeSet id="102-Add_collection_sequence_table" context="schema-change" author="Steven Luu">
+    <createTable tableName="collection_sequence">
+      <column name="collection_id" type="integer">
+        <constraints primaryKey="true" primaryKeyName="pk_collection_sequence_id" foreignKeyName="fk_collection_id" references="collection(id)" />
+      </column>
+      <column name="counter" type="integer" defaultValueNumeric="0">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <sql>
+      CREATE OR REPLACE FUNCTION collection_get_next_id( collectionID int, amount int )
+      RETURNS TABLE
+      (
+        low_reserved_id int, 
+        high_reserved_id int 
+      )
+      LANGUAGE sql AS
+      $$
+        UPDATE collection_sequence
+        SET counter = counter + amount
+        WHERE collection_id = collectionID
+        RETURNING
+          (SELECT (counter - amount + 1) AS low_reserved_id), 
+          (SELECT counter AS high_reserved_id)
+      $$;
+    </sql>
+  </changeSet>
+
+  <changeSet id="102-Add_collection_sequence_table_insert_data" context="data-migration" author="cgendreau">
+    <sql>
+      INSERT INTO collection_sequence SELECT id, 0 FROM collection;
+    </sql>
+  </changeSet>
+</databaseChangeLog>

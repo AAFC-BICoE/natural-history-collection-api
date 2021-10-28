@@ -18,7 +18,6 @@ import org.springframework.validation.Errors;
 import javax.inject.Inject;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -252,7 +251,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
   @SneakyThrows
   private static GeographicPlaceNameSourceDetail newGeographicPlaceNameSourceDetail() {
-    URL url = new URL("https://github.com/AAFC-BICoE/natural-history-collection-api");
+    String url = "https://github.com/AAFC-BICoE/natural-history-collection-api";
     return GeographicPlaceNameSourceDetail.builder()
       .sourceUrl(url)
       .stateProvince(newSourceAdministrativeLevel())

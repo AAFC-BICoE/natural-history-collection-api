@@ -1,18 +1,24 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.service.InstitutionService;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
-import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
+import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.service.CollectionSequenceMapper;
+import ca.gc.aafc.collection.api.service.InstitutionService;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 
 class CollectionCRUDIT extends CollectionModuleBaseIT {
 
   @Inject
   private InstitutionService institutionService;
+
+  @Inject
+  private CollectionSequenceMapper collectionSequenceMapper;
 
   @Test
   void create() {
@@ -35,4 +41,69 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
       result.getMultilingualDescription().getDescriptions().get(0).getLang());
   }
 
+  @Test
+  void newline_contact_and_address() {
+    Collection collection = collectionService.create(CollectionFactory.newCollection()
+      .address("line1\nline2")
+      .contact("line1\nline2")
+      .build());
+
+    Assertions.assertTrue(
+      collection.getAddress().contains("\n"));
+    Assertions.assertTrue(
+      collection.getContact().contains("\n"));
+  }
+
+  @Test
+  void testInvalidURLValidation_throwsConstraintValidation() {
+    Collection collection = CollectionFactory.newCollection().webpage("invalidurl").build();
+
+    Assertions.assertThrows(ConstraintViolationException.class, () -> collectionService.create(collection));
+  }
+
+  @Test
+  void onCreateCollection_collectionSequenceCreated() {
+    Collection collection = collectionService.create(CollectionFactory.newCollection().build());
+
+    // Ensure that a collection sequence has been created when a collection is created.
+    Assertions.assertNotNull(collectionSequenceService.findOneById(collection.getId(), CollectionSequence.class));
+  }
+
+  @Test
+  void onDeleteCollection_collectionSequenceDeleted() {
+    Collection collection = CollectionFactory.newCollection().build();
+    collectionService.create(collection);
+    int collectionID = collection.getId();
+
+    // Ensure that a collection sequence has been created when a collection is created.
+    Assertions.assertNotNull(collectionSequenceService.findOneById(collectionID, CollectionSequence.class));
+
+    // Delete the collection
+    collectionService.delete(collection);
+
+    // Since the record has been deleted, the Cascade type on the one to one
+    // relationship should automatically delete the CollectionSequence.
+    Assertions.assertNull(collectionSequenceService.findOneById(collectionID, CollectionSequence.class));
+  }
+
+  @Test
+  void collectionSequenceGetNextID_getExpectedValue() {
+    Collection collection = CollectionFactory.newCollection().build();
+    collectionService.create(collection);
+
+    // ugly hack until we can do service.flush
+    // update will flush so the mapper can see the record
+    collectionService.update(collection);
+
+    // Should start at zero and increment.
+    int collectionID = collection.getId();
+    Assertions.assertEquals(1, collectionSequenceMapper.getNextId(collectionID, 1).getLowReservedID());
+    Assertions.assertEquals(2, collectionSequenceMapper.getNextId(collectionID, 1).getLowReservedID());
+    Assertions.assertEquals(3, collectionSequenceMapper.getNextId(collectionID, 1).getLowReservedID());
+
+    // Test incrementing by a higher amount.
+    CollectionSequenceMapper.CollectionSequenceReserved reservedIDs = collectionSequenceMapper.getNextId(collectionID, 20);
+    Assertions.assertEquals(4, reservedIDs.getLowReservedID());
+    Assertions.assertEquals(23, reservedIDs.getHighReservedID());
+  }
 }

@@ -1,7 +1,9 @@
 package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
@@ -9,6 +11,7 @@ import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
+import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -25,21 +28,26 @@ import java.util.function.BiFunction;
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
+  private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
+  private final BaseDAO baseDAO;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+    @NonNull AssociationValidator associationValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
-      MessageProducer messageProducer
+    MessageProducer messageProducer
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, messageProducer);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.associationValidator = associationValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
+    this.baseDAO = baseDAO;
   }
 
   @Override
@@ -64,28 +72,53 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private void setHierarchy(MaterialSample sample) {
     sample.setHierarchy(postgresHierarchicalDataService.getHierarchy(
       sample.getId(),
-        MaterialSample.TABLE_NAME,
-        MaterialSample.ID_COLUMN_NAME,
-        MaterialSample.UUID_COLUMN_NAME,
-        MaterialSample.PARENT_ID_COLUMN_NAME,
-        MaterialSample.NAME_COLUMN_NAME
+      MaterialSample.TABLE_NAME,
+      MaterialSample.ID_COLUMN_NAME,
+      MaterialSample.UUID_COLUMN_NAME,
+      MaterialSample.PARENT_ID_COLUMN_NAME,
+      MaterialSample.NAME_COLUMN_NAME
     ));
   }
 
   @Override
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
+    linkAssociations(entity);
+  }
+
+  @Override
+  protected void preUpdate(MaterialSample entity) {
+    linkAssociations(entity);
+  }
+
+  private void linkAssociations(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      entity.getAssociations().forEach(association -> {
+        UUID associatedUuid = association.getAssociatedSample().getUuid();
+        association.setSample(entity);
+        association.setAssociatedSample(this.findOne(associatedUuid, MaterialSample.class));
+      });
+    }
   }
 
   @Override
   public void validateBusinessRules(MaterialSample entity) {
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
+    validateAssociations(entity);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
       CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
+  }
+
+  private void validateAssociations(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      for (Association association : entity.getAssociations()) {
+        associationValidator.validate(association, ValidationErrorsHelper.newErrorsObject(entity));
+      }
+    }
   }
 
   @Override
@@ -102,6 +135,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   /**
    * Detaches the parent to make sure it reloads its children list
+   *
    * @param sample
    * @return
    */

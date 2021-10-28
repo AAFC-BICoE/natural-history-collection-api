@@ -93,5 +93,19 @@
   <include file="db/changelog/migrations/87-Add_Material_Sample_State_and_Remarks_field.xml"/>
   <include file="db/changelog/migrations/88-Add_tags_to_collectingEvent.xml"/>
   <include file="db/changelog/migrations/89-Add_organism_to_materialSample.xml"/>
+  <include file="db/changelog/migrations/90-Add_ScheduledActions.xml"/>
+  <include file="db/changelog/migrations/91-Add_address_and_remarks_to_Institution.xml"/>
+  <include file="db/changelog/migrations/92-Add_field_filedAs_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/93-Make_Collection_relationship_to_Institution_optional.xml"/>
+  <include file="db/changelog/migrations/94-Add_fields_to_Collection.xml"/>
+  <include file="db/changelog/migrations/95-Add_isInseperable_to_StorageUnitType.xml"/>
+  <include file="db/changelog/migrations/96-MaterialSampleType_should_not_have_a_group.xml"/>
+  <include file="db/changelog/migrations/97-Add_preparation_method_to_abstractMaterialSample.xml"/>
+  <include file="db/changelog/migrations/98-Add_identifier_to_Collection_and_Institution.xml"/>
+  <include file="db/changelog/initial-data/2-Create_new_MaterialSampleType.xml"/>
+  <include file="db/changelog/migrations/99-Add_HostOrganism_to_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/100-Add_associations_relationships.xml"/>
+  <include file="db/changelog/migrations/101-Add_list_of_attachments_to_preparation.xml"/>
+  <include file="db/changelog/migrations/102-Add_collection_sequence_table.xml"/>
   <include file="db/changelog/migrations/90-add_eventGeom_to_collecting_event.xml"/>
 </databaseChangeLog>

@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.validation;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import lombok.NonNull;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
@@ -11,6 +10,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import java.util.List;
 
 @Component
 public class MaterialSampleValidator implements Validator {
@@ -25,6 +26,7 @@ public class MaterialSampleValidator implements Validator {
   public static final String PARENT_AND_EVENT_ERROR_KEY = "validation.constraint.violation.sample.parentWithEvent";
   public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
+  public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
@@ -59,6 +61,12 @@ public class MaterialSampleValidator implements Validator {
 
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
+      if (countPrimaries(materialSample.getDetermination()) != 1) {
+        errors.rejectValue(
+          "determination",
+          MISSING_PRIMARY_DETERMINATION,
+          getMessage(MISSING_PRIMARY_DETERMINATION));
+      }
       for (Determination determination : materialSample.getDetermination()) {
         // XOR, both set or both not set but never only one of them
         if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
@@ -73,9 +81,15 @@ public class MaterialSampleValidator implements Validator {
     }
   }
 
+  private static long countPrimaries(List<Determination> determinations) {
+    if (CollectionUtils.isEmpty(determinations)) {
+      return 0;
+    }
+    return determinations.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
+  }
+
   private String getMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
   }
-
 
 }

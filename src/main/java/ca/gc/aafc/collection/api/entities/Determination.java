@@ -64,4 +64,6 @@ public class Determination {
   @Size(max = 250)
   private final String scientificNameDetails;
 
+  private final Boolean isPrimary;
+
 }
