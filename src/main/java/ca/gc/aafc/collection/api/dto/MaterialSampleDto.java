@@ -16,6 +16,7 @@ import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
+import io.crnk.core.resource.annotations.LookupIncludeBehavior;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 import org.javers.core.metamodel.annotation.Id;
@@ -124,7 +125,7 @@ public class MaterialSampleDto {
   private HostOrganism hostOrganism;
 
   @JsonApiExternalRelation(type = "metadata")
-  @JsonApiRelation
+  @JsonApiRelation(lookUp = LookupIncludeBehavior.AUTOMATICALLY_ALWAYS)
   private List<ExternalRelationDto> preparationAttachment = new ArrayList<>();
   
   @IgnoreDinaMapping
