@@ -56,6 +56,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
         assertEquals(MaterialSampleTestFixture.HOST, result.getHost());
+        assertEquals(MaterialSampleTestFixture.ALLOW_DUPLICATE_NAME, result.getAllowDuplicateName());
         assertEquals(materialSampleDto.getBarcode(), result.getBarcode());
         assertEquals(1 , result.getHierarchy().size());
     }

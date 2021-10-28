@@ -27,6 +27,7 @@ public class MaterialSampleTestFixture {
   public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
   public static final String FILED_AS = "example of filedAs";
   public static final String PREPARATION_METHOD = "microwaving";
+  public static final Boolean ALLOW_DUPLICATE_NAME = true;
 
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto= new MaterialSampleDto();
@@ -52,6 +53,7 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setPreparationMethod(PREPARATION_METHOD);
     materialSampleDto.setPreparationAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
+    materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
     return materialSampleDto;
   }
 }
