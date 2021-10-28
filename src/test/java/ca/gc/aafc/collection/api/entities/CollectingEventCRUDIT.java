@@ -75,6 +75,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void setUp() {
     geoReferenceAssertion = GeoreferenceAssertionDto.builder()
       .dwcDecimalLatitude(12.123456)
+      .dwcDecimalLongitude(33.3)
       .isPrimary(true)
       .build();
 
@@ -299,6 +300,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcMinimumDepthInMeters, fetchedCollectingEvent.getDwcMinimumDepthInMeters());
     assertEquals(dwcMinimumElevationInMeters, fetchedCollectingEvent.getDwcMinimumElevationInMeters());
     MatcherAssert.assertThat(collectingEvent.getSubstrate(), Matchers.is(fetchedCollectingEvent.getSubstrate()));
+    assertEquals(geoReferenceAssertion.getDwcDecimalLongitude(), fetchedCollectingEvent.getEventGeom().getCoordinate().getX());
+    assertEquals(geoReferenceAssertion.getDwcDecimalLatitude(), fetchedCollectingEvent.getEventGeom().getCoordinate().getY());
   }
 
   @Test
@@ -447,7 +450,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     fetchedCollectingEvent.setDwcMinimumDepthInMeters(new BigDecimal("-1.01"));
     fetchedCollectingEvent.setDwcMinimumElevationInMeters(new BigDecimal("-2.02"));
 
-    assertThrows(ConstraintViolationException.class, 
+    assertThrows(ConstraintViolationException.class,
       () -> collectingEventService.update(fetchedCollectingEvent));
 
   }
@@ -462,9 +465,9 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     fetchedCollectingEvent.setDwcMaximumDepthInMeters(new BigDecimal("15000.03"));
     fetchedCollectingEvent.setDwcMaximumElevationInMeters(new BigDecimal("15000.04"));
 
-    assertThrows(ConstraintViolationException.class, 
+    assertThrows(ConstraintViolationException.class,
       () -> collectingEventService.update(fetchedCollectingEvent));
-      
+
   }
 
   @Test
