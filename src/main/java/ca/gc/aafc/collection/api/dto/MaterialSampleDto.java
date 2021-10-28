@@ -130,6 +130,5 @@ public class MaterialSampleDto {
   @IgnoreDinaMapping
   private List<AssociationDto> associations = new ArrayList<>();
 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Boolean allowDuplicateName = false;
 }
