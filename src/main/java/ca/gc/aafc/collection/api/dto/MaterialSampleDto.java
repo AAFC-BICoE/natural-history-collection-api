@@ -130,5 +130,5 @@ public class MaterialSampleDto {
   @IgnoreDinaMapping
   private List<AssociationDto> associations = new ArrayList<>();
 
-  private Boolean allowDuplicateName = false;
+  private Boolean allowDuplicateName;
 }
