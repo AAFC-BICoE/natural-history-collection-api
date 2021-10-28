@@ -107,4 +107,5 @@
   <include file="db/changelog/migrations/100-Add_associations_relationships.xml"/>
   <include file="db/changelog/migrations/101-Add_list_of_attachments_to_preparation.xml"/>
   <include file="db/changelog/migrations/102-Add_collection_sequence_table.xml"/>
+  <include file="db/changelog/migrations/103-add_eventGeom_to_collecting_event.xml"/>
 </databaseChangeLog>
