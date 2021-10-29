@@ -29,7 +29,8 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
             .materialSampleName("soil sample")
             .associations(new ArrayList<>())
             .createdBy("test user")
-            .group("aafc");
+            .group("aafc")
+            .allowDuplicateName(true);
     }
     
 }
