@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
@@ -44,6 +46,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String expectedPreparationRemarks = "this is a remark on the preparation";
   private static final String expectDwcDegreeOfEstablishment = "established";
   private static final LocalDate preparationDate = LocalDate.now();
+  private static final String materialSampleUniqueName = "unique-test";
   private PreparationType preparationType;
   private MaterialSampleType materialSampleType;
   private MaterialSample materialSample;
@@ -296,4 +299,63 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     () -> materialSampleService.update(materialSample));
   }
 
+  @Test
+  void materialSampleNameDuplicatedNames_allowDuplicatesFalse_Exception() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName.toLowerCase())
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with the same name (with allow duplicates set to false)
+    // should throw an error. This test also ensures that the index is case sensitive.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName.toUpperCase())
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+    assertThrows(PersistenceException.class, () -> materialSampleService.create(materialSampleDuplicate2));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNamesDifferentCollections_allowDuplicatesFalse_createRecord() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName.toLowerCase())
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with the same name (with allow duplicates
+    // set to false) in a DIFFERENT collection should be allowed. The record should be
+    // created with no issues.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName.toLowerCase())
+        .collection(CollectionFactory.newCollection().build())
+        .allowDuplicateName(false)
+        .build();
+    assertDoesNotThrow(() -> materialSampleService.create(materialSampleDuplicate2));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNames_allowDuplicatesTrue_createRecord() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(true)
+        .build();
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with the same name (with allow duplicates set to true)
+    // should not cause any issues since the allow duplicate boolean activated.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(true)
+        .build();
+    assertDoesNotThrow(() -> materialSampleService.create(materialSampleDuplicate2));
+  }
 }
