@@ -126,5 +126,6 @@ public class AbstractMaterialSample implements DinaEntity {
 
   @Column(name = "allow_duplicate_name")
   @NotNull
-  private Boolean allowDuplicateName;
+  @Builder.Default
+  private Boolean allowDuplicateName = false;
 }

@@ -83,11 +83,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   @Override
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
-
-    if (entity.getAllowDuplicateName() == null) {
-      entity.setAllowDuplicateName(false);
-    }
-
     linkAssociations(entity);
   }
 
