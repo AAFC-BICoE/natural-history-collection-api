@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.34</version>
+  <version>0.36-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -65,6 +65,11 @@
       <artifactId>hibernate-types-52</artifactId>
       <version>${hibernate-types-52.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-spatial</artifactId>
+    </dependency>
+
 
     <!-- caching -->
     <dependency>
