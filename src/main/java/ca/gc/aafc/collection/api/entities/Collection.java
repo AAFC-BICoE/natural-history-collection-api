@@ -64,7 +64,7 @@ public class Collection extends UserDescribedDinaEntity {
   @Valid
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "parent_collection_id")
   @ToString.Exclude
   private Collection parentCollection;
