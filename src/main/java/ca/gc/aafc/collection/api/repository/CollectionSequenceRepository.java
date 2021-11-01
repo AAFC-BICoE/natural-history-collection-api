@@ -1,17 +1,23 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.io.Serializable;
 import java.util.Collection;
+
+import org.springframework.stereotype.Repository;
 
 import ca.gc.aafc.collection.api.dto.CollectionSequenceGeneratorDto;
 import ca.gc.aafc.collection.api.service.CollectionSequenceMapper.CollectionSequenceReserved;
 
 import io.crnk.core.exception.MethodNotAllowedException;
 import io.crnk.core.queryspec.QuerySpec;
-import io.crnk.core.repository.ResourceRepository;
+import io.crnk.core.repository.ResourceRepositoryBase;
 import io.crnk.core.resource.list.ResourceList;
 
-public class CollectionSequenceRepository implements ResourceRepository<CollectionSequenceGeneratorDto, Integer> {
+@Repository
+public class CollectionSequenceRepository extends ResourceRepositoryBase<CollectionSequenceGeneratorDto, CollectionSequenceGeneratorDto> {
+
+  public CollectionSequenceRepository() {
+    super(CollectionSequenceGeneratorDto.class);
+  }
 
   @Override
   public <S extends CollectionSequenceGeneratorDto> S create(S resource) {
@@ -36,16 +42,6 @@ public class CollectionSequenceRepository implements ResourceRepository<Collecti
   }
 
   @Override
-  public void delete(Integer arg0) {
-    throw new MethodNotAllowedException("DELETE");
-  }
-
-  @Override
-  public CollectionSequenceGeneratorDto findOne(Integer id, QuerySpec querySpec) {
-    throw new MethodNotAllowedException("GET");
-  }
-
-  @Override
   public ResourceList<CollectionSequenceGeneratorDto> findAll(QuerySpec querySpec) {
     throw new MethodNotAllowedException("GET");
   }
@@ -53,6 +49,11 @@ public class CollectionSequenceRepository implements ResourceRepository<Collecti
   @Override
   public ResourceList<CollectionSequenceGeneratorDto> findAll(Collection ids, QuerySpec querySpec) {
     throw new MethodNotAllowedException("GET");
+  }
+
+  @Override
+  public void delete(CollectionSequenceGeneratorDto entity) {
+    throw new MethodNotAllowedException("DELETE");
   }
 
   @Override

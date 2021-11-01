@@ -1,22 +1,30 @@
 package ca.gc.aafc.collection.api.dto;
 
+import javax.persistence.Id;
+
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ca.gc.aafc.collection.api.service.CollectionSequenceMapper.CollectionSequenceReserved;
 
+import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonApiResource(type = "collection-sequence", patchable = false, readable = false, deletable = false, sortable = false, filterable = false)
+@JsonApiResource(type = CollectionSequenceGeneratorDto.TYPENAME)
+@TypeName(value = CollectionSequenceGeneratorDto.TYPENAME)
 public class CollectionSequenceGeneratorDto {
+
+  public static final String TYPENAME = "collection-sequence";
+
+  @Id
+  @JsonApiId
+  private Integer id;
+
   private Integer collectionId;
 
   private Integer amount = 1;
