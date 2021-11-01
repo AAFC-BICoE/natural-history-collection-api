@@ -1,8 +1,7 @@
 package ca.gc.aafc.collection.api.dto;
 
-import javax.persistence.Id;
+import java.util.UUID;
 
-import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -19,13 +18,10 @@ import lombok.Data;
 @TypeName(value = CollectionSequenceGeneratorDto.TYPENAME)
 public class CollectionSequenceGeneratorDto {
 
-  public static final String TYPENAME = "collection-sequence";
+  public static final String TYPENAME = "collection-sequence-generator";
 
-  @Id
   @JsonApiId
-  private Integer id;
-
-  private Integer collectionId;
+  private UUID collectionId;
 
   private Integer amount = 1;
 
