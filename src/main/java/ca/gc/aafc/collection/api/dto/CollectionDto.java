@@ -66,6 +66,4 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   @JsonApiRelation
   private CollectionDto parentCollection;
 
-  private List<CollectionDto> subCollections;
-
 }

@@ -69,8 +69,4 @@ public class Collection extends UserDescribedDinaEntity {
   @ToString.Exclude
   private Collection parentCollection;
 
-  @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "parent_collection_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private List<Collection> subCollections = new ArrayList<>();
-
 }
