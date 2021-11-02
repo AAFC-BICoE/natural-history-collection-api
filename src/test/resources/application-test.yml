@@ -16,8 +16,5 @@ embedded.postgresql:
 logging:
   level:
     org.springframework: ERROR
-    org.hibernate:
-      SQL: DEBUG 
-      type: TRACE
 dev-user:
   enabled: false
