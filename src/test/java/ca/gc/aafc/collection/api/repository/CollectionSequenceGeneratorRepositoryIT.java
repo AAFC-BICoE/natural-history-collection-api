@@ -1,11 +1,10 @@
 package ca.gc.aafc.collection.api.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.UUID;
-
 import javax.inject.Inject;
-import javax.validation.ValidationException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,14 +21,14 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   private CollectionSequenceGeneratorRepository collectionSequenceRepository;
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"CNC:DINA_ADMIN"})
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   public void reserveNewSequenceIds_collectionExists_idReserved() {
     // Create a collection to generate sequences from.
     Collection persistCollection = Collection.builder()
         .uuid(UUID.randomUUID())
         .name("name")
-        .group("group")
-        .createdBy("by")
+        .group("aafc")
+        .createdBy("createdBy")
         .code("DNA")
         .build();
     collectionService.create(persistCollection);
@@ -46,16 +45,6 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
     assertEquals(1, responseSequence.getResult().getLowReservedID());
   }
 
-  @Test
-  @WithMockKeycloakUser(groupRole = {"CNC:DINA_ADMIN"})
-  public void reserveNewSequenceIds_collectionDoesNotExist_exception() {
-    // Generate a collection sequence dto request with invalid collection uuid.
-    CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();
-    requestSequence.setAmount(1);
-    requestSequence.setCollectionId(UUID.randomUUID());
-
-    // Send the request to the repository expecting a violation exception.
-    assertThrows(ValidationException.class, () -> collectionSequenceRepository.create(requestSequence));
-  }
+  // TODO create new test with invalid access.
 
 }
