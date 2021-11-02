@@ -109,4 +109,5 @@
   <include file="db/changelog/migrations/102-Add_collection_sequence_table.xml"/>
   <include file="db/changelog/migrations/103-add_eventGeom_to_collecting_event.xml"/>
   <include file="db/changelog/migrations/104-Add_conditional_constraint_to_material_samples.xml"/>
+  <include file="db/changelog/migrations/105-Add_acquisition_event.xml"/>
 </databaseChangeLog>
