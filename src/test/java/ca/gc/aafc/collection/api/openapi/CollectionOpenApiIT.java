@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.InstitutionDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -55,25 +57,36 @@ public class CollectionOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
-    CollectionDto collectionDto = new CollectionDto();
-    collectionDto.setCode("CODE");
-    collectionDto.setName(name);
-    collectionDto.setCreatedBy("test user");
-    collectionDto.setGroup("aafc");
+    CollectionDto collectionDto = CollectionFixture.newCollection()
+      .institution(null)
+      .build();
 
     String institutionId = sendPost(
       InstitutionDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
         InstitutionDto.TYPENAME, JsonAPITestHelper.toAttributeMap(InstitutionFixture.newInstitution().build())
         , null, null)).extract().body().jsonPath().getString("data.id");
 
+    String parentId = sendPost(
+      TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(
+        TYPE_NAME, JsonAPITestHelper.toAttributeMap(CollectionFixture.newCollection().institution(null).build())
+        , null, null)).extract().body().jsonPath().getString("data.id");
+
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Collection",
       sendPost(
         TYPE_NAME,
         JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
-          JsonAPITestHelper.toRelationshipMap(
-            JsonAPIRelationship.of("institution", InstitutionDto.TYPENAME, institutionId)),
+          Map.of(
+            "institution", getRelationType(InstitutionDto.TYPENAME, institutionId),
+            "parentCollection", getRelationType(TYPE_NAME, parentId)
+          ),
           null)
       ).extract().asString());
+  }
+
+  private Map<String, Object> getRelationType(String type, String uuid) {
+    return Map.of("data", Map.of(
+      "id", uuid,
+      "type", type));
   }
 
 }
