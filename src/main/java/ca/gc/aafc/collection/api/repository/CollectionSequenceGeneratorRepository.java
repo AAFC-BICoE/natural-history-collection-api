@@ -13,6 +13,8 @@ import ca.gc.aafc.collection.api.entities.CollectionSequenceGenerationRequest;
 import ca.gc.aafc.collection.api.service.CollectionSequenceGeneratorService;
 import ca.gc.aafc.collection.api.service.CollectionService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
+import ca.gc.aafc.dina.mapper.DinaMappingLayer;
+import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
@@ -28,6 +30,12 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
 
   @Inject
   private CollectionService collectionService;
+
+  private CollectionSequenceGeneratorService collectionSequenceGeneratorService;
+
+  private DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> dinaMapper;
+
+  private DinaAuthorizationService groupAuthorizationService;
 
   public CollectionSequenceGeneratorRepository(
     @NonNull CollectionSequenceGeneratorService dinaService,
@@ -46,8 +54,24 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
       null,
       externalResourceProvider,
       buildProperties);
+
+    // Create the dina mapper for CollectionSequenceGeneratorDto to CollectionSequenceGenerationRequest.
+    this.dinaMapper = new DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest>(
+      CollectionSequenceGeneratorDto.class, 
+      new DinaMapper<>(CollectionSequenceGeneratorDto.class), 
+      dinaService, 
+      new DinaMappingRegistry(CollectionSequenceGeneratorDto.class)
+    );
+    this.collectionSequenceGeneratorService = dinaService;
+    this.groupAuthorizationService = groupAuthorizationService;
   }
 
+  /**
+   * This method is completely overriding the super create method since it uses the findOne method
+   * which is not supported for the repository or service.
+   * 
+   * The CollectionSequenceGenerationRequest is a fake entity and is not mapped to a database.
+   */
   @Override
   public <S extends CollectionSequenceGeneratorDto> S create(S resource) {
 
@@ -57,12 +81,30 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
       resource.setGroup(collection.getGroup());
     }
 
-    return super.create(resource);
+    // Convert the Dto into an entity.
+    CollectionSequenceGenerationRequest entity = new CollectionSequenceGenerationRequest();
+    dinaMapper.mapToEntity(resource, entity);
+    
+    // Check to ensure the current user has permission to perform this action.
+    groupAuthorizationService.authorizeCreate(entity);
+
+    // Perform the action from the service.
+    collectionSequenceGeneratorService.create(entity);
+
+    // Return the resource back to the results from the service.
+    resource.setResult(entity.getResult());
+
+    return resource;
   }
 
   @Override
   public <S extends CollectionSequenceGeneratorDto> S save(S resource) {
     throw new MethodNotAllowedException("PUT/PATCH");
+  }
+
+  @Override
+  public CollectionSequenceGeneratorDto findOne(Serializable id, QuerySpec querySpec) {
+    throw new MethodNotAllowedException("GET");
   }
 
   @Override
@@ -78,10 +120,5 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
   @Override
   public void delete(Serializable id) {
     throw new MethodNotAllowedException("DELETE");
-  }
-
-  @Override
-  public Class<CollectionSequenceGeneratorDto> getResourceClass() {
-    return CollectionSequenceGeneratorDto.class;
   }
 }
