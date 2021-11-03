@@ -345,7 +345,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
         .materialSampleName(materialSampleUniqueName)
         .collection(collection)
-        .allowDuplicateName(true)
+        .allowDuplicateName(false)
         .build();
     materialSampleService.create(materialSampleDuplicate1);
 
@@ -358,4 +358,25 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .build();
     assertDoesNotThrow(() -> materialSampleService.create(materialSampleDuplicate2));
   }
+
+  @Test
+  void materialSampleNameDuplicatedNames_allowDuplicatesTrueThenFalse_Exception() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(true)
+        .build();
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with the same name (with allow duplicates set to true)
+    // should not cause any issues since the allow duplicate boolean activated.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+    materialSampleService.create(materialSampleDuplicate2);
+    assertThrows(PersistenceException.class, () -> materialSampleService.create(materialSampleDuplicate2));
+  }
+
 }
