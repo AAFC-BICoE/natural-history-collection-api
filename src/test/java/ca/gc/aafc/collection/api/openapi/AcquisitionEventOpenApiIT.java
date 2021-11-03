@@ -3,6 +3,8 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,7 @@ import lombok.SneakyThrows;
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-public class AcquisitionEventopenApiIT extends BaseRestAssuredTest {
+public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
   private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
@@ -33,7 +35,7 @@ public class AcquisitionEventopenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = AcquisitionEventDto.TYPENAME;
 
-  protected AcquisitionEventopenApiIT() {
+  protected AcquisitionEventOpenApiIT() {
     super("/api/v1/");
   }
 
@@ -46,12 +48,23 @@ public class AcquisitionEventopenApiIT extends BaseRestAssuredTest {
   void acquisitionEvent_SpecValid() {
     AcquisitionEventDto acquisitionEventDto = AcquisitionEventTestFixture.newAcquisitionEvent();  
     acquisitionEventDto.setCreatedBy("test user");  
+    acquisitionEventDto.setReceivedFrom(null);
+    acquisitionEventDto.setExternallyIsolatedBy(null);
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "AcquisitionEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
-        null,
+      Map.of(
+        "receivedFrom", getRelationType("person", UUID.randomUUID().toString()),
+        "externallyIsolatedBy", getRelationType("person", UUID.randomUUID().toString())
+      ),
         null)
-      ).extract().asString());
+      ).log().all().extract().asString());
+  }
+
+  private Map<String, Object> getRelationType(String type, String uuid) {
+    return Map.of("data", Map.of(
+      "id", uuid,
+      "type", type));
   }
   
 }
