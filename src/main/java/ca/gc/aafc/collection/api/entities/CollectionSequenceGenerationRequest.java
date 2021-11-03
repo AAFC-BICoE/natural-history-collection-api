@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 

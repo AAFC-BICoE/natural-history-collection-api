@@ -2,14 +2,12 @@ package ca.gc.aafc.collection.api.service;
 
 import java.util.List;
 import java.util.function.BiFunction;
-
+import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.validation.groups.Default;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.server.MethodNotAllowedException;
@@ -17,22 +15,28 @@ import org.springframework.web.server.MethodNotAllowedException;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.CollectionSequence;
 import ca.gc.aafc.collection.api.entities.CollectionSequenceGenerationRequest;
+import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
-import ca.gc.aafc.dina.service.DinaService;
+import ca.gc.aafc.dina.service.DefaultDinaService;
 import ca.gc.aafc.dina.service.OnCreate;
+
 import io.crnk.core.exception.ResourceNotFoundException;
 import lombok.NonNull;
 
 @Service
-public class CollectionSequenceGeneratorService implements DinaService<CollectionSequenceGenerationRequest> {
+public class CollectionSequenceGeneratorService extends DefaultDinaService<CollectionSequenceGenerationRequest> {
 
-  @Autowired
+  public CollectionSequenceGeneratorService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator validator) {
+    super(baseDAO, validator);
+  }
+
+  @Inject
   private CollectionService collectionService;
 
-  @Autowired
+  @Inject
   private CollectionSequenceService collectionSequenceService;
 
-  @Autowired
+  @Inject
   private CollectionSequenceMapper collectionSequenceMapper;
 
   @Override
@@ -49,12 +53,6 @@ public class CollectionSequenceGeneratorService implements DinaService<Collectio
     );
 
     return entity;
-  }
-
-  @Override
-  public void validateConstraints(CollectionSequenceGenerationRequest entity,
-      Class<? extends Default> validationGroup) {
-    // TODO figure out what to do with this
   }
 
   @Override

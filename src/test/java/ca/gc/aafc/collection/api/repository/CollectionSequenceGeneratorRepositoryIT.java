@@ -1,9 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-
 import java.util.UUID;
 import javax.inject.Inject;
 
@@ -16,6 +12,10 @@ import ca.gc.aafc.collection.api.dto.CollectionSequenceGeneratorDto;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBaseIT {
 
@@ -23,7 +23,7 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   private CollectionSequenceGeneratorRepository collectionSequenceRepository;
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = "aafc: staff")
   public void reserveNewSequenceIds_accessGranted_idReserved() {
     // Create a collection to generate sequences from.
     Collection persistCollection = Collection.builder()
@@ -34,6 +34,11 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
         .code("DNA")
         .build();
     collectionService.create(persistCollection);
+
+    // ugly hack until we can do service.flush
+    // update will flush so the mapper can see the record
+    collectionService.update(persistCollection);
+
     assertNotNull(persistCollection.getUuid());
     assertNotNull(persistCollection.getId());
 
@@ -48,7 +53,7 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = "aafc: staff")
   public void reserveNewSequenceIds_accessDenied_exception() {
     // Create a collection to generate sequences from.
     Collection persistCollection = Collection.builder()
