@@ -63,4 +63,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
+  @JsonApiRelation
+  private CollectionDto parentCollection;
+
 }
