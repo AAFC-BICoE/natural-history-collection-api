@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
-
 public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     @Inject

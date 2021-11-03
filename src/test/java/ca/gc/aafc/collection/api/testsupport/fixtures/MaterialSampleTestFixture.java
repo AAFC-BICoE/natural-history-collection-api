@@ -30,7 +30,7 @@ public class MaterialSampleTestFixture {
   public static final Boolean ALLOW_DUPLICATE_NAME = true;
 
   public static MaterialSampleDto newMaterialSample() {
-    MaterialSampleDto materialSampleDto= new MaterialSampleDto();
+    MaterialSampleDto materialSampleDto = new MaterialSampleDto();
     materialSampleDto.setDwcCatalogNumber(DWC_CATALOG_NUMBER);
     materialSampleDto.setDwcOtherCatalogNumbers(DWC_OTHER_CATALOG_NUMBERS);
     materialSampleDto.setCollectingEvent(null);
