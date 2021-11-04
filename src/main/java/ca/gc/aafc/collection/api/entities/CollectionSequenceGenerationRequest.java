@@ -24,7 +24,7 @@ public class CollectionSequenceGenerationRequest implements DinaEntity {
   private UUID collectionId;
 
   @NotNull
-  @Min(value = 0)
+  @Min(value = 1)
   @Builder.Default
   private Integer amount = 1;
 

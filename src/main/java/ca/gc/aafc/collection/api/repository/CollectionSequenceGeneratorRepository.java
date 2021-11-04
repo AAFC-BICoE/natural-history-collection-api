@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import ca.gc.aafc.collection.api.dto.CollectionSequenceGeneratorDto;
 import ca.gc.aafc.collection.api.entities.Collection;
@@ -72,6 +73,7 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
    * 
    * The CollectionSequenceGenerationRequest is a fake entity and is not mapped to a database.
    */
+  @Transactional
   @Override
   public <S extends CollectionSequenceGeneratorDto> S create(S resource) {
 

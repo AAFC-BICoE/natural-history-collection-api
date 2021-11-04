@@ -26,10 +26,6 @@ import lombok.NonNull;
 @Service
 public class CollectionSequenceGeneratorService extends DefaultDinaService<CollectionSequenceGenerationRequest> {
 
-  public CollectionSequenceGeneratorService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator validator) {
-    super(baseDAO, validator);
-  }
-
   @Inject
   private CollectionService collectionService;
 
@@ -38,6 +34,10 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
 
   @Inject
   private CollectionSequenceMapper collectionSequenceMapper;
+
+  public CollectionSequenceGeneratorService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator validator) {
+    super(baseDAO, validator);
+  }
 
   @Override
   public CollectionSequenceGenerationRequest create(CollectionSequenceGenerationRequest entity) {

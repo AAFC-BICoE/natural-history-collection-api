@@ -6,46 +6,56 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.test.context.transaction.BeforeTransaction;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionSequenceGeneratorDto;
 import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.collection.api.entities.CollectionSequence;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBaseIT {
 
+  private static final String VALID_GROUP = "aafc";
+  private static final String INVALID_GROUP = "notvalid";
+
   @Inject
   private CollectionSequenceGeneratorRepository collectionSequenceRepository;
 
+  private Collection collection;
+  private CollectionSequence collectionSequence;
+
+  @BeforeTransaction
+  public void setUp() {
+    service.runInNewTransaction(entityManager -> {
+      collection = CollectionFactory.newCollection()
+          .uuid(UUID.randomUUID())
+          .group(VALID_GROUP)
+          .build();
+
+      entityManager.persist(collection);
+
+      collectionSequence = CollectionSequence.builder()
+          .collection(collection)
+          .id(collection.getId())
+          .build();
+      entityManager.persist(collectionSequence);
+    });
+  }
+
   @Test
-  @WithMockKeycloakUser(groupRole = "aafc: staff")
+  @WithMockKeycloakUser(groupRole = VALID_GROUP + ": staff")
   public void reserveNewSequenceIds_accessGranted_idReserved() {
-    // Create a collection to generate sequences from.
-    Collection persistCollection = Collection.builder()
-        .uuid(UUID.randomUUID())
-        .name("name")
-        .group("aafc")
-        .createdBy("createdBy")
-        .code("DNA")
-        .build();
-    collectionService.create(persistCollection);
-
-    // ugly hack until we can do service.flush
-    // update will flush so the mapper can see the record
-    collectionService.update(persistCollection);
-
-    assertNotNull(persistCollection.getUuid());
-    assertNotNull(persistCollection.getId());
-
     // Generate a collection sequence dto request.
     CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();
     requestSequence.setAmount(1);
-    requestSequence.setCollectionId(persistCollection.getUuid());
+    requestSequence.setCollectionId(collection.getUuid());
 
     // Send the request to the repository.
     CollectionSequenceGeneratorDto responseSequence = collectionSequenceRepository.create(requestSequence);
@@ -53,27 +63,22 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = "aafc: staff")
+  @WithMockKeycloakUser(groupRole = INVALID_GROUP + ": staff")
   public void reserveNewSequenceIds_accessDenied_exception() {
-    // Create a collection to generate sequences from.
-    Collection persistCollection = Collection.builder()
-        .uuid(UUID.randomUUID())
-        .name("name")
-        .group("incorrectGroup")
-        .createdBy("createdBy")
-        .code("DNA")
-        .build();
-    collectionService.create(persistCollection);
-    assertNotNull(persistCollection.getUuid());
-    assertNotNull(persistCollection.getId());
-
     // Generate a collection sequence dto request.
     CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();
     requestSequence.setAmount(1);
-    requestSequence.setCollectionId(persistCollection.getUuid());
+    requestSequence.setCollectionId(collection.getUuid());
 
     // Send the request to the repository, should result in an AccessDeniedException.
     assertThrows(AccessDeniedException.class, () -> collectionSequenceRepository.create(requestSequence));
   }
 
+  @AfterTransaction
+  public void tearDown() {
+    service.runInNewTransaction(entityManager -> {
+      entityManager.remove(entityManager.find(CollectionSequence.class, collectionSequence.getId()));
+      entityManager.remove(entityManager.find(Collection.class, collection.getId()));
+    });
+  }
 }
