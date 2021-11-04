@@ -11,8 +11,8 @@ import ca.gc.aafc.collection.api.service.AcquisitionEventService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
-import ca.gc.aafc.dina.security.DinaAdminOnlyAuthorizationService;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import lombok.NonNull;
 
 @Repository
@@ -22,14 +22,14 @@ public class AcquisitionEventRepository extends DinaRepository<AcquisitionEventD
 
   public AcquisitionEventRepository(
     @NonNull AcquisitionEventService dinaService,
-    @NonNull DinaAdminOnlyAuthorizationService adminOnlyAuthorizationService,
+    DinaAuthorizationService groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       dinaService,
-      adminOnlyAuthorizationService,
+      groupAuthorizationService,
       Optional.empty(),
       new DinaMapper<>(AcquisitionEventDto.class),
       AcquisitionEventDto.class,

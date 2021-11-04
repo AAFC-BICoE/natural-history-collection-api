@@ -19,7 +19,7 @@ public class AcquisitionEventRepositoryIT extends CollectionModuleBaseIT  {
   private AcquisitionEventRepository acquisitionEventRepository;
   
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:DINA_ADMIN"})
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
   void find() {
     AcquisitionEventDto expected = acquisitionEventRepository.create(AcquisitionEventTestFixture.newAcquisitionEvent());
     AcquisitionEventDto result = acquisitionEventRepository.findOne(expected.getUuid(), new QuerySpec(AcquisitionEventDto.class));

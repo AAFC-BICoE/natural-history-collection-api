@@ -43,6 +43,10 @@ public class AcquisitionEvent implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
 
+  @NotBlank
+  @Column(name = "_group")
+  @Size(max = 50)
+  private String group;
 
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)

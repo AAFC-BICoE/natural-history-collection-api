@@ -20,6 +20,8 @@ public class AcquisitionEventTestFixture {
   public static final LocalDate RECEIVED_DATE = LocalDate.now();
   public static final String RECEPTION_REMARKS = RandomStringUtils.randomAlphabetic(10);
 
+  public static final String GROUP = "aafc";
+
   public static AcquisitionEventDto newAcquisitionEvent() {
     AcquisitionEventDto acquisitionEventDto = new AcquisitionEventDto();
     acquisitionEventDto.setCreatedBy(CREATED_BY);
@@ -30,6 +32,8 @@ public class AcquisitionEventTestFixture {
     acquisitionEventDto.setReceivedFrom(ExternalRelationDto.builder().id(RECEIVED_FROM.toString()).type("person").build());
     acquisitionEventDto.setReceivedDate(RECEIVED_DATE);
     acquisitionEventDto.setReceptionRemarks(RECEPTION_REMARKS);
+
+    acquisitionEventDto.setGroup(GROUP);
     
     return acquisitionEventDto;
   }

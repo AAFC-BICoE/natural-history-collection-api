@@ -35,6 +35,8 @@ public class AcquisitionEventDto {
   private OffsetDateTime createdOn;
   private String createdBy;
 
+  private String group;
+
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
   private ExternalRelationDto receivedFrom;
