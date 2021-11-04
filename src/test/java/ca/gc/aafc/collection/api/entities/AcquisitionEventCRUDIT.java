@@ -20,6 +20,7 @@ public class AcquisitionEventCRUDIT extends CollectionModuleBaseIT {
       .receivedFrom(UUID.randomUUID())
       .receivedDate(LocalDate.now())
       .receptionRemarks("reception remarks")
+      .group("aafc")
       .build();
 
     acquisitionEventService.create(acquisitionEvent);
