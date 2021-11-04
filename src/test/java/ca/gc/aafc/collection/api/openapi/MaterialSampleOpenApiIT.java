@@ -159,20 +159,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String childUUID = materialSampleResponseBody.path("data[1].id");
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
-    AcquisitionEventDto acquisitionEventDto = AcquisitionEventTestFixture.newAcquisitionEvent();  
-    acquisitionEventDto.setCreatedBy("test user");  
-    acquisitionEventDto.setReceivedFrom(null);
-    acquisitionEventDto.setExternallyIsolatedBy(null);
-
-    String acquisitionEventUUID = sendPost(
-      AcquisitionEventDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-        AcquisitionEventDto.TYPENAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
-        Map.of(
-          "receivedFrom", getRelationType("person", UUID.randomUUID().toString()),
-          "externallyIsolatedBy", getRelationType("person", UUID.randomUUID().toString())
-        ), 
-        null)).extract().body().jsonPath().getString("data.id");
-
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     String unitId = sendPost(
       TYPE_NAME, 
@@ -184,8 +170,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "parentMaterialSample", getRelationType(TYPE_NAME, parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
           "preparationType", getRelationType(PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString()),
-          "acquisitionEvent", getRelationType(AcquisitionEventDto.TYPENAME, acquisitionEventUUID)),
+          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
@@ -201,9 +186,9 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,acquisitionEvent,"
+      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).print(),
-      ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent")).build()
+      ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
     }
 

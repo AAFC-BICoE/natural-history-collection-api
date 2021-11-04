@@ -40,12 +40,14 @@ public class MaterialSampleValidator implements Validator {
     }
     MaterialSample materialSample = (MaterialSample) target;
     checkParentIsNotSelf(errors, materialSample);
-    checkHasParentOrEvent(errors, materialSample);
+    checkHasParentOrEventOrAcquisitionEvent(errors, materialSample);
     checkDetermination(errors, materialSample);
   }
 
-  private void checkHasParentOrEvent(Errors errors, MaterialSample materialSample) {
-    if (materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null) {
+  private void checkHasParentOrEventOrAcquisitionEvent(Errors errors, MaterialSample materialSample) {
+    if ((materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null) 
+      || (materialSample.getParentMaterialSample() != null && materialSample.getAcquisitionEvent() != null)
+      || (materialSample.getCollectingEvent() != null && materialSample.getAcquisitionEvent() != null)) {
       String errorMessage = getMessage(PARENT_AND_EVENT_ERROR_KEY);
       errors.rejectValue("parentMaterialSample", PARENT_AND_EVENT_ERROR_KEY, errorMessage);
     }
