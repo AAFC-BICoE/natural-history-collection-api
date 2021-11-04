@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.AcquisitionEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
@@ -10,6 +11,7 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AcquisitionEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -122,6 +124,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setOrganism(organism);
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
+    ms.setAcquisitionEvent(null);
+
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -131,6 +135,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setMaterialSampleChildren(null);
     parent.setPreparedBy(null);
     parent.setPreparationAttachment(null);
+    parent.setAcquisitionEvent(null);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -140,6 +145,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setMaterialSampleChildren(null);
     child.setPreparedBy(null);
     child.setPreparationAttachment(null);
+    child.setAcquisitionEvent(null);
 
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
@@ -153,6 +159,20 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String childUUID = materialSampleResponseBody.path("data[1].id");
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
+    AcquisitionEventDto acquisitionEventDto = AcquisitionEventTestFixture.newAcquisitionEvent();  
+    acquisitionEventDto.setCreatedBy("test user");  
+    acquisitionEventDto.setReceivedFrom(null);
+    acquisitionEventDto.setExternallyIsolatedBy(null);
+
+    String acquisitionEventUUID = sendPost(
+      AcquisitionEventDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        AcquisitionEventDto.TYPENAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
+        Map.of(
+          "receivedFrom", getRelationType("person", UUID.randomUUID().toString()),
+          "externallyIsolatedBy", getRelationType("person", UUID.randomUUID().toString())
+        ), 
+        null)).extract().body().jsonPath().getString("data.id");
+
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     String unitId = sendPost(
       TYPE_NAME, 
@@ -161,10 +181,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         attributeMap,
         Map.of(
           "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
-          "parentMaterialSample", getRelationType("material-sample", parentUUID),
+          "parentMaterialSample", getRelationType(TYPE_NAME, parentUUID),
           "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-          "preparationType", getRelationType("preparation-type", preparationTypeUUID),
-          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
+          "preparationType", getRelationType(PreparationTypeDto.TYPENAME, preparationTypeUUID),
+          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString()),
+          "acquisitionEvent", getRelationType(AcquisitionEventDto.TYPENAME, acquisitionEventUUID)),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
@@ -180,7 +201,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
+      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,acquisitionEvent,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).print(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent")).build()
       );
