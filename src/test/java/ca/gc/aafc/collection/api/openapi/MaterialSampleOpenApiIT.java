@@ -90,7 +90,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .determinedOn(LocalDate.now())
       .qualifier("qualifier")
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .scientificNameDetails("scientificNameDetails")
+      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .sourceUrl(new URL("https://www.google.com").toString())
+        .recordedOn(LocalDate.now().minusDays(1))
+        .labelHtml("label")
+        .build())
       .build();
     
     Organism organism = Organism.builder()
