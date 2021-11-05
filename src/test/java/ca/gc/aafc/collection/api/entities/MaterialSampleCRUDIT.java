@@ -1,5 +1,17 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import javax.persistence.PersistenceException;
+import javax.validation.ValidationException;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
@@ -9,17 +21,6 @@ import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.persistence.PersistenceException;
-import javax.validation.ValidationException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -376,6 +377,73 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .allowDuplicateName(false)
         .build();
     assertThrows(PersistenceException.class, () -> materialSampleService.create(materialSampleDuplicate2));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNames_updateAllowDuplicatesFalse_Exception() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with the same name (with allow duplicates set to true)
+    // should not cause any issues since the allow duplicate boolean activated.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(true)
+        .build();
+    materialSampleService.create(materialSampleDuplicate2);
+
+    // Now update materialSampleDuplicate2 to not allow duplicates, should fail.
+    materialSampleDuplicate2.setAllowDuplicateName(false);
+    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSampleDuplicate2));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNames_changeNameToExistingName_Exception() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with two different names.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName("materialSampleName2")
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+    materialSampleService.create(materialSampleDuplicate2);
+
+    // Now update materialSampleDuplicate2 to materialSampleDuplicate1 name, should fail.
+    materialSampleDuplicate2.setMaterialSampleName(materialSampleUniqueName);
+    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSampleDuplicate2));
+  }
+
+  @Test
+  void materialSampleNameDuplicatedNames_changeCollectionWithSameName_Exception() {
+    MaterialSample materialSampleDuplicate1 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collection)
+        .allowDuplicateName(false)
+        .build();
+    materialSampleService.create(materialSampleDuplicate1);
+
+    // Creating another material sample with a different collection.
+    MaterialSample materialSampleDuplicate2 = MaterialSampleFactory.newMaterialSample()
+        .materialSampleName(materialSampleUniqueName)
+        .collection(collectionService.create(CollectionFactory.newCollection().build()))
+        .allowDuplicateName(false)
+        .build();
+    materialSampleService.create(materialSampleDuplicate2);
+
+    // Now update materialSampleDuplicate2 to use the same collection as materialSampleDuplicate1, should fail.
+    materialSampleDuplicate2.setCollection(collection);
+    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSampleDuplicate2));
   }
 
 }
