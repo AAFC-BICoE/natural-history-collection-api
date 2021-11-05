@@ -116,8 +116,6 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 
-  private String filedAs;
-
   private String preparationMethod;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)

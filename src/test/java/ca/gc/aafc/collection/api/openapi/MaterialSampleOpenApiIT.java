@@ -95,6 +95,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         .recordedOn(LocalDate.now().minusDays(1))
         .labelHtml("label")
         .build())
+      .isFileAs(true)
       .build();
     
     Organism organism = Organism.builder()
