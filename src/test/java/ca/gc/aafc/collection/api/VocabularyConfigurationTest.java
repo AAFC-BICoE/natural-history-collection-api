@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api;
 
-import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,10 +27,10 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
         .get("degreeOfEstablishment");
 
     assertNotNull(vocabularyConfiguration.getVocabulary());
-    assertEquals("native", degreeOfEstablishment.get(0).getName());
-    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d001", degreeOfEstablishment.get(0).getTerm());
-    assertEquals("native", degreeOfEstablishment.get(0).getLabels().get("en"));
-    assertEquals("indigène", degreeOfEstablishment.get(0).getLabels().get("fr"));
+    assertEquals("captive", degreeOfEstablishment.get(0).getName());
+    assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d002", degreeOfEstablishment.get(0).getTerm());
+    assertEquals("captive", degreeOfEstablishment.get(0).getLabels().get("en"));
+    assertEquals("captif", degreeOfEstablishment.get(0).getLabels().get("fr"));
   }
 
   @Test
