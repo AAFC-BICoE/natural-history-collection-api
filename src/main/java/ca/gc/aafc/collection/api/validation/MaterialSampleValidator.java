@@ -49,7 +49,7 @@ public class MaterialSampleValidator implements Validator {
       return;
     }
     if (!(materialSample.getParentMaterialSample() != null ^ materialSample.getCollectingEvent() != null ^ materialSample.getAcquisitionEvent() != null)
-     || materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null && materialSample.getAcquisitionEvent() != null) {
+      || materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null && materialSample.getAcquisitionEvent() != null) {
       String errorMessage = getMessage(PARENT_AND_EVENT_ERROR_KEY);
       errors.rejectValue("parentMaterialSample", PARENT_AND_EVENT_ERROR_KEY, errorMessage);
     }
