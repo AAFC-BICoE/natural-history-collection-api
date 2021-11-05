@@ -93,6 +93,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
         .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))
+        .labelHtml("label")
         .build())
       .build();
     
