@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -92,7 +91,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .qualifier("qualifier")
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
-        .sourceUrl(RandomStringUtils.randomAlphabetic(4))
+        .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))
         .build())
       .build();

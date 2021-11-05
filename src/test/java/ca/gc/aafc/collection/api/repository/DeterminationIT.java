@@ -5,12 +5,14 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import io.crnk.core.queryspec.QuerySpec;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
 import javax.validation.ValidationException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
   }
 
+  @SneakyThrows
   private Determination.DeterminationBuilder newDetermination() {
     return Determination.builder()
       .verbatimDeterminer(RandomStringUtils.randomAlphabetic(3))
@@ -70,7 +73,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
-        .sourceUrl(RandomStringUtils.randomAlphabetic(4))
+        .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))
         .build())
       .transcriberRemarks(RandomStringUtils.randomAlphabetic(50));
