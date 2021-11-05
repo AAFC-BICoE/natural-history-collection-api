@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -90,7 +91,10 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .determinedOn(LocalDate.now())
       .qualifier("qualifier")
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .scientificNameDetails("scientificNameDetails")
+      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .sourceUrl(RandomStringUtils.randomAlphabetic(4))
+        .recordedOn(LocalDate.now().minusDays(1))
+        .build())
       .build();
     
     Organism organism = Organism.builder()

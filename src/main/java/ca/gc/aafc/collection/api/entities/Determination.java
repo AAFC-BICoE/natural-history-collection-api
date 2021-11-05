@@ -61,9 +61,16 @@ public class Determination {
 
   private final ScientificNameSource scientificNameSource;
 
-  @Size(max = 250)
-  private final String scientificNameDetails;
+  private final ScientificNameSourceDetails scientificNameDetails;
 
   private final Boolean isPrimary;
 
+  @Getter
+  @Builder
+  @RequiredArgsConstructor
+  public static class ScientificNameSourceDetails {
+    private final String sourceUrl;
+    @PastOrPresent
+    private final LocalDate recordedOn;
+  }
 }

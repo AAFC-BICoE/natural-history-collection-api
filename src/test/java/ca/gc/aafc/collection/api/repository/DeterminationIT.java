@@ -41,12 +41,17 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(determination.getDeterminedOn(), result.getDeterminedOn());
     Assertions.assertEquals(determination.getDeterminer().get(0), result.getDeterminer().get(0));
     Assertions.assertEquals(determination.getQualifier(), result.getQualifier());
-    Assertions.assertEquals(determination.getScientificNameDetails(), result.getScientificNameDetails());
     Assertions.assertEquals(determination.getScientificNameSource(), result.getScientificNameSource());
     Assertions.assertEquals(determination.getTypeStatus(), result.getTypeStatus());
     Assertions.assertEquals(determination.getTypeStatusEvidence(), result.getTypeStatusEvidence());
     Assertions.assertEquals(determination.getScientificName(), result.getScientificName());
     Assertions.assertEquals(determination.getIsPrimary(), result.getIsPrimary());
+    Assertions.assertEquals(
+      determination.getScientificNameDetails().getSourceUrl(),
+      result.getScientificNameDetails().getSourceUrl());
+    Assertions.assertEquals(
+      determination.getScientificNameDetails().getRecordedOn(),
+      result.getScientificNameDetails().getRecordedOn());
   }
 
   @Test
@@ -64,6 +69,10 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .verbatimDate(LocalDate.now().toString())
       .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
+      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .sourceUrl(RandomStringUtils.randomAlphabetic(4))
+        .recordedOn(LocalDate.now().minusDays(1))
+        .build())
       .transcriberRemarks(RandomStringUtils.randomAlphabetic(50));
   }
 
