@@ -94,7 +94,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @Column(name = "preparation_attachment", columnDefinition = "uuid[]")
   private List<UUID> preparationAttachment = new ArrayList<>();
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "acquisition_event_id")
   private AcquisitionEvent acquisitionEvent;
 
