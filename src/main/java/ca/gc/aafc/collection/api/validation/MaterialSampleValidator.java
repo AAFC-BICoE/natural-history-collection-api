@@ -41,12 +41,12 @@ public class MaterialSampleValidator implements Validator {
     }
     MaterialSample materialSample = (MaterialSample) target;
     checkParentIsNotSelf(errors, materialSample);
-    checkHasParentOrEvent(errors, materialSample);
+    checkHasParentOrEventOrAcquisitionEvent(errors, materialSample);
     checkDetermination(errors, materialSample);
   }
 
-  private void checkHasParentOrEvent(Errors errors, MaterialSample materialSample) {
-    if (materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null) {
+  private void checkHasParentOrEventOrAcquisitionEvent(Errors errors, MaterialSample materialSample) {
+    if (isMoreThanOne(materialSample.getParentMaterialSample() != null, materialSample.getCollectingEvent() != null, materialSample.getAcquisitionEvent() != null)) {
       String errorMessage = getMessage(PARENT_AND_EVENT_ERROR_KEY);
       errors.rejectValue("parentMaterialSample", PARENT_AND_EVENT_ERROR_KEY, errorMessage);
     }
@@ -89,6 +89,11 @@ public class MaterialSampleValidator implements Validator {
         errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
       }
     }
+
+  }
+  
+  private Boolean isMoreThanOne(boolean b1, boolean b2, boolean b3) {
+    return b1 && b2 || b1 && b3 || b2 && b3;
   }
 
   private static long countPrimaries(List<Determination> determinations) {

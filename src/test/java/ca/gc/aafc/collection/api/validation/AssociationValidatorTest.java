@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.validation;
 
-import java.util.UUID;
-
-import javax.inject.Inject;
-
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
@@ -11,11 +11,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.Association;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
-import groovy.xml.StreamingDOMBuilder._closure1;
+import javax.inject.Inject;
+import java.util.UUID;
 
 public class AssociationValidatorTest extends CollectionModuleBaseIT {
   
@@ -31,6 +28,19 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
     associationValidator.validate(association, errors);
     Assertions.assertFalse(errors.hasErrors());
+  }
+
+  @Test
+  void validate_WhenAssociatedWithSelf_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATED_WITH_SELF_ERROR_KEY);
+    Association association = newAssociation();
+    MaterialSample sample = newSample();
+    association.setAssociatedSample(sample);
+    association.setSample(sample);
+    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
+    associationValidator.validate(association, errors);
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
