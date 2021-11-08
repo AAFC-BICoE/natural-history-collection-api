@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-  <changeSet id="108-Material_sample_unique_partial_trigger" context="schema-change" author="cgendreau">
+  <changeSet id="109-Material_sample_unique_partial_trigger" context="schema-change" author="cgendreau">
     <!-- Drop index created at changeset #104 -->
     <dropIndex tableName="material_sample" indexName="unique_material_sample_name" />
 

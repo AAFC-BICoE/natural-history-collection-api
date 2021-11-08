@@ -4,25 +4,25 @@ vocabulary:
       term: http://purl.obolibrary.org/obo/RO_0002454
       inverseOf: host_of
       labels:
-        en: has_host
+        en: has host
         fr: 
     - name: host_of
       term: http://purl.obolibrary.org/obo/RO_0002453
       inverseOf: has_host
       labels:
-        en: host_of
+        en: host of
         fr: 
     - name: parasite_of
       term: http://purl.obolibrary.org/obo/RO_0002444
       inverseOf: parasitized_by
       labels:
-        en: parasite_of
+        en: parasite of
         fr: 
     - name: parasitized_by
       term: http://purl.obolibrary.org/obo/RO_0002445
       inverseOf: parasite_of
       labels:
-        en: parasitized_by
+        en: parasitized by
         fr: 
     - name: pollinates
       term: http://purl.obolibrary.org/obo/RO_0002455
@@ -34,29 +34,29 @@ vocabulary:
       term: http://purl.obolibrary.org/obo/RO_0002456
       inverseOf: pollinates
       labels:
-        en: pollinated_by
+        en: pollinated by
         fr: 
     - name: has_vector
       term: http://purl.obolibrary.org/obo/RO_0002460
       inverseOf: is_vector_for
       labels:
-        en: has_vector
+        en: has vector
         fr: 
     - name: is_vector_for
       term: http://purl.obolibrary.org/obo/RO_0002459
       inverseOf: has_vector
       labels:
-        en: is_vector_for
+        en: is vector for
         fr: 
     - name: has_pathogen
       term: http://purl.obolibrary.org/obo/RO_0002557
       inverseOf: pathogen_of
       labels:
-        en: has_pathogen
+        en: has pathogen
         fr: 
     - name: pathogen_of
       term: http://purl.obolibrary.org/obo/RO_0002556
       inverseOf: has_pathogen
       labels:
-        en: pathogen_of
+        en: pathogen of
         fr: 
