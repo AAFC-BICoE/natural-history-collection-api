@@ -1,7 +1,9 @@
 package ca.gc.aafc.collection.api.validation;
 
-import java.util.Optional;
-
+import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration.CollectionVocabularyElement;
+import ca.gc.aafc.collection.api.entities.Association;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -9,18 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration.CollectionVocabularyElement;
-import ca.gc.aafc.collection.api.entities.Association;
-import lombok.NonNull;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class AssociationValidator implements Validator {
 
-  private final CollectionVocabularyConfiguration collectionVocabularyConfiguration;
-
+  public static final String ASSOCIATED_WITH_SELF_ERROR_KEY = "validation.constraint.violation.association.associatedWithSelf";
   public static final String ASSOCIATION_TYPE_NOT_IN_VOCABULARY = "validation.constraint.violation.associationTypeNotInVocabulary";
-  
+  private final CollectionVocabularyConfiguration collectionVocabularyConfiguration;
   private final MessageSource messageSource;
 
   public AssociationValidator(
@@ -43,7 +42,14 @@ public class AssociationValidator implements Validator {
     }
     Association association = (Association) target;
     validateAssociationType(errors, association);
-    
+    validateAssociationNotSelf(errors, association);
+  }
+
+  private void validateAssociationNotSelf(Errors errors, Association association) {
+    if (Objects.equals(association.getAssociatedSample().getUuid(), association.getSample().getUuid())) {
+      String errorMessage = getMessage(ASSOCIATED_WITH_SELF_ERROR_KEY);
+      errors.rejectValue("associationType", ASSOCIATED_WITH_SELF_ERROR_KEY, errorMessage);
+    }
   }
 
   private void validateAssociationType(Errors errors, Association association) {
