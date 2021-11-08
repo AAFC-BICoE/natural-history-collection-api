@@ -82,7 +82,7 @@ public class MaterialSampleValidator implements Validator {
 
   }
   
-  private Boolean isMoreThanOne(Boolean b1, Boolean b2, Boolean b3) {
+  private Boolean isMoreThanOne(boolean b1, boolean b2, boolean b3) {
     return b1 && b2 || b1 && b3 || b2 && b3;
   }
 
