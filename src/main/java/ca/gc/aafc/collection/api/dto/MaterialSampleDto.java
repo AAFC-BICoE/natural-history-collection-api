@@ -131,4 +131,7 @@ public class MaterialSampleDto {
   private List<AssociationDto> associations = new ArrayList<>();
 
   private Boolean allowDuplicateName = false;
+
+  @JsonApiRelation
+  private AcquisitionEventDto acquisitionEvent;
 }
