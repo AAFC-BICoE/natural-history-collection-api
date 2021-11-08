@@ -30,7 +30,7 @@
 
             IF NEW.allow_duplicate_name=false AND material_name_exists(NEW.id, NEW.collection_id, NEW.material_sample_name) THEN
               RAISE EXCEPTION unique_violation 
-              USING MESSAGE = ''material_sample_name already exist in that collection'',
+              USING MESSAGE = ''material_sample_name in collection violates unique constraint "material_sample_name_unique"'',
               CONSTRAINT = ''material_sample_name_unique'';
             END IF;
             RETURN NEW;
