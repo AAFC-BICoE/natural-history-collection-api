@@ -28,8 +28,10 @@
               THEN RETURN NEW;
             END IF;
 
-            IF NEW.allow_duplicate_name=false AND material_name_exists(new.id, NEW.collection_id, NEW.material_sample_name) THEN
-              RAISE EXCEPTION ''material_sample_name already exist for collection'';
+            IF NEW.allow_duplicate_name=false AND material_name_exists(NEW.id, NEW.collection_id, NEW.material_sample_name) THEN
+              RAISE EXCEPTION unique_violation 
+              USING MESSAGE = ''material_sample_name already exist in that collection'',
+              CONSTRAINT = ''material_sample_name_unique'';
             END IF;
             RETURN NEW;
         END;
