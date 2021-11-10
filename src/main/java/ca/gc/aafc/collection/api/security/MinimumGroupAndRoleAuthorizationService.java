@@ -9,17 +9,17 @@ import ca.gc.aafc.dina.security.PermissionAuthorizationService;
 public class MinimumGroupAndRoleAuthorizationService extends PermissionAuthorizationService {
 
   @Override
-  @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, collection-manager, #entity)")
+  @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, 'COLLECTION_MANAGER', #entity)")
   public void authorizeCreate(Object entity) {    
   }
 
   @Override
-  @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, collection-manager, #entity)")
+  @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, 'COLLECTION_MANAGER', #entity)")
   public void authorizeUpdate(Object entity) {    
   }
 
   @Override
-  @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, collection-manager, #entity)")
+  @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, 'COLLECTION_MANAGER', #entity)")
   public void authorizeDelete(Object entity) {    
   }
 
