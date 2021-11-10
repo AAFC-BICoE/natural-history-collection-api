@@ -23,13 +23,13 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
   public CollectionRepository(
     @NonNull CollectionService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    DinaAuthorizationService dinaAdminOnlyAuthorizationService,
+    DinaAuthorizationService minimumGroupAndRoleAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       dinaService,
-      dinaAdminOnlyAuthorizationService,
+      minimumGroupAndRoleAuthorizationService,
       Optional.empty(),
       new DinaMapper<>(CollectionDto.class),
       CollectionDto.class,
