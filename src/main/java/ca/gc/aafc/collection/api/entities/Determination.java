@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -61,9 +63,20 @@ public class Determination {
 
   private final ScientificNameSource scientificNameSource;
 
-  @Size(max = 250)
-  private final String scientificNameDetails;
+  @Valid
+  private final ScientificNameSourceDetails scientificNameDetails;
 
   private final Boolean isPrimary;
 
+  @Getter
+  @Builder
+  @RequiredArgsConstructor
+  public static class ScientificNameSourceDetails {
+    @Size(max = 255)
+    private final String labelHtml;
+    @URL
+    private final String sourceUrl;
+    @PastOrPresent
+    private final LocalDate recordedOn;
+  }
 }
