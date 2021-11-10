@@ -25,7 +25,7 @@ public class MinimumGroupAndRoleAuthorizationService extends PermissionAuthoriza
 
   @Override
   public String getName() {
-    return "GroupAndRoleAuthorizationService";
+    return "MinimumGroupAndRoleAuthorizationService";
   }
   
 }
