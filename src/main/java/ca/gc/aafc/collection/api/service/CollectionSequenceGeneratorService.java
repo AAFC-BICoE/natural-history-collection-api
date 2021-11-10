@@ -13,14 +13,12 @@ import org.springframework.validation.SmartValidator;
 import org.springframework.web.server.MethodNotAllowedException;
 
 import ca.gc.aafc.collection.api.entities.Collection;
-import ca.gc.aafc.collection.api.entities.CollectionSequence;
 import ca.gc.aafc.collection.api.entities.CollectionSequenceGenerationRequest;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import ca.gc.aafc.dina.service.OnCreate;
 
-import io.crnk.core.exception.ResourceNotFoundException;
 import lombok.NonNull;
 
 @Service
@@ -28,9 +26,6 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
 
   @Inject
   private CollectionService collectionService;
-
-  @Inject
-  private CollectionSequenceService collectionSequenceService;
 
   @Inject
   private CollectionSequenceMapper collectionSequenceMapper;
@@ -42,7 +37,6 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
   @Override
   public CollectionSequenceGenerationRequest create(CollectionSequenceGenerationRequest entity) {
     validateConstraints(entity, OnCreate.class);
-    validateBusinessRules(entity);
 
     // Using the collection sequence mapper, retrieve the reserved ids. Both the
     // collection and collection sequence should exist since it was checked in the 
@@ -53,24 +47,6 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
     );
 
     return entity;
-  }
-
-  @Override
-  public void validateBusinessRules(CollectionSequenceGenerationRequest entity) {
-    // Check to ensure both the Collection and CollectionSequence exist.
-    Collection collection = collectionService.findOne(entity.getCollectionId(), Collection.class);
-    if (collection == null) {
-      throw new ResourceNotFoundException(
-          "Collection with the UUID of '" + entity.getCollectionId() + "' does not exist.");
-    }
-
-    CollectionSequence collectionSequence = collectionSequenceService.findOneById(collection.getId(),
-        CollectionSequence.class);
-    if (collectionSequence == null) {
-      throw new ResourceNotFoundException(
-          "There is no collection sequence associated with the collection with the UUID of '" 
-              + entity.getCollectionId() + "'.");
-    }
   }
 
   @Override

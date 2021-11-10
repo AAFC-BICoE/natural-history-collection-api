@@ -16,8 +16,6 @@ import ca.gc.aafc.collection.api.entities.CollectionSequenceGenerationRequest;
 import ca.gc.aafc.collection.api.service.CollectionSequenceMapper.CollectionSequenceReserved;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 
-import io.crnk.core.exception.ResourceNotFoundException;
-
 public class CollectionSequenceGeneratorServiceIT extends CollectionModuleBaseIT {
 
   @Inject
@@ -99,7 +97,7 @@ public class CollectionSequenceGeneratorServiceIT extends CollectionModuleBaseIT
         .collectionId(UUID.randomUUID())
         .build();
 
-    Assertions.assertThrows(ResourceNotFoundException.class, () -> collectionSequenceGeneratorService.create(invalidCollectionRequest));
+    Assertions.assertThrows(NullPointerException.class, () -> collectionSequenceGeneratorService.create(invalidCollectionRequest));
   }
 
   @AfterTransaction
