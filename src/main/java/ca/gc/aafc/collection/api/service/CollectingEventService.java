@@ -59,14 +59,22 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   @Override
   public void preUpdate(CollectingEvent entity) {
+    setLock(entity);
+    cleanupManagedAttributes(entity);
+    assignAutomaticValues(entity);
+  }
+
+  @Override
+  protected void preDelete(CollectingEvent entity) {
+    setLock(entity);
+  }
+
+  private void setLock(CollectingEvent entity) {
     // This can be removed once it's implemented directly to the DinaService/DinaEntity.
     entityManager.createWithEntityManager(em -> {
       em.lock(entity, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
       return null;
     });
-
-    cleanupManagedAttributes(entity);
-    assignAutomaticValues(entity);
   }
 
   @Override
