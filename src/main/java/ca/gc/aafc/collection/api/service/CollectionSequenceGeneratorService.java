@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
