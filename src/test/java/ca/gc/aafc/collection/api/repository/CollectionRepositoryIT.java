@@ -44,7 +44,7 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"AAFC:DINA_ADMIN"})
+  @WithMockKeycloakUser(groupRole = {"AAFC:COLLECTION_MANAGER"})
   public void create_WhenDifferentGroup_AccessDeniedException() {
     CollectionDto collectionDto = newCollectionDto();
     assertThrows(AccessDeniedException.class, () -> collectionRepository.create(collectionDto));

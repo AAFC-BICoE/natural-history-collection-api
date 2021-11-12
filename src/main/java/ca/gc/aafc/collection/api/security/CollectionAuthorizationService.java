@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ca.gc.aafc.dina.security.PermissionAuthorizationService;
 
 @Service
-public class MinimumGroupAndRoleAuthorizationService extends PermissionAuthorizationService {
+public class CollectionAuthorizationService extends PermissionAuthorizationService {
 
   @Override
   @PreAuthorize("hasMinimumGroupAndRolePermissions(@currentUser, 'COLLECTION_MANAGER', #entity)")
