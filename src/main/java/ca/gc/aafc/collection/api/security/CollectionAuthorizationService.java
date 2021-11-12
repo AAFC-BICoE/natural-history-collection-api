@@ -25,7 +25,7 @@ public class CollectionAuthorizationService extends PermissionAuthorizationServi
 
   @Override
   public String getName() {
-    return "MinimumGroupAndRoleAuthorizationService";
+    return "CollectionAuthorizationService";
   }
   
 }
