@@ -68,6 +68,8 @@ public class Determination {
 
   private final Boolean isPrimary;
 
+  private final Boolean isFileAs;
+
   @Getter
   @Builder
   @RequiredArgsConstructor
