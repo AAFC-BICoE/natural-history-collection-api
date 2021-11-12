@@ -24,7 +24,7 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private CollectionRepository collectionRepository;
 
-  private static final String group = "aafc";
+  private static final String group = "cnc";
   private static final String name = "preparation process definition";
   private static final String code = "YUL";
 
@@ -44,10 +44,17 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
-  public void create_WhenManager_AccessDeniedException() {
+  @WithMockKeycloakUser(groupRole = {"AAFC:COLLECTION_MANAGER"})
+  public void create_WhenDifferentGroup_AccessDeniedException() {
     CollectionDto collectionDto = newCollectionDto();
     assertThrows(AccessDeniedException.class, () -> collectionRepository.create(collectionDto));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"AAFC:COLLECTION_MANAGER"})
+  public void delete_WhenDifferentGroup_AccessDeniedException() {
+    Collection persisted = setupPersistedCollection();
+    assertThrows(AccessDeniedException.class, () -> collectionRepository.delete(persisted.getUuid()));
   }
 
   @Test
@@ -56,12 +63,12 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
     Collection persisted = setupPersistedCollection();
     assertDoesNotThrow(() -> collectionRepository.delete(persisted.getUuid()));
   }
-
+    
   @Test
   @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
-  public void delete_WhenManager_AccessDeniedException() {
+  public void delete_WhenManager_AccessAccepted() {
     Collection persisted = setupPersistedCollection();
-    assertThrows(AccessDeniedException.class, () -> collectionRepository.delete(persisted.getUuid()));
+    assertDoesNotThrow(() -> collectionRepository.delete(persisted.getUuid()));
   }
 
   @Test
@@ -74,9 +81,10 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
-  public void update_WhenManager_AccessDeniedException() {
-    CollectionDto collectionDto = newCollectionDto();
-    assertThrows(AccessDeniedException.class, () -> collectionRepository.save(collectionDto));
+  public void update_WhenManager_AccessAccepted() {
+    assertDoesNotThrow(() -> collectionRepository.save(collectionRepository.findOne(
+      collectionRepository.create(newCollectionDto()).getUuid(),
+      new QuerySpec(CollectionDto.class))));
   }
 
   private CollectionDto newCollectionDto() {
@@ -101,7 +109,7 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
       .name("name")
       .institution(institution)
       .uuid(UUID.randomUUID())
-      .group("group")
+      .group(group)
       .createdBy("by")
       .code("DNA")
       .build();
