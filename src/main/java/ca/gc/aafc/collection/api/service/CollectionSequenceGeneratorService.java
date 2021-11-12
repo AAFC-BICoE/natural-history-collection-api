@@ -39,19 +39,16 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
   public CollectionSequenceGenerationRequest create(CollectionSequenceGenerationRequest entity) {
     validateConstraints(entity, OnCreate.class);
 
-    // Ensure the collection exists.
-    Objects.requireNonNull(
-      collectionService.findOne(entity.getCollectionId(), Collection.class), 
-      "Collection with the UUID of '" + entity.getCollectionId() + "' does not exist."
-    );
+    // Retrieve the collection and make sure it exists.
+    Collection collection = collectionService.findOne(entity.getCollectionId(), Collection.class);
+    if (collection == null) {
+      throw new IllegalArgumentException("Collection with the UUID of '" + entity.getCollectionId() + "' could not be found.");
+    }
 
     // Using the collection sequence mapper, retrieve the reserved ids. Both the
     // collection and collection sequence should exist since it was checked in the 
     // preCreate method.
-    entity.setResult(collectionSequenceMapper.getNextId(
-      collectionService.findOne(entity.getCollectionId(), Collection.class).getId(), 
-      entity.getAmount())
-    );
+    entity.setResult(collectionSequenceMapper.getNextId(collection.getId(), entity.getAmount()));
 
     return entity;
   }

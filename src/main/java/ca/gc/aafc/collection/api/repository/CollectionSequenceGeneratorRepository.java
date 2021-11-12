@@ -22,6 +22,7 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 
 import io.crnk.core.exception.MethodNotAllowedException;
+import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
@@ -79,9 +80,10 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
 
     // Retrieve the collections group to use to check if the current user has permission to perform this.
     Collection collection = collectionService.findOne(resource.getCollectionId(), Collection.class);
-    if (collection != null) {
-      resource.setGroup(collection.getGroup());
+    if (collection == null) {
+      throw new ResourceNotFoundException("The collection with the UUID of '" + resource.getCollectionId() + "' could not be found.");
     }
+    resource.setGroup(collection.getGroup());
 
     // Convert the Dto into an entity.
     CollectionSequenceGenerationRequest entity = new CollectionSequenceGenerationRequest();

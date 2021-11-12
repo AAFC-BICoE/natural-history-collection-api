@@ -15,6 +15,7 @@ import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.CollectionSequence;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import io.crnk.core.exception.ResourceNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -60,6 +61,18 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
     // Send the request to the repository.
     CollectionSequenceGeneratorDto responseSequence = collectionSequenceRepository.create(requestSequence);
     assertEquals(1, responseSequence.getResult().getLowReservedID());
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = VALID_GROUP + ": staff")
+  public void reserveNewSequenceIds_collectionDoesNotExist_exception() {
+    // Generate a collection sequence dto request.
+    CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();
+    requestSequence.setAmount(1);
+    requestSequence.setCollectionId(UUID.randomUUID());
+
+    // Send the request to the repository, since the collection does not exist, it should throw an exception.
+    assertThrows(ResourceNotFoundException.class, () -> collectionSequenceRepository.create(requestSequence));
   }
 
   @Test
