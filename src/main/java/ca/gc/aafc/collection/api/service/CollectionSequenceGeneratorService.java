@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -37,6 +38,12 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
   @Override
   public CollectionSequenceGenerationRequest create(CollectionSequenceGenerationRequest entity) {
     validateConstraints(entity, OnCreate.class);
+
+    // Ensure the collection exists.
+    Objects.requireNonNull(
+      collectionService.findOne(entity.getCollectionId(), Collection.class), 
+      "Collection with the UUID of '" + entity.getCollectionId() + "' does not exist."
+    );
 
     // Using the collection sequence mapper, retrieve the reserved ids. Both the
     // collection and collection sequence should exist since it was checked in the 

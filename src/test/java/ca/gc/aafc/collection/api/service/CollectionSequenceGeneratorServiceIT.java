@@ -97,7 +97,11 @@ public class CollectionSequenceGeneratorServiceIT extends CollectionModuleBaseIT
         .collectionId(UUID.randomUUID())
         .build();
 
-    Assertions.assertThrows(NullPointerException.class, () -> collectionSequenceGeneratorService.create(invalidCollectionRequest));
+    NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> collectionSequenceGeneratorService.create(invalidCollectionRequest), "A collection ID is required in order to generate sequences on it.");
+    Assertions.assertEquals(
+      "Collection with the UUID of '" + invalidCollectionRequest.getCollectionId() + "' does not exist.", 
+      nullPointerException.getMessage()
+    );
   }
 
   @AfterTransaction
