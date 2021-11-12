@@ -1,13 +1,10 @@
 package ca.gc.aafc.collection.api.service;
 
-import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
-import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
-import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.service.DefaultDinaService;
-import lombok.NonNull;
+import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.LockModeType;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.geolatte.geom.builder.DSL;
@@ -20,9 +17,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.SmartValidator;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
+import ca.gc.aafc.dina.jpa.BaseDAO;
+import ca.gc.aafc.dina.service.DefaultDinaService;
+
+import lombok.NonNull;
 
 @Service
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
@@ -30,6 +33,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+
+  private BaseDAO entityManager;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
@@ -42,6 +47,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.entityManager = baseDAO;
   }
 
   @Override
@@ -53,6 +59,12 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   @Override
   public void preUpdate(CollectingEvent entity) {
+    // This can be removed once it's implemented directly to the DinaService/DinaEntity.
+    entityManager.createWithEntityManager(em -> {
+      em.lock(entity, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+      return null;
+    });
+
     cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
   }
