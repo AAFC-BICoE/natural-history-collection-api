@@ -76,7 +76,9 @@ class DeterminationIT extends CollectionModuleBaseIT {
         .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))
         .build())
-      .transcriberRemarks(RandomStringUtils.randomAlphabetic(50));
+      .transcriberRemarks(RandomStringUtils.randomAlphabetic(50))
+      .verbatimRemarks(RandomStringUtils.randomAlphabetic(50))
+      .determinationRemarks(RandomStringUtils.randomAlphabetic(50));;
   }
 
 }
