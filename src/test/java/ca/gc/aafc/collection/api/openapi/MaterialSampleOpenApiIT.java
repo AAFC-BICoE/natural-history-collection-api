@@ -83,6 +83,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .verbatimDate("2021-01-01")
       .scientificName("scientificName")
       .transcriberRemarks("transcriberRemarks")
+      .verbatimRemarks("verbatimRemarks")
+      .determinationRemarks("determinationRemarks")
       .isPrimary(true)
       .typeStatus("typeStatus")
       .typeStatusEvidence("typeStatusEvidence")
