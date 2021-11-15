@@ -24,6 +24,8 @@ public class MaterialSampleTestFixture {
   public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";
   public static final String[] TAGS = new String[]{"0-Tag", "1-Tag"};
   public static final String MATERIAL_SAMPLE_STATE = "Damaged";
+  public static final LocalDate STATE_CHANGED_ON = LocalDate.now();
+  public static final String STATE_CHANGE_REMARKS = "state change remarks";
   public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
   public static final String FILED_AS = "example of filedAs";
   public static final String PREPARATION_METHOD = "microwaving";
@@ -49,6 +51,8 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
     materialSampleDto.setTags(TAGS);
     materialSampleDto.setMaterialSampleState(MATERIAL_SAMPLE_STATE);
+    materialSampleDto.setStateChangedOn(STATE_CHANGED_ON);
+    materialSampleDto.setStateChangeRemarks(STATE_CHANGE_REMARKS);
     materialSampleDto.setMaterialSampleRemarks(MATERIAL_SAMPLE_REMARKS);
     materialSampleDto.setPreparationMethod(PREPARATION_METHOD);
     materialSampleDto.setPreparationAttachment(List.of(
