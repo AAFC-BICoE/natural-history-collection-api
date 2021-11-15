@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -110,6 +111,37 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
       .build();
 
     List<Determination> determinations = List.of(determination);
+    MaterialSample sample = newSample();
+    sample.setDetermination(determinations);
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
+    sampleValidator.validate(sample, errors);
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_WhenMoreThanOneIsFiledAs() {
+    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.MORE_THAN_ONE_ISFILEDAS);
+
+    Determination determination_a = Determination.builder()
+      .isPrimary(true)
+      .isFileAs(true)
+      .verbatimScientificName("verbatimScientificName A")
+      .scientificName("scientificName A")
+      .scientificNameSource(ScientificNameSource.COLPLUS)
+      .build();
+
+    Determination determination_b = Determination.builder()
+      .isPrimary(false)
+      .isFileAs(true)
+      .verbatimScientificName("verbatimScientificName B")
+      .scientificName("scientificName B")
+      .scientificNameSource(ScientificNameSource.COLPLUS)
+      .build();
+
+    List<Determination> determinations = List.of(determination_a, determination_b);
     MaterialSample sample = newSample();
     sample.setDetermination(determinations);
 

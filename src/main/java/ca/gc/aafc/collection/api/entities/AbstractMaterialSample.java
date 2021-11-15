@@ -114,9 +114,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private List<ScheduledActionDto> scheduledActions;
 
-  @Size(max = 255)
-  private String filedAs;
-
   @Size(max = 250)
   private String preparationMethod;
 
@@ -124,4 +121,8 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private HostOrganism hostOrganism;
 
+  @Column(name = "allow_duplicate_name")
+  @NotNull
+  @Builder.Default
+  private Boolean allowDuplicateName = false;
 }

@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
-
 public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     @Inject
@@ -56,6 +55,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
         assertEquals(MaterialSampleTestFixture.HOST, result.getHost());
+        assertEquals(MaterialSampleTestFixture.ALLOW_DUPLICATE_NAME, result.getAllowDuplicateName());
         assertEquals(materialSampleDto.getBarcode(), result.getBarcode());
         assertEquals(1 , result.getHierarchy().size());
     }
@@ -76,8 +76,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   public void create_WithCollection_PersistedWithCollection() {
     Institution institution = InstitutionFixture.newInstitutionEntity().build();
     service.save(institution);
-    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection().
-      institution(InstitutionDto.builder().uuid(institution.getUuid()).build()).build());
+    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection()
+      .group("aafc")
+      .institution(InstitutionDto.builder().uuid(institution.getUuid()).build()).build());
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setCollection(collectionDto);
     QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);

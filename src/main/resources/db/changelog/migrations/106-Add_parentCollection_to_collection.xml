@@ -4,10 +4,12 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="103-Add_extensions_to_CollectingEvent" context="schema-change" author="steven luu">
-       <addColumn tableName="collecting_event">
-           <column type="jsonb" name="extensions"/>
-       </addColumn>
+    <changeSet id="106-Add_parentCollection_to_collection" context="schema-change" author="steven luu">
+      <addColumn tableName="collection">
+        <column name="parent_collection_id" type="integer">
+          <constraints foreignKeyName="fk_parent_collection_id" references="collection(id)"/>
+        </column>
+      </addColumn>
     </changeSet>
 
 </databaseChangeLog>

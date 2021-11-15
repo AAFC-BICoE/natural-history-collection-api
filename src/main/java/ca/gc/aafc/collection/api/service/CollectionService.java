@@ -7,6 +7,7 @@ import org.springframework.validation.SmartValidator;
 
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.CollectionSequence;
+import ca.gc.aafc.collection.api.validation.CollectionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 
@@ -16,13 +17,17 @@ import lombok.NonNull;
 public class CollectionService extends DefaultDinaService<Collection> {
 
   private final CollectionSequenceService collectionSequenceService;
+  private final CollectionValidator collectionValidator;
 
   public CollectionService(
     @NonNull BaseDAO baseDAO, 
     @NonNull SmartValidator sv,
-    @NonNull CollectionSequenceService collectionSequenceService) {
+    @NonNull CollectionSequenceService collectionSequenceService,
+    @NonNull CollectionValidator collectionValidator
+  ) {
     super(baseDAO, sv);
     this.collectionSequenceService = collectionSequenceService;
+    this.collectionValidator = collectionValidator;
   }
 
   @Override
@@ -52,6 +57,11 @@ public class CollectionService extends DefaultDinaService<Collection> {
     collectionSequenceService.delete(
       collectionSequenceService.findOneById(entity.getId(), CollectionSequence.class)
     );
+  }
+
+  @Override
+  public void validateBusinessRules(Collection entity) {
+    applyBusinessRule(entity, collectionValidator);
   }
 
 }
