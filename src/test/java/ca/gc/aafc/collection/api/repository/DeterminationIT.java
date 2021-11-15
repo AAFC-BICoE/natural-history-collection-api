@@ -78,7 +78,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
         .build())
       .transcriberRemarks(RandomStringUtils.randomAlphabetic(50))
       .verbatimRemarks(RandomStringUtils.randomAlphabetic(50))
-      .determinationRemarks(RandomStringUtils.randomAlphabetic(50));;
+      .determinationRemarks(RandomStringUtils.randomAlphabetic(50));
   }
 
 }
