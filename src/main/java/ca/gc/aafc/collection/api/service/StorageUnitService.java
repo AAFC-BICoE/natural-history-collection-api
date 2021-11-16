@@ -1,27 +1,31 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.BiFunction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
+
+import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
-import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
+import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
-import lombok.NonNull;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.SmartValidator;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.BiFunction;
+import lombok.NonNull;
 
 @Service
-public class StorageUnitService extends DefaultDinaService<StorageUnit> {
+public class StorageUnitService extends MessageProducingService<StorageUnit> {
 
   private final StorageUnitTypeService storageUnitTypeService;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
@@ -30,9 +34,10 @@ public class StorageUnitService extends DefaultDinaService<StorageUnit> {
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
-    @NonNull StorageUnitTypeService storageUnitTypeService
+    @NonNull StorageUnitTypeService storageUnitTypeService,
+    MessageProducer messageProducer
   ) {
-    super(baseDAO, sv);
+    super(baseDAO, sv, StorageUnitDto.TYPENAME, messageProducer);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitTypeService = storageUnitTypeService;
   }
