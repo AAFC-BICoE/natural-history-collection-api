@@ -112,11 +112,11 @@ public class MaterialSampleDto {
 
   private String materialSampleState;
   private String materialSampleRemarks;
+  private LocalDate stateChangedOn;
+  private String stateChangeRemarks;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
-
-  private String filedAs;
 
   private String preparationMethod;
 
@@ -134,4 +134,5 @@ public class MaterialSampleDto {
 
   @JsonApiRelation
   private AcquisitionEventDto acquisitionEvent;
+
 }

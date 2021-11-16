@@ -114,4 +114,7 @@
   <include file="db/changelog/migrations/107-Group_based_acquisition_event.xml"/>
   <include file="db/changelog/migrations/108-Add_link_between_materialSample_and_acquisitionEvent.xml"/>
   <include file="db/changelog/migrations/109-Material_sample_unique_partial_trigger.xml"/>
+  <include file="db/changelog/migrations/110-Changed_filedAs_implementation.xml"/>
+  <include file="db/changelog/migrations/111-Add_MaterialSample_state_change_fields.xml"/>
+
 </databaseChangeLog>

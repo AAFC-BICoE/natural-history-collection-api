@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -82,6 +84,11 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Size(max = 50)
   private String materialSampleState;
+
+  private LocalDate stateChangedOn;
+
+  @Size(max = 500)
+  private String stateChangeRemarks;
 
   @Size(max = 250)
   private String materialSampleRemarks;

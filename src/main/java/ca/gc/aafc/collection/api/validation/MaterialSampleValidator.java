@@ -27,6 +27,7 @@ public class MaterialSampleValidator implements Validator {
   public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
+  public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
@@ -67,6 +68,7 @@ public class MaterialSampleValidator implements Validator {
           MISSING_PRIMARY_DETERMINATION,
           getMessage(MISSING_PRIMARY_DETERMINATION));
       }
+      Integer isFiledAsCounter = 0;
       for (Determination determination : materialSample.getDetermination()) {
         // XOR, both set or both not set but never only one of them
         if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
@@ -77,6 +79,14 @@ public class MaterialSampleValidator implements Validator {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
         }
+        // Check there is 0 or 1 isFiledAs but never more
+        if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
+          isFiledAsCounter++;
+        }
+      }
+      if (isFiledAsCounter > 1) {
+        String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
+        errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
       }
     }
 

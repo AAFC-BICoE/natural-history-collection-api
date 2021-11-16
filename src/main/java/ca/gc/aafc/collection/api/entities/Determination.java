@@ -44,8 +44,14 @@ public class Determination {
   @Size(max = 250)
   private final String scientificName;
 
-  @Size(max = 250)
+  @Size(max = 500)
   private final String transcriberRemarks;
+
+  @Size(max = 500)
+  private final String verbatimRemarks;
+
+  @Size(max = 500)
+  private final String determinationRemarks;
 
   @Size(max = 50)
   private final String typeStatus;
@@ -67,6 +73,8 @@ public class Determination {
   private final ScientificNameSourceDetails scientificNameDetails;
 
   private final Boolean isPrimary;
+
+  private final Boolean isFileAs;
 
   @Getter
   @Builder
