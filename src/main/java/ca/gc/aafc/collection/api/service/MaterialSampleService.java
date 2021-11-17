@@ -31,7 +31,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
-  private final BaseDAO baseDAO;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -47,7 +46,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
-    this.baseDAO = baseDAO;
   }
 
   @Override
@@ -115,8 +113,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   private void validateAssociations(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      int associationIndex = 0;
       for (Association association : entity.getAssociations()) {
-        associationValidator.validate(association, ValidationErrorsHelper.newErrorsObject(entity));
+        applyBusinessRule(entity.getUuid().toString() + associationIndex, association, associationValidator);
+        associationIndex++;
       }
     }
   }
