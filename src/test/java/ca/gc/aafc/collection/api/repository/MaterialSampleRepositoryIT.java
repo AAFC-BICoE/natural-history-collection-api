@@ -76,8 +76,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   public void create_WithCollection_PersistedWithCollection() {
     Institution institution = InstitutionFixture.newInstitutionEntity().build();
     service.save(institution);
-    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection().
-      institution(InstitutionDto.builder().uuid(institution.getUuid()).build()).build());
+    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection()
+      .group("aafc")
+      .institution(InstitutionDto.builder().uuid(institution.getUuid()).build()).build());
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setCollection(collectionDto);
     QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);

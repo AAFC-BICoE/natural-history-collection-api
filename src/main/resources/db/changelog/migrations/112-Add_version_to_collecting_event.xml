@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-  <changeSet id="110-Add_version_to_collecting_event" context="schema-change" author="Brandon Andre">
+  <changeSet id="112-Add_version_to_collecting_event" context="schema-change" author="Brandon Andre">
 
       <!-- Add the version column to the collecting event for optimistic locking. -->
       <addColumn tableName="collecting_event">

@@ -53,7 +53,8 @@ public class MaterialSampleActionDefinition implements DinaEntity {
 
   public enum MaterialSampleFormComponent {
     COLLECTING_EVENT,
-    MATERIAL_SAMPLE 
+    MATERIAL_SAMPLE,
+    ACQUISITION_EVENT
   }
 
   @Id

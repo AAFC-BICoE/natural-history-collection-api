@@ -11,7 +11,6 @@ import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
-import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
-  private final BaseDAO baseDAO;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -47,7 +45,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
-    this.baseDAO = baseDAO;
   }
 
   @Override
@@ -115,8 +112,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   private void validateAssociations(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
+      int associationIndex = 0;
       for (Association association : entity.getAssociations()) {
-        associationValidator.validate(association, ValidationErrorsHelper.newErrorsObject(entity));
+        applyBusinessRule(entity.getUuid().toString() + associationIndex, association, associationValidator);
+        associationIndex++;
       }
     }
   }
