@@ -49,7 +49,7 @@ public class CollectingEventDto {
   @PropertyName("id")
   private UUID uuid;
 
-  @JsonApiField(postable = false, patchable = false, deletable = false)
+  @JsonApiField(postable = false)
   private int version;
 
   private String group;

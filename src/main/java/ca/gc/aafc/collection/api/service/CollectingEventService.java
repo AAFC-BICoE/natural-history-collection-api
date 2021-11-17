@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.service;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
-import javax.persistence.LockModeType;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +33,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
 
-  private BaseDAO entityManager;
-
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
@@ -47,7 +44,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
-    this.entityManager = baseDAO;
   }
 
   @Override
@@ -59,22 +55,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   @Override
   public void preUpdate(CollectingEvent entity) {
-    setLock(entity);
     cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
-  }
-
-  @Override
-  protected void preDelete(CollectingEvent entity) {
-    setLock(entity);
-  }
-
-  private void setLock(CollectingEvent entity) {
-    // This can be removed once it's implemented directly to the DinaService/DinaEntity.
-    entityManager.createWithEntityManager(em -> {
-      em.lock(entity, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-      return null;
-    });
   }
 
   @Override
