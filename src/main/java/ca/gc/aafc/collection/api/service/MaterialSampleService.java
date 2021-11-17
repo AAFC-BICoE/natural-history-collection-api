@@ -11,7 +11,6 @@ import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
-import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
