@@ -61,6 +61,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateBusinessRules(CollectingEvent entity) {
     applyBusinessRule(entity, collectingEventValidator);
     validateAssertions(entity);
+    // applyBusinessRule(entity.getUuid().toString(), entity.getManagedAttributes(), collectionManagedAttributeValueValidator);
     validateManagedAttribute(entity);
   }
 
@@ -78,29 +79,17 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private void validateAssertions(@NonNull CollectingEvent entity) {
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
-      entity.getGeoReferenceAssertions().forEach(geo -> validateGeoreferenceAssertion(
-        geo,
-        entity.getUuid().toString()));
+      entity.getGeoReferenceAssertions().forEach(geo -> applyBusinessRule(
+        entity.getUuid().toString(), 
+        geo, 
+        georeferenceAssertionValidator
+      ));
     }
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
         CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.COLLECTING_EVENT);
-  }
-
-  public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertionDto geo, @NonNull String eventUUID) {
-    Errors errors = new BeanPropertyBindingResult(geo, eventUUID);
-    georeferenceAssertionValidator.validate(geo, errors);
-
-    if (!errors.hasErrors()) {
-      return;
-    }
-
-    Optional<String> errorMsg = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).findAny();
-    errorMsg.ifPresent(msg -> {
-      throw new IllegalArgumentException(msg);
-    });
   }
 
   private void cleanupManagedAttributes(CollectingEvent entity) {
