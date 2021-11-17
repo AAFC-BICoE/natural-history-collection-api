@@ -57,7 +57,6 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateBusinessRules(CollectingEvent entity) {
     applyBusinessRule(entity, collectingEventValidator);
     validateAssertions(entity);
-    // applyBusinessRule(entity.getUuid().toString(), entity.getManagedAttributes(), collectionManagedAttributeValueValidator);
     validateManagedAttribute(entity);
   }
 
