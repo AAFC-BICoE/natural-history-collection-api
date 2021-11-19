@@ -12,9 +12,9 @@ public class AcquisitionEventTestFixture {
 
   public static final String CREATED_BY = RandomStringUtils.randomAlphabetic(4);
 
-  public static final UUID EXTERNALLY_ISOLATED_BY = UUID.randomUUID();
-  public static final LocalDate EXTERNALLY_ISOLATED_ON = LocalDate.now();
-  public static final String EXTERNALLY_ISOLATION_REMARKS = RandomStringUtils.randomAlphabetic(10);
+  public static final UUID ISOLATED_BY = UUID.randomUUID();
+  public static final LocalDate ISOLATED_ON = LocalDate.now();
+  public static final String ISOLATION_REMARKS = RandomStringUtils.randomAlphabetic(10);
 
   public static final UUID RECEIVED_FROM = UUID.randomUUID();
   public static final LocalDate RECEIVED_DATE = LocalDate.now();
@@ -25,9 +25,9 @@ public class AcquisitionEventTestFixture {
   public static AcquisitionEventDto newAcquisitionEvent() {
     AcquisitionEventDto acquisitionEventDto = new AcquisitionEventDto();
     acquisitionEventDto.setCreatedBy(CREATED_BY);
-    acquisitionEventDto.setExternallyIsolatedBy(ExternalRelationDto.builder().id(EXTERNALLY_ISOLATED_BY.toString()).type("person").build());
-    acquisitionEventDto.setExternallyIsolatedOn(EXTERNALLY_ISOLATED_ON);
-    acquisitionEventDto.setExternallyIsolationRemarks(EXTERNALLY_ISOLATION_REMARKS);
+    acquisitionEventDto.setIsolatedBy(ExternalRelationDto.builder().id(ISOLATED_BY.toString()).type("person").build());
+    acquisitionEventDto.setIsolatedOn(ISOLATED_ON);
+    acquisitionEventDto.setIsolationRemarks(ISOLATION_REMARKS);
 
     acquisitionEventDto.setReceivedFrom(ExternalRelationDto.builder().id(RECEIVED_FROM.toString()).type("person").build());
     acquisitionEventDto.setReceivedDate(RECEIVED_DATE);

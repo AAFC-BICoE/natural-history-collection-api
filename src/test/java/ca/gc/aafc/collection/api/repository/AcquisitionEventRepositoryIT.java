@@ -26,9 +26,9 @@ public class AcquisitionEventRepositoryIT extends CollectionModuleBaseIT  {
     Assertions.assertNotNull(result.getCreatedBy());
     Assertions.assertNotNull(result.getCreatedOn());
 
-    Assertions.assertEquals(expected.getExternallyIsolatedBy(), result.getExternallyIsolatedBy());
-    Assertions.assertEquals(expected.getExternallyIsolatedOn(), result.getExternallyIsolatedOn());
-    Assertions.assertEquals(expected.getExternallyIsolationRemarks(), result.getExternallyIsolationRemarks());
+    Assertions.assertEquals(expected.getIsolatedBy(), result.getIsolatedBy());
+    Assertions.assertEquals(expected.getIsolatedOn(), result.getIsolatedOn());
+    Assertions.assertEquals(expected.getIsolationRemarks(), result.getIsolationRemarks());
 
     Assertions.assertEquals(expected.getReceivedFrom(), result.getReceivedFrom());
     Assertions.assertEquals(expected.getReceivedDate(), result.getReceivedDate());
