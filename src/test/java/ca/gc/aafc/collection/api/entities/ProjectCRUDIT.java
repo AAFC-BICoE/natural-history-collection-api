@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.ValidationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +65,37 @@ public class ProjectCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_END_DATE, result.getEndDate());
     Assertions.assertEquals(EXPECT_ATTACHMENTS, result.getAttachment());
     Assertions.assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(), result.getMultilingualDescription().getDescriptions());
-  
+  }
+
+  @Test
+  public void nullStartTimeNonNullEndTime_throwsValidationException() {
+    Project project = buildExpectedProject();
+    project.setStartDate(null);
+    project.setEndDate(LocalDate.now());
+
+    ValidationException exception = Assertions.assertThrows(
+      ValidationException.class,
+      () -> projectService.create(project));
+
+    String expectedMessage = "The start and end dates do not create a valid timeline";
+    String actualMessage = exception.getMessage();
+
+    Assertions.assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  public void startTimeAfterEndTime_throwsValidationException() {
+    Project project = buildExpectedProject();
+    project.setStartDate(LocalDate.of(20201, 01, 01));
+    project.setEndDate(LocalDate.of(2020, 01, 01));
+    ValidationException exception = Assertions.assertThrows(
+      ValidationException.class,
+      () -> projectService.create(project));
+
+    String expectedMessage = "The start and end dates do not create a valid timeline";
+    String actualMessage = exception.getMessage();
+
+    Assertions.assertTrue(actualMessage.contains(expectedMessage));
   }
 
   private Project buildExpectedProject() {

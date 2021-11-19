@@ -202,7 +202,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
         relationshipMap,
         null),
       201
-    ).log().all(true).extract().body().jsonPath().getString("data.id");
+    ).extract().body().jsonPath().getString("data.id");
   }
 
   private String postUnit(StorageUnitDto unit) {

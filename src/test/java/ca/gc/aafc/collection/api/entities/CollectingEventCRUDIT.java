@@ -107,7 +107,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void nullStartTimeNonNullEndTime_throwsIllegalArgumentException() {
+  public void nullStartTimeNonNullEndTime_throwsValidationException() {
     collectingEvent = CollectingEventFactory.newCollectingEvent()
       .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
       .build();
@@ -122,7 +122,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void startTimeAfterEndTime_throwsIllegalArgumentException() {
+  public void startTimeAfterEndTime_throwsValidationException() {
     collectingEvent = CollectingEventFactory.newCollectingEvent()
       .startEventDateTime(LocalDateTime.of(2009, 1, 1, 1, 1, 1))
       .endEventDateTime(LocalDateTime.of(2008, 1, 1, 1, 1, 1))
