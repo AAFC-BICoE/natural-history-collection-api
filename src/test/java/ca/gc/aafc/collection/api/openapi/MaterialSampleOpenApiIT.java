@@ -171,11 +171,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         TYPE_NAME, 
         attributeMap,
         Map.of(
-          "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
+          "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
           "parentMaterialSample", getRelationType(TYPE_NAME, parentUUID),
-          "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
+          "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
           "preparationType", getRelationType(PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
+          "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
@@ -203,10 +203,4 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "type", type));
   }
 
-  private Map<String, Object> getRelationListType(String type, String uuid) {
-
-    return Map.of("data", List.of(Map.of(
-      "id", uuid,
-      "type", type)));
-  }
 }
