@@ -39,7 +39,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String preparationExpectedGroup = "dina-group-save";
   private static final String preparationExpectedName = "isolate lake water sample";
   private static final String materialSampleTypeExpectedCreatedBy = "material-sample-type-save";
-  private static final String materialSampleTypeExpectedGroup = "material-sample-type-group-save";
   private static final String materialSampleTypeExpectedName = "liquid lake water sample";
   private static final String storageUnitExpectedCreatedBy = "su-createdBy";
   private static final String storageUnitExpectedGroup = "su-dina";
@@ -444,6 +443,20 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     // Now update materialSampleDuplicate2 to use the same collection as materialSampleDuplicate1, should fail.
     materialSampleDuplicate2.setCollection(collection);
     assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSampleDuplicate2));
+  }
+
+  @Test
+  void updateMaterialSample_WhenAssociatedWithSelf_Exception() {
+
+    Association association = Association.builder()
+      .associationType(RandomStringUtils.randomAlphabetic(4))
+      .build();;
+    association.setAssociatedSample(materialSample);
+    association.setSample(materialSample);
+
+    materialSample.setAssociations(List.of(association));
+
+    assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
   }
 
 }

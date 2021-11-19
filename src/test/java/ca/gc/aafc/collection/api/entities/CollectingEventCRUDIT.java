@@ -153,8 +153,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       geo.setDwcDecimalLatitude(2.0);
     });
 
-    IllegalArgumentException exception = assertThrows(
-      IllegalArgumentException.class,
+    ValidationException exception = assertThrows(
+      ValidationException.class,
       () -> collectingEventService.create(collectingEvent));
 
     String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
@@ -371,8 +371,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       geo.setDwcDecimalLatitude(2.0);
     });
 
-    IllegalArgumentException exception = assertThrows(
-      IllegalArgumentException.class,
+    ValidationException exception = assertThrows(
+      ValidationException.class,
       () -> collectingEventService.update(collectingEvent));
 
     String expectedMessage = "dwcDecimalLatitude, dwcDecimalLongitude and dwcCoordinateUncertaintyInMeters must be null if dwcGeoreferenceVerificationStatus is GEOREFERENCING_NOT_POSSIBLE";
