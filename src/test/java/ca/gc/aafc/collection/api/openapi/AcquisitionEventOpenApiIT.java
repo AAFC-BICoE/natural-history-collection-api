@@ -55,7 +55,7 @@ public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
       Map.of(
         "receivedFrom", JsonAPITestHelper.generateExternalRelation("person"),
-        "externallyIsolatedBy", JsonAPITestHelper.generateExternalRelation("person")
+        "isolatedBy", JsonAPITestHelper.generateExternalRelation("person")
       ),
         null)
       ).extract().asString());
