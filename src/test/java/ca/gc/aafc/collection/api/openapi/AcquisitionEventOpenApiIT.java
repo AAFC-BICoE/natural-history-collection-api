@@ -54,17 +54,11 @@ public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "AcquisitionEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
       Map.of(
-        "receivedFrom", getRelationType("person", UUID.randomUUID().toString()),
-        "externallyIsolatedBy", getRelationType("person", UUID.randomUUID().toString())
+        "receivedFrom", JsonAPITestHelper.generateExternalRelation("person"),
+        "externallyIsolatedBy", JsonAPITestHelper.generateExternalRelation("person")
       ),
         null)
-      ).log().all().extract().asString());
+      ).extract().asString());
   }
 
-  private Map<String, Object> getRelationType(String type, String uuid) {
-    return Map.of("data", Map.of(
-      "id", uuid,
-      "type", type));
-  }
-  
 }

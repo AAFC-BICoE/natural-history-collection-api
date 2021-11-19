@@ -54,15 +54,10 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Project",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(projectDto),
       Map.of(
-        "attachment", getExternalListType("metadata")
+        "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
       ),
         null)
-      ).log().all().extract().asString());
+      ).extract().asString());
   }
 
-  private Map<String, Object> getExternalListType(String type) {
-    return Map.of("data", List.of(Map.of(
-      "id", UUID.randomUUID().toString(),
-      "type", type)));
-  }
 }
