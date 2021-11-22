@@ -8,6 +8,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -53,7 +57,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @ToString.Exclude
   private MaterialSample parentMaterialSample;
 
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
 
@@ -104,5 +108,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "acquisition_event_id")
   private AcquisitionEvent acquisitionEvent;
+
+  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+  @LazyCollection(LazyCollectionOption.FALSE)
+  private List<Project> projects = new ArrayList<>();
 
 }

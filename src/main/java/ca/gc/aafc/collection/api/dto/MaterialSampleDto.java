@@ -135,4 +135,8 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private AcquisitionEventDto acquisitionEvent;
 
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<ProjectDto> projects = new ArrayList<>();
+
 }
