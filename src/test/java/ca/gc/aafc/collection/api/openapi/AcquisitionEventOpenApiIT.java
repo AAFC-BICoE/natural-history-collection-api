@@ -49,13 +49,13 @@ public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
     AcquisitionEventDto acquisitionEventDto = AcquisitionEventTestFixture.newAcquisitionEvent();  
     acquisitionEventDto.setCreatedBy("test user");  
     acquisitionEventDto.setReceivedFrom(null);
-    acquisitionEventDto.setExternallyIsolatedBy(null);
+    acquisitionEventDto.setIsolatedBy(null);
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "AcquisitionEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
       Map.of(
         "receivedFrom", JsonAPITestHelper.generateExternalRelation("person"),
-        "externallyIsolatedBy", JsonAPITestHelper.generateExternalRelation("person")
+        "isolatedBy", JsonAPITestHelper.generateExternalRelation("person")
       ),
         null)
       ).extract().asString());

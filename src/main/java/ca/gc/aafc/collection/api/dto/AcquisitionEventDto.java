@@ -47,10 +47,10 @@ public class AcquisitionEventDto {
 
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
-  private ExternalRelationDto externallyIsolatedBy;
+  private ExternalRelationDto isolatedBy;
 
-  private LocalDate externallyIsolatedOn;
+  private LocalDate isolatedOn;
 
-  private String externallyIsolationRemarks;
+  private String isolationRemarks;
   
 }
