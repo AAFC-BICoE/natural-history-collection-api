@@ -66,13 +66,11 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
     ProjectDto projectDto = ProjectTestFixture.newProject();  
     projectDto.setCreatedBy("test user");  
     projectDto.setAttachment(null);
-    projectDto.setSample(null);
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Project",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(projectDto),
       Map.of(
-        "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-        "sample", getRelationType("material-sample", sampleId)
+        "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
       ),
         null)
       ).extract().asString());

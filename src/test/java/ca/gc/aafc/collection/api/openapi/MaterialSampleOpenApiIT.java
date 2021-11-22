@@ -188,13 +188,10 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ProjectDto projectDto = ProjectTestFixture.newProject();  
     projectDto.setCreatedBy("test user");  
     projectDto.setAttachment(null);
-    projectDto.setSample(null);
-
 
     String projectId = sendPost("project", JsonAPITestHelper.toJsonAPIMap("project", JsonAPITestHelper.toAttributeMap(projectDto),
     Map.of(
-      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-      "sample", getRelationType("material-sample", unitId)
+      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
     ),
       null)
     ).extract().body().jsonPath().getString("data.id");

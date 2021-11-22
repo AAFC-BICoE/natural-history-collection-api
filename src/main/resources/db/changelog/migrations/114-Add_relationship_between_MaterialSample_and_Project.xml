@@ -5,11 +5,17 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <changeSet id="114-Add_relationship_between_MaterialSample_and_Project" context="schema-change" author="steven luu">
-        <addColumn tableName="project">
-            <column name="material_sample_id" type="integer">
-                <constraints foreignKeyName="fk_material_sample_id" references="material_sample(id)"/>
-            </column>
-        </addColumn>
+        <createTable tableName="sample_project">
+          <column name="id" type="SERIAL">
+             <constraints nullable="false" primaryKeyName="pk_sample_project_id" primaryKey="true"/>
+          </column>
+          <column name="material_sample_id" type="integer">
+            <constraints nullable="false" foreignKeyName="fk_material_sample_id" references="material_sample(id)"/>
+          </column>
+          <column name="project_id" type="integer">
+            <constraints nullable="false" foreignKeyName="fk_project_id" references="project(id)"/>
+          </column>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

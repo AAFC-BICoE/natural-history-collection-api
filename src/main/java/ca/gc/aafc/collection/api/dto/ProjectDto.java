@@ -50,6 +50,4 @@ public class ProjectDto {
 
   private MultilingualDescription multilingualDescription;
 
-  @JsonApiRelation
-  private MaterialSampleDto sample;
 }

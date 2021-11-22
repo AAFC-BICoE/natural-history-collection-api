@@ -19,6 +19,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -109,8 +111,12 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "acquisition_event_id")
   private AcquisitionEvent acquisitionEvent;
 
-  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-  @LazyCollection(LazyCollectionOption.FALSE)
+  @ManyToMany
+  @JoinTable(
+    name = "sample_project", 
+    joinColumns = { @JoinColumn(name = "material_sample_id") }, 
+    inverseJoinColumns = { @JoinColumn(name = "project_id") }
+  )
   private List<Project> projects = new ArrayList<>();
 
 }

@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
@@ -48,9 +47,5 @@ public class Project extends UserDescribedDinaEntity {
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
-
-  @ManyToOne
-  @JoinColumn(name = "material_sample_id")
-  private MaterialSample sample;
 
 }
