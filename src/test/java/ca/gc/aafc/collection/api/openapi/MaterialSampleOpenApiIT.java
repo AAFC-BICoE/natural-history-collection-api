@@ -17,6 +17,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
@@ -33,6 +34,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -175,28 +177,35 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ),
       null)
     ).extract().body().jsonPath().getString("data.id");
-    
+
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
+    Map<String, Object> generatedRelationshipMap = Map.of(
+      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
+      "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
+      "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
+      "projects", getRelationshipListType("project", projectId));
+    Map<String, Object> relationshipMapPreparationType = JsonAPITestHelper.toRelationshipMap(
+        List.of(
+          JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
+          JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, parentUUID)));
+
+    Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);
+    relationshipMap.putAll(relationshipMapPreparationType);
+
     String unitId = sendPost(
       TYPE_NAME, 
       JsonAPITestHelper.toJsonAPIMap(
         TYPE_NAME, 
         attributeMap,
-        Map.of(
-          "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-          "parentMaterialSample", getRelationType(TYPE_NAME, parentUUID),
-          "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
-          "preparationType", getRelationType(PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-          "projects", getRelationshipListType("project", projectId)),
-          null
+        relationshipMap,
+        null
         )
       ).extract().body().jsonPath().getString("data.id");
 
     sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
       TYPE_NAME,
       Map.of(),
-      Map.of("parentMaterialSample", getRelationType("material-sample", unitId)),
+      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, unitId)),
       null
     ));
     
@@ -209,12 +218,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
     }
-
-  private Map<String, Object> getRelationType(String type, String uuid) {
-    return Map.of("data", Map.of(
-      "id", uuid,
-      "type", type));
-  }
 
   private Map<String, Object> getRelationshipListType(String type, String uuid) {
     return Map.of("data", List.of(Map.of(

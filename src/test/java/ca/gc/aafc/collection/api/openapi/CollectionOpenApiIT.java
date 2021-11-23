@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
@@ -20,7 +21,7 @@ import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Map;
+import java.util.List;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -72,18 +73,12 @@ public class CollectionOpenApiIT extends BaseRestAssuredTest {
       sendPost(
         TYPE_NAME,
         JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
-          Map.of(
-            "institution", getRelationType(InstitutionDto.TYPENAME, institutionId),
-            "parentCollection", getRelationType(TYPE_NAME, parentId)
+          JsonAPITestHelper.toRelationshipMap(List.of(
+            JsonAPIRelationship.of("institution", InstitutionDto.TYPENAME, institutionId),
+            JsonAPIRelationship.of("parentCollection", TYPE_NAME, parentId))
           ),
           null)
       ).extract().asString());
-  }
-
-  private Map<String, Object> getRelationType(String type, String uuid) {
-    return Map.of("data", Map.of(
-      "id", uuid,
-      "type", type));
   }
 
 }

@@ -61,8 +61,6 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
     ms.setAcquisitionEvent(null);
     ms.setProjects(null);
 
-    String sampleId = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(ms))).extract().body().jsonPath().getString("data.id");
-
     ProjectDto projectDto = ProjectTestFixture.newProject();  
     projectDto.setCreatedBy("test user");  
     projectDto.setAttachment(null);
@@ -75,12 +73,5 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
         null)
       ).extract().asString());
   }
-
-  private Map<String, Object> getRelationType(String type, String uuid) {
-    return Map.of("data", Map.of(
-      "id", uuid,
-      "type", type));
-  }
-
 
 }
