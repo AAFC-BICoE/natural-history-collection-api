@@ -165,6 +165,17 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
+    ProjectDto projectDto = ProjectTestFixture.newProject();  
+    projectDto.setCreatedBy("test user");  
+    projectDto.setAttachment(null);
+
+    String projectId = sendPost("project", JsonAPITestHelper.toJsonAPIMap("project", JsonAPITestHelper.toAttributeMap(projectDto),
+    Map.of(
+      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
+    ),
+      null)
+    ).extract().body().jsonPath().getString("data.id");
+    
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     String unitId = sendPost(
       TYPE_NAME, 
@@ -176,33 +187,16 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "parentMaterialSample", getRelationType(TYPE_NAME, parentUUID),
           "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
           "preparationType", getRelationType(PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)),
+          "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
+          "projects", getRelationshipListType("project", projectId)),
           null
         )
       ).extract().body().jsonPath().getString("data.id");
-
-    ProjectDto projectDto = ProjectTestFixture.newProject();  
-    projectDto.setCreatedBy("test user");  
-    projectDto.setAttachment(null);
-
-    String projectId = sendPost("project", JsonAPITestHelper.toJsonAPIMap("project", JsonAPITestHelper.toAttributeMap(projectDto),
-    Map.of(
-      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
-    ),
-      null)
-    ).extract().body().jsonPath().getString("data.id");
 
     sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
       TYPE_NAME,
       Map.of(),
       Map.of("parentMaterialSample", getRelationType("material-sample", unitId)),
-      null
-    ));
-
-    sendPatch(TYPE_NAME, unitId, JsonAPITestHelper.toJsonAPIMap(
-      TYPE_NAME,
-      Map.of(),
-      Map.of("projects", getRelationshipListType("project", projectId)),
       null
     ));
     
