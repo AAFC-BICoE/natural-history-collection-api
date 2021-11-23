@@ -160,13 +160,9 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
     
-    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent)));
-    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child)));
+    String parentUUID = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent))).extract().body().jsonPath().getString("data.id");
+    String childUUID = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child))).extract().body().jsonPath().getString("data.id");
     
-    ResponseBody materialSampleResponseBody = sendGet("material-sample", "").extract().response().body();
-
-    String parentUUID = materialSampleResponseBody.path("data[0].id");
-    String childUUID = materialSampleResponseBody.path("data[1].id");
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
@@ -215,7 +211,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
       .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
-        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).print(),
+        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).asString(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
     }

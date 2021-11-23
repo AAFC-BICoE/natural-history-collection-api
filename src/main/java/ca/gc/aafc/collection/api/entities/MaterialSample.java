@@ -8,10 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -23,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
@@ -59,9 +56,18 @@ public class MaterialSample extends AbstractMaterialSample {
   @ToString.Exclude
   private MaterialSample parentMaterialSample;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
+ 
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+    name = "sample_project", 
+    joinColumns = { @JoinColumn(name = "material_sample_id") }, 
+    inverseJoinColumns = { @JoinColumn(name = "project_id") }
+  )
+  @OrderColumn(name = "id")
+  private List<Project> projects = new ArrayList<>();
 
   @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
   private List<Association> associations = new ArrayList<>();
@@ -110,13 +116,5 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "acquisition_event_id")
   private AcquisitionEvent acquisitionEvent;
-
-  @ManyToMany
-  @JoinTable(
-    name = "sample_project", 
-    joinColumns = { @JoinColumn(name = "material_sample_id") }, 
-    inverseJoinColumns = { @JoinColumn(name = "project_id") }
-  )
-  private List<Project> projects = new ArrayList<>();
 
 }
