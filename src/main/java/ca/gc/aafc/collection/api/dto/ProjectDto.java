@@ -49,4 +49,5 @@ public class ProjectDto {
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   private MultilingualDescription multilingualDescription;
+
 }

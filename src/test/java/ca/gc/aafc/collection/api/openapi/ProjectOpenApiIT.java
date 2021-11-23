@@ -14,7 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -47,6 +49,18 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
   @Test
   @SneakyThrows
   void project_SpecValid() {
+    MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
+    ms.setAttachment(null);
+    ms.setPreparedBy(null);
+    ms.setPreparationAttachment(null);
+    ms.setManagedAttributes(null);
+    ms.setDetermination(null);
+    ms.setOrganism(null);
+    ms.setScheduledActions(null);
+    ms.setHostOrganism(null);
+    ms.setAcquisitionEvent(null);
+    ms.setProjects(null);
+
     ProjectDto projectDto = ProjectTestFixture.newProject();  
     projectDto.setCreatedBy("test user");  
     projectDto.setAttachment(null);

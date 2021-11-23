@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.Materia
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.TemplateField;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
@@ -96,25 +98,20 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
     materialSampleDto.setMaterialSampleChildren(null);
     materialSampleDto.setPreparationAttachment(null);
 
-    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(materialSampleDto)));
-    sendPost("material-sample-action-definition", JsonAPITestHelper.toJsonAPIMap("material-sample-action-definition", JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto)));
+    sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toAttributeMap(materialSampleDto)));
+    sendPost(MaterialSampleActionDefinitionDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(MaterialSampleActionDefinitionDto.TYPENAME, JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto)));
 
-    String materialSampleUUID = sendGet("material-sample", "").extract().response().body().path("data[0].id");
-    String materialSampleActionDefinitionUUID = sendGet("material-sample-action-definition", "").extract().response().body().path("data[0].id");
+    String materialSampleUUID = sendGet(MaterialSampleDto.TYPENAME, "").extract().response().body().path("data[0].id");
+    String materialSampleActionDefinitionUUID = sendGet(MaterialSampleActionDefinitionDto.TYPENAME, "").extract().response().body().path("data[0].id");
 
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSampleActionRun",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(materialSampleActionRunDto),
-        Map.of(
-          "sourceMaterialSample", getRelationshipType("material-sample", materialSampleUUID),
-          "materialSampleActionDefinition", getRelationshipType("material-sample-action-definition", materialSampleActionDefinitionUUID)),
+        JsonAPITestHelper.toRelationshipMap(List.of(
+          JsonAPIRelationship.of("sourceMaterialSample", MaterialSampleDto.TYPENAME, materialSampleUUID),
+          JsonAPIRelationship.of("materialSampleActionDefinition", MaterialSampleActionDefinitionDto.TYPENAME, materialSampleActionDefinitionUUID))
+        ),
         null)
       ).extract().asString()); // Allow group field
-  }
-
-  private Map<String, Object> getRelationshipType(String type, String uuid) {
-    return Map.of("data", Map.of(
-      "id", uuid,
-      "type", type));
   }
 
 }
