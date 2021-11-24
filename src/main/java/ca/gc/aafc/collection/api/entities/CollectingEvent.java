@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -221,9 +220,6 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "string-array")
   private String[] tags;
-
-  @Type(type = "jsonb")
-  private List<Extension> extensions = new ArrayList<>();
   
   private Geometry eventGeom;
 
