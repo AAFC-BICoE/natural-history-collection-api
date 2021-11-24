@@ -64,11 +64,11 @@ public class AcquisitionEvent implements DinaEntity {
   @Size(max = 255)
   private String receptionRemarks;
 
-  private UUID externallyIsolatedBy;
+  private UUID isolatedBy;
 
-  private LocalDate externallyIsolatedOn;
+  private LocalDate isolatedOn;
 
   @Size(max = 250)
-  private String externallyIsolationRemarks;
+  private String isolationRemarks;
 
 }

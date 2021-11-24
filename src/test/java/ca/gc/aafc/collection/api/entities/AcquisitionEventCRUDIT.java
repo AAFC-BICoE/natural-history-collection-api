@@ -14,9 +14,9 @@ public class AcquisitionEventCRUDIT extends CollectionModuleBaseIT {
   @Test
   void find() {
     AcquisitionEvent acquisitionEvent = AcquisitionEventFactory.newAcquisitionEvent()
-      .externallyIsolatedBy(UUID.randomUUID())
-      .externallyIsolatedOn(LocalDate.now())
-      .externallyIsolationRemarks("externally isolation remarks")
+      .isolatedBy(UUID.randomUUID())
+      .isolatedOn(LocalDate.now())
+      .isolationRemarks("isolation remarks")
       .receivedFrom(UUID.randomUUID())
       .receivedDate(LocalDate.now())
       .receptionRemarks("reception remarks")
@@ -29,9 +29,9 @@ public class AcquisitionEventCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertNotNull(result.getId());
     Assertions.assertNotNull(result.getCreatedOn());
 
-    Assertions.assertEquals(acquisitionEvent.getExternallyIsolatedBy(), result.getExternallyIsolatedBy());
-    Assertions.assertEquals(acquisitionEvent.getExternallyIsolatedOn(), result.getExternallyIsolatedOn());
-    Assertions.assertEquals(acquisitionEvent.getExternallyIsolationRemarks(), result.getExternallyIsolationRemarks());
+    Assertions.assertEquals(acquisitionEvent.getIsolatedBy(), result.getIsolatedBy());
+    Assertions.assertEquals(acquisitionEvent.getIsolatedOn(), result.getIsolatedOn());
+    Assertions.assertEquals(acquisitionEvent.getIsolationRemarks(), result.getIsolationRemarks());
     
     Assertions.assertEquals(acquisitionEvent.getReceivedFrom(), result.getReceivedFrom());
     Assertions.assertEquals(acquisitionEvent.getReceivedDate(), result.getReceivedDate());

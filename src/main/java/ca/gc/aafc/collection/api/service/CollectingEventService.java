@@ -15,13 +15,9 @@ import org.geolatte.geom.crs.CoordinateReferenceSystems;
 import org.geolatte.geom.jts.JTS;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.SmartValidator;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -78,29 +74,17 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   private void validateAssertions(@NonNull CollectingEvent entity) {
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
-      entity.getGeoReferenceAssertions().forEach(geo -> validateGeoreferenceAssertion(
-        geo,
-        entity.getUuid().toString()));
+      entity.getGeoReferenceAssertions().forEach(geo -> applyBusinessRule(
+        entity.getUuid().toString(), 
+        geo, 
+        georeferenceAssertionValidator
+      ));
     }
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
         CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.COLLECTING_EVENT);
-  }
-
-  public void validateGeoreferenceAssertion(@NonNull GeoreferenceAssertionDto geo, @NonNull String eventUUID) {
-    Errors errors = new BeanPropertyBindingResult(geo, eventUUID);
-    georeferenceAssertionValidator.validate(geo, errors);
-
-    if (!errors.hasErrors()) {
-      return;
-    }
-
-    Optional<String> errorMsg = errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).findAny();
-    errorMsg.ifPresent(msg -> {
-      throw new IllegalArgumentException(msg);
-    });
   }
 
   private void cleanupManagedAttributes(CollectingEvent entity) {

@@ -112,6 +112,8 @@ public class MaterialSampleDto {
 
   private String materialSampleState;
   private String materialSampleRemarks;
+  private LocalDate stateChangedOn;
+  private String stateChangeRemarks;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
@@ -132,4 +134,9 @@ public class MaterialSampleDto {
 
   @JsonApiRelation
   private AcquisitionEventDto acquisitionEvent;
+
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<ProjectDto> projects = new ArrayList<>();
+
 }
