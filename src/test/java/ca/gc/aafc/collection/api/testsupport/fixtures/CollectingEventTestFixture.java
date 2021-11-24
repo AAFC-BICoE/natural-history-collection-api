@@ -5,8 +5,6 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
-import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
 import lombok.SneakyThrows;
 
 import java.math.BigDecimal;
@@ -89,20 +87,6 @@ public class CollectingEventTestFixture {
     .build();
   }
 
-  public static Extension newFieldExtension() {
-    return Extension.builder()
-        .name("MixS Soil")
-        .key("mixs_soil_v5")
-        .version("v5")
-        .fields(Collections.singletonList(Field.builder()
-          .term("experimental_factor")
-          .name("experimental factor")
-          .definition("definition of experimentWal factor")
-          .dinaComponent("COLLECTING_EVENT")
-          .build()))
-        .build();
-  }
-
   public static CollectingEventDto newEventDto() {
     List<GeoreferenceAssertionDto> assertions = new ArrayList<>();
     assertions.add(GEOREFERENCE_ASSERTION_DTO);
@@ -140,7 +124,6 @@ public class CollectingEventTestFixture {
     ce.setPubliclyReleasable(PUBLICLY_RELEASABLE);
     ce.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
     ce.setTags(TAGS);
-    ce.setExtensions(Collections.singletonList(newFieldExtension()));
     return ce;
   }
 
