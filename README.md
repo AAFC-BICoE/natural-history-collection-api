@@ -2,13 +2,23 @@
 
 AAFC DINA Natural History Collection module implementation.
 
-See DINA Collection module [specifications](https://github.com/DINA-Web/collection-specs).
+See DINA Collection module OpenAPI [specifications](https://dina-web.github.io/collection-specs/).
 
 ## Required
 
 * Java 11
 * Maven 3.6 (tested)
 * Docker 19+ (for running integration tests)
+
+## dina-base-api
+
+`natural-history-collection-api` relies heavily on [dina-base-api](https://aafc-bicoe.github.io/dina-base-api/).
+
+## IDE
+
+`natural-history-collection-api` requires [Project Lombok](https://projectlombok.org/) to be setup in your IDE.
+
+See Lombok [Setup documentation](https://projectlombok.org/setup/overview)
 
 ## To Run
 
