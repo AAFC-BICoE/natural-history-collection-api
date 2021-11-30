@@ -1,0 +1,18 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="115-Fix_relationship_between_MaterialSample_and_Project" context="schema-change" author="cgendreau">
+      <dropColumn tableName="sample_project">
+        <column name="id"/>
+      </dropColumn>
+      <addPrimaryKey tableName="sample_project"
+                     columnNames="material_sample_id, project_id"
+                     constraintName="pk_sample_project_id"/>
+      <addColumn tableName="sample_project" >
+        <column name="pos" type="integer" defaultValue="0"/>
+      </addColumn>
+    </changeSet>
+</databaseChangeLog>
