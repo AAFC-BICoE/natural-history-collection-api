@@ -66,7 +66,7 @@ public class MaterialSample extends AbstractMaterialSample {
     joinColumns = { @JoinColumn(name = "material_sample_id") }, 
     inverseJoinColumns = { @JoinColumn(name = "project_id") }
   )
-  @OrderColumn(name = "id")
+  @OrderColumn(name = "pos")
   private List<Project> projects = new ArrayList<>();
 
   @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
