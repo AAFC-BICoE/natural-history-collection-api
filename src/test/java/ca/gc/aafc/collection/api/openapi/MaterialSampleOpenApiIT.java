@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
@@ -12,6 +13,7 @@ import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -81,7 +83,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
 
-   
     Determination determination = Determination.builder()
       .verbatimScientificName("verbatimScientificName")
       .verbatimDeterminer("verbatimDeterminer")
@@ -159,6 +160,12 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setAcquisitionEvent(null);
     child.setProjects(null);
 
+    ProjectDto projectDto = ProjectTestFixture.newProject();  
+    projectDto.setCreatedBy("test user");  
+    projectDto.setAttachment(null);
+
+    MaterialSampleTypeDto materialSampleTypeDto = MaterialSampleTypeTestFixture.newMaterialSampleType();
+  
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
     
@@ -167,13 +174,22 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
-    ProjectDto projectDto = ProjectTestFixture.newProject();  
-    projectDto.setCreatedBy("test user");  
-    projectDto.setAttachment(null);
+    String materialSampleTypeUUID =  sendPost(
+      MaterialSampleTypeDto.TYPENAME, 
+      JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleTypeDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(materialSampleTypeDto),
+        null,
+        null)
+    ).extract().body().jsonPath().getString("data.id");
 
-    String projectId = sendPost("project", JsonAPITestHelper.toJsonAPIMap("project", JsonAPITestHelper.toAttributeMap(projectDto),
-    Map.of(
-      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
+    String projectUUID = sendPost(ProjectDto.TYPENAME, 
+      JsonAPITestHelper.toJsonAPIMap(
+        ProjectDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(projectDto),
+        Map.of(
+          "attachment", 
+          JsonAPITestHelper.generateExternalRelationList("metadata", 1)
     ),
       null)
     ).extract().body().jsonPath().getString("data.id");
@@ -183,14 +199,15 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
       "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-      "projects", getRelationshipListType("project", projectId));
-    Map<String, Object> relationshipMapPreparationType = JsonAPITestHelper.toRelationshipMap(
+      "projects", getRelationshipListType("project", projectUUID));
+    Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
+          JsonAPIRelationship.of("materialSampleType", MaterialSampleTypeDto.TYPENAME, materialSampleTypeUUID),
           JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, parentUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);
-    relationshipMap.putAll(relationshipMapPreparationType);
+    relationshipMap.putAll(relationshipMapWithId);
 
     String unitId = sendPost(
       TYPE_NAME, 
@@ -213,7 +230,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
+      .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,materialSampleType,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).asString(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
