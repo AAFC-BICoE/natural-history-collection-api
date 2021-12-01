@@ -1,8 +1,9 @@
 package ca.gc.aafc.collection.api.entities;
 
+import org.javers.core.metamodel.annotation.Value;
+
 import lombok.Builder;
 import lombok.Data;
-import lombok.Value;
 
 @Data
 @Builder
