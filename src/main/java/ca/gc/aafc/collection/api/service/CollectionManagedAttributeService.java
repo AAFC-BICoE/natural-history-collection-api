@@ -42,6 +42,8 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
       case MATERIAL_SAMPLE:
         checkKeysFor(entity.getKey(), MATERIAL_SAMPLE_TABLE_NAME);
         break;
+      case DETERMINATION:
+        break;
       default:
         throw new IllegalStateException(
           "Unexpected managed attribute component of: " + entity.getManagedAttributeComponent());
