@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class CollectionManagedAttributeFactory implements TestableEntityFactory<
      *
      * @return Pre-configured builder with all mandatory fields set
      */
-    public static CollectionManagedAttribute.CollectionManagedAttributeBuilder newCollectionManagedAttribute() {
+    public static CollectionManagedAttribute.CollectionManagedAttributeBuilder<?, ?> newCollectionManagedAttribute() {
       return CollectionManagedAttribute
           .builder()
           .uuid(UUID.randomUUID())
@@ -30,7 +31,8 @@ public class CollectionManagedAttributeFactory implements TestableEntityFactory<
           .createdBy(RandomStringUtils.randomAlphabetic(5))
           .managedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING)
           .acceptedValues(new String[]{"value"})
-          .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+          .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
+          .multilingualDescription(CollectionMethodTestFixture.newMulti());
     }
 
   }
