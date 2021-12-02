@@ -48,7 +48,8 @@ public class CollectionManagedAttribute implements ManagedAttribute {
 
   public enum ManagedAttributeComponent {
     COLLECTING_EVENT,
-    MATERIAL_SAMPLE 
+    MATERIAL_SAMPLE,
+    DETERMINATION
   }
 
   @Id
