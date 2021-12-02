@@ -3,7 +3,9 @@ package ca.gc.aafc.collection.api.openapi;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
@@ -11,10 +13,13 @@ import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
@@ -31,6 +36,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -130,7 +136,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
     ms.setAcquisitionEvent(null);
-
+    ms.setProjects(null);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -141,6 +147,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setPreparedBy(null);
     parent.setPreparationAttachment(null);
     parent.setAcquisitionEvent(null);
+    parent.setProjects(null);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
@@ -151,39 +158,71 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setPreparedBy(null);
     child.setPreparationAttachment(null);
     child.setAcquisitionEvent(null);
+    child.setProjects(null);
 
+    ProjectDto projectDto = ProjectTestFixture.newProject();  
+    projectDto.setCreatedBy("test user");  
+    projectDto.setAttachment(null);
+
+    MaterialSampleTypeDto materialSampleTypeDto = MaterialSampleTypeTestFixture.newMaterialSampleType();
+  
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
     
-    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent)));
-    sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child)));
+    String parentUUID = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent))).extract().body().jsonPath().getString("data.id");
+    String childUUID = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child))).extract().body().jsonPath().getString("data.id");
     
-    ResponseBody materialSampleResponseBody = sendGet("material-sample", "").extract().response().body();
-
-    String parentUUID = materialSampleResponseBody.path("data[0].id");
-    String childUUID = materialSampleResponseBody.path("data[1].id");
     String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
 
+    String materialSampleTypeUUID =  sendPost(
+      MaterialSampleTypeDto.TYPENAME, 
+      JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleTypeDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(materialSampleTypeDto),
+        null,
+        null)
+    ).extract().body().jsonPath().getString("data.id");
+
+    String projectUUID = sendPost(ProjectDto.TYPENAME, 
+      JsonAPITestHelper.toJsonAPIMap(
+        ProjectDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(projectDto),
+        Map.of(
+          "attachment", 
+          JsonAPITestHelper.generateExternalRelationList("metadata", 1)
+    ),
+      null)
+    ).extract().body().jsonPath().getString("data.id");
+
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
+    Map<String, Object> generatedRelationshipMap = Map.of(
+      "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
+      "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
+      "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
+      "projects", getRelationshipListType("project", projectUUID));
+    Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
+        List.of(
+          JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
+          JsonAPIRelationship.of("materialSampleType", MaterialSampleTypeDto.TYPENAME, materialSampleTypeUUID),
+          JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, parentUUID)));
+
+    Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);
+    relationshipMap.putAll(relationshipMapWithId);
+
     String unitId = sendPost(
       TYPE_NAME, 
       JsonAPITestHelper.toJsonAPIMap(
         TYPE_NAME, 
         attributeMap,
-        Map.of(
-          "attachment", getRelationListType("metadata", UUID.randomUUID().toString()),
-          "parentMaterialSample", getRelationType(TYPE_NAME, parentUUID),
-          "preparedBy", getRelationType("person", UUID.randomUUID().toString()),
-          "preparationType", getRelationType(PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          "preparationAttachment", getRelationListType("metadata", UUID.randomUUID().toString())),
-          null
+        relationshipMap,
+        null
         )
       ).extract().body().jsonPath().getString("data.id");
 
     sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
       TYPE_NAME,
       Map.of(),
-      Map.of("parentMaterialSample", getRelationType("material-sample", unitId)),
+      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, unitId)),
       null
     ));
     
@@ -191,22 +230,16 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,"
-        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).print(),
+      .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,materialSampleType,"
+        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).asString(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
     }
 
-  private Map<String, Object> getRelationType(String type, String uuid) {
-    return Map.of("data", Map.of(
-      "id", uuid,
-      "type", type));
-  }
-
-  private Map<String, Object> getRelationListType(String type, String uuid) {
-
+  private Map<String, Object> getRelationshipListType(String type, String uuid) {
     return Map.of("data", List.of(Map.of(
       "id", uuid,
       "type", type)));
   }
+
 }

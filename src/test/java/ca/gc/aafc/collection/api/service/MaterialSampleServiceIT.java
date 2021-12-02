@@ -5,6 +5,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 
+import ca.gc.aafc.collection.api.dto.ProjectDto;
+import ca.gc.aafc.collection.api.entities.Project;
+import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
@@ -41,6 +45,25 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     String errorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
     ValidationException exception = Assertions.assertThrows(ValidationException.class, () -> materialSampleService.create(sample));
     Assertions.assertEquals(errorMessage, exception.getMessage());
+  }
+  
+  @Test
+  void create_onLinkingToAnExistingProject_secondMaterialSampleSaved() {
+    Project p = ProjectFactory.newProject().build();
+    projectService.create(p);
+
+    MaterialSample sample1 = MaterialSampleFactory.newMaterialSample()
+        .projects(List.of(p))
+        .build();
+
+    materialSampleService.createAndFlush(sample1);
+
+    MaterialSample sample2 = MaterialSampleFactory.newMaterialSample()
+        .projects(List.of(p))
+        .build();
+
+    materialSampleService.createAndFlush(sample2);
+
   }
 
   private MaterialSample persistMaterialSample() {

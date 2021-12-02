@@ -33,7 +33,6 @@ public class GeographicPlaceNameSourceDetail {
   @Valid
   private List<SourceAdministrativeLevel> higherGeographicPlaces;
 
-  @NotNull
   @Valid
   private SourceAdministrativeLevel stateProvince;
 

@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Determination {
 
   public enum ScientificNameSource {
-    COLPLUS;
+    COLPLUS, GNA;
 
     @JsonCreator
     public static ScientificNameSource forValue(String v) {
