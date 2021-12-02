@@ -22,7 +22,7 @@ public class CollectionManagedAttributeFactory implements TestableEntityFactory<
      *
      * @return Pre-configured builder with all mandatory fields set
      */
-    public static CollectionManagedAttribute.CollectionManagedAttributeBuilder newCollectionManagedAttribute() {
+    public static CollectionManagedAttribute.CollectionManagedAttributeBuilder<?, ?> newCollectionManagedAttribute() {
       return CollectionManagedAttribute
           .builder()
           .uuid(UUID.randomUUID())

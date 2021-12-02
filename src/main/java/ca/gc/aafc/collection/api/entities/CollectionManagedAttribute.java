@@ -34,6 +34,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "managed_attribute")
 @Getter
@@ -44,11 +45,11 @@ import lombok.Setter;
   @TypeDef(name = "jsonb", typeClass = StringArrayType.class)
 })
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
-public class CollectionManagedAttribute implements ManagedAttribute {
+public class CollectionManagedAttribute extends UserDescribedDinaEntity implements ManagedAttribute {
 
   public enum ManagedAttributeComponent {
     COLLECTING_EVENT,
@@ -56,19 +57,13 @@ public class CollectionManagedAttribute implements ManagedAttribute {
     DETERMINATION
   }
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
-  @NaturalId
-  @NotNull
-  @Column(name = "uuid", unique = true)
-  private UUID uuid;
-
   @NotBlank
   @Size(max = 50)
   @Column(updatable = false)
-  private String name;
+  @Override
+  public String getName(){
+    return super.getName();
+  }
 
   @NotBlank
   @Column(name = "_group")
@@ -95,17 +90,5 @@ public class CollectionManagedAttribute implements ManagedAttribute {
   @Type(type = "string-array")
   @Column(columnDefinition = "text[]")
   private String[] acceptedValues;
-
-  @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
-  private OffsetDateTime createdOn;
-
-  @NotBlank
-  @Column(name = "created_by", updatable = false)
-  private String createdBy;
-
-  @Type(type = "jsonb")
-  @Column(name = "multilingual_description")
-  private MultilingualDescription multilingualDescription;
 
 }
