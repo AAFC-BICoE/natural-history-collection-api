@@ -1,9 +1,13 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
+import ca.gc.aafc.dina.jpa.BaseDAO;
+import ca.gc.aafc.dina.service.DefaultDinaService;
+import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.geolatte.geom.builder.DSL;
@@ -13,15 +17,8 @@ import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
-import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
-import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
-import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
-import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.service.DefaultDinaService;
-
-import lombok.NonNull;
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Service
 public class CollectingEventService extends DefaultDinaService<CollectingEvent> {
