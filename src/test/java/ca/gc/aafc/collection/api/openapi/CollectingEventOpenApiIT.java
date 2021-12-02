@@ -3,9 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -79,16 +77,10 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectingEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(ce),
         Map.of(
-          "collectors", getExternalListType("person"),
-          "attachment", getExternalListType("metadata")),
+          "collectors", JsonAPITestHelper.generateExternalRelationList("person", 1),
+          "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)),
         null)
       ).extract().asString());
-  }
-
-  private Map<String, Object> getExternalListType(String type) {
-    return Map.of("data", List.of(Map.of(
-      "id", UUID.randomUUID().toString(),
-      "type", type)));
   }
 
 }

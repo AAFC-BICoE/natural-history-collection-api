@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -80,5 +81,19 @@ class CollectionCRUDIT extends CollectionModuleBaseIT {
     // Since the record has been deleted, the Cascade type on the one to one
     // relationship should automatically delete the CollectionSequence.
     Assertions.assertNull(collectionSequenceService.findOneById(collectionID, CollectionSequence.class));
+  }
+
+  @Test
+  void create_ParentHasParent_ThrowsValidationException() {
+
+    Collection collection = CollectionFactory.newCollection().build();
+    Collection parentCollection = CollectionFactory.newCollection().build();
+    Collection parentParentCollection = CollectionFactory.newCollection().build();
+    collection.setParentCollection(parentCollection);
+    parentCollection.setParentCollection(parentParentCollection);
+
+    Assertions.assertThrows(ValidationException.class, 
+      () -> collectionService.create(collection));
+
   }
 }

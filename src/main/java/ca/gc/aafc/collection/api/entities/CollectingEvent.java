@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
+
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
@@ -219,7 +220,7 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "string-array")
   private String[] tags;
-
+  
   private Geometry eventGeom;
 
   /**

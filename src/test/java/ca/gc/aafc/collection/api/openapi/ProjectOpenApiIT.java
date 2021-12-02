@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,8 +14,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.dto.AcquisitionEventDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.AcquisitionEventTestFixture;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.ProjectDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -27,15 +30,15 @@ import lombok.SneakyThrows;
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
-
+public class ProjectOpenApiIT extends BaseRestAssuredTest {
+  
   private static final String SPEC_HOST = "raw.githubusercontent.com";
   private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = createSchemaUriBuilder(SPEC_HOST, SPEC_PATH);
 
-  public static final String TYPE_NAME = AcquisitionEventDto.TYPENAME;
+  public static final String TYPE_NAME = ProjectDto.TYPENAME;
 
-  protected AcquisitionEventOpenApiIT() {
+  protected ProjectOpenApiIT() {
     super("/api/v1/");
   }
 
@@ -43,19 +46,29 @@ public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
     return URI_BUILDER.build().toURL();
   }
 
-  @SneakyThrows
   @Test
-  void acquisitionEvent_SpecValid() {
-    AcquisitionEventDto acquisitionEventDto = AcquisitionEventTestFixture.newAcquisitionEvent();  
-    acquisitionEventDto.setCreatedBy("test user");  
-    acquisitionEventDto.setReceivedFrom(null);
-    acquisitionEventDto.setIsolatedBy(null);
+  @SneakyThrows
+  void project_SpecValid() {
+    MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
+    ms.setAttachment(null);
+    ms.setPreparedBy(null);
+    ms.setPreparationAttachment(null);
+    ms.setManagedAttributes(null);
+    ms.setDetermination(null);
+    ms.setOrganism(null);
+    ms.setScheduledActions(null);
+    ms.setHostOrganism(null);
+    ms.setAcquisitionEvent(null);
+    ms.setProjects(null);
 
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "AcquisitionEvent",
-      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
+    ProjectDto projectDto = ProjectTestFixture.newProject();  
+    projectDto.setCreatedBy("test user");  
+    projectDto.setAttachment(null);
+
+    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Project",
+      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(projectDto),
       Map.of(
-        "receivedFrom", JsonAPITestHelper.generateExternalRelation("person"),
-        "isolatedBy", JsonAPITestHelper.generateExternalRelation("person")
+        "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1)
       ),
         null)
       ).extract().asString());
