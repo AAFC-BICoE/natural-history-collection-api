@@ -1,28 +1,19 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
-
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import ca.gc.aafc.dina.entity.ManagedAttribute;
-import ca.gc.aafc.dina.i18n.MultilingualDescription;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -30,7 +21,6 @@ import org.hibernate.annotations.TypeDefs;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -49,20 +39,13 @@ import lombok.experimental.SuperBuilder;
 @RequiredArgsConstructor
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
+@AttributeOverride(name = "name", column = @Column(name = "name", updatable = false))
 public class CollectionManagedAttribute extends UserDescribedDinaEntity implements ManagedAttribute {
 
   public enum ManagedAttributeComponent {
     COLLECTING_EVENT,
     MATERIAL_SAMPLE,
     DETERMINATION
-  }
-
-  @NotBlank
-  @Size(max = 50)
-  @Column(updatable = false)
-  @Override
-  public String getName(){
-    return super.getName();
   }
 
   @NotBlank
