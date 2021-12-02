@@ -121,5 +121,6 @@
   <include file="db/changelog/migrations/114-Add_relationship_between_MaterialSample_and_Project.xml"/>
   <include file="db/changelog/migrations/115-Fix_relationship_between_MaterialSample_and_Project.xml"/>
   <include file="db/changelog/migrations/116-Add_DETERMINATION_to_ManagedAttributeComponent.xml"/>
+  <include file="db/changelog/migrations/117-Store_field_extension_values.xml"/>
 
 </databaseChangeLog>
