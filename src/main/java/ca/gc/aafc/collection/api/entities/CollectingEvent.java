@@ -33,6 +33,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
@@ -80,6 +81,9 @@ public class CollectingEvent implements DinaEntity {
   @NotNull
   @Column(unique = true)
   private UUID uuid;
+
+  @Version
+  private int version;
 
   @NotBlank
   @Column(name = "_group")

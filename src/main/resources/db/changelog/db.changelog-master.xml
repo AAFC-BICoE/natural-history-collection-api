@@ -123,5 +123,6 @@
   <include file="db/changelog/migrations/116-Add_DETERMINATION_to_ManagedAttributeComponent.xml"/>
   <include file="db/changelog/migrations/117-Store_field_extension_values.xml"/>
   <include file="db/changelog/migrations/118-Add_multilingualDescription_to_CollectionManagedAttribute.xml"/>
+  <include file="db/changelog/migrations/119-Add_version_to_collecting_event.xml"/>
 
 </databaseChangeLog>
