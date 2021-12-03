@@ -227,6 +227,11 @@ public class CollectingEvent implements DinaEntity {
   
   private Geometry eventGeom;
 
+  @Type(type = "jsonb")
+  @Column(name = "extension_values", columnDefinition = "jsonb")
+  @Valid
+  private List<ExtensionValue> extensionValues = new ArrayList<>();
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
    * in sync.
