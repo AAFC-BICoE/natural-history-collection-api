@@ -62,6 +62,20 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
       IllegalStateException.class, () -> collectionManagedAttributeService.delete(attribute));
   }
 
+  @Test
+  void delete_WhenManagedAttributeComponentIsDetermination_DeleteAccepted() {
+    CollectionManagedAttribute attribute = newAttribute(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION);
+    collectionManagedAttributeService.create(attribute);
+
+    Assertions.assertNotNull(
+      collectionManagedAttributeService.findOne(attribute.getUuid(), CollectionManagedAttribute.class));
+
+    collectionManagedAttributeService.delete(attribute);
+
+    Assertions.assertNull(
+      collectionManagedAttributeService.findOne(attribute.getUuid(), CollectionManagedAttribute.class));
+  }
+
   private static CollectionManagedAttribute newAttribute(CollectionManagedAttribute.ManagedAttributeComponent component) {
     return CollectionManagedAttribute.builder()
       .group("grp")
