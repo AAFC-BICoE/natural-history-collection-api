@@ -1,0 +1,33 @@
+
+Configuration:
+  name: dina
+
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+
+  Appenders:
+    Console:
+      name: LogToConsole
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%d [%t] %-5p %c - %m%n"
+    File:
+      name: LogToFile
+      fileName: ${log-path}/app.log
+      PatternLayout:
+        pattern: "%d [%t] %-5p %c - %m%n"
+
+  Loggers:
+      Logger:
+        - name: ca.gc.aafc
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: LogToConsole
+#            - ref: LogToFile
+      Root:
+          level: warning
+          AppenderRef:
+            - ref: LogToConsole
