@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
