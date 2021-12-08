@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.ExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
@@ -26,18 +27,21 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+  private final ExtensionValueValidator extensionValueValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
-    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator
+    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+    @NonNull ExtensionValueValidator extensionValueValidator
   ) {
     super(baseDAO, sv);
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.extensionValueValidator = extensionValueValidator;
   }
 
   @Override
@@ -57,6 +61,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   public void validateBusinessRules(CollectingEvent entity) {
     applyBusinessRule(entity, collectingEventValidator);
     validateAssertions(entity);
+    validateExtensionValues(entity);
     validateManagedAttribute(entity);
   }
 
@@ -78,6 +83,16 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
         entity.getUuid().toString(), 
         geo, 
         georeferenceAssertionValidator
+      ));
+    }
+  }
+
+  private void validateExtensionValues(@NonNull CollectingEvent entity) {
+    if (CollectionUtils.isNotEmpty(entity.getExtensionValues())) {
+      entity.getExtensionValues().forEach(extVal -> applyBusinessRule(
+        entity.getUuid().toString(),
+        extVal,
+        extensionValueValidator
       ));
     }
   }
