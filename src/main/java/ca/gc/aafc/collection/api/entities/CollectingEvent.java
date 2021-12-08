@@ -193,7 +193,7 @@ public class CollectingEvent implements DinaEntity {
 
   private String substrate;
 
-  @Size(max = 250)
+  @Size(max = 1000)
   private String remarks;
 
   /** Map of Managed attribute key to value object. */

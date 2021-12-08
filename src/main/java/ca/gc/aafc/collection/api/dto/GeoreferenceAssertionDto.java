@@ -11,6 +11,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.Size;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,6 +28,7 @@ public class GeoreferenceAssertionDto {
   private String literalGeoreferencedBy;
   private String dwcGeoreferenceProtocol;
   private String dwcGeoreferenceSources;
+  @Size(max = 1000)
   private String dwcGeoreferenceRemarks;
   private String dwcGeodeticDatum;
   private Boolean isPrimary;
