@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api;
 
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
+import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;

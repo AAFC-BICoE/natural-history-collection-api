@@ -30,6 +30,6 @@ public class ScheduledActionDto {
   @JsonApiRelation
   private ExternalRelationDto assignedTo;
 
-  @Size(max = 250)
+  @Size(max = 1000)
   private String remarks;
 }

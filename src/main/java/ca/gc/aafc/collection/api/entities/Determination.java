@@ -44,13 +44,13 @@ public class Determination {
   @Size(max = 250)
   private final String scientificName;
 
-  @Size(max = 500)
+  @Size(max = 1000)
   private final String transcriberRemarks;
 
-  @Size(max = 500)
+  @Size(max = 1000)
   private final String verbatimRemarks;
 
-  @Size(max = 500)
+  @Size(max = 1000)
   private final String determinationRemarks;
 
   @Size(max = 50)

@@ -55,7 +55,7 @@ public class Collection extends UserDescribedDinaEntity {
   @Size(max = 500)
   private String address;
 
-  @Size(max = 500)
+  @Size(max = 1000)
   private String remarks;
 
   @Type(type = "jsonb")

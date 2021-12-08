@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.datetime.ISODateTime;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -193,7 +193,7 @@ public class CollectingEvent implements DinaEntity {
 
   private String substrate;
 
-  @Size(max = 250)
+  @Size(max = 1000)
   private String remarks;
 
   /** Map of Managed attribute key to value object. */
