@@ -1,5 +1,7 @@
 package ca.gc.aafc.collection.api.datetime;
 
+import ca.gc.aafc.dina.datetime.ISODateTime;
+
 import ca.gc.aafc.dina.filter.RsqlFilterAdapter;
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
