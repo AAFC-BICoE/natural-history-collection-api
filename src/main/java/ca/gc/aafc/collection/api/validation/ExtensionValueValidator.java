@@ -50,8 +50,8 @@ public class ExtensionValueValidator implements Validator {
     for (Extension extension : collectionExtensionConfiguration.getExtension().values()) {
       if (extension.getKey().equals(extensionValue.getExtKey()) && 
         extension.getVersion().equals(extensionValue.getExtVersion())) {
-          matchCollectionExtensionConfigurationTerm(errors, extensionValue, extension);
-          return;
+        matchCollectionExtensionConfigurationTerm(errors, extensionValue, extension);
+        return;
       }
     }
     String errorMessage = getMessageForKey(
