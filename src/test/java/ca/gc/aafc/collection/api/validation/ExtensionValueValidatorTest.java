@@ -62,7 +62,7 @@ public class ExtensionValueValidatorTest extends CollectionModuleBaseIT {
     validator.validate(extensionValue, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage();
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   private static ExtensionValue newExtensionValue() {
