@@ -20,6 +20,6 @@ public class Organism {
   @Size(max = 50)
   private final String substrate;
 
-  @Size(max = 250)
+  @Size(max = 1000)
   private final String remarks;
 }

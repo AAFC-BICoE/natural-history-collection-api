@@ -99,10 +99,10 @@ public class MaterialSample extends AbstractMaterialSample {
 
   private LocalDate stateChangedOn;
 
-  @Size(max = 500)
+  @Size(max = 1000)
   private String stateChangeRemarks;
 
-  @Size(max = 250)
+  @Size(max = 1000)
   private String materialSampleRemarks;
 
   @Type(type = "list-array")

@@ -14,6 +14,6 @@ public class HostOrganism {
   @Size(max = 150)
   private String name;
 
-  @Size(max = 250)
+  @Size(max = 1000)
   private String remarks;
 }

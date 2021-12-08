@@ -88,7 +88,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private Organism organism;
 
-  @Size(max = 500)
+  @Size(max = 1000)
   @Column(name = "preparation_remarks")
   private String preparationRemarks;
 
