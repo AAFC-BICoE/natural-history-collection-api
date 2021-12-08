@@ -24,7 +24,6 @@ import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import javax.annotation.Nullable;
-
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -50,6 +49,9 @@ public class CollectingEventDto {
   @Id
   @PropertyName("id")
   private UUID uuid;
+
+  @JsonApiField(postable = false)
+  private int version;
 
   private String group;
 
