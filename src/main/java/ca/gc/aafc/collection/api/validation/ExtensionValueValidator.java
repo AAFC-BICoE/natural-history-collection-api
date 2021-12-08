@@ -58,7 +58,7 @@ public class ExtensionValueValidator implements Validator {
       NO_MATCH_KEY_VERSION, 
       extensionValue.getExtKey(),
       extensionValue.getExtVersion());
-    errors.rejectValue("extKey", errorMessage);
+    errors.rejectValue("extKey", NO_MATCH_KEY_VERSION, errorMessage);
   }
 
   private void matchCollectionExtensionConfigurationTerm(Errors errors, ExtensionValue extensionValue, Extension extension) {
@@ -72,7 +72,7 @@ public class ExtensionValueValidator implements Validator {
       extensionValue.getExtKey(),
       extensionValue.getExtVersion(),
       extensionValue.getExtTerm());
-    errors.rejectValue("extTerm", errorMessage);
+    errors.rejectValue("extTerm", NO_MATCH_TERM, errorMessage);
   }
 
   private String getMessageForKey(String key, Object... objects) {
