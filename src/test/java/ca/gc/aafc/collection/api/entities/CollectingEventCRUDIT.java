@@ -509,7 +509,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     fetchedCollectingEvent.setExtensionValues(extensionValues);
 
-    assertThrows(Validation.class, 
+    assertThrows(ValidationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
   }
 
