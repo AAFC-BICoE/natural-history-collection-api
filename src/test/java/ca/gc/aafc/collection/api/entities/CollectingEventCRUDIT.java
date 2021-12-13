@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
 import javax.validation.ValidationException;
 
 import java.math.BigDecimal;
@@ -471,7 +472,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  void update_WithInvalidPrecision_throwsConstraintVIolationException() {
+  void update_WithInvalidPrecision_throwsConstraintViolationException() {
     CollectingEvent fetchedCollectingEvent = collectingEventService
     .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
@@ -480,7 +481,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertThrows(ConstraintViolationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
   }
-
 
   @Test
   void update_WithNullMinimumValue_NoExceptionThrown() {
@@ -491,6 +491,26 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     fetchedCollectingEvent.setDwcMinimumElevationInMeters(null);
 
     collectingEventService.update(fetchedCollectingEvent);
+  }
+
+  @Test
+  void update_WithInvalidExtensionValueKey_throwsValidationException() {
+    CollectingEvent fetchedCollectingEvent = collectingEventService
+      .findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+
+    List<ExtensionValue> extensionValues = new ArrayList<>();
+    extensionValues.add(ExtensionValue.builder()
+      .extKey("invalid_key")
+      .extVersion("v5")
+      .extTerm("experimental_factor")
+      .value("definition of experimentWal factor")
+      .build());
+
+    fetchedCollectingEvent.setExtensionValues(extensionValues);
+
+    assertThrows(ValidationException.class, 
+      () -> collectingEventService.update(fetchedCollectingEvent));
   }
 
 }
