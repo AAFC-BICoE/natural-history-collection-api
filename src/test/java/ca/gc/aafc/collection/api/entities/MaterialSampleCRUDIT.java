@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
@@ -264,6 +266,100 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
 
     collectionManagedAttributeService.create(testManagedAttribute);
+
+    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
+    assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void validateDetermination_WhenValidStringType() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION)
+        .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "anything"))
+      .build();
+
+    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void validateDetermination_WhenInvalidIntegerTypeExceptionThrown() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION)
+        .managedAttributeType(ManagedAttributeType.INTEGER)
+        .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"))
+      .build();
+
+    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+
+    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void validateDetermination_AssignedValueContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(new String[]{"val1", "val2"})
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION)
+        .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]))
+      .build();
+
+    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void validateDetermination_AssignedValueNotContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+        .acceptedValues(new String[]{"val1", "val2"})
+        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION)
+        .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val3"))
+      .build();
+
+    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+
+    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void validateDetermination_AssignManagedAttribute_onCollectingEventAttribute_Exception() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory
+        .newCollectionManagedAttribute().acceptedValues(new String[] { "val1", "val2" })
+        .managedAttributeComponent(
+            CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val1"))
+      .build();
+
+    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
 
     materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
     assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));

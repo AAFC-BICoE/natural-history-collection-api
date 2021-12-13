@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -102,12 +103,22 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   public void validateBusinessRules(MaterialSample entity) {
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
+    validateDeterminationManagedAttribute(entity);
     validateAssociations(entity);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
       CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
+  }
+
+  private void validateDeterminationManagedAttribute(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getDetermination())) {
+      for (Determination determination : entity.getDetermination()) {
+        collectionManagedAttributeValueValidator.validate(entity, determination.getManagedAttributes(),
+          CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+      }
+    }
   }
 
   private void validateAssociations(MaterialSample entity) {
