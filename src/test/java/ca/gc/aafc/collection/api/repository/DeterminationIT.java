@@ -73,6 +73,8 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .classificationPath(RandomStringUtils.randomAlphabetic(50))
+        .classificationRanks(RandomStringUtils.randomAlphabetic(50))
         .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))
         .build())

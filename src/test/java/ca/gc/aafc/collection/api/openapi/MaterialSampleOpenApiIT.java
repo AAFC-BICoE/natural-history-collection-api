@@ -99,6 +99,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .qualifier("qualifier")
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .classificationPath("classificationPath")
+        .classificationRanks("classificationRanks")
         .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))
         .labelHtml("label")
