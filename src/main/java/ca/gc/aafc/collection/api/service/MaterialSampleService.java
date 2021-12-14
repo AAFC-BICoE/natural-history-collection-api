@@ -20,6 +20,8 @@ import org.springframework.validation.SmartValidator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -94,14 +96,13 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private void setOnlyDeterminationIsPrimary(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getDetermination()) &&
       entity.getDetermination().size() == 1 && 
-      Boolean.FALSE.equals(entity.getDetermination().get(0).getIsPrimary())) {
-      List<Determination> determination = entity.getDetermination();
+      !Boolean.TRUE.equals(entity.getDetermination().get(0).getIsPrimary())) {
     
-      Determination onlyDetermination = determination.get(0).toBuilder().isPrimary(true).build();
-      
-      determination.set(0, onlyDetermination);
+      Determination determination = entity.getDetermination().get(0).toBuilder()
+        .isPrimary(true)
+        .build();
 
-      entity.setDetermination(determination);
+      entity.setDetermination(new ArrayList<>(List.of(determination)));
     }
   }
 
