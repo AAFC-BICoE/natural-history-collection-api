@@ -12,6 +12,7 @@ import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
+import liquibase.util.BooleanUtils;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -102,7 +103,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private void checkSingularDeterminationIsPrimary(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getDetermination()) &&
       entity.getDetermination().size() == 1 && 
-      !Boolean.TRUE.equals(entity.getDetermination().get(0).getIsPrimary())) {
+      !BooleanUtils.isTrue(entity.getDetermination().get(0).getIsPrimary())) {
     
       Determination determination = entity.getDetermination().get(0).toBuilder()
         .isPrimary(true)
