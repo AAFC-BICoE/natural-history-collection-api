@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -81,11 +82,27 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
     linkAssociations(entity);
+    setOnlyDeterminationIsPrimary(entity);
   }
 
   @Override
   protected void preUpdate(MaterialSample entity) {
     linkAssociations(entity);
+    setOnlyDeterminationIsPrimary(entity);
+  }
+
+  private void setOnlyDeterminationIsPrimary(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getDetermination()) &&
+      entity.getDetermination().size() == 1 && 
+      Boolean.FALSE.equals(entity.getDetermination().get(0).getIsPrimary())) {
+      List<Determination> determination = entity.getDetermination();
+    
+      Determination onlyDetermination = determination.get(0).toBuilder().isPrimary(true).build();
+      
+      determination.set(0, onlyDetermination);
+
+      entity.setDetermination(determination);
+    }
   }
 
   private void linkAssociations(MaterialSample entity) {

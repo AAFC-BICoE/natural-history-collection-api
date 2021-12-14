@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @RequiredArgsConstructor
 public class Determination {
 
