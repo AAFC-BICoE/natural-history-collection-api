@@ -84,16 +84,22 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
     linkAssociations(entity);
-    setOnlyDeterminationIsPrimary(entity);
+    checkSingularDeterminationIsPrimary(entity);
   }
 
   @Override
   protected void preUpdate(MaterialSample entity) {
     linkAssociations(entity);
-    setOnlyDeterminationIsPrimary(entity);
+    checkSingularDeterminationIsPrimary(entity);
   }
 
-  private void setOnlyDeterminationIsPrimary(MaterialSample entity) {
+  /**
+   *  check if there is only one determination and if isPrimary is null or false
+   *  set isPrimary to true
+   * 
+   * @param entity
+   */
+  private void checkSingularDeterminationIsPrimary(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getDetermination()) &&
       entity.getDetermination().size() == 1 && 
       !Boolean.TRUE.equals(entity.getDetermination().get(0).getIsPrimary())) {
