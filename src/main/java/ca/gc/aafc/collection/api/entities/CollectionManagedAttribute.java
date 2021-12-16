@@ -13,6 +13,7 @@ import ca.gc.aafc.dina.entity.ManagedAttribute;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
@@ -32,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 @TypeDefs({
   @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class),
   @TypeDef(name = "string-array", typeClass = StringArrayType.class),
-  @TypeDef(name = "jsonb", typeClass = StringArrayType.class)
+  @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 })
 @AllArgsConstructor
 @SuperBuilder
