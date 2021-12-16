@@ -70,29 +70,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void post_withAssociation_PSQLEXCEPTION() {
-    String ExpectedType = "host_of";
-    String expectedRemarks = RandomStringUtils.randomAlphabetic(13);
-
-    MaterialSampleDto associatedWith = newSample();
-    String associatedWithId = postSample(associatedWith);
-
-    MaterialSampleDto sample = newSample();
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .remarks(expectedRemarks)
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-
-    String sampleID = sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      MaterialSampleDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(sample),
-      null,
-      null)
-    ).extract().body().jsonPath().getString("data.id");
-  }
-
-  @Test
   void patch_AddAssociation() {
     String ExpectedType = "host_of";
     MaterialSampleDto associatedWith = newSample();
