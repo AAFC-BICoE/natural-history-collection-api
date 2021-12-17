@@ -15,6 +15,7 @@ import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import liquibase.util.BooleanUtils;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
