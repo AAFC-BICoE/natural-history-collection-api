@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @RequiredArgsConstructor
 public class Determination {
 
@@ -86,6 +86,10 @@ public class Determination {
   public static class ScientificNameSourceDetails {
     @Size(max = 255)
     private final String labelHtml;
+    @Size(max = 1000)
+    private final String classificationPath;
+    @Size(max = 1000)
+    private final String classificationRanks;
     @URL
     private final String sourceUrl;
     @PastOrPresent

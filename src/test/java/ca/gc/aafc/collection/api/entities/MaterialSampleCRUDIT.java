@@ -555,4 +555,24 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
   }
 
+  
+  @Test
+  void updateMaterialSample_WhenOnlyDeterminationIsPrimaryIsFalse_Passes() {
+
+    Determination determination = Determination.builder()
+      .verbatimScientificName("verbatimScientificName")
+      .isPrimary(false)
+      .build();
+
+    List<Determination> determinations = List.of(determination);
+    
+    materialSample.setDetermination(determinations);
+    
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+
+    assertTrue(fetchedMaterialSample.getDetermination().get(0).getIsPrimary());
+  }
+
 }
