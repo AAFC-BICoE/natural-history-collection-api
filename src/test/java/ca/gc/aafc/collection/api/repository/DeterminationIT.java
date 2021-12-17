@@ -72,7 +72,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .verbatimDate(LocalDate.now().toString())
       .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
-      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()\
+      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
         .currentName("scientificName")
         .isSynonym(false)
         .classificationPath(RandomStringUtils.randomAlphabetic(50))
