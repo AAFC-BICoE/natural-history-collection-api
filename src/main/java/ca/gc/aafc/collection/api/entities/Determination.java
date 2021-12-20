@@ -11,6 +11,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -75,6 +76,9 @@ public class Determination {
   private final Boolean isPrimary;
 
   private final Boolean isFileAs;
+
+  @Builder.Default
+  private final Map<String, String> managedAttributes = Map.of();
 
   @Getter
   @Builder
