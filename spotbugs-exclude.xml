@@ -1,0 +1,15 @@
+<!-- Spotbugs filter for excluding reports that should not be considered errors.
+See https://spotbugs.readthedocs.io/en/latest/filter.html
+-->
+
+<FindBugsFilter>
+
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+
+</FindBugsFilter>
