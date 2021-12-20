@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSourceDetails;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
@@ -477,6 +479,26 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
     assertTrue(fetchedMaterialSample.getDetermination().get(0).getIsPrimary());
+  }
+
+  @Test
+  void updateMaterialSample_assertDefaultIsSynonymIsFalse_Passes() {
+
+    Determination determination = Determination.builder()
+      .verbatimScientificName("verbatimScientificName")
+      .isPrimary(true)
+      .scientificNameDetails(ScientificNameSourceDetails.builder().build())
+      .build();
+
+    List<Determination> determinations = new ArrayList<>(List.of(determination));
+    
+    materialSample.setDetermination(determinations);
+    
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+
+    assertFalse(fetchedMaterialSample.getDetermination().get(0).getScientificNameDetails().getIsSynonym());
   }
 
 }
