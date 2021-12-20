@@ -94,5 +94,9 @@ public class Determination {
     private final String sourceUrl;
     @PastOrPresent
     private final LocalDate recordedOn;
+    @Size(max = 250)
+    private final String currentName;
+    @Builder.Default
+    private final Boolean isSynonym = false;
   }
 }
