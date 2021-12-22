@@ -612,9 +612,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
 
-    MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
-
-    assertFalse(fetchedMaterialSample.getDetermination().get(0).getScientificNameDetails().getIsSynonym());
   }
 
 }
