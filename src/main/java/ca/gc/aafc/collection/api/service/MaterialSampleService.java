@@ -139,11 +139,13 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private void validateDeterminationManagedAttribute(MaterialSample entity) {
     if (CollectionUtils.isNotEmpty(entity.getDetermination())) {
       for (Determination determination : entity.getDetermination()) {
-        collectionManagedAttributeValueValidator.validate(
-          entity.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()), 
-          determination, 
-          determination.getManagedAttributes(), 
-          CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+        if (determination.getManagedAttributes() != null) {
+          collectionManagedAttributeValueValidator.validate(
+            entity.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()), 
+            determination, 
+            determination.getManagedAttributes(), 
+            CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+        }
       }
     }
   }
