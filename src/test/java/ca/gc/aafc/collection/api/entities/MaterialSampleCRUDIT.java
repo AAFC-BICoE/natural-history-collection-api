@@ -596,4 +596,25 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertFalse(fetchedMaterialSample.getDetermination().get(0).getScientificNameDetails().getIsSynonym());
   }
 
+  @Test
+  void updateMaterialSample_DeterminationNullManagedAttributes_Passes() {
+
+    Determination determination = Determination.builder()
+      .verbatimScientificName("verbatimScientificName")
+      .isPrimary(true)
+      .managedAttributes(null)
+      .scientificNameDetails(ScientificNameSourceDetails.builder().build())
+      .build();
+
+    List<Determination> determinations = new ArrayList<>(List.of(determination));
+    
+    materialSample.setDetermination(determinations);
+    
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+
+    assertFalse(fetchedMaterialSample.getDetermination().get(0).getScientificNameDetails().getIsSynonym());
+  }
+
 }
