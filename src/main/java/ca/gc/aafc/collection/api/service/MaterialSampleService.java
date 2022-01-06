@@ -15,6 +15,7 @@ import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import liquibase.util.BooleanUtils;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -126,12 +127,27 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   public void validateBusinessRules(MaterialSample entity) {
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
+    validateDeterminationManagedAttribute(entity);
     validateAssociations(entity);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
       CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
+  }
+
+  private void validateDeterminationManagedAttribute(MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getDetermination())) {
+      for (Determination determination : entity.getDetermination()) {
+        if (determination.getManagedAttributes() != null) {
+          collectionManagedAttributeValueValidator.validate(
+            entity.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()), 
+            determination, 
+            determination.getManagedAttributes(), 
+            CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+        }
+      }
+    }
   }
 
   private void validateAssociations(MaterialSample entity) {

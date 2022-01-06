@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
 import javax.validation.ValidationException;
 
 import java.math.BigDecimal;

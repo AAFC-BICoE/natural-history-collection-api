@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.44-SNAPSHOT</version>
+  <version>0.46-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -12,23 +12,23 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.6</version>
+    <version>2.5.8</version>
   </parent>
 
   <properties>
     <java.version>11</java.version>
     <javax.interceptor-api>1.2.2</javax.interceptor-api>
-    <spotbugs-maven-plugin.version>4.2.0</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.2.3</spotbugs.version>
+    <spotbugs.version>4.5.2</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.5.0.0</spotbugs-maven-plugin.version>
     <jcip-annotations.version>1.0</jcip-annotations.version>
-    <dependency-check-maven.version>6.4.1</dependency-check-maven.version>
+    <dependency-check-maven.version>6.5.1</dependency-check-maven.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.45.1</checkstyle.version>
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.76</dina-base-api.version>
+    <dina-base-api.version>0.77</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
-    <log4j2.version>2.16.0</log4j2.version>
+    <log4j2.version>2.17.0</log4j2.version>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
   </properties>
 
@@ -211,6 +211,9 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${spotbugs-maven-plugin.version}</version>
+        <configuration>
+          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+        </configuration>
         <dependencies>
           <!-- Force SpotBug version to match the annotation -->
           <dependency>

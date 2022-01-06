@@ -24,7 +24,6 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import io.restassured.RestAssured;
-import io.restassured.response.ResponseBody;
 import lombok.SneakyThrows;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
@@ -99,6 +98,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .qualifier("qualifier")
       .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .currentName("scientificName")
+        .isSynonym(true)
         .classificationPath("classificationPath")
         .classificationRanks("classificationRanks")
         .sourceUrl(new URL("https://www.google.com").toString())
