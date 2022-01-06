@@ -9,6 +9,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -18,7 +19,6 @@ import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
-import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 
@@ -35,9 +35,9 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     @NonNull SmartValidator sv,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
     @NonNull StorageUnitTypeService storageUnitTypeService,
-    MessageProducer messageProducer
+    ApplicationEventPublisher eventPublisher
   ) {
-    super(baseDAO, sv, StorageUnitDto.TYPENAME, messageProducer);
+    super(baseDAO, sv, StorageUnitDto.TYPENAME, eventPublisher);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitTypeService = storageUnitTypeService;
   }

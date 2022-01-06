@@ -9,13 +9,13 @@ import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValid
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
-import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import liquibase.util.BooleanUtils;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -43,9 +43,9 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull AssociationValidator associationValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
-    MessageProducer messageProducer
+    ApplicationEventPublisher eventPublisher
   ) {
-    super(baseDAO, sv, MaterialSampleDto.TYPENAME, messageProducer);
+    super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
