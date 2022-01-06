@@ -45,6 +45,9 @@ public class MaterialSampleDto {
   @PropertyName("id")
   private UUID uuid;
 
+  @JsonApiField(postable = false)
+  private int version;
+
   private String group;
 
   private OffsetDateTime createdOn;
