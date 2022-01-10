@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import javax.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -43,6 +44,9 @@ public class MaterialSample extends AbstractMaterialSample {
   public static final String UUID_COLUMN_NAME = "uuid";
   public static final String PARENT_ID_COLUMN_NAME = "parent_material_sample_id";
   public static final String NAME_COLUMN_NAME = "material_sample_name";
+
+  @Version
+  private int version;
 
   @ManyToOne
   private Collection collection;
