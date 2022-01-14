@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -32,6 +31,7 @@ public class MaterialSampleValidator implements Validator {
   public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
+  public static final String MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM = "validation.constraint.violation.determination.primaryDeterminationMissingMixedOrganism";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
 
   @Override
@@ -86,8 +86,8 @@ public class MaterialSampleValidator implements Validator {
         if (countPrimaries(materialSample.getDetermination()) > 1) {
           errors.rejectValue(
             "determination",
-            MISSING_PRIMARY_DETERMINATION,
-            getMessage(MISSING_PRIMARY_DETERMINATION));
+            MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM,
+            getMessage(MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM));
         }
       } else if (countPrimaries(materialSample.getDetermination()) != 1) {
         // Other types must always have 1 primary determination.

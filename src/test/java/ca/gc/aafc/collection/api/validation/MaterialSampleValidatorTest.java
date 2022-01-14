@@ -195,7 +195,8 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenMoreThanOneIsPrimary() {
-    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION);
+    String expectedErrorMessageNonMixed = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION);
+    String expectedErrorMessageMixed = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM);
 
     Determination determinationA = Determination.builder()
       .isPrimary(true)
@@ -222,7 +223,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     sampleValidator.validate(sample, errorsNonMixedSpecimen);
     Assertions.assertTrue(errorsNonMixedSpecimen.hasErrors());
     Assertions.assertEquals(1, errorsNonMixedSpecimen.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errorsNonMixedSpecimen.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertEquals(expectedErrorMessageNonMixed, errorsNonMixedSpecimen.getAllErrors().get(0).getDefaultMessage());
 
     // Try it again but Material Sample is now a Mixed Organism, expecting the same errors.
     sample.setMaterialSampleType(MaterialSampleType.builder().uuid(MaterialSampleType.MIXED_ORGANISMS_UUID).build());
@@ -231,7 +232,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     sampleValidator.validate(sample, errorsMixedSpecimen);
     Assertions.assertTrue(errorsMixedSpecimen.hasErrors());
     Assertions.assertEquals(1, errorsMixedSpecimen.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errorsMixedSpecimen.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertEquals(expectedErrorMessageMixed, errorsMixedSpecimen.getAllErrors().get(0).getDefaultMessage());
   }
 
   private static MaterialSample newSample() {
