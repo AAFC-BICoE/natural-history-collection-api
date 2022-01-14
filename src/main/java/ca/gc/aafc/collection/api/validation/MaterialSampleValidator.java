@@ -1,9 +1,10 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import lombok.NonNull;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -11,7 +12,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.List;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleType;
+
+import lombok.NonNull;
 
 @Component
 public class MaterialSampleValidator implements Validator {
@@ -62,12 +67,31 @@ public class MaterialSampleValidator implements Validator {
 
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
-      if (countPrimaries(materialSample.getDetermination()) != 1) {
+
+      // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
+      if (CollectionUtils.size(materialSample.getDetermination()) == 1 &&
+        BooleanUtils.isFalse(materialSample.getDetermination().get(0).getIsPrimary()) &&
+        BooleanUtils.isFalse(materialSample.getMaterialSampleType().getUuid().equals(MaterialSampleType.MIXED_ORGANISMS_UUID))) {
+      
+        Determination determination = materialSample.getDetermination().get(0).toBuilder()
+          .isPrimary(true)
+          .build();
+
+        materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+      }
+
+      // Ensure atleast one determination is set as primary (Unless mixed sample type is Mixed Organism.)
+      // This will also check to make sure there is never more than one primary determination.
+      if ((BooleanUtils.isFalse(materialSample.getMaterialSampleType() != null
+            && materialSample.getMaterialSampleType().getUuid().equals(MaterialSampleType.MIXED_ORGANISMS_UUID))
+          && countPrimaries(materialSample.getDetermination()) != 1) || countPrimaries(materialSample.getDetermination()) > 1) {
         errors.rejectValue(
           "determination",
           MISSING_PRIMARY_DETERMINATION,
           getMessage(MISSING_PRIMARY_DETERMINATION));
       }
+
+      // Ensure scientific name and verbatim are set correctly.
       Integer isFiledAsCounter = 0;
       for (Determination determination : materialSample.getDetermination()) {
         // XOR, both set or both not set but never only one of them
@@ -79,17 +103,18 @@ public class MaterialSampleValidator implements Validator {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
         }
-        // Check there is 0 or 1 isFiledAs but never more
+        // Count if isFiled as is set.
         if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
           isFiledAsCounter++;
         }
       }
+
+      // Check there is 0 or 1 isFiledAs but never more
       if (isFiledAsCounter > 1) {
         String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
         errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
       }
     }
-
   }
   
   private Boolean isMoreThanOne(boolean b1, boolean b2, boolean b3) {
