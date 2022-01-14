@@ -69,22 +69,28 @@ public class MaterialSampleValidator implements Validator {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
 
       // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
-      if (CollectionUtils.size(materialSample.getDetermination()) == 1 &&
-        BooleanUtils.isFalse(materialSample.getDetermination().get(0).getIsPrimary()) &&
-        BooleanUtils.isFalse(materialSample.getMaterialSampleType().getUuid().equals(MaterialSampleType.MIXED_ORGANISMS_UUID))) {
-      
+      if (materialSample.getDetermination().size() == 1 &&
+          !materialSample.getDetermination().get(0).getIsPrimary() &&
+          !isMixedOrganism(materialSample)) {
+
         Determination determination = materialSample.getDetermination().get(0).toBuilder()
           .isPrimary(true)
           .build();
 
-        materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+        materialSample.setDetermination(new ArrayList<>(List.of(determination)));            
       }
 
-      // Ensure atleast one determination is set as primary (Unless mixed sample type is Mixed Organism.)
-      // This will also check to make sure there is never more than one primary determination.
-      if ((BooleanUtils.isFalse(materialSample.getMaterialSampleType() != null
-            && materialSample.getMaterialSampleType().getUuid().equals(MaterialSampleType.MIXED_ORGANISMS_UUID))
-          && countPrimaries(materialSample.getDetermination()) != 1) || countPrimaries(materialSample.getDetermination()) > 1) {
+      // Ensure the correct number of primary determination is saved.
+      if (isMixedOrganism(materialSample)) {
+        // "Mixed Organism" Material Sample can have 1 or 0 primary determinations.
+        if (countPrimaries(materialSample.getDetermination()) > 1) {
+          errors.rejectValue(
+            "determination",
+            MISSING_PRIMARY_DETERMINATION,
+            getMessage(MISSING_PRIMARY_DETERMINATION));
+        }
+      } else if (countPrimaries(materialSample.getDetermination()) != 1) {
+        // Other types must always have 1 primary determination.
         errors.rejectValue(
           "determination",
           MISSING_PRIMARY_DETERMINATION,
@@ -126,6 +132,13 @@ public class MaterialSampleValidator implements Validator {
       return 0;
     }
     return determinations.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
+  }
+
+  private boolean isMixedOrganism(MaterialSample materialSample) {
+    if (materialSample.getMaterialSampleType() == null) {
+      return false;
+    }
+    return materialSample.getMaterialSampleType().getUuid().equals(MaterialSampleType.MIXED_ORGANISMS_UUID);
   }
 
   private String getMessage(String key) {
