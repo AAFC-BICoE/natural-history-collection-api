@@ -129,23 +129,6 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_WhenNoPrimaryDeterminationWithOnlyOne_NoError() {
-    // Since there is only one, the validator will automatically set it as the primary. No error expected.
-    Determination determination = Determination.builder()
-      .isPrimary(false)
-      .verbatimScientificName("verbatimScientificNameA")
-      .build();
-
-    List<Determination> determinations = List.of(determination);
-    MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errors);
-    Assertions.assertFalse(errors.hasErrors());
-  }
-
-  @Test
   void validate_WhenNoPrimaryDeterminationAndMixedOrganism_NoErrors() {
     Determination determination = Determination.builder()
       .isPrimary(false)

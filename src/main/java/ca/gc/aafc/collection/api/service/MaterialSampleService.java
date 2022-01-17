@@ -9,6 +9,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -105,18 +106,17 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
    * @param entity
    */
   private void checkSingularDeterminationIsPrimary(MaterialSample materialSample) {
-      // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
-      if (CollectionUtils.isNotEmpty(materialSample.getDetermination()) &&
-          materialSample.getDetermination().size() == 1 &&
-          !materialSample.getDetermination().get(0).getIsPrimary() &&
-          !materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
+    // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
+    if (CollectionUtils.size(materialSample.getDetermination()) == 1 &&
+        BooleanUtils.isFalse(materialSample.getDetermination().get(0).getIsPrimary()) &&
+        !materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
 
-        Determination determination = materialSample.getDetermination().get(0).toBuilder()
-          .isPrimary(true)
-          .build();
+      Determination determination = materialSample.getDetermination().get(0).toBuilder()
+        .isPrimary(true)
+        .build();
 
-        materialSample.setDetermination(new ArrayList<>(List.of(determination)));            
-      }
+      materialSample.setDetermination(new ArrayList<>(List.of(determination)));            
+    }
   }
 
   private void linkAssociations(MaterialSample entity) {
