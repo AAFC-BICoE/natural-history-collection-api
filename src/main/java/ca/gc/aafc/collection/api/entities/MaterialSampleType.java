@@ -34,7 +34,8 @@ import java.util.UUID;
 @SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
 public class MaterialSampleType implements DinaEntity {
-  
+
+  // The following UUIDs are inserted by Liquibase and considered stable
   public static final UUID MIXED_ORGANISMS_UUID = UUID.fromString("24d0a216-5967-4bb0-875a-47655e7c0ae8");
   public static final UUID ORGANISM_PART_UUID = UUID.fromString("6c2aedd0-220e-41de-b0e9-d36f0c6e09b9");
   public static final UUID WHOLE_ORGANISM_UUID = UUID.fromString("3a001690-7008-45be-b6a8-cc1808eefbc6");

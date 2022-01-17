@@ -103,7 +103,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
    * it will not automatically be set since it's possible for a Mixed Organism not
    * to have a primary determination.
    * 
-   * @param entity
+   * @param materialSample
    */
   private void checkSingularDeterminationIsPrimary(MaterialSample materialSample) {
     // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
@@ -115,7 +115,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
         .isPrimary(true)
         .build();
 
-      materialSample.setDetermination(new ArrayList<>(List.of(determination)));            
+      materialSample.setDetermination(new ArrayList<>(List.of(determination)));
     }
   }
 

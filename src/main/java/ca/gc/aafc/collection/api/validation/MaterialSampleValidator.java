@@ -70,13 +70,13 @@ public class MaterialSampleValidator implements Validator {
       // Ensure the correct number of primary determination is saved.
       if (materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
         // "Mixed Organism" Material Sample can have 1 or 0 primary determinations.
-        if (countPrimaries(materialSample.getDetermination()) > 1) {
+        if (materialSample.countPrimaryDetermination() > 1) {
           errors.rejectValue(
             "determination",
             MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM,
             getMessage(MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM));
         }
-      } else if (countPrimaries(materialSample.getDetermination()) != 1) {
+      } else if (materialSample.countPrimaryDetermination() != 1) {
         // Other types must always have 1 primary determination.
         errors.rejectValue(
           "determination",
@@ -85,7 +85,7 @@ public class MaterialSampleValidator implements Validator {
       }
 
       // Ensure scientific name and verbatim are set correctly.
-      Integer isFiledAsCounter = 0;
+      int isFiledAsCounter = 0;
       for (Determination determination : materialSample.getDetermination()) {
         // XOR, both set or both not set but never only one of them
         if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
@@ -114,12 +114,6 @@ public class MaterialSampleValidator implements Validator {
     return b1 && b2 || b1 && b3 || b2 && b3;
   }
 
-  private static long countPrimaries(List<Determination> determinations) {
-    if (CollectionUtils.isEmpty(determinations)) {
-      return 0;
-    }
-    return determinations.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
-  }
 
   private String getMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
