@@ -134,6 +134,9 @@ public class MaterialSample extends AbstractMaterialSample {
    */
   @Transient
   public boolean isType(UUID uuid) {
+    if (materialSampleType == null) {
+      return false;
+    }
     return Objects.equals(materialSampleType.getUuid(), uuid);
   }
 }
