@@ -28,6 +28,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -121,4 +122,18 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "acquisition_event_id")
   private AcquisitionEvent acquisitionEvent;
 
+  /**
+   * Check if the material sample type equals a specific UUID.
+   * 
+   * If the Material Sample Type is null, false will be returned.
+   * 
+   * @param uuid UUID to check against. Material sample type has a bunch of UUID
+   *             constants for system generated types.
+   * @return if the material sample type uuid is equal to the provided uuid. If
+   *         type is not set, false will be returned.
+   */
+  @Transient
+  public boolean isType(UUID uuid) {
+    return Objects.equals(materialSampleType.getUuid(), uuid);
+  }
 }

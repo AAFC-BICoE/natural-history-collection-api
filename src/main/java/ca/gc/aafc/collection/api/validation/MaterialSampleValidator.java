@@ -68,20 +68,8 @@ public class MaterialSampleValidator implements Validator {
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
 
-      // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
-      if (materialSample.getDetermination().size() == 1 &&
-          !materialSample.getDetermination().get(0).getIsPrimary() &&
-          !isMixedOrganism(materialSample)) {
-
-        Determination determination = materialSample.getDetermination().get(0).toBuilder()
-          .isPrimary(true)
-          .build();
-
-        materialSample.setDetermination(new ArrayList<>(List.of(determination)));            
-      }
-
       // Ensure the correct number of primary determination is saved.
-      if (isMixedOrganism(materialSample)) {
+      if (materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
         // "Mixed Organism" Material Sample can have 1 or 0 primary determinations.
         if (countPrimaries(materialSample.getDetermination()) > 1) {
           errors.rejectValue(
@@ -132,13 +120,6 @@ public class MaterialSampleValidator implements Validator {
       return 0;
     }
     return determinations.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
-  }
-
-  private boolean isMixedOrganism(MaterialSample materialSample) {
-    if (materialSample.getMaterialSampleType() == null) {
-      return false;
-    }
-    return materialSample.getMaterialSampleType().getUuid().equals(MaterialSampleType.MIXED_ORGANISMS_UUID);
   }
 
   private String getMessage(String key) {
