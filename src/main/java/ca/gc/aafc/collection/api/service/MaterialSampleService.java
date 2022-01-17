@@ -1,9 +1,25 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.BiFunction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
+
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleType;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
@@ -11,22 +27,8 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
-import liquibase.util.BooleanUtils;
+
 import lombok.NonNull;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.SmartValidator;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.BiFunction;
 
 @Service
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
@@ -96,20 +98,24 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   /**
-   *  check if there is only one determination and if isPrimary is null or false
-   *  set isPrimary to true
+   * Check if there is only one determination and if isPrimary is null or false
+   * set isPrimary to true. If the material sample is a Mixed Organism type then
+   * it will not automatically be set since it's possible for a Mixed Organism not
+   * to have a primary determination.
    * 
-   * @param entity
+   * @param materialSample
    */
-  private void checkSingularDeterminationIsPrimary(MaterialSample entity) {
-    if (CollectionUtils.size(entity.getDetermination()) == 1 &&
-      !BooleanUtils.isTrue(entity.getDetermination().get(0).getIsPrimary())) {
-    
-      Determination determination = entity.getDetermination().get(0).toBuilder()
+  private void checkSingularDeterminationIsPrimary(MaterialSample materialSample) {
+    // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
+    if (CollectionUtils.size(materialSample.getDetermination()) == 1 &&
+        BooleanUtils.isFalse(materialSample.getDetermination().get(0).getIsPrimary()) &&
+        !materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
+
+      Determination determination = materialSample.getDetermination().get(0).toBuilder()
         .isPrimary(true)
         .build();
 
-      entity.setDetermination(new ArrayList<>(List.of(determination)));
+      materialSample.setDetermination(new ArrayList<>(List.of(determination)));
     }
   }
 
