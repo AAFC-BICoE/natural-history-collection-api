@@ -1,8 +1,5 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
@@ -11,7 +8,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.List;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleType;
+
+import lombok.NonNull;
 
 @Component
 public class MaterialSampleValidator implements Validator {
@@ -27,6 +28,7 @@ public class MaterialSampleValidator implements Validator {
   public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
+  public static final String MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM = "validation.constraint.violation.determination.primaryDeterminationMissingMixedOrganism";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
 
   @Override
@@ -62,13 +64,26 @@ public class MaterialSampleValidator implements Validator {
 
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
     if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
-      if (countPrimaries(materialSample.getDetermination()) != 1) {
+
+      // Ensure the correct number of primary determination is saved.
+      if (materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
+        // "Mixed Organism" Material Sample can have 1 or 0 primary determinations.
+        if (materialSample.countPrimaryDetermination() > 1) {
+          errors.rejectValue(
+            "determination",
+            MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM,
+            getMessage(MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM));
+        }
+      } else if (materialSample.countPrimaryDetermination() != 1) {
+        // Other types must always have 1 primary determination.
         errors.rejectValue(
           "determination",
           MISSING_PRIMARY_DETERMINATION,
           getMessage(MISSING_PRIMARY_DETERMINATION));
       }
-      Integer isFiledAsCounter = 0;
+
+      // Ensure scientific name and verbatim are set correctly.
+      int isFiledAsCounter = 0;
       for (Determination determination : materialSample.getDetermination()) {
         // XOR, both set or both not set but never only one of them
         if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
@@ -79,29 +94,24 @@ public class MaterialSampleValidator implements Validator {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
         }
-        // Check there is 0 or 1 isFiledAs but never more
+        // Count if isFiled as is set.
         if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
           isFiledAsCounter++;
         }
       }
+
+      // Check there is 0 or 1 isFiledAs but never more
       if (isFiledAsCounter > 1) {
         String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
         errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
       }
     }
-
   }
   
   private Boolean isMoreThanOne(boolean b1, boolean b2, boolean b3) {
     return b1 && b2 || b1 && b3 || b2 && b3;
   }
 
-  private static long countPrimaries(List<Determination> determinations) {
-    if (CollectionUtils.isEmpty(determinations)) {
-      return 0;
-    }
-    return determinations.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
-  }
 
   private String getMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());

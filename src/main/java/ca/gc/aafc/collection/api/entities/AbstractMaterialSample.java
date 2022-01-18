@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -125,4 +126,17 @@ public class AbstractMaterialSample implements DinaEntity {
   @NotNull
   @Builder.Default
   private Boolean allowDuplicateName = false;
+
+  /**
+   * Count the number of primary Determination.
+   * If there is no Determination 0 will be returned.
+   *
+   * @return the number of primary determination or 0 if there is no determinations
+   */
+  public long countPrimaryDetermination() {
+    if (CollectionUtils.isEmpty(determination)) {
+      return 0;
+    }
+    return determination.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
+  }
 }
