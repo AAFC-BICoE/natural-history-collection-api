@@ -10,6 +10,7 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RelatedEntity(StorageUnit.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = StorageUnitDto.TYPENAME)
+@TypeName(StorageUnitDto.TYPENAME)
 public class StorageUnitDto {
 
   public static final String TYPENAME = "storage-unit";

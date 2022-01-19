@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -19,6 +20,7 @@ import lombok.Data;
 @RelatedEntity(PreparationType.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = PreparationTypeDto.TYPENAME)
+@TypeName(PreparationTypeDto.TYPENAME)
 public class PreparationTypeDto {
 
   public static final String TYPENAME = "preparation-type";

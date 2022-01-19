@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -18,6 +19,7 @@ import lombok.Data;
 @RelatedEntity(MaterialSampleType.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = MaterialSampleTypeDto.TYPENAME)
+@TypeName(MaterialSampleTypeDto.TYPENAME)
 public class MaterialSampleTypeDto {
 
   public static final String TYPENAME = "material-sample-type";

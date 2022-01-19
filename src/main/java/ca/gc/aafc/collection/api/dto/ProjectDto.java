@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -24,6 +25,7 @@ import lombok.Data;
 @RelatedEntity(Project.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = ProjectDto.TYPENAME)
+@TypeName(ProjectDto.TYPENAME)
 public class ProjectDto {
   
   public static final String TYPENAME = "project";
