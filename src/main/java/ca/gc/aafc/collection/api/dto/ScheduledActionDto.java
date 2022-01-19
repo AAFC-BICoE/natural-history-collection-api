@@ -16,6 +16,8 @@ import lombok.Value;
 @Builder
 @RequiredArgsConstructor
 @Value
+// This class is considered a "value" belonging to a MaterialSample:
+@org.javers.core.metamodel.annotation.Value
 public class ScheduledActionDto {
 
   @Size(max = 25)

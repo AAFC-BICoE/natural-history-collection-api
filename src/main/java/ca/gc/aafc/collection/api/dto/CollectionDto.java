@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.UUID;
 @RelatedEntity(Collection.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = CollectionDto.TYPENAME)
+@TypeName(CollectionDto.TYPENAME)
 public class CollectionDto extends AttributeMetaInfoProvider {
 
   public static final String TYPENAME = "collection";
