@@ -23,6 +23,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -75,6 +76,7 @@ public class MaterialSample extends AbstractMaterialSample {
   private List<Project> projects = new ArrayList<>();
 
   @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+  @Valid
   private List<Association> associations = new ArrayList<>();
 
   public void setAssociations(List<Association> associations) {
