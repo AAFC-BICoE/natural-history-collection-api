@@ -1,25 +1,27 @@
 package ca.gc.aafc.collection.api.repository;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Repository;
+
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.security.CollectionManagedAttributeAuthorizationService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.security.DinaAuthorizationService;
+
 import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.FilterSpec;
 import io.crnk.core.queryspec.QuerySpec;
 import lombok.NonNull;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Repository;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Repository
 public class CollectionManagedAttributeRepo extends DinaRepository<CollectionManagedAttributeDto, CollectionManagedAttribute> {
@@ -30,14 +32,14 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
 
   public CollectionManagedAttributeRepo(
     @NonNull CollectionManagedAttributeService service,
-    DinaAuthorizationService groupAuthorizationService,
+    @NonNull CollectionManagedAttributeAuthorizationService collectionManagedAttributeAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       service,
-      groupAuthorizationService,
+      collectionManagedAttributeAuthorizationService,
       Optional.empty(),
       new DinaMapper<>(CollectionManagedAttributeDto.class),
       CollectionManagedAttributeDto.class,

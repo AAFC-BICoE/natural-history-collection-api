@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition;
 import ca.gc.aafc.collection.api.entities.MaterialSampleActionDefinition.FormTemplate;
@@ -22,6 +23,7 @@ import lombok.Data;
 @RelatedEntity(MaterialSampleActionDefinition.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = MaterialSampleActionDefinitionDto.TYPENAME)
+@TypeName(MaterialSampleActionDefinitionDto.TYPENAME)
 public class MaterialSampleActionDefinitionDto {
 
   public static final String TYPENAME = "material-sample-action-definition";

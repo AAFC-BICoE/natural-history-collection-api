@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.URL;
+import org.javers.core.metamodel.annotation.Value;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Getter
 @Builder(toBuilder = true)
 @RequiredArgsConstructor
+@Value // This class is considered a "value" belonging to a MaterialSample:
 public class Determination {
 
   public enum ScientificNameSource {

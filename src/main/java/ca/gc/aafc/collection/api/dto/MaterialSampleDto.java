@@ -18,6 +18,8 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
+
+import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -77,6 +79,7 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private MaterialSampleDto parentMaterialSample;
 
+  @DiffIgnore
   private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   @JsonApiExternalRelation(type = "person")

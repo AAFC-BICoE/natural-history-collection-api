@@ -21,6 +21,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.javers.core.metamodel.annotation.TypeName;
+
 @Getter
 @Setter
 @Builder
@@ -29,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @RelatedEntity(Institution.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = InstitutionDto.TYPENAME)
+@TypeName(InstitutionDto.TYPENAME)
 public class InstitutionDto extends AttributeMetaInfoProvider {
 
   public static final String TYPENAME = "institution";

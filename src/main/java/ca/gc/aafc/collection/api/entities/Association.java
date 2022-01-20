@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -32,12 +34,14 @@ public class Association {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "sample_id", nullable = false)
   private MaterialSample sample;
-
+  
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "associated_with_id", nullable = false)
+  @NotNull
   private MaterialSample associatedSample;
-
+  
   @Size(max = 50)
+  @NotBlank
   private String associationType;
 
   @Size(max = 1000)
