@@ -8,6 +8,8 @@ import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
+
+import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -41,7 +43,7 @@ public class StorageUnitDto {
   @JsonApiRelation
   private StorageUnitDto parentStorageUnit;
 
-
+  @DiffIgnore
   private List<ImmutableStorageUnitDto> storageUnitChildren = new ArrayList<>();
 
   private List<StorageHierarchicalObject> hierarchy;

@@ -3,6 +3,8 @@ package ca.gc.aafc.collection.api.repository;
 import java.util.Optional;
 
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.service.AuditService;
+
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +25,7 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
   public CollectionRepository(
     @NonNull CollectionService dinaService,
     ExternalResourceProvider externalResourceProvider,
+    @NonNull AuditService auditService,
     DinaAuthorizationService collectionAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
@@ -30,7 +33,7 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
     super(
       dinaService,
       collectionAuthorizationService,
-      Optional.empty(),
+      Optional.of(auditService),
       new DinaMapper<>(CollectionDto.class),
       CollectionDto.class,
       Collection.class,
