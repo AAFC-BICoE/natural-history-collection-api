@@ -24,13 +24,13 @@ public class MaterialSampleTypeRepository extends DinaRepository<MaterialSampleT
   public MaterialSampleTypeRepository(
     @NonNull MaterialSampleTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
-    DinaAuthorizationService dinaAdminOnlyAuthorizationService,
+    DinaAuthorizationService dinaAdminCUDAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
       dinaService,
-      dinaAdminOnlyAuthorizationService,
+      dinaAdminCUDAuthorizationService,
       Optional.empty(),
       new DinaMapper<>(MaterialSampleTypeDto.class),
       MaterialSampleTypeDto.class,

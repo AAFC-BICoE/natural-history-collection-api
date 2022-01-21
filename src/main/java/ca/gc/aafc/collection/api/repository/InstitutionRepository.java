@@ -6,7 +6,7 @@ import ca.gc.aafc.collection.api.service.InstitutionService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
-import ca.gc.aafc.dina.security.DinaAdminOnlyAuthorizationService;
+import ca.gc.aafc.dina.security.DinaAdminCUDAuthorizationService;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
@@ -21,7 +21,7 @@ public class InstitutionRepository extends DinaRepository<InstitutionDto, Instit
 
   public InstitutionRepository(
     @NonNull InstitutionService dinaService,
-    @NonNull DinaAdminOnlyAuthorizationService adminOnlyAuthorizationService,
+    @NonNull DinaAdminCUDAuthorizationService adminOnlyAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser

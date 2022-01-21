@@ -23,6 +23,11 @@ public class CollectionManagedAttributeAuthorizationService extends PermissionAu
   public void authorizeDelete(Object entity) {
   }
 
+  // Do nothing for now
+  @Override
+  public void authorizeRead(Object entity) {
+  }
+
   @Override
   public String getName() {
     return "CollectionManagedAttributeAuthorizationService";
