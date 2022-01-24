@@ -3,6 +3,8 @@ package ca.gc.aafc.collection.api.repository;
 import java.util.Optional;
 
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.service.AuditService;
+
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +26,7 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
   public PreparationTypeRepository(
     @NonNull PreparationTypeService dinaService,
     ExternalResourceProvider externalResourceProvider,
+    @NonNull AuditService auditService,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
@@ -31,7 +34,7 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
     super(
       dinaService,
       groupAuthorizationService,
-      Optional.empty(),
+      Optional.of(auditService),
       new DinaMapper<>(PreparationTypeDto.class),
       PreparationTypeDto.class,
       PreparationType.class,

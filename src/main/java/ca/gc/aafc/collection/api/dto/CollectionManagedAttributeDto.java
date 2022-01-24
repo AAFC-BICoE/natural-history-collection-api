@@ -11,13 +11,22 @@ import lombok.Data;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.TypeName;
+
 @RelatedEntity(CollectionManagedAttribute.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
-@JsonApiResource(type = "managed-attribute")
+@JsonApiResource(type = CollectionManagedAttributeDto.TYPENAME)
+@TypeName(CollectionManagedAttributeDto.TYPENAME)
 public class CollectionManagedAttributeDto {
 
+  public static final String TYPENAME = "managed-attribute";
+
   @JsonApiId
+  @Id
+  @PropertyName("id")
   private UUID uuid;
   private String name;
   private String key;

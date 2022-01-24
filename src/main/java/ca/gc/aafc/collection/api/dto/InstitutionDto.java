@@ -21,6 +21,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 @Getter
@@ -37,6 +39,8 @@ public class InstitutionDto extends AttributeMetaInfoProvider {
   public static final String TYPENAME = "institution";
 
   @JsonApiId
+  @PropertyName("id")
+  @Id
   private UUID uuid;
 
   private OffsetDateTime createdOn;

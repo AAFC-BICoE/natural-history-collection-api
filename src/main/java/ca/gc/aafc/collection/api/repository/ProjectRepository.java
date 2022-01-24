@@ -13,6 +13,7 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.service.AuditService;
 import lombok.NonNull;
 
 @Repository
@@ -23,6 +24,7 @@ public class ProjectRepository extends DinaRepository<ProjectDto, Project> {
   public ProjectRepository(
     @NonNull ProjectService dinaService,
     ExternalResourceProvider externalResourceProvider,
+    @NonNull AuditService auditService,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
@@ -30,7 +32,7 @@ public class ProjectRepository extends DinaRepository<ProjectDto, Project> {
     super(
       dinaService,
       groupAuthorizationService,
-      Optional.empty(),
+      Optional.of(auditService),
       new DinaMapper<>(ProjectDto.class),
       ProjectDto.class,
       Project.class,

@@ -15,6 +15,8 @@ import lombok.Setter;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 @Getter
@@ -31,6 +33,8 @@ public class CollectionMethodDto {
   public static final String TYPENAME = "collection-method";
 
   @JsonApiId
+  @Id
+  @PropertyName("id")
   private UUID uuid;
 
   private OffsetDateTime createdOn;
