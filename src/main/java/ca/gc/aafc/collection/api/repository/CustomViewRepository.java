@@ -24,19 +24,16 @@ public class CustomViewRepository extends DinaRepository<CustomViewDto, CustomVi
     DinaAuthorizationService groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
-    DinaAuthenticatedUser dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
-    super(
-        customViewService,
-      groupAuthorizationService,
-      Optional.empty(),
-      new DinaMapper<>(CustomViewDto.class),
-        CustomViewDto.class,
-        CustomView.class,
-      null,
-      externalResourceProvider,
-      buildProperties);
-    this.authenticatedUser = dinaAuthenticatedUser;
+    super(customViewService,
+        groupAuthorizationService,
+        Optional.empty(),
+        new DinaMapper<>(CustomViewDto.class),
+        CustomViewDto.class, CustomView.class,
+        null,
+        externalResourceProvider, buildProperties);
+    this.authenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
   @Override
   public <S extends CustomViewDto> S create(S resource) {
