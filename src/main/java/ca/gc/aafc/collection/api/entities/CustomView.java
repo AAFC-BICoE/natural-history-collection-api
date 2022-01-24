@@ -58,7 +58,7 @@ public class CustomView implements DinaEntity {
   private String group;
 
   @NotNull
-  private Boolean restrictToCreatedBy;
+  private Boolean restrictToCreatedBy = false;
 
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
