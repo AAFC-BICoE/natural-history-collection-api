@@ -23,6 +23,11 @@ public class CollectionAuthorizationService extends PermissionAuthorizationServi
   public void authorizeDelete(Object entity) {    
   }
 
+  // Do nothing for now
+  @Override
+  public void authorizeRead(Object entity) {
+  }
+
   @Override
   public String getName() {
     return "CollectionAuthorizationService";
