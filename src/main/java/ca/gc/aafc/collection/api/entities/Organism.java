@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.entities;
 
 import javax.validation.constraints.Size;
 
+import org.javers.core.metamodel.annotation.Value;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @RequiredArgsConstructor
+@Value
 public class Organism {
   
   @Size(max = 50)
