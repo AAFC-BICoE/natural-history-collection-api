@@ -25,7 +25,7 @@ public class CustomViewRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = CustomViewFixture.GROUP+":user")
-  public void create_WithAuthenticatedUser_SetsCreatedBy() {
+  public void create_OnCreate_SetsCreatedBy() {
 
     CustomViewDto cvDto = CustomViewFixture.newCustomView().name(NAME).build();
 
@@ -36,6 +36,27 @@ public class CustomViewRepositoryIT extends CollectionModuleBaseIT {
     assertNotNull(result.getCreatedBy());
     assertEquals(NAME, result.getName());
     assertEquals(CustomViewFixture.GROUP, result.getGroup());
+
+    customViewRepository.delete(createResourceUUID);
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = CustomViewFixture.GROUP+":user")
+  public void update_OnNameUpdate_NameUpdated() {
+
+    CustomViewDto cvDto = CustomViewFixture.newCustomView().name(NAME).build();
+    UUID createResourceUUID = customViewRepository.create(cvDto).getUuid();
+
+    CustomViewDto result = customViewRepository.findOne(
+        createResourceUUID, new QuerySpec(MaterialSampleActionDefinitionDto.class));
+
+    result.setName("new name");
+    customViewRepository.save(result);
+
+    result = customViewRepository.findOne(
+        createResourceUUID, new QuerySpec(MaterialSampleActionDefinitionDto.class));
+
+    assertEquals("new name", result.getName());
 
     customViewRepository.delete(createResourceUUID);
   }
