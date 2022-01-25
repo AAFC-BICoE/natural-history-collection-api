@@ -8,6 +8,7 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.service.AuditService;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
@@ -33,6 +34,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
   public StorageUnitRepo(
     @NonNull StorageUnitService sus,
     DinaAuthorizationService groupAuthorizationService,
+    @NonNull AuditService auditService,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull BuildProperties buildProperties,
     MessageSource messageSource
@@ -40,7 +42,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
     super(
       sus,
       groupAuthorizationService,
-      Optional.empty(),
+      Optional.of(auditService),
       new DinaMapper<>(StorageUnitDto.class),
       StorageUnitDto.class,
       StorageUnit.class,

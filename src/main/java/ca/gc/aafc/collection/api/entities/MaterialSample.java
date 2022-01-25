@@ -9,6 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Type;
+import org.javers.core.metamodel.annotation.DiffIgnore;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -99,6 +100,7 @@ public class MaterialSample extends AbstractMaterialSample {
   private StorageUnit storageUnit;
 
   @Transient
+  @DiffIgnore
   private List<HierarchicalObject> hierarchy;
 
   @Size(max = 50)
