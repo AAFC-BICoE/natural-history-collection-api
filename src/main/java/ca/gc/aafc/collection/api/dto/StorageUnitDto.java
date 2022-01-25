@@ -46,6 +46,7 @@ public class StorageUnitDto {
   @DiffIgnore
   private List<ImmutableStorageUnitDto> storageUnitChildren = new ArrayList<>();
 
+  @DiffIgnore
   private List<StorageHierarchicalObject> hierarchy;
 
   @JsonApiRelation
