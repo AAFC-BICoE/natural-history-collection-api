@@ -1,16 +1,17 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.CustomViewDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleActionDefinitionDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CustomViewFixture;
-import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.queryspec.QuerySpec;
+import java.util.UUID;
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.inject.Inject;
-import java.util.UUID;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.CustomViewDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CustomViewFixture;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+
+import io.crnk.core.queryspec.QuerySpec;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,7 +33,7 @@ public class CustomViewRepositoryIT extends CollectionModuleBaseIT {
     UUID createResourceUUID = customViewRepository.create(cvDto).getUuid();
 
     CustomViewDto result = customViewRepository.findOne(
-        createResourceUUID, new QuerySpec(MaterialSampleActionDefinitionDto.class));
+        createResourceUUID, new QuerySpec(CustomViewDto.class));
     assertNotNull(result.getCreatedBy());
     assertEquals(NAME, result.getName());
     assertEquals(CustomViewFixture.GROUP, result.getGroup());
@@ -48,13 +49,13 @@ public class CustomViewRepositoryIT extends CollectionModuleBaseIT {
     UUID createResourceUUID = customViewRepository.create(cvDto).getUuid();
 
     CustomViewDto result = customViewRepository.findOne(
-        createResourceUUID, new QuerySpec(MaterialSampleActionDefinitionDto.class));
+        createResourceUUID, new QuerySpec(CustomViewDto.class));
 
     result.setName("new name");
     customViewRepository.save(result);
 
     result = customViewRepository.findOne(
-        createResourceUUID, new QuerySpec(MaterialSampleActionDefinitionDto.class));
+        createResourceUUID, new QuerySpec(CustomViewDto.class));
 
     assertEquals("new name", result.getName());
 
