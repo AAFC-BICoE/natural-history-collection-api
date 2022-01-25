@@ -27,7 +27,6 @@ public class MaterialSampleTestFixture {
   public static final LocalDate STATE_CHANGED_ON = LocalDate.now();
   public static final String STATE_CHANGE_REMARKS = "state change remarks";
   public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
-  public static final String FILED_AS = "example of filedAs";
   public static final String PREPARATION_METHOD = "microwaving";
   public static final Boolean ALLOW_DUPLICATE_NAME = true;
 
