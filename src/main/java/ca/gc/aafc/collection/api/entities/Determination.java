@@ -18,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Builder(toBuilder = true)
 @RequiredArgsConstructor
-@Value // This class is considered a "value" belonging to a MaterialSample:
+@Value // This class is considered a "value" belonging to a Organism:
 public class Determination {
 
   public enum ScientificNameSource {

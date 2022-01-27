@@ -83,11 +83,7 @@ public class AbstractMaterialSample implements DinaEntity {
 
   @Type(type = "jsonb")
   @Valid
-  private List<Determination> determination;
-
-  @Type(type = "jsonb")
-  @Valid
-  private Organism organism;
+  private List<Organism> organism;
 
   @Size(max = 1000)
   @Column(name = "preparation_remarks")
@@ -126,17 +122,4 @@ public class AbstractMaterialSample implements DinaEntity {
   @NotNull
   @Builder.Default
   private Boolean allowDuplicateName = false;
-
-  /**
-   * Count the number of primary Determination.
-   * If there is no Determination 0 will be returned.
-   *
-   * @return the number of primary determination or 0 if there is no determinations
-   */
-  public long countPrimaryDetermination() {
-    if (CollectionUtils.isEmpty(determination)) {
-      return 0;
-    }
-    return determination.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
-  }
 }
