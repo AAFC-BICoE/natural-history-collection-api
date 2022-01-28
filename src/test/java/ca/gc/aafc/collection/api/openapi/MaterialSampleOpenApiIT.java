@@ -50,7 +50,7 @@ import java.util.UUID;
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
+  private static final String SPEC_PATH = "DINA-Web/collection-specs/23916e142542abe9791f0d606977856cef771a9f/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
   public static final String TYPE_NAME = "material-sample";
@@ -110,6 +110,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .build();
     
     Organism organism = Organism.builder()
+      .determination(List.of(determination))
       .lifeStage("larva")
       .sex("female")
       .substrate("organism subtrate")
@@ -134,8 +135,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
-    ms.setDetermination(List.of(determination));
-    ms.setOrganism(organism);
+    ms.setOrganism(List.of(organism));
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
     ms.setAcquisitionEvent(null);

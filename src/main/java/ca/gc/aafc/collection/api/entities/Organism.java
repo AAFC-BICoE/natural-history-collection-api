@@ -10,30 +10,32 @@ import org.apache.commons.collections.CollectionUtils;
 import org.javers.core.metamodel.annotation.Value;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
-@Builder
+@Getter
+@Builder(toBuilder = true)
+@RequiredArgsConstructor
 @Value // This class is considered a "value" belonging to a Material Sample:
 public class Organism {
 
   @NotNull
-  private UUID uuid;
+  private final UUID uuid;
 
   @Valid
-  private List<Determination> determination;
+  private final List<Determination> determination;
 
   @Size(max = 50)
-  private String lifeStage;
+  private final String lifeStage;
 
   @Size(max = 25)
-  private String sex;
+  private final String sex;
 
   @Size(max = 50)
-  private String substrate;
+  private final String substrate;
 
   @Size(max = 1000)
-  private String remarks;
+  private final String remarks;
 
   /**
    * Count the number of primary Determination.

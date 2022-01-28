@@ -1,22 +1,25 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
-import io.crnk.core.queryspec.QuerySpec;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
-
-import javax.inject.Inject;
-import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.inject.Inject;
+import javax.validation.ValidationException;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
+
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+
+import io.crnk.core.queryspec.QuerySpec;
+import lombok.SneakyThrows;
 
 class DeterminationIT extends CollectionModuleBaseIT {
 
@@ -29,11 +32,14 @@ class DeterminationIT extends CollectionModuleBaseIT {
     Determination determination = newDetermination()
         .isPrimary(true)
         .determiner(List.of(UUID.randomUUID())).build();
-    dto.setDetermination(new ArrayList<>(List.of(determination)));
+    
+    dto.setOrganism(new ArrayList<>(List.of(Organism.builder().determination(
+      new ArrayList<>(List.of(determination))).build())
+    ));
 
     Determination result = materialSampleRepository
         .findOne(materialSampleRepository.create(dto).getUuid(),
-            new QuerySpec(MaterialSampleDto.class)).getDetermination().get(0);
+            new QuerySpec(MaterialSampleDto.class)).getOrganism().get(0).getDetermination().get(0);
 
     // Assert determination
     Assertions.assertNotNull(result);
@@ -59,9 +65,14 @@ class DeterminationIT extends CollectionModuleBaseIT {
   @Test
   void create_WhenDeterminationHasValidationConstraintViolation_ThrowsValidationException() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(new ArrayList<>(List.of(Determination.builder()
-      .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
-      .build())));
+    Determination determination = Determination.builder()
+        .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
+        .build();
+
+    dto.setOrganism(new ArrayList<>(List.of(Organism.builder().determination(
+      new ArrayList<>(List.of(determination))).build())
+    ));
+
     Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
   }
 

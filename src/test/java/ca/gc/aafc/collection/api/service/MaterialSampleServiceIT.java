@@ -16,6 +16,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 
@@ -72,15 +73,19 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
       .verbatimScientificName("verbatimScientificName")
       .build();
 
+    Organism organism = Organism.builder()
+      .determination(List.of(determination))
+      .build();
+
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
-        .determination(List.of(determination))
+        .organism(List.of(organism))
         .build();
 
     materialSample = materialSampleService.createAndFlush(materialSample);
 
-    Assertions.assertNotNull(materialSample.getDetermination());
-    Assertions.assertEquals(1, materialSample.getDetermination().size());
-    Assertions.assertTrue(materialSample.getDetermination().get(0).getIsPrimary());
+    Assertions.assertNotNull(materialSample.getOrganism().get(0).getDetermination());
+    Assertions.assertEquals(1, materialSample.getOrganism().get(0).getDetermination().size());
+    Assertions.assertTrue(materialSample.getOrganism().get(0).getDetermination().get(0).getIsPrimary());
   }
 
   private MaterialSample persistMaterialSample() {

@@ -14,12 +14,12 @@ import org.javers.core.metamodel.annotation.Value;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Data
-@Builder
+@Getter
+@Builder(toBuilder = true)
+@RequiredArgsConstructor
 @Value // This class is considered a "value" belonging to a Organism:
 public class Determination {
 
@@ -38,51 +38,51 @@ public class Determination {
   }
 
   @Size(max = 250)
-  private String verbatimScientificName;
+  private final String verbatimScientificName;
 
   @Size(max = 150)
-  private String verbatimDeterminer;
+  private final String verbatimDeterminer;
 
   @Size(max = 50)
-  private String verbatimDate;
+  private final String verbatimDate;
 
   @Size(max = 250)
-  private String scientificName;
+  private final String scientificName;
 
   @Size(max = 1000)
-  private String transcriberRemarks;
+  private final String transcriberRemarks;
 
   @Size(max = 1000)
-  private String verbatimRemarks;
+  private final String verbatimRemarks;
 
   @Size(max = 1000)
-  private String determinationRemarks;
+  private final String determinationRemarks;
 
   @Size(max = 50)
-  private String typeStatus;
+  private final String typeStatus;
 
   @Size(max = 250)
-  private String typeStatusEvidence;
+  private final String typeStatusEvidence;
 
-  private List<UUID> determiner;
+  private final List<UUID> determiner;
 
   @PastOrPresent
-  private LocalDate determinedOn;
+  private final LocalDate determinedOn;
 
   @Size(max = 150)
-  private String qualifier;
+  private final String qualifier;
 
-  private ScientificNameSource scientificNameSource;
+  private final ScientificNameSource scientificNameSource;
 
   @Valid
-  private ScientificNameSourceDetails scientificNameDetails;
+  private final ScientificNameSourceDetails scientificNameDetails;
 
-  private Boolean isPrimary;
+  private final Boolean isPrimary;
 
-  private Boolean isFileAs;
+  private final Boolean isFileAs;
 
   @Builder.Default
-  private Map<String, String> managedAttributes = Map.of();
+  private final Map<String, String> managedAttributes = Map.of();
 
   @Getter
   @Builder
