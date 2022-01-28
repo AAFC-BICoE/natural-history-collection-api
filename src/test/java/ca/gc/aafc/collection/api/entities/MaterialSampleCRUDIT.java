@@ -286,7 +286,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "anything"))
       .build();
 
-    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
 
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
   }
@@ -305,7 +308,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"))
       .build();
 
-    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
 
     assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
   }
@@ -324,7 +330,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .managedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]))
       .build();
 
-    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
 
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
   }
@@ -342,7 +351,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "val3"))
       .build();
 
-    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
 
     assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
   }
@@ -360,7 +372,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "val1"))
       .build();
 
-    materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
 
     materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
     assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
@@ -372,11 +387,12 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .verbatimScientificName("verbatimScientificName")
       .determinedOn(LocalDate.now().plusDays(2))
       .build();
+    
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
 
-    List<Determination> determinations = List.of(determination);
-    
-    materialSample.setDetermination(determinations);
-    
     assertThrows(ValidationException.class, 
       () -> materialSampleService.update(materialSample));
   }
@@ -547,7 +563,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     Association association = Association.builder()
       .associationType(RandomStringUtils.randomAlphabetic(4))
-      .build();;
+      .build();
     association.setAssociatedSample(materialSample);
     association.setSample(materialSample);
 
@@ -565,15 +581,16 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .isPrimary(false)
       .build();
 
-    List<Determination> determinations = List.of(determination);
-    
-    materialSample.setDetermination(determinations);
-    
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
+
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
 
     MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
-    assertTrue(fetchedMaterialSample.getDetermination().get(0).getIsPrimary());
+    assertTrue(fetchedMaterialSample.getOrganism().get(0).getDetermination().get(0).getIsPrimary());
   }
 
   @Test
@@ -585,15 +602,16 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .scientificNameDetails(ScientificNameSourceDetails.builder().build())
       .build();
 
-    List<Determination> determinations = new ArrayList<>(List.of(determination));
-    
-    materialSample.setDetermination(determinations);
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
     
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
 
     MaterialSample fetchedMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
 
-    assertFalse(fetchedMaterialSample.getDetermination().get(0).getScientificNameDetails().getIsSynonym());
+    assertFalse(fetchedMaterialSample.getOrganism().get(0).getDetermination().get(0).getScientificNameDetails().getIsSynonym());
   }
 
   @Test
@@ -606,10 +624,11 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .scientificNameDetails(ScientificNameSourceDetails.builder().build())
       .build();
 
-    List<Determination> determinations = new ArrayList<>(List.of(determination));
-    
-    materialSample.setDetermination(determinations);
-    
+    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build()
+    )));
+
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
 
   }

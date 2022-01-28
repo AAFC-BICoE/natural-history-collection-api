@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -86,16 +87,18 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
     linkAssociations(entity);
-    checkSingularDeterminationIsPrimary(entity);
+    setupDeterminations(entity);
   }
 
   @Override
   protected void preUpdate(MaterialSample entity) {
     linkAssociations(entity);
-    checkSingularDeterminationIsPrimary(entity);
+    setupDeterminations(entity);
   }
 
   /**
+   * Will automatically set a UUID for each organism if one has not already been given.
+   * 
    * For each organism a material sample has, if it contains a single determination
    * it will automatically set it to the primary determination.
    * 
@@ -103,21 +106,25 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
    * 
    * @param materialSample material sample to check the organism determinations.
    */
-  private void checkSingularDeterminationIsPrimary(MaterialSample materialSample) {
+  private void setupDeterminations(MaterialSample materialSample) {
     // Automatically set the primary determination if there is one determination. 
     if (CollectionUtils.isNotEmpty(materialSample.getOrganism())) {
 
       // This applies for each organism a material sample has.
       materialSample.getOrganism().forEach(organism -> {
 
+        // If no UUID has been set yet, generate a random one.
+        if (organism.getUuid() == null) {
+          organism.setUuid(UUID.randomUUID());
+        }
+
         // Check to see if one determination is present and is currently not primary.
         if (CollectionUtils.size(organism.getDetermination()) == 1 &&
             BooleanUtils.isFalse(organism.getDetermination().get(0).getIsPrimary())) {
-          Determination determination = organism.getDetermination().get(0).toBuilder()
-            .isPrimary(true)
-            .build();
+          Determination determination = organism.getDetermination().get(0);
+          determination.setIsPrimary(true);
 
-          organism.toBuilder().determination(List.of(determination));
+          organism.setDetermination(new ArrayList<>(List.of(determination)));
         }
       });
     }
