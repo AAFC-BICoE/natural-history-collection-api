@@ -2,13 +2,10 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Type;
 import org.javers.core.metamodel.annotation.Value;
 
 import lombok.Builder;
@@ -24,8 +21,6 @@ public class Organism {
   @NotNull
   private final UUID uuid;
 
-  @Type(type = "jsonb")
-  @Valid
   private final List<Determination> determination;
 
   @Size(max = 50)

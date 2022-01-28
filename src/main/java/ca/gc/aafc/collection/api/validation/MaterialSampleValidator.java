@@ -73,7 +73,7 @@ public class MaterialSampleValidator implements Validator {
           if (organism.countPrimaryDetermination() != 1) {
             // Other types must always have 1 primary determination.
             errors.rejectValue(
-              "determination",
+              "organism",
               MISSING_PRIMARY_DETERMINATION,
               getMessage(MISSING_PRIMARY_DETERMINATION));
           }
@@ -84,11 +84,11 @@ public class MaterialSampleValidator implements Validator {
             // XOR, both set or both not set but never only one of them
             if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
               String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-              errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
+              errors.rejectValue("organism", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
             }
             if (StringUtils.isBlank(determination.getVerbatimScientificName()) && StringUtils.isBlank(determination.getScientificName())) {
               String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
-              errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
+              errors.rejectValue("organism", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
             }
             // Count if isFiled as is set.
             if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
@@ -99,7 +99,7 @@ public class MaterialSampleValidator implements Validator {
           // Check there is 0 or 1 isFiledAs but never more
           if (isFiledAsCounter > 1) {
             String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
-            errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
+            errors.rejectValue("organism", MORE_THAN_ONE_ISFILEDAS, errorMessage);
           }
         }
 

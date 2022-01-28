@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
@@ -51,11 +50,8 @@ public class ImmutableMaterialSampleDto {
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = new HashMap<>();
 
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<Determination> determination;
-
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private Organism organism;
+  private List<Organism> organism;
 
   private String preparationRemarks;
 

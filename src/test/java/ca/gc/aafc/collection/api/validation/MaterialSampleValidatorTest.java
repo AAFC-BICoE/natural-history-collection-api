@@ -17,6 +17,7 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleType;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
 class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
@@ -75,7 +76,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     List<Determination> determinations = List.of(determination);
 
     MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
+    sample.setOrganism(List.of(Organism.builder().determination(determinations).build()));
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);

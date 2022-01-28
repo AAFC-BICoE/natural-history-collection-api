@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -19,7 +18,6 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.MaterialSampleType;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
@@ -98,24 +96,30 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   /**
-   * Check if there is only one determination and if isPrimary is null or false
-   * set isPrimary to true. If the material sample is a Mixed Organism type then
-   * it will not automatically be set since it's possible for a Mixed Organism not
-   * to have a primary determination.
+   * For each organism a material sample has, if it contains a single determination
+   * it will automatically set it to the primary determination.
    * 
-   * @param materialSample
+   * This step should be performed before the validation.
+   * 
+   * @param materialSample material sample to check the organism determinations.
    */
   private void checkSingularDeterminationIsPrimary(MaterialSample materialSample) {
-    // Automatically set the primary determination if there is one determination. (Unless mixed sample type is Mixed Organism.)
-    if (CollectionUtils.size(materialSample.getDetermination()) == 1 &&
-        BooleanUtils.isFalse(materialSample.getDetermination().get(0).getIsPrimary()) &&
-        !materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
+    // Automatically set the primary determination if there is one determination. 
+    if (CollectionUtils.isNotEmpty(materialSample.getOrganism())) {
 
-      Determination determination = materialSample.getDetermination().get(0).toBuilder()
-        .isPrimary(true)
-        .build();
+      // This applies for each organism a material sample has.
+      materialSample.getOrganism().forEach(organism -> {
 
-      materialSample.setDetermination(new ArrayList<>(List.of(determination)));
+        // Check to see if one determination is present and is currently not primary.
+        if (CollectionUtils.size(organism.getDetermination()) == 1 &&
+            BooleanUtils.isFalse(organism.getDetermination().get(0).getIsPrimary())) {
+          Determination determination = organism.getDetermination().get(0).toBuilder()
+            .isPrimary(true)
+            .build();
+
+          organism.toBuilder().determination(List.of(determination));
+        }
+      });
     }
   }
 
@@ -143,16 +147,24 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void validateDeterminationManagedAttribute(MaterialSample entity) {
-    if (CollectionUtils.isNotEmpty(entity.getDetermination())) {
-      for (Determination determination : entity.getDetermination()) {
-        if (determination.getManagedAttributes() != null) {
-          collectionManagedAttributeValueValidator.validate(
-            entity.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()), 
-            determination, 
-            determination.getManagedAttributes(), 
-            CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+    // A material sample can have multiple organisms, each with it's own set of determinations.
+    if (CollectionUtils.isNotEmpty(entity.getOrganism())) {
+      entity.getOrganism().forEach(organism -> {
+
+        // An organism can have multiple determinations, go through each of them and validate.
+        if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
+          organism.getDetermination().forEach(determination -> {
+            if (determination.getManagedAttributes() != null) {
+              collectionManagedAttributeValueValidator.validate(
+                organism.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()), 
+                determination, 
+                determination.getManagedAttributes(), 
+                CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+            }            
+          });
         }
-      }
+
+      });
     }
   }
 

@@ -9,10 +9,5 @@
       <!-- Drop the determinations column from material sample. -->
       <dropColumn columnName="determination" tableName="material_sample"/>
 
-      <!-- Add the new organism column to material sample. -->
-      <addColumn tableName="material_sample">
-        <column name="organism" type="jsonb"/>
-      </addColumn>
-
   </changeSet>
 </databaseChangeLog>

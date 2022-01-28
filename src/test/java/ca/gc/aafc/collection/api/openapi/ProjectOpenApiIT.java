@@ -3,9 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
@@ -22,6 +20,7 @@ import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -29,7 +28,7 @@ import lombok.SneakyThrows;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
 public class ProjectOpenApiIT extends BaseRestAssuredTest {
   
   private static final String SPEC_HOST = "raw.githubusercontent.com";
@@ -54,7 +53,6 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
     ms.setManagedAttributes(null);
-    ms.setDetermination(null);
     ms.setOrganism(null);
     ms.setScheduledActions(null);
     ms.setHostOrganism(null);
