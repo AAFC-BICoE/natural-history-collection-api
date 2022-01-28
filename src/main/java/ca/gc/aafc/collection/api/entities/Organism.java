@@ -1,72 +1,44 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
+import org.javers.core.metamodel.annotation.Value;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
-
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
-@NaturalIdCache
-@MappedSuperclass
-@NoArgsConstructor
-@SuperBuilder
-public class Organism implements DinaEntity {
+@Builder(toBuilder = true)
+@RequiredArgsConstructor
+@Value // This class is considered a "value" belonging to a Material Sample:
+public class Organism {
   
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
-  @NaturalId
   @NotNull
-  @Column(unique = true)
-  private UUID uuid;
-
-  @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
-  private OffsetDateTime createdOn;
-
-  @NotBlank
-  @Column(name = "created_by", updatable = false)
-  private String createdBy;
+  private final UUID uuid;
 
   @Type(type = "jsonb")
   @Valid
-  private List<Determination> determination;
+  private final List<Determination> determination;
 
   @Size(max = 50)
-  private String lifeStage;
+  private final String lifeStage;
 
   @Size(max = 25)
-  private String sex;
+  private final String sex;
 
   @Size(max = 50)
-  private String substrate;
+  private final String substrate;
 
   @Size(max = 1000)
-  private String remarks;
+  private final String remarks;
 
   /**
    * Count the number of primary Determination.

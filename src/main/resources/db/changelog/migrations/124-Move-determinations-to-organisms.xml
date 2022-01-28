@@ -6,31 +6,13 @@
 
   <changeSet id="124-Move-determinations-to-organisms" context="schema-change" author="Brandon Andre">
 
-      <!-- Create new table for Organisms -->
-      <createTable tableName="organism">
-          <column autoIncrement="true" name="id" type="SERIAL">
-              <constraints primaryKey="true" primaryKeyName="pk_acquisition_event_id"/>
-          </column>
-
-          <column name="uuid" type="uuid">
-              <constraints nullable="false" unique="true"/>
-          </column>
-
-          <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
-          <column name="created_by" type="VARCHAR(250)">
-              <constraints nullable="false"/>
-          </column>
-
-          <column type="jsonb" name="determination"/>
-
-          <column name="life_stage" type="VARCHAR(50)"/>
-          <column name="sex" type="VARCHAR(25)"/>
-          <column name="substrate" type="VARCHAR(50)"/>
-          <column name="remarks" type="VARCHAR(1000)"/>
-      </createTable>
-
-      <!-- Drop the determinations column from material samples. -->
+      <!-- Drop the determinations column from material sample. -->
       <dropColumn columnName="determination" tableName="material_sample"/>
+
+      <!-- Add the new organism column to material sample. -->
+      <addColumn tableName="material_sample">
+        <column name="organism" type="jsonb"/>
+      </addColumn>
 
   </changeSet>
 </databaseChangeLog>

@@ -10,7 +10,6 @@ import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.MaterialSampleType;
 
 import lombok.NonNull;
 
@@ -28,7 +27,6 @@ public class MaterialSampleValidator implements Validator {
   public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
-  public static final String MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM = "validation.constraint.violation.determination.primaryDeterminationMissingMixedOrganism";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
 
   @Override
@@ -63,48 +61,49 @@ public class MaterialSampleValidator implements Validator {
   }
 
   private void checkDetermination(Errors errors, MaterialSample materialSample) {
-    if (CollectionUtils.isNotEmpty(materialSample.getDetermination())) {
 
-      // Ensure the correct number of primary determination is saved.
-      if (materialSample.isType(MaterialSampleType.MIXED_ORGANISMS_UUID)) {
-        // "Mixed Organism" Material Sample can have 1 or 0 primary determinations.
-        if (materialSample.countPrimaryDetermination() > 1) {
-          errors.rejectValue(
-            "determination",
-            MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM,
-            getMessage(MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM));
-        }
-      } else if (materialSample.countPrimaryDetermination() != 1) {
-        // Other types must always have 1 primary determination.
-        errors.rejectValue(
-          "determination",
-          MISSING_PRIMARY_DETERMINATION,
-          getMessage(MISSING_PRIMARY_DETERMINATION));
-      }
+    // Determinations are stored on each organism on a material sample.
+    if (CollectionUtils.isNotEmpty(materialSample.getOrganism())) {
+      materialSample.getOrganism().forEach(organism -> {
 
-      // Ensure scientific name and verbatim are set correctly.
-      int isFiledAsCounter = 0;
-      for (Determination determination : materialSample.getDetermination()) {
-        // XOR, both set or both not set but never only one of them
-        if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
-          String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-          errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
-        }
-        if (StringUtils.isBlank(determination.getVerbatimScientificName()) && StringUtils.isBlank(determination.getScientificName())) {
-          String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
-          errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
-        }
-        // Count if isFiled as is set.
-        if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
-          isFiledAsCounter++;
-        }
-      }
+        // For each organism, these determination rules apply
+        if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
 
-      // Check there is 0 or 1 isFiledAs but never more
-      if (isFiledAsCounter > 1) {
-        String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
-        errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
-      }
+          // Ensure the correct number of primary determination is saved.
+          if (organism.countPrimaryDetermination() != 1) {
+            // Other types must always have 1 primary determination.
+            errors.rejectValue(
+              "determination",
+              MISSING_PRIMARY_DETERMINATION,
+              getMessage(MISSING_PRIMARY_DETERMINATION));
+          }
+    
+          // Ensure scientific name and verbatim are set correctly.
+          int isFiledAsCounter = 0;
+          for (Determination determination : organism.getDetermination()) {
+            // XOR, both set or both not set but never only one of them
+            if (determination.getScientificNameSource() == null ^ StringUtils.isBlank(determination.getScientificName())) {
+              String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
+              errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
+            }
+            if (StringUtils.isBlank(determination.getVerbatimScientificName()) && StringUtils.isBlank(determination.getScientificName())) {
+              String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
+              errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
+            }
+            // Count if isFiled as is set.
+            if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
+              isFiledAsCounter++;
+            }
+          }
+    
+          // Check there is 0 or 1 isFiledAs but never more
+          if (isFiledAsCounter > 1) {
+            String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
+            errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
+          }
+        }
+
+      });
     }
   }
   
