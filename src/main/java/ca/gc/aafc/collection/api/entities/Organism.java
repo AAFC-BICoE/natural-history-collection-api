@@ -12,7 +12,6 @@ import org.javers.core.metamodel.annotation.Value;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder

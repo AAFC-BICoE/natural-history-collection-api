@@ -1,23 +1,7 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.BiFunction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.SmartValidator;
-
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -26,8 +10,20 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
-
 import lombok.NonNull;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.BiFunction;
 
 @Service
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
