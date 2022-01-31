@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 
+import ca.gc.aafc.collection.api.testsupport.factories.OrganismFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -624,10 +625,10 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .scientificNameDetails(ScientificNameSourceDetails.builder().build())
       .build();
 
-    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
-      .determination(new ArrayList<>(List.of(determination)))
-      .build()
-    )));
+    materialSample.setOrganism(
+        OrganismFactory
+        .buildAsList(Organism.builder()
+            .determination(new ArrayList<>(List.of(determination)))));
 
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
 

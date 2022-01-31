@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.javers.core.metamodel.annotation.Value;
 
@@ -14,28 +15,28 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@Builder(toBuilder = true)
-@RequiredArgsConstructor
+@Builder
+@Data
 @Value // This class is considered a "value" belonging to a Material Sample:
 public class Organism {
 
   @NotNull
-  private final UUID uuid;
+  private UUID uuid;
 
   @Valid
-  private final List<Determination> determination;
+  private List<Determination> determination;
 
   @Size(max = 50)
-  private final String lifeStage;
+  private String lifeStage;
 
   @Size(max = 25)
-  private final String sex;
+  private String sex;
 
   @Size(max = 50)
-  private final String substrate;
+  private String substrate;
 
   @Size(max = 1000)
-  private final String remarks;
+  private String remarks;
 
   /**
    * Count the number of primary Determination.

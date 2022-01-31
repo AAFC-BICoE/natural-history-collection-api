@@ -115,19 +115,13 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
         // If no UUID has been set yet, generate a random one.
         if (organism.getUuid() == null) {
-          organism.toBuilder().uuid(UUID.randomUUID()).build();
+          organism.setUuid(UUID.randomUUID());
         }
 
         // Check to see if one determination is present and is currently not primary.
         if (CollectionUtils.size(organism.getDetermination()) == 1 &&
             BooleanUtils.isFalse(organism.getDetermination().get(0).getIsPrimary())) {
-          Determination determination = organism.getDetermination().get(0).toBuilder()
-              .isPrimary(true)
-              .build();
-
-          organism.toBuilder().determination(
-            new ArrayList<>(List.of(determination))
-          );
+          organism.getDetermination().get(0).setIsPrimary(true);
         }
       });
     }

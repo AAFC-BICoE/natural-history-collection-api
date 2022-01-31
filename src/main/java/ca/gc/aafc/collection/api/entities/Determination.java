@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 import org.javers.core.metamodel.annotation.Value;
 
@@ -17,9 +18,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
-@Builder(toBuilder = true)
-@RequiredArgsConstructor
+@Data
+@Builder
 @Value // This class is considered a "value" belonging to a Organism:
 public class Determination {
 
@@ -38,51 +38,51 @@ public class Determination {
   }
 
   @Size(max = 250)
-  private final String verbatimScientificName;
+  private String verbatimScientificName;
 
   @Size(max = 150)
-  private final String verbatimDeterminer;
+  private String verbatimDeterminer;
 
   @Size(max = 50)
-  private final String verbatimDate;
+  private String verbatimDate;
 
   @Size(max = 250)
-  private final String scientificName;
+  private String scientificName;
 
   @Size(max = 1000)
-  private final String transcriberRemarks;
+  private String transcriberRemarks;
 
   @Size(max = 1000)
-  private final String verbatimRemarks;
+  private String verbatimRemarks;
 
   @Size(max = 1000)
-  private final String determinationRemarks;
+  private String determinationRemarks;
 
   @Size(max = 50)
-  private final String typeStatus;
+  private String typeStatus;
 
   @Size(max = 250)
-  private final String typeStatusEvidence;
+  private String typeStatusEvidence;
 
-  private final List<UUID> determiner;
+  private List<UUID> determiner;
 
   @PastOrPresent
-  private final LocalDate determinedOn;
+  private LocalDate determinedOn;
 
   @Size(max = 150)
-  private final String qualifier;
+  private String qualifier;
 
-  private final ScientificNameSource scientificNameSource;
+  private ScientificNameSource scientificNameSource;
 
   @Valid
-  private final ScientificNameSourceDetails scientificNameDetails;
+  private ScientificNameSourceDetails scientificNameDetails;
 
-  private final Boolean isPrimary;
+  private Boolean isPrimary;
 
-  private final Boolean isFileAs;
+  private Boolean isFileAs;
 
   @Builder.Default
-  private final Map<String, String> managedAttributes = Map.of();
+  private Map<String, String> managedAttributes = Map.of();
 
   @Getter
   @Builder
