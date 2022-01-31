@@ -50,7 +50,7 @@ import java.util.UUID;
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/23916e142542abe9791f0d606977856cef771a9f/schema/natural-history-collection-api.yml";
+  private static final String SPEC_PATH = "DINA-Web/collection-specs/move_determination_to_organism/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
   public static final String TYPE_NAME = "material-sample";

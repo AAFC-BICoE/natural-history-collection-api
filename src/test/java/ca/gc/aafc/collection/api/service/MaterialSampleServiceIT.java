@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.validation.ValidationException;
 
 import ca.gc.aafc.collection.api.entities.Project;
+import ca.gc.aafc.collection.api.testsupport.factories.OrganismFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,6 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
         .build();
 
     materialSampleService.createAndFlush(sample2);
-
   }
 
   @Test
@@ -73,12 +73,11 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
       .verbatimScientificName("verbatimScientificName")
       .build();
 
-    Organism organism = Organism.builder()
-      .determination(List.of(determination))
-      .build();
+    Organism.OrganismBuilder organismBldr = Organism.builder()
+      .determination(List.of(determination));
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
-        .organism(List.of(organism))
+        .organism(OrganismFactory.buildAsList(organismBldr))
         .build();
 
     materialSample = materialSampleService.createAndFlush(materialSample);
