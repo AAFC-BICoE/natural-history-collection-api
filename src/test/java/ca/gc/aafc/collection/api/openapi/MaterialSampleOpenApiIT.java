@@ -8,12 +8,16 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.OrganismFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -35,6 +39,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +75,43 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     return URI_BUILDER.build().toURL();
   }
 
+  @Test
+  void materialSample_OnPatchOrganismOrganismReplaced() throws MalformedURLException {
+    Organism organism = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
+    MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
+    ms.setAttachment(null);
+    ms.setAttachment(null);
+    ms.setPreparedBy(null);
+    ms.setPreparationAttachment(null);
+    ms.setAcquisitionEvent(null);
+    ms.setProjects(null);
+    ms.setOrganism(Collections.singletonList(organism));
+
+    String materialSampleUUID =
+        JsonAPITestHelper.extractId(sendPost(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toJsonAPIMap(
+            MaterialSampleDto.TYPENAME,
+            JsonAPITestHelper.toAttributeMap(ms),
+            null,
+            null)
+    ));
+
+    Map<String, Object> attributeMap = new HashMap<>();
+    Organism organism2 = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
+    organism2.setLifeStage("adult");
+    attributeMap.put("organism", new ArrayList<>(List.of(JsonAPITestHelper.toAttributeMap(organism2))));
+
+    sendPatch(
+        MaterialSampleDto.TYPENAME,
+        materialSampleUUID,
+        JsonAPITestHelper.toJsonAPIMap(
+            MaterialSampleDto.TYPENAME,
+            attributeMap, null,null));
+
+
+  }
+
   @SneakyThrows
   @Test
   void materialSample_SpecValid() {
@@ -82,40 +125,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
 
-    Determination determination = Determination.builder()
-      .verbatimScientificName("verbatimScientificName")
-      .verbatimDeterminer("verbatimDeterminer")
-      .verbatimDate("2021-01-01")
-      .scientificName("scientificName")
-      .transcriberRemarks("transcriberRemarks")
-      .verbatimRemarks("verbatimRemarks")
-      .determinationRemarks("determinationRemarks")
-      .isPrimary(true)
-      .typeStatus("typeStatus")
-      .typeStatusEvidence("typeStatusEvidence")
-      .determiner(List.of(UUID.randomUUID()))
-      .determinedOn(LocalDate.now())
-      .qualifier("qualifier")
-      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
-        .currentName("scientificName")
-        .isSynonym(true)
-        .classificationPath("classificationPath")
-        .classificationRanks("classificationRanks")
-        .sourceUrl(new URL("https://www.google.com").toString())
-        .recordedOn(LocalDate.now().minusDays(1))
-        .labelHtml("label")
-        .build())
-      .isFileAs(true)
-      .build();
-    
-    Organism organism = Organism.builder()
-      .determination(List.of(determination))
-      .lifeStage("larva")
-      .sex("female")
-      .substrate("organism subtrate")
-      .remarks("remark")
-      .build();
+    Organism organism = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
 
     HostOrganism hostOrganism = HostOrganism.builder()
       .name("host name")
