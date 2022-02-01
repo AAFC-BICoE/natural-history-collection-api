@@ -4,16 +4,13 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.OrganismFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
@@ -75,43 +72,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     return URI_BUILDER.build().toURL();
   }
 
-  @Test
-  void materialSample_OnPatchOrganismOrganismReplaced() throws MalformedURLException {
-    Organism organism = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
-    MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
-    ms.setAttachment(null);
-    ms.setAttachment(null);
-    ms.setPreparedBy(null);
-    ms.setPreparationAttachment(null);
-    ms.setAcquisitionEvent(null);
-    ms.setProjects(null);
-    ms.setOrganism(Collections.singletonList(organism));
-
-    String materialSampleUUID =
-        JsonAPITestHelper.extractId(sendPost(
-        MaterialSampleDto.TYPENAME,
-        JsonAPITestHelper.toJsonAPIMap(
-            MaterialSampleDto.TYPENAME,
-            JsonAPITestHelper.toAttributeMap(ms),
-            null,
-            null)
-    ));
-
-    Map<String, Object> attributeMap = new HashMap<>();
-    Organism organism2 = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
-    organism2.setLifeStage("adult");
-    attributeMap.put("organism", new ArrayList<>(List.of(JsonAPITestHelper.toAttributeMap(organism2))));
-
-    sendPatch(
-        MaterialSampleDto.TYPENAME,
-        materialSampleUUID,
-        JsonAPITestHelper.toJsonAPIMap(
-            MaterialSampleDto.TYPENAME,
-            attributeMap, null,null));
-
-
-  }
-
   @SneakyThrows
   @Test
   void materialSample_SpecValid() {
@@ -124,8 +84,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     collectionManagedAttributeDto.setCreatedBy("dina");     
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
-
-    Organism organism = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
 
     HostOrganism hostOrganism = HostOrganism.builder()
       .name("host name")
@@ -145,7 +103,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
-    ms.setOrganism(List.of(organism));
+    ms.setOrganism(null);
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
     ms.setAcquisitionEvent(null);

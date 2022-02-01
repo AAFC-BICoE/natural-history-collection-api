@@ -32,5 +32,10 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
             .group("aafc")
             .allowDuplicateName(true);
     }
+
+    public static MaterialSample.MaterialSampleBuilder<?, ?> newMaterialSampleNoRelationships() {
+        return newMaterialSample()
+            ;
+    }
     
 }

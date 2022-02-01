@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import javax.validation.ValidationException;
 
 import ca.gc.aafc.collection.api.entities.Project;
-import ca.gc.aafc.collection.api.testsupport.factories.OrganismFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,9 +14,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Association;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 
@@ -64,27 +61,6 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
         .build();
 
     materialSampleService.createAndFlush(sample2);
-  }
-
-  @Test
-  void create_oneDeterminationAutomaticallySetPrimary_determinationSetPrimary() {
-    Determination determination = Determination.builder()
-      .isPrimary(false)
-      .verbatimScientificName("verbatimScientificName")
-      .build();
-
-    Organism.OrganismBuilder organismBldr = Organism.builder()
-      .determination(List.of(determination));
-
-    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
-        .organism(OrganismFactory.buildAsList(organismBldr))
-        .build();
-
-    materialSample = materialSampleService.createAndFlush(materialSample);
-
-    Assertions.assertNotNull(materialSample.getOrganism().get(0).getDetermination());
-    Assertions.assertEquals(1, materialSample.getOrganism().get(0).getDetermination().size());
-    Assertions.assertTrue(materialSample.getOrganism().get(0).getDetermination().get(0).getIsPrimary());
   }
 
   private MaterialSample persistMaterialSample() {

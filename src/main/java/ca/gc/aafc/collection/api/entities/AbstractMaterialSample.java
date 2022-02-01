@@ -82,10 +82,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Builder.Default
   private Map<String, String> managedAttributes = new HashMap<>();
 
-  @Type(type = "jsonb")
-  @Valid
-  private List<Organism> organism;
-
   @Size(max = 1000)
   @Column(name = "preparation_remarks")
   private String preparationRemarks;

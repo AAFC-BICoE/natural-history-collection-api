@@ -76,6 +76,10 @@ public class MaterialSample extends AbstractMaterialSample {
   @OrderColumn(name = "pos")
   private List<Project> projects = new ArrayList<>();
 
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "material_sample_id")
+  private List<OrganismEntity> organism = new ArrayList<>();
+
   @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
   @Valid
   private List<Association> associations = new ArrayList<>();

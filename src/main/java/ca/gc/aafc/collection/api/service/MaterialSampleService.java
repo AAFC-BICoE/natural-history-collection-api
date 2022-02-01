@@ -12,8 +12,6 @@ import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
@@ -83,44 +81,11 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
     linkAssociations(entity);
-    setupDeterminations(entity);
   }
 
   @Override
   protected void preUpdate(MaterialSample entity) {
     linkAssociations(entity);
-    setupDeterminations(entity);
-  }
-
-  /**
-   * Will automatically set a UUID for each organism if one has not already been given.
-   * 
-   * For each organism a material sample has, if it contains a single determination
-   * it will automatically set it to the primary determination.
-   * 
-   * This step should be performed before the validation.
-   * 
-   * @param materialSample material sample to check the organism determinations.
-   */
-  private void setupDeterminations(MaterialSample materialSample) {
-    // Automatically set the primary determination if there is one determination. 
-    if (CollectionUtils.isNotEmpty(materialSample.getOrganism())) {
-
-      // This applies for each organism a material sample has.
-      materialSample.getOrganism().forEach(organism -> {
-
-        // If no UUID has been set yet, generate a random one.
-        if (organism.getUuid() == null) {
-          organism.setUuid(UUID.randomUUID());
-        }
-
-        // Check to see if one determination is present and is currently not primary.
-        if (CollectionUtils.size(organism.getDetermination()) == 1 &&
-            BooleanUtils.isFalse(organism.getDetermination().get(0).getIsPrimary())) {
-          organism.getDetermination().get(0).setIsPrimary(true);
-        }
-      });
-    }
   }
 
   private void linkAssociations(MaterialSample entity) {
@@ -137,35 +102,12 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   public void validateBusinessRules(MaterialSample entity) {
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
-    validateDeterminationManagedAttribute(entity);
     validateAssociations(entity);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
       CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
-  }
-
-  private void validateDeterminationManagedAttribute(MaterialSample entity) {
-    // A material sample can have multiple organisms, each with it's own set of determinations.
-    if (CollectionUtils.isNotEmpty(entity.getOrganism())) {
-      entity.getOrganism().forEach(organism -> {
-
-        // An organism can have multiple determinations, go through each of them and validate.
-        if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
-          organism.getDetermination().forEach(determination -> {
-            if (determination.getManagedAttributes() != null) {
-              collectionManagedAttributeValueValidator.validate(
-                organism.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()), 
-                determination, 
-                determination.getManagedAttributes(), 
-                CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
-            }            
-          });
-        }
-
-      });
-    }
   }
 
   private void validateAssociations(MaterialSample entity) {
