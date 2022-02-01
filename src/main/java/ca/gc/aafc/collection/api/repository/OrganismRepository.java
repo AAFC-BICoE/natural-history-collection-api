@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.OrganismDto;
-import ca.gc.aafc.collection.api.entities.OrganismEntity;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.service.OrganismService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class OrganismRepository extends DinaRepository<OrganismDto, OrganismEntity> {
+public class OrganismRepository extends DinaRepository<OrganismDto, Organism> {
 
   private final DinaAuthenticatedUser dinaAuthenticatedUser;
 
@@ -28,7 +28,7 @@ public class OrganismRepository extends DinaRepository<OrganismDto, OrganismEnti
       Optional<DinaAuthenticatedUser> dinaAuthenticatedUser) {
     super(dinaService, groupAuthorizationService, Optional.of(auditService),
         new DinaMapper<>(OrganismDto.class), OrganismDto.class,
-        OrganismEntity.class, null, externalResourceProvider, buildProperties);
+        Organism.class, null, externalResourceProvider, buildProperties);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 

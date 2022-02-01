@@ -1,11 +1,9 @@
 package ca.gc.aafc.collection.api.validation;
 
-import java.util.List;
 import java.util.UUID;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,8 +12,6 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 

@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.OrganismEntity;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import org.junit.jupiter.api.Assertions;
@@ -44,12 +44,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);
-    OrganismEntity organismEntity = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(determinations)
         .build();
 
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organismEntity);
-    organismValidator.validate(organismEntity, errors);
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
 
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
@@ -67,12 +67,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
         .build();
 
     List<Determination> determinations = List.of(determination);
-    OrganismEntity organismEntity = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(determinations)
         .build();
 
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organismEntity);
-    organismValidator.validate(organismEntity, errors);
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
@@ -86,12 +86,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
         .isPrimary(true)
         .build());
 
-    OrganismEntity organismEntity = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(determinations)
         .build();
 
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organismEntity);
-    organismValidator.validate(organismEntity, errors);
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
@@ -113,12 +113,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);
-    OrganismEntity organismEntity = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(determinations)
         .build();
 
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organismEntity);
-    organismValidator.validate(organismEntity, errors);
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
@@ -145,12 +145,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);
-    OrganismEntity organismEntity = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(determinations)
         .build();
 
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organismEntity);
-    organismValidator.validate(organismEntity, errors);
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
 
     // Expect 2 errors, since 2 of the organisms have invalid determinations
     Assertions.assertTrue(errors.hasErrors());

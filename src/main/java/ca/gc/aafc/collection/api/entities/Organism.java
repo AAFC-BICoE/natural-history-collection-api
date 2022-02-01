@@ -36,7 +36,7 @@ import java.util.UUID;
 @Builder
 @NaturalIdCache
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class OrganismEntity implements DinaEntity {
+public class Organism implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

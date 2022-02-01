@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
-import ca.gc.aafc.collection.api.entities.OrganismEntity;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.OrganismValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
@@ -15,7 +15,7 @@ import org.springframework.validation.SmartValidator;
 import java.util.UUID;
 
 @Service
-public class OrganismService extends DefaultDinaService<OrganismEntity> {
+public class OrganismService extends DefaultDinaService<Organism> {
 
   private final OrganismValidator organismValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
@@ -28,18 +28,18 @@ public class OrganismService extends DefaultDinaService<OrganismEntity> {
   }
 
   @Override
-  protected void preCreate(OrganismEntity entity) {
+  protected void preCreate(Organism entity) {
     entity.setUuid(UUID.randomUUID());
     setupDeterminations(entity);
   }
 
   @Override
-  protected void preUpdate(OrganismEntity entity) {
+  protected void preUpdate(Organism entity) {
     setupDeterminations(entity);
   }
 
   @Override
-  public void validateBusinessRules(OrganismEntity entity) {
+  public void validateBusinessRules(Organism entity) {
     applyBusinessRule(entity, organismValidator);
     validateDeterminationManagedAttribute(entity);
   }
@@ -50,7 +50,7 @@ public class OrganismService extends DefaultDinaService<OrganismEntity> {
    *
    * @param organism the organism
    */
-  private void setupDeterminations(OrganismEntity organism) {
+  private void setupDeterminations(Organism organism) {
     // Check to see if one determination is present and is currently not primary.
     if (CollectionUtils.size(organism.getDetermination()) == 1 &&
         BooleanUtils.isFalse(organism.getDetermination().get(0).getIsPrimary())) {
@@ -58,7 +58,7 @@ public class OrganismService extends DefaultDinaService<OrganismEntity> {
     }
   }
 
-  private void validateDeterminationManagedAttribute(OrganismEntity organism) {
+  private void validateDeterminationManagedAttribute(Organism organism) {
     // An organism can have multiple determinations, go through each of them and validate.
     if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
       organism.getDetermination().forEach(determination -> {

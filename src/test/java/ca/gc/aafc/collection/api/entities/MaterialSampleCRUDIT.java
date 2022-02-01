@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSourceDetails;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
@@ -212,7 +211,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   public void testOrganismRelationship() {
-    OrganismEntity organism = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .build();
     organismService.createAndFlush(organism);
     assertNotNull(organism.getUuid());

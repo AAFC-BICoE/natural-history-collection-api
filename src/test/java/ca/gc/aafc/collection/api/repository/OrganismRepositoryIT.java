@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Test;
@@ -19,9 +19,9 @@ public class OrganismRepositoryIT extends BaseRepositoryIT {
   private OrganismRepository organismRepository;
 
   @Test
-  @WithMockKeycloakUser(groupRole = { OrganismFixture.GROUP + ": staff" })
+  @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ": staff" })
   public void create_WithAuthenticatedUser_SetsCreatedBy() throws MalformedURLException {
-    OrganismDto organismDto = OrganismFixture.newOrganism(DeterminationFixture.newDetermination());
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
 
     UUID organismUUID = organismRepository.create(organismDto).getUuid();
     OrganismDto result = organismRepository.findOne(organismUUID,

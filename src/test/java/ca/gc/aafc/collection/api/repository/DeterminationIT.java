@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import io.crnk.core.queryspec.QuerySpec;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
         .isPrimary(true)
         .determiner(List.of(UUID.randomUUID())).build();
 
-    OrganismDto organismDto = OrganismFixture.newOrganism(determination);
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(determination);
 
     Determination result = organismRepository
         .findOne(organismRepository.create(organismDto).getUuid(),
@@ -63,7 +63,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
         .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
         .build();
 
-    OrganismDto dto = OrganismFixture.newOrganism(determination);
+    OrganismDto dto = OrganismTestFixture.newOrganism(determination);
 
     Assertions.assertThrows(ValidationException.class, () -> organismRepository.create(dto));
   }

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Collections;
 
-public class OrganismFixture {
+public class OrganismTestFixture {
 
   public static final String GROUP = "aafc";
 

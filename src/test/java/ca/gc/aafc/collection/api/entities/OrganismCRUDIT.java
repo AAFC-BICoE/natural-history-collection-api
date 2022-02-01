@@ -23,11 +23,11 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void create() {
-    OrganismEntity organism = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .build();
     organismService.createAndFlush(organism);
 
-    OrganismEntity result = organismService.findOne(organism.getUuid(), OrganismEntity.class);
+    Organism result = organismService.findOne(organism.getUuid(), Organism.class);
     Assertions.assertNotNull(result.getId());
     Assertions.assertNotNull(result.getCreatedOn());
     Assertions.assertEquals(OrganismEntityFactory.GROUP, result.getGroup());
@@ -43,7 +43,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
         .determinedOn(LocalDate.now().plusDays(2))
         .build();
 
-    OrganismEntity organism = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(List.of(determination))
         .build();
 
@@ -65,7 +65,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
         .managedAttributes(Map.of(testManagedAttribute.getKey(), "val3"))
         .build();
 
-    OrganismEntity organism = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(new ArrayList<>(List.of(determination)))
         .build();
     assertThrows(ValidationException.class, () ->  organismService.createAndFlush(organism));
@@ -85,12 +85,12 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
         .isPrimary(false)
         .build();
 
-    OrganismEntity organism = OrganismEntityFactory.newOrganism()
+    Organism organism = OrganismEntityFactory.newOrganism()
         .determination(new ArrayList<>(List.of(determination)))
         .build();
 
     assertDoesNotThrow(() -> organismService.createAndFlush(organism));
-    OrganismEntity fetchedOrganism = organismService.findOne(organism.getUuid(), OrganismEntity.class);
+    Organism fetchedOrganism = organismService.findOne(organism.getUuid(), Organism.class);
     assertTrue(fetchedOrganism.getDetermination().get(0).getIsPrimary());
   }
 }

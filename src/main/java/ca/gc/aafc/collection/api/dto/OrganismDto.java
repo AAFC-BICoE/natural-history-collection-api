@@ -1,13 +1,12 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.OrganismEntity;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RelatedEntity(OrganismEntity.class)
+@RelatedEntity(Organism.class)
 @JsonApiResource(type = OrganismDto.TYPENAME)
 @TypeName(OrganismDto.TYPENAME)
 public class OrganismDto {

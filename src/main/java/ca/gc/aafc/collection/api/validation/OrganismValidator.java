@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.OrganismEntity;
+import ca.gc.aafc.collection.api.entities.Organism;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public class OrganismValidator implements Validator {
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return OrganismEntity.class.isAssignableFrom(clazz);
+    return Organism.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -35,11 +35,11 @@ public class OrganismValidator implements Validator {
     if (!supports(target.getClass())) {
       throw new IllegalArgumentException("OrganismValidator not supported for class " + target.getClass());
     }
-    OrganismEntity organism = (OrganismEntity) target;
+    Organism organism = (Organism) target;
     checkDetermination(organism, errors);
   }
 
-  private void checkDetermination(OrganismEntity organism, Errors errors) {
+  private void checkDetermination(Organism organism, Errors errors) {
 
     if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
 
