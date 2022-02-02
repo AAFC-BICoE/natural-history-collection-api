@@ -31,7 +31,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @RequiredArgsConstructor
-@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
 public class MaterialSampleType implements DinaEntity {
 

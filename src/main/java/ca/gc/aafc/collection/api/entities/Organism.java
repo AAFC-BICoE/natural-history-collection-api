@@ -1,41 +1,76 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.util.List;
-import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.javers.core.metamodel.annotation.Value;
-
+import ca.gc.aafc.dina.entity.DinaEntity;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Entity(name = "organism")
 @Getter
-@Builder(toBuilder = true)
+@Setter
+@AllArgsConstructor
 @RequiredArgsConstructor
-@Value // This class is considered a "value" belonging to a Material Sample:
-public class Organism {
+@Builder
+@NaturalIdCache
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+public class Organism implements DinaEntity {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @NaturalId
   @NotNull
-  private final UUID uuid;
+  private UUID uuid;
 
+  @NotBlank
+  @Size(max = 50)
+  @Column(name = "_group")
+  private String group;
+
+  @Type(type = "jsonb")
   @Valid
-  private final List<Determination> determination;
+  private List<Determination> determination;
 
   @Size(max = 50)
-  private final String lifeStage;
+  private String lifeStage;
 
   @Size(max = 25)
-  private final String sex;
-
-  @Size(max = 50)
-  private final String substrate;
+  private String sex;
 
   @Size(max = 1000)
-  private final String remarks;
+  private String remarks;
+
+  @Column(name = "created_on", insertable = false, updatable = false)
+  @Generated(value = GenerationTime.INSERT)
+  private OffsetDateTime createdOn;
+
+  @NotBlank
+  @Column(name = "created_by", updatable = false)
+  private String createdBy;
 
   /**
    * Count the number of primary Determination.

@@ -8,9 +8,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
-import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
@@ -50,7 +48,7 @@ import java.util.UUID;
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/23916e142542abe9791f0d606977856cef771a9f/schema/natural-history-collection-api.yml";
+  private static final String SPEC_PATH = "DINA-Web/collection-specs/move_determination_to_organism/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
   public static final String TYPE_NAME = "material-sample";
@@ -82,41 +80,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
 
-    Determination determination = Determination.builder()
-      .verbatimScientificName("verbatimScientificName")
-      .verbatimDeterminer("verbatimDeterminer")
-      .verbatimDate("2021-01-01")
-      .scientificName("scientificName")
-      .transcriberRemarks("transcriberRemarks")
-      .verbatimRemarks("verbatimRemarks")
-      .determinationRemarks("determinationRemarks")
-      .isPrimary(true)
-      .typeStatus("typeStatus")
-      .typeStatusEvidence("typeStatusEvidence")
-      .determiner(List.of(UUID.randomUUID()))
-      .determinedOn(LocalDate.now())
-      .qualifier("qualifier")
-      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
-        .currentName("scientificName")
-        .isSynonym(true)
-        .classificationPath("classificationPath")
-        .classificationRanks("classificationRanks")
-        .sourceUrl(new URL("https://www.google.com").toString())
-        .recordedOn(LocalDate.now().minusDays(1))
-        .labelHtml("label")
-        .build())
-      .isFileAs(true)
-      .build();
-    
-    Organism organism = Organism.builder()
-      .determination(List.of(determination))
-      .lifeStage("larva")
-      .sex("female")
-      .substrate("organism subtrate")
-      .remarks("remark")
-      .build();
-
     HostOrganism hostOrganism = HostOrganism.builder()
       .name("host name")
       .remarks("host remark")
@@ -135,7 +98,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
-    ms.setOrganism(List.of(organism));
+    ms.setOrganism(null);
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
     ms.setAcquisitionEvent(null);

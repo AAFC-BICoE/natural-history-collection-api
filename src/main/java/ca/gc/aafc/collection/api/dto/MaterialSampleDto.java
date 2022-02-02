@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -95,8 +94,9 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private StorageUnitDto storageUnit;
 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<Organism> organism;
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<OrganismDto> organism = new ArrayList<>();
 
   private String preparationRemarks;
   
