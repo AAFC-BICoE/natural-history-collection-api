@@ -54,6 +54,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String expectDwcDegreeOfEstablishment = "established";
   private static final LocalDate preparationDate = LocalDate.now();
   private static final String materialSampleUniqueName = "unique-test";
+  private static final String ORGANISM_LIFESTAGE = "lifestage-test";
   private PreparationType preparationType;
   private MaterialSampleType materialSampleType;
   private MaterialSample materialSample;
@@ -211,9 +212,19 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   public void testOrganismRelationship() {
-    Organism organism = OrganismEntityFactory.newOrganism()
+    ArrayList<Determination> determinations = new ArrayList<>();
+    ArrayList<Organism> organisms = new ArrayList<>();
+
+    Determination determination = DeterminationFactory.newDetermination()
+        .verbatimScientificName("verbatimScientificName")
+        .isPrimary(false)
         .build();
-    organismService.createAndFlush(organism);
+    determinations.add(determination);
+
+    Organism organism = OrganismEntityFactory.newOrganism()
+        .determination(determinations)
+        .build();
+    organisms.add(organismService.createAndFlush(organism));
     assertNotNull(organism.getUuid());
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
@@ -221,7 +232,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     materialSampleService.createAndFlush(materialSample);
 
-    materialSample.setOrganism(new ArrayList<>(List.of(organism)));
+    materialSample.setOrganism(organisms);
     materialSampleService.update(materialSample);
 
     // Detach the entity to force a load from the database
@@ -229,10 +240,45 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     MaterialSample freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
     assertEquals(organism.getUuid(), freshMaterialSample.getOrganism().get(0).getUuid());
+    assertEquals(determination.getVerbatimScientificName(), freshMaterialSample.getOrganism().get(0).getDetermination().get(0).getVerbatimScientificName());
 
-    // what happens to the organism ?
+    // Try updating the organism. Add a new determination to the organism.
+    Determination determination2 = DeterminationFactory.newDetermination()
+        .verbatimScientificName("secondVerbatimScientificName")
+        .isPrimary(false)
+        .build();
+    determinations.add(determination2);
+
+    organism.setLifeStage(ORGANISM_LIFESTAGE);
+    organism.setDetermination(determinations);
+    organismService.update(organism);
+
+    freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+    assertEquals(ORGANISM_LIFESTAGE, freshMaterialSample.getOrganism().get(0).getLifeStage());
+    assertEquals(determination2.getVerbatimScientificName(), freshMaterialSample.getOrganism().get(0).getDetermination().get(1).getVerbatimScientificName());
+
+    // Try adding a new organism to the material sample.
+    Determination determination3 = DeterminationFactory.newDetermination()
+      .verbatimScientificName("thirdVerbatimScientificName")
+      .isPrimary(true)
+      .build();
+
+    Organism organism2 = OrganismEntityFactory.newOrganism()
+      .determination(new ArrayList<>(List.of(determination3)))
+      .build();
+    organisms.add(organismService.createAndFlush(organism2));
+    materialSample.setOrganism(organisms);
+    materialSampleService.update(materialSample);
+
+    freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+    assertEquals(determination3.getVerbatimScientificName(), freshMaterialSample.getOrganism().get(1).getDetermination().get(0).getVerbatimScientificName());
+
+    // Try deleting the material sample.
     materialSampleService.delete(freshMaterialSample);
 
+    // Does the organism still exist?
+    Organism freshOrganism = organismService.findOne(organism2.getUuid(), Organism.class);
+    assertNotNull(freshOrganism);
   }
 
   @Test
@@ -297,72 +343,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
             CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
 
     collectionManagedAttributeService.create(testManagedAttribute);
-
-    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
-    assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void validateDetermination_WhenValidStringType() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(null)
-        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION)
-        .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Determination determination = DeterminationFactory.newDetermination()
-      .isPrimary(true)
-      .managedAttributes(Map.of(testManagedAttribute.getKey(), "anything"))
-      .build();
-
-//    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
-//      .determination(new ArrayList<>(List.of(determination)))
-//      .build()
-//    )));
-
-    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void validateDetermination_AssignedValueContainedInAcceptedValues_validationPasses() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(new String[]{"val1", "val2"})
-        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION)
-        .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Determination determination = DeterminationFactory.newDetermination()
-      .isPrimary(true)
-      .managedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]))
-      .build();
-
-//    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
-//      .determination(new ArrayList<>(List.of(determination)))
-//      .build()
-//    )));
-
-    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void validateDetermination_AssignManagedAttribute_onCollectingEventAttribute_Exception() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory
-        .newCollectionManagedAttribute().acceptedValues(new String[] { "val1", "val2" })
-        .managedAttributeComponent(
-            CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Determination determination = DeterminationFactory.newDetermination()
-      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val1"))
-      .build();
-
-//    materialSample.setOrganism(new ArrayList<>(List.of(Organism.builder()
-//      .determination(new ArrayList<>(List.of(determination)))
-//      .build()
-//    )));
 
     materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
     assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));

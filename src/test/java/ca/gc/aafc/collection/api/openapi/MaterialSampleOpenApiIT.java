@@ -1,34 +1,5 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
-import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
-import ca.gc.aafc.collection.api.dto.ProjectDto;
-import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.HostOrganism;
-import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
-import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
-import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
-import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
-import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
-import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
-import io.restassured.RestAssured;
-import lombok.SneakyThrows;
-import org.apache.http.client.utils.URIBuilder;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,12 +10,47 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.http.client.utils.URIBuilder;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
+import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
+import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.dto.ProjectDto;
+import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
+import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
+
+import io.restassured.RestAssured;
+import lombok.SneakyThrows;
+
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
@@ -93,12 +99,21 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .assignedTo(ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("user").build())
       .build();
 
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .verbatimScientificName("verbatimScientificName")
+      .build();
+
+    OrganismDto organism = OrganismTestFixture.newOrganism(determination);
+    organism.setLifeStage("lifeStage");
+    organism.setGroup("group");
+
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
-    ms.setOrganism(null);
+    ms.setOrganism(List.of(organism));
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
     ms.setAcquisitionEvent(null);
@@ -156,7 +171,15 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         Map.of(
           "attachment", 
           JsonAPITestHelper.generateExternalRelationList("metadata", 1)
-    ),
+        ),
+      null)
+    ).extract().body().jsonPath().getString("data.id");
+
+    String organismUUID = sendPost(OrganismDto.TYPENAME, 
+      JsonAPITestHelper.toJsonAPIMap(
+        OrganismDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(organism),
+        null,
       null)
     ).extract().body().jsonPath().getString("data.id");
 
@@ -165,7 +188,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
       "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-      "projects", getRelationshipListType("project", projectUUID));
+      "projects", getRelationshipListType("project", projectUUID),
+      "organisms", getRelationshipListType("organism", organismUUID));
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
@@ -196,7 +220,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,materialSampleType,"
+      .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,materialSampleType,organisms,"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).asString(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
