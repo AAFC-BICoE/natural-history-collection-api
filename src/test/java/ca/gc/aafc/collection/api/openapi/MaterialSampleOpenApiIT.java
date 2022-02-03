@@ -55,7 +55,7 @@ import lombok.SneakyThrows;
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/move_determination_to_organism/schema/natural-history-collection-api.yml";
+  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
 
   static {
