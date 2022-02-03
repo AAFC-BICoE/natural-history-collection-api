@@ -34,6 +34,8 @@
       <column name="created_by" type="VARCHAR(250)">
         <constraints nullable="false"/>
       </column>
+
+      <column name="pos" type="integer" defaultValue="0"/>
     </createTable>
   </changeSet>
 </databaseChangeLog>
