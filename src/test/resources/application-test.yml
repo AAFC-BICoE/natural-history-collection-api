@@ -16,5 +16,7 @@ embedded.postgresql:
 logging:
   level:
     org.springframework: ERROR
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 dev-user:
   enabled: false

@@ -10,6 +10,7 @@ import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.MaterialSampleTypeService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
+import ca.gc.aafc.collection.api.service.OrganismService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.service.ProjectService;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
@@ -72,5 +73,8 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected ProjectService projectService;
+
+  @Inject
+  protected OrganismService organismService;
 }
 

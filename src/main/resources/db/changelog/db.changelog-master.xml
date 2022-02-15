@@ -128,5 +128,5 @@
   <include file="db/changelog/migrations/121-Change_remarks_fields_to_TEXT.xml"/>
   <include file="db/changelog/migrations/122-Add_version_to_material_sample.xml"/>
   <include file="db/changelog/migrations/123-Add_custom_view.xml"/>
-
+  <include file="db/changelog/migrations/124-Move-determinations-to-organisms.xml"/>
 </databaseChangeLog>
