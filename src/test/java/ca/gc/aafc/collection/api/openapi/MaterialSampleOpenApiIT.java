@@ -1,19 +1,38 @@
 package ca.gc.aafc.collection.api.openapi;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import org.apache.http.client.utils.URIBuilder;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
-import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -23,37 +42,21 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
+
 import io.restassured.RestAssured;
 import lombok.SneakyThrows;
-import org.apache.http.client.utils.URIBuilder;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   private static final String SPEC_HOST = "raw.githubusercontent.com";
   private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
   private static final URIBuilder URI_BUILDER = new URIBuilder();
-
-  public static final String TYPE_NAME = "material-sample";
 
   static {
     URI_BUILDER.setScheme("https");
@@ -82,40 +85,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
 
-    Determination determination = Determination.builder()
-      .verbatimScientificName("verbatimScientificName")
-      .verbatimDeterminer("verbatimDeterminer")
-      .verbatimDate("2021-01-01")
-      .scientificName("scientificName")
-      .transcriberRemarks("transcriberRemarks")
-      .verbatimRemarks("verbatimRemarks")
-      .determinationRemarks("determinationRemarks")
-      .isPrimary(true)
-      .typeStatus("typeStatus")
-      .typeStatusEvidence("typeStatusEvidence")
-      .determiner(List.of(UUID.randomUUID()))
-      .determinedOn(LocalDate.now())
-      .qualifier("qualifier")
-      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
-        .currentName("scientificName")
-        .isSynonym(true)
-        .classificationPath("classificationPath")
-        .classificationRanks("classificationRanks")
-        .sourceUrl(new URL("https://www.google.com").toString())
-        .recordedOn(LocalDate.now().minusDays(1))
-        .labelHtml("label")
-        .build())
-      .isFileAs(true)
-      .build();
-    
-    Organism organism = Organism.builder()
-      .lifeStage("larva")
-      .sex("female")
-      .substrate("organism subtrate")
-      .remarks("remark")
-      .build();
-
     HostOrganism hostOrganism = HostOrganism.builder()
       .name("host name")
       .remarks("host remark")
@@ -129,13 +98,19 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .assignedTo(ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("user").build())
       .build();
 
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .verbatimScientificName("verbatimScientificName")
+      .build();
+
+    OrganismDto organism = OrganismTestFixture.newOrganism(determination);
+
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
-    ms.setDetermination(List.of(determination));
-    ms.setOrganism(organism);
+    ms.setOrganism(null);
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
     ms.setAcquisitionEvent(null);
@@ -172,69 +147,105 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
     
-    String parentUUID = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(parent))).extract().body().jsonPath().getString("data.id");
-    String childUUID = sendPost("material-sample", JsonAPITestHelper.toJsonAPIMap("material-sample", JsonAPITestHelper.toAttributeMap(child))).extract().body().jsonPath().getString("data.id");
-    
-    String preparationTypeUUID = sendPost("preparation-type", JsonAPITestHelper.toJsonAPIMap("preparation-type", JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data.id");
+    String parentUUID = JsonAPITestHelper.extractId(sendPost(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(parent)
+      )
+    ));
 
-    String materialSampleTypeUUID =  sendPost(
+    String childUUID = JsonAPITestHelper.extractId(sendPost(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(child)
+      )
+    ));
+
+    String preparationTypeUUID = JsonAPITestHelper.extractId(sendPost(
+      PreparationTypeDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(
+        PreparationTypeDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(preparationTypeDto)
+      )
+    ));
+
+    String materialSampleTypeUUID = JsonAPITestHelper.extractId(sendPost(
       MaterialSampleTypeDto.TYPENAME, 
       JsonAPITestHelper.toJsonAPIMap(
         MaterialSampleTypeDto.TYPENAME, 
         JsonAPITestHelper.toAttributeMap(materialSampleTypeDto),
         null,
         null)
-    ).extract().body().jsonPath().getString("data.id");
+    ));
 
-    String projectUUID = sendPost(ProjectDto.TYPENAME, 
+    String projectUUID = JsonAPITestHelper.extractId(sendPost(
+      ProjectDto.TYPENAME, 
       JsonAPITestHelper.toJsonAPIMap(
         ProjectDto.TYPENAME, 
         JsonAPITestHelper.toAttributeMap(projectDto),
         Map.of(
           "attachment", 
           JsonAPITestHelper.generateExternalRelationList("metadata", 1)
-    ),
+        ),
       null)
-    ).extract().body().jsonPath().getString("data.id");
+    ));
+
+    String organismUUID = JsonAPITestHelper.extractId(sendPost(
+      OrganismDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(
+        OrganismDto.TYPENAME, 
+        JsonAPITestHelper.toAttributeMap(organism)
+      )
+    ));
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     Map<String, Object> generatedRelationshipMap = Map.of(
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
       "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-      "projects", getRelationshipListType("project", projectUUID));
+      "projects", getRelationshipListType("project", projectUUID),
+      "organism", getRelationshipListType("organism", organismUUID));
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
           JsonAPIRelationship.of("materialSampleType", MaterialSampleTypeDto.TYPENAME, materialSampleTypeUUID),
-          JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, parentUUID)));
+          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);
     relationshipMap.putAll(relationshipMapWithId);
 
-    String unitId = sendPost(
-      TYPE_NAME, 
+    String unitId = JsonAPITestHelper.extractId(sendPost(
+      MaterialSampleDto.TYPENAME, 
       JsonAPITestHelper.toJsonAPIMap(
-        TYPE_NAME, 
+        MaterialSampleDto.TYPENAME, 
         attributeMap,
         relationshipMap,
         null
-        )
-      ).extract().body().jsonPath().getString("data.id");
+      )
+    ));
 
-    sendPatch(TYPE_NAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
-      TYPE_NAME,
+    sendPatch(MaterialSampleDto.TYPENAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
       Map.of(),
-      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", TYPE_NAME, unitId)),
+      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, unitId)),
       null
     ));
     
+    // Included relationships with the request
+    Set<String> toInclude = new HashSet<>();
+    toInclude.addAll(generatedRelationshipMap.keySet());
+    toInclude.addAll(relationshipMapWithId.keySet());
+    toInclude.add("materialSampleChildren");
+    toInclude.add("organism");
+    toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
+
     OpenAPI3Assertions.assertRemoteSchema(
       getOpenAPISpecsURL(), 
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(TYPE_NAME + "/" + unitId + "?include=projects,attachment,preparedBy,preparationType,parentMaterialSample,materialSampleChildren,preparationAttachment,materialSampleType,"
-        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).asString(),
+        .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" + String.join(",", toInclude)).asString(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
       );
     }

@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import io.crnk.core.queryspec.QuerySpec;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -14,26 +14,26 @@ import javax.inject.Inject;
 import javax.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 class DeterminationIT extends CollectionModuleBaseIT {
 
   @Inject
-  private MaterialSampleRepository materialSampleRepository;
+  private OrganismRepository organismRepository;
 
   @Test
   void find() {
-    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
+
     Determination determination = newDetermination()
         .isPrimary(true)
         .determiner(List.of(UUID.randomUUID())).build();
-    dto.setDetermination(new ArrayList<>(List.of(determination)));
 
-    Determination result = materialSampleRepository
-        .findOne(materialSampleRepository.create(dto).getUuid(),
-            new QuerySpec(MaterialSampleDto.class)).getDetermination().get(0);
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(determination);
+
+    Determination result = organismRepository
+        .findOne(organismRepository.create(organismDto).getUuid(),
+            new QuerySpec(OrganismDto.class)).getDetermination().get(0);
 
     // Assert determination
     Assertions.assertNotNull(result);
@@ -58,11 +58,14 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
   @Test
   void create_WhenDeterminationHasValidationConstraintViolation_ThrowsValidationException() {
-    MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
-    dto.setDetermination(new ArrayList<>(List.of(Determination.builder()
-      .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
-      .build())));
-    Assertions.assertThrows(ValidationException.class, () -> materialSampleRepository.create(dto));
+
+    Determination determination = Determination.builder()
+        .verbatimScientificName(RandomStringUtils.randomAlphabetic(350)) // name to long
+        .build();
+
+    OrganismDto dto = OrganismTestFixture.newOrganism(determination);
+
+    Assertions.assertThrows(ValidationException.class, () -> organismRepository.create(dto));
   }
 
   @SneakyThrows

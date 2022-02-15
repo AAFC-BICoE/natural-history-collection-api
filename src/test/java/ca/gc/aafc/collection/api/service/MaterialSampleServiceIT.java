@@ -14,7 +14,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Association;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
@@ -62,25 +61,6 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
         .build();
 
     materialSampleService.createAndFlush(sample2);
-
-  }
-
-  @Test
-  void create_oneDeterminationAutomaticallySetPrimary_determinationSetPrimary() {
-    Determination determination = Determination.builder()
-      .isPrimary(false)
-      .verbatimScientificName("verbatimScientificName")
-      .build();
-
-    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
-        .determination(List.of(determination))
-        .build();
-
-    materialSample = materialSampleService.createAndFlush(materialSample);
-
-    Assertions.assertNotNull(materialSample.getDetermination());
-    Assertions.assertEquals(1, materialSample.getDetermination().size());
-    Assertions.assertTrue(materialSample.getDetermination().get(0).getIsPrimary());
   }
 
   private MaterialSample persistMaterialSample() {

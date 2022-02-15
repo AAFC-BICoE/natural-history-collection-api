@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.validation;
 
-import java.util.List;
 import java.util.UUID;
 import javax.inject.Inject;
 
@@ -13,10 +12,7 @@ import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.MaterialSampleType;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
 class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
@@ -60,162 +56,6 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
-  void validate_WhenScientificNameSourceIsSetButScientificIsNotSet_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-
-    Determination determination = Determination.builder()
-      .isPrimary(true)
-      .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-      .verbatimScientificName("verbatimScientificName")
-      .build();
-
-    List<Determination> determinations = List.of(determination);
-
-    MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
-  void validate_WhenScientificNameAndVerbatimScientificNameIsNotSet_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_DETERMINATION_SCIENTIFICNAME);
-
-    List<Determination> determinations = List.of(Determination.builder()
-      .isPrimary(true)
-      .build());
-
-    MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
-  void validate_WhenNoPrimaryDeterminationWithMultipleDeterminations_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION);
-
-    // Since there will be two determinations, the validatior can't automatically set one as primary.
-    Determination determinationA = Determination.builder()
-      .isPrimary(false)
-      .verbatimScientificName("verbatimScientificNameA")
-      .build();
-
-    Determination determinationB = Determination.builder()
-      .isPrimary(false)
-      .verbatimScientificName("verbatimScientificNameB")
-      .build();
-
-    List<Determination> determinations = List.of(determinationA, determinationB);
-    MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
-  void validate_WhenNoPrimaryDeterminationAndMixedOrganism_NoErrors() {
-    Determination determination = Determination.builder()
-      .isPrimary(false)
-      .verbatimScientificName("verbatimScientificName")
-      .build();
-
-    List<Determination> determinations = List.of(determination);
-    MaterialSample sample = newSample();
-    sample.setMaterialSampleType(MaterialSampleType.builder().uuid(MaterialSampleType.MIXED_ORGANISMS_UUID).build());
-    sample.setDetermination(determinations);
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errors);
-    Assertions.assertFalse(errors.hasErrors());
-  }
-
-  @Test
-  void validate_WhenMoreThanOneIsFiledAs() {
-    String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.MORE_THAN_ONE_ISFILEDAS);
-
-    Determination determinationA = Determination.builder()
-      .isPrimary(true)
-      .isFileAs(true)
-      .verbatimScientificName("verbatimScientificName A")
-      .scientificName("scientificName A")
-      .scientificNameSource(ScientificNameSource.COLPLUS)
-      .build();
-
-    Determination determinationB = Determination.builder()
-      .isPrimary(false)
-      .isFileAs(true)
-      .verbatimScientificName("verbatimScientificName B")
-      .scientificName("scientificName B")
-      .scientificNameSource(ScientificNameSource.COLPLUS)
-      .build();
-
-    List<Determination> determinations = List.of(determinationA, determinationB);
-    MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
-  void validate_WhenMoreThanOneIsPrimary() {
-    String expectedErrorMessageNonMixed = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION);
-    String expectedErrorMessageMixed = getExpectedErrorMessage(MaterialSampleValidator.MISSING_PRIMARY_DETERMINATION_MIXED_ORGANISM);
-
-    Determination determinationA = Determination.builder()
-      .isPrimary(true)
-      .isFileAs(false)
-      .verbatimScientificName("verbatimScientificName A")
-      .scientificName("scientificName A")
-      .scientificNameSource(ScientificNameSource.COLPLUS)
-      .build();
-
-    Determination determinationB = Determination.builder()
-      .isPrimary(true)
-      .isFileAs(false)
-      .verbatimScientificName("verbatimScientificName B")
-      .scientificName("scientificName B")
-      .scientificNameSource(ScientificNameSource.COLPLUS)
-      .build();
-
-    List<Determination> determinations = List.of(determinationA, determinationB);
-
-    MaterialSample sample = newSample();
-    sample.setDetermination(determinations);
-
-    Errors errorsNonMixedSpecimen = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errorsNonMixedSpecimen);
-    Assertions.assertTrue(errorsNonMixedSpecimen.hasErrors());
-    Assertions.assertEquals(1, errorsNonMixedSpecimen.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessageNonMixed, errorsNonMixedSpecimen.getAllErrors().get(0).getDefaultMessage());
-
-    // Try it again but Material Sample is now a Mixed Organism, expecting the same errors.
-    sample.setMaterialSampleType(MaterialSampleType.builder().uuid(MaterialSampleType.MIXED_ORGANISMS_UUID).build());
-
-    Errors errorsMixedSpecimen = ValidationErrorsHelper.newErrorsObject(sample);
-    sampleValidator.validate(sample, errorsMixedSpecimen);
-    Assertions.assertTrue(errorsMixedSpecimen.hasErrors());
-    Assertions.assertEquals(1, errorsMixedSpecimen.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessageMixed, errorsMixedSpecimen.getAllErrors().get(0).getDefaultMessage());
   }
 
   private static MaterialSample newSample() {

@@ -1,20 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
-import ca.gc.aafc.dina.entity.DinaEntity;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
-
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,12 +15,22 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+
+import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
+import ca.gc.aafc.dina.entity.DinaEntity;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -81,14 +82,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Builder.Default
   private Map<String, String> managedAttributes = new HashMap<>();
 
-  @Type(type = "jsonb")
-  @Valid
-  private List<Determination> determination;
-
-  @Type(type = "jsonb")
-  @Valid
-  private Organism organism;
-
   @Size(max = 1000)
   @Column(name = "preparation_remarks")
   private String preparationRemarks;
@@ -126,17 +119,4 @@ public class AbstractMaterialSample implements DinaEntity {
   @NotNull
   @Builder.Default
   private Boolean allowDuplicateName = false;
-
-  /**
-   * Count the number of primary Determination.
-   * If there is no Determination 0 will be returned.
-   *
-   * @return the number of primary determination or 0 if there is no determinations
-   */
-  public long countPrimaryDetermination() {
-    if (CollectionUtils.isEmpty(determination)) {
-      return 0;
-    }
-    return determination.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
-  }
 }
