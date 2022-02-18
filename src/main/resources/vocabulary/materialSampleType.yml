@@ -1,0 +1,23 @@
+vocabulary:
+  materialSampleType:
+    - name: whole_organism
+      term:
+      labels:
+        en: Whole organism
+        fr: Organisme entier
+    - name: organism_part
+      term:
+      labels:
+        en: Organism part
+        fr: Partie d'organisme
+    - name: mixed_organisms
+      term:
+      labels:
+        en: Mixed organisms
+        fr: Organismes mixtes
+    - name: molecular_sample
+      term:
+      labels:
+        en: Molecular sample
+        fr: Échantillon moléculaire
+        
