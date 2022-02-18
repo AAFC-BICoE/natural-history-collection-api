@@ -20,7 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
@@ -142,8 +141,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     projectDto.setCreatedBy("test user");  
     projectDto.setAttachment(null);
 
-    MaterialSampleTypeDto materialSampleTypeDto = MaterialSampleTypeTestFixture.newMaterialSampleType();
-  
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
     
@@ -169,15 +166,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         PreparationTypeDto.TYPENAME, 
         JsonAPITestHelper.toAttributeMap(preparationTypeDto)
       )
-    ));
-
-    String materialSampleTypeUUID = JsonAPITestHelper.extractId(sendPost(
-      MaterialSampleTypeDto.TYPENAME, 
-      JsonAPITestHelper.toJsonAPIMap(
-        MaterialSampleTypeDto.TYPENAME, 
-        JsonAPITestHelper.toAttributeMap(materialSampleTypeDto),
-        null,
-        null)
     ));
 
     String projectUUID = JsonAPITestHelper.extractId(sendPost(
@@ -210,7 +198,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          JsonAPIRelationship.of("materialSampleType", MaterialSampleTypeDto.TYPENAME, materialSampleTypeUUID),
           JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);

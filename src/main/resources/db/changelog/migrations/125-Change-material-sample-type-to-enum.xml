@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+  <changeSet id="125-Change-material-sample-type-to-enum" context="schema-change" author="Brandon Andre">
+
+    <!-- Drop material sample type table -->
+    <dropTable tableName="material_sample_type"/>
+
+    <!-- Create new enum type for material sample type -->
+    <sql>
+        CREATE TYPE material_sample_type AS ENUM (
+          'WHOLE_ORGANISM', 
+          'ORGANISM_PART', 
+          'MIXED_ORGANISMS',
+          'MOLECULAR_SAMPLE'
+        );
+    </sql>
+
+    <!-- Alter column to be an enum -->
+    <modifyDataType tableName="material_sample" columnName="material_sample_type" newDataType="material_sample_type" />
+    <addNotNullConstraint tableName="material_sample" columnName="material_sample_type" />
+
+  </changeSet>
+</databaseChangeLog>
