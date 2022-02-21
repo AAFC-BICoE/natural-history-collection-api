@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.val;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Type;
 import org.javers.core.metamodel.annotation.DiffIgnore;
@@ -33,6 +34,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -48,7 +50,22 @@ public class MaterialSample extends AbstractMaterialSample {
     WHOLE_ORGANISM, 
     ORGANISM_PART, 
     MIXED_ORGANISMS,
-    MOLECULAR_SAMPLE
+    MOLECULAR_SAMPLE;
+
+    /**
+     * More lenient version of {@link #valueOf(String)}.
+     * Case insensitive and returning Optional instead of throwing exceptions.
+     * @param text
+     * @return
+     */
+    public static Optional<MaterialSampleType> fromString(String text) {
+      for (MaterialSampleType curr : values()) {
+        if (text.equalsIgnoreCase(curr.toString())) {
+          return Optional.of(curr);
+        }
+      }
+      return Optional.empty();
+    }
   }
 
   public static final String TABLE_NAME = "material_sample";
