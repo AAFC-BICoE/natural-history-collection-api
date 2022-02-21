@@ -32,6 +32,8 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 
+import javax.validation.constraints.Size;
+
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
@@ -70,8 +72,6 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private CollectionDto collection;
 
-  @JsonApiRelation
-  private PreparationTypeDto preparationType;
 
   @JsonApiRelation
   private MaterialSampleTypeDto materialSampleType;
@@ -86,7 +86,15 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private ExternalRelationDto preparedBy;
 
+  @JsonApiRelation
+  private PreparationTypeDto preparationType;
+
   private LocalDate preparationDate;
+  private String preparationMethod;
+  private String preservationType;
+  private String preparationFixative;
+  private String preparationMaterials;
+  private String preparationSubstrate;
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = new HashMap<>();
@@ -121,8 +129,6 @@ public class MaterialSampleDto {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
-
-  private String preparationMethod;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
