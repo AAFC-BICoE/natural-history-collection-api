@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import lombok.val;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Type;
 import org.javers.core.metamodel.annotation.DiffIgnore;
@@ -121,8 +120,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
-
-  @NotNull
+  
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private MaterialSampleType materialSampleType;
