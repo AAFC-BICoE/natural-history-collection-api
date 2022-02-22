@@ -27,6 +27,7 @@ import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
@@ -104,6 +105,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     OrganismDto organism = OrganismTestFixture.newOrganism(determination);
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
+    ms.setMaterialSampleType(MaterialSampleType.MIXED_ORGANISMS);
     ms.setAttachment(null);
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
@@ -115,6 +117,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setProjects(null);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
+    parent.setMaterialSampleType(MaterialSampleType.MOLECULAR_SAMPLE);
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     parent.setMaterialSampleName("parent" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
     parent.setAttachment(null);
@@ -126,6 +129,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setProjects(null);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
+    child.setMaterialSampleType(MaterialSampleType.WHOLE_ORGANISM);
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME); 
     child.setAttachment(null);
