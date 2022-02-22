@@ -14,11 +14,19 @@ public class MaterialSampleTestFixture {
   public static final String[] DWC_OTHER_CATALOG_NUMBERS = new String[]{"A-1111", "B-2222"};
   public static final String GROUP = "aafc";
   public static final String MATERIAL_SAMPLE_NAME = "ocean water sample";
-  public static final UUID PREPARED_BY = UUID.randomUUID();
-  public static final LocalDate PREPARATION_DATE = LocalDate.now();
   public static final String CREATED_BY = "test user";
   public static final String DWC_DEGREE_OF_ESTABLISHMENT = "established";
+
+  public static final String PREPARATION_METHOD = "microwaving";
   public static final String PREPARATION_REMARKS = "this is a remark on the preparation";
+  public static final UUID PREPARED_BY = UUID.randomUUID();
+  public static final LocalDate PREPARATION_DATE = LocalDate.now();
+
+  public static final String PRESERVATION_TYPE = "frozen";
+  public static final String PREPARATION_FIXATIVE = "alcohol";
+  public static final String PREPARATION_MATERIALS = "vial";
+  public static final String PREPARATION_SUBSTRATE = "rock";
+
   public static final String HOST = "host";
   public static final Boolean PUBLICLY_RELEASABLE = false;
   public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";
@@ -27,7 +35,7 @@ public class MaterialSampleTestFixture {
   public static final LocalDate STATE_CHANGED_ON = LocalDate.now();
   public static final String STATE_CHANGE_REMARKS = "state change remarks";
   public static final String MATERIAL_SAMPLE_REMARKS = "This sample is damaged";
-  public static final String PREPARATION_METHOD = "microwaving";
+
   public static final Boolean ALLOW_DUPLICATE_NAME = true;
 
   public static MaterialSampleDto newMaterialSample() {
@@ -54,6 +62,10 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setStateChangeRemarks(STATE_CHANGE_REMARKS);
     materialSampleDto.setMaterialSampleRemarks(MATERIAL_SAMPLE_REMARKS);
     materialSampleDto.setPreparationMethod(PREPARATION_METHOD);
+    materialSampleDto.setPreservationType(PRESERVATION_TYPE);
+    materialSampleDto.setPreparationFixative(PREPARATION_FIXATIVE);
+    materialSampleDto.setPreparationMaterials(PREPARATION_MATERIALS);
+    materialSampleDto.setPreparationSubstrate(PREPARATION_SUBSTRATE);
     materialSampleDto.setPreparationAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
