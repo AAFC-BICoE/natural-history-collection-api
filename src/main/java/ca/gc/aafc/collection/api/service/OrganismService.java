@@ -53,7 +53,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
   private void setupDeterminations(Organism organism) {
     // Check to see if one determination is present and is currently not primary.
     if (CollectionUtils.size(organism.getDetermination()) == 1 &&
-        BooleanUtils.isFalse(organism.getDetermination().get(0).getIsPrimary())) {
+        !BooleanUtils.isTrue(organism.getDetermination().get(0).getIsPrimary())) {
       organism.getDetermination().get(0).setIsPrimary(true);
     }
   }
