@@ -73,8 +73,7 @@ public class MaterialSampleDto {
   private CollectionDto collection;
 
 
-  @JsonApiRelation
-  private MaterialSampleTypeDto materialSampleType;
+  private MaterialSample.MaterialSampleType materialSampleType;
 
   @JsonApiRelation
   private MaterialSampleDto parentMaterialSample;
