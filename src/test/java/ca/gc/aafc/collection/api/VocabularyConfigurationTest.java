@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api;
 
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,15 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(
-  classes = CollectionModuleApiLauncher.class,
-  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+@SpringBootTest(classes = CollectionModuleApiLauncher.class)
 public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
   @Inject
@@ -62,11 +61,21 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
     assertEquals(10, associationType.size());
     associationType.forEach(assertVocabElement());
 
-    assertTrue(
-      associationType
-        .stream()
-        .filter(o -> StringUtils.isNotBlank(o.getInverseOf())).count() == 10
-    );
+    assertEquals(10,
+        associationType.stream().filter(o -> StringUtils.isNotBlank(o.getInverseOf())).count());
+  }
+
+  @Test
+  void materialSampleType() {
+
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> materialSampleType = vocabularyConfiguration.getVocabulary().get("materialSampleType");
+
+    List<MaterialSample.MaterialSampleType> fromVocabularyFile = materialSampleType.stream()
+        .map(mst -> MaterialSample.MaterialSampleType.fromString(mst.getName()).orElse(null))
+        .collect(Collectors.toList());
+
+    assertArrayEquals(MaterialSample.MaterialSampleType.values(), fromVocabularyFile.toArray());
+
   }
 
   private static Consumer<CollectionVocabularyConfiguration.CollectionVocabularyElement> assertVocabElement() {

@@ -5,7 +5,6 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
@@ -26,13 +25,10 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
-
 public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
   private final List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
@@ -56,7 +52,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String materialSampleUniqueName = "unique-test";
   private static final String ORGANISM_LIFESTAGE = "lifestage-test";
   private PreparationType preparationType;
-  private MaterialSampleType materialSampleType;
+  private MaterialSample.MaterialSampleType materialSampleType;
   private MaterialSample materialSample;
   private StorageUnit storageUnit;
   private Collection collection;
@@ -81,11 +77,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .build();
     preparationTypeService.create(preparationType);
 
-    materialSampleType = MaterialSampleTypeFactory.newMaterialSampleType()
-        .createdBy(materialSampleTypeExpectedCreatedBy)
-        .name(materialSampleTypeExpectedName)
-        .build();
-    materialSampleTypeService.create(materialSampleType);
+    materialSampleType = MaterialSample.MaterialSampleType.WHOLE_ORGANISM;
 
     collection = collectionService.create(Collection.builder()
       .code(RandomStringUtils.randomAlphabetic(4))
@@ -132,9 +124,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(preparationExpectedGroup, materialSample.getPreparationType().getGroup());
     assertEquals(preparationExpectedName, materialSample.getPreparationType().getName());
 
-    assertEquals(materialSampleType.getId(), materialSample.getMaterialSampleType().getId());
-    assertEquals(materialSampleTypeExpectedCreatedBy, materialSample.getMaterialSampleType().getCreatedBy());
-    assertEquals(materialSampleTypeExpectedName, materialSample.getMaterialSampleType().getName());
+    assertEquals(materialSampleType, materialSample.getMaterialSampleType());
 
     assertEquals(preparedBy, materialSample.getPreparedBy());
     assertEquals(preparationDate, materialSample.getPreparationDate());
@@ -166,9 +156,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(preparationExpectedGroup, fetchedMaterialSample.getPreparationType().getGroup());
     assertEquals(preparationExpectedName, fetchedMaterialSample.getPreparationType().getName());
 
-    assertEquals(materialSampleType.getId(), fetchedMaterialSample.getMaterialSampleType().getId());
-    assertEquals(materialSampleTypeExpectedCreatedBy, fetchedMaterialSample.getMaterialSampleType().getCreatedBy());
-    assertEquals(materialSampleTypeExpectedName, fetchedMaterialSample.getMaterialSampleType().getName());
+    assertEquals(materialSampleType, fetchedMaterialSample.getMaterialSampleType());
 
     assertEquals(storageUnit.getId(), fetchedMaterialSample.getStorageUnit().getId());
     assertEquals(storageUnitExpectedCreatedBy, fetchedMaterialSample.getStorageUnit().getCreatedBy());
