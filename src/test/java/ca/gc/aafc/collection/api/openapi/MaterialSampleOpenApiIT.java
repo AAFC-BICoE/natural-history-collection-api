@@ -30,7 +30,6 @@ import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;

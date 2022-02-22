@@ -4,24 +4,38 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-  <changeSet id="125-Change-material-sample-type-to-enum" context="schema-change" author="Brandon Andre">
+  <changeSet id="125-Change-material-sample-type-to-enum" context="schema-change" author="cgendreau">
 
-    <!-- Drop material sample type table -->
-    <dropTable tableName="material_sample_type"/>
-
+    <!-- naming the enum material_sample_type create an error saying it already exists.-->
     <!-- Create new enum type for material sample type -->
     <sql>
-        CREATE TYPE material_sample_type AS ENUM (
-          'WHOLE_ORGANISM', 
-          'ORGANISM_PART', 
-          'MIXED_ORGANISMS',
-          'MOLECULAR_SAMPLE'
-        );
+      CREATE TYPE material_sample_type_enum AS ENUM (
+      'WHOLE_ORGANISM',
+      'ORGANISM_PART',
+      'MIXED_ORGANISMS',
+      'MOLECULAR_SAMPLE'
+      );
     </sql>
 
-    <!-- Alter column to be an enum -->
-    <modifyDataType tableName="material_sample" columnName="material_sample_type" newDataType="material_sample_type" />
-    <addNotNullConstraint tableName="material_sample" columnName="material_sample_type" />
+    <addColumn tableName="material_sample">
+      <column name="material_sample_type" type="material_sample_type_enum"/>
+    </addColumn>
 
+    <sql>
+      UPDATE material_sample SET material_sample_type = (
+      CASE
+            WHEN (material_sample_type_id = (SELECT id from material_sample_type where uuid = '3a001690-7008-45be-b6a8-cc1808eefbc6')) THEN 'WHOLE_ORGANISM'::material_sample_type_enum
+            WHEN (material_sample_type_id = (SELECT id from material_sample_type where uuid = '6c2aedd0-220e-41de-b0e9-d36f0c6e09b9')) THEN 'ORGANISM_PART'::material_sample_type_enum
+            WHEN (material_sample_type_id = (SELECT id from material_sample_type where uuid = '24d0a216-5967-4bb0-875a-47655e7c0ae8')) THEN 'MIXED_ORGANISMS'::material_sample_type_enum
+            WHEN (material_sample_type_id = (SELECT id from material_sample_type where uuid = '3426a6db-99db-4f9d-9c26-eaed1d6906e5')) THEN 'MOLECULAR_SAMPLE'::material_sample_type_enum
+      END);
+    </sql>
+
+    <dropColumn tableName="material_sample">
+      <column name="material_sample_type_id"/>
+    </dropColumn>
+
+    <dropTable tableName="material_sample_type"/>
   </changeSet>
+
 </databaseChangeLog>

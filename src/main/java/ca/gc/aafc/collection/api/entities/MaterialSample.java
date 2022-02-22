@@ -27,12 +27,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -48,7 +48,22 @@ public class MaterialSample extends AbstractMaterialSample {
     WHOLE_ORGANISM, 
     ORGANISM_PART, 
     MIXED_ORGANISMS,
-    MOLECULAR_SAMPLE
+    MOLECULAR_SAMPLE;
+
+    /**
+     * More lenient version of {@link #valueOf(String)}.
+     * Case insensitive and returning Optional instead of throwing exceptions.
+     * @param text
+     * @return
+     */
+    public static Optional<MaterialSampleType> fromString(String text) {
+      for (MaterialSampleType curr : values()) {
+        if (text.equalsIgnoreCase(curr.toString())) {
+          return Optional.of(curr);
+        }
+      }
+      return Optional.empty();
+    }
   }
 
   public static final String TABLE_NAME = "material_sample";
@@ -104,8 +119,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
-
-  @NotNull
+  
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private MaterialSampleType materialSampleType;
