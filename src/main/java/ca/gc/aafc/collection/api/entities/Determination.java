@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class Determination {
 
   public enum ScientificNameSource {
-    COLPLUS, GNA;
+    CUSTOM, COLPLUS, GNA;
 
     @JsonCreator
     public static ScientificNameSource forValue(String v) {

@@ -18,6 +18,7 @@ public class OrganismValidator implements Validator {
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
+  public static final String MISSING_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificNameSourceMissing";
 
   private final MessageSource messageSource;
 
@@ -53,6 +54,7 @@ public class OrganismValidator implements Validator {
       // Ensure scientific name and verbatim are set correctly.
       int isFiledAsCounter = 0;
       for (Determination determination : organism.getDetermination()) {
+
         // XOR, both set or both not set but never only one of them
         if (determination.getScientificNameSource() == null ^ StringUtils
             .isBlank(determination.getScientificName())) {
@@ -64,6 +66,14 @@ public class OrganismValidator implements Validator {
           String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
           errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
         }
+
+        // scientificNameDetails should not be added unless a name source is provided.
+        if (determination.getScientificNameSource() == null && 
+            determination.getScientificNameDetails() != null) {
+          String errorMessage = getMessage(MISSING_SCIENTIFICNAMESOURCE);
+          errors.rejectValue("determination", MISSING_SCIENTIFICNAMESOURCE, errorMessage);
+        }
+
         // Count if isFiled as is set.
         if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
           isFiledAsCounter++;
