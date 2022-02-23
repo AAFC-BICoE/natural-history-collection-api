@@ -188,33 +188,6 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
-  @Test
-  void validate_customClassificationWithoutVerbatimScientificName_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MISSING_VERBATIMSCIENTIFICNAME);
-
-    // Attempt to set the scientific name details without a source provided.
-    Determination determination = Determination.builder()
-        .isPrimary(true)
-        .scientificNameSource(ScientificNameSource.CUSTOM)
-        .scientificNameDetails(ScientificNameSourceDetails.builder()
-            .classificationPath("Poaceae|Poa")
-            .classificationRanks("family|genus")
-            .build()
-        )
-        .build();
-
-    List<Determination> determinations = List.of(determination);
-    Organism organism = OrganismEntityFactory.newOrganism()
-        .determination(determinations)
-        .build();
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
-    organismValidator.validate(organism, errors);
-
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
 
   @Test
   void validate_customClassificationWithSource_NoErrors() {
