@@ -10,11 +10,11 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.URL;
 import org.javers.core.metamodel.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -88,19 +88,18 @@ public class Determination {
 
   /**
    * Checks if the scientificNameSource is CUSTOM
-   *
-   * @return
    */
   @Transient
+  @JsonIgnore
   public boolean isCustomScientificNameSource() {
     return scientificNameSource == ScientificNameSource.CUSTOM;
   }
 
   /**
    * Checks if the scientificNameSource is CUSTOM or null
-   * @return
    */
   @Transient
+  @JsonIgnore
   public boolean isCustomScientificNameSourceOrNull() {
     return scientificNameSource == null || scientificNameSource == ScientificNameSource.CUSTOM;
   }
@@ -114,6 +113,7 @@ public class Determination {
    *    true: if only one is provided.
    */
   @Transient
+  @JsonIgnore
   public boolean areSourceAndDetailsNotInPair() {
     return scientificNameDetails != null ^ scientificNameSource != null;
   }
