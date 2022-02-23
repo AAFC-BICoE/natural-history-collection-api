@@ -37,7 +37,8 @@ public class OrganismDto {
 
   private String group;
 
-  private Boolean isTarget;
+  @Builder.Default
+  private Boolean isTarget = false;
 
   private String lifeStage;
   private String sex;

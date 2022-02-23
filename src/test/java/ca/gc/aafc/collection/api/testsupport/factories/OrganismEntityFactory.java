@@ -14,6 +14,7 @@ public class OrganismEntityFactory implements TestableEntityFactory<Organism> {
     return Organism
         .builder()
         .group(GROUP)
+        .isTarget(false)
         .createdBy("test user");
   }
 
