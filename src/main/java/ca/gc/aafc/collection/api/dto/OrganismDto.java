@@ -37,6 +37,8 @@ public class OrganismDto {
 
   private String group;
 
+  private Boolean isTarget;
+
   private String lifeStage;
   private String sex;
   private String remarks;

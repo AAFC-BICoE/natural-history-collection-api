@@ -130,5 +130,6 @@
   <include file="db/changelog/migrations/123-Add_custom_view.xml"/>
   <include file="db/changelog/migrations/124-Move-determinations-to-organisms.xml"/>
   <include file="db/changelog/migrations/125-Change-material-sample-type-to-enum.xml"/>
+  <include file="db/changelog/migrations/127-Add-isTarget-to-organism-with-partial-unique-index.xml"/>
 
 </databaseChangeLog>
