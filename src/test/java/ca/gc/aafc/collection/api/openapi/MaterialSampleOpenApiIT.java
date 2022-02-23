@@ -20,7 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleTypeDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
@@ -28,10 +27,10 @@ import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
@@ -106,6 +105,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     OrganismDto organism = OrganismTestFixture.newOrganism(determination);
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
+    ms.setMaterialSampleType(MaterialSampleType.MIXED_ORGANISMS);
     ms.setAttachment(null);
     ms.setPreparedBy(null);
     ms.setPreparationAttachment(null);
@@ -117,6 +117,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setProjects(null);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
+    parent.setMaterialSampleType(MaterialSampleType.MOLECULAR_SAMPLE);
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     parent.setMaterialSampleName("parent" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
     parent.setAttachment(null);
@@ -128,6 +129,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setProjects(null);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
+    child.setMaterialSampleType(MaterialSampleType.WHOLE_ORGANISM);
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME); 
     child.setAttachment(null);
@@ -142,8 +144,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     projectDto.setCreatedBy("test user");  
     projectDto.setAttachment(null);
 
-    MaterialSampleTypeDto materialSampleTypeDto = MaterialSampleTypeTestFixture.newMaterialSampleType();
-  
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy("test user");  
     
@@ -169,15 +169,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         PreparationTypeDto.TYPENAME, 
         JsonAPITestHelper.toAttributeMap(preparationTypeDto)
       )
-    ));
-
-    String materialSampleTypeUUID = JsonAPITestHelper.extractId(sendPost(
-      MaterialSampleTypeDto.TYPENAME, 
-      JsonAPITestHelper.toJsonAPIMap(
-        MaterialSampleTypeDto.TYPENAME, 
-        JsonAPITestHelper.toAttributeMap(materialSampleTypeDto),
-        null,
-        null)
     ));
 
     String projectUUID = JsonAPITestHelper.extractId(sendPost(
@@ -210,7 +201,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          JsonAPIRelationship.of("materialSampleType", MaterialSampleTypeDto.TYPENAME, materialSampleTypeUUID),
           JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);

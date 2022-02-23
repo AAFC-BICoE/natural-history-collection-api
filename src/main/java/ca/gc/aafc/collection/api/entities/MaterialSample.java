@@ -14,6 +14,8 @@ import org.javers.core.metamodel.annotation.DiffIgnore;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -30,7 +32,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -41,6 +43,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Table(name = "material_sample")
 public class MaterialSample extends AbstractMaterialSample {
+
+  public enum MaterialSampleType {
+    WHOLE_ORGANISM, 
+    ORGANISM_PART, 
+    MIXED_ORGANISMS,
+    MOLECULAR_SAMPLE;
+
+    /**
+     * More lenient version of {@link #valueOf(String)}.
+     * Case insensitive and returning Optional instead of throwing exceptions.
+     * @param text
+     * @return
+     */
+    public static Optional<MaterialSampleType> fromString(String text) {
+      for (MaterialSampleType curr : values()) {
+        if (text.equalsIgnoreCase(curr.toString())) {
+          return Optional.of(curr);
+        }
+      }
+      return Optional.empty();
+    }
+  }
 
   public static final String TABLE_NAME = "material_sample";
   public static final String ID_COLUMN_NAME = "id";
@@ -95,9 +119,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
-
-  @ManyToOne
-  @ToString.Exclude
+  
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
   private MaterialSampleType materialSampleType;
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -130,22 +154,4 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "acquisition_event_id")
   private AcquisitionEvent acquisitionEvent;
-
-  /**
-   * Check if the material sample type equals a specific UUID.
-   * 
-   * If the Material Sample Type is null, false will be returned.
-   * 
-   * @param uuid UUID to check against. Material sample type has a bunch of UUID
-   *             constants for system generated types.
-   * @return if the material sample type uuid is equal to the provided uuid. If
-   *         type is not set, false will be returned.
-   */
-  @Transient
-  public boolean isType(UUID uuid) {
-    if (materialSampleType == null) {
-      return false;
-    }
-    return Objects.equals(materialSampleType.getUuid(), uuid);
-  }
 }
