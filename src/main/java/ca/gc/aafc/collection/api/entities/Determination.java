@@ -108,10 +108,13 @@ public class Determination {
   /**
    * Checks if scientificNameDetails and scientificNameSource are provided in pair.
    * In pair means they are both provided are both not provided but never one without the other one.
-   * @return
+   * 
+   * @return 
+   *    false: if BOTH are provided or both not provided.
+   *    true: if only one is provided.
    */
   @Transient
-  public boolean areSourceAndDetailsInPair () {
+  public boolean areSourceAndDetailsNotInPair() {
     return scientificNameDetails != null ^ scientificNameSource != null;
   }
 

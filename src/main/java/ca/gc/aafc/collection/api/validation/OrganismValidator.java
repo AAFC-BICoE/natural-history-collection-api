@@ -14,11 +14,12 @@ import org.springframework.validation.Validator;
 @Component
 public class OrganismValidator implements Validator {
 
-  public static final String VALID_DETERMINATION_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificnamesource";
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
-  public static final String MISSING_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificNameSourceMissing";
+  public static final String INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR = "validation.constraint.violation.determination.invalidScientificSourceDetailsPair";
+  public static final String MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR = "validation.constraint.violation.determination.scientificNameSourceOrDetailsMissing";
+  public static final String INVALID_SOURCE_PROVIDED = "validation.constraint.violation.determination.invalidScientificNameSourceProvided";
 
   private final MessageSource messageSource;
 
@@ -62,31 +63,27 @@ public class OrganismValidator implements Validator {
           rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
         }
 
-        // ScientificNameDetails and NameSource (could be CUSTOM) should be provided in pair
-        if (determination.areSourceAndDetailsInPair()) {
-          // TODO add new  message
-          rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
-        }
-
         // if scientificName is provided
         if (StringUtils.isNotBlank(determination.getScientificName())) {
           // nameSource and scientificNameDetails are required
           if (determination.getScientificNameSource() == null || determination.getScientificNameDetails() == null) {
-            rejectValueWithMessage("determination", errors, MISSING_SCIENTIFICNAMESOURCE);
+            rejectValueWithMessage("determination", errors, MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
           }
         } else {
           // if scientificName is blank, it means we only have verbatim since we already check that we have 1 of the 2 set
 
+          // ScientificNameDetails and NameSource (could be CUSTOM) should be provided in pair.
+          if (determination.areSourceAndDetailsNotInPair()) {
+            rejectValueWithMessage("determination", errors, INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
+          }
+
           // scientificNameSource can only be CUSTOM or null (when we only have verbatimScientificName set)
           if (!determination.isCustomScientificNameSourceOrNull()) {
-            rejectValueWithMessage("determination", errors,
-                // TODO change message
-                VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
+            rejectValueWithMessage("determination", errors, INVALID_SOURCE_PROVIDED);
           }
 
         }
       }
-
     }
   }
 

@@ -14,6 +14,7 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSourceDetails;
 import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
@@ -29,20 +30,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   void validate_WhenMoreThanOneIsPrimary_HasError() {
     String expectedErrorMessageNonMixed = getExpectedErrorMessage(OrganismValidator.MISSING_PRIMARY_DETERMINATION);
 
-    Determination determinationA = Determination.builder()
+    Determination determinationA = DeterminationFactory.newDetermination()
         .isPrimary(true)
-        .isFileAs(false)
-        .verbatimScientificName("verbatimScientificName A")
-        .scientificName("scientificName A")
-        .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
         .build();
 
-    Determination determinationB = Determination.builder()
+    Determination determinationB = DeterminationFactory.newDetermination()
         .isPrimary(true)
-        .isFileAs(false)
-        .verbatimScientificName("verbatimScientificName B")
-        .scientificName("scientificName B")
-        .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);
@@ -59,33 +52,13 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_WhenScientificNameSourceIsSetButScientificIsNotSet_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-
-    Determination determination = Determination.builder()
-        .isPrimary(true)
-        .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
-        .verbatimScientificName("verbatimScientificName")
-        .build();
-
-    List<Determination> determinations = List.of(determination);
-    Organism organism = OrganismEntityFactory.newOrganism()
-        .determination(determinations)
-        .build();
-
-    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
-    organismValidator.validate(organism, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
   void validate_WhenScientificNameAndVerbatimScientificNameIsNotSet_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.VALID_DETERMINATION_SCIENTIFICNAME);
 
-    List<Determination> determinations = List.of(Determination.builder()
+    List<Determination> determinations = List.of(DeterminationFactory.newDetermination()
         .isPrimary(true)
+        .scientificName(null)
+        .verbatimScientificName(null)
         .build());
 
     Organism organism = OrganismEntityFactory.newOrganism()
@@ -104,14 +77,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MISSING_PRIMARY_DETERMINATION);
 
     // Since there will be two determinations, we can't automatically set one as primary.
-    Determination determinationA = Determination.builder()
+    Determination determinationA = DeterminationFactory.newDetermination()
         .isPrimary(false)
-        .verbatimScientificName("verbatimScientificNameA")
         .build();
 
-    Determination determinationB = Determination.builder()
+    Determination determinationB = DeterminationFactory.newDetermination()
         .isPrimary(false)
-        .verbatimScientificName("verbatimScientificNameB")
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);
@@ -130,20 +101,14 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   void validate_WhenMoreThanOneIsFiledAs_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MORE_THAN_ONE_ISFILEDAS);
 
-    Determination determinationA = Determination.builder()
+    Determination determinationA = DeterminationFactory.newDetermination()
         .isPrimary(true)
         .isFileAs(true)
-        .verbatimScientificName("verbatimScientificName A")
-        .scientificName("scientificName A")
-        .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
         .build();
 
-    Determination determinationB = Determination.builder()
+    Determination determinationB = DeterminationFactory.newDetermination()
         .isPrimary(false)
         .isFileAs(true)
-        .verbatimScientificName("verbatimScientificName B")
-        .scientificName("scientificName B")
-        .scientificNameSource(Determination.ScientificNameSource.COLPLUS)
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);
@@ -161,13 +126,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_customClassificationWithoutSource_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MISSING_SCIENTIFICNAMESOURCE);
+  void validate_InvalidScientificSourceDetailsPair_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
 
-    // Attempt to set the verbatim scientific name details without a source provided.
-    Determination determination = Determination.builder()
+    Determination determination = DeterminationFactory.newDetermination()
         .isPrimary(true)
-        .verbatimScientificName("verbatimScientificName A")
+        .scientificNameSource(null)
         .scientificNameDetails(ScientificNameSourceDetails.builder()
             .classificationPath("Poaceae|Poa")
             .classificationRanks("family|genus")
@@ -188,11 +152,48 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
+  @Test
+  void validate_MissingScientificSourceDetailsPair_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
+
+    Determination determinationA = DeterminationFactory.newDetermination()
+        .isPrimary(true)
+        .verbatimScientificName(null)
+        .scientificName("scientificName A")
+        .scientificNameSource(null)
+        .scientificNameDetails(ScientificNameSourceDetails.builder()
+            .classificationPath("Poaceae|Poa")
+            .classificationRanks("family|genus")
+            .build()
+        )
+        .build();
+
+    Determination determinationB = DeterminationFactory.newDetermination()
+        .isPrimary(false)
+        .verbatimScientificName(null)
+        .scientificName("scientificName B")
+        .scientificNameSource(ScientificNameSource.COLPLUS)
+        .scientificNameDetails(null)
+        .build();
+
+    List<Determination> determinations = List.of(determinationA, determinationB);
+    Organism organism = OrganismEntityFactory.newOrganism()
+        .determination(determinations)
+        .build();
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
+
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(2, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(1).getDefaultMessage());
+  }
 
   @Test
-  void validate_customClassificationWithSource_NoErrors() {
+  void validate_CustomClassificationWithSource_NoErrors() {
     // Attempt to set the scientific name details without a source provided.
-    Determination determination = Determination.builder()
+    Determination determination = DeterminationFactory.newDetermination()
         .isPrimary(true)
         .scientificNameSource(ScientificNameSource.CUSTOM)
         .verbatimScientificName("verbatimScientificName A")
@@ -212,6 +213,29 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     organismValidator.validate(organism, errors);
 
     Assertions.assertFalse(errors.hasErrors());
+  }
+
+  @Test
+  void validate_VerbatimScientificNameIsSetIncorrectSourceProvided_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.INVALID_SOURCE_PROVIDED);
+
+    Determination determination = DeterminationFactory.newDetermination()
+        .isPrimary(true)
+        .scientificName(null)
+        .scientificNameSource(ScientificNameSource.COLPLUS)
+        .build();
+
+    List<Determination> determinations = List.of(determination);
+    Organism organism = OrganismEntityFactory.newOrganism()
+        .determination(determinations)
+        .build();
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
+
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   private String getExpectedErrorMessage(String key) {
