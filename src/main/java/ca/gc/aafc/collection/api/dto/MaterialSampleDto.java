@@ -32,8 +32,6 @@ import io.crnk.core.resource.annotations.JsonApiResource;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 
-import javax.validation.constraints.Size;
-
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
