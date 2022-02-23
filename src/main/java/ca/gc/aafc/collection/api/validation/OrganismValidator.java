@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ public class OrganismValidator implements Validator {
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
   public static final String MISSING_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificNameSourceMissing";
+  public static final String MISSING_VERBATIMSCIENTIFICNAME = "validation.constraint.violation.determination.verbatimScientificNameMissing";
 
   private final MessageSource messageSource;
 
@@ -55,16 +57,27 @@ public class OrganismValidator implements Validator {
       int isFiledAsCounter = 0;
       for (Determination determination : organism.getDetermination()) {
 
-        // XOR, both set or both not set but never only one of them
-        if (determination.getScientificNameSource() == null ^ StringUtils
-            .isBlank(determination.getScientificName())) {
-          String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-          errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
-        }
-        if (StringUtils.isBlank(determination.getVerbatimScientificName()) && StringUtils
-            .isBlank(determination.getScientificName())) {
-          String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
-          errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
+        if (determination.getScientificNameSource() == ScientificNameSource.CUSTOM) {
+          // Verbatim must be provided when CUSTOM is used.
+          if (StringUtils.isBlank(determination.getVerbatimScientificName())) {
+              // Verbatim must be provided for a custom source.
+              String errorMessage = getMessage(MISSING_VERBATIMSCIENTIFICNAME);
+              errors.rejectValue("determination", MISSING_VERBATIMSCIENTIFICNAME, errorMessage);
+          }
+        } else {
+          // XOR, both set or both not set but never only one of them
+          if (determination.getScientificNameSource() == null ^ StringUtils
+              .isBlank(determination.getScientificName())) {
+            String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
+            errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
+          }
+
+          // One of the scientific name fields have to provided for a determination.
+          if (StringUtils.isBlank(determination.getVerbatimScientificName()) && 
+              StringUtils.isBlank(determination.getScientificName())) {
+            String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
+            errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
+          }          
         }
 
         // scientificNameDetails should not be added unless a name source is provided.

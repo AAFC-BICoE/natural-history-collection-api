@@ -1,19 +1,21 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSourceDetails;
-import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
-import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
+import java.util.List;
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 
-import javax.inject.Inject;
-import java.util.List;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSourceDetails;
+import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
+import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
 public class OrganismValidatorTest extends CollectionModuleBaseIT {
 
@@ -162,10 +164,10 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   void validate_customClassificationWithoutSource_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MISSING_SCIENTIFICNAMESOURCE);
 
-    // Attempt to set the scientific name details without a source provided.
+    // Attempt to set the verbatim scientific name details without a source provided.
     Determination determination = Determination.builder()
         .isPrimary(true)
-        .verbatimScientificName("verbatimScientificName B")
+        .verbatimScientificName("verbatimScientificName A")
         .scientificNameDetails(ScientificNameSourceDetails.builder()
             .classificationPath("Poaceae|Poa")
             .classificationRanks("family|genus")
@@ -184,6 +186,59 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_customClassificationWithoutVerbatimScientificName_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.MISSING_VERBATIMSCIENTIFICNAME);
+
+    // Attempt to set the scientific name details without a source provided.
+    Determination determination = Determination.builder()
+        .isPrimary(true)
+        .scientificNameSource(ScientificNameSource.CUSTOM)
+        .scientificNameDetails(ScientificNameSourceDetails.builder()
+            .classificationPath("Poaceae|Poa")
+            .classificationRanks("family|genus")
+            .build()
+        )
+        .build();
+
+    List<Determination> determinations = List.of(determination);
+    Organism organism = OrganismEntityFactory.newOrganism()
+        .determination(determinations)
+        .build();
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
+
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_customClassificationWithSource_NoErrors() {
+    // Attempt to set the scientific name details without a source provided.
+    Determination determination = Determination.builder()
+        .isPrimary(true)
+        .scientificNameSource(ScientificNameSource.CUSTOM)
+        .verbatimScientificName("verbatimScientificName A")
+        .scientificNameDetails(ScientificNameSourceDetails.builder()
+            .classificationPath("Poaceae|Poa")
+            .classificationRanks("family|genus")
+            .build()
+        )
+        .build();
+
+    List<Determination> determinations = List.of(determination);
+    Organism organism = OrganismEntityFactory.newOrganism()
+        .determination(determinations)
+        .build();
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
+    organismValidator.validate(organism, errors);
+
+    Assertions.assertFalse(errors.hasErrors());
   }
 
   private String getExpectedErrorMessage(String key) {
