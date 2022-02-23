@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.URL;
 import org.javers.core.metamodel.annotation.Value;
 
@@ -83,6 +85,35 @@ public class Determination {
 
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
+
+  /**
+   * Checks if the scientificNameSource is CUSTOM
+   *
+   * @return
+   */
+  @Transient
+  public boolean isCustomScientificNameSource() {
+    return scientificNameSource == ScientificNameSource.CUSTOM;
+  }
+
+  /**
+   * Checks if the scientificNameSource is CUSTOM or null
+   * @return
+   */
+  @Transient
+  public boolean isCustomScientificNameSourceOrNull() {
+    return scientificNameSource == null || scientificNameSource == ScientificNameSource.CUSTOM;
+  }
+
+  /**
+   * Checks if scientificNameDetails and scientificNameSource are provided in pair.
+   * In pair means they are both provided are both not provided but never one without the other one.
+   * @return
+   */
+  @Transient
+  public boolean areSourceAndDetailsInPair () {
+    return scientificNameDetails != null ^ scientificNameSource != null;
+  }
 
   @Getter
   @Builder

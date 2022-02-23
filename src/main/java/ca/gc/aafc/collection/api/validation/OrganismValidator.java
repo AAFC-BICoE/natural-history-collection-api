@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.validation;
 
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +19,6 @@ public class OrganismValidator implements Validator {
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
   public static final String MORE_THAN_ONE_ISFILEDAS = "validation.constraint.violation.determination.moreThanOneIsFiledAs";
   public static final String MISSING_SCIENTIFICNAMESOURCE = "validation.constraint.violation.determination.scientificNameSourceMissing";
-  public static final String MISSING_VERBATIMSCIENTIFICNAME = "validation.constraint.violation.determination.verbatimScientificNameMissing";
 
   private final MessageSource messageSource;
 
@@ -46,62 +44,54 @@ public class OrganismValidator implements Validator {
 
     if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
 
-      // Ensure the correct number of primary determination is saved.
+      // Ensure there is always 1 primary determination
       if (organism.countPrimaryDetermination() != 1) {
-        // Other types must always have 1 primary determination.
-        errors.rejectValue("determination", MISSING_PRIMARY_DETERMINATION,
-            getMessage(MISSING_PRIMARY_DETERMINATION));
-      }
-
-      // Ensure scientific name and verbatim are set correctly.
-      int isFiledAsCounter = 0;
-      for (Determination determination : organism.getDetermination()) {
-
-        if (determination.getScientificNameSource() == ScientificNameSource.CUSTOM) {
-          // Verbatim must be provided when CUSTOM is used.
-          if (StringUtils.isBlank(determination.getVerbatimScientificName())) {
-              // Verbatim must be provided for a custom source.
-              String errorMessage = getMessage(MISSING_VERBATIMSCIENTIFICNAME);
-              errors.rejectValue("determination", MISSING_VERBATIMSCIENTIFICNAME, errorMessage);
-          }
-        } else {
-          // XOR, both set or both not set but never only one of them
-          if (determination.getScientificNameSource() == null ^ StringUtils
-              .isBlank(determination.getScientificName())) {
-            String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-            errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAMESOURCE, errorMessage);
-          }
-
-          // One of the scientific name fields have to provided for a determination.
-          if (StringUtils.isBlank(determination.getVerbatimScientificName()) && 
-              StringUtils.isBlank(determination.getScientificName())) {
-            String errorMessage = getMessage(VALID_DETERMINATION_SCIENTIFICNAME);
-            errors.rejectValue("determination", VALID_DETERMINATION_SCIENTIFICNAME, errorMessage);
-          }          
-        }
-
-        // scientificNameDetails should not be added unless a name source is provided.
-        if (determination.getScientificNameSource() == null && 
-            determination.getScientificNameDetails() != null) {
-          String errorMessage = getMessage(MISSING_SCIENTIFICNAMESOURCE);
-          errors.rejectValue("determination", MISSING_SCIENTIFICNAMESOURCE, errorMessage);
-        }
-
-        // Count if isFiled as is set.
-        if (determination.getIsFileAs() != null && determination.getIsFileAs()) {
-          isFiledAsCounter++;
-        }
+        rejectValueWithMessage("determination", errors, MISSING_PRIMARY_DETERMINATION);
       }
 
       // Check there is 0 or 1 isFiledAs but never more
-      if (isFiledAsCounter > 1) {
-        String errorMessage = getMessage(MORE_THAN_ONE_ISFILEDAS);
-        errors.rejectValue("determination", MORE_THAN_ONE_ISFILEDAS, errorMessage);
+      if (organism.countFiledAsDetermination() > 1) {
+        rejectValueWithMessage("determination", errors, MORE_THAN_ONE_ISFILEDAS);
       }
+
+      for (Determination determination : organism.getDetermination()) {
+
+        // One of the scientific name fields have to provided for a determination.
+        if (StringUtils.isBlank(determination.getVerbatimScientificName()) &&
+            StringUtils.isBlank(determination.getScientificName())) {
+          rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
+        }
+
+        // ScientificNameDetails and NameSource (could be CUSTOM) should be provided in pair
+        if (determination.areSourceAndDetailsInPair()) {
+          // TODO add new  message
+          rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
+        }
+
+        // if scientificName is provided
+        if (StringUtils.isNotBlank(determination.getScientificName())) {
+          // nameSource and scientificNameDetails are required
+          if (determination.getScientificNameSource() == null || determination.getScientificNameDetails() == null) {
+            rejectValueWithMessage("determination", errors, MISSING_SCIENTIFICNAMESOURCE);
+          }
+        } else {
+          // if scientificName is blank, it means we only have verbatim since we already check that we have 1 of the 2 set
+
+          // scientificNameSource can only be CUSTOM or null (when we only have verbatimScientificName set)
+          if (!determination.isCustomScientificNameSourceOrNull()) {
+            rejectValueWithMessage("determination", errors,
+                // TODO change message
+                VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
+          }
+
+        }
+      }
+
     }
   }
 
-  private String getMessage(String key) {
-    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+  private void rejectValueWithMessage(String field, Errors errors, String messageKey) {
+    errors.rejectValue(field, messageKey,
+        messageSource.getMessage(messageKey, null, LocaleContextHolder.getLocale()));
   }
 }
