@@ -70,8 +70,6 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private CollectionDto collection;
 
-  @JsonApiRelation
-  private PreparationTypeDto preparationType;
 
   private MaterialSample.MaterialSampleType materialSampleType;
 
@@ -85,7 +83,15 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private ExternalRelationDto preparedBy;
 
+  @JsonApiRelation
+  private PreparationTypeDto preparationType;
+
   private LocalDate preparationDate;
+  private String preparationMethod;
+  private String preservationType;
+  private String preparationFixative;
+  private String preparationMaterials;
+  private String preparationSubstrate;
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = new HashMap<>();
@@ -120,8 +126,6 @@ public class MaterialSampleDto {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
-
-  private String preparationMethod;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;

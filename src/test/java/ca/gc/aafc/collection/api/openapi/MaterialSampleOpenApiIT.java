@@ -1,8 +1,5 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -53,22 +49,8 @@ import lombok.SneakyThrows;
 @ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
-  private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = new URIBuilder();
-
-  static {
-    URI_BUILDER.setScheme("https");
-    URI_BUILDER.setHost(SPEC_HOST);
-    URI_BUILDER.setPath(SPEC_PATH);
-  }
-
   protected MaterialSampleOpenApiIT() {
     super("/api/v1/");
-  }
-
-  public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
-    return URI_BUILDER.build().toURL();
   }
 
   @SneakyThrows
@@ -232,7 +214,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
 
     OpenAPI3Assertions.assertRemoteSchema(
-      getOpenAPISpecsURL(), 
+        OpenAPIConstants.COLLECTION_API_SPECS_URL,
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
         .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" + String.join(",", toInclude)).asString(),
