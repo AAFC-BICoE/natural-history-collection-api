@@ -105,6 +105,16 @@ public class Determination {
     return scientificNameSource == null || scientificNameSource == ScientificNameSource.CUSTOM;
   }
 
+  /**
+   * Checks if scientificNameDetails and scientificNameSource are provided in pair.
+   * In pair means they are both provided are both not provided but never one without the other one.
+   * @return
+   */
+  @Transient
+  public boolean areSourceAndDetailsInPair () {
+    return scientificNameDetails != null ^ scientificNameSource != null;
+  }
+
   @Getter
   @Builder
   @RequiredArgsConstructor

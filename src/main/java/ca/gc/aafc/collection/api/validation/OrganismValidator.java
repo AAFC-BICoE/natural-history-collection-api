@@ -62,6 +62,12 @@ public class OrganismValidator implements Validator {
           rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
         }
 
+        // ScientificNameDetails and NameSource (could be CUSTOM) should be provided in pair
+        if (determination.areSourceAndDetailsInPair()) {
+          // TODO add new  message
+          rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
+        }
+
         // if scientificName is provided
         if (StringUtils.isNotBlank(determination.getScientificName())) {
           // nameSource and scientificNameDetails are required
@@ -72,17 +78,12 @@ public class OrganismValidator implements Validator {
           // if scientificName is blank, it means we only have verbatim since we already check that we have 1 of the 2 set
 
           // scientificNameSource can only be CUSTOM or null (when we only have verbatimScientificName set)
-          if( !determination.isCustomScientificNameSourceOrNull()) {
+          if (!determination.isCustomScientificNameSourceOrNull()) {
             rejectValueWithMessage("determination", errors,
                 // TODO change message
                 VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
           }
 
-          // we only allow scientificNameDetails if the source is at CUSTOM (when we only have verbatimScientificName set)
-          if (determination.getScientificNameDetails() != null && !determination.isCustomScientificNameSource()) {
-            rejectValueWithMessage("determination", errors,
-                VALID_DETERMINATION_SCIENTIFICNAMESOURCE);
-          }
         }
       }
 
