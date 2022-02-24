@@ -115,8 +115,8 @@ public class Determination {
   @Transient
   @JsonIgnore
   public boolean areSourceAndDetailsInPair() {
-    return (scientificNameDetails == null && scientificNameSource == null)
-        || (scientificNameDetails != null && scientificNameSource != null);
+    return scientificNameDetails == null && scientificNameSource == null
+        || scientificNameDetails != null && scientificNameSource != null;
   }
 
   @Getter
