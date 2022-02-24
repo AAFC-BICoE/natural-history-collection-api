@@ -72,19 +72,36 @@ public class AbstractMaterialSample implements DinaEntity {
   @Column(name = "material_sample_name")
   private String materialSampleName;
 
+  // Preparation related
+
   @Column(name = "prepared_by")
   private UUID preparedBy;
 
   private LocalDate preparationDate;
 
+  @Size(max = 1000)
+  @Column(name = "preparation_remarks")
+  private String preparationRemarks;
+
+  @Size(max = 250)
+  private String preparationMethod;
+
+  @Size(max = 250)
+  private String preservationType;
+
+  @Size(max = 250)
+  private String preparationFixative;
+
+  @Size(max = 250)
+  private String preparationMaterials;
+
+  @Size(max = 250)
+  private String preparationSubstrate;
+
   @Type(type = "jsonb")
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = new HashMap<>();
-
-  @Size(max = 1000)
-  @Column(name = "preparation_remarks")
-  private String preparationRemarks;
 
   @Size(max = 250)
   @Column(name = "dwc_degree_of_establishment")
@@ -107,9 +124,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "jsonb")
   @Valid
   private List<ScheduledActionDto> scheduledActions;
-
-  @Size(max = 250)
-  private String preparationMethod;
 
   @Type(type = "jsonb")
   @Valid
