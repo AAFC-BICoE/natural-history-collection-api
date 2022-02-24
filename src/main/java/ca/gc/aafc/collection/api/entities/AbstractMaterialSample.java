@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,4 +134,9 @@ public class AbstractMaterialSample implements DinaEntity {
   @NotNull
   @Builder.Default
   private Boolean allowDuplicateName = false;
+
+  @Type(type = "jsonb")
+  @Valid
+  private List<ExtensionValue> restrictionFieldsExtension;
+
 }

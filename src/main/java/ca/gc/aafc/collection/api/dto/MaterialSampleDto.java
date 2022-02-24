@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
@@ -146,4 +147,5 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ProjectDto> projects = new ArrayList<>();
 
+  private List<ExtensionValue> restrictionFieldsExtension;
 }
