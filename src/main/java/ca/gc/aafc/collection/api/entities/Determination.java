@@ -109,13 +109,14 @@ public class Determination {
    * In pair means they are both provided are both not provided but never one without the other one.
    * 
    * @return 
-   *    false: if BOTH are provided or both not provided.
-   *    true: if only one is provided.
+   *    true: if BOTH are provided or both not provided.
+   *    false: if only one is provided.
    */
   @Transient
   @JsonIgnore
-  public boolean areSourceAndDetailsNotInPair() {
-    return scientificNameDetails != null ^ scientificNameSource != null;
+  public boolean areSourceAndDetailsInPair() {
+    return (scientificNameDetails == null && scientificNameSource == null)
+        || (scientificNameDetails != null && scientificNameSource != null);
   }
 
   @Getter

@@ -73,7 +73,7 @@ public class OrganismValidator implements Validator {
           // if scientificName is blank, it means we only have verbatim since we already check that we have 1 of the 2 set
 
           // ScientificNameDetails and NameSource (could be CUSTOM) should be provided in pair.
-          if (determination.areSourceAndDetailsNotInPair()) {
+          if (!determination.areSourceAndDetailsInPair()) {
             rejectValueWithMessage("determination", errors, INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
           }
 
