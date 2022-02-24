@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
@@ -13,6 +14,7 @@ import org.hibernate.validator.constraints.URL;
 import org.javers.core.metamodel.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class Determination {
 
   public enum ScientificNameSource {
-    COLPLUS, GNA;
+    CUSTOM, COLPLUS, GNA;
 
     @JsonCreator
     public static ScientificNameSource forValue(String v) {
@@ -83,6 +85,39 @@ public class Determination {
 
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
+
+  /**
+   * Checks if the scientificNameSource is CUSTOM
+   */
+  @Transient
+  @JsonIgnore
+  public boolean isCustomScientificNameSource() {
+    return scientificNameSource == ScientificNameSource.CUSTOM;
+  }
+
+  /**
+   * Checks if the scientificNameSource is CUSTOM or null
+   */
+  @Transient
+  @JsonIgnore
+  public boolean isCustomScientificNameSourceOrNull() {
+    return scientificNameSource == null || scientificNameSource == ScientificNameSource.CUSTOM;
+  }
+
+  /**
+   * Checks if scientificNameDetails and scientificNameSource are provided in pair.
+   * In pair means they are both provided are both not provided but never one without the other one.
+   * 
+   * @return 
+   *    true: if BOTH are provided or both not provided.
+   *    false: if only one is provided.
+   */
+  @Transient
+  @JsonIgnore
+  public boolean areSourceAndDetailsInPair() {
+    return scientificNameDetails == null && scientificNameSource == null
+        || scientificNameDetails != null && scientificNameSource != null;
+  }
 
   @Getter
   @Builder
