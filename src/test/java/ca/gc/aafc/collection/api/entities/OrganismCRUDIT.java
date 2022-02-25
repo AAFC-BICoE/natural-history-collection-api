@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 
-import org.hibernate.type.TrueFalseType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -199,6 +198,12 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
     // The material sample only gets set to the organism from the material sample service.
     assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
+
+    // Clean up
+    materialSampleService.delete(materialSample);
+    organisms.forEach(organism -> {
+      organismService.delete(organism);
+    });
   }
 
   @Test
@@ -230,5 +235,11 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
     // The material sample only gets set to the organism from the material sample service.
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    // Clean up
+    materialSampleService.delete(materialSample);
+    organisms.forEach(organism -> {
+      organismService.delete(organism);
+    });
   }
 }
