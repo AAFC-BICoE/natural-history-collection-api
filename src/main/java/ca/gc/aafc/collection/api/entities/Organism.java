@@ -51,6 +51,10 @@ public class Organism implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
+  @NotNull
+  @Builder.Default
+  private Boolean isTarget = false;
+
   @Type(type = "jsonb")
   @Valid
   private List<Determination> determination;
@@ -83,6 +87,19 @@ public class Organism implements DinaEntity {
       return 0;
     }
     return determination.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).count();
+  }
+
+  /**
+   * Count the number of filedAs Determination.
+   * If there is no Determination 0 will be returned.
+   *
+   * @return the number of filedAs determination or 0 if there is no determinations
+   */
+  public long countFiledAsDetermination() {
+    if (CollectionUtils.isEmpty(determination)) {
+      return 0;
+    }
+    return determination.stream().filter(d -> d.getIsFileAs() != null && d.getIsFileAs()).count();
   }
 
 }

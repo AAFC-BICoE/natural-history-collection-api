@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 import lombok.SneakyThrows;
 
@@ -31,6 +32,7 @@ public class DeterminationFactory implements TestableEntityFactory<Determination
       .verbatimDate(LocalDate.now().toString())
       .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
+      .scientificNameSource(ScientificNameSource.CUSTOM)
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
         .sourceUrl(new URL("https://www.google.com").toString())
         .recordedOn(LocalDate.now().minusDays(1))

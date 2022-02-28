@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import io.crnk.core.queryspec.QuerySpec;
 import lombok.SneakyThrows;
@@ -75,6 +76,7 @@ class DeterminationIT extends CollectionModuleBaseIT {
       .verbatimDate(LocalDate.now().toString())
       .isPrimary(false)
       .verbatimScientificName(RandomStringUtils.randomAlphabetic(3))
+      .scientificNameSource(ScientificNameSource.CUSTOM)
       .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
         .currentName("scientificName")
         .isSynonym(false)
