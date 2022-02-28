@@ -51,6 +51,10 @@ public class Organism implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
+  @NotNull
+  @Builder.Default
+  private Boolean isTarget = false;
+
   @Type(type = "jsonb")
   @Valid
   private List<Determination> determination;
