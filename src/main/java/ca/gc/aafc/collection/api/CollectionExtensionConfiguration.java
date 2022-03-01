@@ -13,6 +13,7 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @ConfigurationProperties
 @PropertySource(value = "classpath:extension/mixsSoil.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/mixsSediment.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/cfia_ppc.yml", factory  = YamlPropertyLoaderFactory.class)
 public class CollectionExtensionConfiguration {
 
   private final Map<String, Extension> extension;
