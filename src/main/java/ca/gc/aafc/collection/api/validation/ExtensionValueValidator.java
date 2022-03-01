@@ -62,11 +62,11 @@ public class ExtensionValueValidator implements Validator {
   }
 
   private void matchCollectionExtensionConfigurationTerm(Errors errors, ExtensionValue extensionValue, Extension extension) {
-    for (Field field : extension.getFields()) {
-      if (field.getTerm().equals(extensionValue.getExtTerm())) {
-        return;
-      }
+
+    if(extension.containsTerm(extensionValue.getExtTerm())){
+      return;
     }
+
     String errorMessage = getMessageForKey(
       NO_MATCH_TERM, 
       extensionValue.getExtKey(),
