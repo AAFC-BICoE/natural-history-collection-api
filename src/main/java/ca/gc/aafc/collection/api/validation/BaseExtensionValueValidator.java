@@ -113,7 +113,7 @@ public class BaseExtensionValueValidator implements Validator {
     }
 
     String errorMessage = getMessageForKey(
-      NO_MATCH_TERM, 
+      INCORRECT_DINA_COMPONENT, 
       componentType,
       field.getDinaComponent());
     errors.rejectValue("extTerm", INCORRECT_DINA_COMPONENT, errorMessage);
