@@ -1,13 +1,9 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,25 +30,11 @@ import lombok.SneakyThrows;
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest {
 
-  private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = new URIBuilder();
-
   public static final String TYPE_NAME = "material-sample-action-definition";
-
-  private static final String name = "definition of ocean water isolation";
-  static {
-    URI_BUILDER.setScheme("https");
-    URI_BUILDER.setHost(SPEC_HOST);
-    URI_BUILDER.setPath(SPEC_PATH);
-  }
+  private static final String NAME = "definition of ocean water isolation";
 
   protected MaterialSampleActionDefinitionOpenApiIT() {
     super("/api/v1/");
-  }
-
-  public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
-    return URI_BUILDER.build().toURL();
   }
 
   @SneakyThrows
@@ -61,7 +43,7 @@ public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = new MaterialSampleActionDefinitionDto();
     materialSampleActionDefinitionDto.setCreatedBy("test user");
     materialSampleActionDefinitionDto.setGroup("aafc");
-    materialSampleActionDefinitionDto.setName(name);
+    materialSampleActionDefinitionDto.setName(NAME);
     materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
     materialSampleActionDefinitionDto.setFormTemplates(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()
       .allowNew(true)
@@ -71,11 +53,12 @@ public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest
         .defaultValue("test-default-value")
         .build()))
       .build()));
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSampleActionDefinition",
-      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto),
-        null,
-        null)
-      ).extract().asString());
+
+    OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL,
+        "MaterialSampleActionDefinition", sendPost(TYPE_NAME, JsonAPITestHelper
+            .toJsonAPIMap(TYPE_NAME,
+                JsonAPITestHelper.toAttributeMap(materialSampleActionDefinitionDto))).extract()
+            .asString());
   }
 
 }
