@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
+import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
@@ -30,6 +31,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
+  private final RestrictionExtensionValueValidator extensionValueValidator;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -38,6 +40,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull AssociationValidator associationValidator,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
+    @NonNull RestrictionExtensionValueValidator extensionValueValidator,
     ApplicationEventPublisher eventPublisher
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
@@ -45,6 +48,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
+    this.extensionValueValidator = extensionValueValidator;
   }
 
   @Override
@@ -103,6 +107,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
     validateAssociations(entity);
+    validateExtensionValues(entity);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
@@ -117,6 +122,16 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
         applyBusinessRule(entity.getUuid().toString() + associationIndex, association, associationValidator);
         associationIndex++;
       }
+    }
+  }
+
+  private void validateExtensionValues(@NonNull MaterialSample entity) {
+    if (CollectionUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
+      entity.getRestrictionFieldsExtension().forEach(extVal -> applyBusinessRule(
+        entity.getUuid().toString(),
+        extVal,
+        extensionValueValidator
+      ));
     }
   }
 
