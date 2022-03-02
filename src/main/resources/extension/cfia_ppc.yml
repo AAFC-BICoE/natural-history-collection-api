@@ -4,12 +4,10 @@ extension:
     key: "cfia_ppc"
     version: "2022-02"
     fields:
-      - term: "ppc-1"
-        name: "Plant Pest Containment Level 1"
-        definition: "Plant Pest Containment Level 1 (PPC-1)"
+      - term: "level"
+        name: "Plant Pest Containment Level"
+        definition: "Plant Pest Containment"
+        acceptedValues:
+          - Level 1 (PPC-1)
+          - Level 2 (PPC-2)
         dinaComponent: "RESTRICTION"
-      - term: "ppc-2"
-        name: "Plant Pest Containment Level 2"
-        definition: "Plant Pest Containment Level 1 (PPC-2)"
-        dinaComponent: "RESTRICTION"
-        
