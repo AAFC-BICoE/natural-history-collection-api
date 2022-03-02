@@ -136,7 +136,7 @@ public class BaseExtensionValueValidator implements Validator {
     String errorMessage = getMessageForKey(
       NO_MATCH_ACCEPTED_VALUE, 
       extensionValue.getValue(),
-      field.getAcceptedValues());
+      String.join(", ", field.getAcceptedValues()));
     errors.rejectValue("extTerm", NO_MATCH_ACCEPTED_VALUE, errorMessage);
   }
 
