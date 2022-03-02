@@ -1,12 +1,7 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 import javax.transaction.Transactional;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,37 +26,23 @@ import lombok.SneakyThrows;
 
 public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
 
-  private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = new URIBuilder();
-
   public static final String TYPE_NAME = "managed-attribute";
-    
-  static {
-    URI_BUILDER.setScheme("https");
-    URI_BUILDER.setHost(SPEC_HOST);
-    URI_BUILDER.setPath(SPEC_PATH);
-  }
 
   protected CollectionManagedAttributeOpenApiIT() {
     super("/api/v1/");
-  }
-
-  public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
-    return URI_BUILDER.build().toURL();
   }
 
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
 
-    CollectionManagedAttributeDto collectionManagedAttributeDto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();     
+    CollectionManagedAttributeDto collectionManagedAttributeDto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
 
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "CollectionManagedAttribute",
-      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto),
-        null,
-        null)
-      ).extract().asString());
+    OpenAPI3Assertions
+        .assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "CollectionManagedAttribute",
+            sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME,
+                JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto))).extract()
+                .asString());
   }
 
 }

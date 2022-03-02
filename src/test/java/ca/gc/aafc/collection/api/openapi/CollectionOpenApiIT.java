@@ -11,16 +11,12 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
-import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 @SpringBootTest(
@@ -32,24 +28,10 @@ import java.util.List;
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class CollectionOpenApiIT extends BaseRestAssuredTest {
 
-  private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = new URIBuilder();
-
   public static final String TYPE_NAME = "collection";
-
-  static {
-    URI_BUILDER.setScheme("https");
-    URI_BUILDER.setHost(SPEC_HOST);
-    URI_BUILDER.setPath(SPEC_PATH);
-  }
 
   protected CollectionOpenApiIT() {
     super("/api/v1/");
-  }
-
-  public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
-    return URI_BUILDER.build().toURL();
   }
 
   @SneakyThrows
@@ -61,15 +43,15 @@ public class CollectionOpenApiIT extends BaseRestAssuredTest {
 
     String institutionId = sendPost(
       InstitutionDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-        InstitutionDto.TYPENAME, JsonAPITestHelper.toAttributeMap(InstitutionFixture.newInstitution().build())
-        , null, null)).extract().body().jsonPath().getString("data.id");
+        InstitutionDto.TYPENAME, JsonAPITestHelper.toAttributeMap(InstitutionFixture.newInstitution().build())))
+        .extract().body().jsonPath().getString("data.id");
 
     String parentId = sendPost(
       TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(
-        TYPE_NAME, JsonAPITestHelper.toAttributeMap(CollectionFixture.newCollection().institution(null).build())
-        , null, null)).extract().body().jsonPath().getString("data.id");
+        TYPE_NAME, JsonAPITestHelper.toAttributeMap(CollectionFixture.newCollection().institution(null).build())))
+        .extract().body().jsonPath().getString("data.id");
 
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "Collection",
+    OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "Collection",
       sendPost(
         TYPE_NAME,
         JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(collectionDto),
