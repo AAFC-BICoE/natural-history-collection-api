@@ -133,4 +133,9 @@ public class AbstractMaterialSample implements DinaEntity {
   @NotNull
   @Builder.Default
   private Boolean allowDuplicateName = false;
+
+  @Type(type = "jsonb")
+  @Valid
+  private List<ExtensionValue> restrictionFieldsExtension;
+
 }

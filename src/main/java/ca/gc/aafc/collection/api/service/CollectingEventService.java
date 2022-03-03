@@ -4,7 +4,7 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
-import ca.gc.aafc.collection.api.validation.ExtensionValueValidator;
+import ca.gc.aafc.collection.api.validation.CollectingEventExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
@@ -27,7 +27,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final ExtensionValueValidator extensionValueValidator;
+  private final CollectingEventExtensionValueValidator extensionValueValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
@@ -35,7 +35,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
-    @NonNull ExtensionValueValidator extensionValueValidator
+    @NonNull CollectingEventExtensionValueValidator extensionValueValidator
   ) {
     super(baseDAO, sv);
     this.collectingEventValidator = collectingEventValidator;

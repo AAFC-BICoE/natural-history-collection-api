@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 
 import javax.inject.Inject;
+import javax.validation.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -135,7 +136,18 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         materialSampleRepository.delete(result.getUuid());
         assertThrows(GoneException.class, () -> materialSampleRepository.findOne(result.getUuid(),
             new QuerySpec(MaterialSampleDto.class)));
-
     }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  public void when_InvalidRestrictionFieldExtension_ExceptionThrown(){
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+
+    // Put an invalid key
+    materialSampleDto.getRestrictionFieldsExtension().get(0).setExtKey("ABC");
+
+    assertThrows(ValidationException.class, () -> materialSampleRepository.create(materialSampleDto));
+
+  }
 
 }

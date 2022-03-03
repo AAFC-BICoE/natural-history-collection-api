@@ -39,4 +39,14 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
     assertEquals("v5", mixsSediment.getVersion());
   }
 
+  @Test
+  void getCfiaPpc() {
+    Extension cfiaPpc = extensionConfiguration.getExtension().get("cfia_ppc");
+
+    assertNotNull(cfiaPpc);
+    assertEquals("CFIA Plant pest containment", cfiaPpc.getName());
+    assertEquals("cfia_ppc", cfiaPpc.getKey());
+    assertEquals("2022-02", cfiaPpc.getVersion());
+  }
+
 }

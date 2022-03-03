@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class MaterialSampleTestFixture {
@@ -38,6 +40,11 @@ public class MaterialSampleTestFixture {
 
   public static final Boolean ALLOW_DUPLICATE_NAME = true;
 
+  public static final String RESTRICTION_KEY = "cfia_ppc";
+  public static final String RESTRICTION_VERSION = "2022-02";
+  public static final String RESTRICTION_TERM = "level";
+  public static final String RESTRICTION_VALUE = "Level 2 (PPC-2)";
+
   public static MaterialSampleDto newMaterialSample() {
     MaterialSampleDto materialSampleDto = new MaterialSampleDto();
     materialSampleDto.setDwcCatalogNumber(DWC_CATALOG_NUMBER);
@@ -69,6 +76,12 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setPreparationAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
+    materialSampleDto.setRestrictionFieldsExtension(List.of(ExtensionValue.builder()
+        .extKey(RESTRICTION_KEY)
+        .extVersion(RESTRICTION_VERSION)
+        .extTerm(RESTRICTION_TERM)
+        .value(RESTRICTION_VALUE)
+        .build()));
     return materialSampleDto;
   }
 }
