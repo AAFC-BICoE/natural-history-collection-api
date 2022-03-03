@@ -44,7 +44,7 @@ public class BaseExtensionValueValidator implements Validator {
     }
 
     ExtensionValue extensionValue = (ExtensionValue) target;
-    matchCollectionExtensionConfigurationKeyAndVersion(errors, extensionValue);
+    handleValidation(errors, extensionValue);
   }
 
   /**
@@ -54,10 +54,21 @@ public class BaseExtensionValueValidator implements Validator {
    * @param errors if any validation problems occur, errors will be reported here.
    * @param extensionValue extension value being validated against.
    */
-  private void matchCollectionExtensionConfigurationKeyAndVersion(Errors errors, ExtensionValue extensionValue) {
+  private void handleValidation(Errors errors, ExtensionValue extensionValue) {
     for (Extension extension : configuration.getExtension().values()) {
+      // First, check if the key and version match
       if (extension.matchesKeyVersion(extensionValue.getExtKey(), extensionValue.getExtVersion())) {
-        matchCollectionExtensionConfigurationTerm(errors, extensionValue, extension);
+
+        // Check term
+        checkExtensionConfigurationTerm(errors, extensionValue, extension);
+        // Check dinaComponent
+        checkExtensionConfigurationComponent(errors, extension.getFieldByTerm(extensionValue.getExtTerm()));
+
+        // only run the last check if there is no errors
+        if (!errors.hasErrors()) {
+          checkExtensionConfigurationAcceptedValues(errors, extensionValue,
+              extension.getFieldByTerm(extensionValue.getExtTerm()));
+        }
         return;
       }
     }
@@ -78,20 +89,12 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extensionValue extension value being validated against.
    * @param extension the extension set of values that that matches the key and version.
    */
-  private void matchCollectionExtensionConfigurationTerm(Errors errors, ExtensionValue extensionValue, Extension extension) {
-
-    if(extension.containsTerm(extensionValue.getExtTerm())) {
-      // Extension term was found, but ensure it's the same component.
-      matchCollectionExtensionConfigurationComponent(errors, extensionValue, extension.getFieldByTerm(extensionValue.getExtTerm()));
-      return;
+  private void checkExtensionConfigurationTerm(Errors errors, ExtensionValue extensionValue, Extension extension) {
+    if(!extension.containsTerm(extensionValue.getExtTerm())) {
+      String errorMessage = getMessageForKey(NO_MATCH_TERM, extensionValue.getExtKey(),
+          extensionValue.getExtVersion(), extensionValue.getExtTerm());
+      errors.rejectValue("extTerm", NO_MATCH_TERM, errorMessage);
     }
-
-    String errorMessage = getMessageForKey(
-      NO_MATCH_TERM, 
-      extensionValue.getExtKey(),
-      extensionValue.getExtVersion(),
-      extensionValue.getExtTerm());
-    errors.rejectValue("extTerm", NO_MATCH_TERM, errorMessage);
   }
 
   /**
@@ -99,24 +102,19 @@ public class BaseExtensionValueValidator implements Validator {
    * extension value is being saved. When the validator is set up, a dinaComponent is setup
    * 
    * @param errors if any validation problems occur, errors will be reported here.
-   * @param extensionValue extension value being validated against.
    * @param field the field that was matched with the term.
    */
-  private void matchCollectionExtensionConfigurationComponent(Errors errors, ExtensionValue extensionValue, Field field) {
-    DinaComponent extensionComponent = DinaComponent.valueOf(field.getDinaComponent());
-
-    if (extensionComponent.equals(componentType)) {
-      // Finally, check if the field has accepted values that the extensionValue needs to follow.
-      matchCollectionExtensionConfigurationAcceptedValues(errors, extensionValue, field);
-
+  private void checkExtensionConfigurationComponent(Errors errors, Field field) {
+    if (field == null) {
       return;
     }
 
-    String errorMessage = getMessageForKey(
-      INCORRECT_DINA_COMPONENT, 
-      componentType,
-      field.getDinaComponent());
-    errors.rejectValue("extTerm", INCORRECT_DINA_COMPONENT, errorMessage);
+    DinaComponent extensionComponent = DinaComponent.valueOf(field.getDinaComponent());
+
+    if (!extensionComponent.equals(componentType)) {
+      String errorMessage = getMessageForKey(INCORRECT_DINA_COMPONENT, componentType, field.getDinaComponent());
+      errors.rejectValue("extTerm", INCORRECT_DINA_COMPONENT, errorMessage);
+    }
   }
 
   /**
@@ -127,7 +125,7 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extensionValue extension value being validated against.
    * @param field the field that was matched with the term.
    */
-  private void matchCollectionExtensionConfigurationAcceptedValues(Errors errors, ExtensionValue extensionValue, Field field) {
+  private void checkExtensionConfigurationAcceptedValues(Errors errors, ExtensionValue extensionValue, Field field) {
     // Check if the field has accepted values, if it does, check that the value provided matches a accepted value.
     if (field.getAcceptedValues() == null || field.isAcceptedValues(extensionValue.getValue())) {
       return;
