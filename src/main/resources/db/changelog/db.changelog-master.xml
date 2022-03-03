@@ -132,5 +132,6 @@
   <include file="db/changelog/migrations/125-Change-material-sample-type-to-enum.xml"/>
   <include file="db/changelog/migrations/126-Adjust_Preparation_Fields.xml"/>
   <include file="db/changelog/migrations/127-Add-isTarget-to-organism-with-partial-unique-index.xml"/>
+  <include file="db/changelog/migrations/128-Add_restriction_extension_to_material_sample.xml"/>
 
 </databaseChangeLog>
