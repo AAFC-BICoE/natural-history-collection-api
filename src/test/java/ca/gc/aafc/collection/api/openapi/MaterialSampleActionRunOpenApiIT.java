@@ -1,8 +1,5 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +7,6 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -41,26 +37,12 @@ import lombok.SneakyThrows;
 
 public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
 
-  private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = new URIBuilder();
-
   public static final String TYPE_NAME = "material-sample-action-run";
 
   private static final UUID agentId = UUID.randomUUID();
 
-  static {
-    URI_BUILDER.setScheme("https");
-    URI_BUILDER.setHost(SPEC_HOST);
-    URI_BUILDER.setPath(SPEC_PATH);
-  }
-
   protected MaterialSampleActionRunOpenApiIT() {
     super("/api/v1/");
-  }
-
-  public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
-    return URI_BUILDER.build().toURL();
   }
 
   @SneakyThrows
@@ -104,7 +86,7 @@ public class MaterialSampleActionRunOpenApiIT extends BaseRestAssuredTest {
     String materialSampleUUID = sendGet(MaterialSampleDto.TYPENAME, "").extract().response().body().path("data[0].id");
     String materialSampleActionDefinitionUUID = sendGet(MaterialSampleActionDefinitionDto.TYPENAME, "").extract().response().body().path("data[0].id");
 
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "MaterialSampleActionRun",
+    OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "MaterialSampleActionRun",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(materialSampleActionRunDto),
         JsonAPITestHelper.toRelationshipMap(List.of(
           JsonAPIRelationship.of("sourceMaterialSample", MaterialSampleDto.TYPENAME, materialSampleUUID),

@@ -1,12 +1,7 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Map;
-import java.util.UUID;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,18 +24,10 @@ import lombok.SneakyThrows;
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
 
-  private static final String SPEC_HOST = "raw.githubusercontent.com";
-  private static final String SPEC_PATH = "DINA-Web/collection-specs/master/schema/natural-history-collection-api.yml";
-  private static final URIBuilder URI_BUILDER = createSchemaUriBuilder(SPEC_HOST, SPEC_PATH);
-
   public static final String TYPE_NAME = AcquisitionEventDto.TYPENAME;
 
   protected AcquisitionEventOpenApiIT() {
     super("/api/v1/");
-  }
-
-  public static URL getOpenAPISpecsURL() throws URISyntaxException, MalformedURLException {
-    return URI_BUILDER.build().toURL();
   }
 
   @SneakyThrows
@@ -51,7 +38,7 @@ public class AcquisitionEventOpenApiIT extends BaseRestAssuredTest {
     acquisitionEventDto.setReceivedFrom(null);
     acquisitionEventDto.setIsolatedBy(null);
 
-    OpenAPI3Assertions.assertRemoteSchema(getOpenAPISpecsURL(), "AcquisitionEvent",
+    OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "AcquisitionEvent",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(acquisitionEventDto),
       Map.of(
         "receivedFrom", JsonAPITestHelper.generateExternalRelation("person"),
