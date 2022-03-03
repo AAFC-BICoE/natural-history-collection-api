@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
