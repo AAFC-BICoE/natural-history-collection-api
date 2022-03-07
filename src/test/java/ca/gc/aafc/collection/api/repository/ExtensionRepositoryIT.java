@@ -29,7 +29,7 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_ExtensionConfiguration() {
     List<ExtensionDto> listOfExtensionDtos =
       extensionRepository.findAll(new QuerySpec(ExtensionDto.class));
-    assertEquals(3, listOfExtensionDtos.size());
+    assertEquals(6, listOfExtensionDtos.size());
 
     List<Extension> listOfExtension = new ArrayList<>();
     for (ExtensionDto extensionDto : listOfExtensionDtos) {
@@ -41,7 +41,10 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
       Matchers.containsInAnyOrder(
         collectionExtensionConfiguration.getExtension().get("mixs_soil"),
         collectionExtensionConfiguration.getExtension().get("mixs_sediment"),
-        collectionExtensionConfiguration.getExtension().get("cfia_ppc")
+        collectionExtensionConfiguration.getExtension().get("cfia_ppc"),
+        collectionExtensionConfiguration.getExtension().get("phac_human_rg"),
+        collectionExtensionConfiguration.getExtension().get("phac_animal_rg"),
+        collectionExtensionConfiguration.getExtension().get("phac_cl")
       ));
   }
   

@@ -1,0 +1,13 @@
+extension:
+  phac_cl:
+    name: "PHAC Containment Level"
+    key: "phac_cl"
+    version: "2022-02"
+    fields:
+      - term: "level"
+        name: "Containment Level"
+        definition: "Containment Level"
+        acceptedValues:
+          - Containment Level 1 (CL1)
+          - Containment Level 2 (CL2)
+        dinaComponent: "RESTRICTION"
