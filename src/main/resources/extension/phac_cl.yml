@@ -1,5 +1,5 @@
 extension:
-  cfia_ppc:
+  phac_cl:
     name: "PHAC Containment Level"
     key: "phac_cl"
     version: "2022-02"
