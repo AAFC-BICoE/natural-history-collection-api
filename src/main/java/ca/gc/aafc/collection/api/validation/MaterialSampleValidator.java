@@ -56,7 +56,6 @@ public class MaterialSampleValidator implements Validator {
     return b1 && b2 || b1 && b3 || b2 && b3;
   }
 
-
   private String getMessage(String key) {
     return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
   }

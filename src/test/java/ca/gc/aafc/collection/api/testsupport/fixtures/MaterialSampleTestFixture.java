@@ -82,6 +82,7 @@ public class MaterialSampleTestFixture {
         .extTerm(RESTRICTION_TERM)
         .value(RESTRICTION_VALUE)
         .build()));
+    materialSampleDto.setRestrictionRemarks("abc");
     return materialSampleDto;
   }
 }

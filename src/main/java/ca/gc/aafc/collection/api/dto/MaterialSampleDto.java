@@ -71,7 +71,6 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private CollectionDto collection;
 
-
   private MaterialSample.MaterialSampleType materialSampleType;
 
   @JsonApiRelation
@@ -148,4 +147,9 @@ public class MaterialSampleDto {
   private List<ProjectDto> projects = new ArrayList<>();
 
   private List<ExtensionValue> restrictionFieldsExtension;
+
+  private Boolean isRestricted = false;
+
+  private String restrictionRemarks;
+
 }

@@ -133,5 +133,6 @@
   <include file="db/changelog/migrations/126-Adjust_Preparation_Fields.xml"/>
   <include file="db/changelog/migrations/127-Add-isTarget-to-organism-with-partial-unique-index.xml"/>
   <include file="db/changelog/migrations/128-Add_restriction_extension_to_material_sample.xml"/>
+  <include file="db/changelog/migrations/129-Add_restriction_boolean_and_remarks.xml"/>
 
 </databaseChangeLog>
