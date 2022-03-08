@@ -138,4 +138,10 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private List<ExtensionValue> restrictionFieldsExtension;
 
+  @Builder.Default
+  private Boolean isRestricted = false;
+
+  @Size(max = 1000)
+  private String restrictionRemarks;
+
 }

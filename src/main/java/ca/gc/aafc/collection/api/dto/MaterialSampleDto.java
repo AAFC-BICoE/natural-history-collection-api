@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.ExtensionValue;
+import lombok.Builder;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
@@ -32,6 +33,8 @@ import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
+
+import javax.validation.constraints.Size;
 
 @RelatedEntity(MaterialSample.class)
 @SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -148,4 +151,9 @@ public class MaterialSampleDto {
   private List<ProjectDto> projects = new ArrayList<>();
 
   private List<ExtensionValue> restrictionFieldsExtension;
+
+  private Boolean isRestricted = false;
+
+  private String restrictionRemarks;
+
 }
