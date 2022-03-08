@@ -109,7 +109,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
    * @param entity
    */
   private void setRestrictedFields(MaterialSample entity) {
-    if(CollectionUtils.isNotEmpty(entity.getRestrictionFieldsExtension())){
+    if (CollectionUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
       entity.setIsRestricted(true);
     }
   }
