@@ -55,7 +55,8 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
     }
   }
 
-  public CollectionManagedAttribute findOneByKeyAndComponent(String key, CollectionManagedAttribute.ManagedAttributeComponent component){
+  public CollectionManagedAttribute findOneByKeyAndComponent(String key,
+      CollectionManagedAttribute.ManagedAttributeComponent component) {
     if (StringUtils.isBlank(key) || component == null) {
       return null;
     }
