@@ -85,13 +85,11 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUID.randomUUID());
     linkAssociations(entity);
-    setRestrictedFields(entity);
   }
 
   @Override
   protected void preUpdate(MaterialSample entity) {
     linkAssociations(entity);
-    setRestrictedFields(entity);
   }
 
   private void linkAssociations(MaterialSample entity) {
@@ -101,16 +99,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
         association.setSample(entity);
         association.setAssociatedSample(this.findOne(associatedUuid, MaterialSample.class));
       });
-    }
-  }
-
-  /**
-   * Make sure isRestricted is always set if there is a restricted provided.
-   * @param entity
-   */
-  private void setRestrictedFields(MaterialSample entity) {
-    if (CollectionUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
-      entity.setIsRestricted(true);
     }
   }
 
