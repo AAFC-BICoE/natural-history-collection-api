@@ -46,7 +46,16 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   public enum ManagedAttributeComponent {
     COLLECTING_EVENT,
     MATERIAL_SAMPLE,
-    DETERMINATION
+    DETERMINATION;
+
+    public static ManagedAttributeComponent fromString(String s) {
+      for (ManagedAttributeComponent source : ManagedAttributeComponent.values()) {
+        if (source.name().equalsIgnoreCase(s)) {
+          return source;
+        }
+      }
+      return null;
+    }
   }
 
   @NotBlank

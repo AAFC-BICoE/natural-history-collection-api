@@ -79,7 +79,7 @@ public class CollectionModuleBaseIT {
   protected OrganismService organismService;
 
   @TestConfiguration
-  private class CollectionModuleTestConfiguration {
+  class CollectionModuleTestConfiguration {
     @Bean
     public BuildProperties buildProperties() {
       Properties props = new Properties();

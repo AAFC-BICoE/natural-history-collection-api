@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -18,14 +17,13 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
 import io.crnk.core.exception.ResourceNotFoundException;
-import io.crnk.core.queryspec.FilterOperator;
-import io.crnk.core.queryspec.FilterSpec;
 import io.crnk.core.queryspec.QuerySpec;
 import lombok.NonNull;
 
 @Repository
 public class CollectionManagedAttributeRepo extends DinaRepository<CollectionManagedAttributeDto, CollectionManagedAttribute> {
 
+  private final CollectionManagedAttributeService dinaService;
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
   public static final Pattern KEY_LOOKUP_PATTERN = Pattern.compile("(.*)\\.(.*)");
@@ -48,6 +46,7 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
       null,
       externalResourceProvider,
       buildProperties);
+    this.dinaService = service;
     this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
@@ -66,18 +65,15 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
     var matcher = KEY_LOOKUP_PATTERN.matcher(id.toString());
     if (matcher.groupCount() == 2) {
       if (matcher.find()) {
-        String componentType = matcher.group(1).toUpperCase();
+        CollectionManagedAttribute.ManagedAttributeComponent component = CollectionManagedAttribute.ManagedAttributeComponent
+            .fromString(matcher.group(1));
         String attributeKey = matcher.group(2);
 
-        QuerySpec keyQuerySpec = new QuerySpec(CollectionManagedAttributeDto.class);
-        keyQuerySpec.addFilter(
-          new FilterSpec(List.of("key"), FilterOperator.EQ, attributeKey));
-        keyQuerySpec.addFilter(
-          new FilterSpec(List.of("managedAttributeComponent"), FilterOperator.EQ, componentType));
-        
-        var results = super.findAll(keyQuerySpec);
-        if (results.size() > 0) {
-          return results.get(0);
+        CollectionManagedAttribute managedAttribute =
+            dinaService.findOneByKeyAndComponent(attributeKey, component);
+
+        if (managedAttribute != null) {
+          return getMappingLayer().toDtoSimpleMapping(managedAttribute);
         } else {
           throw new ResourceNotFoundException("Managed Attribute not found: " + id);
         }
