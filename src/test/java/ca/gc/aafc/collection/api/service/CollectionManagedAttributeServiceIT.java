@@ -76,11 +76,6 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
       collectionManagedAttributeService.findOne(attribute.getUuid(), CollectionManagedAttribute.class));
   }
 
-  @Test
-  void create_WhenKeyInUseBySample_DeniesDelete() {
-
-  }
-
   private static CollectionManagedAttribute newAttribute(CollectionManagedAttribute.ManagedAttributeComponent component) {
     return CollectionManagedAttribute.builder()
       .group("grp")

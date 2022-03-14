@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-  <changeSet id="5-130-Update_managed_attribute_type_postgres_enum" context="schema-change" author="cgendreau" runInTransaction="false">
+  <changeSet id="130-Update_managed_attribute_type_postgres_enum" context="schema-change" author="cgendreau" runInTransaction="false">
     <sql>
       ALTER TYPE managed_attribute_type ADD VALUE 'DATE';
     </sql>

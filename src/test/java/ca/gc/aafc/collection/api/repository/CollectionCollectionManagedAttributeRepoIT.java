@@ -51,7 +51,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = "group:COLLECTION_MANAGER")
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER")
   void findOneByKey_whenKeyProvided_managedAttributeFetched() {
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("Collecting Event Attribute 1");
