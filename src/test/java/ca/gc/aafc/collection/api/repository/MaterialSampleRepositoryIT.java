@@ -3,16 +3,20 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
+import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.InstitutionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
+import ca.gc.aafc.dina.security.DinaRole;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
@@ -23,6 +27,9 @@ import org.springframework.security.access.AccessDeniedException;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 
+import java.util.Map;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,14 +37,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
-    @Inject
-    private MaterialSampleRepository materialSampleRepository;
+  @Inject
+  private MaterialSampleRepository materialSampleRepository;
 
-    @Inject
-    private CollectingEventRepository eventRepository;
+  @Inject
+  private CollectingEventRepository eventRepository;
 
-    @Inject
-    private CollectionRepository collectionRepository;
+  @Inject
+  private CollectionRepository collectionRepository;
+
+  @Inject
+  private CollectionManagedAttributeRepo collManagedAttributeRepo;
 
     @Test
     @WithMockKeycloakUser(groupRole = {"aafc: staff"})
@@ -106,37 +116,36 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
     }
 
-    @Test
-    @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
-    public void updateFromDifferentGroup_throwAccessDenied() {
-        MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
-            .group(MaterialSampleTestFixture.GROUP)
-            .createdBy("dina")
-            .build();
-        materialSampleService.create(testMaterialSample);
-        MaterialSampleDto retrievedMaterialSample = materialSampleRepository.findOne(testMaterialSample.getUuid(),
+  @Test
+  @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC: staff" })
+  public void updateFromDifferentGroup_throwAccessDenied() {
+    MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
+        .group(MaterialSampleTestFixture.GROUP).createdBy("dina").build();
+    materialSampleService.create(testMaterialSample);
+    MaterialSampleDto retrievedMaterialSample = materialSampleRepository
+        .findOne(testMaterialSample.getUuid(), new QuerySpec(MaterialSampleDto.class));
+    assertThrows(AccessDeniedException.class,
+        () -> materialSampleRepository.save(retrievedMaterialSample));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = { "aafc: staff" })
+  public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted() {
+    CollectingEventDto event = eventRepository
+        .findOne(eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(),
+            new QuerySpec(CollectingEventDto.class));
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setCollectingEvent(event);
+
+    MaterialSampleDto result = materialSampleRepository
+        .findOne(materialSampleRepository.create(materialSampleDto).getUuid(),
             new QuerySpec(MaterialSampleDto.class));
-        assertThrows(AccessDeniedException.class, () -> materialSampleRepository.save(retrievedMaterialSample));
-    }
 
-    @Test
-    @WithMockKeycloakUser(groupRole = {"aafc: staff"})
-    public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted(){
-        CollectingEventDto event = eventRepository.findOne(
-            eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
-        MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-        materialSampleDto.setCollectingEvent(event);
-
-        MaterialSampleDto result = materialSampleRepository.findOne(
-            materialSampleRepository.create(materialSampleDto).getUuid(),
-            new QuerySpec(MaterialSampleDto.class)
-            );
-
-        assertNotNull(result.getUuid());
-        materialSampleRepository.delete(result.getUuid());
-        assertThrows(GoneException.class, () -> materialSampleRepository.findOne(result.getUuid(),
-            new QuerySpec(MaterialSampleDto.class)));
-    }
+    assertNotNull(result.getUuid());
+    materialSampleRepository.delete(result.getUuid());
+    assertThrows(GoneException.class, () -> materialSampleRepository
+        .findOne(result.getUuid(), new QuerySpec(MaterialSampleDto.class)));
+  }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc: staff"})
@@ -145,9 +154,35 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     // Put an invalid key
     materialSampleDto.getRestrictionFieldsExtension().get(0).setExtKey("ABC");
+    assertThrows(ValidationException.class, () -> materialSampleRepository.create(materialSampleDto));
+  }
 
+  @Test
+  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER"})
+  public void create_onManagedAttributeValue_validationOccur() {
+
+    CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttribute.setAcceptedValues(null);
+    newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
+
+    newAttribute = collManagedAttributeRepo.create(newAttribute);
+
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
+
+    // Put an invalid value for Date
+    materialSampleDto.setManagedAttributes(Map.of(newAttribute.getKey(), "zxy"));
     assertThrows(ValidationException.class, () -> materialSampleRepository.create(materialSampleDto));
 
+    // Fix the value
+    materialSampleDto.setManagedAttributes(Map.of(newAttribute.getKey(), "2022-02-02"));
+    UUID matSampleId = materialSampleRepository.create(materialSampleDto).getUuid();
+
+    //cleanup
+    materialSampleRepository.delete(matSampleId);
+
+    // can't delete managed attribute for now since the check for key in use is using a fresh transaction
   }
 
 }

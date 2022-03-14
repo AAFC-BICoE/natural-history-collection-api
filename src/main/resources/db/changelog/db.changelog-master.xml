@@ -134,5 +134,5 @@
   <include file="db/changelog/migrations/127-Add-isTarget-to-organism-with-partial-unique-index.xml"/>
   <include file="db/changelog/migrations/128-Add_restriction_extension_to_material_sample.xml"/>
   <include file="db/changelog/migrations/129-Add_restriction_boolean_and_remarks.xml"/>
-
+  <include file="db/changelog/migrations/130-Update_managed_attribute_type_postgres_enum.xml"/>
 </databaseChangeLog>

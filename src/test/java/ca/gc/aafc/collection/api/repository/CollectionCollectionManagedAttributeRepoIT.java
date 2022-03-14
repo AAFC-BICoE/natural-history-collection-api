@@ -51,14 +51,12 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = "group:COLLECTION_MANAGER")
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER")
   void findOneByKey_whenKeyProvided_managedAttributeFetched() {
-    CollectionManagedAttributeDto newAttribute = new CollectionManagedAttributeDto();
+    CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("Collecting Event Attribute 1");
     newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
-    newAttribute.setCreatedBy("poffm");
-    newAttribute.setGroup("group");
 
     UUID newAttributeUuid = repo.create(newAttribute).getUuid();
 
