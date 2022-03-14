@@ -5,6 +5,8 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.ManagedAttributeService;
 import ca.gc.aafc.dina.service.PostgresJsonbService;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -16,6 +18,9 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
   public static final String MANAGED_ATTRIBUTES_COL_NAME = "managed_attributes";
   public static final String COLLECTING_EVENT_TABLE_NAME = "collecting_event";
   public static final String MATERIAL_SAMPLE_TABLE_NAME = "material_sample";
+
+  private static final String COMPONENT_FIELD_NAME = "managedAttributeComponent";
+
   private final PostgresJsonbService jsonbService;
 
   public CollectionManagedAttributeService(
@@ -48,6 +53,14 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
         throw new IllegalStateException(
           "Unexpected managed attribute component of: " + entity.getManagedAttributeComponent());
     }
+  }
+
+  public CollectionManagedAttribute findOneByKeyAndComponent(String key,
+      CollectionManagedAttribute.ManagedAttributeComponent component) {
+    if (StringUtils.isBlank(key) || component == null) {
+      return null;
+    }
+    return findOneByKeyAnd(key, Pair.of(COMPONENT_FIELD_NAME, component));
   }
 
   private void checkKeysFor(String key, String tableName) {
