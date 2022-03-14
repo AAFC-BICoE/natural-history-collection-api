@@ -7,9 +7,9 @@
 .vscode
 docker-compose.yml
 docker-compose.override.yml
+pom.xml.versionsBackup
 /*.env
 /*.iml
 /bin
 dbchangelog-4.4.xsd
 logs/app.log
-
