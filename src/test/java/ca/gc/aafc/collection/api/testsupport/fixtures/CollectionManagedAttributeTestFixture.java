@@ -6,10 +6,12 @@ import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 
 public class CollectionManagedAttributeTestFixture {
 
+  public static final String GROUP = "dina";
+
   public static CollectionManagedAttributeDto newCollectionManagedAttribute() {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName(RandomStringUtils.randomAlphabetic(5));
-    collectionManagedAttributeDto.setGroup("dina");
+    collectionManagedAttributeDto.setGroup(GROUP);
     collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
     collectionManagedAttributeDto.setAcceptedValues(new String[]{"value"});
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
