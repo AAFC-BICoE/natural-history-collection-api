@@ -177,10 +177,10 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     // Fix the value
     materialSampleDto.setManagedAttributes(Map.of(newAttribute.getKey(), "2022-02-02"));
-    materialSampleRepository.create(materialSampleDto);
+    UUID matSampleId = materialSampleRepository.create(materialSampleDto).getUuid();
 
     //cleanup
-    materialSampleRepository.delete(materialSampleDto.getUuid());
+    materialSampleRepository.delete(matSampleId);
 
     // can't delete managed attribute for now since the check for key in use is using a fresh transaction
   }
