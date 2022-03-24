@@ -17,6 +17,10 @@ spring:
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
   # Allow grace timeout period for 20 seconds
   lifecycle.timeout-per-shutdown-phase: 20s
+management:
+  endpoints:
+    web:
+      exposure.include: "health,prometheus"
 crnk:
   pathPrefix: /api/v1
   domainName: ""

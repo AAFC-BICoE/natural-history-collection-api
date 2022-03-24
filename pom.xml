@@ -58,6 +58,17 @@
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
+    <!-- actuator -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
     <!--  Database -->
     <dependency>
       <groupId>org.postgresql</groupId>
