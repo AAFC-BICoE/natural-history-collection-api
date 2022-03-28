@@ -77,6 +77,11 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
       }
       return Optional.empty();
     }
+
+    @Override
+    public Object getValue() {
+      return managedAttributeComponent;
+    }
   }
 
   private String getMessageForKey(String key, Object... objects) {

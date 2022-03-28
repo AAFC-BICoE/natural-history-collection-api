@@ -70,10 +70,8 @@ class CollectionMethodCRUDIT extends CollectionModuleBaseIT {
 
   private static MultilingualDescription newMulti() {
     return MultilingualDescription.builder()
-      .descriptions(List.of(MultilingualDescription.MultilingualPair.builder()
-        .desc(RandomStringUtils.randomAlphabetic(4))
-        .lang("en")
-        .build()))
+      .descriptions(List.of(MultilingualDescription.MultilingualPair
+          .of("en", RandomStringUtils.randomAlphabetic(4))))
       .build();
   }
 }

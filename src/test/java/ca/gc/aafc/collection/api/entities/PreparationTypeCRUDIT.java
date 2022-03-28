@@ -16,15 +16,11 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
   private static final String EXPECTED_GROUP = "DINA GROUP";
   private static final String EXPECTED_CREATED_BY = "createdBy";
 
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR = MultilingualDescription.MultilingualPair.builder()
-    .desc("description en français")
-    .lang("fr")
-    .build();
+  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR =
+      MultilingualDescription.MultilingualPair.of("fr", "description en français");
 
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_EN = MultilingualDescription.MultilingualPair.builder()
-    .desc("description in english")
-    .lang("en")
-    .build();
+  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_EN =
+      MultilingualDescription.MultilingualPair.of("en", "description in english");
 
   private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescription.builder()
     .descriptions(List.of(MULTILINGUAL_PAIR_EN, MULTILINGUAL_PAIR_FR))
