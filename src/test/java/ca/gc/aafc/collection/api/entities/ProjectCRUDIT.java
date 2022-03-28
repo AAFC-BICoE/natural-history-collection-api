@@ -23,15 +23,11 @@ public class ProjectCRUDIT extends CollectionModuleBaseIT {
   private static final LocalDate EXPECTED_END_DATE = LocalDate.now();
   private final List<UUID> EXPECT_ATTACHMENTS = List.of(UUID.randomUUID(), UUID.randomUUID());
 
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR = MultilingualDescription.MultilingualPair.builder()
-    .desc("description en français")
-    .lang("fr")
-    .build();
+  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR =
+      MultilingualDescription.MultilingualPair.of("fr", "description en français");
 
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_EN = MultilingualDescription.MultilingualPair.builder()
-    .desc("description in english")
-    .lang("en")
-    .build();
+  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_EN =
+      MultilingualDescription.MultilingualPair.of("en", "description in english");
 
   private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescription.builder()
     .descriptions(List.of(MULTILINGUAL_PAIR_EN, MULTILINGUAL_PAIR_FR))
