@@ -4,6 +4,7 @@ import javax.inject.Named;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.validation.ValidationContext;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,15 @@ import org.springframework.validation.Errors;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class CollectionManagedAttributeValueValidator extends ManagedAttributeValueValidator<CollectionManagedAttribute> {
 
   private static final String INVALID_VALIDATION_CONTEXT_KEY = "managedAttribute.validation.context.invalid";
+  private static final String COMPONENT_FIELD_NAME = "managedAttributeComponent";
 
+  private final ManagedAttributeService<CollectionManagedAttribute> dinaService;
   private final MessageSource messageSource;
 
   public CollectionManagedAttributeValueValidator(
@@ -30,11 +34,25 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
       @NonNull MessageSource messageSource,
       @NonNull ManagedAttributeService<CollectionManagedAttribute> dinaService) {
     super(baseMessageSource, dinaService);
+    this.dinaService = dinaService;
     this.messageSource = messageSource;
   }
 
   public <D extends DinaEntity> void validate(D entity, Map<String, String> managedAttributes, CollectionManagedAttributeValidationContext context) {
     super.validate(entity, managedAttributes, context);
+  }
+
+  /**
+   * override base class version to also add a restriction on the component since the uniqueness
+   * for CollectionManagedAttribute is key + component.
+   * @param keys
+   * @param validationContext
+   * @return
+   */
+  @Override
+  protected Map<String, CollectionManagedAttribute> findAttributesForValidation(
+      Set<String> keys, ValidationContext validationContext) {
+    return dinaService.findAttributesForKeys(keys, Pair.of(COMPONENT_FIELD_NAME, validationContext.getValue()));
   }
 
   @Override
@@ -76,6 +94,11 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
         }
       }
       return Optional.empty();
+    }
+
+    @Override
+    public Object getValue() {
+      return managedAttributeComponent;
     }
   }
 

@@ -185,4 +185,34 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     // can't delete managed attribute for now since the check for key in use is using a fresh transaction
   }
 
+  @Test
+  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER"})
+  public void create_onManagedAttributeValue_canUseKeyEvenIfUsedByAnotherComponent() {
+
+    CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    newAttributeCE.setName("test");
+    newAttributeCE.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttributeCE.setAcceptedValues(null);
+    newAttributeCE.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    collManagedAttributeRepo.create(newAttributeCE);
+
+    CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    newAttribute.setName("test");
+    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttribute.setAcceptedValues(null);
+    newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
+    newAttribute = collManagedAttributeRepo.create(newAttribute);
+
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
+
+    materialSampleDto.setManagedAttributes(Map.of(newAttribute.getKey(), "2022-02-02"));
+    UUID matSampleId = materialSampleRepository.create(materialSampleDto).getUuid();
+
+    //cleanup
+    materialSampleRepository.delete(matSampleId);
+
+    // can't delete managed attribute for now since the check for key in use is using a fresh transaction
+  }
+
 }
