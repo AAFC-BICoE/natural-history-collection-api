@@ -16,7 +16,6 @@ import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
-import org.keycloak.OAuth2Constants;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -79,7 +78,7 @@ public class CollectionModuleBaseIT {
   protected OrganismService organismService;
 
   @TestConfiguration
-  class CollectionModuleTestConfiguration {
+  static class CollectionModuleTestConfiguration {
     @Bean
     public BuildProperties buildProperties() {
       Properties props = new Properties();
