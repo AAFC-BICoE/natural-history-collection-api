@@ -35,7 +35,7 @@ public class DeterminationFixture {
             .recordedOn(LocalDate.now().minusDays(1))
             .labelHtml("label")
             .build())
-        .isFileAs(true)
+        .isFiledAs(true)
         .build();
   }
 }

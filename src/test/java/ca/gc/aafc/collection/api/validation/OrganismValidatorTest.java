@@ -103,12 +103,12 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
 
     Determination determinationA = DeterminationFactory.newDetermination()
         .isPrimary(true)
-        .isFileAs(true)
+        .isFiledAs(true)
         .build();
 
     Determination determinationB = DeterminationFactory.newDetermination()
         .isPrimary(false)
-        .isFileAs(true)
+        .isFiledAs(true)
         .build();
 
     List<Determination> determinations = List.of(determinationA, determinationB);

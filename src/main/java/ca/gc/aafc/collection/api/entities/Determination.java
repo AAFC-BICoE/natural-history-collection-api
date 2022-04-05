@@ -81,7 +81,7 @@ public class Determination {
 
   private Boolean isPrimary;
 
-  private Boolean isFileAs;
+  private Boolean isFiledAs;
 
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
