@@ -11,6 +11,7 @@ public class PreparationTypeTestFixture {
   public static PreparationTypeDto newPreparationType() {
     PreparationTypeDto preparationTypeDto = new PreparationTypeDto();
     preparationTypeDto.setName(RandomStringUtils.randomAlphabetic(5));
+    preparationTypeDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
     preparationTypeDto.setGroup(GROUP);
     return preparationTypeDto;
   }

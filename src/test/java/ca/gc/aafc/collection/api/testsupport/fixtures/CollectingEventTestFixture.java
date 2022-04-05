@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
+import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
 
@@ -63,14 +64,20 @@ public class CollectingEventTestFixture {
     .dwcCoordinateUncertaintyInMeters(2)
     .build();
 
-  public static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
-    GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
-    .build();
+  public static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY = GeographicPlaceNameSourceDetail.Country
+      .builder().code("Al").name("Atlantis")
+      .build();
 
-  public static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE =
-    GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F")
-    .element("N").placeType("province").name("Island of Pharo's")
-    .build();
+  public static final SourceAdministrativeLevel TEST_PROVINCE = SourceAdministrativeLevel.builder().id("A32F")
+      .element("N").placeType("province").name("Island of Pharo's")
+      .build();
+
+  public static final SourceAdministrativeLevel SELECTED_GEOGRAPHIC_PLACE = SourceAdministrativeLevel.builder()
+      .id("A32B")
+      .element("R")
+      .placeType("province")
+      .name("Ontario")
+      .build();
 
   public static final String[] DWC_OTHER_RECORD_NUMBERS = new String[]{"80-79", "80-80"};
   public static final String HABITAT = "Tropical";
@@ -85,14 +92,15 @@ public class CollectingEventTestFixture {
   @SneakyThrows
   public static GeographicPlaceNameSourceDetail newGeographicPlaceNameSourceDetail() {
     return GeographicPlaceNameSourceDetail.builder()
-    .country(TEST_COUNTRY)
-    .stateProvince(TEST_PROVINCE)
-    .sourceUrl("https://github.com/orgs/AAFC-BICoE/dashboard")
-    // recordedOn should be overwritten by the server side generated value
-    .recordedOn(OffsetDateTime.of(
-      LocalDateTime.of(2000, 1, 1, 11, 10),
-      ZoneOffset.ofHoursMinutes(1, 0)))
-    .build();
+        .selectedGeographicPlace(SELECTED_GEOGRAPHIC_PLACE)
+        .country(TEST_COUNTRY)
+        .stateProvince(TEST_PROVINCE)
+        .sourceUrl("https://github.com/orgs/AAFC-BICoE/dashboard")
+        // recordedOn should be overwritten by the server side generated value
+        .recordedOn(OffsetDateTime.of(
+          LocalDateTime.of(2000, 1, 1, 11, 10),
+          ZoneOffset.ofHoursMinutes(1, 0)))
+        .build();
   }
 
   public static CollectingEventDto newEventDto() {
