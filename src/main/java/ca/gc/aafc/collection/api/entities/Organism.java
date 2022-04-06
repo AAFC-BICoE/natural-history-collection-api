@@ -99,7 +99,7 @@ public class Organism implements DinaEntity {
     if (CollectionUtils.isEmpty(determination)) {
       return 0;
     }
-    return determination.stream().filter(d -> d.getIsFileAs() != null && d.getIsFileAs()).count();
+    return determination.stream().filter(d -> d.getIsFiledAs() != null && d.getIsFiledAs()).count();
   }
 
 }

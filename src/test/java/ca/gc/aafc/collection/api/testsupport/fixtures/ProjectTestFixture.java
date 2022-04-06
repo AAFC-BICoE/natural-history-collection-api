@@ -19,6 +19,7 @@ public class ProjectTestFixture {
     ProjectDto preparationTypeDto = new ProjectDto();
     preparationTypeDto.setName(RandomStringUtils.randomAlphabetic(5));
     preparationTypeDto.setStatus(RandomStringUtils.randomAlphabetic(5));
+    preparationTypeDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
     preparationTypeDto.setStartDate(START_DATE);
     preparationTypeDto.setEndDate(END_DATE);
     preparationTypeDto.setGroup(GROUP);

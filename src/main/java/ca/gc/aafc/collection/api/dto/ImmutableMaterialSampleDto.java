@@ -57,8 +57,6 @@ public class ImmutableMaterialSampleDto {
 
   private String barcode;
 
-  private String filedAs;
-
   private String preparationMethod;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

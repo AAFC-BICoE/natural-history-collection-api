@@ -178,7 +178,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
     Determination determination = Determination.builder()
         .isPrimary(false)
-        .isFileAs(false)
+        .isFiledAs(false)
         .verbatimScientificName("verbatimScientificName")
         .build();
 
@@ -215,7 +215,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
     Determination determination = Determination.builder()
         .isPrimary(false)
-        .isFileAs(false)
+        .isFiledAs(false)
         .verbatimScientificName("verbatimScientificName")
         .build();
 

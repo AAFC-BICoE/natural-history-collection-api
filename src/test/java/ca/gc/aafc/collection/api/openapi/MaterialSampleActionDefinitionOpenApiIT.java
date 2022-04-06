@@ -39,20 +39,22 @@ public class MaterialSampleActionDefinitionOpenApiIT extends BaseRestAssuredTest
 
   @SneakyThrows
   @Test
-  void collectingEvent_SpecValid() {
+  void materialSampleActionDefinition_SpecValid() {
     MaterialSampleActionDefinitionDto materialSampleActionDefinitionDto = new MaterialSampleActionDefinitionDto();
     materialSampleActionDefinitionDto.setCreatedBy("test user");
     materialSampleActionDefinitionDto.setGroup("aafc");
     materialSampleActionDefinitionDto.setName(NAME);
     materialSampleActionDefinitionDto.setActionType(MaterialSampleActionDefinition.ActionType.ADD);
-    materialSampleActionDefinitionDto.setFormTemplates(Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE, FormTemplate.builder()
-      .allowNew(true)
-      .allowExisting(true)
-      .templateFields(Map.of("materialSampleName", TemplateField.builder()
-        .enabled(true)  
-        .defaultValue("test-default-value")
-        .build()))
-      .build()));
+    materialSampleActionDefinitionDto.setFormTemplates(
+        Map.of(MaterialSampleFormComponent.MATERIAL_SAMPLE,
+            FormTemplate.builder().allowNew(true).allowExisting(true).templateFields(
+                Map.of("materialSampleName",
+                    TemplateField.builder().enabled(true).defaultValue("test-default-value")
+                        .build())).build(), MaterialSampleFormComponent.COLLECTING_EVENT,
+            FormTemplate.builder().allowNew(true).allowExisting(true).templateFields(
+                Map.of("collectingEventName",
+                    TemplateField.builder().enabled(true).defaultValue("test-default-value")
+                        .build())).build()));
 
     OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL,
         "MaterialSampleActionDefinition", sendPost(TYPE_NAME, JsonAPITestHelper
