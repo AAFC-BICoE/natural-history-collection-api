@@ -11,6 +11,7 @@ import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
+import io.micrometer.core.annotation.Timed;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
@@ -53,6 +54,7 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
     return super.create(resource);
   }
 
+  @Timed(value = "dina.repository.material-sample.findAll.time", description = "Time taken to findAll on MaterialSampleRepository")
   @Override
   public ResourceList<MaterialSampleDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {
     ResourceList<MaterialSampleDto> resourceList = super.findAll(ids, querySpec);
@@ -60,6 +62,12 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
       resourceList.forEach(r -> r.setHierarchy(null));
     }
     return resourceList;
+  }
+
+  @Timed(value = "dina.repository.material-sample.findOne.time", description = "Time taken to findOne on MaterialSampleRepository")
+  @Override
+  public MaterialSampleDto findOne(Serializable id, QuerySpec querySpec) {
+    return super.findOne(id, querySpec);
   }
 
   private static boolean isHierarchyIncluded(QuerySpec querySpec) {
