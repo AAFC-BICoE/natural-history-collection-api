@@ -28,7 +28,7 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
   private PreparationTypeRepository preparationTypeRepository;
 
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:DINA_ADMIN"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     PreparationTypeDto pt = PreparationTypeTestFixture.newPreparationType();
     PreparationTypeDto result = preparationTypeRepository.findOne(
