@@ -29,6 +29,7 @@
     <dina-base-api.version>0.87</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
+    <geolatte-geom.version>1.8.2</geolatte-geom.version>
   </properties>
 
   <dependencies>
@@ -81,7 +82,11 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-spatial</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.geolatte</groupId>
+      <artifactId>geolatte-geojson</artifactId>
+      <version>${geolatte-geom.version}</version>
+    </dependency>
 
     <!-- caching -->
     <dependency>

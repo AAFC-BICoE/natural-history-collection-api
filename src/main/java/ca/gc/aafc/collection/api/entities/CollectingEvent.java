@@ -17,13 +17,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -224,8 +225,9 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "string-array")
   private String[] tags;
-  
-  private Geometry eventGeom;
+
+  // Field calculated by CollectingEventService
+  private Point<G2D> eventGeom;
 
   @Type(type = "jsonb")
   @Column(name = "extension_values", columnDefinition = "jsonb")
