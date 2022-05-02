@@ -13,10 +13,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
-import org.geolatte.geom.Position;
 import org.geolatte.geom.builder.DSL;
 import org.geolatte.geom.crs.CoordinateReferenceSystems;
-import org.geolatte.geom.Geometry;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
