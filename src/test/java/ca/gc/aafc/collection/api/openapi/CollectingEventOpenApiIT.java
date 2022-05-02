@@ -53,7 +53,6 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
 
     ce.setManagedAttributes(Map.of("key", "anything"));
-    ce.setGeoReferenceAssertions(null);
     ce.setAttachment(null);
     ce.setCollectors(null);
 

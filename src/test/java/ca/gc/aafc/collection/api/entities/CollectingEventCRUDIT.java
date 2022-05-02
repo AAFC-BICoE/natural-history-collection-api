@@ -6,6 +6,8 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
 import lombok.SneakyThrows;
+import org.geolatte.geom.Point;
+import org.geolatte.geom.crs.CoordinateSystemAxis;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -300,8 +302,13 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcMinimumDepthInMeters, fetchedCollectingEvent.getDwcMinimumDepthInMeters());
     assertEquals(dwcMinimumElevationInMeters, fetchedCollectingEvent.getDwcMinimumElevationInMeters());
     MatcherAssert.assertThat(collectingEvent.getSubstrate(), Matchers.is(fetchedCollectingEvent.getSubstrate()));
-    assertEquals(geoReferenceAssertion.getDwcDecimalLongitude(), fetchedCollectingEvent.getEventGeom().getCoordinate().getX());
-    assertEquals(geoReferenceAssertion.getDwcDecimalLatitude(), fetchedCollectingEvent.getEventGeom().getCoordinate().getY());
+
+    assertEquals(geoReferenceAssertion.getDwcDecimalLongitude(),
+        ((Point<?>) fetchedCollectingEvent.getEventGeom()).getPosition()
+            .getCoordinate(CoordinateSystemAxis.mkLonAxis()));
+    assertEquals(geoReferenceAssertion.getDwcDecimalLatitude(),
+        ((Point<?>) fetchedCollectingEvent.getEventGeom()).getPosition()
+            .getCoordinate(CoordinateSystemAxis.mkLatAxis()));
   }
 
   @Test

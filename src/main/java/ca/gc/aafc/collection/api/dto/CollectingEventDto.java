@@ -19,6 +19,8 @@ import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -60,6 +62,10 @@ public class CollectingEventDto {
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private List<GeoreferenceAssertionDto> geoReferenceAssertions =  new ArrayList<>();
+
+  // Read-only field
+  @JsonApiField(postable = false, patchable = false)
+  private Point<G2D> eventGeom;
 
   private String dwcVerbatimCoordinates;
   private String dwcRecordedBy;
