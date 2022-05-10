@@ -46,7 +46,12 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   @Override
   protected void preCreate(CollectingEvent entity) {
-    entity.setUuid(UUID.randomUUID());
+
+    // allow user provided UUID
+    if(entity.getUuid() == null) {
+      entity.setUuid(UUID.randomUUID());
+    }
+
     cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
   }
