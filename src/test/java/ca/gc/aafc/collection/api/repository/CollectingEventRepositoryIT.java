@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -133,6 +134,21 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));
     assertEquals(methodDto.getUuid(), result.getCollectionMethod().getUuid());
     MatcherAssert.assertThat(CollectingEventTestFixture.SUBSTRATE, Matchers.is(result.getSubstrate()));
+  }
+
+  @WithMockKeycloakUser(groupRole = {"aafc:staff"})
+  @Test
+  public void create_withUserProvidedUUID_resourceCreatedWithProvidedUUID() {
+    UUID myUUID = UUID.randomUUID();
+    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ce.setUuid(myUUID);
+    collectingEventRepository.create(ce);
+
+    QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
+    CollectingEventDto refreshedCe = collectingEventRepository.findOne(myUUID, querySpec);
+
+    assertNotNull(refreshedCe);
+
   }
 
   private void assertAssertion(

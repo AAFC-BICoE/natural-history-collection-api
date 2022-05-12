@@ -10,7 +10,6 @@ import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
@@ -28,7 +27,6 @@ import org.javers.core.metamodel.annotation.TypeName;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +37,6 @@ import java.util.function.Supplier;
 @CustomFieldAdapter(adapters = {
   CollectingEventDto.StartEventDateTimeAdapter.class,
   CollectingEventDto.EndEventDateTimeAdapter.class})
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = CollectingEventDto.TYPENAME)
 @TypeName(CollectingEventDto.TYPENAME)
@@ -61,7 +58,7 @@ public class CollectingEventDto {
   private OffsetDateTime createdOn;
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
-  private List<GeoreferenceAssertionDto> geoReferenceAssertions =  new ArrayList<>();
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = List.of();
 
   // Read-only field
   @JsonApiField(postable = false, patchable = false)
@@ -80,11 +77,11 @@ public class CollectingEventDto {
 
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
-  private List<ExternalRelationDto> collectors = new ArrayList<>();
+  private List<ExternalRelationDto> collectors = List.of();
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
-  private List<ExternalRelationDto> attachment = new ArrayList<>();
+  private List<ExternalRelationDto> attachment = List.of();
 
   @JsonApiRelation
   private CollectionMethodDto collectionMethod;
@@ -124,7 +121,7 @@ public class CollectingEventDto {
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
-  private List<ExtensionValue> extensionValues = new ArrayList<>();
+  private List<ExtensionValue> extensionValues = List.of();
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter
