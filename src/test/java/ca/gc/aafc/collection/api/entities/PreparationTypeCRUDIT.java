@@ -3,12 +3,16 @@ package ca.gc.aafc.collection.api.entities;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
+
+import javax.persistence.PersistenceException;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
 
@@ -26,29 +30,46 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
     .descriptions(List.of(MULTILINGUAL_PAIR_EN, MULTILINGUAL_PAIR_FR))
     .build();
 
-  private PreparationType preparationType;
 
-  @BeforeEach
-  void setup() {
-
-    preparationType = PreparationTypeFactory.newPreparationType()
+  private PreparationType buildTestPreparationType() {
+    return  PreparationTypeFactory.newPreparationType()
       .name(EXPECTED_NAME)
       .group(EXPECTED_GROUP)
       .createdBy(EXPECTED_CREATED_BY)
       .multilingualDescription(MULTILINGUAL_DESCRIPTION)
       .build();
-    preparationTypeService.create(preparationType);
   }
 
   @Test
   void create() {
-    Assertions.assertNotNull(preparationType.getId());
-    Assertions.assertNotNull(preparationType.getCreatedOn());
-    Assertions.assertNotNull(preparationType.getUuid());
+    PreparationType preparationType = buildTestPreparationType();
+    preparationTypeService.create(preparationType);
+
+    assertNotNull(preparationType.getId());
+    assertNotNull(preparationType.getCreatedOn());
+    assertNotNull(preparationType.getUuid());
+  }
+
+  @Test
+  void createDuplicates_ThrowsException() {
+    PreparationType preparationType = buildTestPreparationType();
+    preparationTypeService.createAndFlush(preparationType);
+
+    PreparationType preparationType2 = buildTestPreparationType();
+    //change the group so create should work
+    preparationType2.setGroup("grp2");
+    preparationTypeService.createAndFlush(preparationType2);
+
+    //set the same group and try to update
+    preparationType2.setGroup(EXPECTED_GROUP);
+    assertThrows(PersistenceException.class, () -> preparationTypeService.createAndFlush(preparationType2));
   }
 
   @Test
   void find() {
+    PreparationType preparationType = buildTestPreparationType();
+    preparationTypeService.create(preparationType);
+
     PreparationType result = preparationTypeService.findOne(
       preparationType.getUuid(),
       PreparationType.class);
