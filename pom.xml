@@ -21,7 +21,7 @@
     <spotbugs.version>4.5.3</spotbugs.version>
     <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
     <jcip-annotations.version>1.0</jcip-annotations.version>
-    <dependency-check-maven.version>6.5.3</dependency-check-maven.version>
+    <dependency.check.version>6.5.3</dependency.check.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.45.1</checkstyle.version>
@@ -380,6 +380,20 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>${dependency.check.version}</version>
+        <configuration>
+          <format>xml</format>
+          <failBuildOnCVSS>8</failBuildOnCVSS>
+          <suppressionFiles>
+            <suppressionFile>owasp-suppression.xml</suppressionFile> <!-- Required due to bug in plugin https://github.com/jeremylong/DependencyCheck/issues/1827 -->
+          </suppressionFiles>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
@@ -394,7 +408,7 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <version>${dependency-check-maven.version}</version>
+        <version>${dependency.check.version}</version>
         <reportSets>
           <reportSet>
             <reports>
