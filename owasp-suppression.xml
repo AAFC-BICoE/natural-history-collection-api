@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+    <suppress>
+        <cpe>cpe:/a:pivotal_software:spring_security:5.4.5</cpe>
+    </suppress>
+    <suppress>
+        <notes>CVE about Keycloak Server</notes>
+        <cve>CVE-2021-4133</cve>
+    </suppress>
+</suppressions>
