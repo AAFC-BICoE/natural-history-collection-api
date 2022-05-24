@@ -2,7 +2,7 @@
 <databaseChangeLog 
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog db/changelog/xsd/dbchangelog-4.4.xsd">
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd">
   
   <changeSet id="102-Add_collection_sequence_table" context="schema-change" author="Steven Luu">
     <createTable tableName="collection_sequence">
