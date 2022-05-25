@@ -30,6 +30,8 @@
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
+
+    <liquibase.version>4.9.0</liquibase.version>
   </properties>
 
   <dependencies>
@@ -201,26 +203,26 @@
       <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-dependency-plugin</artifactId>
-      <executions>
+        <executions>
           <execution>
-              <id>unpack</id>
-              <phase>generate-sources</phase>
-              <goals>
-                  <goal>unpack</goal>
-              </goals>
-              <configuration>
-                  <artifactItems>
-                      <artifactItem>
-                          <groupId>io.github.aafc-bicoe</groupId>
-                          <artifactId>dina-base-api</artifactId>
-                          <version>${dina-base-api.version}</version>
-                          <outputDirectory>${basedir}/src/main/resources/db/changelog/xsd</outputDirectory>
-                          <includes>dbchangelog-4.4.xsd</includes>
-                      </artifactItem>
-                  </artifactItems>
-              </configuration>
+            <id>unpack</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>io.github.aafc-bicoe</groupId>
+                  <artifactId>dina-base-api</artifactId>
+                  <version>${dina-base-api.version}</version>
+                  <outputDirectory>${basedir}/src/main/resources/local.xsd</outputDirectory>
+                  <includes>dbchangelog-4.4.xsd</includes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
           </execution>
-      </executions>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
