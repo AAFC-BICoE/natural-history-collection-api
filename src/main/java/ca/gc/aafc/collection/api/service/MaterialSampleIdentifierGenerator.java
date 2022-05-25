@@ -33,7 +33,7 @@ public class MaterialSampleIdentifierGenerator {
       nextSuffix = NumberLetterTranslator.toLetter(matchingNumber + 1);
 
       // return lowercase but only if the entire suffix was lowercase
-      if(StringUtils.isAllLowerCase(currSuffix)){
+      if (StringUtils.isAllLowerCase(currSuffix)) {
         nextSuffix = nextSuffix.toLowerCase();
       }
     }
