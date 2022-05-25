@@ -11,10 +11,10 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.geolatte.geom.builder.DSL;
 import org.geolatte.geom.crs.CoordinateReferenceSystems;
-import org.geolatte.geom.jts.JTS;
-import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -46,7 +46,12 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
 
   @Override
   protected void preCreate(CollectingEvent entity) {
-    entity.setUuid(UUID.randomUUID());
+
+    // allow user provided UUID
+    if(entity.getUuid() == null) {
+      entity.setUuid(UUID.randomUUID());
+    }
+
     cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
   }
@@ -80,8 +85,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private void validateAssertions(@NonNull CollectingEvent entity) {
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
       entity.getGeoReferenceAssertions().forEach(geo -> applyBusinessRule(
-        entity.getUuid().toString(), 
-        geo, 
+        entity.getUuid().toString(),
+        geo,
         georeferenceAssertionValidator
       ));
     }
@@ -113,11 +118,11 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     );
   }
 
-  private static Geometry mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
+  private static Point<G2D> mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
     if (geo == null || geo.getDwcDecimalLongitude() == null || geo.getDwcDecimalLatitude() == null) {
       return null;
     }
-    return JTS.to(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
-      geo.getDwcDecimalLongitude(), geo.getDwcDecimalLatitude())));
+    return DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
+      geo.getDwcDecimalLongitude(), geo.getDwcDecimalLatitude()));
   }
 }
