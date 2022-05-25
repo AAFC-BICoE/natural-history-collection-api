@@ -17,5 +17,11 @@ public class MaterialSampleIdentifierGeneratorTest {
 
     assertEquals("ABC-B", m.generateNextIdentifier("ABC-A"));
     assertEquals("ABC-A03AA", m.generateNextIdentifier("ABC-A03Z"));
+
+    // lowercase input should return lowercase output
+    assertEquals("ABC-A03ja", m.generateNextIdentifier("ABC-A03iz"));
+
+    // if there is a mix, uppercase will be preserved
+    assertEquals("ABC-A-BA", m.generateNextIdentifier("ABC-A-aZ"));
   }
 }
