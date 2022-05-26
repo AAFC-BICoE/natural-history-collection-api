@@ -252,7 +252,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
       .build();
 
     Organism organism2 = OrganismEntityFactory.newOrganism()
-      .determination(new ArrayList<>(List.of(determination3)))
+      .determination(List.of(determination3))
       .build();
     organisms.add(organismService.createAndFlush(organism2));
     materialSample.setOrganism(organisms);

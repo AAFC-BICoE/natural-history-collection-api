@@ -108,7 +108,7 @@ public class MaterialSampleDto {
   private String dwcDegreeOfEstablishment;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<HierarchicalObject> hierarchy;
+  private List<MaterialSampleHierarchyObject> hierarchy;
 
   private String host;
 

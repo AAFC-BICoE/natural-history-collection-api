@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
@@ -10,7 +11,6 @@ import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
-import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,7 +30,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final MaterialSampleValidator materialSampleValidator;
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final PostgresHierarchicalDataService postgresHierarchicalDataService;
+  private final CollectionHierarchicalDataDAO hierarchicalDataService;
   private final RestrictionExtensionValueValidator extensionValueValidator;
 
   public MaterialSampleService(
@@ -39,7 +39,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull AssociationValidator associationValidator,
-    @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
+    @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull RestrictionExtensionValueValidator extensionValueValidator,
     ApplicationEventPublisher eventPublisher
   ) {
@@ -47,7 +47,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
-    this.postgresHierarchicalDataService = postgresHierarchicalDataService;
+    this.hierarchicalDataService = hierarchicalDataService;
     this.extensionValueValidator = extensionValueValidator;
   }
 
@@ -71,13 +71,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void setHierarchy(MaterialSample sample) {
-    sample.setHierarchy(postgresHierarchicalDataService.getHierarchy(
-      sample.getId(),
-      MaterialSample.TABLE_NAME,
-      MaterialSample.ID_COLUMN_NAME,
-      MaterialSample.UUID_COLUMN_NAME,
-      MaterialSample.PARENT_ID_COLUMN_NAME,
-      MaterialSample.NAME_COLUMN_NAME
+    sample.setHierarchy(hierarchicalDataService.getHierarchy(
+      sample.getId()
     ));
   }
 

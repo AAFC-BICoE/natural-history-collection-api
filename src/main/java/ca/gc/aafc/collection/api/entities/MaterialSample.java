@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -130,7 +131,7 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Transient
   @DiffIgnore
-  private List<HierarchicalObject> hierarchy;
+  private List<MaterialSampleHierarchyObject> hierarchy;
 
   @Size(max = 50)
   private String materialSampleState;
