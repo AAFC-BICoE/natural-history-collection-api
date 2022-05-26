@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
+import ca.gc.aafc.collection.api.dto.ProtocolDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;

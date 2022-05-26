@@ -12,19 +12,14 @@
             <column name="uuid" type="uuid">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column autoIncrement="true" name="id" type="SERIAL">
-                <constraints primaryKey="true" primaryKeyName="pk_protocol_id"/>
-            </column>
             <column name="_group" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
-            <column name="attachment" type="varchar(250) []">
-                <constraints nullable="false"/>
-            </column>
-                        <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="attachment" type="varchar(250) []"/>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>

@@ -19,7 +19,7 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
   private static final String EXPECTED_NAME = "name";
   private static final String EXPECTED_GROUP = "DINA GROUP";
   private static final String EXPECTED_CREATED_BY = "createdBy";
-  private final List<UUID> attachmentIdentifiers = List.of(UUID.randomUUID(), UUID.randomUUID());
+  private final List<UUID> EXPECTED_ATTACHMENT_IDENTIFIERS = List.of(UUID.randomUUID(), UUID.randomUUID());
 
   private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR =
       MultilingualDescription.MultilingualPair.of("fr", "description en français");
@@ -35,7 +35,7 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
   private PreparationType buildTestPreparationType() {
     return  PreparationTypeFactory.newPreparationType()
       .name(EXPECTED_NAME)
-      .attachments(attachmentIdentifiers)
+      .attachments(EXPECTED_ATTACHMENT_IDENTIFIERS)
       .group(EXPECTED_GROUP)
       .createdBy(EXPECTED_CREATED_BY)
       .multilingualDescription(MULTILINGUAL_DESCRIPTION)
@@ -77,7 +77,7 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
     Protocol.class);
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
     Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
-    Assertions.assertEquals(EXPECTED_ATTACHMENTS, result.getAttchments());
+    Assertions.assertEquals(EXPECTED_ATTACHMENT_IDENTIFIERS, result.getAttchments());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(), result.getMultilingualDescription().getDescriptions());
   }
