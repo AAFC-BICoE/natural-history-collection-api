@@ -136,4 +136,5 @@
   <include file="db/changelog/migrations/129-Add_restriction_boolean_and_remarks.xml"/>
   <include file="db/changelog/migrations/130-Update_managed_attribute_type_postgres_enum.xml"/>
   <include file="db/changelog/migrations/131-Change_preparationType_Uniqueness_Constraint.xml"/>
+  <include file="db/changelog/migrations/132-Protocol_Resource.xml"/>
 </databaseChangeLog>
