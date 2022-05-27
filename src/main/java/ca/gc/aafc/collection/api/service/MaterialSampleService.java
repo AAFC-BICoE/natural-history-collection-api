@@ -83,15 +83,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
-    List<MaterialSampleHierarchyObject.MaterialSampleHierarchyObjectRaw> hierarchyRaw = hierarchicalDataService.getHierarchy(
-            sample.getId());
-    List<MaterialSampleHierarchyObject> hierarchy = new ArrayList<>(hierarchyRaw.size());
-
-    for (MaterialSampleHierarchyObject.MaterialSampleHierarchyObjectRaw rawVersion : hierarchyRaw) {
-      hierarchy.add(MaterialSampleHierarchyObject.fromRaw(rawVersion,
-              objectMapper.treeToValue(rawVersion.getTargetOrganismPrimaryDetermination(), MaterialSampleHierarchyObject.DeterminationSummary.class)));
-    }
-    sample.setHierarchy(hierarchy);
+    sample.setHierarchy(hierarchicalDataService.getHierarchy(sample.getId()));
   }
 
   @Override

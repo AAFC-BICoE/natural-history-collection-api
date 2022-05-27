@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.dao;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
-import ca.gc.aafc.collection.api.mybatis.JsonbTypeHandler;
+import ca.gc.aafc.collection.api.mybatis.DeterminationSummaryTypeHandler;
 import ca.gc.aafc.dina.mybatis.UUIDTypeHandler;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -28,7 +28,7 @@ public interface CollectionHierarchicalDataDAO {
             "SELECT id, uuid, name, rank, target_organism_primary_determination FROM get_hierarchy;")
   @Options(statementType = StatementType.CALLABLE)
   @Result(property = "uuid", column = "uuid", typeHandler = UUIDTypeHandler.class)
-  @Result(property = "targetOrganismPrimaryDetermination", column = "target_organism_primary_determination", typeHandler = JsonbTypeHandler.class)
-  List<MaterialSampleHierarchyObject.MaterialSampleHierarchyObjectRaw> getHierarchy(@Param("id") Integer id);
+  @Result(property = "targetOrganismPrimaryDetermination", column = "target_organism_primary_determination", typeHandler = DeterminationSummaryTypeHandler.class)
+  List<MaterialSampleHierarchyObject> getHierarchy(@Param("id") Integer id);
 
 }
