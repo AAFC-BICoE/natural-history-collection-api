@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
-import ca.gc.aafc.dina.dto.HierarchicalObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

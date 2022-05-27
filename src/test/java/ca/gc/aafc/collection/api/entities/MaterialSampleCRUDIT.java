@@ -200,8 +200,8 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   public void testOrganismRelationship() {
-    ArrayList<Determination> determinations = new ArrayList<>();
-    ArrayList<Organism> organisms = new ArrayList<>();
+    List<Determination> determinations = new ArrayList<>();
+    List<Organism> organisms = new ArrayList<>();
 
     Determination determination = DeterminationFactory.newDetermination()
         .verbatimScientificName("verbatimScientificName")

@@ -2,7 +2,9 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -11,15 +13,20 @@ import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -32,6 +39,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
   private final RestrictionExtensionValueValidator extensionValueValidator;
+  private final ObjectMapper objectMapper;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -41,7 +49,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull AssociationValidator associationValidator,
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull RestrictionExtensionValueValidator extensionValueValidator,
-    ApplicationEventPublisher eventPublisher
+    ApplicationEventPublisher eventPublisher,
+    Jackson2ObjectMapperBuilder mapperBuilder
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
@@ -49,6 +58,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.associationValidator = associationValidator;
     this.hierarchicalDataService = hierarchicalDataService;
     this.extensionValueValidator = extensionValueValidator;
+    this.objectMapper = mapperBuilder.build();
   }
 
   @Override
@@ -63,17 +73,27 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     if (CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
       all.forEach(t -> {
         if (t instanceof MaterialSample) {
-          setHierarchy((MaterialSample) t);
+          try {
+            setHierarchy((MaterialSample) t);
+          } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+          }
         }
       });
     }
     return all;
   }
 
-  private void setHierarchy(MaterialSample sample) {
-    sample.setHierarchy(hierarchicalDataService.getHierarchy(
-      sample.getId()
-    ));
+  public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
+    List<MaterialSampleHierarchyObject.MaterialSampleHierarchyObjectRaw> hierarchyRaw = hierarchicalDataService.getHierarchy(
+            sample.getId());
+    List<MaterialSampleHierarchyObject> hierarchy = new ArrayList<>(hierarchyRaw.size());
+
+    for (MaterialSampleHierarchyObject.MaterialSampleHierarchyObjectRaw rawVersion : hierarchyRaw) {
+      hierarchy.add(MaterialSampleHierarchyObject.fromRaw(rawVersion,
+              objectMapper.treeToValue(rawVersion.getTargetOrganismPrimaryDetermination(), MaterialSampleHierarchyObject.DeterminationSummary.class)));
+    }
+    sample.setHierarchy(hierarchy);
   }
 
   @Override
