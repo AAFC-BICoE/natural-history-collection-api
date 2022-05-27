@@ -14,8 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//TODO replace with JsonNodeTypeHandler from dina-base 0.89
-@MappedTypes({JsonNode.class})
+// TODO replace with JsonNodeTypeHandler from dina-base 0.89
+@MappedTypes(JsonNode.class)
 public class JsonbTypeHandler extends BaseTypeHandler<JsonNode> {
 
   private static final ObjectMapper OM = new ObjectMapper();
@@ -25,12 +25,11 @@ public class JsonbTypeHandler extends BaseTypeHandler<JsonNode> {
     JSON_NODE_READER = OM.readerFor(JsonNode.class);
   }
 
-  private static final PGobject jsonObject = new PGobject();
-
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i, JsonNode parameter, JdbcType jdbcType)
           throws SQLException {
     if (ps != null) {
+      PGobject jsonObject = new PGobject();
       jsonObject.setType("jsonb");
       try {
         jsonObject.setValue(OM.writeValueAsString(parameter));
