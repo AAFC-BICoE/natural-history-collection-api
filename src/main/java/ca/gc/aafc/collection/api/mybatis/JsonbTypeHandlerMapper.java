@@ -22,7 +22,6 @@ final class JsonbTypeHandlerMapper {
    * @param jsonStr
    * @param clazz
    * @return
-   * @param <T>
    * @throws JsonProcessingException
    */
   static <T> T readValue(String jsonStr, Class<T> clazz) throws JsonProcessingException {
