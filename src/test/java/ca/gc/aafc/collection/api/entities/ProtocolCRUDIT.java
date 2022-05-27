@@ -1,18 +1,19 @@
 package ca.gc.aafc.collection.api.entities;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.PersistenceException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.ProtocolFactory;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
-
-import javax.persistence.PersistenceException;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProtocolCRUDIT extends CollectionModuleBaseIT {
 
@@ -32,8 +33,8 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
     .build();
 
 
-  private PreparationType buildTestPreparationType() {
-    return  PreparationTypeFactory.newPreparationType()
+  private Protocol buildTestProtocol() {
+    return  ProtocolFactory.newProtocol()
       .name(EXPECTED_NAME)
       .attachments(EXPECTED_ATTACHMENT_IDENTIFIERS)
       .group(EXPECTED_GROUP)
@@ -44,8 +45,8 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void create() {
-    Protocol protocol = buildTestPreparationType();
-    protocolService.create(preparationType);
+    Protocol protocol = buildTestProtocol();
+    protocolService.create(protocol);
 
     assertNotNull(protocol.getId());
     assertNotNull(protocol.getCreatedOn());

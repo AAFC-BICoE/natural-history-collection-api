@@ -8,7 +8,7 @@ public class ProtocolTestFixture {
 
   private static final String GROUP = "aafc";
 
-  public static ProtocolTypeDto newProtocol() {
+  public static ProtocolDto newProtocol() {
     ProtocolDto protocolDto = new ProtocolDto();
     protocolDto.setName(RandomStringUtils.randomAlphabetic(5));
     protocolDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());

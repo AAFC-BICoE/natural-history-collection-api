@@ -11,7 +11,8 @@ import lombok.NonNull;
 import org.springframework.validation.SmartValidator;
 
 @Service
-public class Protocol extends DefaultDinaService<Protocol> {
+public class ProtocolService extends DefaultDinaService<Protocol> {
+
   public ProtocolService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
     super(baseDAO, sv);
   }
