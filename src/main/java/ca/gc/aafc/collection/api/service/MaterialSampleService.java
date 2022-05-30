@@ -12,11 +12,9 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -35,7 +33,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
   private final RestrictionExtensionValueValidator extensionValueValidator;
-  private final ObjectMapper objectMapper;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -45,8 +42,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull AssociationValidator associationValidator,
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull RestrictionExtensionValueValidator extensionValueValidator,
-    ApplicationEventPublisher eventPublisher,
-    Jackson2ObjectMapperBuilder mapperBuilder
+    ApplicationEventPublisher eventPublisher
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
@@ -54,7 +50,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.associationValidator = associationValidator;
     this.hierarchicalDataService = hierarchicalDataService;
     this.extensionValueValidator = extensionValueValidator;
-    this.objectMapper = mapperBuilder.build();
   }
 
   @Override
