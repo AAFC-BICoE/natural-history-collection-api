@@ -21,8 +21,8 @@ final class JsonbTypeHandlerMapper {
    *
    * @param jsonStr
    * @param clazz
-   * @return
-   * @throws JsonProcessingException
+   * @return Instance of T with the content of jsonStr. Note that unknowns properties are ignored.
+   * @throws JsonProcessingException a
    */
   static <T> T readValue(String jsonStr, Class<T> clazz) throws JsonProcessingException {
     return OM.readValue(jsonStr, clazz);
