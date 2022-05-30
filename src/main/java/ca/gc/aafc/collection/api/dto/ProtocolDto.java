@@ -35,6 +35,8 @@ public class ProtocolDto{
 
   private String group;
 
+  private String name;
+
   private List<UUID> attachments;
 
   private MultilingualDescription multilingualDescription;

@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

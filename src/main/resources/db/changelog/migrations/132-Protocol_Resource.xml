@@ -24,6 +24,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createIndex indexName="protocol_name_group_unique"
+                   tableName="protocol"
+                   unique="true">
+          <column name="LOWER(name)"/>
+          <column name="LOWER(_group)"/>
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>

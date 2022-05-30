@@ -58,7 +58,7 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
     Protocol protocol = buildTestProtocol();
     protocolService.createAndFlush(protocol);
 
-    Protocol protocol = buildTestProtocol();
+    Protocol protocol2 = buildTestProtocol();
     //change the group so create should work
     protocol2.setGroup("grp2");
     protocolService.createAndFlush(protocol2);
@@ -78,7 +78,6 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
     Protocol.class);
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
     Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
-    Assertions.assertEquals(EXPECTED_ATTACHMENT_IDENTIFIERS, result.getAttchments());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(), result.getMultilingualDescription().getDescriptions());
   }
