@@ -43,6 +43,23 @@ jobs:
             version.txt
             target/natural-history-collection-api-*.jar
             Dockerfile
+            
+  build-java17:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 17
+      - name: Build with Maven
+        run: mvn verify
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
+      - name: Run SpotBugs
+        run: mvn spotbugs:check
+        
   push:
     name: Build Docker Image and Push to DockerHub
     needs: [build]
