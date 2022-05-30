@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.repository;
 
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
@@ -28,6 +30,19 @@ public class OrganismRepositoryIT extends BaseRepositoryIT {
         new QuerySpec(OrganismDto.class));
     assertNotNull(result.getCreatedBy());
     organismRepository.delete(organismUUID);
+  }
+
+  @WithMockKeycloakUser(groupRole = {OrganismTestFixture.GROUP + ":staff"})
+  @Test
+  public void create_withUserProvidedUUID_resourceCreatedWithProvidedUUID() throws MalformedURLException {
+    UUID myUUID = UUID.randomUUID();
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
+    organismDto.setUuid(myUUID);
+    organismRepository.create(organismDto);
+
+    QuerySpec querySpec = new QuerySpec(OrganismDto.class);
+    OrganismDto refreshedCe = organismRepository.findOne(myUUID, querySpec);
+    assertNotNull(refreshedCe);
   }
 
 }

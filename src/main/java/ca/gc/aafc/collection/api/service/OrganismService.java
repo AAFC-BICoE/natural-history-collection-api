@@ -29,7 +29,11 @@ public class OrganismService extends DefaultDinaService<Organism> {
 
   @Override
   protected void preCreate(Organism entity) {
-    entity.setUuid(UUID.randomUUID());
+    // allow user provided UUID
+    if(entity.getUuid() == null) {
+      entity.setUuid(UUID.randomUUID());
+    }
+
     setupDeterminations(entity);
   }
 

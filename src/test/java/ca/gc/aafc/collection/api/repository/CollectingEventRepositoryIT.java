@@ -146,9 +146,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
 
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
     CollectingEventDto refreshedCe = collectingEventRepository.findOne(myUUID, querySpec);
-
     assertNotNull(refreshedCe);
-
   }
 
   private void assertAssertion(
