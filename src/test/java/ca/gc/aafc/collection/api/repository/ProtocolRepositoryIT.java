@@ -19,35 +19,37 @@ import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 
 @SpringBootTest(
-  properties = "keycloak.enabled = true"
+        properties = "keycloak.enabled = true"
 )
-public class ProtocolRepositoryIT extends CollectionModuleBaseIT{
-    @Inject
-    private ProtocolRepository protocolRepository;
-  
-    @Test
-    @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:DINA_ADMIN"})
-    public void create_WithAuthenticatedUser_SetsCreatedBy() {
-      ProtocolDto pt = ProtocolTestFixture.newProtocol();
-      ProtocolDto result = protocolRepository.findOne(
-        protocolRepository.create(pt).getUuid(),
-        new QuerySpec(ProtocolDto.class));
-      assertNotNull(result.getCreatedBy());
-      assertEquals(pt.getName(), result.getName());
-      assertEquals(pt.getGroup(), result.getGroup());
-    }
-  
-    @Test
-    @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
-    public void updateFromDifferentGroup_throwAccessDenied() {
-      Protocol testProtocol = ProtocolFactory.newProtocol()
-        .group("preparation process definition")
-        .name("aafc")
-        .build();
-      protocolService.create(testProtocol);
-      ProtocolDto retrievedProtocol = protocolRepository.findOne(testProtocol.getUuid(),
-        new QuerySpec(ProtocolDto.class));
-      assertThrows(AccessDeniedException.class, () -> protocolRepository.save(retrievedProtocol));
-    }
+public class ProtocolRepositoryIT extends CollectionModuleBaseIT {
+
+  @Inject
+  private ProtocolRepository protocolRepository;
+
+  @Test
+  @WithMockKeycloakUser(username = "dev", groupRole = {ProtocolTestFixture.GROUP + ":DINA_ADMIN"})
+  public void create_WithAuthenticatedUser_SetsCreatedBy() {
+    ProtocolDto pt = ProtocolTestFixture.newProtocol();
+    ProtocolDto result = protocolRepository.findOne(
+            protocolRepository.create(pt).getUuid(),
+            new QuerySpec(ProtocolDto.class));
+
+    assertNotNull(result.getCreatedBy());
+    assertEquals(pt.getName(), result.getName());
+    assertEquals(pt.getGroup(), result.getGroup());
+  }
+
+  @Test
+  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
+  public void updateFromDifferentGroup_throwAccessDenied() {
+    Protocol testProtocol = ProtocolFactory.newProtocol()
+            .group("preparation process definition")
+            .name("aafc")
+            .build();
+    protocolService.create(testProtocol);
+    ProtocolDto retrievedProtocol = protocolRepository.findOne(testProtocol.getUuid(),
+            new QuerySpec(ProtocolDto.class));
+    assertThrows(AccessDeniedException.class, () -> protocolRepository.save(retrievedProtocol));
+  }
 }
 

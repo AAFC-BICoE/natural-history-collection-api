@@ -19,12 +19,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="multilingual_description" type="jsonb"/>
-            <column name="attachments" type="varchar(250) []"/>
+            <column name="attachments" type="uuid[]"/>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
             <column name="created_by" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
         <createIndex indexName="protocol_name_group_unique"
                    tableName="protocol"
                    unique="true">

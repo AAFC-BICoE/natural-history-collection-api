@@ -6,7 +6,7 @@ import ca.gc.aafc.collection.api.dto.ProtocolDto;
 
 public class ProtocolTestFixture {
 
-  private static final String GROUP = "aafc";
+  public static final String GROUP = "aafc";
 
   public static ProtocolDto newProtocol() {
     ProtocolDto protocolDto = new ProtocolDto();

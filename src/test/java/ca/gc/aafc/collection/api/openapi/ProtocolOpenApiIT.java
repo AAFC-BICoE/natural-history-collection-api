@@ -36,6 +36,7 @@ public class ProtocolOpenApiIT extends BaseRestAssuredTest {
   void protocol_SpecValid() {
     ProtocolDto protocolDto = ProtocolTestFixture.newProtocol();  
     protocolDto.setCreatedBy("test user");
+    protocolDto.setAttachments(null);
 
     OpenAPI3Assertions
         .assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "Protocol",
