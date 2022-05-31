@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.file.AccessDeniedException;
 
 import org.junit.jupiter.api.Test;
-import org.picocontainer.annotations.Inject;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
@@ -18,9 +17,9 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 
-@SpringBootTest(
-        properties = "keycloak.enabled = true"
-)
+import javax.inject.Inject;
+
+@SpringBootTest(properties = "keycloak.enabled = true")
 public class ProtocolRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
