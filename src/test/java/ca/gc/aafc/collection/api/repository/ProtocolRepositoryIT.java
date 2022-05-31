@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.nio.file.AccessDeniedException;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,6 +14,7 @@ import ca.gc.aafc.collection.api.testsupport.factories.ProtocolFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.inject.Inject;
 
@@ -39,13 +38,16 @@ public class ProtocolRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
-  public void updateFromDifferentGroup_throwAccessDenied() {
+  @WithMockKeycloakUser(username = "other user", groupRole = {ProtocolTestFixture.GROUP + ":staff"})
+  public void updateFromNonAdmin_throwAccessDenied() {
+    ProtocolDto pt = ProtocolTestFixture.newProtocol();
+
     Protocol testProtocol = ProtocolFactory.newProtocol()
-            .group("preparation process definition")
+            .group(ProtocolTestFixture.GROUP)
             .name("aafc")
             .build();
     protocolService.create(testProtocol);
+
     ProtocolDto retrievedProtocol = protocolRepository.findOne(testProtocol.getUuid(),
             new QuerySpec(ProtocolDto.class));
     assertThrows(AccessDeniedException.class, () -> protocolRepository.save(retrievedProtocol));
