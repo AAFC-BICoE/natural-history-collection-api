@@ -1,5 +1,12 @@
 package ca.gc.aafc.collection.api.openapi;
 
+import javax.transaction.Transactional;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
@@ -8,12 +15,6 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
-import javax.transaction.Transactional;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -42,5 +43,4 @@ public class ProtocolOpenApiIT extends BaseRestAssuredTest {
                 .toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(protocolDto)))
                 .extract().asString());
   }
-
 }
