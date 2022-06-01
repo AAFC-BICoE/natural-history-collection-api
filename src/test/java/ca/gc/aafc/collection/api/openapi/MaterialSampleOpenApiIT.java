@@ -85,6 +85,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .build();
 
     OrganismDto organism = OrganismTestFixture.newOrganism(determination);
+    organism.setIsTarget(true);
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setMaterialSampleType(MaterialSampleType.MIXED_ORGANISMS);
@@ -217,8 +218,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         OpenAPIConstants.COLLECTION_API_SPECS_URL,
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-        .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" + String.join(",", toInclude)).asString(),
-      ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent")).build()
+        .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" + String.join(",", toInclude)).then().log().body().extract().asString(),
+      ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent", "targetOrganismPrimaryDetermination")).build()
       );
     }
 

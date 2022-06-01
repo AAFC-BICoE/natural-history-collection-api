@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
@@ -108,7 +107,7 @@ public class MaterialSampleDto {
   private String dwcDegreeOfEstablishment;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<HierarchicalObject> hierarchy;
+  private List<MaterialSampleHierarchyObject> hierarchy;
 
   private String host;
 
