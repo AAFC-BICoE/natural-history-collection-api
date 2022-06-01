@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import org.javers.core.metamodel.annotation.Id;
@@ -22,7 +23,7 @@ import lombok.Data;
 @RelatedEntity(Protocol.class)
 @JsonApiResource(type = ProtocolDto.TYPENAME)
 @TypeName(ProtocolDto.TYPENAME)
-public class ProtocolDto {
+public class ProtocolDto extends AttributeMetaInfoProvider {
 
   public static final String TYPENAME = "protocol";
 
