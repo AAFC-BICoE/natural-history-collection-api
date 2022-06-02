@@ -91,7 +91,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setMaterialSampleType(MaterialSampleType.MIXED_ORGANISMS);
     ms.setAttachment(null);
     ms.setPreparedBy(null);
-    ms.setPreparationAttachment(null);
+    ms.setProtocol(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setOrganism(null);
     ms.setScheduledActions(List.of(scheduledAction));
@@ -107,7 +107,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setParentMaterialSample(null);
     parent.setMaterialSampleChildren(null);
     parent.setPreparedBy(null);
-    parent.setPreparationAttachment(null);
+    parent.setProtocol(null);
     parent.setAcquisitionEvent(null);
     parent.setProjects(null);
 
@@ -119,7 +119,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setParentMaterialSample(null);
     child.setMaterialSampleChildren(null);
     child.setPreparedBy(null);
-    child.setPreparationAttachment(null);
+    child.setProtocol(null);
     child.setAcquisitionEvent(null);
     child.setProjects(null);
 
@@ -178,7 +178,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Map<String, Object> generatedRelationshipMap = Map.of(
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
-      "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "projects", getRelationshipListType("project", projectUUID),
       "organism", getRelationshipListType("organism", organismUUID));
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(

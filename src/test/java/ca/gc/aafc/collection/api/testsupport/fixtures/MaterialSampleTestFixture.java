@@ -73,8 +73,6 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setPreparationFixative(PREPARATION_FIXATIVE);
     materialSampleDto.setPreparationMaterials(PREPARATION_MATERIALS);
     materialSampleDto.setPreparationSubstrate(PREPARATION_SUBSTRATE);
-    materialSampleDto.setPreparationAttachment(List.of(
-        ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
     materialSampleDto.setRestrictionFieldsExtension(List.of(ExtensionValue.builder()
         .extKey(RESTRICTION_KEY)
