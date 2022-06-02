@@ -138,7 +138,7 @@ public class MaterialSampleDto {
   private AcquisitionEventDto acquisitionEvent;
 
   @JsonApiRelation
-  private ProtocolDto protocol;
+  private ProtocolDto preparationProtocol;
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

@@ -39,7 +39,7 @@ public class ProjectOpenApiIT extends BaseRestAssuredTest {
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setAttachment(null);
     ms.setPreparedBy(null);
-    ms.setProtocol(null);
+    ms.setPreparationProtocol(null);
     ms.setManagedAttributes(null);
     ms.setOrganism(null);
     ms.setScheduledActions(null);
