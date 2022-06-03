@@ -171,7 +171,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void targetOrganism_multipleTargetsSameMaterialSample_Exception() {
-    ArrayList<Organism> organisms = new ArrayList<>();
+    List<Organism> organisms = new ArrayList<>();
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample().build();
     materialSampleService.createAndFlush(materialSample);
@@ -196,7 +196,10 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
     materialSample.setOrganism(organisms);
 
-    // The material sample only gets set to the organism from the material sample service.
+    // unique constraint will trigger an exception
+    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
+
+    // unique constraint will trigger an exception
     assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
 
     // Clean up
