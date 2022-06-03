@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import ca.gc.aafc.collection.api.dto.ProtocolDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -53,6 +55,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     super("/api/v1/");
   }
 
+  private static final String CREATED_BY = "test user";
+
   @SneakyThrows
   @Test
   void materialSample_SpecValid() {
@@ -62,7 +66,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
-    collectionManagedAttributeDto.setCreatedBy("dina");     
+    collectionManagedAttributeDto.setCreatedBy(CREATED_BY);
 
     sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
 
@@ -91,7 +95,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setMaterialSampleType(MaterialSampleType.MIXED_ORGANISMS);
     ms.setAttachment(null);
     ms.setPreparedBy(null);
-    ms.setPreparationAttachment(null);
+    ms.setPreparationProtocol(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setOrganism(null);
     ms.setScheduledActions(List.of(scheduledAction));
@@ -107,7 +111,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     parent.setParentMaterialSample(null);
     parent.setMaterialSampleChildren(null);
     parent.setPreparedBy(null);
-    parent.setPreparationAttachment(null);
+    parent.setPreparationProtocol(null);
     parent.setAcquisitionEvent(null);
     parent.setProjects(null);
 
@@ -119,16 +123,20 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     child.setParentMaterialSample(null);
     child.setMaterialSampleChildren(null);
     child.setPreparedBy(null);
-    child.setPreparationAttachment(null);
+    child.setPreparationProtocol(null);
     child.setAcquisitionEvent(null);
     child.setProjects(null);
 
     ProjectDto projectDto = ProjectTestFixture.newProject();  
-    projectDto.setCreatedBy("test user");  
+    projectDto.setCreatedBy(CREATED_BY);
     projectDto.setAttachment(null);
 
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
-    preparationTypeDto.setCreatedBy("test user");  
+    preparationTypeDto.setCreatedBy(CREATED_BY);
+
+    ProtocolDto protocolDto = ProtocolTestFixture.newProtocol();
+    protocolDto.setAttachments(null);
+    protocolDto.setCreatedBy(CREATED_BY);
     
     String parentUUID = JsonAPITestHelper.extractId(sendPost(
       MaterialSampleDto.TYPENAME,
@@ -166,6 +174,14 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       null)
     ));
 
+    String protocolUUID = JsonAPITestHelper.extractId(sendPost(
+            ProtocolDto.TYPENAME,
+            JsonAPITestHelper.toJsonAPIMap(
+                    ProtocolDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(protocolDto))
+    ));
+
+
     String organismUUID = JsonAPITestHelper.extractId(sendPost(
       OrganismDto.TYPENAME,
       JsonAPITestHelper.toJsonAPIMap(
@@ -178,18 +194,19 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Map<String, Object> generatedRelationshipMap = Map.of(
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
-      "preparationAttachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "projects", getRelationshipListType("project", projectUUID),
       "organism", getRelationshipListType("organism", organismUUID));
+
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
-          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID)));
+          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID),
+          JsonAPIRelationship.of("preparationProtocol", ProtocolDto.TYPENAME, protocolUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);
     relationshipMap.putAll(relationshipMapWithId);
 
-    String unitId = JsonAPITestHelper.extractId(sendPost(
+    String materialSampleId = JsonAPITestHelper.extractId(sendPost(
       MaterialSampleDto.TYPENAME, 
       JsonAPITestHelper.toJsonAPIMap(
         MaterialSampleDto.TYPENAME, 
@@ -202,7 +219,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     sendPatch(MaterialSampleDto.TYPENAME, childUUID, JsonAPITestHelper.toJsonAPIMap(
       MaterialSampleDto.TYPENAME,
       Map.of(),
-      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, unitId)),
+      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, materialSampleId)),
       null
     ));
     
@@ -211,14 +228,13 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     toInclude.addAll(generatedRelationshipMap.keySet());
     toInclude.addAll(relationshipMapWithId.keySet());
     toInclude.add("materialSampleChildren");
-    toInclude.add("organism");
     toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
 
     OpenAPI3Assertions.assertRemoteSchema(
         OpenAPIConstants.COLLECTION_API_SPECS_URL,
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-        .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" + String.join(",", toInclude)).then().log().body().extract().asString(),
+        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude)).asString(),
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent", "targetOrganismPrimaryDetermination")).build()
       );
     }
