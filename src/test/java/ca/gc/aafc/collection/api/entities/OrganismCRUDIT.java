@@ -199,9 +199,6 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
     // unique constraint will trigger an exception
     assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
 
-    // unique constraint will trigger an exception
-    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
-
     // Clean up
     materialSampleService.delete(materialSample);
     organisms.forEach(organism -> {
