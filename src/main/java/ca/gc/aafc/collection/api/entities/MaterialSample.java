@@ -119,10 +119,6 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
-  
-  @Type(type = "pgsql_enum")
-  @Enumerated(EnumType.STRING)
-  private MaterialSampleType materialSampleType;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
