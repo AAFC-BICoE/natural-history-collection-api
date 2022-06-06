@@ -208,7 +208,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
   @Test
   void targetOrganism_oneTargetOrganism_noExceptions() {
-    ArrayList<Organism> organisms = new ArrayList<>();
+    List<Organism> organisms = new ArrayList<>();
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample().build();
     materialSampleService.createAndFlush(materialSample);
@@ -231,10 +231,81 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
         .build();
     organisms.add(organismService.createAndFlush(organism2));
 
+    // The material sample only gets set to the organism from the material sample service.
     materialSample.setOrganism(organisms);
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    // Clean up
+    materialSampleService.delete(materialSample);
+    organisms.forEach(organism -> {
+      organismService.delete(organism);
+    });
+  }
+
+  @Test
+  void targetOrganism_noTargetOrganism_noExceptions() {
+    List<Organism> organisms = new ArrayList<>();
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample().build();
+    materialSampleService.createAndFlush(materialSample);
+
+    Determination determination = Determination.builder()
+            .isPrimary(false)
+            .isFiledAs(false)
+            .verbatimScientificName("verbatimScientificName")
+            .build();
+
+    Organism organism1 = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination))
+            .build();
+    organisms.add(organismService.createAndFlush(organism1));
+
+    Organism organism2 = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination))
+            .build();
+    organisms.add(organismService.createAndFlush(organism2));
 
     // The material sample only gets set to the organism from the material sample service.
+    materialSample.setOrganism(organisms);
     assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    // Clean up
+    materialSampleService.delete(materialSample);
+    organisms.forEach(organism -> {
+      organismService.delete(organism);
+    });
+  }
+
+  @Test
+  void targetOrganism_MixedTargetOrganism_Exception() {
+    List<Organism> organisms = new ArrayList<>();
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample().build();
+    materialSampleService.createAndFlush(materialSample);
+
+    Determination determination = Determination.builder()
+            .isPrimary(false)
+            .isFiledAs(false)
+            .verbatimScientificName("verbatimScientificName")
+            .build();
+
+    Organism organism1 = OrganismEntityFactory.newOrganism()
+            .isTarget(true)
+            .determination(List.of(determination))
+            .build();
+    organisms.add(organismService.createAndFlush(organism1));
+
+    Organism organism2 = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination))
+            .build();
+    organisms.add(organismService.createAndFlush(organism2));
+
+    // The material sample only gets set to the organism from the material sample service.
+    materialSample.setOrganism(organisms);
+    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
 
     // Clean up
     materialSampleService.delete(materialSample);

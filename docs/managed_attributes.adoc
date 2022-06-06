@@ -7,10 +7,12 @@ Managed Attributes can be fetched either by UUID or by a "{component}.{key}" for
 
 e.g.
 
-```
+[source]
+----
 /managed-attribute/collecting_event.my_managed_attribute.
-```
+----
 
-```
+[source]
+----
 /managed-attribute/32746f92-0530-4913-b891-242b1ff629b6.
-```
+----

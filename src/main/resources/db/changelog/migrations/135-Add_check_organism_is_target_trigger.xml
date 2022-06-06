@@ -1,0 +1,47 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="135-Add_check_organism_is_target_trigger" context="schema-change" author="cgendreau">
+
+        <!-- Function that will be triggered on each INSERT or UPDATE event on organism -->
+        <sql>
+            CREATE OR REPLACE FUNCTION check_organism_is_target() RETURNS TRIGGER AS
+            '
+            BEGIN
+
+            IF (NEW.material_sample_id IS NULL OR (TG_OP != ''UPDATE'' AND TG_OP = ''INSERT'')) THEN
+              RETURN NEW;
+            END IF;
+
+            <!-- If is_target is not used (NULL), make sure it is not used for other organism attached to that material_sample.-->
+            IF (NEW.is_target IS NULL AND EXISTS (
+              SELECT 1 FROM organism WHERE material_sample_id = NEW.material_sample_id AND is_target IS NOT NULL LIMIT 1)) THEN
+              RAISE EXCEPTION check_violation
+              USING MESSAGE = ''is_target in organism violates constraint "organism_is_target_consistent"'',
+              CONSTRAINT = ''organism_is_target_consistent'';
+            END IF;
+
+            <!-- If is_target is used (NOT NULL), make sure it is used for other organism attached to that material_sample.-->
+            IF (NEW.is_target IS NOT NULL AND EXISTS (
+            SELECT 1 FROM organism WHERE material_sample_id = NEW.material_sample_id AND is_target IS NULL LIMIT 1)) THEN
+              RAISE EXCEPTION check_violation
+              USING MESSAGE = ''is_target in organism violates constraint "organism_is_target_consistent"'',
+              CONSTRAINT = ''organism_is_target_consistent'';
+            END IF;
+
+            RETURN NEW;
+            END;
+            '
+            LANGUAGE PLPGSQL;
+        </sql>
+
+        <!-- Create the new trigger that is activated on every new and updated organism -->
+        <sql>
+            CREATE TRIGGER check_organism_is_target BEFORE INSERT OR UPDATE ON organism
+            FOR EACH ROW EXECUTE PROCEDURE check_organism_is_target();
+        </sql>
+    </changeSet>
+</databaseChangeLog>
