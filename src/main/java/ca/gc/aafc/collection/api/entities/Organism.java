@@ -51,9 +51,8 @@ public class Organism implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @NotNull
-  @Builder.Default
-  private Boolean isTarget = false;
+  // null allowed to represent that the concept of target is not used
+  private Boolean isTarget;
 
   @Type(type = "jsonb")
   @Valid

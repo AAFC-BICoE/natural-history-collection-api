@@ -1,0 +1,20 @@
+= Database
+
+== Triggers
+
+=== check_material_name_unique
+
+Make sure `material_sample_name` is unique within a collection unless `allow_duplicate_name` is set to true (for legacy data).
+
+=== check_storage_hierarchy
+
+Ensures `storage_unit` 's hierarchy is except of cycles.
+
+=== check_organism_is_target
+
+Ensures that `organism` attached to a `material_sample` are using the `is_target` concept or are not using it but never a mix of both.
+
+== Functions
+
+=== jsonb_path_exists_varchar
+`jsonb_path_exists_varchar(target jsonb, path varchar, vars varchar, caseSensitive boolean)`
