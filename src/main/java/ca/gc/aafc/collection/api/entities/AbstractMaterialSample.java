@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,6 +56,10 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 50)
   @Column(name = "_group")
   private String group;
+
+  @Type(type = "pgsql_enum")
+  @Enumerated(EnumType.STRING)
+  private MaterialSample.MaterialSampleType materialSampleType;
 
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)

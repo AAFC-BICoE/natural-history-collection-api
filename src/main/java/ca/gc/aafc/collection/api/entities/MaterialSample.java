@@ -14,8 +14,6 @@ import org.javers.core.metamodel.annotation.DiffIgnore;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -119,10 +117,6 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne
   @ToString.Exclude
   private PreparationType preparationType;
-  
-  @Type(type = "pgsql_enum")
-  @Enumerated(EnumType.STRING)
-  private MaterialSampleType materialSampleType;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
