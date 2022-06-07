@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 
@@ -35,6 +36,8 @@ public class ImmutableMaterialSampleDto {
   private UUID id;
 
   private String group;
+
+  private MaterialSample.MaterialSampleType materialSampleType;
 
   private OffsetDateTime createdOn;
   private String createdBy;
