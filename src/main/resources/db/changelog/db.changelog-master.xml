@@ -140,4 +140,5 @@
   <include file="db/changelog/migrations/133-Change_material-sample_prep_attachment_to_protocol.xml"/>
   <include file="db/changelog/migrations/134-Remove_NotNull_on_organism_is_target.xml"/>
   <include file="db/changelog/migrations/135-Add_check_organism_is_target_trigger.xml"/>
+  <include file="db/changelog/migrations/136-Update_check_organism_is_target_trigger.xml"/>
 </databaseChangeLog>
