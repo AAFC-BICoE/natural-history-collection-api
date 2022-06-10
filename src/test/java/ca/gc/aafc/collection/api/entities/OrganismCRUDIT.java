@@ -1,26 +1,21 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.PersistenceException;
-import javax.validation.ValidationException;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import javax.persistence.PersistenceException;
+import javax.validation.ValidationException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
@@ -138,7 +133,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
     Organism organism = OrganismEntityFactory.newOrganism()
       .determination(new ArrayList<>(List.of(determination)))
       .build();
-      
+
     assertDoesNotThrow(() -> organismService.create(organism));
 
     // Clean up
@@ -279,7 +274,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  void targetOrganism_MixedTargetOrganism_Exception() {
+  void targetOrganismNotUsed_startUsingTargetOrganism_SaveSuccess() {
     List<Organism> organisms = new ArrayList<>();
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample().build();
@@ -292,7 +287,7 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
             .build();
 
     Organism organism1 = OrganismEntityFactory.newOrganism()
-            .isTarget(true)
+            .isTarget(null)
             .determination(List.of(determination))
             .build();
     organisms.add(organismService.createAndFlush(organism1));
@@ -305,7 +300,13 @@ public class OrganismCRUDIT extends CollectionModuleBaseIT {
 
     // The material sample only gets set to the organism from the material sample service.
     materialSample.setOrganism(organisms);
-    assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSample));
+    materialSampleService.update(materialSample);
+
+    // now start making use of isTarget
+    organism1.setIsTarget(true);
+    organism2.setIsTarget(false);
+
+    materialSampleService.update(materialSample);
 
     // Clean up
     materialSampleService.delete(materialSample);
