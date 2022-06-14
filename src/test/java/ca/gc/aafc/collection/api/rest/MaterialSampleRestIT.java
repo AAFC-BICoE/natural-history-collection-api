@@ -4,12 +4,14 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
@@ -18,7 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @SpringBootTest(
@@ -67,6 +72,106 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType))
       .body("data.attributes.associations.remarks", Matchers.contains(expectedRemarks));
+  }
+
+  @Test
+  void post_withOrganism() {
+    JsonPath response;
+
+    // Operation for organism creation
+    response = sendOperation(
+      List.of(
+        Map.of(
+          "op", "POST",
+          "path", OrganismDto.TYPENAME,
+          "value", Map.of(
+            "id", UUID.randomUUID().toString(),
+            "type", OrganismDto.TYPENAME,
+            "attributes", Map.of(
+              "group", "aafc"
+            )
+          )
+        ),
+        Map.of(
+          "op", "POST",
+          "path", OrganismDto.TYPENAME,
+          "value", Map.of(
+            "id", UUID.randomUUID().toString(),
+            "type", OrganismDto.TYPENAME,
+            "attributes", Map.of(
+              "group", "aafc"
+            )
+          )
+        )
+      )
+    ).extract().jsonPath();
+    assertEquals(201, response.getInt("status[0]"));
+    String organismUuid1 = response.getString("data.id[0]");
+    String organismUuid2 = response.getString("data.id[1]");
+
+    // Operation for parent material sample (with organisms attached)
+    response = sendOperation(
+      List.of(
+        Map.of(
+          "op", "POST",
+          "path", "material-sample",
+          "value", Map.of(
+            "id", UUID.randomUUID().toString(),
+            "type", MaterialSampleDto.TYPENAME,
+            "attributes", Map.of(
+              "group", "aafc",
+              "materialSampleName", "Parent"
+            ),
+            "relationships", Map.of(
+              "organism", Map.of(
+                "data", List.of(
+                  Map.of(
+                    "id", organismUuid1,
+                    "type", OrganismDto.TYPENAME
+                  ),
+                  Map.of(
+                    "id", organismUuid2,
+                    "type", OrganismDto.TYPENAME
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ).extract().jsonPath();
+    assertEquals(201, response.getInt("status[0]"));
+    String parentUuid = response.getString("data.id[0]");
+
+    // Operation for child material sample, with parent uuid attached.
+    response = sendOperation(
+      List.of(
+        Map.of(
+          "op", "POST",
+          "path", "material-sample",
+          "value", Map.of(
+            "id", UUID.randomUUID().toString(),
+            "type", MaterialSampleDto.TYPENAME,
+            "attributes", Map.of(
+              "group", "aafc",
+              "materialSampleName", "child"
+            ),
+            "relationships", Map.of(
+              "parentMaterialSample", Map.of(
+                "data", Map.of(
+                  "id", parentUuid,
+                  "type", MaterialSampleDto.TYPENAME
+                )
+              )
+            )
+          )
+        )
+      )
+    ).extract().jsonPath();
+    assertEquals(201, response.getInt("status[0]"));
+
+    // GET request to see the number of material sample children.
+    findSample(parentUuid).body("data.attributes.materialSampleChildren", Matchers.hasSize(1));
   }
 
   @Test
@@ -201,7 +306,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   private ValidatableResponse findSample(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=materialSampleChildren"
+      .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=organism,materialSampleChildren,parentMaterialSample"
         + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
   }
 
