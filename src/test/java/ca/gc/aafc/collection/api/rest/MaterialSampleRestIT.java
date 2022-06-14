@@ -120,7 +120,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     // Step 3 - Create child material sample, linked to the parent material sample.
     MaterialSampleDto child = newSample();
     child.setMaterialSampleName("child");
-    System.out.println(sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+    sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
       MaterialSampleDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(child),
       JsonAPITestHelper.toRelationshipMap(
@@ -129,7 +129,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
         )
       ),
       null)
-    ).extract().body().jsonPath().prettify());
+    );
 
     // Step 4 - GET request to see the number of material sample children.
     findSample(parentId).body("data.relationships.organism.data", Matchers.hasSize(2));
