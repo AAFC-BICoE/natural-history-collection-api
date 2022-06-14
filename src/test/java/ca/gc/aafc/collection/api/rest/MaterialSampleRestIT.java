@@ -9,6 +9,7 @@ import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
@@ -75,103 +76,64 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void post_withOrganism() {
-    JsonPath response;
+  void post_withChild_andOrganisms() {
+    // Step 1 - Create organisms.
+    OrganismDto organism = new OrganismDto();
+    organism.setGroup("aafc");
 
-    // Operation for organism creation
-    response = sendOperation(
-      List.of(
-        Map.of(
-          "op", "POST",
-          "path", OrganismDto.TYPENAME,
-          "value", Map.of(
-            "id", UUID.randomUUID().toString(),
-            "type", OrganismDto.TYPENAME,
-            "attributes", Map.of(
-              "group", "aafc"
-            )
-          )
-        ),
-        Map.of(
-          "op", "POST",
-          "path", OrganismDto.TYPENAME,
-          "value", Map.of(
-            "id", UUID.randomUUID().toString(),
-            "type", OrganismDto.TYPENAME,
-            "attributes", Map.of(
-              "group", "aafc"
-            )
-          )
-        )
-      )
-    ).extract().jsonPath();
-    assertEquals(201, response.getInt("status[0]"));
-    String organismUuid1 = response.getString("data.id[0]");
-    String organismUuid2 = response.getString("data.id[1]");
+    String organismUuid1 = sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      OrganismDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(organism),
+      null,
+      null
+    )).extract().body().jsonPath().getString("data.id");
 
-    // Operation for parent material sample (with organisms attached)
-    response = sendOperation(
-      List.of(
-        Map.of(
-          "op", "POST",
-          "path", "material-sample",
-          "value", Map.of(
-            "id", UUID.randomUUID().toString(),
-            "type", MaterialSampleDto.TYPENAME,
-            "attributes", Map.of(
-              "group", "aafc",
-              "materialSampleName", "Parent"
+    String organismUuid2 = sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      OrganismDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(organism),
+      null,
+      null
+    )).extract().body().jsonPath().getString("data.id");
+
+    // Step 2 - Create parent material sample with organisms attached.
+    MaterialSampleDto parent = newSample();
+    String parentId = sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(parent),
+      Map.of(
+        "organism", Map.of(
+          "data", List.of(
+            Map.of(
+              "type", OrganismDto.TYPENAME,
+              "id", organismUuid1
             ),
-            "relationships", Map.of(
-              "organism", Map.of(
-                "data", List.of(
-                  Map.of(
-                    "id", organismUuid1,
-                    "type", OrganismDto.TYPENAME
-                  ),
-                  Map.of(
-                    "id", organismUuid2,
-                    "type", OrganismDto.TYPENAME
-                  )
-                )
-              )
+            Map.of(
+              "type", OrganismDto.TYPENAME,
+              "id", organismUuid2
             )
           )
         )
-      )
-    ).extract().jsonPath();
-    assertEquals(201, response.getInt("status[0]"));
-    String parentUuid = response.getString("data.id[0]");
+      ),
+      null)
+    ).extract().body().jsonPath().getString("data.id");
 
-    // Operation for child material sample, with parent uuid attached.
-    response = sendOperation(
-      List.of(
-        Map.of(
-          "op", "POST",
-          "path", "material-sample",
-          "value", Map.of(
-            "id", UUID.randomUUID().toString(),
-            "type", MaterialSampleDto.TYPENAME,
-            "attributes", Map.of(
-              "group", "aafc",
-              "materialSampleName", "child"
-            ),
-            "relationships", Map.of(
-              "parentMaterialSample", Map.of(
-                "data", Map.of(
-                  "id", parentUuid,
-                  "type", MaterialSampleDto.TYPENAME
-                )
-              )
-            )
-          )
+    // Step 3 - Create child material sample, linked to the parent material sample.
+    MaterialSampleDto child = newSample();
+    child.setMaterialSampleName("child");
+    System.out.println(sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(child),
+      JsonAPITestHelper.toRelationshipMap(
+        List.of(
+          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentId)
         )
-      )
-    ).extract().jsonPath();
-    assertEquals(201, response.getInt("status[0]"));
+      ),
+      null)
+    ).extract().body().jsonPath().prettify());
 
-    // GET request to see the number of material sample children.
-    findSample(parentUuid).body("data.attributes.materialSampleChildren", Matchers.hasSize(1));
+    // Step 4 - GET request to see the number of material sample children.
+    findSample(parentId).body("data.relationships.organism.data", Matchers.hasSize(2));
+    findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.hasSize(1));
   }
 
   @Test
