@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.validation;
 import java.util.UUID;
 import javax.inject.Inject;
 
+import ca.gc.aafc.collection.api.entities.MaterialSampleParent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
@@ -35,7 +36,9 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   void validate_WhenParentIsSelf_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.VALID_PARENT_RELATIONSHIP_LOOP);
     MaterialSample sample = newSample();
-    sample.setParentMaterialSample(sample);
+    MaterialSampleParent msParent = new MaterialSampleParent();
+    msParent.setUuid(sample.getUuid());
+    sample.setParentMaterialSample(msParent);
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
 
@@ -49,7 +52,9 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
   void validate_WhenHasParentAndEvent_HasError() {
     String expectedErrorMessage = getExpectedErrorMessage(MaterialSampleValidator.PARENT_AND_EVENT_ERROR_KEY);
     MaterialSample sample = newSample();
-    sample.setParentMaterialSample(newSample());
+    MaterialSampleParent msParent = new MaterialSampleParent();
+    msParent.setUuid(newSample().getUuid());
+    sample.setParentMaterialSample(msParent);
     sample.setCollectingEvent(CollectingEvent.builder().build());
     Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
     sampleValidator.validate(sample, errors);

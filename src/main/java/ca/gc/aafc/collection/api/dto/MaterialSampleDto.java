@@ -73,7 +73,7 @@ public class MaterialSampleDto {
   private MaterialSample.MaterialSampleType materialSampleType;
 
   @JsonApiRelation
-  private MaterialSampleDto parentMaterialSample;
+  private MaterialSampleParentDto parentMaterialSample;
 
   @DiffIgnore
   private List<ImmutableMaterialSampleDto> materialSampleChildren;

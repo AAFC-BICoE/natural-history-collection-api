@@ -178,17 +178,18 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .preparationType(preparationType)
         .build();
 
-    MaterialSample child = MaterialSampleFactory.newMaterialSample()
-        .dwcCatalogNumber("child-" + dwcCatalogNumber)
-        .createdBy("child-" + expectedCreatedBy)
-        .attachment(attachmentIdentifiers)
-        .materialSampleName("child-" + sampleMaterialName)
-        .preparationType(preparationType)
-        .parentMaterialSample(parent)
-        .build();
-
     parent = materialSampleService.create(parent);
-    child.setParentMaterialSample(parent);
+    MaterialSampleParent msParent = materialSampleService.getReferenceByNaturalId(MaterialSampleParent.class, parent.getUuid());
+
+    MaterialSample child = MaterialSampleFactory.newMaterialSample()
+            .dwcCatalogNumber("child-" + dwcCatalogNumber)
+            .createdBy("child-" + expectedCreatedBy)
+            .attachment(attachmentIdentifiers)
+            .materialSampleName("child-" + sampleMaterialName)
+            .preparationType(preparationType)
+            .parentMaterialSample(msParent)
+            .build();
+
     materialSampleService.create(child);
 
     MaterialSample fetchedParent = materialSampleService.findOne(parent.getUuid(), MaterialSample.class);

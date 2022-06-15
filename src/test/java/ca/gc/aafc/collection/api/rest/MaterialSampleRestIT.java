@@ -134,7 +134,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       JsonAPITestHelper.toAttributeMap(child),
       JsonAPITestHelper.toRelationshipMap(
         List.of(
-          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentId)
+          JsonAPIRelationship.of("parentMaterialSample", "material-sample-parent", parentId)
         )
       ),
       null)
@@ -145,7 +145,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       JsonAPITestHelper.toAttributeMap(child),
       JsonAPITestHelper.toRelationshipMap(
         List.of(
-          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentId)
+          JsonAPIRelationship.of("parentMaterialSample", "material-sample-parent", parentId)
         )
       ),
       null)

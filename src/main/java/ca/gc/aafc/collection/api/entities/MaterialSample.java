@@ -82,12 +82,10 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "parent_material_sample_id")
-  @ToString.Exclude
-  private MaterialSample parentMaterialSample;
+  private MaterialSampleParent parentMaterialSample;
 
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
-  @OrderColumn(name = "pos")
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
