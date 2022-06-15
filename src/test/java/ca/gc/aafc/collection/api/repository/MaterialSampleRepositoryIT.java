@@ -6,9 +6,11 @@ import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.InstitutionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleParentDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleParent;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
@@ -76,7 +78,11 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   public void create_WithAParent() {
     MaterialSampleDto parent = materialSampleRepository.create(MaterialSampleTestFixture.newMaterialSample());
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
-    child.setParentMaterialSample(parent);
+
+    MaterialSampleParentDto parentDto = new MaterialSampleParentDto();
+    parentDto.setUuid(parent.getUuid());
+
+    child.setParentMaterialSample(parentDto);
     child = materialSampleRepository.create(child);
     MaterialSampleDto result = materialSampleRepository.findOne(parent.getUuid(), new QuerySpec(MaterialSampleDto.class));
     assertEquals(child.getUuid(), result.getMaterialSampleChildren().get(0).getUuid());

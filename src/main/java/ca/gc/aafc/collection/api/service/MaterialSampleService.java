@@ -153,7 +153,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
    */
   private MaterialSample detachParent(MaterialSample sample) {
     if (sample.getParentMaterialSample() != null) {
-      detach(sample.getParentMaterialSample());
+      // tell Hibernate to detach the parent but use a reference so if it's not loaded we won't need to load it
+      detach(getReferenceByNaturalId(MaterialSample.class, sample.getParentMaterialSample().getUuid()));
     }
     return sample;
   }

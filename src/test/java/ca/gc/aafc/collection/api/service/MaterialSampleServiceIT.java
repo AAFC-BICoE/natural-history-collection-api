@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.validation.ValidationException;
 
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.MaterialSampleParent;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
@@ -98,8 +99,9 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
               .build();
     transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(parentMaterialSample));
 
+    MaterialSampleParent msParent = materialSampleService.getReferenceByNaturalId(MaterialSampleParent.class, parentMaterialSample.getUuid());
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
-            .parentMaterialSample(parentMaterialSample)
+            .parentMaterialSample(msParent)
             .build();
 
     transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(materialSample));
