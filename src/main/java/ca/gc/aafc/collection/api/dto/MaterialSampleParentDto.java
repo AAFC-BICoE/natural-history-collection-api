@@ -2,8 +2,6 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.MaterialSampleParent;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Getter;
@@ -24,9 +22,5 @@ public class MaterialSampleParentDto {
   public static final String TYPE = "material-sample-parent";
 
   @JsonApiId
-  @JsonIgnore
   private UUID uuid;
-
-  @IgnoreDinaMapping
-  private UUID id;
 }
