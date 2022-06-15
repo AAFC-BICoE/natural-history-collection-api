@@ -87,8 +87,9 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @OrderColumn(name = "pos")
   private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
- 
+
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
     name = "sample_project", 
