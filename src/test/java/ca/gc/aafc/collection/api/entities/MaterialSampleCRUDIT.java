@@ -198,50 +198,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(child.getUuid(), fetchedParent.getMaterialSampleChildren().get(0).getUuid());
   }
 
-  // written for 27888
-  @Test
-  public void testParentChildWithOrganism() {
-    MaterialSample parent = MaterialSampleFactory.newMaterialSample()
-            .dwcCatalogNumber("parent-" + dwcCatalogNumber)
-            .createdBy("parent-" + expectedCreatedBy)
-            .attachment(attachmentIdentifiers)
-            .materialSampleName("parent-" + sampleMaterialName)
-            .preparationType(preparationType)
-            .build();
-
-    Organism organism1 = OrganismEntityFactory.newOrganism()
-            .build();
-    organismService.create(organism1);
-    Organism organism2 = OrganismEntityFactory.newOrganism()
-            .build();
-    organismService.create(organism2);
-
-    MaterialSample child1 = MaterialSampleFactory.newMaterialSample()
-            .dwcCatalogNumber("child1-" + dwcCatalogNumber)
-            .createdBy(expectedCreatedBy)
-            .materialSampleName("child-" + sampleMaterialName)
-            .organism(List.of(organism1, organism2))
-            .parentMaterialSample(parent)
-            .build();
-
-
-    MaterialSample child2 = MaterialSampleFactory.newMaterialSample()
-            .dwcCatalogNumber("child2-" + dwcCatalogNumber)
-            .createdBy(expectedCreatedBy)
-            .materialSampleName("child-" + sampleMaterialName)
-            .parentMaterialSample(parent)
-            .build();
-
-    parent = materialSampleService.create(parent);
-    materialSampleService.create(child1);
-    materialSampleService.create(child2);
-
-    MaterialSample fetchedParent = materialSampleService.findOne(parent.getUuid(), MaterialSample.class);
-
-    // the bug we are chasing is returning 3 children
-    assertEquals(2, fetchedParent.getMaterialSampleChildren().size());
-  }
-
   @Test
   public void testOrganismRelationship() {
     List<Determination> determinations = new ArrayList<>();
