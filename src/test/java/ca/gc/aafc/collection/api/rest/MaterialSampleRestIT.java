@@ -92,6 +92,13 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       null
     )).extract().body().jsonPath().getString("data.id");
 
+    String organismUuid3 = sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      OrganismDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(organism),
+      null,
+      null
+    )).extract().body().jsonPath().getString("data.id");
+
     // Step 2 - Create parent material sample with organisms attached.
     MaterialSampleDto parent = newSample();
     String parentId = sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
@@ -107,6 +114,10 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
             Map.of(
               "type", OrganismDto.TYPENAME,
               "id", organismUuid2
+            ),
+            Map.of(
+              "type", OrganismDto.TYPENAME,
+              "id", organismUuid3
             )
           )
         )
@@ -114,9 +125,21 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       null)
     ).extract().body().jsonPath().getString("data.id");
 
-    // Step 3 - Create child material sample, linked to the parent material sample.
+    // Step 3 - Create two child material samples, linked to the parent material sample.
     MaterialSampleDto child = newSample();
     child.setMaterialSampleName("child");
+
+    sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(child),
+      JsonAPITestHelper.toRelationshipMap(
+        List.of(
+          JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentId)
+        )
+      ),
+      null)
+    );
+
     sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
       MaterialSampleDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(child),
@@ -129,8 +152,8 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
 
     // Step 4 - GET request to see the number of material sample children.
-    findSample(parentId).body("data.relationships.organism.data", Matchers.hasSize(2));
-    findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.hasSize(1));
+    findSample(parentId).body("data.relationships.organism.data", Matchers.hasSize(3));
+    findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.hasSize(2));
   }
 
   @Test
