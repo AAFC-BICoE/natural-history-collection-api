@@ -21,7 +21,7 @@
     <spotbugs.version>4.5.3</spotbugs.version>
     <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
     <jcip-annotations.version>1.0</jcip-annotations.version>
-    <dependency.check.version>7.1.0</dependency.check.version>
+    <dependency.check.version>7.1.1</dependency.check.version>
     <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.45.1</checkstyle.version>
@@ -32,7 +32,6 @@
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
 
     <liquibase.version>4.9.0</liquibase.version>
-    <spring-security.version>5.6.5</spring-security.version>
   </properties>
 
   <dependencies>
