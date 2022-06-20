@@ -13,6 +13,7 @@ import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
 @Service
+@Log4j2
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
@@ -58,9 +61,13 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull PredicateSupplier<T> where,
     BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
     int startIndex,
-    int maxResult
+    int maxResult,
+    @NonNull Set<String> relationships
   ) {
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult);
+
+    log.debug("Relationships received: {}", relationships);
+
+    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, relationships);
     if (CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
       all.forEach(t -> {
         if (t instanceof MaterialSample) {

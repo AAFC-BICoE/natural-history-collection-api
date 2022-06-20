@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -81,7 +82,7 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
 
   @Override
   public <T> List<T> findAll(@NonNull Class<T> entityClass, @NonNull PredicateSupplier<T> where,
-      BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy, int startIndex, int maxResult) {
+      BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy, int startIndex, int maxResult, Set<String> relationships) {
     throw new MethodNotAllowedException("findAll", null);
   }
 
