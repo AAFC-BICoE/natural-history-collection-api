@@ -13,6 +13,7 @@ import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import io.micrometer.core.annotation.Timed;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
 
+@Log4j2
 @Repository
 public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, MaterialSample> {
 
@@ -57,6 +59,9 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
   @Timed(value = "dina.repository.material-sample.findAll.time", description = "Time taken to findAll on MaterialSampleRepository")
   @Override
   public ResourceList<MaterialSampleDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {
+
+    log.debug("QuerySpec included relations: {}", querySpec.getIncludedRelations());
+
     ResourceList<MaterialSampleDto> resourceList = super.findAll(ids, querySpec);
     if (CollectionUtils.isNotEmpty(resourceList) && !isHierarchyIncluded(querySpec)) {
       resourceList.forEach(r -> r.setHierarchy(null));
@@ -67,6 +72,7 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
   @Timed(value = "dina.repository.material-sample.findOne.time", description = "Time taken to findOne on MaterialSampleRepository")
   @Override
   public MaterialSampleDto findOne(Serializable id, QuerySpec querySpec) {
+    log.debug("QuerySpec included relations: {}", querySpec.getIncludedRelations());
     return super.findOne(id, querySpec);
   }
 

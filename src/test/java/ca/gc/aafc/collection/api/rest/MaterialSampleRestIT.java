@@ -4,10 +4,12 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
@@ -19,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @SpringBootTest(
@@ -67,6 +70,94 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
       .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType))
       .body("data.attributes.associations.remarks", Matchers.contains(expectedRemarks));
+  }
+
+  @Test
+  void post_withChild_andOrganisms() {
+    // Step 1 - Create organisms.
+    OrganismDto organism = new OrganismDto();
+    organism.setGroup("aafc");
+
+    String organismUuid1 = JsonAPITestHelper.extractId(
+            sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    OrganismDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(organism),
+                    null,
+                    null
+            )));
+
+    String organismUuid2 = JsonAPITestHelper.extractId(
+            sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    OrganismDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(organism),
+                    null,
+                    null
+            )));
+
+    String organismUuid3 = JsonAPITestHelper.extractId(
+            sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    OrganismDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(organism),
+                    null,
+                    null
+            )));
+
+    // Step 2 - Create parent material sample with organisms attached.
+    MaterialSampleDto parent = newSample();
+    String parentId = sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(parent),
+      Map.of(
+        "organism", Map.of(
+          "data", List.of(
+            Map.of(
+              "type", OrganismDto.TYPENAME,
+              "id", organismUuid1
+            ),
+            Map.of(
+              "type", OrganismDto.TYPENAME,
+              "id", organismUuid2
+            ),
+            Map.of(
+              "type", OrganismDto.TYPENAME,
+              "id", organismUuid3
+            )
+          )
+        )
+      ),
+      null)
+    ).extract().body().jsonPath().getString("data.id");
+
+    // Step 3 - Create two child material samples, linked to the parent material sample.
+    MaterialSampleDto child = newSample();
+    child.setMaterialSampleName("child");
+
+    sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(child),
+      JsonAPITestHelper.toRelationshipMap(
+        List.of(
+          JsonAPIRelationship.of("parentMaterialSample", "material-sample", parentId)
+        )
+      ),
+      null)
+    );
+
+    sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(child),
+      JsonAPITestHelper.toRelationshipMap(
+        List.of(
+          JsonAPIRelationship.of("parentMaterialSample", "material-sample", parentId)
+        )
+      ),
+      null)
+    );
+
+    // Step 4 - GET request to see the number of material sample children.
+    findSample(parentId)
+            .body("data.relationships.organism.data", Matchers.hasSize(3))
+            .body("data.attributes.materialSampleChildren", Matchers.hasSize(2));
   }
 
   @Test
@@ -201,8 +292,9 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   private ValidatableResponse findSample(String unitId) {
     return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-      .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=materialSampleChildren"
-        + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM).then();
+      .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" +
+              String.join(",", "organism", "materialSampleChildren", "parentMaterialSample"
+                      , StorageUnitRepo.HIERARCHY_INCLUDE_PARAM)).then();
   }
 
 }

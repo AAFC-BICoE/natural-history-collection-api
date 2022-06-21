@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -63,9 +64,11 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     @NonNull PredicateSupplier<T> where,
     BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
     int startIndex,
-    int maxResult
+    int maxResult,
+    @NonNull Set<String> includes,
+    @NonNull Set<String> relationships
   ) {
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult);
+    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, relationships);
     if (CollectionUtils.isNotEmpty(all) && entityClass == StorageUnit.class) {
       all.forEach(t -> {
         if (t instanceof StorageUnit) {
