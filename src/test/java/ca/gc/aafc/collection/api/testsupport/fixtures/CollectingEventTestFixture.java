@@ -8,6 +8,7 @@ import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
+import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -40,7 +41,7 @@ public class CollectingEventTestFixture {
   public static final BigDecimal DWC_MAXIMUM_DEPTH_IN_METERS = new BigDecimal("20.02");
   public static final BigDecimal DWC_MINIMUM_ELEVATION_IN_METERS = new BigDecimal("50.50");
   public static final BigDecimal DWC_MINIMUM_DEPTH_IN_METERS = new BigDecimal("10.10");
-  public static final String SUBSTRATE = "rock";
+  public static final String SUBSTRATE = RandomStringUtils.randomAlphabetic(58);
   public static final String REMARKS = "this is a remark";
   public static final Boolean PUBLICLY_RELEASABLE = false;
   public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";

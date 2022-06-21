@@ -192,6 +192,7 @@ public class CollectingEvent implements DinaEntity {
   @Digits(integer = 5, fraction = 2)
   private BigDecimal dwcMaximumDepthInMeters;
 
+  @Size(max = 255)
   private String substrate;
 
   @Size(max = 1000)
