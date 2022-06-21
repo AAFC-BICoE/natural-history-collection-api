@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -66,8 +67,11 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   ) {
 
     log.debug("Relationships received: {}", relationships);
+    // We can't fetch join materialSampleChildren without getting duplicates since it's a read-only list and we can't use the OrderColumn
+    // This will let materialSampleChildren be lazy loaded
+    Set<String> filteredRelationships = relationships.stream().filter( rel -> !rel.equalsIgnoreCase(MaterialSample.CHILDREN_COL_NAME)).collect(Collectors.toSet());
 
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, relationships);
+    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, filteredRelationships);
     if (CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
       all.forEach(t -> {
         if (t instanceof MaterialSample) {

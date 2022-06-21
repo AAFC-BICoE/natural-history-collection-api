@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 
@@ -70,6 +72,8 @@ public class MaterialSample extends AbstractMaterialSample {
   public static final String PARENT_ID_COLUMN_NAME = "parent_material_sample_id";
   public static final String NAME_COLUMN_NAME = "material_sample_name";
 
+  public static final String CHILDREN_COL_NAME = "materialSampleChildren";
+
   @Version
   private int version;
 
@@ -80,7 +84,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @ToString.Exclude
   private CollectingEvent collectingEvent;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_material_sample_id")
   @ToString.Exclude
   private MaterialSample parentMaterialSample;
