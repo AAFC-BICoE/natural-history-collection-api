@@ -63,6 +63,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
     int startIndex,
     int maxResult,
+    @NonNull Set<String> includes,
     @NonNull Set<String> relationships
   ) {
 
@@ -71,7 +72,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     // This will let materialSampleChildren be lazy loaded
     Set<String> filteredRelationships = relationships.stream().filter( rel -> !rel.equalsIgnoreCase(MaterialSample.CHILDREN_COL_NAME)).collect(Collectors.toSet());
 
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, filteredRelationships);
+    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
     if (CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
       all.forEach(t -> {
         if (t instanceof MaterialSample) {

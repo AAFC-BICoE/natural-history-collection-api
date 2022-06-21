@@ -65,9 +65,10 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
     int startIndex,
     int maxResult,
+    @NonNull Set<String> includes,
     @NonNull Set<String> relationships
   ) {
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, relationships);
+    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, relationships);
     if (CollectionUtils.isNotEmpty(all) && entityClass == StorageUnit.class) {
       all.forEach(t -> {
         if (t instanceof StorageUnit) {

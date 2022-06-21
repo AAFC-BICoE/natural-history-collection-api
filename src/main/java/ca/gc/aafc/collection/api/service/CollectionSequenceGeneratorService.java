@@ -82,7 +82,7 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
 
   @Override
   public <T> List<T> findAll(@NonNull Class<T> entityClass, @NonNull PredicateSupplier<T> where,
-      BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy, int startIndex, int maxResult, Set<String> relationships) {
+      BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy, int startIndex, int maxResult, Set<String>includes, Set<String> relationships) {
     throw new MethodNotAllowedException("findAll", null);
   }
 
