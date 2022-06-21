@@ -5,10 +5,8 @@ import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
-import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
@@ -24,10 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -83,26 +78,29 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     OrganismDto organism = new OrganismDto();
     organism.setGroup("aafc");
 
-    String organismUuid1 = sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      OrganismDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(organism),
-      null,
-      null
-    )).extract().body().jsonPath().getString("data.id");
+    String organismUuid1 = JsonAPITestHelper.extractId(
+            sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    OrganismDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(organism),
+                    null,
+                    null
+            )));
 
-    String organismUuid2 = sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      OrganismDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(organism),
-      null,
-      null
-    )).extract().body().jsonPath().getString("data.id");
+    String organismUuid2 = JsonAPITestHelper.extractId(
+            sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    OrganismDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(organism),
+                    null,
+                    null
+            )));
 
-    String organismUuid3 = sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      OrganismDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(organism),
-      null,
-      null
-    )).extract().body().jsonPath().getString("data.id");
+    String organismUuid3 = JsonAPITestHelper.extractId(
+            sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    OrganismDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(organism),
+                    null,
+                    null
+            )));
 
     // Step 2 - Create parent material sample with organisms attached.
     MaterialSampleDto parent = newSample();
