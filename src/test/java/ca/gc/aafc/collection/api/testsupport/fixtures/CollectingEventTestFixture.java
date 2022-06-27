@@ -109,9 +109,11 @@ public class CollectingEventTestFixture {
     assertions.add(GEOREFERENCE_ASSERTION_DTO);
     List<ExtensionValue> extensionValues = new ArrayList<>();
     extensionValues.add(EXTENSION_VALUE);
+
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("aafc");
     ce.setCreatedBy("test user");
+    ce.setDwcFieldNumber("abcd");
     ce.setStartEventDateTime(START_DATE.toString());
     ce.setEndEventDateTime(END_DATE.toString());
     ce.setDwcRecordedBy(DWC_RECORDED_BY);
