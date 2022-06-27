@@ -71,6 +71,7 @@ public class MaterialSample extends AbstractMaterialSample {
   public static final String NAME_COLUMN_NAME = "material_sample_name";
 
   public static final String CHILDREN_COL_NAME = "materialSampleChildren";
+  public static final String HIERARCHY_PROP_NAME = "hierarchy";
 
   @Version
   private int version;

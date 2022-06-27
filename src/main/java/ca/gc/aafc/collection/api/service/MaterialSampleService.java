@@ -73,7 +73,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     Set<String> filteredRelationships = relationships.stream().filter( rel -> !rel.equalsIgnoreCase(MaterialSample.CHILDREN_COL_NAME)).collect(Collectors.toSet());
 
     List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
-    if (CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
+    if (includes.contains(MaterialSample.HIERARCHY_PROP_NAME) && CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
       all.forEach(t -> {
         if (t instanceof MaterialSample) {
           try {
