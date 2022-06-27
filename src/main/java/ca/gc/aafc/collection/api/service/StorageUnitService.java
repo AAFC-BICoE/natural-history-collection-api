@@ -69,7 +69,7 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     @NonNull Set<String> relationships
   ) {
     List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, relationships);
-    if (CollectionUtils.isNotEmpty(all) && entityClass == StorageUnit.class) {
+    if (includes.contains(StorageUnit.HIERARCHY_PROP_NAME) && CollectionUtils.isNotEmpty(all) && entityClass == StorageUnit.class) {
       all.forEach(t -> {
         if (t instanceof StorageUnit) {
           setHierarchy((StorageUnit) t);

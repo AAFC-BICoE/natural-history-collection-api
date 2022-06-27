@@ -31,6 +31,8 @@ public class StorageUnit extends AbstractStorageUnit {
   public static final String NAME_COLUMN_NAME = "name";
   public static final String TYPE_COLUMN_NAME = "storage_unit_type_id";
 
+  public static final String HIERARCHY_PROP_NAME = "hierarchy";
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = PARENT_ID_COLUMN_NAME)
   private StorageUnit parentStorageUnit;
