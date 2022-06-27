@@ -52,6 +52,10 @@ public class CollectingEventDto {
   @JsonApiField(postable = false)
   private int version;
 
+  private String dwcFieldNumber;
+  private String dwcRecordNumber;
+  private String[] dwcOtherRecordNumbers;
+
   private String group;
 
   private String createdBy;
@@ -102,8 +106,6 @@ public class CollectingEventDto {
   private String dwcVerbatimSRS;
   private String dwcVerbatimElevation;
   private String dwcVerbatimDepth;
-  private String[] dwcOtherRecordNumbers;
-  private String dwcRecordNumber;
   private String dwcCountry;
   private String dwcCountryCode;
   private String dwcStateProvince;

@@ -59,7 +59,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @RequiredArgsConstructor
-@SuppressFBWarnings(justification = "ok for Hibernate Entity", value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @NaturalIdCache
 @TypeDef(
   name = "list-array",
@@ -85,6 +84,16 @@ public class CollectingEvent implements DinaEntity {
 
   @Version
   private int version;
+
+  @Size(max = 50)
+  private String dwcFieldNumber;
+
+  @Size(max = 50)
+  private String dwcRecordNumber;
+
+  @Type(type = "string-array")
+  private String[] dwcOtherRecordNumbers;
+
 
   @NotBlank
   @Column(name = "_group")
@@ -151,12 +160,6 @@ public class CollectingEvent implements DinaEntity {
 
   @Size(max = 25)
   private String dwcVerbatimDepth;
-
-  @Type(type = "string-array")
-  private String[] dwcOtherRecordNumbers;
-
-  @Size(max = 50)
-  private String dwcRecordNumber;
 
   @Size(max = 100)
   private String dwcCountry;
