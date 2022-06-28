@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import ca.gc.aafc.collection.api.entities.GridLayoutDefinition;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -32,4 +33,5 @@ public class StorageUnitTypeDto {
   private String group;
   private String name;
   private Boolean isInseperable;
+  private GridLayoutDefinition gridLayoutDefinition;
 }

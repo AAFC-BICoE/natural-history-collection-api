@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,12 +11,15 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,6 +33,7 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 @NaturalIdCache
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class StorageUnitType implements DinaEntity {
 
   @Id
@@ -58,5 +63,10 @@ public class StorageUnitType implements DinaEntity {
   private String createdBy;
 
   private Boolean isInseperable;
+
+  @Type(type = "jsonb")
+  @Column(name = "grid_layout_definition", columnDefinition = "jsonb")
+  @Valid
+  private GridLayoutDefinition gridLayoutDefinition;
 
 }
