@@ -88,7 +88,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_SRS, collectingEventDto.getDwcVerbatimSRS());
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_ELEVATION, collectingEventDto.getDwcVerbatimElevation());
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, collectingEventDto.getDwcVerbatimDepth());
-    assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], collectingEventDto.getDwcOtherRecordNumbers()[1]);
+    assertEquals(CollectingEventTestFixture.OTHER_RECORD_NUMBERS[1], collectingEventDto.getOtherRecordNumbers()[1]);
     assertEquals(CollectingEventTestFixture.GEOGRAPHIC_PLACE_NAME_SOURCE, collectingEventDto.getGeographicPlaceNameSource());
     assertEquals(CollectingEventTestFixture.HOST, collectingEventDto.getHost());
     assertEquals(
@@ -128,7 +128,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_SRS, result.getDwcVerbatimSRS());
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_ELEVATION, result.getDwcVerbatimElevation());
     assertEquals(CollectingEventTestFixture.DWC_VERBATIM_DEPTH, result.getDwcVerbatimDepth());
-    assertEquals(CollectingEventTestFixture.DWC_OTHER_RECORD_NUMBERS[1], result.getDwcOtherRecordNumbers()[1]);
+    assertEquals(CollectingEventTestFixture.OTHER_RECORD_NUMBERS[1], result.getOtherRecordNumbers()[1]);
     assertEquals(CollectingEventTestFixture.HABITAT, result.getHabitat());
     assertEquals(CollectingEventTestFixture.HOST, result.getHost());
     assertAssertion(result.getGeoReferenceAssertions().get(0), ce.getGeoReferenceAssertions().get(0));

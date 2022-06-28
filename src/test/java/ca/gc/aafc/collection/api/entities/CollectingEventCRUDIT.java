@@ -41,7 +41,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final String dwcVerbatimSRS = "EPSG:4326";
   private static final String dwcVerbatimElevation = "100-200 m";
   private static final String dwcVerbatimDepth = "10-20 m ";
-  private static final String[] dwcOtherRecordNumbers = new String[]{"80-79", "80-80"};
+  private static final String[] otherRecordNumbers = new String[]{"80-79", "80-80"};
   private static final String dwcCountry = "Atlantis";
   private static final String dwcCountryCode = "Al";
   private static final String dwcStateProvince = "Island of Pharo's";
@@ -93,7 +93,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .dwcVerbatimSRS(dwcVerbatimSRS)
       .dwcVerbatimElevation(dwcVerbatimElevation)
       .dwcVerbatimDepth(dwcVerbatimDepth)
-      .dwcOtherRecordNumbers(dwcOtherRecordNumbers)
+      .otherRecordNumbers(otherRecordNumbers)
       .substrate(RandomStringUtils.randomAlphabetic(3))
       .dwcCountry(dwcCountry)
       .habitat(habitat)
@@ -286,7 +286,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcVerbatimSRS, fetchedCollectingEvent.getDwcVerbatimSRS());
     assertEquals(dwcVerbatimElevation, fetchedCollectingEvent.getDwcVerbatimElevation());
     assertEquals(dwcVerbatimDepth, fetchedCollectingEvent.getDwcVerbatimDepth());
-    assertArrayEquals(dwcOtherRecordNumbers, fetchedCollectingEvent.getDwcOtherRecordNumbers());
+    assertArrayEquals(otherRecordNumbers, fetchedCollectingEvent.getOtherRecordNumbers());
     assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());

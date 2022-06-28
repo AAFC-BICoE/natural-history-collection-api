@@ -143,4 +143,5 @@
   <include file="db/changelog/migrations/136-Update_check_organism_is_target_trigger.xml"/>
   <include file="db/changelog/migrations/137-Change_collectingevent_substrate_length.xml"/>
   <include file="db/changelog/migrations/138-Add_field_number_collecting_event.xml"/>
+  <include file="db/changelog/migrations/139-Rename_dwc_other_record_numbers.xml"/>
 </databaseChangeLog>
