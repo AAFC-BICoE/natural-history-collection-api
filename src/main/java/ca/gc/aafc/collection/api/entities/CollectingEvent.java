@@ -91,8 +91,7 @@ public class CollectingEvent implements DinaEntity {
   private String dwcRecordNumber;
 
   @Type(type = "string-array")
-  private String[] dwcOtherRecordNumbers;
-
+  private String[] otherRecordNumbers;
 
   @NotBlank
   @Column(name = "_group")

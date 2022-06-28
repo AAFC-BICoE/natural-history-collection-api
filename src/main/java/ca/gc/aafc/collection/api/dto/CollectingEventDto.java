@@ -54,7 +54,7 @@ public class CollectingEventDto {
 
   private String dwcFieldNumber;
   private String dwcRecordNumber;
-  private String[] dwcOtherRecordNumbers;
+  private String[] otherRecordNumbers;
 
   private String group;
 

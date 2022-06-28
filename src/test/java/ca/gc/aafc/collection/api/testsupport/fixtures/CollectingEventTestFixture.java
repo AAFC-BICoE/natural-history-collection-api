@@ -80,7 +80,7 @@ public class CollectingEventTestFixture {
       .name("Ontario")
       .build();
 
-  public static final String[] DWC_OTHER_RECORD_NUMBERS = new String[]{"80-79", "80-80"};
+  public static final String[] OTHER_RECORD_NUMBERS = new String[]{"80-79", "80-80"};
   public static final String HABITAT = "Tropical";
 
   public static final ExtensionValue EXTENSION_VALUE = ExtensionValue.builder()
@@ -133,7 +133,7 @@ public class CollectingEventTestFixture {
     ce.setDwcVerbatimSRS(DWC_VERBATIM_SRS);
     ce.setDwcVerbatimElevation(DWC_VERBATIM_ELEVATION);
     ce.setDwcVerbatimDepth(DWC_VERBATIM_DEPTH);
-    ce.setDwcOtherRecordNumbers(DWC_OTHER_RECORD_NUMBERS);
+    ce.setOtherRecordNumbers(OTHER_RECORD_NUMBERS);
     ce.setHabitat(HABITAT);
     ce.setHost(HOST);
     ce.setDwcMaximumDepthInMeters(DWC_MAXIMUM_DEPTH_IN_METERS);
