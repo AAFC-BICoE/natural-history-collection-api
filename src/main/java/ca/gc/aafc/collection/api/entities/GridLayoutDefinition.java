@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.javers.core.metamodel.annotation.Value;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
@@ -14,10 +15,14 @@ import java.util.regex.Pattern;
 @Value // This class is considered a "value" belonging to a StorageTypeDto.
 public class GridLayoutDefinition {
 
+  @NotNull
   @Min(1)
+  @Max(1000)
   private Integer numberOfRows;
 
+  @NotNull
   @Min(1)
+  @Max(1000)
   private Integer numberOfColumns;
 
   @NotNull
