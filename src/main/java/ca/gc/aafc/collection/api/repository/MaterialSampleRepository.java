@@ -14,7 +14,6 @@ import io.crnk.core.resource.list.ResourceList;
 import io.micrometer.core.annotation.Timed;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -59,14 +58,8 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
   @Timed(value = "dina.repository.material-sample.findAll.time", description = "Time taken to findAll on MaterialSampleRepository")
   @Override
   public ResourceList<MaterialSampleDto> findAll(Collection<Serializable> ids, QuerySpec querySpec) {
-
     log.debug("QuerySpec included relations: {}", querySpec.getIncludedRelations());
-
-    ResourceList<MaterialSampleDto> resourceList = super.findAll(ids, querySpec);
-    if (CollectionUtils.isNotEmpty(resourceList) && !isHierarchyIncluded(querySpec)) {
-      resourceList.forEach(r -> r.setHierarchy(null));
-    }
-    return resourceList;
+    return super.findAll(ids, querySpec);
   }
 
   @Timed(value = "dina.repository.material-sample.findOne.time", description = "Time taken to findOne on MaterialSampleRepository")
@@ -76,8 +69,4 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
     return super.findOne(id, querySpec);
   }
 
-  private static boolean isHierarchyIncluded(QuerySpec querySpec) {
-    return querySpec.getIncludedRelations().stream()
-      .anyMatch(r -> r.getAttributePath().get(0).equalsIgnoreCase(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
-  }
 }
