@@ -9,6 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 
 import javax.persistence.CascadeType;
@@ -142,6 +143,7 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
+  @UniqueElements
   private List<UUID> attachment = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
