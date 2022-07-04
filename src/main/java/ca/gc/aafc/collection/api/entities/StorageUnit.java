@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,18 +32,18 @@ public class StorageUnit extends AbstractStorageUnit {
 
   public static final String HIERARCHY_PROP_NAME = "hierarchy";
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = PARENT_ID_COLUMN_NAME)
   private StorageUnit parentStorageUnit;
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_storage_unit_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private List<ImmutableStorageUnit> storageUnitChildren = new ArrayList<>();
+  private List<ImmutableStorageUnit> storageUnitChildren = List.of();
 
   @Transient
   private List<StorageHierarchicalObject> hierarchy;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = TYPE_COLUMN_NAME)
   private StorageUnitType storageUnitType;
 

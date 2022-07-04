@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -15,13 +15,11 @@ import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @RelatedEntity(StorageUnit.class)
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = StorageUnitDto.TYPENAME)
 @TypeName(StorageUnitDto.TYPENAME)
 public class StorageUnitDto {
@@ -44,9 +42,10 @@ public class StorageUnitDto {
   private StorageUnitDto parentStorageUnit;
 
   @DiffIgnore
-  private List<ImmutableStorageUnitDto> storageUnitChildren = new ArrayList<>();
+  private List<ImmutableStorageUnitDto> storageUnitChildren = List.of();
 
   @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<StorageHierarchicalObject> hierarchy;
 
   @JsonApiRelation
