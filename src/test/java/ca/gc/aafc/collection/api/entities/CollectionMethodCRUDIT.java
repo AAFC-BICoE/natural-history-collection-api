@@ -2,11 +2,12 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.service.CollectionMethodService;
+import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -15,6 +16,9 @@ class CollectionMethodCRUDIT extends CollectionModuleBaseIT {
 
   @Inject
   private CollectionMethodService methodService;
+
+  private static final MultilingualDescription MULTILINGUAL_DESCRIPTION =
+          MultilingualDescriptionFactory.newMultilingualDescription();
 
   @Test
   void find() {
@@ -64,14 +68,8 @@ class CollectionMethodCRUDIT extends CollectionModuleBaseIT {
       .name(RandomStringUtils.randomAlphabetic(4))
       .createdBy(RandomStringUtils.randomAlphabetic(4))
       .group(RandomStringUtils.randomAlphabetic(4))
-      .multilingualDescription(newMulti())
+      .multilingualDescription(MULTILINGUAL_DESCRIPTION)
       .build();
   }
 
-  private static MultilingualDescription newMulti() {
-    return MultilingualDescription.builder()
-      .descriptions(List.of(MultilingualDescription.MultilingualPair
-          .of("en", RandomStringUtils.randomAlphabetic(4))))
-      .build();
-  }
 }

@@ -145,4 +145,5 @@
   <include file="db/changelog/migrations/138-Add_field_number_collecting_event.xml"/>
   <include file="db/changelog/migrations/139-Rename_dwc_other_record_numbers.xml"/>
   <include file="db/changelog/migrations/140-Add_grid_storage_details_to_storage_type.xml"/>
+  <include file="db/changelog/migrations/141-Add_preparation_method.xml"/>
 </databaseChangeLog>

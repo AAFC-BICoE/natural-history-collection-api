@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+  context="schema-change">
+  
+  <changeSet context="schema-change" id="141-Add_preparation_method.xml" author="cgendreau">
+    <createTable tableName="preparation_method">
+	    <column autoIncrement="true" name="id" type="SERIAL">
+			<constraints primaryKey="true" primaryKeyName="pk_preparation_method_id" />
+	    </column>
+		<column name="uuid" type="uuid">
+			<constraints nullable="false" unique="true" />
+		</column>
+        <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+        <column name="created_by" type="VARCHAR(250)">
+          <constraints nullable="false"/>
+        </column>
+        <column name="_group" type="VARCHAR(50)">
+          <constraints nullable="false"/>
+        </column>
+        <column name="name" type="VARCHAR(50)">
+          <constraints nullable="false"/>
+        </column>
+        <column name="multilingual_description" type="jsonb"/>
+    </createTable>
+    <createIndex indexName="preparation_method_name_group_unique"
+               tableName="preparation_method"
+               unique="true">
+      <column name="LOWER(name)"/>
+      <column name="LOWER(_group)"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>
+
