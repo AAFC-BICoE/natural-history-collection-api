@@ -17,6 +17,8 @@
 
   <properties>
     <java.version>11</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     <javax.interceptor-api>1.2.2</javax.interceptor-api>
     <spotbugs.version>4.5.3</spotbugs.version>
     <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
@@ -26,7 +28,7 @@
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.45.1</checkstyle.version>
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.89</dina-base-api.version>
+    <dina-base-api.version>0.90-SNAPSHOT</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>

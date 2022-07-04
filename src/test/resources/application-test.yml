@@ -1,5 +1,6 @@
 # Test config:
 spring:
+  mandatory_file_encoding: UTF-8
   datasource:
     username: web_user
     password: test
