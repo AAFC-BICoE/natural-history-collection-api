@@ -104,29 +104,16 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
     // Step 2 - Create parent material sample with organisms attached.
     MaterialSampleDto parent = newSample();
-    String parentId = sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      MaterialSampleDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(parent),
-      Map.of(
-        "organism", Map.of(
-          "data", List.of(
-            Map.of(
-              "type", OrganismDto.TYPENAME,
-              "id", organismUuid1
-            ),
-            Map.of(
-              "type", OrganismDto.TYPENAME,
-              "id", organismUuid2
-            ),
-            Map.of(
-              "type", OrganismDto.TYPENAME,
-              "id", organismUuid3
-            )
-          )
-        )
-      ),
-      null)
-    ).extract().body().jsonPath().getString("data.id");
+    String parentId = JsonAPITestHelper.extractId(
+            sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+                    MaterialSampleDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(parent),
+                    (Map<String, Object>) JsonAPITestHelper.toRelationshipMapByName(
+                            List.of(JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismUuid1),
+                                    JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismUuid2),
+                                    JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismUuid3))),
+                    null)
+            ));
 
     // Step 3 - Create two child material samples, linked to the parent material sample.
     MaterialSampleDto child = newSample();
