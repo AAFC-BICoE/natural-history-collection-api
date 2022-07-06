@@ -5,7 +5,7 @@ import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
 import ca.gc.aafc.collection.api.service.CollectionService;
-import ca.gc.aafc.collection.api.service.CustomViewService;
+import ca.gc.aafc.collection.api.service.FormTemplateService;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
@@ -47,7 +47,7 @@ public class CollectionModuleBaseIT {
   protected MaterialSampleService materialSampleService;
 
   @Inject
-  protected CustomViewService customViewService;
+  protected FormTemplateService formTemplateService;
 
   @Inject
   protected MaterialSampleActionDefinitionService materialSampleActionDefinitionService;

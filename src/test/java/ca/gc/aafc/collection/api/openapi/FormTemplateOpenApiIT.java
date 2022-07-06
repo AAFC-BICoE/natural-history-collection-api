@@ -8,8 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.dto.CustomViewDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CustomViewFixture;
+import ca.gc.aafc.collection.api.dto.FormTemplateDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.FormTemplateFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -25,19 +25,19 @@ import lombok.SneakyThrows;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
-public class CustomViewOpenApiIT extends BaseRestAssuredTest {
+public class FormTemplateOpenApiIT extends BaseRestAssuredTest {
 
-  public static final String TYPE_NAME = CustomViewDto.TYPENAME;
-  public static final String SCHEMA_NAME = "CustomView";
+  public static final String TYPE_NAME = FormTemplateDto.TYPENAME;
+  public static final String SCHEMA_NAME = "FormTemplate";
 
-  protected CustomViewOpenApiIT() {
+  protected FormTemplateOpenApiIT() {
     super("/api/v1/");
   }
 
   @SneakyThrows
   @Test
-  void customView_SpecValid() {
-    CustomViewDto dto = CustomViewFixture.newCustomView().createdBy("test").build();
+  void formTemplate_SpecValid() {
+    FormTemplateDto dto = FormTemplateFixture.newFormTemplate().createdBy("test").build();
 
     ValidatableResponse apiResponse = sendPost(TYPE_NAME, JsonAPITestHelper
         .toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(dto), null, null));

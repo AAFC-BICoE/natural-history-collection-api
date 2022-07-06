@@ -1,17 +1,17 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
-import ca.gc.aafc.collection.api.entities.CustomView;
+import ca.gc.aafc.collection.api.entities.FormTemplate;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class CustomViewFactory implements TestableEntityFactory<CustomView> {
+public class FormTemplateFactory implements TestableEntityFactory<FormTemplate> {
 
   @Override
-  public CustomView getEntityInstance() {
-    return newCustomView().build();
+  public FormTemplate getEntityInstance() {
+    return newFormTemplate().build();
   }
 
   /**
@@ -21,8 +21,8 @@ public class CustomViewFactory implements TestableEntityFactory<CustomView> {
    *
    * @return Pre-configured builder with all mandatory fields set
    */
-  public static CustomView.CustomViewBuilder newCustomView() {
-    return CustomView
+  public static FormTemplate.FormTemplateBuilder newFormTemplate() {
+    return FormTemplate
         .builder()
         .uuid(UUID.randomUUID())
         .name(RandomStringUtils.randomAlphabetic(5))

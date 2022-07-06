@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * CustomView is used to store User Interface view customizations.
+ * FormTemplate is used to store client (e.g. ui) customizations.
  */
 @Entity
 @Getter
@@ -37,7 +37,7 @@ import java.util.UUID;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @RequiredArgsConstructor
 @NaturalIdCache
-public class CustomView implements DinaEntity {
+public class FormTemplate implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
