@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.CustomView;
+import ca.gc.aafc.collection.api.entities.FormTemplate;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -19,11 +19,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@RelatedEntity(CustomView.class)
-@JsonApiResource(type = CustomViewDto.TYPENAME)
-public class CustomViewDto {
+@RelatedEntity(FormTemplate.class)
+@JsonApiResource(type = FormTemplateDto.TYPENAME)
+public class FormTemplateDto {
 
-  public static final String TYPENAME = "custom-view";
+  public static final String TYPENAME = "form-template";
   
   @JsonApiId
   private UUID uuid;

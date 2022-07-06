@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.dto.CustomViewDto;
-import ca.gc.aafc.collection.api.entities.CustomView;
-import ca.gc.aafc.collection.api.service.CustomViewService;
+import ca.gc.aafc.collection.api.dto.FormTemplateDto;
+import ca.gc.aafc.collection.api.entities.FormTemplate;
+import ca.gc.aafc.collection.api.service.FormTemplateService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -15,28 +15,28 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class CustomViewRepository extends DinaRepository<CustomViewDto, CustomView> {
+public class FormTemplateRepository extends DinaRepository<FormTemplateDto, FormTemplate> {
 
   private final DinaAuthenticatedUser authenticatedUser;
 
-  public CustomViewRepository(
-    @NonNull CustomViewService customViewService,
+  public FormTemplateRepository(
+    @NonNull FormTemplateService formTemplateService,
     DinaAuthorizationService groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
-    super(customViewService,
+    super(formTemplateService,
         groupAuthorizationService,
         Optional.empty(),
-        new DinaMapper<>(CustomViewDto.class),
-        CustomViewDto.class, CustomView.class,
+        new DinaMapper<>(FormTemplateDto.class),
+        FormTemplateDto.class, FormTemplate.class,
         null,
         externalResourceProvider, buildProperties);
     this.authenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
   @Override
-  public <S extends CustomViewDto> S create(S resource) {
+  public <S extends FormTemplateDto> S create(S resource) {
     if(authenticatedUser != null) {
       resource.setCreatedBy(authenticatedUser.getUsername());
     }

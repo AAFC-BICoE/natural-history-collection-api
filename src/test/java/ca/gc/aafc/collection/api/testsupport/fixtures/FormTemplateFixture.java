@@ -1,20 +1,20 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
-import ca.gc.aafc.collection.api.dto.CustomViewDto;
+import ca.gc.aafc.collection.api.dto.FormTemplateDto;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Map;
 
-public final class CustomViewFixture {
+public final class FormTemplateFixture {
 
   public static final String GROUP = "aafc";
 
-  private CustomViewFixture() {
+  private FormTemplateFixture() {
     //utility class
   }
 
-  public static CustomViewDto.CustomViewDtoBuilder newCustomView() {
-    return CustomViewDto.builder()
+  public static FormTemplateDto.FormTemplateDtoBuilder newFormTemplate() {
+    return FormTemplateDto.builder()
         .group(GROUP)
         .restrictToCreatedBy(false)
         .viewConfiguration(Map.of())
