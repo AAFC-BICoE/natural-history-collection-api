@@ -10,6 +10,7 @@ import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
 import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
 import ca.gc.aafc.collection.api.service.OrganismService;
+import ca.gc.aafc.collection.api.service.PreparationMethodService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.service.ProjectService;
 import ca.gc.aafc.collection.api.service.ProtocolService;
@@ -56,6 +57,9 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected PreparationTypeService preparationTypeService;
+
+  @Inject
+  protected PreparationMethodService preparationMethodService;
 
   @Inject
   protected ProtocolService protocolService;

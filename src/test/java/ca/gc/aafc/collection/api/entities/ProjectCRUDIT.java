@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.ValidationException;
 
+import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,15 +24,8 @@ public class ProjectCRUDIT extends CollectionModuleBaseIT {
   private static final LocalDate EXPECTED_END_DATE = LocalDate.now();
   private final List<UUID> EXPECT_ATTACHMENTS = List.of(UUID.randomUUID(), UUID.randomUUID());
 
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR =
-      MultilingualDescription.MultilingualPair.of("fr", "description en français");
-
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_EN =
-      MultilingualDescription.MultilingualPair.of("en", "description in english");
-
-  private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescription.builder()
-    .descriptions(List.of(MULTILINGUAL_PAIR_EN, MULTILINGUAL_PAIR_FR))
-    .build();
+  private static final MultilingualDescription MULTILINGUAL_DESCRIPTION =
+          MultilingualDescriptionFactory.newMultilingualDescription();
 
   @Test
   void create() {

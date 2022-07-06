@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.util.List;
-
+import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,16 +19,8 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
   private static final String EXPECTED_GROUP = "DINA GROUP";
   private static final String EXPECTED_CREATED_BY = "createdBy";
 
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_FR =
-      MultilingualDescription.MultilingualPair.of("fr", "description en français");
-
-  private static final MultilingualDescription.MultilingualPair MULTILINGUAL_PAIR_EN =
-      MultilingualDescription.MultilingualPair.of("en", "description in english");
-
-  private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescription.builder()
-    .descriptions(List.of(MULTILINGUAL_PAIR_EN, MULTILINGUAL_PAIR_FR))
-    .build();
-
+  private static final MultilingualDescription MULTILINGUAL_DESCRIPTION =
+          MultilingualDescriptionFactory.newMultilingualDescription();
 
   private PreparationType buildTestPreparationType() {
     return  PreparationTypeFactory.newPreparationType()
@@ -62,7 +53,7 @@ public class PreparationTypeCRUDIT extends CollectionModuleBaseIT {
 
     //set the same group and try to update
     preparationType2.setGroup(EXPECTED_GROUP);
-    assertThrows(PersistenceException.class, () -> preparationTypeService.createAndFlush(preparationType2));
+    assertThrows(PersistenceException.class, () -> preparationTypeService.update(preparationType2));
   }
 
   @Test

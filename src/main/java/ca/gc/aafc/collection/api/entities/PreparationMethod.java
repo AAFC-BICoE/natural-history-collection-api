@@ -11,14 +11,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * A noun representing what is getting prepared
+ * A noun representing the process used (the how) in preparing the material sample
  */
 @Entity
 @SuperBuilder
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class PreparationType extends UserDescribedDinaEntity {
+public class PreparationMethod extends UserDescribedDinaEntity {
 
   @NotBlank
   @Size(max = 50)
