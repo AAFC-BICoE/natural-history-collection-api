@@ -22,7 +22,7 @@ public class FormTemplateCRUDIT extends CollectionModuleBaseIT {
             .createdBy(EXPECTED_CREATED_BY)
         .build());
 
-    // make sure we can create a second CustomView on the same group
+    // make sure we can create a second form template on the same group
     FormTemplate formTemplate2 = formTemplateService.createAndFlush(
         FormTemplateFactory.newFormTemplate()
             .group(EXPECTED_GROUP)

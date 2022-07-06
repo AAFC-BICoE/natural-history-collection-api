@@ -22,7 +22,7 @@ public class FormTemplateRepositoryIT extends CollectionModuleBaseIT {
   @Inject 
   private FormTemplateRepository formTemplateRepository;
 
-  private static final String NAME = "My Custom View";
+  private static final String NAME = "My Form Template";
 
   @Test
   @WithMockKeycloakUser(groupRole = FormTemplateFixture.GROUP+":user")

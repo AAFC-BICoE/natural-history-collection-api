@@ -36,7 +36,7 @@ public class FormTemplateOpenApiIT extends BaseRestAssuredTest {
 
   @SneakyThrows
   @Test
-  void customView_SpecValid() {
+  void formTemplate_SpecValid() {
     FormTemplateDto dto = FormTemplateFixture.newFormTemplate().createdBy("test").build();
 
     ValidatableResponse apiResponse = sendPost(TYPE_NAME, JsonAPITestHelper
