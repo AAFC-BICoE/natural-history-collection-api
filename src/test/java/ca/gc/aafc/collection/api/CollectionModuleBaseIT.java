@@ -7,8 +7,6 @@ import ca.gc.aafc.collection.api.service.CollectionSequenceService;
 import ca.gc.aafc.collection.api.service.CollectionService;
 import ca.gc.aafc.collection.api.service.FormTemplateService;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
-import ca.gc.aafc.collection.api.service.MaterialSampleActionDefinitionService;
-import ca.gc.aafc.collection.api.service.MaterialSampleActionRunService;
 import ca.gc.aafc.collection.api.service.OrganismService;
 import ca.gc.aafc.collection.api.service.PreparationMethodService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
@@ -48,12 +46,6 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected FormTemplateService formTemplateService;
-
-  @Inject
-  protected MaterialSampleActionDefinitionService materialSampleActionDefinitionService;
-
-  @Inject
-  protected MaterialSampleActionRunService materialSampleActionRunService;
 
   @Inject
   protected PreparationTypeService preparationTypeService;
