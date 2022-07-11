@@ -76,7 +76,6 @@ public class FormTemplate implements DinaEntity {
   @Type(type = "jsonb")
   private Map<String, Object> viewConfiguration;
 
-  @NotNull
   @Valid
   @Type(type = "jsonb")
   private List<FormComponent> components;

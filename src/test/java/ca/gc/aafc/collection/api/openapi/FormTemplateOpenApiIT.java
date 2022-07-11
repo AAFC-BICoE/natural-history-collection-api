@@ -40,9 +40,6 @@ public class FormTemplateOpenApiIT extends BaseRestAssuredTest {
   void formTemplate_SpecValid() {
     FormTemplateDto dto = FormTemplateFixture.newFormTemplate().createdBy("test").build();
 
-    ObjectMapper om = new ObjectMapper();
-    System.out.println(om.writeValueAsString(dto));
-
     ValidatableResponse apiResponse = sendPost(TYPE_NAME, JsonAPITestHelper
         .toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(dto), null, null));
 
