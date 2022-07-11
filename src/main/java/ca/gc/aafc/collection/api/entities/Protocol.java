@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @SuperBuilder
@@ -30,6 +31,7 @@ public class Protocol extends UserDescribedDinaEntity {
 
   @Type(type = "list-array")
   @Column(name = "attachments", columnDefinition = "uuid[]")
+  @UniqueElements
   private List<UUID> attachments = new ArrayList<>();
   
 }

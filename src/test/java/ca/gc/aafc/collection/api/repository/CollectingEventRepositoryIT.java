@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.FilterOperator;
 import io.crnk.core.queryspec.IncludeRelationSpec;
@@ -21,6 +22,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -147,6 +149,19 @@ public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
     QuerySpec querySpec = new QuerySpec(CollectingEventDto.class);
     CollectingEventDto refreshedCe = collectingEventRepository.findOne(myUUID, querySpec);
     assertNotNull(refreshedCe);
+  }
+
+  @WithMockKeycloakUser(groupRole = {"aafc:staff"})
+  @Test
+  public void create_withDuplicatedExternalRelationship_exception() {
+    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ExternalRelationDto externalRelationship = ExternalRelationDto.builder()
+            .id(UUID.randomUUID().toString())
+            .type("metadata")
+            .build();
+    // add it twice to make sure the UniqueElement annotation is doing what we think
+    ce.setAttachment(List.of(externalRelationship, externalRelationship));
+    assertThrows(ConstraintViolationException.class, () -> collectingEventRepository.create(ce));
   }
 
   private void assertAssertion(

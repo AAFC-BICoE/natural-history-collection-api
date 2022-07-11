@@ -24,6 +24,7 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -132,10 +133,12 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "list-array")
   @Column(name = "collectors", columnDefinition = "uuid[]")
+  @UniqueElements
   private List<UUID> collectors = new ArrayList<>();
 
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
+  @UniqueElements
   private List<UUID> attachment = new ArrayList<>();
 
   @Size(max = 250)
