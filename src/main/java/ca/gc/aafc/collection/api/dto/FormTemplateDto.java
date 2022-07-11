@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.FormTemplate;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -12,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,4 +42,8 @@ public class FormTemplateDto {
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, Object> viewConfiguration;
+
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<FormTemplate.FormComponent> components;
 }

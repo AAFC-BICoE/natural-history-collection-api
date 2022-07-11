@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.openapi;
 
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,6 +39,9 @@ public class FormTemplateOpenApiIT extends BaseRestAssuredTest {
   @Test
   void formTemplate_SpecValid() {
     FormTemplateDto dto = FormTemplateFixture.newFormTemplate().createdBy("test").build();
+
+    ObjectMapper om = new ObjectMapper();
+    System.out.println(om.writeValueAsString(dto));
 
     ValidatableResponse apiResponse = sendPost(TYPE_NAME, JsonAPITestHelper
         .toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(dto), null, null));
