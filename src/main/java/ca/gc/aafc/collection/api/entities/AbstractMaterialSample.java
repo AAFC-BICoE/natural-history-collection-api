@@ -90,9 +90,6 @@ public class AbstractMaterialSample implements DinaEntity {
   private String preparationRemarks;
 
   @Size(max = 250)
-  private String preparationMethod;
-
-  @Size(max = 250)
   private String preservationType;
 
   @Size(max = 250)

@@ -19,7 +19,6 @@ public class MaterialSampleTestFixture {
   public static final String CREATED_BY = "test user";
   public static final String DWC_DEGREE_OF_ESTABLISHMENT = "established";
 
-  public static final String PREPARATION_METHOD = "microwaving";
   public static final String PREPARATION_REMARKS = "this is a remark on the preparation";
   public static final UUID PREPARED_BY = UUID.randomUUID();
   public static final LocalDate PREPARATION_DATE = LocalDate.now();
@@ -68,7 +67,6 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setStateChangedOn(STATE_CHANGED_ON);
     materialSampleDto.setStateChangeRemarks(STATE_CHANGE_REMARKS);
     materialSampleDto.setMaterialSampleRemarks(MATERIAL_SAMPLE_REMARKS);
-    materialSampleDto.setPreparationMethod(PREPARATION_METHOD);
     materialSampleDto.setPreservationType(PRESERVATION_TYPE);
     materialSampleDto.setPreparationFixative(PREPARATION_FIXATIVE);
     materialSampleDto.setPreparationMaterials(PREPARATION_MATERIALS);

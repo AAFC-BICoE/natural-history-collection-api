@@ -149,4 +149,5 @@
   <include file="db/changelog/migrations/142-Rename_custom-view_to_form-template.xml"/>
   <include file="db/changelog/migrations/143-Remove_MaterialSampleActionDefinition.xml"/>
   <include file="db/changelog/migrations/144-Add_formComponents_to_form-template.xml"/>
+  <include file="db/changelog/migrations/145-Add_relationship_between_mat-sample_and_prep_method.xml"/>
 </databaseChangeLog>

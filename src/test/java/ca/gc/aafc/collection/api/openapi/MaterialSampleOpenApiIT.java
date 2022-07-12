@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationMethodTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -134,6 +136,9 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy(CREATED_BY);
 
+    PreparationMethodDto preparationMethodDto = PreparationMethodTestFixture.newPreparationMethod();
+    preparationMethodDto.setCreatedBy(CREATED_BY);
+
     ProtocolDto protocolDto = ProtocolTestFixture.newProtocol();
     protocolDto.setAttachments(null);
     protocolDto.setCreatedBy(CREATED_BY);
@@ -160,6 +165,14 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
         PreparationTypeDto.TYPENAME, 
         JsonAPITestHelper.toAttributeMap(preparationTypeDto)
       )
+    ));
+
+    String preparationMethodUUID = JsonAPITestHelper.extractId(sendPost(
+            PreparationMethodDto.TYPENAME,
+            JsonAPITestHelper.toJsonAPIMap(
+                    PreparationMethodDto.TYPENAME,
+                    JsonAPITestHelper.toAttributeMap(preparationMethodDto)
+            )
     ));
 
     String projectUUID = JsonAPITestHelper.extractId(sendPost(
@@ -200,6 +213,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
+          JsonAPIRelationship.of("preparationMethod", PreparationMethodDto.TYPENAME, preparationMethodUUID),
           JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID),
           JsonAPIRelationship.of("preparationProtocol", ProtocolDto.TYPENAME, protocolUUID)));
 
