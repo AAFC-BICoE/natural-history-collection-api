@@ -85,8 +85,10 @@ public class MaterialSampleDto {
   @JsonApiRelation
   private PreparationTypeDto preparationType;
 
+  @JsonApiRelation
+  private PreparationMethodDto preparationMethod;
+
   private LocalDate preparationDate;
-  private String preparationMethod;
   private String preservationType;
   private String preparationFixative;
   private String preparationMaterials;

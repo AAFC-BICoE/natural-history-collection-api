@@ -118,10 +118,6 @@ public class MaterialSample extends AbstractMaterialSample {
     }
   }
 
-  @ManyToOne
-  @ToString.Exclude
-  private PreparationType preparationType;
-
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
   private StorageUnit storageUnit;
@@ -145,6 +141,13 @@ public class MaterialSample extends AbstractMaterialSample {
   @Column(name = "attachment", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> attachment = new ArrayList<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private PreparationType preparationType;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "preparation_method_id")
+  private PreparationMethod preparationMethod;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "protocol_id")
