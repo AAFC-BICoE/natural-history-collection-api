@@ -10,10 +10,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
-
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +22,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @RequiredArgsConstructor
-@TypeDef(
-  name = "list-array",
-  typeClass = ListArrayType.class
-)
 public class Project extends UserDescribedDinaEntity {
   
   @NotBlank

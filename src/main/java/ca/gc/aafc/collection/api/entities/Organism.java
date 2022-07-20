@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +33,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Builder
 @NaturalIdCache
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Organism implements DinaEntity {
 
   @Id
