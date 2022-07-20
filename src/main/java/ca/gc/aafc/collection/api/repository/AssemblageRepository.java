@@ -26,7 +26,7 @@ public class AssemblageRepository extends DinaRepository<AssemblageDto, Assembla
           @NonNull AuditService auditService,
           DinaAuthorizationService groupAuthorizationService,
           @NonNull BuildProperties buildProperties,
-          DinaAuthenticatedUser dinaAuthenticatedUser
+          Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
             dinaService,
@@ -38,7 +38,7 @@ public class AssemblageRepository extends DinaRepository<AssemblageDto, Assembla
             null,
             externalResourceProvider,
             buildProperties);
-    this.dinaAuthenticatedUser = dinaAuthenticatedUser;
+    this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 
   @Override
