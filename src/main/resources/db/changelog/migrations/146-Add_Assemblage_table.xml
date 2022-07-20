@@ -31,6 +31,9 @@
             <column name="multilingual_description" type="jsonb"/>
             <column name="attachment" type="uuid[]"/>
         </createTable>
+        <sql>
+            ALTER TYPE managed_attribute_component ADD VALUE 'ASSEMBLAGE';
+        </sql>
     </changeSet>
 
 </databaseChangeLog>
