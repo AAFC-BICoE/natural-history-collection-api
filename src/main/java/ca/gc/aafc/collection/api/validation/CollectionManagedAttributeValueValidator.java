@@ -79,7 +79,8 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
   public enum CollectionManagedAttributeValidationContext implements ValidationContext {
     COLLECTING_EVENT(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT),
     MATERIAL_SAMPLE(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE),
-    DETERMINATION(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION);
+    DETERMINATION(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION),
+    ASSEMBLAGE(CollectionManagedAttribute.ManagedAttributeComponent.ASSEMBLAGE);
 
     CollectionManagedAttributeValidationContext(CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent) {
       this.managedAttributeComponent = managedAttributeComponent;
