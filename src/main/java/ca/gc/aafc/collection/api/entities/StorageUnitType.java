@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.entity.StorageGridLayout;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,6 +65,6 @@ public class StorageUnitType implements DinaEntity {
   @Type(type = "jsonb")
   @Column(name = "grid_layout_definition", columnDefinition = "jsonb")
   @Valid
-  private GridLayoutDefinition gridLayoutDefinition;
+  private StorageGridLayout gridLayoutDefinition;
 
 }

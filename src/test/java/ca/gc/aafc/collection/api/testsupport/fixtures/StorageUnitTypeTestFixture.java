@@ -13,7 +13,7 @@ public class StorageUnitTypeTestFixture {
     storageUnitTypeDto.setName(RandomStringUtils.randomAlphabetic(5));
     storageUnitTypeDto.setGroup(GROUP);
     storageUnitTypeDto.setIsInseperable(false);
-    storageUnitTypeDto.setGridLayoutDefinition(GridLayoutDefinitionTestFixture.newGridStorageDefinition());
+    storageUnitTypeDto.setGridLayoutDefinition(StorageGridLayoutTestFixture.newStorageGridLayout());
     return storageUnitTypeDto;
   }
 
