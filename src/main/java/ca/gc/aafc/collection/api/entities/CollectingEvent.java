@@ -4,10 +4,6 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +19,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
@@ -60,13 +55,6 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 @NaturalIdCache
-@TypeDef(
-  name = "list-array",
-  typeClass = ListArrayType.class
-)
-@TypeDef(name = "string-array", typeClass = StringArrayType.class)
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class CollectingEvent implements DinaEntity {
 
   public enum GeographicPlaceNameSource {
