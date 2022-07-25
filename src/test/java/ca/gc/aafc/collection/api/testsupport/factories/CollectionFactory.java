@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
 import ca.gc.aafc.collection.api.entities.Collection;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MultilingualTestFixture;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -25,7 +25,7 @@ public class CollectionFactory implements TestableEntityFactory<Collection> {
         .name(RandomStringUtils.randomAlphabetic(5))
         .group(RandomStringUtils.randomAlphabetic(5))
         .code(RandomStringUtils.randomAlphabetic(5))
-        .multilingualDescription(CollectionMethodTestFixture.newMulti())
+        .multilingualDescription(MultilingualTestFixture.newMultilingualDescription())
         .createdBy(RandomStringUtils.randomAlphabetic(5));
     }
 

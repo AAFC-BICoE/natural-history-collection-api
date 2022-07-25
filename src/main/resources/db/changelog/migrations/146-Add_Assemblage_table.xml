@@ -28,7 +28,9 @@
             </column>
 
             <column name="managed_attributes" type="jsonb" defaultValue="{}"/>
+            <column name="multilingual_title" type="jsonb"/>
             <column name="multilingual_description" type="jsonb"/>
+
             <column name="attachment" type="uuid[]"/>
         </createTable>
         <sql>

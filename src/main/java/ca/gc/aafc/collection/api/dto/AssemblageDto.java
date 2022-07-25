@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
+import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -50,5 +51,7 @@ public class AssemblageDto {
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = Map.of();
 
+  private MultilingualTitle multilingualTitle;
   private MultilingualDescription multilingualDescription;
+
 }

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +30,11 @@ public class Assemblage extends UserDescribedDinaEntity {
   @Column(name = "_group")
   @Size(max = 250)
   private String group;
+
+  @Type(type = "jsonb")
+  @Column(name = "multilingual_title")
+  @Valid
+  private MultilingualTitle multilingualTitle;
 
   @Type(type = "jsonb")
   @NotNull

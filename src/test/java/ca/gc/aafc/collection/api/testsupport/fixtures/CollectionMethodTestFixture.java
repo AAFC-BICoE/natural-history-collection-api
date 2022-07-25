@@ -1,10 +1,7 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
-import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
-
-import java.util.List;
 
 public class CollectionMethodTestFixture {
 
@@ -13,14 +10,7 @@ public class CollectionMethodTestFixture {
       .name(RandomStringUtils.randomAlphabetic(4))
       .createdBy(RandomStringUtils.randomAlphabetic(4))
       .group("aafc")
-      .multilingualDescription(newMulti())
-      .build();
-  }
-
-  public static MultilingualDescription newMulti() {
-    return MultilingualDescription.builder()
-      .descriptions(List.of(MultilingualDescription
-          .MultilingualPair.of("en",RandomStringUtils.randomAlphabetic(4))))
+      .multilingualDescription(MultilingualTestFixture.newMultilingualDescription())
       .build();
   }
 

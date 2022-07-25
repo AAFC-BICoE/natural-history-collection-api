@@ -16,7 +16,7 @@ public class CollectionManagedAttributeTestFixture {
     collectionManagedAttributeDto.setAcceptedValues(new String[]{"value"});
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collectionManagedAttributeDto.setCreatedBy("created by");   
-    collectionManagedAttributeDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());    
+    collectionManagedAttributeDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     return collectionManagedAttributeDto;
   }
 

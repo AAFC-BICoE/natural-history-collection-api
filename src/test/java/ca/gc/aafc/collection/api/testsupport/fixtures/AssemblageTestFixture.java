@@ -15,7 +15,8 @@ public class AssemblageTestFixture {
     AssemblageDto assemblageDto = new AssemblageDto();
     assemblageDto.setGroup(GROUP);
     assemblageDto.setName(RandomStringUtils.randomAlphabetic(5));
-    assemblageDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
+    assemblageDto.setMultilingualTitle(MultilingualTestFixture.newMultilingualTitle());
+    assemblageDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     assemblageDto.setAttachment(List.of(
             ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("metadata").build()));
     return assemblageDto;
