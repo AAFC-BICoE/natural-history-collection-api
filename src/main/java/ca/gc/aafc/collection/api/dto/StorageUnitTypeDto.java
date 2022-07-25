@@ -1,9 +1,8 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.GridLayoutDefinition;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import ca.gc.aafc.dina.entity.StorageGridLayout;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
@@ -16,7 +15,6 @@ import java.util.UUID;
 
 @Data
 @RelatedEntity(StorageUnitType.class)
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = StorageUnitTypeDto.TYPENAME)
 @TypeName(StorageUnitTypeDto.TYPENAME)
 public class StorageUnitTypeDto {
@@ -33,5 +31,5 @@ public class StorageUnitTypeDto {
   private String group;
   private String name;
   private Boolean isInseperable;
-  private GridLayoutDefinition gridLayoutDefinition;
+  private StorageGridLayout gridLayoutDefinition;
 }

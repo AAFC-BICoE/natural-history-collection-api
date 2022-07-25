@@ -21,7 +21,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @SpringBootTest(
@@ -108,7 +107,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
             sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
                     MaterialSampleDto.TYPENAME,
                     JsonAPITestHelper.toAttributeMap(parent),
-                    (Map<String, Object>) JsonAPITestHelper.toRelationshipMapByName(
+                    JsonAPITestHelper.toRelationshipMapByName(
                             List.of(JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismUuid1),
                                     JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismUuid2),
                                     JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismUuid3))),
