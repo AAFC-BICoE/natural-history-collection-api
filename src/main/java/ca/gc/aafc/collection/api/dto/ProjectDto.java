@@ -15,7 +15,6 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -23,7 +22,6 @@ import lombok.Data;
 
 @Data
 @RelatedEntity(Project.class)
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = ProjectDto.TYPENAME)
 @TypeName(ProjectDto.TYPENAME)
 public class ProjectDto {

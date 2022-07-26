@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api;
 
 import ca.gc.aafc.collection.api.service.AcquisitionEventService;
+import ca.gc.aafc.collection.api.service.AssemblageService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
@@ -73,6 +74,9 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected ProjectService projectService;
+
+  @Inject
+  protected AssemblageService assemblageService;
 
   @Inject
   protected OrganismService organismService;

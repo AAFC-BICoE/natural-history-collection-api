@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.CollectionModuleKeycloakBaseIT;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
@@ -31,13 +30,13 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(properties = "keycloak.enabled=true")
-public class CollectingEventRepositoryIT extends CollectionModuleBaseIT {
+public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT {
 
   @Inject
   private CollectingEventRepository collectingEventRepository;
+
   @Inject
-  CollectionMethodRepository collectionMethodRepository;
+  private CollectionMethodRepository collectionMethodRepository;
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc: staff"})

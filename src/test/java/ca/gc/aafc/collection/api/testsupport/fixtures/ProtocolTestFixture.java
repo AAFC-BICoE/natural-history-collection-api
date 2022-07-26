@@ -11,7 +11,7 @@ public class ProtocolTestFixture {
   public static ProtocolDto newProtocol() {
     ProtocolDto protocolDto = new ProtocolDto();
     protocolDto.setName(RandomStringUtils.randomAlphabetic(5));
-    protocolDto.setMultilingualDescription(CollectionMethodTestFixture.newMulti());
+    protocolDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     protocolDto.setGroup(GROUP);
     return protocolDto;
   }

@@ -20,7 +20,7 @@ public final class InstitutionFixture {
     return InstitutionDto.builder()
       .name(RandomStringUtils.randomAlphabetic(4))
       .createdBy(RandomStringUtils.randomAlphabetic(4))
-      .multilingualDescription(CollectionMethodTestFixture.newMulti())
+      .multilingualDescription(MultilingualTestFixture.newMultilingualDescription())
       .webpage("https://github.com/DINA-Web")
       .address("123 Street \n City")
       .remarks(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30))
@@ -36,7 +36,7 @@ public final class InstitutionFixture {
       .uuid(UUID.randomUUID())
       .name(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(3))
       .createdBy(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(3))
-      .multilingualDescription(CollectionMethodTestFixture.newMulti())
+      .multilingualDescription(MultilingualTestFixture.newMultilingualDescription())
       .webpage("https://github.com/DINA-Web")
       .address("123 Street \n City")
       .remarks(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30));
