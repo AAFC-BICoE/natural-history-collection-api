@@ -24,7 +24,6 @@ import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
@@ -33,7 +32,6 @@ import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 
 @RelatedEntity(MaterialSample.class)
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @Data
 @JsonApiResource(type = MaterialSampleDto.TYPENAME)
 @TypeName(MaterialSampleDto.TYPENAME)
@@ -144,7 +142,11 @@ public class MaterialSampleDto {
 
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<ProjectDto> projects = new ArrayList<>();
+  private List<ProjectDto> projects = List.of();
+
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<AssemblageDto> assemblages = List.of();
 
   private List<ExtensionValue> restrictionFieldsExtension;
 

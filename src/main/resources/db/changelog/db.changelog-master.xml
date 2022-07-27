@@ -151,4 +151,5 @@
   <include file="db/changelog/migrations/144-Add_formComponents_to_form-template.xml"/>
   <include file="db/changelog/migrations/145-Add_relationship_between_mat-sample_and_prep_method.xml"/>
   <include file="db/changelog/migrations/146-Add_Assemblage_table.xml"/>
+  <include file="db/changelog/migrations/147_Add_relationship_between_assemblage_and_material-sample.xml"/>
 </databaseChangeLog>

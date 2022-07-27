@@ -100,7 +100,16 @@ public class MaterialSample extends AbstractMaterialSample {
     inverseJoinColumns = { @JoinColumn(name = "project_id") }
   )
   @OrderColumn(name = "pos")
-  private List<Project> projects = new ArrayList<>();
+  private List<Project> projects = List.of();
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "material_sample_assemblage",
+          joinColumns = { @JoinColumn(name = "material_sample_id") },
+          inverseJoinColumns = { @JoinColumn(name = "assemblage_id") }
+  )
+  @OrderColumn(name = "pos")
+  private List<Assemblage> assemblages = List.of();
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "material_sample_id")

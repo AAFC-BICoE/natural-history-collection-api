@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationMethodTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import org.junit.jupiter.api.Test;
@@ -90,48 +92,35 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .verbatimScientificName("verbatimScientificName")
       .build();
 
-    OrganismDto organism = OrganismTestFixture.newOrganism(determination);
-    organism.setIsTarget(true);
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(determination);
+    organismDto.setIsTarget(true);
 
     MaterialSampleDto ms = MaterialSampleTestFixture.newMaterialSample();
     ms.setMaterialSampleType(MaterialSampleType.MIXED_ORGANISMS);
-    ms.setAttachment(null);
-    ms.setPreparedBy(null);
-    ms.setPreparationProtocol(null);
     ms.setManagedAttributes(Map.of("name", "anything"));
-    ms.setOrganism(null);
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
-    ms.setAcquisitionEvent(null);
-    ms.setProjects(null);
+    setRelationshipsToNull(ms);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setMaterialSampleType(MaterialSampleType.MOLECULAR_SAMPLE);
     parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     parent.setMaterialSampleName("parent" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
-    parent.setAttachment(null);
-    parent.setParentMaterialSample(null);
-    parent.setMaterialSampleChildren(null);
-    parent.setPreparedBy(null);
-    parent.setPreparationProtocol(null);
-    parent.setAcquisitionEvent(null);
-    parent.setProjects(null);
+    setRelationshipsToNull(parent);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setMaterialSampleType(MaterialSampleType.WHOLE_ORGANISM);
     child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
-    child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME); 
-    child.setAttachment(null);
-    child.setParentMaterialSample(null);
-    child.setMaterialSampleChildren(null);
-    child.setPreparedBy(null);
-    child.setPreparationProtocol(null);
-    child.setAcquisitionEvent(null);
-    child.setProjects(null);
+    child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
+    setRelationshipsToNull(child);
 
     ProjectDto projectDto = ProjectTestFixture.newProject();  
     projectDto.setCreatedBy(CREATED_BY);
     projectDto.setAttachment(null);
+
+    AssemblageDto assemblageDto = AssemblageTestFixture.newAssemblage();
+    assemblageDto.setCreatedBy(CREATED_BY);
+    assemblageDto.setAttachment(null);
 
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();  
     preparationTypeDto.setCreatedBy(CREATED_BY);
@@ -159,55 +148,19 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       )
     ));
 
-    String preparationTypeUUID = JsonAPITestHelper.extractId(sendPost(
-      PreparationTypeDto.TYPENAME,
-      JsonAPITestHelper.toJsonAPIMap(
-        PreparationTypeDto.TYPENAME, 
-        JsonAPITestHelper.toAttributeMap(preparationTypeDto)
-      )
-    ));
-
-    String preparationMethodUUID = JsonAPITestHelper.extractId(sendPost(
-            PreparationMethodDto.TYPENAME,
-            JsonAPITestHelper.toJsonAPIMap(
-                    PreparationMethodDto.TYPENAME,
-                    JsonAPITestHelper.toAttributeMap(preparationMethodDto)
-            )
-    ));
-
-    String projectUUID = JsonAPITestHelper.extractId(sendPost(
-      ProjectDto.TYPENAME, 
-      JsonAPITestHelper.toJsonAPIMap(
-        ProjectDto.TYPENAME, 
-        JsonAPITestHelper.toAttributeMap(projectDto),
-        Map.of(
-          "attachment", 
-          JsonAPITestHelper.generateExternalRelationList("metadata", 1)
-        ),
-      null)
-    ));
-
-    String protocolUUID = JsonAPITestHelper.extractId(sendPost(
-            ProtocolDto.TYPENAME,
-            JsonAPITestHelper.toJsonAPIMap(
-                    ProtocolDto.TYPENAME,
-                    JsonAPITestHelper.toAttributeMap(protocolDto))
-    ));
-
-
-    String organismUUID = JsonAPITestHelper.extractId(sendPost(
-      OrganismDto.TYPENAME,
-      JsonAPITestHelper.toJsonAPIMap(
-        OrganismDto.TYPENAME, 
-        JsonAPITestHelper.toAttributeMap(organism)
-      )
-    ));
+    String preparationTypeUUID = postResource(PreparationTypeDto.TYPENAME, preparationTypeDto);
+    String preparationMethodUUID = postResource(PreparationMethodDto.TYPENAME, preparationMethodDto);
+    String protocolUUID = postResource(ProtocolDto.TYPENAME, protocolDto);
+    String organismUUID = postResource(OrganismDto.TYPENAME, organismDto);
+    String assemblageUUID = postResource(AssemblageDto.TYPENAME, assemblageDto);
+    String projectUUID = postResource(ProjectDto.TYPENAME, projectDto);
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     Map<String, Object> generatedRelationshipMap = Map.of(
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
       "projects", getRelationshipListType("project", projectUUID),
+      "assemblages", getRelationshipListType("assemblage", assemblageUUID),
       "organism", getRelationshipListType("organism", organismUUID));
 
     Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
@@ -252,6 +205,31 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent", "targetOrganismPrimaryDetermination")).build()
       );
     }
+
+    private String postResource(String resourceType, Object dto) {
+      return JsonAPITestHelper.extractId(sendPost(
+              resourceType,
+              JsonAPITestHelper.toJsonAPIMap(
+                      resourceType,
+                      JsonAPITestHelper.toAttributeMap(dto))
+      ));
+    }
+
+  /**
+   * Set {@link MaterialSampleDto} relationships to null, so they won't be serialized as attributes.
+   *
+   * @param materialSampleDto
+   */
+  private void setRelationshipsToNull(MaterialSampleDto materialSampleDto) {
+    materialSampleDto.setAttachment(null);
+    materialSampleDto.setParentMaterialSample(null);
+    materialSampleDto.setMaterialSampleChildren(null);
+    materialSampleDto.setPreparedBy(null);
+    materialSampleDto.setPreparationProtocol(null);
+    materialSampleDto.setAcquisitionEvent(null);
+    materialSampleDto.setProjects(null);
+    materialSampleDto.setAssemblages(null);
+  }
 
   private Map<String, Object> getRelationshipListType(String type, String uuid) {
     return Map.of("data", List.of(Map.of(
