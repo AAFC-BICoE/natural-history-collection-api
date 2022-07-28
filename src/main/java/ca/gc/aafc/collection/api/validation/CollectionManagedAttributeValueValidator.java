@@ -16,8 +16,9 @@ import ca.gc.aafc.dina.validation.ManagedAttributeValueValidator;
 import lombok.NonNull;
 import org.springframework.validation.Errors;
 
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 
 @Component
@@ -60,41 +61,42 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
       String value, Errors errors, ValidationContext validationContext) {
 
     // expected context based on the component
-    Optional<CollectionManagedAttributeValidationContext> expectedContext =
+    CollectionManagedAttributeValidationContext expectedContext =
         CollectionManagedAttributeValidationContext.from(managedAttributeDefinition.getManagedAttributeComponent());
 
-    // context received from the validate method
-    Optional<CollectionManagedAttributeValidationContext> collValidationContext =
-        Optional.ofNullable(validationContext).map( vc -> (CollectionManagedAttributeValidationContext)validationContext);
-
-    if(!expectedContext.equals(collValidationContext)) {
+    if(!expectedContext.equals(validationContext)) {
       errors.reject(INVALID_VALIDATION_CONTEXT_KEY, getMessageForKey(INVALID_VALIDATION_CONTEXT_KEY,
-          collValidationContext.map(Enum::toString).orElse("?"),
-          expectedContext.map(Enum::toString).orElse("?")));
+              Objects.toString(validationContext), expectedContext.toString()));
       return false;
     }
     return true;
   }
 
-  public enum CollectionManagedAttributeValidationContext implements ValidationContext {
-    COLLECTING_EVENT(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT),
-    MATERIAL_SAMPLE(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE),
-    DETERMINATION(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION),
-    ASSEMBLAGE(CollectionManagedAttribute.ManagedAttributeComponent.ASSEMBLAGE);
+  /**
+   * Wrapper class to expose {@link ca.gc.aafc.collection.api.entities.CollectionManagedAttribute.ManagedAttributeComponent} as
+   * {@link ValidationContext}.
+   */
+  public static class CollectionManagedAttributeValidationContext implements ValidationContext {
+    // make sure to only keep 1 instance per enum value
+    private static final EnumMap<CollectionManagedAttribute.ManagedAttributeComponent, CollectionManagedAttributeValidationContext> INSTANCES =
+            new EnumMap<>(CollectionManagedAttribute.ManagedAttributeComponent.class);
+    private final CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent;
 
-    CollectionManagedAttributeValidationContext(CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent) {
+    /**
+     * Use {@link #from(CollectionManagedAttribute.ManagedAttributeComponent)} method
+     * @param managedAttributeComponent
+     */
+    private CollectionManagedAttributeValidationContext(CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent) {
       this.managedAttributeComponent = managedAttributeComponent;
     }
 
-    private final CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent;
+    public static CollectionManagedAttributeValidationContext from(CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent) {
+      return INSTANCES.computeIfAbsent(managedAttributeComponent, CollectionManagedAttributeValidationContext::new);
+    }
 
-    public static Optional<CollectionManagedAttributeValidationContext> from(CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent) {
-      for(CollectionManagedAttributeValidationContext curr : values()) {
-        if(curr.managedAttributeComponent == managedAttributeComponent) {
-          return Optional.of(curr);
-        }
-      }
-      return Optional.empty();
+    @Override
+    public String toString(){
+      return managedAttributeComponent.toString();
     }
 
     @Override
