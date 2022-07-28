@@ -76,7 +76,7 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
    * Wrapper class to expose {@link ca.gc.aafc.collection.api.entities.CollectionManagedAttribute.ManagedAttributeComponent} as
    * {@link ValidationContext}.
    */
-  public static class CollectionManagedAttributeValidationContext implements ValidationContext {
+  public static final class CollectionManagedAttributeValidationContext implements ValidationContext {
     // make sure to only keep 1 instance per enum value
     private static final EnumMap<CollectionManagedAttribute.ManagedAttributeComponent, CollectionManagedAttributeValidationContext> INSTANCES =
             new EnumMap<>(CollectionManagedAttribute.ManagedAttributeComponent.class);
@@ -95,7 +95,7 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
     }
 
     @Override
-    public String toString(){
+    public String toString() {
       return managedAttributeComponent.toString();
     }
 
