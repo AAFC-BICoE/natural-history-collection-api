@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -35,6 +36,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final MaterialSampleValidator materialSampleValidator;
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
   private final RestrictionExtensionValueValidator extensionValueValidator;
 
@@ -54,6 +56,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.associationValidator = associationValidator;
     this.hierarchicalDataService = hierarchicalDataService;
     this.extensionValueValidator = extensionValueValidator;
+    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+            .from(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
   }
 
   @Override
@@ -121,8 +125,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
-      CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.MATERIAL_SAMPLE);
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(), validationContext);
   }
 
   private void validateAssociations(MaterialSample entity) {

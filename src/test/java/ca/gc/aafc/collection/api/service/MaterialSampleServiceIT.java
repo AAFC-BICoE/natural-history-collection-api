@@ -42,7 +42,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
   @Test
   void create_invalidAssociationType_exception() {
     // Create association with invalid type.
-    List<Association> associations = new ArrayList<Association>();
+    List<Association> associations = new ArrayList<>();
     associations.add(Association.builder()
       .associatedSample(persistMaterialSample())
       .associationType(INVALID_TYPE)
