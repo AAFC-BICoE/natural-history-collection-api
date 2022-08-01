@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO">
+
+    <resultMap id="materialSampleHierarchyObjectResult" type="ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject">
+        <id property="id" column="id"/>
+        <result property = "uuid" column = "uuid" typeHandler = "ca.gc.aafc.dina.mybatis.UUIDTypeHandler"/>
+
+        <collection property="organismPrimaryDetermination" column="organism_primary_determination" ofType="ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject$DeterminationSummary">
+            <!-- the type handler will convert the entire content of the column -->
+            <result column="organism_primary_determination"/>
+        </collection>
+    </resultMap>
+
+    <select id="getHierarchy" parameterType="int" resultMap="materialSampleHierarchyObjectResult" statementType="CALLABLE">
+        WITH RECURSIVE get_hierarchy (id, parent_id, uuid, name, rank, organism_primary_determination) AS (
+        SELECT initial_t.id, initial_t.parent_material_sample_id, initial_t.uuid, initial_t.material_sample_name, 1, jsonb_path_query_first(organism.determination, '$[*] ? (@.isPrimary == true)')
+        FROM material_sample AS initial_t LEFT OUTER JOIN organism ON initial_t.id = organism.material_sample_id and (organism.is_target or organism.is_target IS NULL) WHERE initial_t.id = #{id}
+         UNION ALL
+        SELECT node.id, node.parent_material_sample_id, node.uuid, node.material_sample_name, gh.rank + 1, jsonb_path_query_first(organism.determination, '$[*] ? (@.isPrimary == true)') FROM
+         get_hierarchy gh, material_sample AS node LEFT OUTER JOIN organism ON node.id = organism.material_sample_id and (organism.is_target or organism.is_target IS NULL) WHERE node.id = gh.parent_id)
+        SELECT id, uuid, name, rank, organism_primary_determination FROM get_hierarchy
+    </select>
+</mapper>

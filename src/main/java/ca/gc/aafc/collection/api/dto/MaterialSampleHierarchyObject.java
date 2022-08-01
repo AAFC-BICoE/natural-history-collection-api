@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class MaterialSampleHierarchyObject extends HierarchicalObject {
 
-  private DeterminationSummary targetOrganismPrimaryDetermination;
+  private List<DeterminationSummary> organismPrimaryDetermination;
 
   /**
    * Summarized version of {@link ca.gc.aafc.collection.api.entities.Determination}

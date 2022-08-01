@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
 import org.postgresql.util.PGobject;
 
 import java.sql.CallableStatement;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@MappedTypes(MaterialSampleHierarchyObject.DeterminationSummary.class)
 public class DeterminationSummaryTypeHandler extends BaseTypeHandler<MaterialSampleHierarchyObject.DeterminationSummary> {
 
   @Override

@@ -42,7 +42,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
   @Test
   void create_invalidAssociationType_exception() {
     // Create association with invalid type.
-    List<Association> associations = new ArrayList<Association>();
+    List<Association> associations = new ArrayList<>();
     associations.add(Association.builder()
       .associatedSample(persistMaterialSample())
       .associationType(INVALID_TYPE)
@@ -107,12 +107,62 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     MaterialSample freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
     materialSampleService.setHierarchy(freshMaterialSample);
     assertEquals(2, freshMaterialSample.getHierarchy().size());
-    assertNotNull(freshMaterialSample.getHierarchy().get(1).getTargetOrganismPrimaryDetermination());
+    assertNotNull(freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination());
 
     //cleanup
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
+  }
+
+  @Test
+  public void hierarchy_onHierarchyNoTargetOrganism_hierarchyLoaded() throws JsonProcessingException {
+
+    Determination determination = DeterminationFactory.newDetermination()
+            .verbatimScientificName("verbatimScientificName")
+            .isPrimary(true)
+            .build();
+    Organism organism = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination))
+            .build();
+    Determination determination2 = DeterminationFactory.newDetermination()
+            .verbatimScientificName("verbatimScientificName2")
+            .isPrimary(true)
+            .build();
+    Organism organism2 = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination2))
+            .build();
+
+    // we need to create the entities in another transaction so that MyBatis can see it.
+    transactionTestingHelper.doInTransaction(() -> organismService.createAndFlush(organism));
+    assertNotNull(organism.getUuid());
+    transactionTestingHelper.doInTransaction(() -> organismService.createAndFlush(organism2));
+    assertNotNull(organism2.getUuid());
+
+    MaterialSample parentMaterialSample = MaterialSampleFactory.newMaterialSample()
+            .organism(List.of(organism, organism2))
+            .build();
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(parentMaterialSample));
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+            .parentMaterialSample(parentMaterialSample)
+            .build();
+
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(materialSample));
+
+    MaterialSample freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+    materialSampleService.setHierarchy(freshMaterialSample);
+    assertEquals(2, freshMaterialSample.getHierarchy().size());
+    assertNotNull(freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination());
+    assertEquals(2, freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination().size());
+
+    //cleanup
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism2));
   }
 
   private MaterialSample persistMaterialSample() {
