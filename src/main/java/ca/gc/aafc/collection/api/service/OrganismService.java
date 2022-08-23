@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.OrganismValidator;
@@ -19,12 +20,15 @@ public class OrganismService extends DefaultDinaService<Organism> {
 
   private final OrganismValidator organismValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
 
   public OrganismService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv, OrganismValidator organismValidator,
       CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator) {
     super(baseDAO, sv);
     this.organismValidator = organismValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+            .from(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION);
   }
 
   @Override
@@ -70,8 +74,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
           collectionManagedAttributeValueValidator.validate(
               organism.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()),
               determination,
-              determination.getManagedAttributes(),
-              CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.DETERMINATION);
+              determination.getManagedAttributes(), validationContext);
         }
       });
     }

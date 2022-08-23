@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.CollectingEventExtensionValueValidator;
@@ -27,6 +28,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
   private final CollectingEventExtensionValueValidator extensionValueValidator;
 
   public CollectingEventService(
@@ -41,6 +43,8 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+            .from(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     this.extensionValueValidator = extensionValueValidator;
   }
 
@@ -103,8 +107,7 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
-        CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext.COLLECTING_EVENT);
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(), validationContext);
   }
 
   private void cleanupManagedAttributes(CollectingEvent entity) {
