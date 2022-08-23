@@ -72,5 +72,5 @@ messaging:
   isProducer: false
 
 mybatis:
-  mapper-locations: classpath:my-batis/mapper*.xml
+  mapper-locations: classpath:my-batis/*Mapper.xml
   type-handlers-package: ca.gc.aafc.collection.api.mybatis

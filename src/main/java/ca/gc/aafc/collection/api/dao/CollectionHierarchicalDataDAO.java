@@ -13,7 +13,7 @@ import java.util.List;
 public interface CollectionHierarchicalDataDAO {
 
   /**
-   * Definition loaded from mapper.xml file due to Java API annotation limitation
+   * Definition loaded from CollectionHierarchicalDataDAOMapper.xml file due to Java API annotation limitation
    * @param id
    * @return
    */

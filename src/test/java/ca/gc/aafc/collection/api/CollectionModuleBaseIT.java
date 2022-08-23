@@ -21,6 +21,7 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -32,6 +33,7 @@ import java.util.Properties;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = { PostgresTestContainerInitializer.class })
+@Import(CollectionModuleBaseIT.CollectionModuleTestConfiguration.class)
 public class CollectionModuleBaseIT {
   @Inject
   protected DatabaseSupportService service;    

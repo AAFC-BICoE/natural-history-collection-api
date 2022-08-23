@@ -1,33 +1,32 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
-
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
+import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.hibernate.validator.internal.util.Contracts;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.Association;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.collection.api.validation.AssociationValidator;
+import javax.inject.Inject;
+import javax.validation.ValidationException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
@@ -155,6 +154,8 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     MaterialSample freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
     materialSampleService.setHierarchy(freshMaterialSample);
     assertEquals(2, freshMaterialSample.getHierarchy().size());
+    assertEquals(1, freshMaterialSample.getHierarchy().get(0).getRank());
+    assertTrue(StringUtils.isNotBlank(freshMaterialSample.getHierarchy().get(0).getName()));
     assertNotNull(freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination());
     assertEquals(2, freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination().size());
 

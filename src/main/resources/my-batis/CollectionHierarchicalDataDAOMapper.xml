@@ -7,7 +7,9 @@
 
     <resultMap id="materialSampleHierarchyObjectResult" type="ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject">
         <id property="id" column="id"/>
-        <result property = "uuid" column = "uuid" typeHandler = "ca.gc.aafc.dina.mybatis.UUIDTypeHandler"/>
+        <result property="rank" column="rank"/>
+        <result property="name" column="name"/>
+        <result property="uuid" column="uuid" typeHandler="ca.gc.aafc.dina.mybatis.UUIDTypeHandler"/>
 
         <collection property="organismPrimaryDetermination" column="organism_primary_determination" ofType="ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject$DeterminationSummary">
             <!-- the type handler will convert the entire content of the column -->
