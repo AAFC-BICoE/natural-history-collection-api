@@ -1,33 +1,32 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
-
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
+import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.hibernate.validator.internal.util.Contracts;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.Association;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.collection.api.validation.AssociationValidator;
+import javax.inject.Inject;
+import javax.validation.ValidationException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
@@ -107,12 +106,64 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     MaterialSample freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
     materialSampleService.setHierarchy(freshMaterialSample);
     assertEquals(2, freshMaterialSample.getHierarchy().size());
-    assertNotNull(freshMaterialSample.getHierarchy().get(1).getTargetOrganismPrimaryDetermination());
+    assertNotNull(freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination());
 
     //cleanup
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
+  }
+
+  @Test
+  public void hierarchy_onHierarchyNoTargetOrganism_hierarchyLoaded() throws JsonProcessingException {
+
+    Determination determination = DeterminationFactory.newDetermination()
+            .verbatimScientificName("verbatimScientificName")
+            .isPrimary(true)
+            .build();
+    Organism organism = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination))
+            .build();
+    Determination determination2 = DeterminationFactory.newDetermination()
+            .verbatimScientificName("verbatimScientificName2")
+            .isPrimary(true)
+            .build();
+    Organism organism2 = OrganismEntityFactory.newOrganism()
+            .isTarget(null)
+            .determination(List.of(determination2))
+            .build();
+
+    // we need to create the entities in another transaction so that MyBatis can see it.
+    transactionTestingHelper.doInTransaction(() -> organismService.createAndFlush(organism));
+    assertNotNull(organism.getUuid());
+    transactionTestingHelper.doInTransaction(() -> organismService.createAndFlush(organism2));
+    assertNotNull(organism2.getUuid());
+
+    MaterialSample parentMaterialSample = MaterialSampleFactory.newMaterialSample()
+            .organism(List.of(organism, organism2))
+            .build();
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(parentMaterialSample));
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+            .parentMaterialSample(parentMaterialSample)
+            .build();
+
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(materialSample));
+
+    MaterialSample freshMaterialSample = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
+    materialSampleService.setHierarchy(freshMaterialSample);
+    assertEquals(2, freshMaterialSample.getHierarchy().size());
+    assertEquals(1, freshMaterialSample.getHierarchy().get(0).getRank());
+    assertTrue(StringUtils.isNotBlank(freshMaterialSample.getHierarchy().get(0).getName()));
+    assertNotNull(freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination());
+    assertEquals(2, freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination().size());
+
+    //cleanup
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
+    transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism2));
   }
 
   private MaterialSample persistMaterialSample() {
