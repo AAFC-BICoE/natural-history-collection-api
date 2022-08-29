@@ -11,7 +11,10 @@
         <notes>CVE about Keycloak Server</notes>
         <cve>CVE-2022-1245</cve>
     </suppress>
-   
+    <suppress>
+        <notes>CVE about Keycloak Server</notes>
+        <cve>CVE-2021-3827</cve>
+    </suppress>
     <suppress>
         <notes>not valid for api</notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*$</packageUrl>
