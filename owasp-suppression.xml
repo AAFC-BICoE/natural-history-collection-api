@@ -5,10 +5,6 @@
     </suppress>
     <suppress>
         <notes>CVE about Keycloak Server</notes>
-        <cve>CVE-2021-4133</cve>
-    </suppress>
-    <suppress>
-        <notes>CVE about Keycloak Server</notes>
         <cve>CVE-2022-1245</cve>
     </suppress>
     <suppress>
