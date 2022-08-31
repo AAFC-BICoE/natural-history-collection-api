@@ -5,7 +5,7 @@ import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.InstitutionIdentifier;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.net.URI;
 import java.util.Collections;

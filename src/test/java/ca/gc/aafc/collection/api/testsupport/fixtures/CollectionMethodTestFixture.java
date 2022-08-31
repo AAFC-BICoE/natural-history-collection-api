@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class CollectionMethodTestFixture {
 

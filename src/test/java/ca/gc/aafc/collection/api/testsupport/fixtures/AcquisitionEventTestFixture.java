@@ -3,10 +3,9 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
-
 import ca.gc.aafc.collection.api.dto.AcquisitionEventDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class AcquisitionEventTestFixture {
 
