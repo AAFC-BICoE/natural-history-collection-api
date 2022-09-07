@@ -6,7 +6,7 @@ See DINA Collection module OpenAPI [specifications](https://dina-web.github.io/c
 
 ## Required
 
-* Java 11
+* Java 17
 * Maven 3.6 (tested)
 * Docker 19+ (for running integration tests)
 
