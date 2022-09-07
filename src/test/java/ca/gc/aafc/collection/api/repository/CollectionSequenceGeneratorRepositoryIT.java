@@ -51,7 +51,7 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = VALID_GROUP + ": staff")
+  @WithMockKeycloakUser(groupRole = VALID_GROUP + ":user")
   public void reserveNewSequenceIds_accessGranted_idReserved() {
     // Generate a collection sequence dto request.
     CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();
@@ -64,7 +64,7 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = VALID_GROUP + ": staff")
+  @WithMockKeycloakUser(groupRole = VALID_GROUP + ":user")
   public void reserveNewSequenceIds_collectionDoesNotExist_exception() {
     // Generate a collection sequence dto request.
     CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();
@@ -76,7 +76,7 @@ public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBas
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = INVALID_GROUP + ": staff")
+  @WithMockKeycloakUser(groupRole = INVALID_GROUP + ":user")
   public void reserveNewSequenceIds_accessDenied_exception() {
     // Generate a collection sequence dto request.
     CollectionSequenceGeneratorDto requestSequence = new CollectionSequenceGeneratorDto();

@@ -18,7 +18,7 @@ public class AssemblageRepositoryIT extends CollectionModuleKeycloakBaseIT {
   private AssemblageRepository assemblageRepository;
 
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     AssemblageDto assemblage = AssemblageTestFixture.newAssemblage();
     AssemblageDto result = assemblageRepository.findOne(

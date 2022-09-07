@@ -20,7 +20,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   private CollectionManagedAttributeRepo repo;
 
   @Test
-  @WithMockKeycloakUser(groupRole = "dinaGroup:COLLECTION_MANAGER")
+  @WithMockKeycloakUser(groupRole = "dinaGroup:SUPER_USER")
   void create_recordCreated() {
     String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
@@ -51,7 +51,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER")
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
   void findOneByKey_whenKeyProvided_managedAttributeFetched() {
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("Collecting Event Attribute 1");

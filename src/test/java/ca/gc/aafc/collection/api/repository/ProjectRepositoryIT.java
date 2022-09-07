@@ -20,7 +20,7 @@ public class ProjectRepositoryIT extends CollectionModuleKeycloakBaseIT {
   private ProjectRepository projectRepository;
 
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     ProjectDto project = ProjectTestFixture.newProject();
     ProjectDto result = projectRepository.findOne(
@@ -32,7 +32,7 @@ public class ProjectRepositoryIT extends CollectionModuleKeycloakBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
+  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC:user"})
   public void updateFromDifferentGroup_throwAccessDenied() {
     Project testProject = ProjectFactory.newProject()
       .group("preparation process definition")

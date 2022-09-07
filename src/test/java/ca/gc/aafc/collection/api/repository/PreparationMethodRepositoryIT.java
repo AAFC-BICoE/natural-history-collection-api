@@ -38,7 +38,7 @@ public class PreparationMethodRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
+  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC:user"})
   public void updateFromDifferentGroup_throwAccessDenied() {
 
     PreparationMethod testPreparationMethod = PreparationMethodFactory.newPreparationMethod()

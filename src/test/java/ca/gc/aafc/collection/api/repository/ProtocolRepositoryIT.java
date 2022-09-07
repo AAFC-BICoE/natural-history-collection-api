@@ -38,7 +38,7 @@ public class ProtocolRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(username = "other user", groupRole = {ProtocolTestFixture.GROUP + ":staff"})
+  @WithMockKeycloakUser(username = "other user", groupRole = {ProtocolTestFixture.GROUP + ":user"})
   public void updateFromNonAdmin_throwAccessDenied() {
     ProtocolDto pt = ProtocolTestFixture.newProtocol();
 
