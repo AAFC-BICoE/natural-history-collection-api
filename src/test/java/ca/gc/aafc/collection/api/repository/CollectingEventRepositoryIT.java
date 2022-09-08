@@ -39,7 +39,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT 
   private CollectionMethodRepository collectionMethodRepository;
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   public void findCollectingEvent_whenNoFieldsAreSelected_CollectingEventReturnedWithAllFields() {
     CollectingEventDto testCollectingEvent = collectingEventRepository.create(CollectingEventTestFixture.newEventDto());
 
@@ -105,7 +105,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT 
     assertEquals(CollectingEventTestFixture.HABITAT, collectingEventDto.getHabitat());
   }
 
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectionMethodDto methodDto = collectionMethodRepository.create(CollectionMethodTestFixture.newMethod());
@@ -137,7 +137,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT 
     MatcherAssert.assertThat(CollectingEventTestFixture.SUBSTRATE, Matchers.is(result.getSubstrate()));
   }
 
-  @WithMockKeycloakUser(groupRole = {"aafc:staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   @Test
   public void create_withUserProvidedUUID_resourceCreatedWithProvidedUUID() {
     UUID myUUID = UUID.randomUUID();
@@ -150,7 +150,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT 
     assertNotNull(refreshedCe);
   }
 
-  @WithMockKeycloakUser(groupRole = {"aafc:staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   @Test
   public void create_withDuplicatedExternalRelationship_exception() {
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
@@ -189,7 +189,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT 
 
   @ParameterizedTest
   @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
     ce.setStartEventDateTime(ISODateTime.parse(startDate).toString());

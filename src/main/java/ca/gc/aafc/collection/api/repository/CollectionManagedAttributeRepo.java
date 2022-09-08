@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.security.CollectionManagedAttributeAuthorizationService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
@@ -30,15 +30,14 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
 
   public CollectionManagedAttributeRepo(
     @NonNull CollectionManagedAttributeService service,
-    @NonNull CollectionManagedAttributeAuthorizationService collectionManagedAttributeAuthorizationService,
+    @NonNull SuperUserInGroupCUDAuthorizationService authService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull AuditService auditService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
   ) {
     super(
-      service,
-      collectionManagedAttributeAuthorizationService,
+      service, authService,
       Optional.of(auditService),
       new DinaMapper<>(CollectionManagedAttributeDto.class),
       CollectionManagedAttributeDto.class,

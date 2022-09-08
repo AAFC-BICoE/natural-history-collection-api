@@ -49,7 +49,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   private CollectionManagedAttributeRepo collManagedAttributeRepo;
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
@@ -71,7 +71,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   public void create_WithAParent() {
     MaterialSampleDto parent = materialSampleRepository.create(MaterialSampleTestFixture.newMaterialSample());
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
@@ -99,7 +99,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   }
 
     @Test
-    @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+    @WithMockKeycloakUser(groupRole = {"aafc:user"})
     public void create_recordCreated() {
         CollectingEventDto event = eventRepository.findOne(
             eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
@@ -116,7 +116,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     }
 
   @Test
-  @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC: staff" })
+  @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
   public void updateFromDifferentGroup_throwAccessDenied() {
     MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
         .group(MaterialSampleTestFixture.GROUP).createdBy("dina").build();
@@ -128,7 +128,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = { "aafc: staff" })
+  @WithMockKeycloakUser(groupRole = { "aafc:user" })
   public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted() {
     CollectingEventDto event = eventRepository
         .findOne(eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(),
@@ -147,7 +147,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"aafc: staff"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   public void when_InvalidRestrictionFieldExtension_ExceptionThrown(){
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
 
@@ -157,7 +157,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER"})
+  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
   public void create_onManagedAttributeValue_validationOccur() {
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
@@ -185,7 +185,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":COLLECTION_MANAGER"})
+  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
   public void create_onManagedAttributeValue_canUseKeyEvenIfUsedByAnotherComponent() {
 
     CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();

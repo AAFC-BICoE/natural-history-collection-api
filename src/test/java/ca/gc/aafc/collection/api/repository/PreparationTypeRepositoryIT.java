@@ -40,7 +40,7 @@ public class PreparationTypeRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC: staff"})
+  @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC:user"})
   public void updateFromDifferentGroup_throwAccessDenied() {
     PreparationType testPreparationType = PreparationTypeFactory.newPreparationType()
       .group("preparation process definition")

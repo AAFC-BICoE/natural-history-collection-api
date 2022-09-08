@@ -44,14 +44,14 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"AAFC:COLLECTION_MANAGER"})
+  @WithMockKeycloakUser(groupRole = {"AAFC:SUPER_USER"})
   public void create_WhenDifferentGroup_AccessDeniedException() {
     CollectionDto collectionDto = newCollectionDto();
     assertThrows(AccessDeniedException.class, () -> collectionRepository.create(collectionDto));
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"AAFC:COLLECTION_MANAGER"})
+  @WithMockKeycloakUser(groupRole = {"AAFC:SUPER_USER"})
   public void delete_WhenDifferentGroup_AccessDeniedException() {
     Collection persisted = setupPersistedCollection();
     assertThrows(AccessDeniedException.class, () -> collectionRepository.delete(persisted.getUuid()));
@@ -65,8 +65,8 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   }
     
   @Test
-  @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
-  public void delete_WhenManager_AccessAccepted() {
+  @WithMockKeycloakUser(groupRole = {"CNC:SUPER_USER"})
+  public void delete_WhenSuperUser_AccessAccepted() {
     Collection persisted = setupPersistedCollection();
     assertDoesNotThrow(() -> collectionRepository.delete(persisted.getUuid()));
   }
@@ -80,8 +80,8 @@ public class CollectionRepositoryIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {"CNC:COLLECTION_MANAGER"})
-  public void update_WhenManager_AccessAccepted() {
+  @WithMockKeycloakUser(groupRole = {"CNC:SUPER_USER"})
+  public void update_WhenSuperUser_AccessAccepted() {
     assertDoesNotThrow(() -> collectionRepository.save(collectionRepository.findOne(
       collectionRepository.create(newCollectionDto()).getUuid(),
       new QuerySpec(CollectionDto.class))));

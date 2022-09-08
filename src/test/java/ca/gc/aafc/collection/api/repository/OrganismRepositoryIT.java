@@ -1,8 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
@@ -21,7 +19,7 @@ public class OrganismRepositoryIT extends BaseRepositoryIT {
   private OrganismRepository organismRepository;
 
   @Test
-  @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ": staff" })
+  @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ":user" })
   public void create_WithAuthenticatedUser_SetsCreatedBy() throws MalformedURLException {
     OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
 
@@ -32,7 +30,7 @@ public class OrganismRepositoryIT extends BaseRepositoryIT {
     organismRepository.delete(organismUUID);
   }
 
-  @WithMockKeycloakUser(groupRole = {OrganismTestFixture.GROUP + ":staff"})
+  @WithMockKeycloakUser(groupRole = {OrganismTestFixture.GROUP + ":user"})
   @Test
   public void create_withUserProvidedUUID_resourceCreatedWithProvidedUUID() throws MalformedURLException {
     UUID myUUID = UUID.randomUUID();

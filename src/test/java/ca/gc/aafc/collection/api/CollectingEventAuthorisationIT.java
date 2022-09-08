@@ -40,7 +40,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   private static final LocalDate endDate = LocalDate.of(2002, 10, 10);
   private static final LocalTime endTime = LocalTime.of(10, 10);  
 
-  @WithMockKeycloakUser(groupRole = { "amf: staff" })
+  @WithMockKeycloakUser(groupRole = { "amf:user" })
   @BeforeEach
   public void setup() {
     createTestCollectingEvent();
@@ -59,7 +59,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     return testCollectingEvent;
   }
 
-  @WithMockKeycloakUser(groupRole = { "aafc: collection-manager" })
+  @WithMockKeycloakUser(groupRole = { "aafc:SUPER_USER" })
   @Test
   public void when_UpdatingAsUserFromGroupOtherthanEventGroup_AccessDenied() {
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
@@ -68,7 +68,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     Assertions.assertThrows(AccessDeniedException.class,()-> collectingEventRepository.save(retrievedEvent));    
   }
 
-  @WithMockKeycloakUser(groupRole = { "amf: staff" })  
+  @WithMockKeycloakUser(groupRole = { "amf:USER" })
   @Test
   public void when_UpdatingAsUserFromEventGroup_EventUpdated(){
     CollectingEventDto retrievedEventDto = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
@@ -79,7 +79,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     assertEquals("10-20m", updatedEvent.getDwcVerbatimDepth());       
   }
 
-  @WithMockKeycloakUser(groupRole = { "aafc: collection-manager" })
+  @WithMockKeycloakUser(groupRole = { "aafc:SUPER_USER" })
   @Test
   public void when_deleteAsUserFromGroupOtherthanEventGroup_AccessDenied() {
     CollectingEventDto retrievedEvent = collectingEventRepository.findOne(testCollectingEvent.getUuid(),
@@ -89,7 +89,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
     assertNotNull(collectingEventService.findOne(testCollectingEvent.getUuid(), CollectingEvent.class));
   }
 
-  @WithMockKeycloakUser(groupRole = { "amf: staff" })
+  @WithMockKeycloakUser(groupRole = { "amf:USER" })
   @Test
   public void when_deleteAsUserFromEventGroup_EventDeleted(){
     CollectingEventDto ce = new CollectingEventDto();
