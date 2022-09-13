@@ -28,7 +28,6 @@ public class MaterialSampleTestFixture {
   public static final String PREPARATION_MATERIALS = "vial";
   public static final String PREPARATION_SUBSTRATE = "rock";
 
-  public static final String HOST = "host";
   public static final Boolean PUBLICLY_RELEASABLE = false;
   public static final String NOT_PUBLICLY_RELEASABLE_REASON = "because it is not allowed";
   public static final String[] TAGS = new String[]{"0-Tag", "1-Tag"};
@@ -58,7 +57,6 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setCreatedBy(CREATED_BY);
     materialSampleDto.setDwcDegreeOfEstablishment(DWC_DEGREE_OF_ESTABLISHMENT);
     materialSampleDto.setPreparationRemarks(PREPARATION_REMARKS);
-    materialSampleDto.setHost(HOST);
     materialSampleDto.setBarcode(RandomStringUtils.randomAlphabetic(4));
     materialSampleDto.setPubliclyReleasable(PUBLICLY_RELEASABLE);
     materialSampleDto.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);

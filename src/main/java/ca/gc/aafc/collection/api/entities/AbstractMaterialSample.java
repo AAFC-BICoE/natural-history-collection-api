@@ -27,7 +27,6 @@ import org.hibernate.annotations.Type;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +39,6 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @NoArgsConstructor
 @SuperBuilder
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class AbstractMaterialSample implements DinaEntity {
 
   @Id
@@ -109,9 +107,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 250)
   @Column(name = "dwc_degree_of_establishment")
   private String dwcDegreeOfEstablishment;
-
-  @Size(max = 250)
-  private String host;
 
   @Size(max = 50)
   private String barcode;
