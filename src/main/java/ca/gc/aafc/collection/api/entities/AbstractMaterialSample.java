@@ -102,7 +102,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "jsonb")
   @NotNull
   @Builder.Default
-  private Map<String, String> managedAttributes = new HashMap<>();
+  private Map<String, String> managedAttributes = Map.of();
 
   @Size(max = 250)
   @Column(name = "dwc_degree_of_establishment")
