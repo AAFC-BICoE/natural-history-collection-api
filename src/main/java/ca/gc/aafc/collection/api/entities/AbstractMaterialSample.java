@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -102,7 +101,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "jsonb")
   @NotNull
   @Builder.Default
-  private Map<String, String> managedAttributes = new HashMap<>();
+  private Map<String, String> managedAttributes = Map.of();
 
   @Size(max = 250)
   @Column(name = "dwc_degree_of_establishment")

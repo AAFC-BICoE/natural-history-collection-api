@@ -91,7 +91,7 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_material_sample_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private List<ImmutableMaterialSample> materialSampleChildren = new ArrayList<>();
+  private List<ImmutableMaterialSample> materialSampleChildren = List.of();
  
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -114,7 +114,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "material_sample_id")
   @OrderColumn(name = "pos")
-  private List<Organism> organism = new ArrayList<>();
+  private List<Organism> organism = List.of();
 
   @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
   @Valid
@@ -149,7 +149,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   @UniqueElements
-  private List<UUID> attachment = new ArrayList<>();
+  private List<UUID> attachment = List.of();
 
   @ManyToOne(fetch = FetchType.LAZY)
   private PreparationType preparationType;

@@ -2,8 +2,6 @@ package ca.gc.aafc.collection.api.dto;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -56,35 +54,12 @@ public class MaterialSampleDto {
   private String dwcCatalogNumber;
   private String[] dwcOtherCatalogNumbers;
 
-  @JsonApiRelation
-  private CollectingEventDto collectingEvent;
-
-  @JsonApiExternalRelation(type = "metadata")
-  @JsonApiRelation
-  private List<ExternalRelationDto> attachment = new ArrayList<>();
-
   private String materialSampleName;
-
-  @JsonApiRelation
-  private CollectionDto collection;
 
   private MaterialSample.MaterialSampleType materialSampleType;
 
-  @JsonApiRelation
-  private MaterialSampleDto parentMaterialSample;
-
   @DiffIgnore
   private List<ImmutableMaterialSampleDto> materialSampleChildren;
-
-  @JsonApiExternalRelation(type = "person")
-  @JsonApiRelation
-  private ExternalRelationDto preparedBy;
-
-  @JsonApiRelation
-  private PreparationTypeDto preparationType;
-
-  @JsonApiRelation
-  private PreparationMethodDto preparationMethod;
 
   private LocalDate preparationDate;
   private String preservationType;
@@ -93,14 +68,8 @@ public class MaterialSampleDto {
   private String preparationSubstrate;
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
-  private Map<String, String> managedAttributes = new HashMap<>();
+  private Map<String, String> managedAttributes = Map.of();
 
-  @JsonApiRelation
-  private StorageUnitDto storageUnit;
-
-  @JsonApiRelation
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<OrganismDto> organism = new ArrayList<>();
 
   private String preparationRemarks;
   
@@ -128,9 +97,39 @@ public class MaterialSampleDto {
   private HostOrganism hostOrganism;
   
   @IgnoreDinaMapping
-  private List<AssociationDto> associations = new ArrayList<>();
+  private List<AssociationDto> associations = List.of();
 
   private Boolean allowDuplicateName = false;
+
+  private List<ExtensionValue> restrictionFieldsExtension;
+
+  private Boolean isRestricted = false;
+
+  private String restrictionRemarks;
+
+  // -- Relationships --
+
+  @JsonApiRelation
+  private MaterialSampleDto parentMaterialSample;
+
+  @JsonApiRelation
+  private CollectingEventDto collectingEvent;
+
+  @JsonApiRelation
+  private CollectionDto collection;
+
+  @JsonApiRelation
+  private PreparationTypeDto preparationType;
+
+  @JsonApiRelation
+  private PreparationMethodDto preparationMethod;
+
+  @JsonApiRelation
+  private StorageUnitDto storageUnit;
+
+  @JsonApiRelation
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<OrganismDto> organism = List.of();
 
   @JsonApiRelation
   private AcquisitionEventDto acquisitionEvent;
@@ -146,10 +145,14 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<AssemblageDto> assemblages = List.of();
 
-  private List<ExtensionValue> restrictionFieldsExtension;
+  // -- External relationships --
 
-  private Boolean isRestricted = false;
+  @JsonApiExternalRelation(type = "person")
+  @JsonApiRelation
+  private ExternalRelationDto preparedBy;
 
-  private String restrictionRemarks;
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonApiRelation
+  private List<ExternalRelationDto> attachment = List.of();
 
 }
