@@ -45,10 +45,10 @@ keycloak:
   public-client: true
   bearer-only: true
   principal-attribute: preferred_username
-  # All endpoints under api require a logged-in user with the "user" role.
+  # All endpoints under api require a logged-in user with the "dina-realm-user" role.
   security-constraints:
     - auth-roles:
-      - user
+      - dina-realm-user
       security-collections:
         - patterns:
           - /api/*
