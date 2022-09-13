@@ -109,8 +109,6 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<MaterialSampleHierarchyObject> hierarchy;
 
-  private String host;
-
   private String barcode;
 
   private Boolean publiclyReleasable;
