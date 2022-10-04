@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.service.MaterialSampleIdentifierGenerator;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import io.crnk.core.exception.MethodNotAllowedException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ResourceRepository;
@@ -27,6 +28,11 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
 
   @Override
   public MaterialSampleIdentifierGeneratorDto findOne(Serializable serializable, QuerySpec querySpec) {
+
+    if(!TextHtmlSanitizer.isSafeText(serializable.toString())) {
+      throw new IllegalArgumentException("unsafe value detected in attribute");
+    }
+
     MaterialSampleIdentifierGeneratorDto dto = new MaterialSampleIdentifierGeneratorDto();
     dto.setSubmittedIdentifier(serializable.toString());
     dto.setNextIdentifier(identifierGenerator.generateNextIdentifier(serializable.toString()));

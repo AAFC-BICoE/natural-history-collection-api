@@ -34,11 +34,9 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
   @Inject
   private CollectionService collectionService;
 
-  private CollectionSequenceGeneratorService collectionSequenceGeneratorService;
-
-  private DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> dinaMapper;
-
-  private DinaAuthorizationService groupAuthorizationService;
+  private final CollectionSequenceGeneratorService collectionSequenceGeneratorService;
+  private final DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> dinaMapper;
+  private final DinaAuthorizationService groupAuthorizationService;
 
   public CollectionSequenceGeneratorRepository(
     @NonNull CollectionSequenceGeneratorService dinaService,
@@ -60,7 +58,7 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
       buildProperties, objectMapper);
 
     // Create the dina mapper for CollectionSequenceGeneratorDto to CollectionSequenceGenerationRequest.
-    this.dinaMapper = new DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest>(
+    this.dinaMapper = new DinaMappingLayer<>(
       CollectionSequenceGeneratorDto.class, 
       new DinaMapper<>(CollectionSequenceGeneratorDto.class), 
       dinaService, 
