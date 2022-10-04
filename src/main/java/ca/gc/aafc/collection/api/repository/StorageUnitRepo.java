@@ -10,6 +10,7 @@ import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.MessageSource;
@@ -33,7 +34,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
     @NonNull AuditService auditService,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull BuildProperties buildProperties,
-    MessageSource messageSource
+    MessageSource messageSource, ObjectMapper objectMapper
   ) {
     super(
       sus,
@@ -44,7 +45,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
       StorageUnit.class,
       null,
       null,
-      buildProperties);
+      buildProperties, objectMapper);
     this.authenticatedUser = authenticatedUser;
     this.messageSource = messageSource;
   }

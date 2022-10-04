@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -20,15 +21,18 @@ public class OrganismRepository extends DinaRepository<OrganismDto, Organism> {
 
   private final DinaAuthenticatedUser dinaAuthenticatedUser;
 
-  public OrganismRepository(@NonNull OrganismService dinaService,
-      ExternalResourceProvider externalResourceProvider,
-      DinaAuthorizationService groupAuthorizationService,
-      @NonNull BuildProperties buildProperties,
-      AuditService auditService,
-      Optional<DinaAuthenticatedUser> dinaAuthenticatedUser) {
+  public OrganismRepository(
+          @NonNull OrganismService dinaService,
+          ExternalResourceProvider externalResourceProvider,
+          DinaAuthorizationService groupAuthorizationService,
+          @NonNull BuildProperties buildProperties,
+          AuditService auditService,
+          Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+          ObjectMapper objectMapper
+  ) {
     super(dinaService, groupAuthorizationService, Optional.of(auditService),
         new DinaMapper<>(OrganismDto.class), OrganismDto.class,
-        Organism.class, null, externalResourceProvider, buildProperties);
+        Organism.class, null, externalResourceProvider, buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 

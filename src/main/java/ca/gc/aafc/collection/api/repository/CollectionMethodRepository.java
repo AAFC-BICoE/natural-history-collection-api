@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.GroupAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -26,7 +27,8 @@ public class CollectionMethodRepository extends DinaRepository<CollectionMethodD
     ExternalResourceProvider externalResourceProvider,
     @NonNull AuditService auditService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       collectionMethodService,
@@ -37,7 +39,7 @@ public class CollectionMethodRepository extends DinaRepository<CollectionMethodD
       CollectionMethod.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 

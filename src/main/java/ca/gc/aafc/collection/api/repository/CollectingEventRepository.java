@@ -11,6 +11,7 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,8 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
     @NonNull AuditService auditService,
     @NonNull BuildProperties props,
     Optional<DinaAuthenticatedUser> authenticatedUser,
-    @NonNull ExternalResourceProvider externalResourceProvider
+    @NonNull ExternalResourceProvider externalResourceProvider,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService,
@@ -43,7 +45,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
         "endEventDateTime", "endEventDateTimePrecision"
       ))),
       externalResourceProvider,
-      props);
+      props, objectMapper);
 
     this.authenticatedUser = authenticatedUser;
   }

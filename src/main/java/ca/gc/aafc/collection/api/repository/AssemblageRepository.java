@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -26,7 +27,8 @@ public class AssemblageRepository extends DinaRepository<AssemblageDto, Assembla
           @NonNull AuditService auditService,
           DinaAuthorizationService groupAuthorizationService,
           @NonNull BuildProperties buildProperties,
-          Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+          Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+          ObjectMapper objectMapper
   ) {
     super(
             dinaService,
@@ -37,7 +39,7 @@ public class AssemblageRepository extends DinaRepository<AssemblageDto, Assembla
             Assemblage.class,
             null,
             externalResourceProvider,
-            buildProperties);
+            buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 

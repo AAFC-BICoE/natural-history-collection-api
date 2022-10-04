@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,8 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
     ExternalResourceProvider externalResourceProvider,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService,
@@ -55,7 +57,7 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
       CollectionSequenceGenerationRequest.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
 
     // Create the dina mapper for CollectionSequenceGeneratorDto to CollectionSequenceGenerationRequest.
     this.dinaMapper = new DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest>(

@@ -8,6 +8,7 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,8 @@ public class FormTemplateRepository extends DinaRepository<FormTemplateDto, Form
     DinaAuthorizationService groupAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(formTemplateService,
         groupAuthorizationService,
@@ -32,7 +34,7 @@ public class FormTemplateRepository extends DinaRepository<FormTemplateDto, Form
         new DinaMapper<>(FormTemplateDto.class),
         FormTemplateDto.class, FormTemplate.class,
         null,
-        externalResourceProvider, buildProperties);
+        externalResourceProvider, buildProperties, objectMapper);
     this.authenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
   @Override
