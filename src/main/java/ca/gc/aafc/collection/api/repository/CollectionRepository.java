@@ -5,6 +5,7 @@ import java.util.Optional;
 import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +29,8 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
     @NonNull AuditService auditService,
     SuperUserInGroupCUDAuthorizationService authService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService, authService,
@@ -38,7 +40,7 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
       Collection.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 

@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +28,8 @@ public class AcquisitionEventRepository extends DinaRepository<AcquisitionEventD
     @NonNull AuditService auditService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService,
@@ -38,7 +40,7 @@ public class AcquisitionEventRepository extends DinaRepository<AcquisitionEventD
       AcquisitionEvent.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 

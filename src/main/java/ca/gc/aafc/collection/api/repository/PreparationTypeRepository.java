@@ -5,6 +5,7 @@ import java.util.Optional;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +30,8 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
     @NonNull AuditService auditService,
     DinaAuthorizationService dinaAdminCUDAuthorizationService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService,
@@ -40,7 +42,7 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
       PreparationType.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 

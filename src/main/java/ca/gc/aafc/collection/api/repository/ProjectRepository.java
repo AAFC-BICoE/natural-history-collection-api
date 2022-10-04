@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +28,8 @@ public class ProjectRepository extends DinaRepository<ProjectDto, Project> {
     @NonNull AuditService auditService,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService,
@@ -38,7 +40,7 @@ public class ProjectRepository extends DinaRepository<ProjectDto, Project> {
       Project.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 

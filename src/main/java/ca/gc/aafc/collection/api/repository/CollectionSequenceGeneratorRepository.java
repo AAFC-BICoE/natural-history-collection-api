@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,18 +34,17 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
   @Inject
   private CollectionService collectionService;
 
-  private CollectionSequenceGeneratorService collectionSequenceGeneratorService;
-
-  private DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> dinaMapper;
-
-  private DinaAuthorizationService groupAuthorizationService;
+  private final CollectionSequenceGeneratorService collectionSequenceGeneratorService;
+  private final DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> dinaMapper;
+  private final DinaAuthorizationService groupAuthorizationService;
 
   public CollectionSequenceGeneratorRepository(
     @NonNull CollectionSequenceGeneratorService dinaService,
     ExternalResourceProvider externalResourceProvider,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser
+    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+    ObjectMapper objectMapper
   ) {
     super(
       dinaService,
@@ -55,10 +55,10 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
       CollectionSequenceGenerationRequest.class,
       null,
       externalResourceProvider,
-      buildProperties);
+      buildProperties, objectMapper);
 
     // Create the dina mapper for CollectionSequenceGeneratorDto to CollectionSequenceGenerationRequest.
-    this.dinaMapper = new DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest>(
+    this.dinaMapper = new DinaMappingLayer<>(
       CollectionSequenceGeneratorDto.class, 
       new DinaMapper<>(CollectionSequenceGeneratorDto.class), 
       dinaService, 

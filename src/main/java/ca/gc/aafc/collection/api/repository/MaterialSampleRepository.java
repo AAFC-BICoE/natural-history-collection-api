@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import io.micrometer.core.annotation.Timed;
@@ -33,7 +34,8 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
       @NonNull AuditService auditService,
       Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
       DinaAuthorizationService groupAuthorizationService,
-      @NonNull BuildProperties buildProperties
+      @NonNull BuildProperties buildProperties,
+      ObjectMapper objectMapper
   ) {
     super(
         dinaService,
@@ -44,7 +46,7 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
         MaterialSample.class,
         null,
         externalResourceProvider,
-        buildProperties);
+        buildProperties, objectMapper);
     this.dinaAuthenticatedUser = dinaAuthenticatedUser;
   }
 
