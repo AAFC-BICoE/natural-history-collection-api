@@ -9,7 +9,6 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
-import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import ca.gc.aafc.dina.service.AuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -19,7 +18,6 @@ import org.jsoup.safety.Safelist;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
