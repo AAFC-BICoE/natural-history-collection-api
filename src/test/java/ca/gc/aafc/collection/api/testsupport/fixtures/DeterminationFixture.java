@@ -33,7 +33,7 @@ public class DeterminationFixture {
             .classificationRanks("classificationRanks")
             .sourceUrl(new URL("https://www.google.com").toString())
             .recordedOn(LocalDate.now().minusDays(1))
-            .labelHtml("label")
+            .labelHtml("label <i>italic</i>")
             .build())
         .isFiledAs(true)
         .build();
