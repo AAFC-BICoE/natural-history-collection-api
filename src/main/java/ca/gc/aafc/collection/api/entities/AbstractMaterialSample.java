@@ -77,9 +77,6 @@ public class AbstractMaterialSample implements DinaEntity {
 
   // Preparation related
 
-  @Column(name = "prepared_by")
-  private UUID preparedBy;
-
   private LocalDate preparationDate;
 
   @Size(max = 1000)

@@ -149,7 +149,7 @@ public class MaterialSampleDto {
 
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
-  private ExternalRelationDto preparedBy;
+  private List<ExternalRelationDto> preparedBy = List.of();
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation

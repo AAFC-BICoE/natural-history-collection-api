@@ -147,6 +147,11 @@ public class MaterialSample extends AbstractMaterialSample {
   private String materialSampleRemarks;
 
   @Type(type = "list-array")
+  @Column(name = "prepared_by", columnDefinition = "uuid[]")
+  @UniqueElements
+  private List<UUID> preparedBy = List.of();
+
+  @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> attachment = List.of();

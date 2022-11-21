@@ -41,8 +41,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final String preparationExpectedCreatedBy = "preparation-dina-save";
   private static final String preparationExpectedGroup = "dina-group-save";
   private static final String preparationExpectedName = "isolate lake water sample";
-  private static final String materialSampleTypeExpectedCreatedBy = "material-sample-type-save";
-  private static final String materialSampleTypeExpectedName = "liquid lake water sample";
   private static final String storageUnitExpectedCreatedBy = "su-createdBy";
   private static final String storageUnitExpectedGroup = "su-dina";
   private static final String storageUnitExpectedName = "su-name";
@@ -92,7 +90,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .dwcOtherCatalogNumbers(dwcOtherCatalogNumbers)
         .createdBy(expectedCreatedBy)
         .attachment(attachmentIdentifiers)
-        .preparedBy(preparedBy)
+        .preparedBy(List.of(preparedBy))
         .materialSampleName(sampleMaterialName)
         .preparationDate(preparationDate)
         .preparationType(preparationType)
@@ -126,7 +124,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     assertEquals(materialSampleType, materialSample.getMaterialSampleType());
 
-    assertEquals(preparedBy, materialSample.getPreparedBy());
+    assertEquals(preparedBy, materialSample.getPreparedBy().get(0));
     assertEquals(preparationDate, materialSample.getPreparationDate());
 
     assertEquals(storageUnit.getId(), materialSample.getStorageUnit().getId());
@@ -163,7 +161,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(storageUnitExpectedGroup, fetchedMaterialSample.getStorageUnit().getGroup());
     assertEquals(storageUnitExpectedName, fetchedMaterialSample.getStorageUnit().getName());
 
-    assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy());
+    assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy().get(0));
     assertEquals(preparationDate, fetchedMaterialSample.getPreparationDate());
     assertEquals(collection.getUuid(), fetchedMaterialSample.getCollection().getUuid());
   }
