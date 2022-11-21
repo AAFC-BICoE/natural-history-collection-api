@@ -10,6 +10,7 @@ import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -70,12 +71,12 @@ public class MaterialSampleDto {
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = Map.of();
 
-
   private String preparationRemarks;
   
   private String dwcDegreeOfEstablishment;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  @DiffIgnore
   private List<MaterialSampleHierarchyObject> hierarchy;
 
   private String barcode;
@@ -108,39 +109,49 @@ public class MaterialSampleDto {
   private String restrictionRemarks;
 
   // -- Relationships --
-
+  @ShallowReference
   @JsonApiRelation
   private MaterialSampleDto parentMaterialSample;
 
+  @ShallowReference
   @JsonApiRelation
   private CollectingEventDto collectingEvent;
 
+  @ShallowReference
   @JsonApiRelation
   private CollectionDto collection;
 
+  @ShallowReference
   @JsonApiRelation
   private PreparationTypeDto preparationType;
 
+  @ShallowReference
   @JsonApiRelation
   private PreparationMethodDto preparationMethod;
 
+  @ShallowReference
   @JsonApiRelation
   private StorageUnitDto storageUnit;
 
+  @ShallowReference
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<OrganismDto> organism = List.of();
 
+  @ShallowReference
   @JsonApiRelation
   private AcquisitionEventDto acquisitionEvent;
 
+  @ShallowReference
   @JsonApiRelation
   private ProtocolDto preparationProtocol;
 
+  @ShallowReference
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ProjectDto> projects = List.of();
 
+  @ShallowReference
   @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<AssemblageDto> assemblages = List.of();
