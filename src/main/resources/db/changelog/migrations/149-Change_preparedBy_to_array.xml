@@ -7,7 +7,7 @@
     <changeSet id="149-Change_preparedBy_to_array" context="schema-change" author="cgendreau">
         <sql>
             ALTER TABLE material_sample ALTER COLUMN prepared_by
-            SET DATA TYPE uuid[] USING NULLIF(ARRAY[prepared_by], '{null}')
+            SET DATA TYPE uuid[] USING COALESCE(NULLIF(ARRAY[prepared_by], '{null}'), '{}')
         </sql>
     </changeSet>
 </databaseChangeLog>
