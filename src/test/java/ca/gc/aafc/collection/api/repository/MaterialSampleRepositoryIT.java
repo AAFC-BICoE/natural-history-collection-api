@@ -62,7 +62,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(MaterialSampleTestFixture.DWC_OTHER_CATALOG_NUMBERS, result.getDwcOtherCatalogNumbers());
     assertEquals(MaterialSampleTestFixture.GROUP, result.getGroup());
     assertEquals(MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME, result.getMaterialSampleName());
-    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
+    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
     assertEquals(MaterialSampleTestFixture.ALLOW_DUPLICATE_NAME, result.getAllowDuplicateName());
     assertEquals(materialSampleDto.getBarcode(), result.getBarcode());
@@ -110,7 +110,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
             );
         assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
-        assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
+        assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
     }
 

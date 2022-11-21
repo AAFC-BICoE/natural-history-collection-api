@@ -48,7 +48,7 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setDwcCatalogNumber(DWC_CATALOG_NUMBER);
     materialSampleDto.setDwcOtherCatalogNumbers(DWC_OTHER_CATALOG_NUMBERS);
     materialSampleDto.setCollectingEvent(null);
-    materialSampleDto.setPreparedBy(ExternalRelationDto.builder().id(PREPARED_BY.toString()).type("agent").build());
+    materialSampleDto.setPreparedBy(List.of(ExternalRelationDto.builder().id(PREPARED_BY.toString()).type("agent").build()));
     materialSampleDto.setPreparationDate(PREPARATION_DATE);
     materialSampleDto.setGroup(GROUP);
     materialSampleDto.setMaterialSampleName(MATERIAL_SAMPLE_NAME);
