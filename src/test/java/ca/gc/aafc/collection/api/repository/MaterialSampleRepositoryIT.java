@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.InstitutionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
@@ -13,8 +14,10 @@ import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
@@ -26,6 +29,8 @@ import org.springframework.security.access.AccessDeniedException;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 
+import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,6 +43,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private MaterialSampleRepository materialSampleRepository;
+
+  @Inject
+  private OrganismRepository organismRepository;
 
   @Inject
   private CollectingEventRepository eventRepository;
@@ -62,7 +70,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(MaterialSampleTestFixture.DWC_OTHER_CATALOG_NUMBERS, result.getDwcOtherCatalogNumbers());
     assertEquals(MaterialSampleTestFixture.GROUP, result.getGroup());
     assertEquals(MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME, result.getMaterialSampleName());
-    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
+    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
     assertEquals(MaterialSampleTestFixture.ALLOW_DUPLICATE_NAME, result.getAllowDuplicateName());
     assertEquals(materialSampleDto.getBarcode(), result.getBarcode());
@@ -110,7 +118,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
             );
         assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
         assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
-        assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getId());
+        assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
         assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
     }
 
@@ -153,6 +161,28 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     // Put an invalid key
     materialSampleDto.getRestrictionFieldsExtension().get(0).setExtKey("ABC");
     assertThrows(ValidationException.class, () -> materialSampleRepository.create(materialSampleDto));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ":user" })
+  public void updateMaterialSample_WithOrganism_accepted() throws MalformedURLException {
+
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
+    UUID organismUUID = organismRepository.create(organismDto).getUuid();
+    OrganismDto result = organismRepository.findOne(organismUUID,
+            new QuerySpec(OrganismDto.class));
+    assertNotNull(result.getCreatedBy());
+
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    UUID matSampleUUID = materialSampleRepository.create(materialSampleDto).getUuid();
+
+    MaterialSampleDto result2 = materialSampleRepository.findOne(matSampleUUID,
+            new QuerySpec(MaterialSampleDto.class));
+
+    result2.setOrganism(List.of(result));
+    materialSampleRepository.save(result2);
+
+    organismRepository.delete(organismUUID);
   }
 
   @Test
