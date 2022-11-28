@@ -39,8 +39,13 @@ public class StorageUnitDto {
 
   private String name;
 
+  @ShallowReference
   @JsonApiRelation
   private StorageUnitDto parentStorageUnit;
+
+  @ShallowReference
+  @JsonApiRelation
+  private StorageUnitTypeDto storageUnitType;
 
   @DiffIgnore
   private List<ImmutableStorageUnitDto> storageUnitChildren = List.of();
@@ -48,9 +53,5 @@ public class StorageUnitDto {
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<StorageHierarchicalObject> hierarchy;
-
-  @ShallowReference
-  @JsonApiRelation
-  private StorageUnitTypeDto storageUnitType;
 
 }
