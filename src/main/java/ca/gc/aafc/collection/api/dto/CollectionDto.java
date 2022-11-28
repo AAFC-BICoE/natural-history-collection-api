@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
@@ -51,6 +52,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
 
   private String code;
 
+  @ShallowReference
   @JsonApiRelation
   private InstitutionDto institution;
 
@@ -65,6 +67,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
+  @ShallowReference
   @JsonApiRelation
   private CollectionDto parentCollection;
 

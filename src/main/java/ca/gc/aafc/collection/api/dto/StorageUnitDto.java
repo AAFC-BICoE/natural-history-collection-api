@@ -12,6 +12,7 @@ import lombok.Data;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
@@ -48,6 +49,7 @@ public class StorageUnitDto {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<StorageHierarchicalObject> hierarchy;
 
+  @ShallowReference
   @JsonApiRelation
   private StorageUnitTypeDto storageUnitType;
 
