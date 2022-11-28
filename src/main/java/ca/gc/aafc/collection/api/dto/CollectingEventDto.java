@@ -22,6 +22,7 @@ import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import javax.annotation.Nullable;
@@ -87,6 +88,7 @@ public class CollectingEventDto {
   @JsonApiRelation
   private List<ExternalRelationDto> attachment = List.of();
 
+  @ShallowReference
   @JsonApiRelation
   private CollectionMethodDto collectionMethod;
 

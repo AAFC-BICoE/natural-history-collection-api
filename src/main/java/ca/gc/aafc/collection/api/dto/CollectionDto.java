@@ -6,7 +6,6 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiRelation;
 import io.crnk.core.resource.annotations.JsonApiResource;
@@ -17,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
@@ -30,7 +30,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(Collection.class)
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @JsonApiResource(type = CollectionDto.TYPENAME)
 @TypeName(CollectionDto.TYPENAME)
 public class CollectionDto extends AttributeMetaInfoProvider {
@@ -51,6 +50,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
 
   private String code;
 
+  @ShallowReference
   @JsonApiRelation
   private InstitutionDto institution;
 
@@ -65,6 +65,7 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
+  @ShallowReference
   @JsonApiRelation
   private CollectionDto parentCollection;
 
