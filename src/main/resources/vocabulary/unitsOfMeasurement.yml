@@ -1,0 +1,16 @@
+vocabulary:
+  unitsOfMeasurement:
+    - name: ug.mL-1
+      term: https://w3id.org/uom/ug.mL-1
+      labels:
+        en: μg/mL
+        fr: μg/mL
+    - name: uL
+      term: https://w3id.org/uom/uL
+      labels:
+        en: μL
+        fr: μL
+    - name: uL.rxn
+      labels:
+        en: µl/rxn
+        fr: µl/rxn
