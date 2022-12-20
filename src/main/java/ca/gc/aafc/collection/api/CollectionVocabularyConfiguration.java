@@ -34,6 +34,7 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
   @Getter
   @Setter
   public static class CollectionVocabularyElement extends VocabularyConfiguration.VocabularyElement {
+    private String unitsOfMeasurement;
     private String inverseOf;
   }
 }

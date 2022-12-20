@@ -14,3 +14,8 @@ vocabulary:
       labels:
         en: µl/rxn
         fr: µl/rxn
+    - name: mM
+      term: http://www.wikidata.org/entity/Q105687351
+      labels:
+        en: mM
+        fr: mM
