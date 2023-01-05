@@ -1,0 +1,18 @@
+extension:
+  mixs_food-farmEnvironment:
+    name: "MIxS Food-farmEnvironment"
+    key: "mixs_food-farmEnvironment_v6"
+    version: "v6"
+    fields:
+    - term: "Structured comment name"
+      name: "Item"
+      definition: "Definition"
+      dinaComponent: "COLLECTING_EVENT"
+    - term: "farm_equip"
+      name: "farm equipment used"
+      definition: "List of equipment used for planting, fertilization, harvesting, \
+        \ irrigation, land levelling, residue management, weeding or transplanting \
+        \ during the growing season. This field accepts terms listed under agricultural \
+        \ implement (http://purl.obolibrary.org/obo/AGRO_00000416). Multiple terms can \
+        \ be separated by pipes."
+      dinaComponent: "COLLECTING_EVENT"
