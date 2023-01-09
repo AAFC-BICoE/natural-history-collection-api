@@ -20,6 +20,16 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
   private CollectionExtensionConfiguration extensionConfiguration;
 
   @Test
+  void getMixSFood-farmEnvironment() {
+    Extension mixsFood-farmEnvironment = extensionConfiguration.getExtension().get("mixs_food-farmEnvironment");
+    
+    assertNotNull(mixsFood-farmEnvironment);
+    assertEquals("MIxS Food-farmEnvironment", mixsFood-farmEnvironment.getName());
+    assertEquals("mixs_food-farmEnvironment_v6", mixsFood-farmEnvironment.getKey());
+    assertEquals("v6", mixsFood-farmEnvironment.getVersion());
+  }
+
+  @Test
   void getMixSSoil() {
     Extension mixsSoil = extensionConfiguration.getExtension().get("mixs_soil");
 
