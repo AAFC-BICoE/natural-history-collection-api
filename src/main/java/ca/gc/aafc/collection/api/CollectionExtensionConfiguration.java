@@ -11,6 +11,7 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 
 @Configuration
 @ConfigurationProperties
+@PropertySource(value - "classpath:extension/mixsFood-farmEnvironment.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/mixsSoil.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/mixsSediment.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/cfia_ppc.yml", factory  = YamlPropertyLoaderFactory.class)
