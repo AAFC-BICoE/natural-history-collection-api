@@ -39,6 +39,7 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
     MatcherAssert.assertThat(
       listOfExtension,
       Matchers.containsInAnyOrder(
+        collectionExtensionConfiguration.getExtension().get("mixs_food-farmEnvironment"),
         collectionExtensionConfiguration.getExtension().get("mixs_soil"),
         collectionExtensionConfiguration.getExtension().get("mixs_sediment"),
         collectionExtensionConfiguration.getExtension().get("cfia_ppc"),
