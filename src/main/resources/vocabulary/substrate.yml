@@ -2,41 +2,53 @@ vocabulary:
   substrate:
     - name: rocks
       term: https://www.wikidata.org/wiki/Q8063
-      labels:
-        en: rocks
-        fr: roches
+      multilingualTitle.titles:
+        - lang: en
+          title: rocks
+        - lang: fr
+          title: roches
     - name: gravel
       term: https://www.wikidata.org/wiki/Q133833
-      labels:
-        en: gravel
-        fr: gravier
+      multilingualTitle.titles:
+        - lang: en
+          title: gravel
+        - lang: fr
+          title: gravier
     - name: detritus
       term: https://www.wikidata.org/wiki/Q736879
-      labels:
-        en: detritus
-        fr: détritus
+      multilingualTitle.titles:
+        - lang: en
+          title: detritus
+        - lang: fr
+          title: détritus
     - name: silt
       term: https://www.wikidata.org/wiki/Q270699
-      labels:
-        en: silt
-        fr: limon
+      multilingualTitle.titles:
+        - lang: en
+          title: silt
+        - lang: fr
+          title: limon
     - name: weed beds
-      term: 
-      labels:
-        en: weed beds
-        fr: 
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: weed beds
     - name: sand
       term: https://www.wikidata.org/wiki/Q34679
-      labels:
-        en: sand
-        fr: sable
+      multilingualTitle.titles:
+        - lang: en
+          title: sand
+        - lang: fr
+          title: sable
     - name: moss mats
-      term: 
-      labels:
-        en: moss mats
-        fr: 
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: moss mats
     - name: mud
       term: https://www.wikidata.org/wiki/Q170449
-      labels:
-        en: mud
-        fr: boue
+      multilingualTitle.titles:
+        - lang: en
+          title: mud
+        - lang: fr
+          title: boue

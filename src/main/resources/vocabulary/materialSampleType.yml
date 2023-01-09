@@ -2,21 +2,29 @@ vocabulary:
   materialSampleType:
     - name: WHOLE_ORGANISM
       term:
-      labels:
-        en: Whole organism
-        fr: Organisme entier
+      multilingualTitle.titles:
+        - lang: en
+          title: Whole organism
+        - lang: fr
+          title: Organisme entier
     - name: ORGANISM_PART
       term:
-      labels:
-        en: Organism part
-        fr: Partie d'organisme
+      multilingualTitle.titles:
+        - lang: en
+          title: Organism part
+        - lang: fr
+          title: Partie d'organisme
     - name: MIXED_ORGANISMS
       term:
-      labels:
-        en: Mixed organisms
-        fr: Organismes mixtes
+      multilingualTitle.titles:
+        - lang: en
+          title: Mixed organisms
+        - lang: fr
+          title: Organismes mixtes
     - name: MOLECULAR_SAMPLE
       term:
-      labels:
-        en: Molecular sample
-        fr: Échantillon moléculaire
+      multilingualTitle.titles:
+        - lang: en
+          title: Molecular sample
+        - lang: fr
+          title: Échantillon moléculaire
