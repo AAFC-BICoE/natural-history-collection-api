@@ -9,7 +9,7 @@ import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
-import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -285,7 +285,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
         .acceptedValues(null)
         .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-        .managedAttributeType(ManagedAttributeType.INTEGER)
+        .managedAttributeType(VocabularyElementType.INTEGER)
         .build();
 
     collectionManagedAttributeService.create(testManagedAttribute);

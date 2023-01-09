@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api;
 import java.util.List;
 import java.util.Map;
 
+import ca.gc.aafc.dina.vocabulary.VocabularyElementConfiguration;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +33,7 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
   @NoArgsConstructor
   @Getter
   @Setter
-  public static class CollectionVocabularyElement extends VocabularyConfiguration.VocabularyElement {
+  public static class CollectionVocabularyElement extends VocabularyElementConfiguration {
     private String inverseOf;
   }
 }

@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 
 import ca.gc.aafc.dina.entity.ManagedAttribute;
 
+import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
@@ -60,7 +61,7 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   @Column(name = "type")
-  private ManagedAttributeType managedAttributeType;
+  private VocabularyElementType managedAttributeType;
 
   @NotNull
   @Type(type = "pgsql_enum")
@@ -71,5 +72,15 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   @Type(type = "string-array")
   @Column(columnDefinition = "text[]")
   private String[] acceptedValues;
+
+  @Override
+  public String getTerm() {
+    return null;
+  }
+
+  @Override
+  public MultilingualTitle getMultilingualTitle() {
+    return null;
+  }
 
 }

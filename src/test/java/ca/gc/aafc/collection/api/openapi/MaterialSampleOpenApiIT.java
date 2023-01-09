@@ -11,9 +11,11 @@ import java.util.UUID;
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationMethodTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -43,6 +45,7 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 
 import io.restassured.RestAssured;
 import lombok.SneakyThrows;
@@ -67,7 +70,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName("name");
     collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING);
+    collectionManagedAttributeDto.setManagedAttributeType(VocabularyElementType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     collectionManagedAttributeDto.setCreatedBy(CREATED_BY);
@@ -131,6 +134,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ProtocolDto protocolDto = ProtocolTestFixture.newProtocol();
     protocolDto.setAttachments(null);
     protocolDto.setCreatedBy(CREATED_BY);
+
+    StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
     
     String parentUUID = JsonAPITestHelper.extractId(sendPost(
       MaterialSampleDto.TYPENAME,
@@ -154,24 +159,26 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String organismUUID = postResource(OrganismDto.TYPENAME, organismDto);
     String assemblageUUID = postResource(AssemblageDto.TYPENAME, assemblageDto);
     String projectUUID = postResource(ProjectDto.TYPENAME, projectDto);
+    String storageUnitUUID = postResource(StorageUnitDto.TYPENAME, storageUnitDto);
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
-    Map<String, Object> generatedRelationshipMap = Map.of(
+    Map<String, Object> toManyRelationships = Map.of(
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
       "projects", getRelationshipListType("project", projectUUID),
       "assemblages", getRelationshipListType("assemblage", assemblageUUID),
       "organism", getRelationshipListType("organism", organismUUID));
 
-    Map<String, Object> relationshipMapWithId = JsonAPITestHelper.toRelationshipMap(
+    Map<String, Object> toOneRelationships = JsonAPITestHelper.toRelationshipMap(
         List.of(
           JsonAPIRelationship.of("preparationType", PreparationTypeDto.TYPENAME, preparationTypeUUID),
           JsonAPIRelationship.of("preparationMethod", PreparationMethodDto.TYPENAME, preparationMethodUUID),
           JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID),
-          JsonAPIRelationship.of("preparationProtocol", ProtocolDto.TYPENAME, protocolUUID)));
+          JsonAPIRelationship.of("preparationProtocol", ProtocolDto.TYPENAME, protocolUUID),
+          JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, storageUnitUUID)));
 
-    Map<String, Object> relationshipMap = new HashMap<>(generatedRelationshipMap);
-    relationshipMap.putAll(relationshipMapWithId);
+    Map<String, Object> relationshipMap = new HashMap<>(toManyRelationships);
+    relationshipMap.putAll(toOneRelationships);
 
     String materialSampleId = JsonAPITestHelper.extractId(sendPost(
       MaterialSampleDto.TYPENAME, 
@@ -192,8 +199,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     
     // Included relationships with the request
     Set<String> toInclude = new HashSet<>();
-    toInclude.addAll(generatedRelationshipMap.keySet());
-    toInclude.addAll(relationshipMapWithId.keySet());
+    toInclude.addAll(toManyRelationships.keySet());
+    toInclude.addAll(toOneRelationships.keySet());
     toInclude.add("materialSampleChildren");
     toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
 
