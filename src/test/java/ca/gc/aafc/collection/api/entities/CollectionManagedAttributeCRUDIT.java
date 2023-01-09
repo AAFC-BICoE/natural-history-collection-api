@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
-
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -21,7 +21,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedName = "dina test attribute";
     String expectedGroup = "dinaGroup";
     UUID uuid = collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .managedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING)
+      .managedAttributeType(VocabularyElementType.STRING)
       .acceptedValues(new String[]{expectedValue})
       .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
       .createdBy(expectedCreatedBy)
@@ -39,10 +39,8 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     assertEquals(
       CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
-    assertEquals(
-      CollectionManagedAttribute.ManagedAttributeType.STRING,
-      result.getManagedAttributeType());
 
+    assertEquals(VocabularyElementType.STRING, result.getManagedAttributeType());
 
     result.setKey("abc");
     result.setName("new name");

@@ -3,8 +3,8 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.dina.entity.ManagedAttribute;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -80,7 +80,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
     return CollectionManagedAttribute.builder()
       .group("grp")
       .name(RandomStringUtils.randomAlphabetic(6))
-      .managedAttributeType(ManagedAttribute.ManagedAttributeType.STRING)
+      .managedAttributeType(VocabularyElementType.STRING)
       .createdBy("CollectionManagedAttributeServiceIT")
       .managedAttributeComponent(component)
       .build();

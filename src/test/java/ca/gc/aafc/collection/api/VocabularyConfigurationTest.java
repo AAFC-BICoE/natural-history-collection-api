@@ -1,12 +1,14 @@
 package ca.gc.aafc.collection.api;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -28,8 +30,15 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
     assertNotNull(vocabularyConfiguration.getVocabulary());
     assertEquals("captive", degreeOfEstablishment.get(0).getName());
     assertEquals("https://dwc.tdwg.org/doe/#dwcdoe_d002", degreeOfEstablishment.get(0).getTerm());
-    assertEquals("captive", degreeOfEstablishment.get(0).getLabels().get("en"));
-    assertEquals("captif", degreeOfEstablishment.get(0).getLabels().get("fr"));
+    assertEquals("captive", getTitleForLang(degreeOfEstablishment.get(0).getMultilingualTitle(),"en").orElse("not found"));
+    assertEquals("captif", getTitleForLang(degreeOfEstablishment.get(0).getMultilingualTitle(),"fr").orElse("not found"));
+  }
+
+  private Optional<String> getTitleForLang(MultilingualTitle multilingualTitle, String lang) {
+    return multilingualTitle.getTitles().stream()
+            .filter( mtp -> lang.equals(mtp.getLang()))
+            .map(MultilingualTitle.MultilingualTitlePair::getTitle)
+            .findFirst();
   }
 
   @Test
@@ -82,7 +91,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
     return vocabularyElement -> {
       assertNotNull(vocabularyElement.getName());
       assertNotNull(vocabularyElement.getTerm());
-      assertNotNull(vocabularyElement.getLabels());
+      assertNotNull(vocabularyElement.getMultilingualTitle());
     };
   }
 }

@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
 
     CollectionManagedAttributeDto dto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     dto.setName(expectedName);
-    dto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
+    dto.setManagedAttributeType(VocabularyElementType.INTEGER);
     dto.setAcceptedValues(new String[]{expectedValue});
     dto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     dto.setCreatedBy(expectedCreatedBy);
@@ -44,7 +45,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
     Assertions.assertNotNull(result.getCreatedBy());
     Assertions.assertEquals(expectedGroup, result.getGroup());
-    Assertions.assertEquals(CollectionManagedAttribute.ManagedAttributeType.INTEGER, result.getManagedAttributeType());
+    Assertions.assertEquals(VocabularyElementType.INTEGER, result.getManagedAttributeType());
     Assertions.assertEquals(
       CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
@@ -55,7 +56,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   void findOneByKey_whenKeyProvided_managedAttributeFetched() {
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("Collecting Event Attribute 1");
-    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.INTEGER);
+    newAttribute.setManagedAttributeType(VocabularyElementType.INTEGER);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
 
     UUID newAttributeUuid = repo.create(newAttribute).getUuid();

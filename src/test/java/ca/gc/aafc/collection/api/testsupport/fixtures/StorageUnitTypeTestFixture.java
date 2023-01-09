@@ -12,6 +12,7 @@ public class StorageUnitTypeTestFixture {
     StorageUnitTypeDto storageUnitTypeDto = new StorageUnitTypeDto();
     storageUnitTypeDto.setName(RandomStringUtils.randomAlphabetic(5));
     storageUnitTypeDto.setGroup(GROUP);
+    storageUnitTypeDto.setCreatedBy("test user");
     storageUnitTypeDto.setIsInseperable(false);
     storageUnitTypeDto.setGridLayoutDefinition(StorageGridLayoutTestFixture.newStorageGridLayout());
     return storageUnitTypeDto;

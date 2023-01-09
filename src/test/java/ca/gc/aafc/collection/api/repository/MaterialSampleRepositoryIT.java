@@ -19,6 +19,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
@@ -190,7 +191,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   public void create_onManagedAttributeValue_validationOccur() {
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
-    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttribute.setManagedAttributeType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
 
@@ -219,14 +220,14 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttributeCE.setName("test");
-    newAttributeCE.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttributeCE.setManagedAttributeType(VocabularyElementType.DATE);
     newAttributeCE.setAcceptedValues(null);
     newAttributeCE.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collManagedAttributeRepo.create(newAttributeCE);
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("test");
-    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttribute.setManagedAttributeType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     newAttribute = collManagedAttributeRepo.create(newAttribute);
