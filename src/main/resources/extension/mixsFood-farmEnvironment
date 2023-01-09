@@ -16,3 +16,7 @@ extension:
         \ implement (http://purl.obolibrary.org/obo/AGRO_00000416). Multiple terms can \
         \ be separated by pipes."
       dinaComponent: "COLLECTING_EVENT"
+    - term: "crop_yield"
+      name: "crop yield"
+      definition: "Amount of crop produced per unit or area of land."
+      dinaComponent: "COLLECTING_EVENT"
