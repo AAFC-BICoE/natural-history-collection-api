@@ -15,7 +15,7 @@ import lombok.NonNull;
 public class BaseExtensionValueValidator implements Validator {
 
   public static final String NO_MATCH_KEY_VERSION = "validation.constraint.violation.noMatchKeyVersion";
-  public static final String NO_MATCH_FIELD_KEY= "validation.constraint.violation.noMatchFieldKey";
+  public static final String NO_MATCH_FIELD_KEY = "validation.constraint.violation.noMatchFieldKey";
   public static final String NO_MATCH_ACCEPTED_VALUE = "validation.constraint.violation.noMatchAcceptedValue";
   public static final String INCORRECT_DINA_COMPONENT = "validation.constraint.violation.incorrectDinaComponent";
 
