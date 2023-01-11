@@ -21,7 +21,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedName = "dina test attribute";
     String expectedGroup = "dinaGroup";
     UUID uuid = collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .managedAttributeType(VocabularyElementType.STRING)
+      .vocabularyElementType(VocabularyElementType.STRING)
       .acceptedValues(new String[]{expectedValue})
       .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
       .createdBy(expectedCreatedBy)
@@ -40,7 +40,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
       CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
 
-    assertEquals(VocabularyElementType.STRING, result.getManagedAttributeType());
+    assertEquals(VocabularyElementType.STRING, result.getVocabularyElementType());
 
     result.setKey("abc");
     result.setName("new name");

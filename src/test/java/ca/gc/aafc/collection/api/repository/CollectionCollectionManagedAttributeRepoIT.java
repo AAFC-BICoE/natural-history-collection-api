@@ -30,7 +30,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
 
     CollectionManagedAttributeDto dto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     dto.setName(expectedName);
-    dto.setManagedAttributeType(VocabularyElementType.INTEGER);
+    dto.setVocabularyElementType(VocabularyElementType.INTEGER);
     dto.setAcceptedValues(new String[]{expectedValue});
     dto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     dto.setCreatedBy(expectedCreatedBy);
@@ -45,7 +45,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     Assertions.assertEquals(expectedValue, result.getAcceptedValues()[0]);
     Assertions.assertNotNull(result.getCreatedBy());
     Assertions.assertEquals(expectedGroup, result.getGroup());
-    Assertions.assertEquals(VocabularyElementType.INTEGER, result.getManagedAttributeType());
+    Assertions.assertEquals(VocabularyElementType.INTEGER, result.getVocabularyElementType());
     Assertions.assertEquals(
       CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
@@ -56,7 +56,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   void findOneByKey_whenKeyProvided_managedAttributeFetched() {
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("Collecting Event Attribute 1");
-    newAttribute.setManagedAttributeType(VocabularyElementType.INTEGER);
+    newAttribute.setVocabularyElementType(VocabularyElementType.INTEGER);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
 
     UUID newAttributeUuid = repo.create(newAttribute).getUuid();

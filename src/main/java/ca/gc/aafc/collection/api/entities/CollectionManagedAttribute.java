@@ -61,7 +61,7 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   @Column(name = "type")
-  private VocabularyElementType managedAttributeType;
+  private VocabularyElementType vocabularyElementType;
 
   @NotNull
   @Type(type = "pgsql_enum")

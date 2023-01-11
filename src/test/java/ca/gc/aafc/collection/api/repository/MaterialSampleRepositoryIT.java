@@ -191,7 +191,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   public void create_onManagedAttributeValue_validationOccur() {
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
-    newAttribute.setManagedAttributeType(VocabularyElementType.DATE);
+    newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
 
@@ -220,14 +220,14 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttributeCE.setName("test");
-    newAttributeCE.setManagedAttributeType(VocabularyElementType.DATE);
+    newAttributeCE.setVocabularyElementType(VocabularyElementType.DATE);
     newAttributeCE.setAcceptedValues(null);
     newAttributeCE.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collManagedAttributeRepo.create(newAttributeCE);
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("test");
-    newAttribute.setManagedAttributeType(VocabularyElementType.DATE);
+    newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     newAttribute = collManagedAttributeRepo.create(newAttribute);

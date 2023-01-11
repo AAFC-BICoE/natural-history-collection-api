@@ -29,7 +29,7 @@ public class CollectionManagedAttributeDto {
   private UUID uuid;
   private String name;
   private String key;
-  private TypedVocabularyElement.VocabularyElementType  managedAttributeType;
+  private TypedVocabularyElement.VocabularyElementType vocabularyElementType;
   private CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent;
   private String[] acceptedValues;
   private OffsetDateTime createdOn;

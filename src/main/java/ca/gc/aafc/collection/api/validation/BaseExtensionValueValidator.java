@@ -15,7 +15,7 @@ import lombok.NonNull;
 public class BaseExtensionValueValidator implements Validator {
 
   public static final String NO_MATCH_KEY_VERSION = "validation.constraint.violation.noMatchKeyVersion";
-  public static final String NO_MATCH_TERM = "validation.constraint.violation.noMatchTerm";
+  public static final String NO_MATCH_FIELD_KEY= "validation.constraint.violation.noMatchFieldKey";
   public static final String NO_MATCH_ACCEPTED_VALUE = "validation.constraint.violation.noMatchAcceptedValue";
   public static final String INCORRECT_DINA_COMPONENT = "validation.constraint.violation.incorrectDinaComponent";
 
@@ -23,6 +23,12 @@ public class BaseExtensionValueValidator implements Validator {
   private final MessageSource messageSource;
   private final CollectionExtensionConfiguration configuration;
 
+  /**
+   *
+   * @param componentType used to validate that the extension field used in matching the validator scope
+   * @param messageSource
+   * @param configuration
+   */
   public BaseExtensionValueValidator(
       DinaComponent componentType, 
       MessageSource messageSource, 
@@ -48,7 +54,7 @@ public class BaseExtensionValueValidator implements Validator {
   }
 
   /**
-   * Check if the key and version match. Once a match is found, the term is searched to ensure
+   * Check if the key and version match. Once a match is found, the field key is searched to ensure
    * it exists within the configuration.
    * 
    * @param errors if any validation problems occur, errors will be reported here.
@@ -59,15 +65,15 @@ public class BaseExtensionValueValidator implements Validator {
       // First, check if the key and version match
       if (extension.matchesKeyVersion(extensionValue.getExtKey(), extensionValue.getExtVersion())) {
 
-        // Check term
-        checkExtensionConfigurationTerm(errors, extensionValue, extension);
+        // Check field key
+        checkExtensionFieldKey(errors, extensionValue, extension);
         // Check dinaComponent
-        checkExtensionConfigurationComponent(errors, extension.getFieldByTerm(extensionValue.getExtTerm()));
+        checkExtensionConfigurationComponent(errors, extension.getFieldByKey(extensionValue.getExtFieldKey()));
 
         // only run the last check if there is no errors
         if (!errors.hasErrors()) {
           checkExtensionConfigurationAcceptedValues(errors, extensionValue,
-              extension.getFieldByTerm(extensionValue.getExtTerm()));
+              extension.getFieldByKey(extensionValue.getExtFieldKey()));
         }
         return;
       }
@@ -81,19 +87,18 @@ public class BaseExtensionValueValidator implements Validator {
   }
 
   /**
-   * Checks to see if the term exists within the extension set. If a match is found, the
-   * next step is to look at the dinaComponent to ensure it's allowed to be used where the
-   * extension value is being saved.
+   * Checks to see if the field key exists within the extension set. If no match is found,
+   * add the error to errors.
    * 
    * @param errors if any validation problems occur, errors will be reported here.
    * @param extensionValue extension value being validated against.
    * @param extension the extension set of values that that matches the key and version.
    */
-  private void checkExtensionConfigurationTerm(Errors errors, ExtensionValue extensionValue, Extension extension) {
-    if(!extension.containsTerm(extensionValue.getExtTerm())) {
-      String errorMessage = getMessageForKey(NO_MATCH_TERM, extensionValue.getExtKey(),
-          extensionValue.getExtVersion(), extensionValue.getExtTerm());
-      errors.rejectValue("extTerm", NO_MATCH_TERM, errorMessage);
+  private void checkExtensionFieldKey(Errors errors, ExtensionValue extensionValue, Extension extension) {
+    if(!extension.containsKey(extensionValue.getExtFieldKey())) {
+      String errorMessage = getMessageForKey(NO_MATCH_FIELD_KEY, extensionValue.getExtKey(),
+          extensionValue.getExtVersion(), extensionValue.getExtFieldKey());
+      errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, NO_MATCH_FIELD_KEY, errorMessage);
     }
   }
 
@@ -113,7 +118,7 @@ public class BaseExtensionValueValidator implements Validator {
 
     if (!extensionComponent.equals(componentType)) {
       String errorMessage = getMessageForKey(INCORRECT_DINA_COMPONENT, componentType, field.getDinaComponent());
-      errors.rejectValue("extTerm", INCORRECT_DINA_COMPONENT, errorMessage);
+      errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, INCORRECT_DINA_COMPONENT, errorMessage);
     }
   }
 
@@ -135,7 +140,7 @@ public class BaseExtensionValueValidator implements Validator {
       NO_MATCH_ACCEPTED_VALUE, 
       extensionValue.getValue(),
       String.join(", ", field.getAcceptedValues()));
-    errors.rejectValue("extTerm", NO_MATCH_ACCEPTED_VALUE, errorMessage);
+    errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, NO_MATCH_ACCEPTED_VALUE, errorMessage);
   }
 
   private String getMessageForKey(String key, Object... objects) {

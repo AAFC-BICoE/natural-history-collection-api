@@ -70,7 +70,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName("name");
     collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setManagedAttributeType(VocabularyElementType.STRING);
+    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     collectionManagedAttributeDto.setCreatedBy(CREATED_BY);

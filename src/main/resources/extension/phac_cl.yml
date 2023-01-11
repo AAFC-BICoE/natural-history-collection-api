@@ -4,9 +4,11 @@ extension:
     key: "phac_cl"
     version: "2022-02"
     fields:
-      - term: "level"
+      - key: "level"
         name: "Containment Level"
-        definition: "Containment Level"
+        multilingualDescription.descriptions:
+          - lang: en
+            desc: "Containment Level"
         acceptedValues:
           - Containment Level 1 (CL1)
           - Containment Level 2 (CL2)

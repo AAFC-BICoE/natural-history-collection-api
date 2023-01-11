@@ -18,12 +18,12 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   
   private static final String COLLECTING_EVENT_KEY = "mixs_soil_v5";
   private static final String COLLECTING_EVENT_VERSION = "v5";
-  private static final String COLLECTING_EVENT_TERM = "experimental_factor";
+  private static final String COLLECTING_EVENT_FIELD_KEY = "experimental_factor";
   private static final String COLLECTING_EVENT_VALUE = "definition of experimentWal factor";
 
   private static final String RESTRICTION_KEY = "cfia_ppc";
   private static final String RESTRICTION_VERSION = "2022-02";
-  private static final String RESTRICTION_TERM = "level";
+  private static final String RESTRICTION_FIELD_KEY = "level";
   private static final String RESTRICTION_VALUE = "Level 2 (PPC-2)";
 
   private static final String NON_MATCH = "non-match";
@@ -56,15 +56,15 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_NoMatchTerm_HasErrors() {
+  void validate_onNoMatchFieldKey_hasErrors() {
     ExtensionValue extensionValue = newCollectingEventExtensionValue();
-    extensionValue.setExtTerm(NON_MATCH);
+    extensionValue.setExtFieldKey(NON_MATCH);
 
     String expectedErrorMessage = getExpectedErrorMessage(
-      CollectingEventExtensionValueValidator.NO_MATCH_TERM, 
+      CollectingEventExtensionValueValidator.NO_MATCH_FIELD_KEY,
       extensionValue.getExtKey(), 
       extensionValue.getExtVersion(),
-      extensionValue.getExtTerm());
+      extensionValue.getExtFieldKey());
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
 
@@ -119,7 +119,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
     String expectedErrorMessage = getExpectedErrorMessage(
       RestrictionExtensionValueValidator.NO_MATCH_ACCEPTED_VALUE, 
       extensionValue.getValue(), 
-      String.join(", ", configuration.getExtension().get(RESTRICTION_KEY).getFieldByTerm(RESTRICTION_TERM).getAcceptedValues()));
+      String.join(", ", configuration.getExtension().get(RESTRICTION_KEY).getFieldByKey(RESTRICTION_FIELD_KEY).getAcceptedValues()));
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
 
@@ -133,7 +133,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
     return ExtensionValue.builder()
         .extKey(COLLECTING_EVENT_KEY)
         .extVersion(COLLECTING_EVENT_VERSION)
-        .extTerm(COLLECTING_EVENT_TERM)
+        .extFieldKey(COLLECTING_EVENT_FIELD_KEY)
         .value(COLLECTING_EVENT_VALUE)
         .build();
   }
@@ -142,7 +142,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
     return ExtensionValue.builder()
         .extKey(RESTRICTION_KEY)
         .extVersion(RESTRICTION_VERSION)
-        .extTerm(RESTRICTION_TERM)
+        .extFieldKey(RESTRICTION_FIELD_KEY)
         .value(RESTRICTION_VALUE)
         .build();
   }

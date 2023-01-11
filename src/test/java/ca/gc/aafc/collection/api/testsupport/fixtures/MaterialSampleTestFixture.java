@@ -40,7 +40,7 @@ public class MaterialSampleTestFixture {
 
   public static final String RESTRICTION_KEY = "cfia_ppc";
   public static final String RESTRICTION_VERSION = "2022-02";
-  public static final String RESTRICTION_TERM = "level";
+  public static final String RESTRICTION_FIELD_KEY = "level";
   public static final String RESTRICTION_VALUE = "Level 2 (PPC-2)";
 
   public static MaterialSampleDto newMaterialSample() {
@@ -73,7 +73,7 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setRestrictionFieldsExtension(List.of(ExtensionValue.builder()
         .extKey(RESTRICTION_KEY)
         .extVersion(RESTRICTION_VERSION)
-        .extTerm(RESTRICTION_TERM)
+        .extFieldKey(RESTRICTION_FIELD_KEY)
         .value(RESTRICTION_VALUE)
         .build()));
     materialSampleDto.setRestrictionRemarks("abc");
