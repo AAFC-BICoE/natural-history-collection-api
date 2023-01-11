@@ -44,7 +44,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName("key");
     collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setManagedAttributeType(VocabularyElementType.STRING);
+    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collectionManagedAttributeDto.setCreatedBy("dina");     

@@ -13,7 +13,7 @@ public class CollectionManagedAttributeTestFixture {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName(RandomStringUtils.randomAlphabetic(5));
     collectionManagedAttributeDto.setGroup(GROUP);
-    collectionManagedAttributeDto.setManagedAttributeType(VocabularyElementType.INTEGER);
+    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.INTEGER);
     collectionManagedAttributeDto.setAcceptedValues(new String[]{"value"});
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collectionManagedAttributeDto.setCreatedBy("created by");   

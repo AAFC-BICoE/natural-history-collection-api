@@ -86,7 +86,7 @@ public class CollectingEventTestFixture {
   public static final ExtensionValue EXTENSION_VALUE = ExtensionValue.builder()
     .extKey("mixs_soil_v5")
     .extVersion("v5")
-    .extTerm("experimental_factor")
+    .extFieldKey("experimental_factor")
     .value("definition of experimentWal factor")
     .build();
 

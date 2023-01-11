@@ -80,7 +80,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
     return CollectionManagedAttribute.builder()
       .group("grp")
       .name(RandomStringUtils.randomAlphabetic(6))
-      .managedAttributeType(VocabularyElementType.STRING)
+      .vocabularyElementType(VocabularyElementType.STRING)
       .createdBy("CollectionManagedAttributeServiceIT")
       .managedAttributeComponent(component)
       .build();

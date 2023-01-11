@@ -407,7 +407,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void validate_WhenInvalidIntegerTypeExceptionThrown() {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
       .acceptedValues(null)
-      .managedAttributeType(VocabularyElementType.INTEGER)
+      .vocabularyElementType(VocabularyElementType.INTEGER)
       .build();
 
     collectionManagedAttributeService.create(testManagedAttribute);
@@ -509,7 +509,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     extensionValues.add(ExtensionValue.builder()
       .extKey("invalid_key")
       .extVersion("v5")
-      .extTerm("experimental_factor")
+      .extFieldKey("experimental_factor")
       .value("definition of experimentWal factor")
       .build());
 

@@ -285,7 +285,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
         .acceptedValues(null)
         .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-        .managedAttributeType(VocabularyElementType.INTEGER)
+        .vocabularyElementType(VocabularyElementType.INTEGER)
         .build();
 
     collectionManagedAttributeService.create(testManagedAttribute);

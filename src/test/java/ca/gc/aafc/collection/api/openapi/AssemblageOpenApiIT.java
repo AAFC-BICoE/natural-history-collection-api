@@ -58,7 +58,7 @@ public class AssemblageOpenApiIT extends BaseRestAssuredTest {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName(key);
     collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setManagedAttributeType(VocabularyElementType.STRING);
+    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.ASSEMBLAGE);
     collectionManagedAttributeDto.setCreatedBy("dina");

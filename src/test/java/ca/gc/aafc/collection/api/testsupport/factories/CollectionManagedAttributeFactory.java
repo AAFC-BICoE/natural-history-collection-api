@@ -30,7 +30,7 @@ public class CollectionManagedAttributeFactory implements TestableEntityFactory<
           .name(RandomStringUtils.randomAlphabetic(5))
           .group(RandomStringUtils.randomAlphabetic(5))
           .createdBy(RandomStringUtils.randomAlphabetic(5))
-          .managedAttributeType(VocabularyElementType.STRING)
+          .vocabularyElementType(VocabularyElementType.STRING)
           .acceptedValues(new String[]{"value"})
           .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
           .multilingualDescription(MultilingualTestFixture.newMultilingualDescription());

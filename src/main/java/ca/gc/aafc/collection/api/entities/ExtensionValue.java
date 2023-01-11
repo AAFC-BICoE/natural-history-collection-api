@@ -9,9 +9,12 @@ import lombok.Data;
 @Builder
 @Value
 public class ExtensionValue {
+
+  // used to report error on validation
+  public static final String FIELD_KEY_NAME = "extFieldKey";
   
   private String extKey;
   private String extVersion;
-  private String extTerm;
+  private String extFieldKey;
   private String value;
 }
