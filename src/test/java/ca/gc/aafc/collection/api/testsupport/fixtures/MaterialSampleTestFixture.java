@@ -39,7 +39,6 @@ public class MaterialSampleTestFixture {
   public static final Boolean ALLOW_DUPLICATE_NAME = true;
 
   public static final String RESTRICTION_KEY = "cfia_ppc";
-  public static final String RESTRICTION_VERSION = "2022-02";
   public static final String RESTRICTION_FIELD_KEY = "level";
   public static final String RESTRICTION_VALUE = "Level 2 (PPC-2)";
 
@@ -72,7 +71,6 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
     materialSampleDto.setRestrictionFieldsExtension(List.of(ExtensionValue.builder()
         .extKey(RESTRICTION_KEY)
-        .extVersion(RESTRICTION_VERSION)
         .extFieldKey(RESTRICTION_FIELD_KEY)
         .value(RESTRICTION_VALUE)
         .build()));

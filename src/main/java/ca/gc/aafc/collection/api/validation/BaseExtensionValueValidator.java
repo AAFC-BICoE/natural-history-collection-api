@@ -62,9 +62,8 @@ public class BaseExtensionValueValidator implements Validator {
    */
   private void handleValidation(Errors errors, ExtensionValue extensionValue) {
     for (Extension extension : configuration.getExtension().values()) {
-      // First, check if the key and version match
-      if (extension.matchesKeyVersion(extensionValue.getExtKey(), extensionValue.getExtVersion())) {
-
+      // First, check if the extension key matches
+      if (extension.getKey().equals(extensionValue.getExtKey())) {
         // Check field key
         checkExtensionFieldKey(errors, extensionValue, extension);
         // Check dinaComponent
@@ -81,8 +80,7 @@ public class BaseExtensionValueValidator implements Validator {
 
     String errorMessage = getMessageForKey(
       NO_MATCH_KEY_VERSION, 
-      extensionValue.getExtKey(),
-      extensionValue.getExtVersion());
+      extensionValue.getExtKey());
     errors.rejectValue("extKey", NO_MATCH_KEY_VERSION, errorMessage);
   }
 
@@ -97,7 +95,7 @@ public class BaseExtensionValueValidator implements Validator {
   private void checkExtensionFieldKey(Errors errors, ExtensionValue extensionValue, Extension extension) {
     if(!extension.containsKey(extensionValue.getExtFieldKey())) {
       String errorMessage = getMessageForKey(NO_MATCH_FIELD_KEY, extensionValue.getExtKey(),
-          extensionValue.getExtVersion(), extensionValue.getExtFieldKey());
+              extensionValue.getExtFieldKey());
       errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, NO_MATCH_FIELD_KEY, errorMessage);
     }
   }

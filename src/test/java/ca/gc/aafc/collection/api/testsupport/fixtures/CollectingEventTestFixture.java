@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -83,13 +82,6 @@ public class CollectingEventTestFixture {
   public static final String[] OTHER_RECORD_NUMBERS = new String[]{"80-79", "80-80"};
   public static final String HABITAT = "Tropical";
 
-  public static final ExtensionValue EXTENSION_VALUE = ExtensionValue.builder()
-    .extKey("mixs_soil_v5")
-    .extVersion("v5")
-    .extFieldKey("experimental_factor")
-    .value("definition of experimentWal factor")
-    .build();
-
   @SneakyThrows
   public static GeographicPlaceNameSourceDetail newGeographicPlaceNameSourceDetail() {
     return GeographicPlaceNameSourceDetail.builder()
@@ -107,8 +99,6 @@ public class CollectingEventTestFixture {
   public static CollectingEventDto newEventDto() {
     List<GeoreferenceAssertionDto> assertions = new ArrayList<>();
     assertions.add(GEOREFERENCE_ASSERTION_DTO);
-    List<ExtensionValue> extensionValues = new ArrayList<>();
-    extensionValues.add(EXTENSION_VALUE);
 
     CollectingEventDto ce = new CollectingEventDto();
     ce.setGroup("aafc");
@@ -145,7 +135,7 @@ public class CollectingEventTestFixture {
     ce.setPubliclyReleasable(PUBLICLY_RELEASABLE);
     ce.setNotPubliclyReleasableReason(NOT_PUBLICLY_RELEASABLE_REASON);
     ce.setTags(TAGS);
-    ce.setExtensionValues(extensionValues);
+    ce.setExtensionValues(ExtensionValueTestFixture.newExtensionValue());
     return ce;
   }
 

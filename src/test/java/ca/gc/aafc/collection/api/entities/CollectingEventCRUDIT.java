@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import lombok.SneakyThrows;
 import org.geolatte.geom.Point;
@@ -504,16 +505,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-
-    List<ExtensionValue> extensionValues = new ArrayList<>();
-    extensionValues.add(ExtensionValue.builder()
-      .extKey("invalid_key")
-      .extVersion("v5")
-      .extFieldKey("experimental_factor")
-      .value("definition of experimentWal factor")
-      .build());
-
-    fetchedCollectingEvent.setExtensionValues(extensionValues);
+    fetchedCollectingEvent.setExtensionValues(ExtensionValueTestFixture.newExtensionValue());
 
     assertThrows(ValidationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
