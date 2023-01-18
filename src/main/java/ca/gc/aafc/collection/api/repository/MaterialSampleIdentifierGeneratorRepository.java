@@ -45,19 +45,19 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       throw new IllegalArgumentException("unsafe value detected in attribute");
     }
 
-    List<String> nextIdentifiers = new ArrayList<>();
     int amount = generatorDto.getAmount() == null ? 1 : generatorDto.getAmount();
 
     if(amount > MAX_GENERATION_AMOUNT) {
       throw new IllegalArgumentException("over maximum amount");
     }
 
+    List<String> nextIdentifiers = new ArrayList<>(amount);
     String lastIdentifier = generatorDto.getSubmittedIdentifier();
     for (int i = 0; i < amount; i++) {
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
       nextIdentifiers.add(lastIdentifier);
     }
-
+    generatorDto.setId(generatorDto.getSubmittedIdentifier());
     generatorDto.setNextIdentifiers(nextIdentifiers);
 
     return generatorDto;
