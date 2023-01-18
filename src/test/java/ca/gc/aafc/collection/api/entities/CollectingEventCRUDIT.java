@@ -475,7 +475,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     assertThrows(ConstraintViolationException.class,
       () -> collectingEventService.update(fetchedCollectingEvent));
-
   }
 
   @Test
@@ -505,7 +504,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-    fetchedCollectingEvent.setExtensionValues(ExtensionValueTestFixture.newExtensionValue());
+    fetchedCollectingEvent.setExtensionValues(ExtensionValueTestFixture.newExtensionValue(
+            ExtensionValueTestFixture.EXTENSION_KEY, RandomStringUtils.randomAlphabetic(8), "abc"));
 
     assertThrows(ValidationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));
