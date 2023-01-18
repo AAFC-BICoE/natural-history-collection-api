@@ -15,8 +15,13 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
 
   @Test
   public void materialSampleIdentifierGeneratorRepositoryNext_nextIdentifierReturned() {
-    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.findOne("ABC-vw", new QuerySpec(MaterialSampleIdentifierGeneratorDto.class));
-    assertEquals("ABC-vx", dto.getNextIdentifier());
+    MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
+            .submittedIdentifier("ABC-vw")
+            .amount(2).build();
+
+    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
+    assertEquals("ABC-vx", dto.getNextIdentifiers().get(0));
+    assertEquals("ABC-vy", dto.getNextIdentifiers().get(1));
   }
 
 }
