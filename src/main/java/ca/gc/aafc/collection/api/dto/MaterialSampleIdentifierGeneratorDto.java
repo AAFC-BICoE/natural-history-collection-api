@@ -5,7 +5,6 @@ import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,10 +25,14 @@ public class MaterialSampleIdentifierGeneratorDto {
 
   public static final String TYPENAME = "material-sample-identifier-generator";
 
+  /**
+   * The id here is not a real id since this resource is only computing values and nothing is stored.
+   *
+   */
   @JsonApiId
   private String id;
 
-  private String submittedIdentifier;
+  private String identifier;
 
   private Integer amount;
 

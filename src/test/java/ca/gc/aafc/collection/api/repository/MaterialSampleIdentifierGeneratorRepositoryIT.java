@@ -16,7 +16,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
   @Test
   public void materialSampleIdentifierGeneratorRepositoryNext_nextIdentifierReturned() {
     MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
-            .submittedIdentifier("ABC-vw")
+            .identifier("ABC-vw")
             .amount(2).build();
 
     MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);

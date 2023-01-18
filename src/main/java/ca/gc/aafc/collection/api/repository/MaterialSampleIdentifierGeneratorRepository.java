@@ -41,7 +41,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
 
   @Override
   public <S extends MaterialSampleIdentifierGeneratorDto> S create(S generatorDto) {
-    if(!TextHtmlSanitizer.isSafeText(generatorDto.getSubmittedIdentifier())) {
+    if(!TextHtmlSanitizer.isSafeText(generatorDto.getIdentifier())) {
       throw new IllegalArgumentException("unsafe value detected in attribute");
     }
 
@@ -52,12 +52,13 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
     }
 
     List<String> nextIdentifiers = new ArrayList<>(amount);
-    String lastIdentifier = generatorDto.getSubmittedIdentifier();
+    String lastIdentifier = generatorDto.getIdentifier();
     for (int i = 0; i < amount; i++) {
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
       nextIdentifiers.add(lastIdentifier);
     }
-    generatorDto.setId(generatorDto.getSubmittedIdentifier());
+    // Id is mandatory per json:api, so we simply reuse the identifier
+    generatorDto.setId(generatorDto.getIdentifier());
     generatorDto.setNextIdentifiers(nextIdentifiers);
 
     return generatorDto;
