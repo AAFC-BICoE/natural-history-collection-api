@@ -17,12 +17,10 @@ import javax.inject.Inject;
 public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   
   private static final String COLLECTING_EVENT_KEY = "mixs_soil_v5";
-  private static final String COLLECTING_EVENT_VERSION = "v5";
   private static final String COLLECTING_EVENT_FIELD_KEY = "experimental_factor";
   private static final String COLLECTING_EVENT_VALUE = "definition of experimentWal factor";
 
   private static final String RESTRICTION_KEY = "cfia_ppc";
-  private static final String RESTRICTION_VERSION = "2022-02";
   private static final String RESTRICTION_FIELD_KEY = "level";
   private static final String RESTRICTION_VALUE = "Level 2 (PPC-2)";
 
@@ -62,8 +60,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
     String expectedErrorMessage = getExpectedErrorMessage(
       CollectingEventExtensionValueValidator.NO_MATCH_FIELD_KEY,
-      extensionValue.getExtKey(), 
-      extensionValue.getExtVersion(),
+      extensionValue.getExtKey(),
       extensionValue.getExtFieldKey());
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
@@ -81,8 +78,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
     String expectedErrorMessage = getExpectedErrorMessage(
       CollectingEventExtensionValueValidator.NO_MATCH_KEY_VERSION, 
-      extensionValue.getExtKey(), 
-      extensionValue.getExtVersion());
+      extensionValue.getExtKey());
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
 
@@ -132,7 +128,6 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   private static ExtensionValue newCollectingEventExtensionValue() {
     return ExtensionValue.builder()
         .extKey(COLLECTING_EVENT_KEY)
-        .extVersion(COLLECTING_EVENT_VERSION)
         .extFieldKey(COLLECTING_EVENT_FIELD_KEY)
         .value(COLLECTING_EVENT_VALUE)
         .build();
@@ -141,7 +136,6 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   private static ExtensionValue newRestrictionExtensionValue() {
     return ExtensionValue.builder()
         .extKey(RESTRICTION_KEY)
-        .extVersion(RESTRICTION_VERSION)
         .extFieldKey(RESTRICTION_FIELD_KEY)
         .value(RESTRICTION_VALUE)
         .build();
