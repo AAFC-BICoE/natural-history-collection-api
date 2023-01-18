@@ -10,10 +10,18 @@ import io.crnk.core.resource.list.ResourceList;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+/**
+ * Used to generate next identifier based on current value.
+ * Identifiers are only generated, they are not reserved and not guarantee to be unique.
+ */
 @Repository
 public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepository<MaterialSampleIdentifierGeneratorDto, Serializable> {
+
+  private static final int MAX_GENERATION_AMOUNT = 500;
 
   private final MaterialSampleIdentifierGenerator identifierGenerator;
 
@@ -28,35 +36,47 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
 
   @Override
   public MaterialSampleIdentifierGeneratorDto findOne(Serializable serializable, QuerySpec querySpec) {
+    throw new MethodNotAllowedException("GET");
+  }
 
-    if(!TextHtmlSanitizer.isSafeText(serializable.toString())) {
+  @Override
+  public <S extends MaterialSampleIdentifierGeneratorDto> S create(S generatorDto) {
+    if(!TextHtmlSanitizer.isSafeText(generatorDto.getIdentifier())) {
       throw new IllegalArgumentException("unsafe value detected in attribute");
     }
 
-    MaterialSampleIdentifierGeneratorDto dto = new MaterialSampleIdentifierGeneratorDto();
-    dto.setSubmittedIdentifier(serializable.toString());
-    dto.setNextIdentifier(identifierGenerator.generateNextIdentifier(serializable.toString()));
-    return dto;
+    int amount = generatorDto.getAmount() == null ? 1 : generatorDto.getAmount();
+
+    if(amount > MAX_GENERATION_AMOUNT) {
+      throw new IllegalArgumentException("over maximum amount");
+    }
+
+    List<String> nextIdentifiers = new ArrayList<>(amount);
+    String lastIdentifier = generatorDto.getIdentifier();
+    for (int i = 0; i < amount; i++) {
+      lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
+      nextIdentifiers.add(lastIdentifier);
+    }
+    // Id is mandatory per json:api, so we simply reuse the identifier
+    generatorDto.setId(generatorDto.getIdentifier());
+    generatorDto.setNextIdentifiers(nextIdentifiers);
+
+    return generatorDto;
   }
 
   @Override
   public ResourceList<MaterialSampleIdentifierGeneratorDto> findAll(QuerySpec querySpec) {
-    throw new MethodNotAllowedException("GET without identifier");
+    throw new MethodNotAllowedException("GET");
   }
 
   @Override
   public ResourceList<MaterialSampleIdentifierGeneratorDto> findAll(Collection<Serializable> collection, QuerySpec querySpec) {
-    throw new MethodNotAllowedException("GET without identifier");
+    throw new MethodNotAllowedException("GET");
   }
 
   @Override
   public <S extends MaterialSampleIdentifierGeneratorDto> S save(S s) {
     throw new MethodNotAllowedException("PUT/PATCH");
-  }
-
-  @Override
-  public <S extends MaterialSampleIdentifierGeneratorDto> S create(S s) {
-    throw new MethodNotAllowedException("POST");
   }
 
   @Override
