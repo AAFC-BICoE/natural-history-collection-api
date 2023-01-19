@@ -1096,3 +1096,165 @@ extension:
           desc: "Any other measurement performed or parameter collected, that is not\
         \ listed here"
       dinaComponent: "COLLECTING_EVENT"
+    - key: "herbicide_regm"
+      name: "herbicide regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving use of herbicides; information\ 
+        \ about treatment involving use of growth hormones; should include the name\ 
+        \ of herbicide, amount administered, treatment duration, interval and total\ 
+        \ experimental duration; can include multiple regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mineral_nutr_regm"
+      name: "mineral nutrient regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Information about treatment involving the use of mineral supplements;\
+          \ should include the name of mineral nutrient, amount administered, treatment\
+          \ regimen including how many times the treatment was repeated, how long each\
+          \ treatment lasted, and the start and end time of the entire treatment; can\
+          \ include multiple mineral nutrient regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "non_mineral_nutr_regm"
+      name: "non-mineral nutrient regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Information about treatment involving the exposure of plant to\
+          \ non-mineral nutrient such as oxygen, hydrogen or carbon; should include\
+          \ the name of non-mineral nutrient, amount administered, treatment regimen\
+          \ including how many times the treatment was repeated, how long each treatment\
+          \ lasted, and the start and end time of the entire treatment; can include\
+          \ multiple non-mineral nutrient regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "watering_regm"
+      name: "watering regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Information about treatment involving an exposure to watering\
+          \ frequencies, treatment regimen including how many times the treatment\
+          \ was repeated, how long each treatment lasted, and the start and end\
+          \ time of the entire treatment; can include multiple regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_amendments_meth"
+      name: "organic amendments methods"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method (e.g. injected, spread); regime rate of application;\
+          \ time of application. (text);(float) (unit);(text);(text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mineral_fertilizer_regime_meth"
+      name: "mineral fertilizer regime method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method (e.g. injected, spread); regime rate of application;\
+          \ time of application. (text);(float) (unit);(text);(text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mineral_nitro_regime"
+      name: "mineral nitrogen regime"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of fertilizer used. (text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mineral_nitro_regime_meth"
+      name: "mineral nitrogen regime_method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method; rate; regime; time of applications.\
+          \ (text);(float)(unit);(text);(text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitro_stabilizers"
+      name: "nitrogen stabilizers"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of compound used. (text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosp_regime"
+      name: "phosphorus regime"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of fertilizer used. (text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosp_regime_meth"
+      name: "phosphorus regime method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method; rate; regime; regime; time of applications.\
+          \ (text);(float) (unit);(text);(text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "cover_crops"
+      name: "cover crops"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Whether or not a cover crop is present and if\ 
+          so, what is the cover. (boolean);(text);(text)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "growing_degree_days"
+      name: "growing degree days"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurment of heat accumulation (>5⁰C). (float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "moisture_deficit"
+      name: "moisture deficit"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Precipitation (P) minus potential evapotranspiration\ 
+          \ (PE); expressed on an annual or monthly basis. (float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bulk_density"
+      name: "bulk density"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "(float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "cation_exchange_capacity"
+      name: "cation exchange capacity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "(float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_carb_meth"
+      name: "total carbon method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Reference or method used in determining total\ 
+          \ carbon. (text); (PMID/DOI/URL)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "available_phosp"
+      name: "available phosphorus"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "(float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "active_carb"
+      name: "active carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Permanganate-oxidizable C. (float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "soil_respiration"
+      name: "soil respiration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Soil CO2 respiration: A proxy for general microbial\ 
+          \ activity. (float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "aggregate_stability"
+      name: "aggregate stability"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "(float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mineralizable_nitro"
+      name: "mineralizable nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Biological nitrogen availability. (float) (unit)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "dna_storage_conditons"
+      name: "dna storage conditions"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Explain how and for how long the DNA was stored\
+          \ prior to sequencing. (text); (period)."
+      dinaComponent: "COLLECTING_EVENT"
