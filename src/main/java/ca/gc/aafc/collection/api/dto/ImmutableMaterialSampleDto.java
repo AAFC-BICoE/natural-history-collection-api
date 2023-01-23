@@ -60,6 +60,8 @@ public class ImmutableMaterialSampleDto {
 
   private String preparationMethod;
 
+  private Integer ordinal;
+
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 

@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -23,6 +24,7 @@ import org.springframework.validation.SmartValidator;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -77,22 +79,41 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     Set<String> filteredRelationships = relationships.stream().filter( rel -> !rel.equalsIgnoreCase(MaterialSample.CHILDREN_COL_NAME)).collect(Collectors.toSet());
 
     List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
-    if (includes.contains(MaterialSample.HIERARCHY_PROP_NAME) && CollectionUtils.isNotEmpty(all) && entityClass == MaterialSample.class) {
-      all.forEach(t -> {
-        if (t instanceof MaterialSample) {
-          try {
-            setHierarchy((MaterialSample) t);
-          } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-          }
-        }
-      });
+
+    // sanity checks
+    if(entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
+      return all;
     }
+
+    // augment information where required
+    all.forEach(t -> {
+      if (t instanceof MaterialSample ms) {
+        try {
+          if (includes.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
+            setHierarchy(ms);
+          }
+          if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
+            setChildrenOrdinal(ms);
+          }
+        } catch (JsonProcessingException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    });
     return all;
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
     sample.setHierarchy(hierarchicalDataService.getHierarchy(sample.getId()));
+  }
+
+  public void setChildrenOrdinal(MaterialSample sample) {
+    List<ImmutableMaterialSample> sortedChildren = sample.getMaterialSampleChildren().stream()
+            .sorted(Comparator.comparingInt(ImmutableMaterialSample::getId)).toList();
+
+    for (int i = 0; i < sortedChildren.size(); i++) {
+      sortedChildren.get(i).setOrdinal(i);
+    }
   }
 
   @Override
