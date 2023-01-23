@@ -22,7 +22,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -165,6 +167,35 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism2));
   }
+
+  @Test
+  public void materialSampleChildren_onRequest_ordinalLoaded() {
+    MaterialSample parentMaterialSample = MaterialSampleFactory.newMaterialSample()
+            .build();
+    materialSampleService.create(parentMaterialSample);
+
+    MaterialSample materialSample1 = MaterialSampleFactory.newMaterialSample()
+            .parentMaterialSample(parentMaterialSample)
+            .build();
+    MaterialSample materialSample2 = MaterialSampleFactory.newMaterialSample()
+            .parentMaterialSample(parentMaterialSample)
+            .build();
+
+    materialSampleService.create(materialSample1);
+    materialSampleService.create(materialSample2);
+
+
+    MaterialSample loadedMaterialSample = materialSampleService.findOne(parentMaterialSample.getUuid(), MaterialSample.class);
+    materialSampleService.setChildrenOrdinal(loadedMaterialSample);
+    assertEquals(2, loadedMaterialSample.getMaterialSampleChildren().size());
+
+    Set<Integer> expectedOrdinal = new HashSet<>(Set.of(0,1));
+    assertTrue(expectedOrdinal.remove(loadedMaterialSample.getMaterialSampleChildren().get(0).getOrdinal()));
+    assertTrue(expectedOrdinal.remove(loadedMaterialSample.getMaterialSampleChildren().get(1).getOrdinal()));
+    // make sure we found the 2 numbers
+    assertTrue(expectedOrdinal.isEmpty());
+  }
+
 
   private MaterialSample persistMaterialSample() {
     MaterialSample persistMaterialSample = MaterialSampleFactory.newMaterialSample().build();

@@ -106,22 +106,22 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         materialSampleRepository.create(materialSampleDto).getUuid(),querySpec).getCollection().getUuid());
   }
 
-    @Test
-    @WithMockKeycloakUser(groupRole = {"aafc:user"})
-    public void create_recordCreated() {
-        CollectingEventDto event = eventRepository.findOne(
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  public void create_recordCreated() {
+    CollectingEventDto event = eventRepository.findOne(
             eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
-        MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-        materialSampleDto.setCollectingEvent(event);
-        MaterialSampleDto result = materialSampleRepository.findOne(
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setCollectingEvent(event);
+    MaterialSampleDto result = materialSampleRepository.findOne(
             materialSampleRepository.create(materialSampleDto).getUuid(),
             new QuerySpec(MaterialSampleDto.class)
-            );
-        assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
-        assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
-        assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
-        assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
-    }
+    );
+    assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
+    assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
+    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
+    assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
+  }
 
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
