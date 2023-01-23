@@ -15,6 +15,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture.RESTRICTION_FIELD_KEY;
+import static ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture.RESTRICTION_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -160,7 +163,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
 
     // Put an invalid key
-    materialSampleDto.getRestrictionFieldsExtension().get(0).setExtKey("ABC");
+    materialSampleDto.setRestrictionFieldsExtension(ExtensionValueTestFixture.newExtensionValue("ABC", RESTRICTION_FIELD_KEY, RESTRICTION_VALUE));
     assertThrows(ValidationException.class, () -> materialSampleRepository.create(materialSampleDto));
   }
 

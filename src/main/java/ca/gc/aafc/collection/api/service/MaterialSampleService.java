@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
@@ -16,6 +17,7 @@ import ca.gc.aafc.dina.service.MessageProducingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -160,12 +162,14 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void validateExtensionValues(@NonNull MaterialSample entity) {
-    if (CollectionUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
-      entity.getRestrictionFieldsExtension().forEach(extVal -> applyBusinessRule(
-        entity.getUuid().toString(),
-        extVal,
-        extensionValueValidator
-      ));
+    if (MapUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
+      for (String currExt : entity.getRestrictionFieldsExtension().keySet()) {
+        entity.getRestrictionFieldsExtension().get(currExt).forEach((k, v) -> applyBusinessRule(
+                entity.getUuid().toString(),
+                ExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
+                extensionValueValidator
+        ));
+      }
     }
   }
 

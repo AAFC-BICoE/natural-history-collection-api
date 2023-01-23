@@ -224,7 +224,6 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "jsonb")
   @Column(name = "extension_values", columnDefinition = "jsonb")
-  @Valid
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
   /**

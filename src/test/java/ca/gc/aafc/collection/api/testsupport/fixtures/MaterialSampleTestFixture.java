@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -69,11 +68,7 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setPreparationMaterials(PREPARATION_MATERIALS);
     materialSampleDto.setPreparationSubstrate(PREPARATION_SUBSTRATE);
     materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
-    materialSampleDto.setRestrictionFieldsExtension(List.of(ExtensionValue.builder()
-        .extKey(RESTRICTION_KEY)
-        .extFieldKey(RESTRICTION_FIELD_KEY)
-        .value(RESTRICTION_VALUE)
-        .build()));
+    materialSampleDto.setRestrictionFieldsExtension(ExtensionValueTestFixture.newExtensionValue(RESTRICTION_KEY, RESTRICTION_FIELD_KEY, RESTRICTION_VALUE));
     materialSampleDto.setRestrictionRemarks("abc");
     return materialSampleDto;
   }
