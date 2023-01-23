@@ -26,7 +26,6 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -101,8 +100,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
         }
       }
     });
-
-   return all;
+    return all;
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {

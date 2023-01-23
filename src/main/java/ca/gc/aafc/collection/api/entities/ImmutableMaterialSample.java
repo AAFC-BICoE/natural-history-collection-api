@@ -15,6 +15,8 @@ import javax.persistence.Transient;
 @Setter
 @Table(name = "material_sample")
 public class ImmutableMaterialSample extends AbstractMaterialSample {
+
+  //The ordinal number of the entry in the list of materialSampleChildren based on order of creation
   @Transient
   @DiffIgnore
   private Integer ordinal;
