@@ -9,6 +9,7 @@ import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
@@ -42,7 +43,9 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
-  private final RestrictionExtensionValueValidator extensionValueValidator;
+
+  private final MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator;
+  private final RestrictionExtensionValueValidator restrictionExtensionValueValidator;
 
   public MaterialSampleService(
     @NonNull BaseDAO baseDAO,
@@ -51,7 +54,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull AssociationValidator associationValidator,
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
-    @NonNull RestrictionExtensionValueValidator extensionValueValidator,
+    @NonNull MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator,
+    @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
     ApplicationEventPublisher eventPublisher
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
@@ -59,7 +63,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
     this.hierarchicalDataService = hierarchicalDataService;
-    this.extensionValueValidator = extensionValueValidator;
+    this.materialSampleExtensionValueValidator = materialSampleExtensionValueValidator;
+    this.restrictionExtensionValueValidator = restrictionExtensionValueValidator;
     this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
             .from(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
   }
@@ -162,16 +167,29 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void validateExtensionValues(@NonNull MaterialSample entity) {
+
+    if(MapUtils.isNotEmpty(entity.getExtensionValues())) {
+      for (String currExt : entity.getExtensionValues().keySet()) {
+        entity.getExtensionValues().get(currExt).forEach((k, v) -> applyBusinessRule(
+                entity.getUuid().toString(),
+                ExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
+                materialSampleExtensionValueValidator
+        ));
+      }
+    }
+
     if (MapUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
       for (String currExt : entity.getRestrictionFieldsExtension().keySet()) {
         entity.getRestrictionFieldsExtension().get(currExt).forEach((k, v) -> applyBusinessRule(
                 entity.getUuid().toString(),
                 ExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
-                extensionValueValidator
+                restrictionExtensionValueValidator
         ));
       }
     }
   }
+
+
 
   @Override
   public MaterialSample create(MaterialSample entity) {
