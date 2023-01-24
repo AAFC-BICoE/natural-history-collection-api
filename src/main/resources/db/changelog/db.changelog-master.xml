@@ -154,4 +154,5 @@
   <include file="db/changelog/migrations/147-Add_relationship_between_assemblage_and_material-sample.xml"/>
   <include file="db/changelog/migrations/148-Remove_host_field_from_material-sample.xml"/>
   <include file="db/changelog/migrations/149-Change_preparedBy_to_array.xml"/>
+  <include file="db/changelog/migrations/150-Add_extension_values_to_material_sample.xml"/>
 </databaseChangeLog>
