@@ -100,6 +100,10 @@ public class AbstractMaterialSample implements DinaEntity {
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
+  @Type(type = "jsonb")
+  @Column(name = "extension_values", columnDefinition = "jsonb")
+  private Map<String, Map<String, String>> extensionValues = Map.of();
+
   @Size(max = 250)
   @Column(name = "dwc_degree_of_establishment")
   private String dwcDegreeOfEstablishment;
@@ -129,8 +133,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private Boolean allowDuplicateName = false;
 
   @Type(type = "jsonb")
-  @Valid
-  private List<ExtensionValue> restrictionFieldsExtension;
+  private Map<String, Map<String, String>> restrictionFieldsExtension;
 
   @Builder.Default
   private Boolean isRestricted = false;
