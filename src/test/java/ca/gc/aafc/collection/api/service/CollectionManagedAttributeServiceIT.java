@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT {
 
+  private static final String GROUP = "grp";
+
   @Test
   void delete_WhenNotInUse_DeleteAccepted() {
     CollectionManagedAttribute attribute = newAttribute(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
@@ -49,7 +51,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
     CollectionManagedAttribute attribute = newAttribute(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     collectionManagedAttributeService.create(attribute);
 
-    MaterialSample sample = MaterialSample.builder().group("grp").createdBy("by").build();
+    MaterialSample sample = MaterialSample.builder().group(GROUP).createdBy("by").build();
     sample.setManagedAttributes(new HashMap<>(Map.of(attribute.getKey(), "test value")));
     materialSampleService.create(sample);
 
@@ -79,13 +81,15 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
     return CollectionManagedAttributeFactory.newCollectionManagedAttribute()
             .createdBy("CollectionManagedAttributeServiceIT")
             .managedAttributeComponent(component)
+            .group(GROUP)
+            .acceptedValues(null)
             .build();
   }
 
   private static CollectingEvent newEvent() {
     return CollectingEvent.builder()
       .createdBy("CollectionManagedAttributeServiceIT")
-      .group("grp")
+      .group(GROUP)
       .startEventDateTime(LocalDateTime.now().minusDays(1))
       .build();
   }
