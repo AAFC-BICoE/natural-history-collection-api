@@ -48,5 +48,15 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
     assertEquals("cfia_ppc", cfiaPpc.getKey());
     assertEquals("2022-02", cfiaPpc.getVersion());
   }
+  
+  @Test
+  void getAgronomyOntology() {
+    Extension agronomyOntology = extensionConfiguration.getExtension().get("agronomy_ontology");
+    
+    assertNotNull(agronomyOntology);
+    assertEquals("Agronomy Ontology", agronomyOntology.getName());
+    assertEquals("agronomy_ontology_v1", agronomyOntology.getKey());
+    assertEquals("v1", agronomyOntology.getVersion());
+  }
 
 }
