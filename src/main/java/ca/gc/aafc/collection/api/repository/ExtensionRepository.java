@@ -1,8 +1,10 @@
 package ca.gc.aafc.collection.api.repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import ca.gc.aafc.dina.extension.FieldExtensionDefinition;
 import org.springframework.stereotype.Repository;
 
 import ca.gc.aafc.collection.api.CollectionExtensionConfiguration;
@@ -20,12 +22,27 @@ public class ExtensionRepository extends ReadOnlyResourceRepositoryBase<Extensio
   protected ExtensionRepository(
     @NonNull CollectionExtensionConfiguration extensionConfiguration) {
     super(ExtensionDto.class);
+    checkArguments(extensionConfiguration.getExtension());
 
     extension = extensionConfiguration.getExtension()
       .entrySet()
       .stream()
       .map( entry -> new ExtensionDto(entry.getKey(), entry.getValue()))
       .collect( Collectors.toList());
+  }
+
+  /**
+   * Very common configuration issue that could lead to errors.
+   *
+   * @param extension
+   */
+  private void checkArguments(Map<String, FieldExtensionDefinition.Extension> extension) {
+    for(var entry : extension.entrySet()){
+      if(!entry.getKey().equals(entry.getValue().getKey())) {
+        throw new IllegalStateException("Extension map key not matching extension key: "
+                + entry.getKey() + " vs " + entry.getValue().getKey());
+      }
+    }
   }
 
   @Override

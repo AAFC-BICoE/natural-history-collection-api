@@ -16,6 +16,10 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @PropertySource(value = "classpath:extension/phac_cl.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/mixsSoilv5.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/mixsSedimentv5.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsSoilv4.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsSedimentv4.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsPlantAssociatedv4.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsWaterv4.yml", factory  = YamlPropertyLoaderFactory.class)
 public class CollectionExtensionConfiguration {
 
   private final Map<String, Extension> extension;

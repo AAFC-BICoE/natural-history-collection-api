@@ -4,12 +4,6 @@ extension:
     key: "mixs_water_v4"
     version: "v4"
     fields:
-    - key: "Structured comment name"
-      name: "Item"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Definition"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "submitted_to_insdc"
       name: "submitted to insdc"
       multilingualDescription.descriptions:
