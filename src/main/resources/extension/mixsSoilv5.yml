@@ -1,6 +1,6 @@
 extension:
-  mixs_soil:
-    name: "MIxS Soil"
+  mixs_soil_v5:
+    name: "MIxS Soil v5"
     key: "mixs_soil_v5"
     version: "v5"
     fields:

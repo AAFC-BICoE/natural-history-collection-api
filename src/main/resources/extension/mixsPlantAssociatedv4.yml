@@ -1,6 +1,6 @@
 extension:
-  mixs_soil:
-    name: "MIxS Plant-Associated"
+  mixs_plant-associated_v4:
+    name: "MIxS Plant-Associated v4"
     key: "mixs_plant-associated_v4"
     version: "v4"
     fields:

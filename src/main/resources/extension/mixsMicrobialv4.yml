@@ -1,6 +1,6 @@
 extension:
-  mixs_soil:
-    name: "MIxS Microbial"
+  mixs_microbial_v4:
+    name: "MIxS Microbial v4"
     key: "mixs_microbial_v4"
     version: "v4"
     fields:

@@ -39,8 +39,8 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
     MatcherAssert.assertThat(
       listOfExtension,
       Matchers.containsInAnyOrder(
-        collectionExtensionConfiguration.getExtension().get("mixs_soil"),
-        collectionExtensionConfiguration.getExtension().get("mixs_sediment"),
+        collectionExtensionConfiguration.getExtension().get("mixs_soil_v5"),
+        collectionExtensionConfiguration.getExtension().get("mixs_sediment_v5"),
         collectionExtensionConfiguration.getExtension().get("cfia_ppc"),
         collectionExtensionConfiguration.getExtension().get("phac_human_rg"),
         collectionExtensionConfiguration.getExtension().get("phac_animal_rg"),

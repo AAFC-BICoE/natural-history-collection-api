@@ -1,6 +1,6 @@
 extension:
-  mixs_soil:
-    name: "MIxS Sediment"
+  mixs_soil_v4:
+    name: "MIxS Sediment v4"
     key: "mixs_sediment_v4"
     version: "v4"
     fields:
