@@ -37,8 +37,8 @@ public class ExtensionRepository extends ReadOnlyResourceRepositoryBase<Extensio
    * @param extension
    */
   private void checkArguments(Map<String, FieldExtensionDefinition.Extension> extension) {
-    for(var entry : extension.entrySet()){
-      if(!entry.getKey().equals(entry.getValue().getKey())) {
+    for (var entry : extension.entrySet()) {
+      if (!entry.getKey().equals(entry.getValue().getKey())) {
         throw new IllegalStateException("Extension map key not matching extension key: "
                 + entry.getKey() + " vs " + entry.getValue().getKey());
       }
