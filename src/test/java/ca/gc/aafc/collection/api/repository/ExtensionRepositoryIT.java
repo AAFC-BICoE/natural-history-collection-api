@@ -44,7 +44,8 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
         collectionExtensionConfiguration.getExtension().get("cfia_ppc"),
         collectionExtensionConfiguration.getExtension().get("phac_human_rg"),
         collectionExtensionConfiguration.getExtension().get("phac_animal_rg"),
-        collectionExtensionConfiguration.getExtension().get("phac_cl")
+        collectionExtensionConfiguration.getExtension().get("phac_cl"),
+        collectionExtensionConfiguration.getExtension().get("agronomy_ontology")
       ));
   }
   
