@@ -4,29 +4,91 @@ extension:
     key: "mixs_plant_associated_v4"
     version: "v4"
     fields:
-    - key: "non_mineral_nutr_regm"
-      name: "non-mineral nutrient regimen"
+    - key: "air_temp_regm"
+      name: "air temperature regimen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "information about treatment involving the exposure of plant to non-mineral\
-        \ nutrient such as oxygen, hydrogen or carbon; should include the name of non-mineral\
-        \ nutrient, amount administered, treatment duration, interval and total experimental\
-        \ duration; can include multiple non-mineral nutrient regimens"
-    - key: "mineral_nutr_regm"
-      name: "mineral nutrient regimen"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "information about treatment involving the use of mineral supplements;\
-        \ should include the name of mineral nutrient, amount administered, treatment\
-        \ duration, interval and total experimental duration; can include multiple mineral\
-        \ nutrient regimens"
+          desc: "information about treatment involving an exposure to varying temperatures;\
+        \ should include the temperature, treatment duration, interval and total experimental\
+        \ duration; can include different temperature regimens"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "watering_regm"
-      name: "watering regimen"
+    - key: "antibiotic_regm"
+      name: "antibiotic regimen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "information about treatment involving an exposure to watering frequencies;\
-        \ can include multiple regimens"
+          desc: "information about treatment involving antibiotic administration; should include\
+        \ the name of antibiotic, amount administered, treatment duration, interval and total\
+        \ experimental duration; can include multiple antibiotic regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chem_administration"
+      name: "chemical administration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "list of chemical compounds administered to the host or site where sampling\
+        \ occurred, and when (e.g. antibiotics, N fertilizer, air filter); can include multiple\
+        \ compounds. For Chemical Entities of Biological Interest ontology (CHEBI) (v 111),\
+        \ http://purl.bioontology.org/ontology/CHEBI"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chem_mutagen"
+      name: "chemical mutagen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "treatment involving use of mutagens; should include the name of mutagen, amount\
+        \ administered, treatment duration, interval and total experimental duration; can include\
+        \ multiple mutagen regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "climate_environment"
+      name: "climate environment"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "treatment involving an exposure to a particular climate; can include multiple\
+        \ climates"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "fertilizer_regm"
+      name: "fertilizer regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving the use of fertilizers; should include\
+        \ the name fertilizer, amount administered, treatment duration, interval and total\
+        \ experimental duration; can include multiple fertilizer regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "fungicide_regm"
+      name: "fungicide regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving use of fungicides; should include the\
+        \ name of fungicide, amount administered, treatment duration, interval and total\
+        \ experimental duration; can include multiple fungicide regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "gaseous_environment"
+      name: "gaseous environment"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "use of conditions with differing gaseous environments; should include the\
+        \ name of gaseous compound, amount administered, treatment duration, interval and\
+        \ total experimental duration; can include multiple gaseous environment regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "gravity"
+      name: "gravity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving use of gravity factor to study various\
+        \ types of responses in presence, absence or modified levels of gravity; can include\
+        \ multiple treatments"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "growth_hormone_regm"
+      name: "growth hormone regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving use of growth hormones; should include\
+        \ the name of growth hormone, amount administered, treatment duration, interval and\
+        \ total experimental duration; can include multiple growth hormone regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "growth_med"
+      name: "growth media"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about growth media for growing the plants or tissue cultured samples"
       dinaComponent: "COLLECTING_EVENT"
     - key: "herbicide_regm"
       name: "herbicide regimen"
@@ -37,13 +99,149 @@ extension:
         \ amount administered, treatment duration, interval and total experimental duration;\
         \ can include multiple regimens"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "fungicide_regm"
-      name: "fungicide regimen"
+    - key: "host_age"
+      name: "host age"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "information about treatment involving use of fungicides; should include the\
-        \ name of fungicide, amount administered, treatment duration, interval and total\
-        \ experimental duration; can include multiple fungicide regimens"
+          desc: "age of host at the time of sampling; relevant scale depends on species and\
+        \ study, e.g. could be seconds for amoebae or centuries for trees"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_common_name"
+      name: "host common name"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "common name of the host, e.g. human"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_disease_stat"
+      name: "host disease status"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "list of diseases with which the host has been diagnosed; can include multiple\
+        \ diagnoses. the value of the field depends on host; for humans the terms should be\
+        \ chosen from DO (Disease Ontology) at http://www.disease-ontology.org, other hosts\
+        \ are free text"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_dry_mass"
+      name: "host dry mass"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of dry mass"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_genotype"
+      name: "host genotype"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "observed genotype"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_height"
+      name: "host height"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "the height of subject"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_infra_specific_name"
+      name: "host infra-specific name"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "taxonomic information about the host below subspecies level"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_infra_specific_rank"
+      name: "host infra-specific rank"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "taxonomic rank information about the host below subspecies level, such as\
+        \ variety, form, rank etc."
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_length"
+      name: "host length"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "the length of subject"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_life_stage"
+      name: "host life stage"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "description of life stage of host"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_phenotype"
+      name: "host phenotype"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "phenotype of host. For Phenotypic quality Ontology (PATO) (v 2013-10-28)\
+        \ terms, please see http://purl.bioontology.org/ontology/PATO"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_taxid"
+      name: "host taxid"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "NCBI taxon id of the host, e.g. 9606"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_tot_mass"
+      name: "host total mass"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "total mass of the host at collection, the unit depends on host"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_wet_mass"
+      name: "host wet mass"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of wet mass"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "humidity_regm"
+      name: "humidity regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving an exposure to varying degree of\
+        \ humidity; information about treatment involving use of growth hormones; should\
+        \ include amount of humidity administered, treatment duration, interval and total\
+        \ experimental duration; can include multiple regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mechanical_damage"
+      name: "mechanical damage"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about any mechanical damage exerted on the plant; can include\
+        \ multiple damages and sites"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mineral_nutr_regm"
+      name: "mineral nutrient regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving the use of mineral supplements;\
+        \ should include the name of mineral nutrient, amount administered, treatment\
+        \ duration, interval and total experimental duration; can include multiple mineral\
+        \ nutrient regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "non_mineral_nutr_regm"
+      name: "non-mineral nutrient regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving the exposure of plant to non-mineral\
+        \ nutrient such as oxygen, hydrogen or carbon; should include the name of non-mineral\
+        \ nutrient, amount administered, treatment duration, interval and total experimental\
+        \ duration; can include multiple non-mineral nutrient regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "organism_count"
+      name: "organism count"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "total count of any organism per gram or volume of sample, should include name\
+        \ of organism followed by count; can include multiple organism counts"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "oxy_stat_samp"
+      name: "oxygenation status of sample"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "oxygenation status of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "perturbation"
+      name: "perturbation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "type of perturbation, e.g. chemical administration, physical disturbance, etc.,\
+        \ coupled with time that perturbation occurred; can include multiple perturbation types"
       dinaComponent: "COLLECTING_EVENT"
     - key: "pesticide_regm"
       name: "pesticide regimen"
@@ -52,4 +250,118 @@ extension:
           desc: "information about treatment involving use of insecticides; should include the\
         \ name of pesticide, amount administered, treatment duration, interval and total\
         \ experimental duration; can include multiple pesticide regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ph_regm"
+      name: "pH regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving exposure of plants to varying levels of\
+        \ pH of the growth media; can include multiple regimen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "plant_body_site"
+      name: "plant body site"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "name of body site that the sample was obtained from. For Plant Ontology (PO)\
+        \ (v 20) terms, see http://purl.bioontology.org/ontology/PO"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "plant_product"
+      name: "plant product"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "substance produced by the plant, where the sample was obtained from"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "radiation_regm"
+      name: "radiation regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving exposure of plant or a plant part to\
+        \ a particular radiation regimen; should include the radiation type, amount or intensity\
+        \ administered, treatment duration, interval and total experimental duration; can include\
+        \ multiple radiation regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "rainfall_regm"
+      name: "rainfall regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving an exposure to a given amount of rainfall;\
+        \ can include multiple regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "salt_regm"
+      name: "salt regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving use of salts as supplement to liquid and\
+        \ soil growth media; should include the name of salt, amount administered, treatment\
+        \ duration, interval and total experimental duration; can include multiple salt regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_salinity"
+      name: "sample salinity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "salinity of sample, i.e. measure of total salt concentration"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_dur"
+      name: "sample storage duration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "duration for which sample was stored"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_loc"
+      name: "sample storage location"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "location at which sample was stored, usually name of a specific freezer/room"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_temp"
+      name: "sample storage temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "temperature at which sample was stored, e.g. -80 degree Celsius"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_vol_we_dna_ext"
+      name: "sample volume or weight for DNA extraction"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "volume (mL) or weight (g) of sample processed for DNA extraction"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "season_environment"
+      name: "seasonal environment"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "treatment involving an exposure to a particular season (e.g. winter, summer,\
+        \ rabi, rainy etc.)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "standing_water_regm"
+      name: "standing water regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "treatment involving an exposure to standing water during a plant's life span,\
+        \ types can be flood water or standing water; can include multiple regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "temp"
+      name: "temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "temperature of the sample at time of sampling"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tiss_cult_growth_med"
+      name: "tissue culture growth media"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "description of plant tissue culture growth media used"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "water_temp_regm"
+      name: "water temperature regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving an exposure to water with varying degree\
+        \ of temperature; can include multiple regimens"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "watering_regm"
+      name: "watering regimen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about treatment involving an exposure to watering frequencies;\
+        \ can include multiple regimens"
       dinaComponent: "COLLECTING_EVENT"

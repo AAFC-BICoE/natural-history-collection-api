@@ -4,10 +4,405 @@ extension:
     key: "mixs_sediment_v4"
     version: "v4"
     fields:
+    - key: "alkalinity"
+      name: "alkalinity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "alkalinity, the ability of a solution to neutralize acids to the equivalence\
+        \ point of carbonate or bicarbonate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "alkyl_diethers"
+      name: "alkyl diethers"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of alkyl diethers "
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "aminopept_act"
+      name: "aminopeptidase activity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of aminopeptidase activity"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "ammonium"
       name: "ammonium"
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of ammonium"
       dinaComponent: "COLLECTING_EVENT"
-    
+    - key: "bacteria_carb_prod"
+      name: "bacterial carbon production"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of bacterial carbon production"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "biomass"
+      name: "biomass"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "amount of biomass; should include the name for the part of biomass measured,\
+        \ e.g. microbial, total. can include multiple measurements"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bishomohopanol"
+      name: "bishomohopanol"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of bishomohopanol"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bromide"
+      name: "bromide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of bromide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "calcium"
+      name: "calcium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of calcium"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "carb_nitro_ratio"
+      name: "carbon/nitrogen ratio"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "ratio of amount or concentrations of carbon to nitrogen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chem_administration"
+      name: "chemical administration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "list of chemical compounds administered to the host or site where sampling occurred, and\
+        \ when (e.g. antibiotics, N fertilizer, air filter); can include multiple compounds. For Chemical\
+        \ Entities of Biological Interest ontology (CHEBI) (v 111), http://purl.bioontology.org/ontology/CHEBI"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chloride"
+      name: "chloride"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of chloride"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chlorophyll"
+      name: "chlorophyll"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of chlorophyll"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "density"
+      name: "density"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "density of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diether_lipids"
+      name: "diether lipids"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of diether lipids; can include multiple types of diether lipids"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_carb_dioxide"
+      name: "dissolved carbon dioxide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of dissolved carbon dioxide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_hydrogen"
+      name: "dissolved hydrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of dissolved hydrogen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_inorg_carb"
+      name: "dissolved inorganic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "dissolved inorganic carbon concentration"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_org_carb"
+      name: "dissolved organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of dissolved organic carbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_org_nitro"
+      name: "dissolved organic nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "dissolved organic nitrogen concentration measured as;\
+        \ total dissolved nitrogen - NH4 - NO3 - NO2"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_oxygen"
+      name: "dissolved oxygen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of dissolved oxygen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "glucosidase_act"
+      name: "glucosidase activity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of glucosidase activity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "magnesium"
+      name: "magnesium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of magnesium"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mean_frict_vel"
+      name: "mean friction velocity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of mean friction velocity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mean_peak_frict_vel"
+      name: "mean peak friction velocity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "measurement of mean peak friction velocity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "methane"
+      name: "methane"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "methane (gas) amount or concentration at the time of sampling"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "misc_param"
+      name: "miscellaneous parameter"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "any other measurement performed or parameter collected, that is not listed here"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "n_alkanes"
+      name: "n-alkanes"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of n-alkanes; can include multiple n-alkanes"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitrate"
+      name: "nitrate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of nitrate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitrite"
+      name: "nitrite"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of nitrite"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitro"
+      name: "nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of nitrogen (total)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_carb"
+      name: "organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of organic carbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_matter"
+      name: "organic matter"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of organic matter"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_nitro"
+      name: "organic nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of organic nitrogen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "organism_count"
+      name: "organism count"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "total count of any organism per gram or volume of sample, should include name of\
+        \ organism followed by count; can include multiple organism counts"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "oxy_stat_samp"
+      name: "oxygenation status of sample"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "oxygenation status of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "part_org_carb"
+      name: "particulate organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of particulate organic carbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "particle_class"
+      name: "particle classification"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "particles are classified, based on their size, into six general categories:clay,\
+        \ silt, sand, gravel, cobbles, and boulders; should include amount of particle preceded by\
+        \ the name of the particle type; can include multiple values"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "perturbation"
+      name: "perturbation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "type of perturbation, e.g. chemical administration, physical disturbance, etc.,\
+        \ coupled with time that perturbation occurred; can include multiple perturbation types"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "petroleum_hydrocarb"
+      name: "petroleum hydrocarbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of petroleum hydrocarbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ph"
+      name: "pH"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "pH measurement"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phaeopigments"
+      name: "phaeopigments"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of phaeopigments; can include multiple phaeopigments"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosphate"
+      name: "phosphate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of phosphate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosplipid_fatt_acid"
+      name: "phospholipid fatty acid"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of phospholipid fatty acids; can include multiple values"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "porosity"
+      name: "porosity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "porosity of deposited sediment is volume of voids divided by the total volume\
+        \ of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "potassium"
+      name: "potassium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of potassium "
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pressure"
+      name: "pressure"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "pressure to which the sample is subject, in atmospheres"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "redox_potential"
+      name: "redox potential"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "redox potential, measured relative to a hydrogen cell, indicating oxidation or\
+        \ reduction potential"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "salinity"
+      name: "salinity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "salinity measurement"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_dur"
+      name: "sample storage duration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "duration for which sample was stored"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_loc"
+      name: "sample storage location"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "location at which sample was stored, usually name of a specific freezer/room"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_temp"
+      name: "sample storage temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "temperature at which sample was stored, e.g. -80 degree Celsius"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_vol_we_dna_ext"
+      name: "sample volume or weight for DNA extraction"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "volume (mL) or weight (g) of sample processed for DNA extraction"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sediment_type"
+      name: "sediment type"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "information about the sediment type based on major constituents"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "silicate"
+      name: "silicate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of silicate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sodium"
+      name: "sodium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "sodium concentration"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sulfate"
+      name: "sulfate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of sulfate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sulfide"
+      name: "sulfide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "concentration of sulfide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "temp"
+      name: "temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "temperature of the sample at time of sampling"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tidal_stage"
+      name: "tidal stage"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "stage of tide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_carb"
+      name: "total carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "total carbon content"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_nitro"
+      name: "total nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "total nitrogen content of the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_org_carb"
+      name: "total organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Definition for soil: total organic carbon content of the soil, definition otherwise:\
+        \ total organic carbon content"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "turbidity"
+      name: "turbidity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "turbidity measurement"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "water_content"
+      name: "water content"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "water content measurement"
+      dinaComponent: "COLLECTING_EVENT"
