@@ -1,5 +1,5 @@
 extension:
-  agronomy_ontology:
+  agronomy_ontology_v1:
     name: "Agronomy Ontology"
     key: "agronomy_ontology_v1"
     version: "v1"
