@@ -59,4 +59,15 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     assertNull(collectionManagedAttributeService.findOne(uuid, CollectionManagedAttribute.class));
   }
 
+  /**
+   * Make sure we can create a managed attribute for every types
+   */
+  @Test
+  void create_differentVocabularyElementType_recordCreated() {
+    for(VocabularyElementType type : VocabularyElementType.values()) {
+      collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+              .vocabularyElementType(type).build());
+    }
+  }
+
 }
