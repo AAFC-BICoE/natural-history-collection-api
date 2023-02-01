@@ -10,6 +10,7 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import ca.gc.aafc.dina.service.AuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Repository
 public class CollectingEventRepository extends DinaRepository<CollectingEventDto, CollectingEvent> {
@@ -55,5 +57,11 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
     authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
     return super.create(resource);
   }
+
+  @Override
+  protected Predicate<String> supplyPredicate() {
+    return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
+  }
+
 }
 
