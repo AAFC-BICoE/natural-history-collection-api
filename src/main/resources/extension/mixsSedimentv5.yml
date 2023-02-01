@@ -1,7 +1,7 @@
 extension:
-  mixs_soil:
-    name: "MIxS Soil"
-    key: "mixs_soil_v5"
+  mixs_sediment_v5:
+    name: "MIxS Sediment v5"
+    key: "mixs_sediment_v5"
     version: "v5"
     fields:
     - key: "Structured comment name"
@@ -756,243 +756,236 @@ extension:
         \ to points on the earth's surface, while altitude is used for points above\
         \ the surface, such as an aircraft in flight or a spacecraft in orbit"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "cur_land_use"
-      name: "current land use"
+    - key: "alkalinity"
+      name: "alkalinity"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Present state of sample site"
+          desc: "Alkalinity, the ability of a solution to neutralize acids to the\
+        \ equivalence point of carbonate or bicarbonate"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "cur_vegetation"
-      name: "current vegetation"
+    - key: "alkyl_diethers"
+      name: "alkyl diethers"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Vegetation classification from one or more standard classification\
-        \ systems, or agricultural crop"
+          desc: "Concentration of alkyl diethers"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "cur_vegetation_meth"
-      name: "current vegetation method"
+    - key: "aminopept_act"
+      name: "aminopeptidase activity"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in vegetation classification"
+          desc: "Measurement of aminopeptidase activity"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "previous_land_use"
-      name: "history/previous land use"
+    - key: "ammonium"
+      name: "ammonium"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Previous land use and dates"
+          desc: "Concentration of ammonium in the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "previous_land_use_meth"
-      name: "history/previous land use method"
+    - key: "bacteria_carb_prod"
+      name: "bacterial carbon production"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining previous land use and dates"
+          desc: "Measurement of bacterial carbon production"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "crop_rotation"
-      name: "history/crop rotation"
+    - key: "biomass"
+      name: "biomass"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Whether or not crop is rotated, and if yes, rotation schedule"
+          desc: "Amount of biomass; should include the name for the part of biomass\
+        \ measured, e.g. Microbial, total. Can include multiple measurements"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "agrochem_addition"
-      name: "history/agrochemical additions"
+    - key: "bishomohopanol"
+      name: "bishomohopanol"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Addition of fertilizers, pesticides, etc. - amount and time of applications"
+          desc: "Concentration of bishomohopanol"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "tillage"
-      name: "history/tillage"
+    - key: "bromide"
+      name: "bromide"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Note method(s) used for tilling"
+          desc: "Concentration of bromide"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "fire"
-      name: "history/fire"
+    - key: "calcium"
+      name: "calcium"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Historical and/or physical evidence of fire"
+          desc: "Concentration of calcium in the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "flooding"
-      name: "history/flooding"
+    - key: "carb_nitro_ratio"
+      name: "carbon/nitrogen ratio"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Historical and/or physical evidence of flooding"
+          desc: "Ratio of amount or concentrations of carbon to nitrogen"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "extreme_event"
-      name: "history/extreme events"
+    - key: "chem_administration"
+      name: "chemical administration"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Unusual physical events that may have affected microbial populations"
+          desc: "List of chemical compounds administered to the host or site where\
+        \ sampling occurred, and when (e.g. Antibiotics, n fertilizer, air filter);\
+        \ can include multiple compounds. For chemical entities of biological interest\
+        \ ontology (chebi) (v 163), http://purl.bioontology.org/ontology/chebi"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "horizon"
-      name: "horizon"
+    - key: "chloride"
+      name: "chloride"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Specific layer in the land area which measures parallel to the soil\
-        \ surface and possesses physical characteristics which differ from the layers\
-        \ above and beneath"
+          desc: "Concentration of chloride in the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "horizon_meth"
-      name: "horizon method"
+    - key: "chlorophyll"
+      name: "chlorophyll"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining the horizon"
+          desc: "Concentration of chlorophyll"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "sieving"
-      name: "composite design/sieving (if any)"
+    - key: "density"
+      name: "density"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Collection design of pooled samples and/or sieve size and amount\
-        \ of sample sieved"
+          desc: "Density of the sample, which is its mass per unit volume (aka volumetric\
+        \ mass density)"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "water_content"
-      name: "water content"
+    - key: "diether_lipids"
+      name: "diether lipids"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Water content measurement"
+          desc: "Concentration of diether lipids; can include multiple types of diether\
+        \ lipids"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "water_content_soil_meth"
-      name: "water content method"
+    - key: "diss_carb_dioxide"
+      name: "dissolved carbon dioxide"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining the water content of soil"
+          desc: "Concentration of dissolved carbon dioxide in the sample or liquid\
+        \ portion of the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "samp_vol_we_dna_ext"
-      name: "sample volume or weight for DNA extraction"
+    - key: "diss_hydrogen"
+      name: "dissolved hydrogen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Volume (ml), weight (g) of processed sample, or surface area swabbed\
-        \ from sample for DNA extraction"
+          desc: "Concentration of dissolved hydrogen"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "pool_dna_extracts"
-      name: "pooling of DNA extracts (if done)"
+    - key: "diss_inorg_carb"
+      name: "dissolved inorganic carbon"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Indicate whether multiple DNA extractions were mixed. If the answer\
-        \ yes, the number of extracts that were pooled should be given"
+          desc: "Dissolved inorganic carbon concentration in the sample, typically\
+        \ measured after filtering the sample using a 0.45 micrometer filter"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "store_cond"
-      name: "storage conditions (fresh/frozen/other)"
+    - key: "diss_org_carb"
+      name: "dissolved organic carbon"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Explain how and for how long the soil sample was stored before DNA\
-        \ extraction"
+          desc: "Concentration of dissolved organic carbon in the sample, liquid portion\
+        \ of the sample, or aqueous phase of the fluid"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "link_climate_info"
-      name: "link to climate information"
+    - key: "diss_org_nitro"
+      name: "dissolved organic nitrogen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Link to climate resource"
+          desc: "Dissolved organic nitrogen concentration measured as; total dissolved\
+        \ nitrogen - NH4 - NO3 - NO2"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "annual_temp"
-      name: "mean annual temperature"
+    - key: "diss_oxygen"
+      name: "dissolved oxygen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Mean annual temperature"
+          desc: "Concentration of dissolved oxygen"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "season_temp"
-      name: "mean seasonal temperature"
+    - key: "glucosidase_act"
+      name: "glucosidase activity"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Mean seasonal temperature"
+          desc: "Measurement of glucosidase activity"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "annual_precpt"
-      name: "mean annual precipitation"
+    - key: "magnesium"
+      name: "magnesium"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "The average of all annual precipitation values known, or an estimated\
-        \ equivalent value derived by such methods as regional indexes or Isohyetal\
-        \ maps."
+          desc: "Concentration of magnesium in the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "season_precpt"
-      name: "mean seasonal precipitation"
+    - key: "mean_frict_vel"
+      name: "mean friction velocity"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "The average of all seasonal precipitation values known, or an estimated\
-        \ equivalent value derived by such methods as regional indexes or Isohyetal\
-        \ maps."
+          desc: "Measurement of mean friction velocity"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "link_class_info"
-      name: "link to classification information"
+    - key: "mean_peak_frict_vel"
+      name: "mean peak friction velocity"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Link to digitized soil maps or other soil classification information"
+          desc: "Measurement of mean peak friction velocity"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "fao_class"
-      name: "soil_taxonomic/FAO classification"
+    - key: "methane"
+      name: "methane"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Soil classification from the FAO World Reference Database for Soil\
-        \ Resources. The list can be found at http://www.fao.org/nr/land/sols/soil/wrb-soil-maps/reference-groups"
+          desc: "Methane (gas) amount or concentration at the time of sampling"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "local_class"
-      name: "soil_taxonomic/local classification"
+    - key: "misc_param"
+      name: "miscellaneous parameter"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Soil classification based on local soil classification system"
+          desc: "Any other measurement performed or parameter collected, that is not\
+        \ listed here"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "local_class_meth"
-      name: "soil_taxonomic/local classification method"
+    - key: "n_alkanes"
+      name: "n-alkanes"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining the local soil classification"
+          desc: "Concentration of n-alkanes; can include multiple n-alkanes"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "soil_type"
-      name: "soil type"
+    - key: "nitrate"
+      name: "nitrate"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Soil series name or other lower-level classification"
+          desc: "Concentration of nitrate in the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "soil_type_meth"
-      name: "soil type method"
+    - key: "nitrite"
+      name: "nitrite"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining soil series name or other\
-        \ lower-level classification"
+          desc: "Concentration of nitrite in the sample"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "slope_gradient"
-      name: "slope gradient"
+    - key: "nitro"
+      name: "nitrogen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Commonly called 'slope'. The angle between ground surface and a horizontal\
-        \ line (in percent). This is the direction that overland water would flow. This\
-        \ measure is usually taken with a hand level meter or clinometer"
+          desc: "Concentration of nitrogen (total)"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "slope_aspect"
-      name: "slope aspect"
+    - key: "org_carb"
+      name: "organic carbon"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "The direction a slope faces. While looking down a slope use a compass\
-        \ to record the direction you are facing (direction or degrees); e.g., nw or\
-        \ 315 degrees. This measure provides an indication of sun and wind exposure\
-        \ that will influence soil temperature and evapotranspiration."
+          desc: "Concentration of organic carbon"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "profile_position"
-      name: "profile position"
+    - key: "org_matter"
+      name: "organic matter"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Cross-sectional position in the hillslope where sample was collected.sample\
-        \ area position in relation to surrounding areas"
+          desc: "Concentration of organic matter"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "drainage_class"
-      name: "drainage classification"
+    - key: "org_nitro"
+      name: "organic nitrogen"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Drainage classification from a standard system such as the USDA system"
+          desc: "Concentration of organic nitrogen"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "texture"
-      name: "texture"
+    - key: "organism_count"
+      name: "organism count"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "The relative proportion of different grain sizes of mineral particles\
-        \ in a soil, as described using a standard system; express as % sand (50 um\
-        \ to 2 mm), silt (2 um to 50 um), and clay (<2 um) with textural name (e.g.,\
-        \ silty clay loam) optional."
+          desc: "Total cell count of any organism (or group of organisms) per gram,\
+        \ volume or area of sample, should include name of organism followed by count.\
+        \ The method that was used for the enumeration (e.g. qPCR, atp, mpn, etc.) Should\
+        \ also be provided. (example: total prokaryotes; 3.5e7 cells per ml; qpcr)"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "texture_meth"
-      name: "texture method"
+    - key: "oxy_stat_samp"
+      name: "oxygenation status of sample"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining soil texture"
+          desc: "Oxygenation status of sample"
       dinaComponent: "COLLECTING_EVENT"
     - key: "ph"
       name: "pH"
@@ -1001,11 +994,174 @@ extension:
           desc: "Ph measurement of the sample, or liquid portion of sample, or aqueous\
         \ phase of the fluid"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "ph_meth"
-      name: "pH method"
+    - key: "particle_class"
+      name: "particle classification"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining ph"
+          desc: "Particles are classified, based on their size, into six general categories:clay,\
+        \ silt, sand, gravel, cobbles, and boulders; should include amount of particle\
+        \ preceded by the name of the particle type; can include multiple values"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "part_org_carb"
+      name: "particulate organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of particulate organic carbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "perturbation"
+      name: "perturbation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of perturbation, e.g. chemical administration, physical disturbance,\
+        \ etc., coupled with perturbation regimen including how many times the perturbation\
+        \ was repeated, how long each perturbation lasted, and the start and end time\
+        \ of the entire perturbation period; can include multiple perturbation types"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "petroleum_hydrocarb"
+      name: "petroleum hydrocarbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of petroleum hydrocarbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phaeopigments"
+      name: "phaeopigments"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of phaeopigments; can include multiple phaeopigments"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosphate"
+      name: "phosphate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of phosphate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosplipid_fatt_acid"
+      name: "phospholipid fatty acid"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of phospholipid fatty acids; can include multiple values"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "porosity"
+      name: "porosity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Porosity of deposited sediment is volume of voids divided by the\
+        \ total volume of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "potassium"
+      name: "potassium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of potassium in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pressure"
+      name: "pressure"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Pressure to which the sample is subject to, in atmospheres"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "redox_potential"
+      name: "redox potential"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Redox potential, measured relative to a hydrogen cell, indicating\
+        \ oxidation or reduction potential"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "salinity"
+      name: "salinity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Salinity is the total concentration of all dissolved salts in a water\
+        \ sample. While salinity can be measured by a complete chemical analysis, this\
+        \ method is difficult and time consuming. More often, it is instead derived\
+        \ from the conductivity measurement. This is known as practical salinity. These\
+        \ derivations compare the specific conductance of the sample to a salinity standard\
+        \ such as seawater"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_dur"
+      name: "sample storage duration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Duration for which the sample was stored"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_loc"
+      name: "sample storage location"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Location at which sample was stored, usually name of a specific freezer/room"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_temp"
+      name: "sample storage temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Temperature at which sample was stored, e.g. -80 degree Celsius"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_vol_we_dna_ext"
+      name: "sample volume or weight for DNA extraction"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Volume (ml), weight (g) of processed sample, or surface area swabbed\
+        \ from sample for DNA extraction"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sediment_type"
+      name: "sediment type"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Information about the sediment type based on major constituents"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "silicate"
+      name: "silicate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of silicate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sodium"
+      name: "sodium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Sodium concentration in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sulfate"
+      name: "sulfate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of sulfate in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sulfide"
+      name: "sulfide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of sulfide in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "temp"
+      name: "temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Temperature of the sample at the time of sampling"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tidal_stage"
+      name: "tidal stage"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Stage of tide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_carb"
+      name: "total carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total carbon content"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_depth_water_col"
+      name: "total depth of water column"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of total depth of water column"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_nitro_content"
+      name: "total nitrogen content"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total nitrogen content of the sample"
       dinaComponent: "COLLECTING_EVENT"
     - key: "tot_org_carb"
       name: "total organic carbon"
@@ -1014,85 +1170,16 @@ extension:
           desc: "Definition for soil: total organic carbon content of the soil, definition\
         \ otherwise: total organic carbon content"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "tot_org_c_meth"
-      name: "total organic carbon method"
+    - key: "turbidity"
+      name: "turbidity"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Reference or method used in determining total organic carbon"
+          desc: "Measure of the amount of cloudiness or haziness in water caused by\
+        \ individual particles"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "tot_nitro_content"
-      name: "total nitrogen content"
+    - key: "water_content"
+      name: "water content"
       multilingualDescription.descriptions:
         - lang: en
-          desc: "Total nitrogen content of the sample"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "tot_nitro_content_meth"
-      name: "total nitrogen content method"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Reference or method used in determining the total nitrogen"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "microbial_biomass"
-      name: "microbial biomass"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "The part of the organic matter in the soil that constitutes living\
-        \ microorganisms smaller than 5-10 micrometer. If you keep this, you would need\
-        \ to have correction factors used for conversion to the final units"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "microbial_biomass_meth"
-      name: "microbial biomass method"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Reference or method used in determining microbial biomass"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "link_addit_analys"
-      name: "links to additional analysis"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Link to additional analysis results performed on the sample"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "extreme_salinity"
-      name: "extreme_unusual_properties/salinity"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Measured salinity"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "salinity_meth"
-      name: "extreme_unusual_properties/salinity method"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Reference or method used in determining salinity"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "heavy_metals"
-      name: "extreme_unusual_properties/heavy metals"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Heavy metals present and concentrationsany drug used by subject and\
-        \ the frequency of usage; can include multiple heavy metals and concentrations"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "heavy_metals_meth"
-      name: "extreme_unusual_properties/heavy metals method"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Reference or method used in determining heavy metals"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "al_sat"
-      name: "extreme_unusual_properties/Al saturation"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Aluminum saturation (esp. For tropical soils)"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "al_sat_meth"
-      name: "extreme_unusual_properties/Al saturation method"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Reference or method used in determining Al saturation"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "misc_param"
-      name: "miscellaneous parameter"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Any other measurement performed or parameter collected, that is not\
-        \ listed here"
+          desc: "Water content measurement"
       dinaComponent: "COLLECTING_EVENT"

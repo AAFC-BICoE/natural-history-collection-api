@@ -11,11 +11,15 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 
 @Configuration
 @ConfigurationProperties
-@PropertySource(value = "classpath:extension/mixsSoil.yml", factory  = YamlPropertyLoaderFactory.class)
-@PropertySource(value = "classpath:extension/mixsSediment.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/cfia_ppc.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/phac_rg.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/phac_cl.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsSoilv5.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsSedimentv5.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsSoilv4.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsSedimentv4.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsPlantAssociatedv4.yml", factory  = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:extension/mixsWaterv4.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/agronomy_ontology.yml", factory = YamlPropertyLoaderFactory.class)
 public class CollectionExtensionConfiguration {
 
