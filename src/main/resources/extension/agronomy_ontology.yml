@@ -6,6 +6,7 @@ extension:
     fields:
     - key: "crop"
       name: "crop"
+      term: "http://purl.obolibrary.org/obo/AGRO_00000325"
       multilingualDescription.descriptions:
         - lang: en
           desc: "A crop is any cultivated plant, fungus, or alga that is harvested for food, clothing, livestock, fodder, biofuel, medicine, or other uses [hasDbXref: https://en.wikipedia.org/wiki/Crop]"
@@ -14,6 +15,7 @@ extension:
       dinaComponent: "MATERIAL_SAMPLE"
     - key: "grain_nitrogen_content"
       name: "grain nitrogen content"
+      term: "http://purl.obolibrary.org/obo/TO_0003068"
       multilingualDescription.descriptions:
         - lang: en
           desc: "A nitrogen content trait (TO:0020093) which is the amount of nitrogen (CHEBI:51143) in a caryopsis fruit (PO:0030104). [hasDbXref: TO:malaporte]"
@@ -22,6 +24,7 @@ extension:
       dinaComponent: "MATERIAL_SAMPLE"
     - key: "grain_phosphorus_content"
       name: "grain phosphorus content"
+      term: "http://purl.obolibrary.org/obo/TO_0003082"
       multilingualDescription.descriptions:
         - lang: en
           desc: "A phosphorus content trait (TO:0001024) which is the amount of phosphorus cation (CHEBI:33467) in a caryopsis fruit (PO:0030104). [hasDbXref: TO:malaporte]"
@@ -30,6 +33,7 @@ extension:
       dinaComponent: "MATERIAL_SAMPLE"
     - key: "1000_grain_weight"
       name: "1000-grain weight"
+      term: "http://purl.obolibrary.org/obo/TO_0000382"
       multilingualDescription.descriptions:
         - lang: en
           desc: "A grain weight (TO:0000919) which is the weight of a sample of 1000 grains (caryopsis fruit; PO:0030104), with the caryopsis hull (PO:0006000). [hasDbXref: Gramene:pankaj_jaiswal]"
