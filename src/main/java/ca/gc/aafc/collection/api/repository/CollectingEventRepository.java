@@ -59,7 +59,7 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   }
 
   @Override
-  protected Predicate<String> supplyPredicate() {
+  protected Predicate<String> supplyCheckSubmittedDataPredicate() {
     return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
   }
 

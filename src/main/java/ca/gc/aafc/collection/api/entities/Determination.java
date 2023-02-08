@@ -42,7 +42,7 @@ public class Determination {
   @Size(max = 250)
   private String verbatimScientificName;
 
-  @Size(max = 150)
+  @Size(max = 250)
   private String verbatimDeterminer;
 
   @Size(max = 50)
