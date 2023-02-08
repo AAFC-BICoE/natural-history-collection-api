@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.config;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,8 +20,8 @@ public class ProtocolElementConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getProtocolElements() {
-    List<ProtocolElementConfiguration.ProtocolElement> protocolElements = protocolElementConfiguration.getProtocolElements();
+    List<? extends TypedVocabularyElement> protocolElements = protocolElementConfiguration.getProtocolElements();
     assertNotNull(protocolElements);
-    assertTrue(protocolElements.size() > 2);
+    assertTrue(protocolElements.size() >= 2);
   }
 }

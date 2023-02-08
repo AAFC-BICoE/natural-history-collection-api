@@ -9,9 +9,11 @@ vocabulary:
           title: μg/mL
     - name: uL
       term: https://w3id.org/uom/uL
-      labels:
-        en: μL
-        fr: μL
+      multilingualTitle.titles:
+        - lang: en
+          title: μL
+        - lang: fr
+          title: μL
     - name: uL.rxn
       multilingualTitle.titles:
         - lang: en
