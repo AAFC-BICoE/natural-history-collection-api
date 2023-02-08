@@ -23,6 +23,7 @@ public class StorageUnitFactory implements TestableEntityFactory<StorageUnit> {
       return StorageUnit
           .builder()
           .group("test group")
+          .barcode("ABC-928723619")
           .name(RandomStringUtils.randomAlphabetic(4))
           .createdBy("test user");
     }

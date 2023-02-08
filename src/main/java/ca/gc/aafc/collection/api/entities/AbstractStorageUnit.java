@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -37,6 +38,9 @@ public abstract class AbstractStorageUnit implements DinaEntity {
   private UUID uuid;
 
   private String name;
+
+  @Size(max = 50)
+  private String barcode;
 
   @Column(name = "_group")
   private String group;
