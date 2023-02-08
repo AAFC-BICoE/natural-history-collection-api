@@ -156,4 +156,5 @@
   <include file="db/changelog/migrations/149-Change_preparedBy_to_array.xml"/>
   <include file="db/changelog/migrations/150-Add_extension_values_to_material_sample.xml"/>
   <include file="db/changelog/migrations/151-Add_managed_attribute_type_DECIMAL.xml"/>
+  <include file="db/changelog/migrations/152-Add_Barcode_to_StorageUnit.xml"/>
 </databaseChangeLog>
