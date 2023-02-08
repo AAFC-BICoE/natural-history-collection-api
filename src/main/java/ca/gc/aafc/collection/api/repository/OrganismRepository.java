@@ -52,7 +52,7 @@ public class OrganismRepository extends DinaRepository<OrganismDto, Organism> {
   }
 
   @Override
-  protected Predicate<String> supplyPredicate() {
+  protected Predicate<String> supplyCheckSubmittedDataPredicate() {
     return txt -> isSafeSimpleText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
   }
 

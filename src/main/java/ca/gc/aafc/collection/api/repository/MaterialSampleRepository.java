@@ -74,7 +74,7 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
   }
 
   @Override
-  protected Predicate<String> supplyPredicate() {
+  protected Predicate<String> supplyCheckSubmittedDataPredicate() {
     return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
   }
 }
