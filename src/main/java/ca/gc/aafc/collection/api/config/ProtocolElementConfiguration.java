@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Configuration
 @PropertySource(value = "classpath:typed-vocabulary/protocolElement.yml", factory = YamlPropertyLoaderFactory.class)
-@ConfigurationProperties
+@ConfigurationProperties(ignoreUnknownFields = false)
 public class ProtocolElementConfiguration {
 
   private final List<ProtocolElement> protocolDataElement;
