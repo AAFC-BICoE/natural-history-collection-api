@@ -15,10 +15,12 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.repository.GoneException;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
 import io.crnk.core.queryspec.QuerySpec;
@@ -34,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture.RESTRICTION_FIELD_KEY;
+import static ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture.RESTRICTION_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -105,22 +109,22 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         materialSampleRepository.create(materialSampleDto).getUuid(),querySpec).getCollection().getUuid());
   }
 
-    @Test
-    @WithMockKeycloakUser(groupRole = {"aafc:user"})
-    public void create_recordCreated() {
-        CollectingEventDto event = eventRepository.findOne(
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  public void create_recordCreated() {
+    CollectingEventDto event = eventRepository.findOne(
             eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
-        MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-        materialSampleDto.setCollectingEvent(event);
-        MaterialSampleDto result = materialSampleRepository.findOne(
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setCollectingEvent(event);
+    MaterialSampleDto result = materialSampleRepository.findOne(
             materialSampleRepository.create(materialSampleDto).getUuid(),
             new QuerySpec(MaterialSampleDto.class)
-            );
-        assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
-        assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
-        assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
-        assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
-    }
+    );
+    assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
+    assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
+    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
+    assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
+  }
 
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
@@ -159,7 +163,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
 
     // Put an invalid key
-    materialSampleDto.getRestrictionFieldsExtension().get(0).setExtKey("ABC");
+    materialSampleDto.setRestrictionFieldsExtension(ExtensionValueTestFixture.newExtensionValue("ABC", RESTRICTION_FIELD_KEY, RESTRICTION_VALUE));
     assertThrows(ValidationException.class, () -> materialSampleRepository.create(materialSampleDto));
   }
 
@@ -190,7 +194,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   public void create_onManagedAttributeValue_validationOccur() {
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
-    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
 
@@ -219,14 +223,14 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
     CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttributeCE.setName("test");
-    newAttributeCE.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttributeCE.setVocabularyElementType(VocabularyElementType.DATE);
     newAttributeCE.setAcceptedValues(null);
     newAttributeCE.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collManagedAttributeRepo.create(newAttributeCE);
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("test");
-    newAttribute.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.DATE);
+    newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     newAttribute = collManagedAttributeRepo.create(newAttribute);

@@ -4,9 +4,11 @@ extension:
     key: "cfia_ppc"
     version: "2022-02"
     fields:
-      - term: "level"
+      - key: "level"
         name: "Plant Pest Containment Level"
-        definition: "Plant Pest Containment"
+        multilingualDescription.descriptions:
+          - lang: en
+            desc: "Plant Pest Containment"
         acceptedValues:
           - Level 1 (PPC-1)
           - Level 2 (PPC-2)

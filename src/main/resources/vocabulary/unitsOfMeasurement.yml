@@ -2,20 +2,26 @@ vocabulary:
   unitsOfMeasurement:
     - name: ug.mL-1
       term: https://w3id.org/uom/ug.mL-1
-      labels:
-        en: μg/mL
-        fr: μg/mL
+      multilingualTitle.titles:
+        - lang: en
+          title: μg/mL
+        - lang: fr
+          title: μg/mL
     - name: uL
       term: https://w3id.org/uom/uL
       labels:
         en: μL
         fr: μL
     - name: uL.rxn
-      labels:
-        en: µl/rxn
-        fr: µl/rxn
+      multilingualTitle.titles:
+        - lang: en
+          title: µl/rxn
+        - lang: fr
+          title: µl/rxn
     - name: mM
       term: http://www.wikidata.org/entity/Q105687351
-      labels:
-        en: mM
-        fr: mM
+      multilingualTitle.titles:
+        - lang: en
+          title: mM
+        - lang: fr
+          title: mM

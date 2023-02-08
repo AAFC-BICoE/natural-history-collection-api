@@ -1,0 +1,1185 @@
+extension:
+  mixs_sediment_v5:
+    name: "MIxS Sediment v5"
+    key: "mixs_sediment_v5"
+    version: "v5"
+    fields:
+    - key: "Structured comment name"
+      name: "Item"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Definition"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "submitted_to_insdc"
+      name: "submitted to insdc"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Depending on the study (large-scale e.g. done with next generation\
+        \ sequencing technology, or small-scale) sequences have to be submitted to SRA\
+        \ (Sequence Read Archive), DRA (DDBJ Read Archive) or via the classical Webin/Sequin\
+        \ systems to Genbank, ENA and DDBJ. Although this field is mandatory, it is\
+        \ meant as a self-test field, therefore it is not necessary to include this\
+        \ field in contextual data submitted to databases"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "investigation_type"
+      name: "investigation type"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Nucleic Acid Sequence Report is the root element of all MIGS/MIMS\
+        \ compliant reports as standardized by Genomic Standards Consortium. This field\
+        \ is either eukaryote,bacteria,virus,plasmid,organelle, metagenome,mimarks-survey,\
+        \ mimarks-specimen, metatranscriptome, single amplified genome, metagenome-assembled\
+        \ genome, or uncultivated viral genome"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "project_name"
+      name: "project name"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Name of the project within which the sequencing was organized"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "experimental_factor"
+      name: "experimental factor"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Experimental factors are essentially the variable aspects of an experiment\
+        \ design which can be used to describe an experiment, or set of experiments,\
+        \ in an increasingly detailed manner. This field accepts ontology terms from\
+        \ Experimental Factor Ontology (EFO) and/or Ontology for Biomedical Investigations\
+        \ (OBI). For a browser of EFO (v 2.95) terms, please see http://purl.bioontology.org/ontology/EFO;\
+        \ for a browser of OBI (v 2018-02-12) terms please see http://purl.bioontology.org/ontology/OBI"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "lat_lon"
+      name: "geographic location (latitude and longitude)"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The geographical origin of the sample as defined by latitude and\
+        \ longitude. The values should be reported in decimal degrees and in WGS84 system"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "depth"
+      name: "geographic location (depth)"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Please refer to the definitions of depth in the environmental packages"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "alt_elev"
+      name: "geographic location (altitude/elevation)"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Please refer to the definitions of either altitude or elevation in\
+        \ the environmental packages"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "geo_loc_name"
+      name: "geographic location (country and/or sea,region)"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The geographical origin of the sample as defined by the country or\
+        \ sea name followed by specific region name. Country or sea names should be\
+        \ chosen from the INSDC country list (http://insdc.org/country.html), or the\
+        \ GAZ ontology (v 1.512) (http://purl.bioontology.org/ontology/GAZ)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "collection_date"
+      name: "collection date"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The time of sampling, either as an instance (single point in time)\
+        \ or interval. In case no exact time is available, the date/time can be right\
+        \ truncated i.e. all of these are valid times: 2008-01-23T19:23:10+00:00; 2008-01-23T19:23:10;\
+        \ 2008-01-23; 2008-01; 2008; Except: 2008-01; 2008 all are ISO8601 compliant"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "env_broad_scale"
+      name: "broad-scale environmental context"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "In this field, report which major environmental system your sample\
+        \ or specimen came from. The systems identified should have a coarse spatial\
+        \ grain, to provide the general environmental context of where the sampling\
+        \ was done (e.g. were you in the desert or a rainforest?). We recommend using\
+        \ subclasses of ENVO’s biome class: http://purl.obolibrary.org/obo/ENVO_00000428.\
+        \ Format (one term): termLabel [termID], Format (multiple terms): termLabel\
+        \ [termID]|termLabel [termID]|termLabel [termID]. Example: Annotating a water\
+        \ sample from the photic zone in middle of the Atlantic Ocean, consider: oceanic\
+        \ epipelagic zone biome [ENVO:01000033]. Example: Annotating a sample from the\
+        \ Amazon rainforest consider: tropical moist broadleaf forest biome [ENVO:01000228].\
+        \ If needed, request new terms on the ENVO tracker, identified here: http://www.obofoundry.org/ontology/envo.html"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "env_local_scale"
+      name: "local environmental context"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "In this field, report the entity or entities which are in your sample\
+        \ or specimen’s local vicinity and which you believe have significant causal\
+        \ influences on your sample or specimen. Please use terms that are present in\
+        \ ENVO and which are of smaller spatial grain than your entry for env_broad_scale.\
+        \ Format (one term): termLabel [termID]; Format (multiple terms): termLabel\
+        \ [termID]|termLabel [termID]|termLabel [termID]. Example: Annotating a pooled\
+        \ sample taken from various vegetation layers in a forest consider: canopy [ENVO:00000047]|herb\
+        \ and fern layer [ENVO:01000337]|litter layer [ENVO:01000338]|understory [01000335]|shrub\
+        \ layer [ENVO:01000336]. If needed, request new terms on the ENVO tracker, identified\
+        \ here: http://www.obofoundry.org/ontology/envo.html"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "env_medium"
+      name: "environmental medium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "In this field, report which environmental material or materials (pipe\
+        \ separated) immediately surrounded your sample or specimen prior to sampling,\
+        \ using one or more subclasses of ENVO’s environmental material class: http://purl.obolibrary.org/obo/ENVO_00010483.\
+        \ Format (one term): termLabel [termID]; Format (multiple terms): termLabel\
+        \ [termID]|termLabel [termID]|termLabel [termID]. Example: Annotating a fish\
+        \ swimming in the upper 100 m of the Atlantic Ocean, consider: ocean water [ENVO:00002151].\
+        \ Example: Annotating a duck on a pond consider: pond water [ENVO:00002228]|air\
+        \ ENVO_00002005. If needed, request new terms on the ENVO tracker, identified\
+        \ here: http://www.obofoundry.org/ontology/envo.html"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "env_package"
+      name: "environmental package"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "MIxS extension for reporting of measurements and observations obtained\
+        \ from one or more of the environments where the sample was obtained. All environmental\
+        \ packages listed here are further defined in separate subtables. By giving\
+        \ the name of the environmental package, a selection of fields can be made from\
+        \ the subtables and can be reported"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "subspecf_gen_lin"
+      name: "subspecific genetic lineage"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "This should provide further information about the genetic distinctness\
+        \ of the sequenced organism by recording additional information e.g. serovar,\
+        \ serotype, biotype, ecotype, or any relevant genetic typing schemes like Group\
+        \ I plasmid. It can also contain alternative taxonomic information. It should\
+        \ contain both the lineage name, and the lineage rank, i.e. biovar:abc123"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ploidy"
+      name: "ploidy"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The ploidy level of the genome (e.g. allopolyploid, haploid, diploid,\
+        \ triploid, tetraploid). It has implications for the downstream study of duplicated\
+        \ gene and regions of the genomes (and perhaps for difficulties in assembly).\
+        \ For terms, please select terms listed under class ploidy (PATO:001374) of\
+        \ Phenotypic Quality Ontology (PATO), and for a browser of PATO (v 2018-03-27)\
+        \ please refer to http://purl.bioontology.org/ontology/PATO"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "num_replicons"
+      name: "number of replicons"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Reports the number of replicons in a nuclear genome of eukaryotes,\
+        \ in the genome of a bacterium or archaea or the number of segments in a segmented\
+        \ virus. Always applied to the haploid chromosome count of a eukaryote"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "extrachrom_elements"
+      name: "extrachromosomal elements"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Do plasmids exist of significant phenotypic consequence (e.g. ones\
+        \ that determine virulence or antibiotic resistance). Megaplasmids? Other plasmids\
+        \ (borrelia has 15+ plasmids)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "estimated_size"
+      name: "estimated size"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The estimated size of the genome prior to sequencing. Of particular\
+        \ importance in the sequencing of (eukaryotic) genome which could remain in\
+        \ draft form for a long or unspecified period."
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ref_biomaterial"
+      name: "reference for biomaterial"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Primary publication if isolated before genome publication; otherwise,\
+        \ primary genome report"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "source_mat_id"
+      name: "source material identifiers"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A unique identifier assigned to a material sample (as defined by\
+        \ http://rs.tdwg.org/dwc/terms/materialSampleID, and as opposed to a particular\
+        \ digital record of a material sample) used for extracting nucleic acids, and\
+        \ subsequent sequencing. The identifier can refer either to the original material\
+        \ collected or to any derived sub-samples. The INSDC qualifiers /specimen_voucher,\
+        \ /bio_material, or /culture_collection may or may not share the same value\
+        \ as the source_mat_id field. For instance, the /specimen_voucher qualifier\
+        \ and source_mat_id may both contain 'UAM:Herps:14' , referring to both the\
+        \ specimen voucher and sampled tissue with the same identifier. However, the\
+        \ /culture_collection qualifier may refer to a value from an initial culture\
+        \ (e.g. ATCC:11775) while source_mat_id would refer to an identifier from some\
+        \ derived culture from which the nucleic acids were extracted (e.g. xatc123\
+        \ or ark:/2154/R2)."
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pathogenicity"
+      name: "known pathogenicity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "To what is the entity pathogenic"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "biotic_relationship"
+      name: "observed biotic relationship"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Description of relationship(s) between the subject organism and other\
+        \ organism(s) it is associated with. E.g., parasite on species X; mutualist\
+        \ with species Y. The target organism is the subject of the relationship, and\
+        \ the other organism(s) is the object"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "specific_host"
+      name: "specific host"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "If there is a host involved, please provide its taxid (or environmental\
+        \ if not actually isolated from the dead or alive host - i.e. a pathogen could\
+        \ be isolated from a swipe of a bench etc) and report whether it is a laboratory\
+        \ or natural host)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_spec_range"
+      name: "host specificity or range"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The NCBI taxonomy identifier of the specific host if it is known"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "health_disease_stat"
+      name: "health or disease status of specific host at time of collection"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Health or disease status of specific host at time of collection"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "trophic_level"
+      name: "trophic level"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Trophic levels are the feeding position in a food chain. Microbes\
+        \ can be a range of producers (e.g. chemolithotroph)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "propagation"
+      name: "propagation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "This field is specific to different taxa. For phages: lytic/lysogenic,\
+        \ for plasmids: incompatibility group, for eukaryotes: sexual/asexual (Note:\
+        \ there is the strong opinion to name phage propagation obligately lytic or\
+        \ temperate, therefore we also give this choice"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "encoded_traits"
+      name: "encoded traits"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Should include key traits like antibiotic resistance or xenobiotic\
+        \ degradation phenotypes for plasmids, converting genes for phage"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "rel_to_oxygen"
+      name: "relationship to oxygen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Is this organism an aerobe, anaerobe? Please note that aerobic and\
+        \ anaerobic are valid descriptors for microbial environments"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "isol_growth_condt"
+      name: "isolation and growth condition"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Publication reference in the form of pubmed ID (pmid), digital object\
+        \ identifier (doi) or url for isolation and growth condition specifications\
+        \ of the organism/material"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_collect_device"
+      name: "sample collection device or method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The method or device employed for collecting the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_mat_process"
+      name: "sample material processing"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Any processing applied to the sample during or after retrieving the\
+        \ sample from environment. This field accepts OBI, for a browser of OBI (v 2018-02-12)\
+        \ terms please see http://purl.bioontology.org/ontology/OBI"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "size_frac"
+      name: "size fraction selected"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Filtering pore size used in sample preparation"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_size"
+      name: "amount or size of sample collected"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Amount or size of sample (volume, mass or area) that was collected"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "source_uvig"
+      name: "source of UViGs"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of dataset from which the UViG was obtained"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "virus_enrich_appr"
+      name: "virus enrichment approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "List of approaches used to enrich the sample for viruses, if any"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nucl_acid_ext"
+      name: "nucleic acid extraction"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A link to a literature reference, electronic resource or a standard\
+        \ operating procedure (SOP), that describes the material separation to recover\
+        \ the nucleic acid fraction from a sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nucl_acid_amp"
+      name: "nucleic acid amplification"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A link to a literature reference, electronic resource or a standard\
+        \ operating procedure (SOP), that describes the enzymatic amplification (PCR,\
+        \ TMA, NASBA) of specific nucleic acids"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "lib_size"
+      name: "library size"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total number of clones in the library prepared for the project"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "lib_reads_seqd"
+      name: "library reads sequenced"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total number of clones sequenced from the library"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "lib_layout"
+      name: "library layout"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Specify whether to expect single, paired, or other configuration\
+        \ of reads"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "lib_vector"
+      name: "library vector"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Cloning vector type(s) used in construction of libraries"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "lib_screen"
+      name: "library screening strategy"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Specific enrichment or screening methods applied before and/or after\
+        \ creating libraries"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "target_gene"
+      name: "target gene"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Targeted gene or locus name for marker gene studies"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "target_subfragment"
+      name: "target subfragment"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Name of subfragment of a gene or locus. Important to e.g. identify\
+        \ special regions on marker genes like V6 on 16S rRNA"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pcr_primers"
+      name: "pcr primers"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "PCR primers that were used to amplify the sequence of the targeted\
+        \ gene, locus or subfragment. This field should contain all the primers used\
+        \ for a single PCR reaction if multiple forward or reverse primers are present\
+        \ in a single PCR reaction. The primer sequence should be reported in uppercase\
+        \ letters"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mid"
+      name: "multiplex identifiers"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Molecular barcodes, called Multiplex Identifiers (MIDs), that are\
+        \ used to specifically tag unique samples in a sequencing run. Sequence should\
+        \ be reported in uppercase letters"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "adapters"
+      name: "adapters"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Adapters provide priming sequences for both amplification and sequencing\
+        \ of the sample-library fragments. Both adapters should be reported; in uppercase\
+        \ letters"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pcr_cond"
+      name: "pcr conditions"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Description of reaction conditions and components of PCR in the form\
+        \ of  'initial denaturation:94degC_1.5min; annealing=...'"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "seq_meth"
+      name: "sequencing method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Sequencing method used; e.g. Sanger, pyrosequencing, ABI-solid"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "seq_quality_check"
+      name: "sequence quality check"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Indicate if the sequence has been called by automatic systems (none)\
+        \ or undergone a manual editing procedure (e.g. by inspecting the raw data or\
+        \ chromatograms). Applied only for sequences that are not submitted to SRA,ENA\
+        \ or DRA"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chimera_check"
+      name: "chimera check"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A chimeric sequence, or chimera for short, is a sequence comprised\
+        \ of two or more phylogenetically distinct parent sequences. Chimeras are usually\
+        \ PCR artifacts thought to occur when a prematurely terminated amplicon reanneals\
+        \ to a foreign DNA strand and is copied to completion in the following PCR cycles.\
+        \ The point at which the chimeric sequence changes from one parent to the next\
+        \ is called the breakpoint or conversion point"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tax_ident"
+      name: "taxonomic identity marker"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The phylogenetic marker(s) used to assign an organism name to the\
+        \ SAG or MAG"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "assembly_qual"
+      name: "assembly quality"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The assembly quality category is based on sets of criteria outlined\
+        \ for each assembly quality category. For MISAG/MIMAG; Finished: Single, validated,\
+        \ contiguous sequence per replicon without gaps or ambiguities with a consensus\
+        \ error rate equivalent to Q50 or better. High Quality Draft:Multiple fragments\
+        \ where gaps span repetitive regions. Presence of the 23S, 16S and 5S rRNA genes\
+        \ and at least 18 tRNAs. Medium Quality Draft:Many fragments with little to\
+        \ no review of assembly other than reporting of standard assembly statistics.\
+        \ Low Quality Draft:Many fragments with little to no review of assembly other\
+        \ than reporting of standard assembly statistics. Assembly statistics include,\
+        \ but are not limited to total assembly size, number of contigs, contig N50/L50,\
+        \ and maximum contig length. For MIUVIG; Finished: Single, validated, contiguous\
+        \ sequence per replicon without gaps or ambiguities, with extensive manual review\
+        \ and editing to annotate putative gene functions and transcriptional units.\
+        \ High-quality draft genome: One or multiple fragments, totaling ≥ 90% of the\
+        \ expected genome or replicon sequence or predicted complete. Genome fragment(s):\
+        \ One or multiple fragments, totalling < 90% of the expected genome or replicon\
+        \ sequence, or for which no genome size could be estimated"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "assembly_name"
+      name: "assembly name"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Name/version of the assembly provided by the submitter that is used\
+        \ in the genome browsers and in the community"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "assembly_software"
+      name: "assembly software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool(s) used for assembly, including version number and parameters"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "annot"
+      name: "annotation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool used for annotation, or for cases where annotation was provided\
+        \ by a community jamboree or model organism database rather than by a specific\
+        \ submitter"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "number_contig"
+      name: "number of contigs"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total number of contigs in the cleaned/submitted assembly that makes\
+        \ up a given genome, SAG, MAG, or UViG"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "feat_pred"
+      name: "feature prediction"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method used to predict UViGs features such as ORFs, integration site,\
+        \ etc."
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ref_db"
+      name: "reference database(s)"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "List of database(s) used for ORF annotation, along with version number\
+        \ and reference to website or publication"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sim_search_meth"
+      name: "similarity search method"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool used to compare ORFs with database, along with version and cutoffs\
+        \ used"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tax_class"
+      name: "taxonomic classification"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method used for taxonomic classification, along with reference database\
+        \ used, classification rank, and thresholds used to classify new genomes"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "16s_recover"
+      name: "16S recovered"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Can a 16S gene be recovered from the submitted SAG or MAG?"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "16s_recover_software"
+      name: "16S recovery software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tools used for 16S rRNA gene extraction"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "trnas"
+      name: "number of standard tRNAs extracted"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The total number of tRNAs identified from the SAG or MAG"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "trna_ext_software"
+      name: "tRNA extraction software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tools used for tRNA identification"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "compl_score"
+      name: "completeness score"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Completeness score is typically based on either the fraction of markers\
+        \ found as compared to a database or the percent of a genome found as compared\
+        \ to a closely related reference genome. High Quality Draft: >90%, Medium Quality\
+        \ Draft: >50%, and Low Quality Draft: < 50% should have the indicated completeness\
+        \ scores"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "compl_software"
+      name: "completeness software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tools used for completion estimate, i.e. checkm, anvi'o, busco"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "compl_appr"
+      name: "completeness approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The approach used to determine the completeness of a given SAG or\
+        \ MAG, which would typically make use of a set of conserved marker genes or\
+        \ a closely related reference genome. For UViG completeness, include reference\
+        \ genome or group used, and contig feature suggesting a complete genome"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "contam_score"
+      name: "contamination score"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The contamination score is based on the fraction of single-copy genes\
+        \ that are observed more than once in a query genome. The following scores are\
+        \ acceptable for; High Quality Draft: < 5%, Medium Quality Draft: < 10%, Low\
+        \ Quality Draft: < 10%. Contamination must be below 5% for a SAG or MAG to be\
+        \ deposited into any of the public databases"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "contam_screen_input"
+      name: "contamination screening input"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The type of sequence data used as input"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "contam_screen_param"
+      name: "contamination screening parameters"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Specific parameters used in the decontamination sofware, such as\
+        \ reference database, coverage, and kmers. Combinations of these parameters\
+        \ may also be used, i.e. kmer and coverage, or reference database and kmer"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "decontam_software"
+      name: "decontamination software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool(s) used in contamination screening"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sort_tech"
+      name: "sorting technology"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method used to sort/isolate cells or particles of interest"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "single_cell_lysis_appr"
+      name: "single cell or viral particle lysis approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method used to free DNA from interior of the cell(s) or particle(s)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "single_cell_lysis_prot"
+      name: "single cell or viral particle lysis kit protocol"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Name of the kit or standard protocol used for cell(s) or particle(s)\
+        \ lysis"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "wga_amp_appr"
+      name: "WGA amplification approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Method used to amplify genomic DNA in preparation for sequencing"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "wga_amp_kit"
+      name: "WGA amplification kit"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Kit used to amplify genomic DNA in preparation for sequencing"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bin_param"
+      name: "binning parameters"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "The parameters that have been applied during the extraction of genomes\
+        \ from metagenomic datasets"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bin_software"
+      name: "binning software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool(s) used for the extraction of genomes from metagenomic datasets"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "reassembly_bin"
+      name: "reassembly post binning"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Has an assembly been performed on a genome bin extracted from a metagenomic\
+        \ assembly?"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mag_cov_software"
+      name: "MAG coverage software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool(s) used to determine the genome coverage if coverage is used\
+        \ as a binning parameter in the extraction of genomes from metagenomic datasets"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "vir_ident_software"
+      name: "viral identification software"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool(s) used for the identification of UViG as a viral genome, software\
+        \ or protocol name  including version number, parameters, and cutoffs used"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pred_genome_type"
+      name: "predicted genome type"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of genome predicted for the UViG"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pred_genome_struc"
+      name: "predicted genome structure"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Expected structure of the viral genome"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "detec_type"
+      name: "detection type"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of UViG detection"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "votu_class_appr"
+      name: "vOTU classification approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Cutoffs and approach used when clustering new UViGs in “species-level”\
+        \ vOTUs. Note that results from standard 95% ANI / 85% AF clustering should\
+        \ be provided alongside vOTUS defined from another set of thresholds, even if\
+        \ the latter are the ones primarily used during the analysis"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "votu_seq_comp_appr"
+      name: "vOTU sequence comparison approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool and thresholds used to compare sequences when computing \"species-level\"\
+        \ vOTUs"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "votu_db"
+      name: "vOTU database"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Reference database (i.e. sequences not generated as part of the current\
+        \ study) used to cluster new genomes in \"species-level\" vOTUs, if any"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_pred_appr"
+      name: "host prediction approach"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Tool or approach used for host prediction"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "host_pred_est_acc"
+      name: "host prediction estimated accuracy"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "For each tool or approach used for host prediction, estimated false\
+        \ discovery rates should be included, either computed de novo or from the literature"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "url"
+      name: "relevant electronic resources"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: ""
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sop"
+      name: "relevant standard operating procedures"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Standard operating procedures used in assembly and/or annotation\
+        \ of genomes, metagenomes or environmental sequences"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "depth"
+      name: "depth"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Depth is defined as the vertical distance below local surface, e.g.\
+        \ For sediment or soil samples depth is measured from sediment or soil surface,\
+        \ respectively. Depth can be reported as an interval for subsurface samples"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "elev"
+      name: "elevation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Elevation of the sampling site is its height above a fixed reference\
+        \ point, most commonly the mean sea level. Elevation is mainly used when referring\
+        \ to points on the earth's surface, while altitude is used for points above\
+        \ the surface, such as an aircraft in flight or a spacecraft in orbit"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "alkalinity"
+      name: "alkalinity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Alkalinity, the ability of a solution to neutralize acids to the\
+        \ equivalence point of carbonate or bicarbonate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "alkyl_diethers"
+      name: "alkyl diethers"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of alkyl diethers"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "aminopept_act"
+      name: "aminopeptidase activity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of aminopeptidase activity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ammonium"
+      name: "ammonium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of ammonium in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bacteria_carb_prod"
+      name: "bacterial carbon production"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of bacterial carbon production"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "biomass"
+      name: "biomass"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Amount of biomass; should include the name for the part of biomass\
+        \ measured, e.g. Microbial, total. Can include multiple measurements"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bishomohopanol"
+      name: "bishomohopanol"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of bishomohopanol"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "bromide"
+      name: "bromide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of bromide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "calcium"
+      name: "calcium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of calcium in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "carb_nitro_ratio"
+      name: "carbon/nitrogen ratio"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Ratio of amount or concentrations of carbon to nitrogen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chem_administration"
+      name: "chemical administration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "List of chemical compounds administered to the host or site where\
+        \ sampling occurred, and when (e.g. Antibiotics, n fertilizer, air filter);\
+        \ can include multiple compounds. For chemical entities of biological interest\
+        \ ontology (chebi) (v 163), http://purl.bioontology.org/ontology/chebi"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chloride"
+      name: "chloride"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of chloride in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "chlorophyll"
+      name: "chlorophyll"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of chlorophyll"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "density"
+      name: "density"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Density of the sample, which is its mass per unit volume (aka volumetric\
+        \ mass density)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diether_lipids"
+      name: "diether lipids"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of diether lipids; can include multiple types of diether\
+        \ lipids"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_carb_dioxide"
+      name: "dissolved carbon dioxide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of dissolved carbon dioxide in the sample or liquid\
+        \ portion of the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_hydrogen"
+      name: "dissolved hydrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of dissolved hydrogen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_inorg_carb"
+      name: "dissolved inorganic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Dissolved inorganic carbon concentration in the sample, typically\
+        \ measured after filtering the sample using a 0.45 micrometer filter"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_org_carb"
+      name: "dissolved organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of dissolved organic carbon in the sample, liquid portion\
+        \ of the sample, or aqueous phase of the fluid"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_org_nitro"
+      name: "dissolved organic nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Dissolved organic nitrogen concentration measured as; total dissolved\
+        \ nitrogen - NH4 - NO3 - NO2"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "diss_oxygen"
+      name: "dissolved oxygen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of dissolved oxygen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "glucosidase_act"
+      name: "glucosidase activity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of glucosidase activity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "magnesium"
+      name: "magnesium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of magnesium in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mean_frict_vel"
+      name: "mean friction velocity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of mean friction velocity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "mean_peak_frict_vel"
+      name: "mean peak friction velocity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of mean peak friction velocity"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "methane"
+      name: "methane"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Methane (gas) amount or concentration at the time of sampling"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "misc_param"
+      name: "miscellaneous parameter"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Any other measurement performed or parameter collected, that is not\
+        \ listed here"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "n_alkanes"
+      name: "n-alkanes"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of n-alkanes; can include multiple n-alkanes"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitrate"
+      name: "nitrate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of nitrate in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitrite"
+      name: "nitrite"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of nitrite in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "nitro"
+      name: "nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of nitrogen (total)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_carb"
+      name: "organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of organic carbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_matter"
+      name: "organic matter"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of organic matter"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "org_nitro"
+      name: "organic nitrogen"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of organic nitrogen"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "organism_count"
+      name: "organism count"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total cell count of any organism (or group of organisms) per gram,\
+        \ volume or area of sample, should include name of organism followed by count.\
+        \ The method that was used for the enumeration (e.g. qPCR, atp, mpn, etc.) Should\
+        \ also be provided. (example: total prokaryotes; 3.5e7 cells per ml; qpcr)"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "oxy_stat_samp"
+      name: "oxygenation status of sample"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Oxygenation status of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "ph"
+      name: "pH"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Ph measurement of the sample, or liquid portion of sample, or aqueous\
+        \ phase of the fluid"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "particle_class"
+      name: "particle classification"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Particles are classified, based on their size, into six general categories:clay,\
+        \ silt, sand, gravel, cobbles, and boulders; should include amount of particle\
+        \ preceded by the name of the particle type; can include multiple values"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "part_org_carb"
+      name: "particulate organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of particulate organic carbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "perturbation"
+      name: "perturbation"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Type of perturbation, e.g. chemical administration, physical disturbance,\
+        \ etc., coupled with perturbation regimen including how many times the perturbation\
+        \ was repeated, how long each perturbation lasted, and the start and end time\
+        \ of the entire perturbation period; can include multiple perturbation types"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "petroleum_hydrocarb"
+      name: "petroleum hydrocarbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of petroleum hydrocarbon"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phaeopigments"
+      name: "phaeopigments"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of phaeopigments; can include multiple phaeopigments"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosphate"
+      name: "phosphate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of phosphate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "phosplipid_fatt_acid"
+      name: "phospholipid fatty acid"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of phospholipid fatty acids; can include multiple values"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "porosity"
+      name: "porosity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Porosity of deposited sediment is volume of voids divided by the\
+        \ total volume of sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "potassium"
+      name: "potassium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of potassium in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "pressure"
+      name: "pressure"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Pressure to which the sample is subject to, in atmospheres"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "redox_potential"
+      name: "redox potential"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Redox potential, measured relative to a hydrogen cell, indicating\
+        \ oxidation or reduction potential"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "salinity"
+      name: "salinity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Salinity is the total concentration of all dissolved salts in a water\
+        \ sample. While salinity can be measured by a complete chemical analysis, this\
+        \ method is difficult and time consuming. More often, it is instead derived\
+        \ from the conductivity measurement. This is known as practical salinity. These\
+        \ derivations compare the specific conductance of the sample to a salinity standard\
+        \ such as seawater"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_dur"
+      name: "sample storage duration"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Duration for which the sample was stored"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_loc"
+      name: "sample storage location"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Location at which sample was stored, usually name of a specific freezer/room"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_store_temp"
+      name: "sample storage temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Temperature at which sample was stored, e.g. -80 degree Celsius"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "samp_vol_we_dna_ext"
+      name: "sample volume or weight for DNA extraction"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Volume (ml), weight (g) of processed sample, or surface area swabbed\
+        \ from sample for DNA extraction"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sediment_type"
+      name: "sediment type"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Information about the sediment type based on major constituents"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "silicate"
+      name: "silicate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of silicate"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sodium"
+      name: "sodium"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Sodium concentration in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sulfate"
+      name: "sulfate"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of sulfate in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "sulfide"
+      name: "sulfide"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Concentration of sulfide in the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "temp"
+      name: "temperature"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Temperature of the sample at the time of sampling"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tidal_stage"
+      name: "tidal stage"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Stage of tide"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_carb"
+      name: "total carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total carbon content"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_depth_water_col"
+      name: "total depth of water column"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measurement of total depth of water column"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_nitro_content"
+      name: "total nitrogen content"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Total nitrogen content of the sample"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "tot_org_carb"
+      name: "total organic carbon"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Definition for soil: total organic carbon content of the soil, definition\
+        \ otherwise: total organic carbon content"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "turbidity"
+      name: "turbidity"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Measure of the amount of cloudiness or haziness in water caused by\
+        \ individual particles"
+      dinaComponent: "COLLECTING_EVENT"
+    - key: "water_content"
+      name: "water content"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Water content measurement"
+      dinaComponent: "COLLECTING_EVENT"

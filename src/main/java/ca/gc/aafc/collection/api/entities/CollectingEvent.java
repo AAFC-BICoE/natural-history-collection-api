@@ -224,8 +224,7 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "jsonb")
   @Column(name = "extension_values", columnDefinition = "jsonb")
-  @Valid
-  private List<ExtensionValue> extensionValues = new ArrayList<>();
+  private Map<String, Map<String, String>> extensionValues = Map.of();
 
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always

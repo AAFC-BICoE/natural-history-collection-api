@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
@@ -125,7 +124,11 @@ public class CollectingEventDto {
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
-  private List<ExtensionValue> extensionValues = List.of();
+  /**
+   * Map of Managed attribute key to value object.
+   */
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, Map<String, String>> extensionValues = Map.of();
 
   @NoArgsConstructor
   public static final class StartEventDateTimeAdapter

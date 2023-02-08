@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.CollectingEventExtensionValueValidator;
@@ -11,6 +12,7 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
@@ -97,12 +99,15 @@ public class CollectingEventService extends DefaultDinaService<CollectingEvent> 
   }
 
   private void validateExtensionValues(@NonNull CollectingEvent entity) {
-    if (CollectionUtils.isNotEmpty(entity.getExtensionValues())) {
-      entity.getExtensionValues().forEach(extVal -> applyBusinessRule(
-        entity.getUuid().toString(),
-        extVal,
-        extensionValueValidator
-      ));
+    if (MapUtils.isNotEmpty(entity.getExtensionValues())) {
+
+      for(String currExt : entity.getExtensionValues().keySet()) {
+        entity.getExtensionValues().get(currExt).forEach( (k,v) -> applyBusinessRule(
+                entity.getUuid().toString(),
+                ExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
+                extensionValueValidator
+        ));
+      }
     }
   }
 

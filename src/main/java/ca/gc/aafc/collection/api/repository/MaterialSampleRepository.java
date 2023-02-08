@@ -8,6 +8,7 @@ import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import ca.gc.aafc.dina.service.AuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.crnk.core.queryspec.QuerySpec;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Log4j2
 @Repository
@@ -71,4 +73,8 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
     return super.findOne(id, querySpec);
   }
 
+  @Override
+  protected Predicate<String> supplyCheckSubmittedDataPredicate() {
+    return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
+  }
 }

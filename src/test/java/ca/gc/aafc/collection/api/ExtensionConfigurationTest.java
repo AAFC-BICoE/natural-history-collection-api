@@ -21,20 +21,20 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getMixSSoil() {
-    Extension mixsSoil = extensionConfiguration.getExtension().get("mixs_soil");
+    Extension mixsSoil = extensionConfiguration.getExtension().get("mixs_soil_v5");
 
     assertNotNull(mixsSoil);
-    assertEquals("MIxS Soil", mixsSoil.getName());
+    assertEquals("MIxS Soil v5", mixsSoil.getName());
     assertEquals("mixs_soil_v5", mixsSoil.getKey());
     assertEquals("v5", mixsSoil.getVersion());
   }
 
   @Test
   void getMixSSediment() {
-    Extension mixsSediment = extensionConfiguration.getExtension().get("mixs_sediment");
+    Extension mixsSediment = extensionConfiguration.getExtension().get("mixs_sediment_v5");
 
     assertNotNull(mixsSediment);
-    assertEquals("MIxS Sediment", mixsSediment.getName());
+    assertEquals("MIxS Sediment v5", mixsSediment.getName());
     assertEquals("mixs_sediment_v5", mixsSediment.getKey());
     assertEquals("v5", mixsSediment.getVersion());
   }
@@ -49,4 +49,13 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
     assertEquals("2022-02", cfiaPpc.getVersion());
   }
 
+  @Test
+  void getAgronomyOntology() {
+    Extension agronomyOntology = extensionConfiguration.getExtension().get("agronomy_ontology_v1");
+
+    assertNotNull(agronomyOntology);
+    assertEquals("Agronomy Ontology", agronomyOntology.getName());
+    assertEquals("agronomy_ontology_v1", agronomyOntology.getKey());
+    assertEquals("v1", agronomyOntology.getVersion());
+  }
 }

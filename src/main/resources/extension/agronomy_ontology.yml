@@ -1,0 +1,42 @@
+extension:
+  agronomy_ontology_v1:
+    name: "Agronomy Ontology"
+    key: "agronomy_ontology_v1"
+    version: "v1"
+    fields:
+    - key: "crop"
+      name: "crop"
+      term: "http://purl.obolibrary.org/obo/AGRO_00000325"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A crop is any cultivated plant, fungus, or alga that is harvested for food, clothing, livestock, fodder, biofuel, medicine, or other uses [hasDbXref: https://en.wikipedia.org/wiki/Crop]"
+        - lang: fr
+          desc: "Une culture est n'importe quel plante, champignon, ou algue cultivé qui est récolté pour la nourriture, les vêtements, le bétail, le fourrage, le biocarburant, la médecine, ou d'autres utilisations [hasDbXref: https://fr.wikipedia.org/wiki/Culture_(agriculture)]"
+      dinaComponent: "MATERIAL_SAMPLE"
+    - key: "grain_nitrogen_content"
+      name: "grain nitrogen content"
+      term: "http://purl.obolibrary.org/obo/TO_0003068"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A nitrogen content trait (TO:0020093) which is the amount of nitrogen (CHEBI:51143) in a caryopsis fruit (PO:0030104). [hasDbXref: TO:malaporte]"
+        - lang: fr
+          desc: "Un trait de teneur en azote (TO:0020093) qui est la quantité d'azote (CHEBI:51143) dans un fruit caryopse (PO:0030104). [hasDbXref: TO:malaporte]"
+      dinaComponent: "MATERIAL_SAMPLE"
+    - key: "grain_phosphorus_content"
+      name: "grain phosphorus content"
+      term: "http://purl.obolibrary.org/obo/TO_0003082"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A phosphorus content trait (TO:0001024) which is the amount of phosphorus cation (CHEBI:33467) in a caryopsis fruit (PO:0030104). [hasDbXref: TO:malaporte]"
+        - lang: fr
+          desc: "Un trait de teneur en phosphore (TO:0001024) qui est la quantité de phosphore cation (CHEBI:33467) dans un fruit caryopse (PO:0030104). [hasDbXref: TO:malaporte]"
+      dinaComponent: "MATERIAL_SAMPLE"
+    - key: "1000_grain_weight"
+      name: "1000-grain weight"
+      term: "http://purl.obolibrary.org/obo/TO_0000382"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "A grain weight (TO:0000919) which is the weight of a sample of 1000 grains (caryopsis fruit; PO:0030104), with the caryopsis hull (PO:0006000). [hasDbXref: Gramene:pankaj_jaiswal]"
+        - lang: fr
+          desc: "Un poids de grains (TO:0000919) qui est le poids d'un échantillon de mille grains (fruit de caryopse; PO:0030104), avec la cosse de caryopse (PO:0006000). [hasDbXref: Gramene:pankaj_jaiswal]"
+      dinaComponent: "MATERIAL_SAMPLE"

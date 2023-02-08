@@ -3,60 +3,60 @@ vocabulary:
     - name: has_host
       term: http://purl.obolibrary.org/obo/RO_0002454
       inverseOf: host_of
-      labels:
-        en: has host
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: has host
     - name: host_of
       term: http://purl.obolibrary.org/obo/RO_0002453
       inverseOf: has_host
-      labels:
-        en: host of
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: host of
     - name: parasite_of
       term: http://purl.obolibrary.org/obo/RO_0002444
       inverseOf: parasitized_by
-      labels:
-        en: parasite of
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: parasite of
     - name: parasitized_by
       term: http://purl.obolibrary.org/obo/RO_0002445
       inverseOf: parasite_of
-      labels:
-        en: parasitized by
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: parasitized by
     - name: pollinates
       term: http://purl.obolibrary.org/obo/RO_0002455
       inverseOf: pollinated_by
-      labels:
-        en: pollinates
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: pollinates
     - name: pollinated_by
       term: http://purl.obolibrary.org/obo/RO_0002456
       inverseOf: pollinates
-      labels:
-        en: pollinated by
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: pollinated by
     - name: has_vector
       term: http://purl.obolibrary.org/obo/RO_0002460
       inverseOf: is_vector_for
-      labels:
-        en: has vector
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: has vector
     - name: is_vector_for
       term: http://purl.obolibrary.org/obo/RO_0002459
       inverseOf: has_vector
-      labels:
-        en: is vector for
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: is vector for
     - name: has_pathogen
       term: http://purl.obolibrary.org/obo/RO_0002557
       inverseOf: pathogen_of
-      labels:
-        en: has pathogen
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: has pathogen
     - name: pathogen_of
       term: http://purl.obolibrary.org/obo/RO_0002556
       inverseOf: has_pathogen
-      labels:
-        en: pathogen of
-        fr: 
+      multilingualTitle.titles:
+        - lang: en
+          title: pathogen of

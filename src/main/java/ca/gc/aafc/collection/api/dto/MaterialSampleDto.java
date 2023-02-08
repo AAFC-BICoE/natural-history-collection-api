@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
@@ -71,6 +70,9 @@ public class MaterialSampleDto {
   @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = Map.of();
 
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, Map<String, String>> extensionValues = Map.of();
+
   private String preparationRemarks;
   
   private String dwcDegreeOfEstablishment;
@@ -102,7 +104,8 @@ public class MaterialSampleDto {
 
   private Boolean allowDuplicateName = false;
 
-  private List<ExtensionValue> restrictionFieldsExtension;
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, Map<String, String>> restrictionFieldsExtension = Map.of();
 
   private Boolean isRestricted = false;
 

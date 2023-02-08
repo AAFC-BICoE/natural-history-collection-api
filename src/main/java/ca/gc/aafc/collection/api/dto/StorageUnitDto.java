@@ -39,6 +39,8 @@ public class StorageUnitDto {
 
   private String name;
 
+  private String barcode;
+
   @ShallowReference
   @JsonApiRelation
   private StorageUnitDto parentStorageUnit;

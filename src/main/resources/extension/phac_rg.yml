@@ -4,9 +4,11 @@ extension:
     key: "phac_human_rg"
     version: "2022-02"
     fields:
-      - term: "risk_group"
+      - key: "risk_group"
         name: "Risk Group"
-        definition: "Risk Group"
+        multilingualDescription.descriptions:
+          - lang: en
+            desc: "Risk Group"
         acceptedValues:
           - Risk Group 1 (RG1)
           - Risk Group 2 (RG2)
@@ -17,9 +19,11 @@ extension:
     key: "phac_animal_rg"
     version: "2022-02"
     fields:
-      - term: "risk_group"
+      - key: "risk_group"
         name: "Risk Group"
-        definition: "Risk Group"
+        multilingualDescription.descriptions:
+          - lang: en
+            desc: "Risk Group"
         acceptedValues:
           - Risk Group 1 (RG1)
           - Risk Group 2 (RG2)

@@ -4,7 +4,8 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
-import ca.gc.aafc.dina.entity.ManagedAttribute.ManagedAttributeType;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import lombok.SneakyThrows;
 import org.geolatte.geom.Point;
 import org.geolatte.geom.crs.CoordinateSystemAxis;
@@ -407,7 +408,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   void validate_WhenInvalidIntegerTypeExceptionThrown() {
     CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
       .acceptedValues(null)
-      .managedAttributeType(ManagedAttributeType.INTEGER)
+      .vocabularyElementType(VocabularyElementType.INTEGER)
       .build();
 
     collectionManagedAttributeService.create(testManagedAttribute);
@@ -474,7 +475,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
     assertThrows(ConstraintViolationException.class,
       () -> collectingEventService.update(fetchedCollectingEvent));
-
   }
 
   @Test
@@ -504,16 +504,8 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     CollectingEvent fetchedCollectingEvent = collectingEventService
       .findOne(collectingEvent.getUuid(), CollectingEvent.class);
 
-
-    List<ExtensionValue> extensionValues = new ArrayList<>();
-    extensionValues.add(ExtensionValue.builder()
-      .extKey("invalid_key")
-      .extVersion("v5")
-      .extTerm("experimental_factor")
-      .value("definition of experimentWal factor")
-      .build());
-
-    fetchedCollectingEvent.setExtensionValues(extensionValues);
+    fetchedCollectingEvent.setExtensionValues(ExtensionValueTestFixture.newExtensionValue(
+            ExtensionValueTestFixture.EXTENSION_KEY, RandomStringUtils.randomAlphabetic(8), "abc"));
 
     assertThrows(ValidationException.class, 
       () -> collectingEventService.update(fetchedCollectingEvent));

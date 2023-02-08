@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -57,7 +58,7 @@ public class AssemblageOpenApiIT extends BaseRestAssuredTest {
     CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
     collectionManagedAttributeDto.setName(key);
     collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setManagedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING);
+    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
     collectionManagedAttributeDto.setAcceptedValues(null);
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.ASSEMBLAGE);
     collectionManagedAttributeDto.setCreatedBy("dina");

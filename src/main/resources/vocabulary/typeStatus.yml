@@ -2,56 +2,78 @@ vocabulary:
   typeStatus:
     - name: None
       term: No Value
-      labels:
-        en: None
-        fr: rien
+      multilingualTitle.titles:
+        - lang: en
+          title: None
+        - lang: fr
+          title: Aucun
     - name: Holotype
       term: https://www.wikidata.org/wiki/Q1061403
-      labels:
-        en: Holotype
-        fr: Holotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Holotype
+        - lang: fr
+          title: Holotype
     - name: Paratype
       term: https://www.wikidata.org/wiki/Q926578
-      labels:
-        en: Paratype
-        fr: Paratype
+      multilingualTitle.titles:
+        - lang: en
+          title: Paratype
+        - lang: fr
+          title: Paratype
     - name: Allotype
       term: https://www.wikidata.org/wiki/Q19353437
-      labels:
-        en: Allotype
-        fr: Allotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Allotype
+        - lang: fr
+          title: Allotype
     - name: Neotype
       term: https://www.wikidata.org/wiki/Q19353453
-      labels:
-        en: Neotype
-        fr: Neotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Neotype
+        - lang: fr
+          title: Neotype
     - name: Syntype
       term: https://www.wikidata.org/wiki/Q719822
-      labels:
-        en: Syntype
-        fr: Syntype
+      multilingualTitle.titles:
+        - lang: en
+          title: Syntype
+        - lang: fr
+          title: Syntype
     - name: Lectotype
       term: https://www.wikidata.org/wiki/Q2439719
-      labels:
-        en: Lectotype
-        fr: Lectotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Lectotype
+        - lang: fr
+          title: Lectotype
     - name: Paralectotype
       term: https://www.wikidata.org/wiki/Q19353473
-      labels:
-        en: Paralectotype
-        fr: Paralectotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Paralectotype
+        - lang: fr
+          title: Paralectotype
     - name: Hapantotype
       term: https://www.wikidata.org/wiki/Q19353478
-      labels:
-        en: Hapantotype
-        fr: Hapantotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Hapantotype
+        - lang: fr
+          title: Hapantotype
     - name: Iconotype
       term: https://en.wikipedia.org/wiki/Type_(biology)
-      labels:
-        en: Iconotype
-        fr: Iconotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Iconotype
+        - lang: fr
+          title: Iconotype
     - name: Ergatotype
       term: https://www.wikidata.org/wiki/Q19353481
-      labels:
-        en: Ergatotype
-        fr: Ergatotype
+      multilingualTitle.titles:
+        - lang: en
+          title: Ergatotype
+        - lang: fr
+          title: Ergatotype

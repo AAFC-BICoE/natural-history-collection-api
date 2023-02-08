@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
-
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -21,7 +21,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedName = "dina test attribute";
     String expectedGroup = "dinaGroup";
     UUID uuid = collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .managedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING)
+      .vocabularyElementType(VocabularyElementType.STRING)
       .acceptedValues(new String[]{expectedValue})
       .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
       .createdBy(expectedCreatedBy)
@@ -39,10 +39,8 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     assertEquals(
       CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT,
       result.getManagedAttributeComponent());
-    assertEquals(
-      CollectionManagedAttribute.ManagedAttributeType.STRING,
-      result.getManagedAttributeType());
 
+    assertEquals(VocabularyElementType.STRING, result.getVocabularyElementType());
 
     result.setKey("abc");
     result.setName("new name");
@@ -59,6 +57,17 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     // delete should work since the attribute is not used
     collectionManagedAttributeService.delete(result);
     assertNull(collectionManagedAttributeService.findOne(uuid, CollectionManagedAttribute.class));
+  }
+
+  /**
+   * Make sure we can create a managed attribute for every types
+   */
+  @Test
+  void create_differentVocabularyElementType_recordCreated() {
+    for(VocabularyElementType type : VocabularyElementType.values()) {
+      collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+              .vocabularyElementType(type).build());
+    }
   }
 
 }

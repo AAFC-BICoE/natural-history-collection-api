@@ -3,9 +3,8 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.dina.entity.ManagedAttribute;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT {
+
+  private static final String GROUP = "grp";
 
   @Test
   void delete_WhenNotInUse_DeleteAccepted() {
@@ -50,7 +51,7 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
     CollectionManagedAttribute attribute = newAttribute(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     collectionManagedAttributeService.create(attribute);
 
-    MaterialSample sample = MaterialSample.builder().group("grp").createdBy("by").build();
+    MaterialSample sample = MaterialSample.builder().group(GROUP).createdBy("by").build();
     sample.setManagedAttributes(new HashMap<>(Map.of(attribute.getKey(), "test value")));
     materialSampleService.create(sample);
 
@@ -77,19 +78,18 @@ public class CollectionManagedAttributeServiceIT extends CollectionModuleBaseIT 
   }
 
   private static CollectionManagedAttribute newAttribute(CollectionManagedAttribute.ManagedAttributeComponent component) {
-    return CollectionManagedAttribute.builder()
-      .group("grp")
-      .name(RandomStringUtils.randomAlphabetic(6))
-      .managedAttributeType(ManagedAttribute.ManagedAttributeType.STRING)
-      .createdBy("CollectionManagedAttributeServiceIT")
-      .managedAttributeComponent(component)
-      .build();
+    return CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+            .createdBy("CollectionManagedAttributeServiceIT")
+            .managedAttributeComponent(component)
+            .group(GROUP)
+            .acceptedValues(null)
+            .build();
   }
 
   private static CollectingEvent newEvent() {
     return CollectingEvent.builder()
       .createdBy("CollectionManagedAttributeServiceIT")
-      .group("grp")
+      .group(GROUP)
       .startEventDateTime(LocalDateTime.now().minusDays(1))
       .build();
   }

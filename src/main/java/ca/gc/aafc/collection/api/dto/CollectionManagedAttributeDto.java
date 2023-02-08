@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class CollectionManagedAttributeDto {
   private UUID uuid;
   private String name;
   private String key;
-  private CollectionManagedAttribute.ManagedAttributeType managedAttributeType;
+  private TypedVocabularyElement.VocabularyElementType vocabularyElementType;
   private CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent;
   private String[] acceptedValues;
   private OffsetDateTime createdOn;

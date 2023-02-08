@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MultilingualTestFixture;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 
@@ -29,7 +30,7 @@ public class CollectionManagedAttributeFactory implements TestableEntityFactory<
           .name(RandomStringUtils.randomAlphabetic(5))
           .group(RandomStringUtils.randomAlphabetic(5))
           .createdBy(RandomStringUtils.randomAlphabetic(5))
-          .managedAttributeType(CollectionManagedAttribute.ManagedAttributeType.STRING)
+          .vocabularyElementType(VocabularyElementType.STRING)
           .acceptedValues(new String[]{"value"})
           .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT)
           .multilingualDescription(MultilingualTestFixture.newMultilingualDescription());
