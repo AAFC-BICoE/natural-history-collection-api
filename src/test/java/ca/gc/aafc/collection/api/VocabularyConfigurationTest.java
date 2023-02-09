@@ -65,6 +65,12 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
   }
 
   @Test
+  void unitsOfMeasurement() {
+    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> unitsOfMeasurement = vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement");
+    assertEquals(4, unitsOfMeasurement.size());
+  }
+
+  @Test
   void associationType() {
     List<CollectionVocabularyConfiguration.CollectionVocabularyElement> associationType = vocabularyConfiguration.getVocabulary().get("associationType");
     assertEquals(10, associationType.size());
@@ -81,7 +87,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
 
     List<MaterialSample.MaterialSampleType> fromVocabularyFile = materialSampleType.stream()
         .map(mst -> MaterialSample.MaterialSampleType.fromString(mst.getName()).orElse(null))
-        .collect(Collectors.toList());
+        .toList();
 
     assertArrayEquals(MaterialSample.MaterialSampleType.values(), fromVocabularyFile.toArray());
 

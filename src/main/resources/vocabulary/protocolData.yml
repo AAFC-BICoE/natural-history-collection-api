@@ -1,0 +1,16 @@
+vocabulary:
+  protocolData:
+    - name: Forward Primer
+      term: forward_primer
+      multilingualTitle.titles:
+        - lang: en
+          title: Forward Primer
+        - lang: fr
+          title: Amorce sens
+    - name: Reverse Primer
+      term: reverse_primer
+      multilingualTitle.titles:
+        - lang: en
+          title: Reverse Primer
+        - lang: fr
+          title: Amorce antisens
