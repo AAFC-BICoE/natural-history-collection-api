@@ -44,4 +44,7 @@ public class ProtocolDto extends AttributeMetaInfoProvider {
   private List<ExternalRelationDto> attachments = List.of();
 
   private MultilingualDescription multilingualDescription;
+
+  private List<Protocol.ProtocolData> protocolData = List.of();
+
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.persistence.PersistenceException;
 
 import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,7 @@ public class ProtocolCRUDIT extends CollectionModuleBaseIT {
       .group(EXPECTED_GROUP)
       .createdBy(EXPECTED_CREATED_BY)
       .multilingualDescription(MULTILINGUAL_DESCRIPTION)
+      .protocolData(ProtocolTestFixture.newProtocolData())
       .build();
   }
 

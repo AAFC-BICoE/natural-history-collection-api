@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -41,7 +40,7 @@ public class Protocol extends UserDescribedDinaEntity {
   @Type(type = "jsonb")
   @Column(name = "protocol_data", columnDefinition = "jsonb")
   @Valid
-  private Map<String, List<ProtocolData>> protocolElements = Map.of();
+  private List<ProtocolData> protocolData = List.of();
 
   @Data
   @Builder
@@ -50,14 +49,28 @@ public class Protocol extends UserDescribedDinaEntity {
 
     @NotBlank
     @Size(max = 50)
-    private String key;
+    private String key; // forward primer
+
+    private boolean vocabularyBased;
+
+    private List<ProtocolDataElement> protocolDataElement;
+  }
+
+  @Data
+  @Builder
+  @Value
+  public static class ProtocolDataElement {
+
+    private boolean vocabularyBased;
+
+    @NotBlank
+    @Size(max = 250)
+    private String elementType; // concentration, reaction quantity
 
     @NotBlank
     @Size(max = 250)
     private String value;
 
-    @Size(max = 25)
-    private String unitsOfMeasurement;
+    private String unit;
   }
-  
 }
