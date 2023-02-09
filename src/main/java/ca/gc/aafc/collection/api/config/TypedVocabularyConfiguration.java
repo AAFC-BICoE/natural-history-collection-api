@@ -35,7 +35,7 @@ public class TypedVocabularyConfiguration {
     return typedVocabulary;
   }
 
-  public List<? extends TypedVocabularyElement> getProtocolDataElement(){
+  public List<? extends TypedVocabularyElement> getProtocolDataElement() {
     return typedVocabulary.get(PROTOCOL_DATA_ELEMENT_KEY);
   }
 
