@@ -12,29 +12,37 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * Protocol elements are typed vocabulary implementation.
+ * Configuration class responsible to load all files (specified by PropertySource annotation) from typed-vocabulary.
+ * The top level of each file should be "typedVocabulary".
  */
 @Configuration
 @PropertySource(value = "classpath:typed-vocabulary/protocolElement.yml", factory = YamlPropertyLoaderFactory.class)
-@ConfigurationProperties(ignoreUnknownFields = false)
-public class ProtocolElementConfiguration {
+@ConfigurationProperties
+public class TypedVocabularyConfiguration {
 
-  private final List<ProtocolElement> protocolDataElement;
+  public static final String PROTOCOL_DATA_ELEMENT_KEY = "protocolDataElement";
 
-  public ProtocolElementConfiguration(List<ProtocolElement> protocolDataElement) {
-    this.protocolDataElement = protocolDataElement;
+  private final Map<String, List<TypedVocabularyElementImpl>> typedVocabulary;
+
+  public TypedVocabularyConfiguration(Map<String, List<TypedVocabularyElementImpl>> typedVocabulary) {
+    this.typedVocabulary = typedVocabulary;
   }
 
-  public List<ProtocolElement> getProtocolElements() {
-    return protocolDataElement;
+  public Map<String, List<TypedVocabularyElementImpl>> getTypedVocabulary() {
+    return typedVocabulary;
+  }
+
+  public List<? extends TypedVocabularyElement> getProtocolDataElement(){
+    return typedVocabulary.get(PROTOCOL_DATA_ELEMENT_KEY);
   }
 
   @NoArgsConstructor
   @Getter
   @Setter
-  public static class ProtocolElement implements TypedVocabularyElement {
+  static class TypedVocabularyElementImpl implements TypedVocabularyElement {
     private String key;
     private String name;
     private VocabularyElementType vocabularyElementType;
@@ -42,6 +50,5 @@ public class ProtocolElementConfiguration {
     private MultilingualTitle multilingualTitle;
     private MultilingualDescription multilingualDescription;
     private String term;
-
   }
 }

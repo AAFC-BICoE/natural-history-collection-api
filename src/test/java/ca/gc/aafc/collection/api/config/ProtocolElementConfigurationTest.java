@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ProtocolElementConfigurationTest extends CollectionModuleBaseIT {
 
   @Inject
-  private ProtocolElementConfiguration protocolElementConfiguration;
+  private TypedVocabularyConfiguration protocolElementConfiguration;
 
   @Test
   void getProtocolElements() {
-    List<? extends TypedVocabularyElement> protocolElements = protocolElementConfiguration.getProtocolElements();
+    List<? extends TypedVocabularyElement> protocolElements = protocolElementConfiguration.getProtocolDataElement();
     assertNotNull(protocolElements);
     assertTrue(protocolElements.size() >= 2);
   }
