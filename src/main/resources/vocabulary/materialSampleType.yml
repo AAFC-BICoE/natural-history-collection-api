@@ -7,6 +7,13 @@ vocabulary:
           title: Whole organism
         - lang: fr
           title: Organisme entier
+    - name: CULTURE_STRAIN
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: Culture strain
+        - lang: fr
+          title: Culture de souche
     - name: ORGANISM_PART
       term:
       multilingualTitle.titles:

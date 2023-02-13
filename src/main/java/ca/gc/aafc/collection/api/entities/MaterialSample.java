@@ -44,8 +44,9 @@ import java.util.UUID;
 public class MaterialSample extends AbstractMaterialSample {
 
   public enum MaterialSampleType {
-    WHOLE_ORGANISM, 
-    ORGANISM_PART, 
+    WHOLE_ORGANISM,
+    CULTURE_STRAIN,
+    ORGANISM_PART,
     MIXED_ORGANISMS,
     MOLECULAR_SAMPLE;
 
