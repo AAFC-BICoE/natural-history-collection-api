@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
+import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -196,6 +198,16 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     assertTrue(expectedOrdinal.isEmpty());
   }
 
+  @Test
+  public void materialSampleType_supportedEnums_ableToPersistAllTypes() {
+    // Retrieve all supported MaterialSampleType enum values
+    Stream.of(MaterialSampleType.values()).forEach((enumType) -> {
+      // Create a new MaterialSample using the current enum value and persist it.
+      MaterialSample persistMaterialSample = MaterialSampleFactory.newMaterialSample().materialSampleType(enumType)
+          .build();
+      materialSampleService.create(persistMaterialSample);
+    });
+  }
 
   private MaterialSample persistMaterialSample() {
     MaterialSample persistMaterialSample = MaterialSampleFactory.newMaterialSample().build();
