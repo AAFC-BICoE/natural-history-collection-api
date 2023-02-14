@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;

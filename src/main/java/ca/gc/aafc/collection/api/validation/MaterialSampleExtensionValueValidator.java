@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.CollectionExtensionConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.entities.DinaComponent;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;

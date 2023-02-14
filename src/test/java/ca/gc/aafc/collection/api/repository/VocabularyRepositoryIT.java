@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.VocabularyDto;
 import io.crnk.core.queryspec.QuerySpec;
 import org.hamcrest.MatcherAssert;
@@ -26,7 +26,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_VocabularyConfiguration() {
     List<VocabularyDto> listOfVocabularies =
       vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class));
-    assertEquals(9, listOfVocabularies.size());
+    assertEquals(10, listOfVocabularies.size());
 
     List<List<CollectionVocabularyConfiguration.CollectionVocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
@@ -44,7 +44,8 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
         vocabularyConfiguration.getVocabulary().get("materialSampleState"),
         vocabularyConfiguration.getVocabulary().get("materialSampleType"),
         vocabularyConfiguration.getVocabulary().get("associationType"),
-        vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement")
+        vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement"),
+        vocabularyConfiguration.getVocabulary().get("protocolData")
       ));
   }
 

@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration;
-import ca.gc.aafc.collection.api.CollectionVocabularyConfiguration.CollectionVocabularyElement;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration.CollectionVocabularyElement;
 import ca.gc.aafc.collection.api.entities.Association;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
