@@ -1,4 +1,4 @@
-package ca.gc.aafc.collection.api;
+package ca.gc.aafc.collection.api.config;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,7 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/associationType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/materialSampleType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/unitsOfMeasurement.yml", factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/protocolData.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
 

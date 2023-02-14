@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition;
 import org.springframework.stereotype.Repository;
 
-import ca.gc.aafc.collection.api.CollectionExtensionConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.dto.ExtensionDto;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;

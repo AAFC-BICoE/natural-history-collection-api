@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +11,6 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;

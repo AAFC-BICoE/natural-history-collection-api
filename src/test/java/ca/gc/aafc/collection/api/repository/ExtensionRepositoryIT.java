@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
-import ca.gc.aafc.collection.api.CollectionExtensionConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.ExtensionDto;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;

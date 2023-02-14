@@ -1,4 +1,4 @@
-package ca.gc.aafc.collection.api;
+package ca.gc.aafc.collection.api.config;
 
 import java.util.Map;
 

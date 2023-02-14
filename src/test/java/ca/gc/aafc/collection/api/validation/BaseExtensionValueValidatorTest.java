@@ -6,7 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 
-import ca.gc.aafc.collection.api.CollectionExtensionConfiguration;
+import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.DinaComponent;
 import ca.gc.aafc.collection.api.entities.ExtensionValue;
