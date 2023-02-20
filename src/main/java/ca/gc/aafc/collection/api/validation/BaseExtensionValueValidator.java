@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
@@ -18,6 +19,7 @@ public class BaseExtensionValueValidator implements Validator {
   public static final String NO_MATCH_FIELD_KEY = "validation.constraint.violation.noMatchFieldKey";
   public static final String NO_MATCH_ACCEPTED_VALUE = "validation.constraint.violation.noMatchAcceptedValue";
   public static final String INCORRECT_DINA_COMPONENT = "validation.constraint.violation.incorrectDinaComponent";
+  public static final String BLANK_VALUE = "validation.constraint.violation.valueBlank";
 
   private final DinaComponent componentType;
   private final MessageSource messageSource;
@@ -61,6 +63,7 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extensionValue extension value being validated against.
    */
   private void handleValidation(Errors errors, ExtensionValue extensionValue) {
+
     for (Extension extension : configuration.getExtension().values()) {
       // First, check if the extension key matches
       if (extension.getKey().equals(extensionValue.getExtKey())) {
@@ -68,6 +71,8 @@ public class BaseExtensionValueValidator implements Validator {
         checkExtensionFieldKey(errors, extensionValue, extension);
         // Check dinaComponent
         checkExtensionConfigurationComponent(errors, extension.getFieldByKey(extensionValue.getExtFieldKey()));
+        // make sure there is a value
+        checkNotBlankValue(errors, extensionValue);
 
         // only run the last check if there is no errors
         if (!errors.hasErrors()) {
@@ -82,6 +87,18 @@ public class BaseExtensionValueValidator implements Validator {
       NO_MATCH_KEY_VERSION, 
       extensionValue.getExtKey());
     errors.rejectValue("extKey", NO_MATCH_KEY_VERSION, errorMessage);
+  }
+
+  /**
+   * Checks if the provided value is considered blank.
+   * Blank refers to the definition of Apache StringUtils isBlank.
+   * @param errors
+   * @param extensionValue
+   */
+  private void checkNotBlankValue(Errors errors, ExtensionValue extensionValue) {
+    if(StringUtils.isBlank(extensionValue.getValue())) {
+      errors.rejectValue(ExtensionValue.VALUE_KEY_NAME, BLANK_VALUE, getMessageForKey(BLANK_VALUE));
+    }
   }
 
   /**

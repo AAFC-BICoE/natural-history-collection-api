@@ -2,6 +2,9 @@ package ca.gc.aafc.collection.api.validation;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
@@ -62,6 +65,24 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
       CollectingEventExtensionValueValidator.NO_MATCH_FIELD_KEY,
       extensionValue.getExtKey(),
       extensionValue.getExtFieldKey());
+
+    Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
+
+    collectingEventValidator.validate(extensionValue, errors);
+    Assertions.assertTrue(errors.hasErrors());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @ParameterizedTest
+  @NullSource
+  @ValueSource(strings = {"", " "})
+  void validate_onBlankValue_hasErrors(String sourceValue) {
+    ExtensionValue extensionValue = newCollectingEventExtensionValue();
+    extensionValue.setValue(sourceValue);
+
+    String expectedErrorMessage = getExpectedErrorMessage(
+            CollectingEventExtensionValueValidator.BLANK_VALUE);
 
     Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
 
