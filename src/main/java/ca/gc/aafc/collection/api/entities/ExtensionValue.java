@@ -12,6 +12,7 @@ public class ExtensionValue {
 
   // used to report error on validation
   public static final String FIELD_KEY_NAME = "extFieldKey";
+  public static final String VALUE_KEY_NAME = "value";
   
   private String extKey;
   private String extFieldKey;
