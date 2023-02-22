@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MaterialSampleCounterServiceIT extends CollectionModuleBaseIT {
@@ -25,14 +26,17 @@ public class MaterialSampleCounterServiceIT extends CollectionModuleBaseIT {
     //Create a material-sample
     MaterialSample ms = MaterialSampleFactory.newMaterialSample().build();
     materialSampleService.create(ms);
+    materialSampleService.flush();
 
     MaterialSampleCounter msCounter = MaterialSampleCounterFactory.newMaterialSampleCounter()
             .materialSampleId(ms.getId())
             .build();
     materialSampleCounterService.create(msCounter);
-
     assertNotNull(msCounter.getId());
-  }
 
+    MaterialSampleCounter.IncrementFunctionOutput io = materialSampleCounterService.incrementCounter(msCounter.getId(), 5);
+    assertEquals(1, io.getLowNumber());
+    assertEquals(5, io.getHighNumber());
+  }
 
 }
