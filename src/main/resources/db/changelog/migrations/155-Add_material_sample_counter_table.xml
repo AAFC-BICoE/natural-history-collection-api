@@ -28,8 +28,8 @@
       CREATE OR REPLACE FUNCTION material_sample_counter_increment( id int, amount int )
       RETURNS TABLE
       (
-      low_reserved_id int,
-      high_reserved_id int
+      low_number int,
+      high_number int
       )
       LANGUAGE sql AS
       $$
@@ -37,8 +37,8 @@
       SET counter = counter + amount
       WHERE id = id
       RETURNING
-      (SELECT (counter - amount + 1) AS low_reserved_id),
-      (SELECT counter AS high_reserved_id)
+      (SELECT (counter - amount + 1) AS low_number),
+      (SELECT counter AS high_number)
       $$;
     </sql>
   </changeSet>

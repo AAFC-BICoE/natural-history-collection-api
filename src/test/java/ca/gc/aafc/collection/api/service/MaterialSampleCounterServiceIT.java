@@ -35,8 +35,8 @@ public class MaterialSampleCounterServiceIT extends CollectionModuleBaseIT {
     assertNotNull(msCounter.getId());
 
     MaterialSampleCounter.IncrementFunctionOutput io = materialSampleCounterService.incrementCounter(msCounter.getId(), 5);
-    assertEquals(1, io.getLowNumber());
-    assertEquals(5, io.getHighNumber());
+    assertEquals(1, io.lowNumber());
+    assertEquals(5, io.highNumber());
   }
 
 }

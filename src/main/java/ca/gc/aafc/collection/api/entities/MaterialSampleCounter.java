@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,8 +39,8 @@ import java.util.UUID;
                 @ConstructorResult(
                         targetClass = MaterialSampleCounter.IncrementFunctionOutput.class,
                         columns = {
-                                @ColumnResult(name = "low_reserved_id", type = int.class),
-                                @ColumnResult(name = "high_reserved_id", type = int.class)})})
+                                @ColumnResult(name = "low_number", type = int.class),
+                                @ColumnResult(name = "high_number", type = int.class)})})
 public class MaterialSampleCounter implements DinaEntity {
 
   public static String INCREMENT_NAMED_QUERY = "material_sample_counter_increment";
@@ -75,11 +74,13 @@ public class MaterialSampleCounter implements DinaEntity {
     return null;
   }
 
-  @AllArgsConstructor
-  @Getter
-  public static final class IncrementFunctionOutput {
-    private int lowNumber;
-    private int highNumber;
+
+  /**
+   * Record representing the output of the function.
+   * @param lowNumber
+   * @param highNumber
+   */
+  public record IncrementFunctionOutput(int lowNumber, int highNumber) {
   }
 
 }
