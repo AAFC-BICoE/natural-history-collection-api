@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd">
+  
+  <changeSet id="155-Add_material_sample_counter_table" context="schema-change" author="cgendreau">
+    <createTable tableName="material_sample_counter">
+
+      <column autoIncrement="true" name="id" type="SERIAL">
+        <constraints primaryKey="true" primaryKeyName="pk_material_sample_counter_id"/>
+      </column>
+
+      <column name="material_sample_id" type="integer">
+        <constraints nullable="false" foreignKeyName="fk_material_sample_counter_material_sample_id" references="material_sample(id)"/>
+      </column>
+
+      <column name="counter_name" type="varchar(50)">
+        <constraints nullable="false" />
+      </column>
+
+      <column name="counter" type="integer" defaultValueNumeric="0">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

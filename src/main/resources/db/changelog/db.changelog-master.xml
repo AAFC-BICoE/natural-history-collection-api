@@ -159,4 +159,5 @@
   <include file="db/changelog/migrations/152-Add_Barcode_to_StorageUnit.xml"/>
   <include file="db/changelog/migrations/153-Add_ProtocolData_to_Protocol.xml"/>
   <include file="db/changelog/migrations/154-Create_materialSampleType_cultureStrain.xml"/>
+  <include file="db/changelog/migrations/155-Add_material_sample_counter_table.xml"/>
 </databaseChangeLog>
