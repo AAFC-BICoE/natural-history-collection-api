@@ -30,20 +30,23 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @NamedNativeQuery(
-        name = "material_sample_counter_increment",
-        query = "SELECT * FROM material_sample_counter_increment( :id , :amount)",
-        resultSetMapping  = "IncrementFunctionOutputMapping")
+  name = "material_sample_counter_increment",
+  query = "SELECT * FROM material_sample_counter_increment( :id , :amount)",
+  resultSetMapping = "IncrementFunctionOutputMapping")
 @SqlResultSetMapping(
-        name = "IncrementFunctionOutputMapping",
-        classes = {
-                @ConstructorResult(
-                        targetClass = MaterialSampleCounter.IncrementFunctionOutput.class,
-                        columns = {
-                                @ColumnResult(name = "low_number", type = int.class),
-                                @ColumnResult(name = "high_number", type = int.class)})})
+  name = "IncrementFunctionOutputMapping",
+  classes = {
+    @ConstructorResult(
+      targetClass = MaterialSampleCounter.IncrementFunctionOutput.class,
+      columns = {
+        @ColumnResult(name = "low_number", type = int.class),
+        @ColumnResult(name = "high_number", type = int.class)})})
 public class MaterialSampleCounter implements DinaEntity {
 
-  public static String INCREMENT_NAMED_QUERY = "material_sample_counter_increment";
+  public static final String INCREMENT_NAMED_QUERY = "material_sample_counter_increment";
+
+  public static final String MATERIAL_SAMPLE_ID_ATTRIBUTE_NAME = "materialSampleId";
+  public static final String COUNTER_NAME_ATTRIBUTE_NAME = "counterName";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
