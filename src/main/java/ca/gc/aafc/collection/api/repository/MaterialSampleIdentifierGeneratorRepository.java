@@ -2,12 +2,12 @@ package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.service.MaterialSampleIdentifierGenerator;
-import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import io.crnk.core.exception.MethodNotAllowedException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ResourceRepository;
 import io.crnk.core.resource.list.ResourceList;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,11 +40,11 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
   }
 
   @Override
+  @Transactional(
+    readOnly = true
+  )
   public <S extends MaterialSampleIdentifierGeneratorDto> S create(S generatorDto) {
-//    if(!TextHtmlSanitizer.isSafeText(generatorDto.ge)) {
-//      throw new IllegalArgumentException("unsafe value detected in attribute");
-//    }
-//
+
     int amount = generatorDto.getAmount() == null ? 1 : generatorDto.getAmount();
 
     if(amount > MAX_GENERATION_AMOUNT) {
@@ -59,7 +59,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
       nextIdentifiers.add(lastIdentifier);
     }
-//    // Id is mandatory per json:api, so we simply reuse the identifier
+    // Id is mandatory per json:api, so we simply reuse the identifier
     generatorDto.setId("abc");
     generatorDto.setNextIdentifiers(nextIdentifiers);
 

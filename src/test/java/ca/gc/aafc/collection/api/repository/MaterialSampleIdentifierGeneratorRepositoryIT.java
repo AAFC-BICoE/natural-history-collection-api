@@ -1,30 +1,49 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
-import io.crnk.core.queryspec.QuerySpec;
-
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import javax.inject.Inject;
 
 public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositoryIT {
 
   @Inject
   private MaterialSampleIdentifierGeneratorRepository materialSampleIdentifierGeneratorRepository;
 
-//  @Test
-//  @Ignore ("update required")
-//  public void materialSampleIdentifierGeneratorRepositoryNext_nextIdentifierReturned() {
-//    MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
-//            //.identifier("ABC-vw")
-//            .amount(2).build();
-//
-//    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
-//    assertEquals("ABC-vx", dto.getNextIdentifiers().get(0));
-//    assertEquals("ABC-vy", dto.getNextIdentifiers().get(1));
-//  }
+  @Inject
+  protected MaterialSampleRepository materialSampleRepository;
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  public void materialSampleIdentifierGeneratorRepositoryNext_nextIdentifierReturned() {
+
+    MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
+    parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
+    parentDto.setMaterialSampleName("ABC-01");
+    parentDto = materialSampleRepository.create(parentDto);
+
+    MaterialSampleDto child1 = MaterialSampleTestFixture.newMaterialSample();
+    child1.setParentMaterialSample(parentDto);
+    child1.setMaterialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN);
+    child1.setMaterialSampleName("ABC-01-a");
+    child1 = materialSampleRepository.create(child1);
+
+    MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
+      .currentParentUUID(child1.getUuid())
+      .strategy(MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED)
+      .characterType(MaterialSampleIdentifierGeneratorDto.CharacterType.LOWER_LETTER)
+      .amount(2).build();
+
+    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
+    assertEquals("ABC-01-b", dto.getNextIdentifiers().get(0));
+    assertEquals("ABC-01-c", dto.getNextIdentifiers().get(1));
+  }
 
 }
