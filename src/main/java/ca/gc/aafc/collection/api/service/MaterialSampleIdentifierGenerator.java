@@ -1,13 +1,16 @@
 package ca.gc.aafc.collection.api.service;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.AbstractMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.translator.NumberLetterTranslator;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,18 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
-import javax.swing.text.html.Option;
-import lombok.NonNull;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class MaterialSampleIdentifierGenerator {
@@ -53,18 +45,15 @@ public class MaterialSampleIdentifierGenerator {
       throw new RuntimeException(e);
     }
 
-    List<Integer> materialSampleIdsToLoad = new ArrayList<>();
+    List<String> descendantNames = new ArrayList<>();
     if(strategy == MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.DIRECT_PARENT) {
-      materialSampleIdsToLoad.add(ms.getId());
+      findDescendantNames(List.of(ms.getId()), descendantNames, false);
     } else if (strategy == MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED) {
-      materialSampleIdsToLoad.addAll( ms.getHierarchy().stream().map(
-        MaterialSampleHierarchyObject::getId).toList());
+      findDescendantNames(ms.getHierarchy().stream().map(
+        MaterialSampleHierarchyObject::getId).toList(), descendantNames, true);
     } else {
       throw new IllegalStateException("unknown strategy");
     }
-
-    List<String> descendantNames = new ArrayList<>();
-    findDescendantNames(materialSampleIdsToLoad, descendantNames, true);
 
     if(descendantNames.isEmpty()) {
       return startSeries(ms.getMaterialSampleName(), characterType);
