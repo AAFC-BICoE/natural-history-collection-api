@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.repository;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.service.MaterialSampleIdentifierGenerator;
 import io.crnk.core.exception.MethodNotAllowedException;
 import io.crnk.core.queryspec.QuerySpec;
@@ -49,7 +50,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       throw new IllegalArgumentException("over maximum amount");
     }
 
-    if(generatorDto.getStrategy() == MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED &&
+    if(generatorDto.getStrategy() == MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED &&
       generatorDto.getMaterialSampleType() == null) {
       throw new IllegalArgumentException("materialSampleType must be provided for strategy TYPE_BASED");
     }

@@ -5,8 +5,8 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +18,7 @@ public class MaterialSampleIdentifierGeneratorTest extends CollectionModuleBaseI
   private MaterialSampleIdentifierGenerator msig;
 
   @Test
-  public void testGetNext2() {
+  public void generateNextIdentifier_typeBasedStrategy_expectedIdentifier() {
     MaterialSample parent = MaterialSampleFactory.newMaterialSample()
       .materialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM)
       .materialSampleName("ABC-01")
@@ -54,16 +54,49 @@ public class MaterialSampleIdentifierGeneratorTest extends CollectionModuleBaseI
     materialSampleService.create(child4Molecular);
 
     String nextIdentifier = msig.generateNextIdentifier(parent.getUuid(),
-      MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED,
+      MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED,
       MaterialSample.MaterialSampleType.CULTURE_STRAIN,
-      MaterialSampleIdentifierGeneratorDto.CharacterType.LOWER_LETTER);
+      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER);
     assertEquals("ABC-01-d", nextIdentifier);
 
     String nextIdentifierMolecular = msig.generateNextIdentifier(child2.getUuid(),
-      MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED,
+      MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED,
       MaterialSample.MaterialSampleType.MOLECULAR_SAMPLE,
-      MaterialSampleIdentifierGeneratorDto.CharacterType.LOWER_LETTER);
+      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER);
     assertEquals("ABC-01-b-B", nextIdentifierMolecular);
+  }
+
+  @Test
+  public void generateNextIdentifier_directParentStrategy_expectedIdentifier() {
+    MaterialSample parent = MaterialSampleFactory.newMaterialSample()
+      .materialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM)
+      .materialSampleName("ABC-01")
+      .build();
+    materialSampleService.create(parent);
+    MaterialSample child1 = MaterialSampleFactory.newMaterialSample()
+      .parentMaterialSample(parent)
+      .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
+      .materialSampleName("ABC-01-a")
+      .build();
+    materialSampleService.create(child1);
+
+    MaterialSample child2 = MaterialSampleFactory.newMaterialSample()
+      .parentMaterialSample(child1)
+      .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
+      .materialSampleName("ABC-01-a-A")
+      .build();
+    materialSampleService.create(child2);
+
+    String nextIdentifier = msig.generateNextIdentifier(child2.getUuid(),
+      MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT,
+      null, MaterialSampleNameGeneration.CharacterType.LOWER_LETTER);
+    assertEquals("ABC-01-a-A-a", nextIdentifier);
+
+    nextIdentifier = msig.generateNextIdentifier(child1.getUuid(),
+      MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT,
+      null, MaterialSampleNameGeneration.CharacterType.UPPER_LETTER);
+    assertEquals("ABC-01-a-B", nextIdentifier);
+
   }
 
 

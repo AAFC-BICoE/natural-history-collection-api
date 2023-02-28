@@ -13,6 +13,7 @@ import lombok.Setter;
 import java.util.List;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 
 /**
  * DTO representing a request to get the identifier that should follow the provided one.
@@ -28,9 +29,6 @@ public class MaterialSampleIdentifierGeneratorDto {
 
   public static final String TYPENAME = "material-sample-identifier-generator";
 
-  public enum IdentifierGenerationStrategy {TYPE_BASED, DIRECT_PARENT}
-  public enum CharacterType {NUMBER, LOWER_LETTER, UPPER_LETTER}
-
   /**
    * The id here is not a real id since this resource is only computing values and nothing is stored.
    *
@@ -39,9 +37,9 @@ public class MaterialSampleIdentifierGeneratorDto {
   private String id;
 
   private UUID currentParentUUID;
-  private IdentifierGenerationStrategy strategy;
+  private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
   private MaterialSample.MaterialSampleType materialSampleType;
-  private CharacterType characterType;
+  private MaterialSampleNameGeneration.CharacterType characterType;
 
   private Integer amount;
 

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
-import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.AbstractMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
@@ -22,6 +22,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.criteria.Predicate;
 
+/**
+ * Responsible to generate a material-sample name based on the hierarchy and a strategy.
+ * The generated name is NOT guaranteed to be unique, it is simply representing what would be the next logical name.
+ *
+ * The algorithm is based on 2 components: the basename and the suffix where the basename is representing the part that should be fixed and
+ * the suffix the part that should be incremented. Depending on the strategy they will be determined differently.
+ *
+ */
 @Service
 public class MaterialSampleIdentifierGenerator {
 
@@ -44,9 +52,10 @@ public class MaterialSampleIdentifierGenerator {
    * @param characterType if we need to create a new series, what should be used.
    * @return
    */
-  public String generateNextIdentifier(UUID currentParentUUID, MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy strategy,
-                                     MaterialSample.MaterialSampleType materialSampleType,
-                                     MaterialSampleIdentifierGeneratorDto.CharacterType characterType) {
+  public String generateNextIdentifier(UUID currentParentUUID,
+                                       MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
+                                       MaterialSample.MaterialSampleType materialSampleType,
+                                       MaterialSampleNameGeneration.CharacterType characterType) {
 
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
@@ -77,12 +86,28 @@ public class MaterialSampleIdentifierGenerator {
     return generateNextIdentifier(params.basename + IDENTIFIER_SEPARATOR + lastName.orElse("?"));
   }
 
+  /**
+   * Generates parameters for DirectParent strategy.
+   * basename: name from the parent
+   * descendantsName: names of all the children of the parent
+   * @param currentParent the current parent
+   * @return parameters
+   */
   private static IdentifierGenerationParameters prepareDirectParentNameGeneration(
     MaterialSample currentParent) {
     return new IdentifierGenerationParameters(currentParent.getMaterialSampleName(),
-      extractAllChildrenNames(List.of(currentParent.getParentMaterialSample())));
+      extractAllChildrenNames(currentParent));
   }
 
+  /**
+   * Generates parameters for TypeBased strategy.
+   * basename: name from the first parent in the hierarchy that has a type different from the provided type.
+   * descendantsName: names of all the children in the entire hierarchy (recursive) where the type is matching the provided type.
+   *
+   * @param currentParent the current parent
+   * @param materialSampleType the material-sample type of the material-sample to be created with the provided identifier
+   * @return parameters
+   */
   private IdentifierGenerationParameters prepareTypeBasedNameGeneration(MaterialSample currentParent, MaterialSample.MaterialSampleType materialSampleType) {
     List<Integer> hierarchyIds = currentParent.getHierarchy().stream().map(
       MaterialSampleHierarchyObject::getId).toList();
@@ -103,13 +128,11 @@ public class MaterialSampleIdentifierGenerator {
    * @param materialSample
    * @return
    */
-  private static List<String> extractAllChildrenNames(List<MaterialSample> materialSample) {
+  private static List<String> extractAllChildrenNames(MaterialSample materialSample) {
     List<String> materialSampleNameAccumulator = new ArrayList<>();
-    for (MaterialSample currMs : materialSample) {
-      if (currMs.getMaterialSampleChildren() != null) {
-        for (AbstractMaterialSample currChild : currMs.getMaterialSampleChildren()) {
-          materialSampleNameAccumulator.add(currChild.getMaterialSampleName());
-        }
+    if (materialSample.getMaterialSampleChildren() != null) {
+      for (AbstractMaterialSample currChild : materialSample.getMaterialSampleChildren()) {
+        materialSampleNameAccumulator.add(currChild.getMaterialSampleName());
       }
     }
     return materialSampleNameAccumulator;
@@ -160,7 +183,7 @@ public class MaterialSampleIdentifierGenerator {
    * @param characterType
    * @return
    */
-  private static String startSeries(String basename, String separator, MaterialSampleIdentifierGeneratorDto.CharacterType characterType) {
+  private static String startSeries(String basename, String separator, MaterialSampleNameGeneration.CharacterType characterType) {
     return basename + separator + switch (characterType) {
       case NUMBER -> "1";
       case LOWER_LETTER -> "a";
