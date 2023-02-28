@@ -45,11 +45,25 @@ public class MaterialSampleIdentifierGeneratorTest extends CollectionModuleBaseI
       .build();
     materialSampleService.create(child3);
 
+    // should not affect CULTURE_STRAIN series
+    MaterialSample child4Molecular = MaterialSampleFactory.newMaterialSample()
+      .parentMaterialSample(child1)
+      .materialSampleType(MaterialSample.MaterialSampleType.MOLECULAR_SAMPLE)
+      .materialSampleName("ABC-01-c-A")
+      .build();
+    materialSampleService.create(child4Molecular);
+
     String nextIdentifier = msig.generateNextIdentifier(parent.getUuid(),
       MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED,
+      MaterialSample.MaterialSampleType.CULTURE_STRAIN,
       MaterialSampleIdentifierGeneratorDto.CharacterType.LOWER_LETTER);
-
     assertEquals("ABC-01-d", nextIdentifier);
+
+    String nextIdentifierMolecular = msig.generateNextIdentifier(child2.getUuid(),
+      MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED,
+      MaterialSample.MaterialSampleType.MOLECULAR_SAMPLE,
+      MaterialSampleIdentifierGeneratorDto.CharacterType.LOWER_LETTER);
+    assertEquals("ABC-01-b-B", nextIdentifierMolecular);
   }
 
 

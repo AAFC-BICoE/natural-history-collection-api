@@ -39,6 +39,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .currentParentUUID(child1.getUuid())
       .strategy(MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED)
       .characterType(MaterialSampleIdentifierGeneratorDto.CharacterType.LOWER_LETTER)
+      .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
       .amount(2).build();
 
     MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);

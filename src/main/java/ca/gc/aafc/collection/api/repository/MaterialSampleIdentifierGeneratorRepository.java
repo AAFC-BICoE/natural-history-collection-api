@@ -40,9 +40,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
   }
 
   @Override
-  @Transactional(
-    readOnly = true
-  )
+  @Transactional(readOnly = true)
   public <S extends MaterialSampleIdentifierGeneratorDto> S create(S generatorDto) {
 
     int amount = generatorDto.getAmount() == null ? 1 : generatorDto.getAmount();
@@ -51,9 +49,14 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       throw new IllegalArgumentException("over maximum amount");
     }
 
+    if(generatorDto.getStrategy() == MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED &&
+      generatorDto.getMaterialSampleType() == null) {
+      throw new IllegalArgumentException("materialSampleType must be provided for strategy TYPE_BASED");
+    }
+
     List<String> nextIdentifiers = new ArrayList<>(amount);
     String lastIdentifier = identifierGenerator.generateNextIdentifier(generatorDto.getCurrentParentUUID(),
-      generatorDto.getStrategy(), generatorDto.getCharacterType());
+      generatorDto.getStrategy(), generatorDto.getMaterialSampleType(), generatorDto.getCharacterType());
     nextIdentifiers.add(lastIdentifier);
     for (int i = 1; i < amount; i++) {
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);

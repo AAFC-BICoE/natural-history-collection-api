@@ -28,13 +28,24 @@ public class MaterialSampleIdentifierGenerator {
   private static final Pattern TRAILING_LETTERS_REGEX = Pattern.compile("([a-zA-Z]+)$");
   private static final Pattern TRAILING_NUMBERS_REGEX = Pattern.compile("(\\d+)$");
 
+  private static final String IDENTIFIER_SEPARATOR = "-";
+
   private final MaterialSampleService materialSampleService;
 
   public MaterialSampleIdentifierGenerator(MaterialSampleService materialSampleService) {
     this.materialSampleService = materialSampleService;
   }
 
+  /**
+   *
+   * @param currentParentUUID parent from which a new child is created
+   * @param strategy strategy to use to find the new id
+   * @param materialSampleType material sample type of the new child to be created
+   * @param characterType if we need to create a new series, what should be used.
+   * @return
+   */
   public String generateNextIdentifier(UUID currentParentUUID, MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy strategy,
+                                     MaterialSample.MaterialSampleType materialSampleType,
                                      MaterialSampleIdentifierGeneratorDto.CharacterType characterType) {
 
     // load current parent with hierarchy
@@ -45,48 +56,82 @@ public class MaterialSampleIdentifierGenerator {
       throw new RuntimeException(e);
     }
 
+    String basename = "";
+
     List<String> descendantNames = new ArrayList<>();
     if(strategy == MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.DIRECT_PARENT) {
-      findDescendantNames(List.of(ms.getId()), descendantNames, false);
+      descendantNames.addAll(extractAllChildrenNames(List.of(ms.getParentMaterialSample())));
+      basename = ms.getMaterialSampleName();
     } else if (strategy == MaterialSampleIdentifierGeneratorDto.IdentifierGenerationStrategy.TYPE_BASED) {
-      findDescendantNames(ms.getHierarchy().stream().map(
-        MaterialSampleHierarchyObject::getId).toList(), descendantNames, true);
+      List<Integer> hierarchyIds = ms.getHierarchy().stream().map(
+        MaterialSampleHierarchyObject::getId).toList();
+      PredicateSupplier<MaterialSample> ps = (cb,  root, em) -> new Predicate[]{root.get("id").in(hierarchyIds)};
+      List<MaterialSample> hierarchyMaterialSample = materialSampleService.findAll(MaterialSample.class,
+        ps, null, 0, 500, Set.of(), Set.of(MaterialSample.CHILDREN_COL_NAME));
+      basename = getBaseName(hierarchyMaterialSample, materialSampleType);
+      extractAllDescendantNames(hierarchyMaterialSample, descendantNames,  materialSampleType);
     } else {
       throw new IllegalStateException("unknown strategy");
     }
 
+    // if there is no descendant we need to start a new series
     if(descendantNames.isEmpty()) {
-      return startSeries(ms.getMaterialSampleName(), characterType);
+      return startSeries(basename, characterType);
     }
 
     // get of max of all children of all loaded material sample
+    // max is applied of the last part of the identifier (after the last separator)
     Optional<String>
-      lastName = descendantNames.stream()
+      lastName = descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, IDENTIFIER_SEPARATOR))
       .max(Comparator.naturalOrder());
 
-    return generateNextIdentifier(lastName.orElse(null));
+    return generateNextIdentifier(basename + IDENTIFIER_SEPARATOR + lastName.orElse("?"));
   }
 
-  private void findDescendantNames(List<Integer> ids, List<String> materialSampleNameAccumulator, boolean recursive) {
-    PredicateSupplier<MaterialSample> ps = (cb,  root, em) -> new Predicate[]{root.get("id").in(ids)};
-    List<MaterialSample> materialSample = materialSampleService.findAll(MaterialSample.class,
-      ps, null, 0, 500, Set.of(), Set.of(MaterialSample.CHILDREN_COL_NAME));
-
-    List<Integer> childrenId = new ArrayList<>();
-
-    for(MaterialSample currMs : materialSample) {
+  /**
+   * Only extracts direct children names.
+   * @param materialSample
+   * @return
+   */
+  private List<String> extractAllChildrenNames(List<MaterialSample> materialSample) {
+    List<String> materialSampleNameAccumulator = new ArrayList<>();
+    for (MaterialSample currMs : materialSample) {
       if (currMs.getMaterialSampleChildren() != null) {
         for (AbstractMaterialSample currChild : currMs.getMaterialSampleChildren()) {
-          childrenId.add(currChild.getId());
           materialSampleNameAccumulator.add(currChild.getMaterialSampleName());
         }
       }
     }
+    return materialSampleNameAccumulator;
+  }
 
-    if(recursive && !childrenId.isEmpty()) {
-      findDescendantNames(childrenId, materialSampleNameAccumulator, true);
+  private void extractAllDescendantNames(List<MaterialSample> materialSample, List<String> materialSampleNameAccumulator, MaterialSample.MaterialSampleType type) {
+    List<Integer> childrenId = new ArrayList<>();
+    for(MaterialSample currMs : materialSample) {
+      if (currMs.getMaterialSampleChildren() != null) {
+        for (AbstractMaterialSample currChild : currMs.getMaterialSampleChildren()) {
+          if(type == null || type == currChild.getMaterialSampleType()) {
+            childrenId.add(currChild.getId());
+            materialSampleNameAccumulator.add(currChild.getMaterialSampleName());
+          }
+        }
+      }
     }
 
+    if(!childrenId.isEmpty()) {
+      PredicateSupplier<MaterialSample> ps = (cb,  root, em) -> new Predicate[]{root.get("id").in(childrenId)};
+      List<MaterialSample> childrenMaterialSample = materialSampleService.findAll(MaterialSample.class,
+        ps, null, 0, 500, Set.of(), Set.of(MaterialSample.CHILDREN_COL_NAME));
+      extractAllDescendantNames(childrenMaterialSample, materialSampleNameAccumulator, type);
+    }
+  }
+
+  private String getBaseName(List<MaterialSample> materialSampleHierarchy, MaterialSample.MaterialSampleType type) {
+    return materialSampleHierarchy.stream()
+      .filter(ms -> ms.getMaterialSampleType() != type)
+      .max(Comparator.comparingInt(MaterialSample::getId))
+      .map(MaterialSample::getMaterialSampleName)
+      .orElse(null);
   }
 
   private String startSeries(String current, MaterialSampleIdentifierGeneratorDto.CharacterType characterType) {
