@@ -35,6 +35,7 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
     COLLECTING_EVENT,
     MATERIAL_SAMPLE,
     DETERMINATION,
+    PREPARATION,
     ASSEMBLAGE;
 
     public static ManagedAttributeComponent fromString(String s) {

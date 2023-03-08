@@ -41,7 +41,12 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final MaterialSampleValidator materialSampleValidator;
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
+
+  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+    materialSampleValidationContext;
+  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+    preparationValidationContext;
+
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
 
   private final MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator;
@@ -65,8 +70,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.hierarchicalDataService = hierarchicalDataService;
     this.materialSampleExtensionValueValidator = materialSampleExtensionValueValidator;
     this.restrictionExtensionValueValidator = restrictionExtensionValueValidator;
-    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+    this.materialSampleValidationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
             .from(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
+    this.preparationValidationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+      .from(CollectionManagedAttribute.ManagedAttributeComponent.PREPARATION);
   }
 
   @Override
@@ -153,7 +160,11 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(), validationContext);
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
+      materialSampleValidationContext);
+
+    collectionManagedAttributeValueValidator.validate(entity, entity.getPreparationManagedAttributes(),
+      preparationValidationContext);
   }
 
   private void validateAssociations(MaterialSample entity) {
@@ -188,8 +199,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
       }
     }
   }
-
-
 
   @Override
   public MaterialSample create(MaterialSample entity) {

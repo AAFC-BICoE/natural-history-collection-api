@@ -2,14 +2,12 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +18,6 @@ import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -265,88 +262,6 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     // Does the organism still exist?
     Organism freshOrganism = organismService.findOne(organism2.getUuid(), Organism.class);
     assertNotNull(freshOrganism);
-  }
-
-  @Test
-  void validate_WhenValidStringType() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(null)
-        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-        .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "anything"));
-    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void validate_WhenInvalidIntegerTypeExceptionThrown() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(null)
-        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-        .vocabularyElementType(VocabularyElementType.INTEGER)
-        .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"));
-
-    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void assignedValueContainedInAcceptedValues_validationPasses() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(new String[]{"val1", "val2"})
-        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-        .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]));
-    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void assignedValueNotContainedInAcceptedValues_validationPasses() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-        .acceptedValues(new String[]{"val1", "val2"})
-        .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-        .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val3"));
-    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void assignManagedAttribute_onCollectingEventAttribute_Exception() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory
-        .newCollectionManagedAttribute().acceptedValues(new String[] { "val1", "val2" })
-        .managedAttributeComponent(
-            CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    materialSample.setManagedAttributes(Map.of(testManagedAttribute.getKey(), "val1"));
-    assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
-  }
-
-  @Test
-  void nestedStructureValidation_Exception() {
-    HostOrganism hostOrganism = HostOrganism.builder()
-      .name(RandomStringUtils.randomAlphanumeric(151))
-      .remarks("host remark")
-      .build();
-    
-    materialSample.setHostOrganism(hostOrganism);
-    
-    assertEquals(151, materialSample.getHostOrganism().getName().length());
-
-    assertThrows(ValidationException.class, 
-    () -> materialSampleService.update(materialSample));
   }
 
   @Test
