@@ -2,24 +2,32 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.util.Map;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
@@ -208,6 +216,125 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
       materialSampleService.create(persistMaterialSample);
     });
   }
+
+  @Test
+  void validate_WhenValidStringType() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(null)
+      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "anything"))
+      .build();
+
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void validate_WhenInvalidIntegerTypeExceptionThrown() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(null)
+      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
+      .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"))
+      .build();
+
+    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void assignedValueContainedInAcceptedValues_validationPasses() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{"val1", "val2"})
+      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]))
+      .build();
+
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void preparationManagedAttributes_validationApplied() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(null)
+      .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
+      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.PREPARATION)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .preparationManagedAttributes(Map.of(testManagedAttribute.getKey(), "7"))
+      .build();
+
+    assertDoesNotThrow(() -> materialSampleService.update(materialSample));
+
+    materialSample.setPreparationManagedAttributes(Map.of(testManagedAttribute.getKey(), "abc"));
+    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void assignedValueNotContainedInAcceptedValues_Exception() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
+      .acceptedValues(new String[]{"val1", "val2"})
+      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
+      .build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val3"))
+      .build();
+
+    assertThrows(ValidationException.class, () ->  materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void assignManagedAttribute_onCollectingEventAttribute_Exception() {
+    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory
+      .newCollectionManagedAttribute().acceptedValues(new String[] { "val1", "val2" })
+      .managedAttributeComponent(
+        CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
+
+    collectionManagedAttributeService.create(testManagedAttribute);
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val1"))
+      .build();
+
+    assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
+  }
+
+  @Test
+  void nestedStructureValidation_Exception() {
+    HostOrganism hostOrganism = HostOrganism.builder()
+      .name(RandomStringUtils.randomAlphanumeric(151))
+      .remarks("host remark")
+      .build();
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .hostOrganism(hostOrganism)
+      .build();
+
+    assertEquals(151, materialSample.getHostOrganism().getName().length());
+
+    assertThrows(ValidationException.class,
+      () -> materialSampleService.update(materialSample));
+  }
+
 
   private MaterialSample persistMaterialSample() {
     MaterialSample persistMaterialSample = MaterialSampleFactory.newMaterialSample().build();
