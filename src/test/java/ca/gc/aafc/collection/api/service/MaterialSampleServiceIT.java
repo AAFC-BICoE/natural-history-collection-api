@@ -2,16 +2,19 @@ package ca.gc.aafc.collection.api.service;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Association;
+import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
+import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.StringUtils;
@@ -38,9 +41,31 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
   private MessageSource messageSource;
 
   @Inject
+  private BaseDAO baseDAO;
+
+  @Inject
   private TransactionTestingHelper transactionTestingHelper;
 
   private static final String INVALID_TYPE = "not a real type";
+
+  @Test
+  void onFindOne_lazyLoadedRelationship() {
+    Collection c = CollectionFactory.newCollection().build();
+    collectionService.create(c);
+    MaterialSample ms = MaterialSampleFactory.newMaterialSample()
+      .collection(c)
+      .build();
+    materialSampleService.create(ms);
+    materialSampleService.flush();
+
+    //remove from cache to force reload from the database
+    materialSampleService.detach(ms);
+    collectionService.detach(c);
+
+    MaterialSample freshMs = materialSampleService.findOne(ms.getUuid(), MaterialSample.class);
+
+    assertFalse(baseDAO.isLoaded(freshMs, "collection"));
+  }
 
   @Test
   void create_invalidAssociationType_exception() {
