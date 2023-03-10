@@ -101,6 +101,11 @@ public class AbstractMaterialSample implements DinaEntity {
   private Map<String, String> managedAttributes = Map.of();
 
   @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, String> preparationManagedAttributes = Map.of();
+
+  @Type(type = "jsonb")
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 

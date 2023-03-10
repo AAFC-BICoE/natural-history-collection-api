@@ -71,6 +71,9 @@ public class MaterialSampleDto {
   private Map<String, String> managedAttributes = Map.of();
 
   @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, String> preparationManagedAttributes = Map.of();
+
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
   private String preparationRemarks;
