@@ -14,3 +14,17 @@ vocabulary:
           title: Reverse Primer
         - lang: fr
           title: Amorce antisens
+    - name: Reaction Mix Volume Per Tube
+      term: reaction_mix_volume_per_tube
+      multilingualTitle.titles:
+        - lang: en
+          title: Reaction Mix Volume Per Tube
+        - lang: fr
+          title: Volume de mélange réactionnel par tube
+    - name: Total Reaction Mix Volume
+      term: total_reaction_mix_volume
+      multilingualTitle.titles:
+        - lang: en
+          title: Total Reaction Mix Volume
+        - lang: fr
+          title: Volume total du mélange réactionnel
