@@ -67,7 +67,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
   @Test
   void unitsOfMeasurement() {
     List<CollectionVocabularyConfiguration.CollectionVocabularyElement> unitsOfMeasurement = vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement");
-    assertEquals(4, unitsOfMeasurement.size());
+    assertEquals(5, unitsOfMeasurement.size());
   }
 
   @Test
