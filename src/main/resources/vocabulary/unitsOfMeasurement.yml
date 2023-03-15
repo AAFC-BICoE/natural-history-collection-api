@@ -27,3 +27,10 @@ vocabulary:
           title: mM
         - lang: fr
           title: mM
+    - name: uM
+      term: http://purl.obolibrary.org/obo/NCIT_C48508
+      multilingualTitle.titles:
+        - lang: en
+          title: µM
+        - lang: fr
+          title: µM
