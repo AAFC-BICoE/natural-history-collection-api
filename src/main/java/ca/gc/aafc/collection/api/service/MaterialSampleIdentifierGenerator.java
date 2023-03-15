@@ -15,6 +15,7 @@ import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public class MaterialSampleIdentifierGenerator {
   private static final Pattern TRAILING_LETTERS_REGEX = Pattern.compile("([a-zA-Z]+)$");
   private static final Pattern TRAILING_NUMBERS_REGEX = Pattern.compile("(\\d+)$");
 
+  private static final Integer MAX_MAT_SAMPLE = 500;
   private static final String IDENTIFIER_SEPARATOR = "-";
 
   private final MaterialSampleService materialSampleService;
@@ -57,6 +59,9 @@ public class MaterialSampleIdentifierGenerator {
                                        MaterialSample.MaterialSampleType materialSampleType,
                                        MaterialSampleNameGeneration.CharacterType characterType) {
 
+    Objects.requireNonNull(strategy);
+    Objects.requireNonNull(characterType);
+
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
     try {
@@ -65,16 +70,20 @@ public class MaterialSampleIdentifierGenerator {
       throw new RuntimeException(e);
     }
 
-    IdentifierGenerationParameters params =
-      switch (strategy) {
-        case DIRECT_PARENT -> prepareDirectParentNameGeneration(ms);
-        case TYPE_BASED -> prepareTypeBasedNameGeneration(ms, materialSampleType);
-      };
+    IdentifierGenerationParameters params = switch (strategy) {
+      case DIRECT_PARENT -> prepareDirectParentNameGeneration(ms);
+      case TYPE_BASED -> prepareTypeBasedNameGeneration(ms, materialSampleType);
+    };
 
 
     // if there is no descendant we need to start a new series
     if(params.descendantNames.isEmpty()) {
       return startSeries(params.basename, IDENTIFIER_SEPARATOR, characterType);
+    }
+
+    // if we reached the max we need to stop
+    if(params.descendantNames.size() == MAX_MAT_SAMPLE) {
+      throw new IllegalStateException("maximum number of descendant reached.");
     }
 
     // get of max of all children of all loaded material sample
@@ -112,10 +121,7 @@ public class MaterialSampleIdentifierGenerator {
     List<Integer> hierarchyIds = currentParent.getHierarchy().stream().map(
       MaterialSampleHierarchyObject::getId).toList();
 
-    PredicateSupplier<MaterialSample> ps = (cb,  root, em) -> new Predicate[]{root.get("id").in(hierarchyIds)};
-    List<MaterialSample> hierarchyMaterialSample = materialSampleService.findAll(MaterialSample.class,
-      ps, null, 0, 500, Set.of(), Set.of(MaterialSample.CHILDREN_COL_NAME));
-
+    List<MaterialSample> hierarchyMaterialSample = findMaterialSampleById(hierarchyIds);
     List<String> descendantNames = new ArrayList<>();
     extractAllDescendantNames(hierarchyMaterialSample, descendantNames,  materialSampleType);
 
@@ -152,10 +158,7 @@ public class MaterialSampleIdentifierGenerator {
     }
 
     if(!childrenId.isEmpty()) {
-      PredicateSupplier<MaterialSample> ps = (cb,  root, em) -> new Predicate[]{root.get("id").in(childrenId)};
-      List<MaterialSample> childrenMaterialSample = materialSampleService.findAll(MaterialSample.class,
-        ps, null, 0, 500, Set.of(), Set.of(MaterialSample.CHILDREN_COL_NAME));
-      extractAllDescendantNames(childrenMaterialSample, materialSampleNameAccumulator, type);
+      extractAllDescendantNames(findMaterialSampleById(childrenId), materialSampleNameAccumulator, type);
     }
   }
 
@@ -173,6 +176,18 @@ public class MaterialSampleIdentifierGenerator {
       .max(Comparator.comparingInt(MaterialSample::getId))
       .map(MaterialSample::getMaterialSampleName)
       .orElse(null);
+  }
+
+  /**
+   * Load all the material-sample from the id list.
+   * Will eager-load children material-sample.
+   * @param idList
+   * @return
+   */
+  private List<MaterialSample> findMaterialSampleById(List<Integer> idList) {
+    PredicateSupplier<MaterialSample> ps = (cb,  root, em) -> new Predicate[]{root.get("id").in(idList)};
+    return materialSampleService.findAll(MaterialSample.class,
+      ps, null, 0, MAX_MAT_SAMPLE, Set.of(), Set.of(MaterialSample.CHILDREN_COL_NAME));
   }
 
   /**
@@ -231,5 +246,11 @@ public class MaterialSampleIdentifierGenerator {
     return StringUtils.removeEnd(providedIdentifier, currSuffix) + nextSuffix;
   }
 
-  private record IdentifierGenerationParameters(String basename, List<String> descendantNames){}
+  /**
+   * Record representing the parameters of the identifier generation.
+   * @param basename
+   * @param descendantNames
+   */
+  private record IdentifierGenerationParameters(String basename, List<String> descendantNames) {
+  }
 }

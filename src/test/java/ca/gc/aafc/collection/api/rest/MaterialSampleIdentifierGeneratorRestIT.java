@@ -1,7 +1,12 @@
 package ca.gc.aafc.collection.api.rest;
 
+import java.util.UUID;
+
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
+import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -25,21 +30,35 @@ public class MaterialSampleIdentifierGeneratorRestIT extends BaseRestAssuredTest
     super("/api/v1/");
   }
 
- // @Test
+  @Test
   public void testPost() {
+    MaterialSampleDto sampleDto = MaterialSampleTestFixture.newMaterialSample();
+    sampleDto.setMaterialSampleName("TEST-POST-2");
+    sampleDto.setAttachment(null);
+    sampleDto.setPreparedBy(null);
+    sampleDto.setPreparationProtocol(null);
+
+    String matSampleUUID = sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sampleDto),
+        null,
+        null)
+      ).extract().body().jsonPath().getString("data.id");
+
     MaterialSampleIdentifierGeneratorDto dto = MaterialSampleIdentifierGeneratorDto
             .builder()
-      //.identifier("123")
-      .amount(2).build();
-    assertEquals("123", postMaterialSampleIdentifierGeneratorRest(dto));
+      .currentParentUUID(UUID.fromString(matSampleUUID))
+      .strategy(MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT)
+      .amount(1).build();
+    assertEquals("TEST-POST-2-a", postMaterialSampleIdentifierGeneratorRest(dto));
   }
 
-  private String postMaterialSampleIdentifierGeneratorRest(MaterialSampleIdentifierGeneratorDto dto) {
-
+  private String postMaterialSampleIdentifierGeneratorRest(
+    MaterialSampleIdentifierGeneratorDto dto) {
     return sendPost(
-            MaterialSampleIdentifierGeneratorDto.TYPENAME,
-            JsonAPITestHelper.toJsonAPIMap(MaterialSampleIdentifierGeneratorDto.TYPENAME, dto)
-    ).extract().body().jsonPath().getString("data.id");
+      MaterialSampleIdentifierGeneratorDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(MaterialSampleIdentifierGeneratorDto.TYPENAME, dto)
+    ).extract().body().jsonPath().getString("data.attributes.nextIdentifiers[0]");
   }
 
 }

@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Used to generate next identifier based on current value.
@@ -44,7 +45,13 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
   @Transactional(readOnly = true)
   public <S extends MaterialSampleIdentifierGeneratorDto> S create(S generatorDto) {
 
+    // Make sure we have sane default values
     int amount = generatorDto.getAmount() == null ? 1 : generatorDto.getAmount();
+    MaterialSampleNameGeneration.CharacterType characterType = generatorDto.getCharacterType() == null ?
+      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER : generatorDto.getCharacterType();
+    MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy = generatorDto.getStrategy() == null ?
+      MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT : generatorDto.getStrategy();
+
 
     if(amount > MAX_GENERATION_AMOUNT) {
       throw new IllegalArgumentException("over maximum amount");
@@ -57,14 +64,14 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
 
     List<String> nextIdentifiers = new ArrayList<>(amount);
     String lastIdentifier = identifierGenerator.generateNextIdentifier(generatorDto.getCurrentParentUUID(),
-      generatorDto.getStrategy(), generatorDto.getMaterialSampleType(), generatorDto.getCharacterType());
+      strategy, generatorDto.getMaterialSampleType(), characterType);
     nextIdentifiers.add(lastIdentifier);
     for (int i = 1; i < amount; i++) {
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
       nextIdentifiers.add(lastIdentifier);
     }
     // Id is mandatory per json:api, so we simply reuse the identifier
-    generatorDto.setId("abc");
+    generatorDto.setId(UUID.randomUUID().toString());
     generatorDto.setNextIdentifiers(nextIdentifiers);
 
     return generatorDto;
