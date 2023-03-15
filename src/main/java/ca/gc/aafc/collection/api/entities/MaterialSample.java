@@ -78,7 +78,7 @@ public class MaterialSample extends AbstractMaterialSample {
   @Version
   private int version;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private Collection collection;
 
   @ManyToOne(fetch = FetchType.LAZY)
