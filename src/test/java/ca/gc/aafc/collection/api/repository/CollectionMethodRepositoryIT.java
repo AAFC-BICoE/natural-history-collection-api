@@ -20,7 +20,7 @@ class CollectionMethodRepositoryIT extends CollectionModuleBaseIT {
   private CollectionMethodRepository repository;
 
   @Test
-  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:super-user"})
   void create_WithAuthUser_CreatedBySet() {
     CollectionMethodDto expected = repository.create(CollectionMethodTestFixture.newMethod());
     CollectionMethodDto result = repository.findOne(

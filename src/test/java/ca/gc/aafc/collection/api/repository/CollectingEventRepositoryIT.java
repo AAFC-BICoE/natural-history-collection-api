@@ -105,7 +105,7 @@ public class CollectingEventRepositoryIT extends CollectionModuleKeycloakBaseIT 
     assertEquals(CollectingEventTestFixture.HABITAT, collectingEventDto.getHabitat());
   }
 
-  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @WithMockKeycloakUser(groupRole = {"aafc:super-user"})
   @Test
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     CollectionMethodDto methodDto = collectionMethodRepository.create(CollectionMethodTestFixture.newMethod());
