@@ -33,8 +33,7 @@ public class ProtocolValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_vocabularyBasedNoInVocabulary_ErrorsReturned() {
-
+  void validate_invalidVocabularyBased_ErrorsReturned() {
     Protocol.ProtocolData protocolData = ProtocolFactory.newProtocolData()
       .vocabularyBased(true)
       .key("abc")
@@ -47,8 +46,20 @@ public class ProtocolValidatorTest extends CollectionModuleBaseIT {
     Errors errors = new BeanPropertyBindingResult(protocol, protocol.getUuid().toString());
     validator.validate(protocol, errors);
     Assertions.assertEquals(1, errors.getAllErrors().size());
-
     Assertions.assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Value not found in"));
+
+    // Test a valid key but without setting vocabularyBased
+    Protocol.ProtocolData protocolData2 = ProtocolFactory.newProtocolData()
+      .vocabularyBased(false)
+      .build();
+    Protocol protocol2 = ProtocolFactory.newProtocol()
+      .protocolData(List.of(protocolData2))
+      .build();
+
+    errors = new BeanPropertyBindingResult(protocol2, protocol2.getUuid().toString());
+    validator.validate(protocol2, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("cannot be used"));
   }
 
 }

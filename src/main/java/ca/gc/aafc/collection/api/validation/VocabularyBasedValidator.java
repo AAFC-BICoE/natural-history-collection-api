@@ -21,7 +21,7 @@ abstract class VocabularyBasedValidator<T> implements Validator {
   private final MessageSource messageSource;
   private final Class<T> supportedClass;
 
-  public VocabularyBasedValidator(MessageSource messageSource, Class<T> supportedClass) {
+  VocabularyBasedValidator(MessageSource messageSource, Class<T> supportedClass) {
     this.messageSource = messageSource;
     this.supportedClass = supportedClass;
   }
@@ -48,8 +48,7 @@ abstract class VocabularyBasedValidator<T> implements Validator {
    * @return standardized value of the provided value or the same value if an error occurred
    */
   protected String validateAndStandardizeValueAgainstVocabulary(String value, String fieldName, List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements, Errors errors) {
-    Optional<CollectionVocabularyConfiguration.CollectionVocabularyElement> foundVocabularyElement = vocabularyElements
-      .stream().filter(o -> o.getTerm().equalsIgnoreCase(value)).findFirst();
+    Optional<CollectionVocabularyConfiguration.CollectionVocabularyElement> foundVocabularyElement = findInVocabulary(value, vocabularyElements);
     if (foundVocabularyElement.isPresent()) {
       return foundVocabularyElement.get().getTerm();
     } else {
@@ -59,8 +58,21 @@ abstract class VocabularyBasedValidator<T> implements Validator {
     return value;
   }
 
+  /**
+   * Finds the first CollectionVocabularyElement where the term is matching (ignore case) the provided value.
+   * @param value
+   * @param vocabularyElements
+   * @return
+   */
+  protected Optional<CollectionVocabularyConfiguration.CollectionVocabularyElement> findInVocabulary(String value, List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements) {
+    return vocabularyElements.stream().filter(o -> o.getTerm().equalsIgnoreCase(value)).findFirst();
+  }
+
   protected abstract void validateVocabularyBasedAttribute(T target, Errors errors);
 
+  protected String getMessage(String key) {
+    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+  }
   protected String getMessage(String key, Object... messageArgs) {
     return messageSource.getMessage(key, messageArgs, LocaleContextHolder.getLocale());
   }
