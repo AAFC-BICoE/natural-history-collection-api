@@ -28,6 +28,8 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @ConfigurationProperties
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
 
+  public static final String PROTOCOL_DATA_VOCAB_KEY = "protocolData";
+
   public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {
     super(vocabulary);
   }
@@ -37,5 +39,9 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
   @Setter
   public static class CollectionVocabularyElement extends VocabularyElementConfiguration {
     private String inverseOf;
+  }
+
+  public List<CollectionVocabularyElement> getVocabularyByKey(String key) {
+    return getVocabulary().get(key);
   }
 }
