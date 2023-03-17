@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 
-import ca.gc.aafc.dina.security.DinaAuthorizationService;
+import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,14 +28,14 @@ public class ProtocolRepository extends DinaRepository<ProtocolDto, Protocol> {
     @NonNull ProtocolService dinaService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull AuditService auditService,
-    DinaAuthorizationService dinaAdminCUDAuthorizationService,
+    SuperUserInGroupCUDAuthorizationService authorizationService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
     ObjectMapper objectMapper
   ) {
     super(
       dinaService,
-      dinaAdminCUDAuthorizationService,
+      authorizationService,
       Optional.of(auditService),
       new DinaMapper<>(ProtocolDto.class),
       ProtocolDto.class,
