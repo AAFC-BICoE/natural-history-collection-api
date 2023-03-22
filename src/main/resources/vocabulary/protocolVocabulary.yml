@@ -28,3 +28,25 @@ vocabulary:
           title: Total Reaction Mix Volume
         - lang: fr
           title: Volume total du mélange réactionnel
+  protocolType:
+    - name: DNA Extraction
+      term: dna_extraction
+      multilingualTitle.titles:
+        - lang: en
+          title: DNA Extraction
+        - lang: fr
+          title: Extraction ADN
+    - name: PCR Reaction
+      term: pcr_reaction
+      multilingualTitle.titles:
+        - lang: en
+          title: PCR Reaction
+        - lang: fr
+          title: Reaction PCR
+    - name: Sequencing Reaction
+      term: sequence_reaction
+      multilingualTitle.titles:
+        - lang: en
+          title: Sequencing Reaction
+        - lang: fr
+          title: Reaction séquençage

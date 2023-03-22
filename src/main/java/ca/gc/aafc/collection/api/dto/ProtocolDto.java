@@ -38,6 +38,7 @@ public class ProtocolDto extends AttributeMetaInfoProvider {
   private String group;
 
   private String name;
+  private String protocolType;
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
