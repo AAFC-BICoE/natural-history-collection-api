@@ -27,6 +27,10 @@ import org.javers.core.metamodel.annotation.Value;
 @RequiredArgsConstructor
 public class Protocol extends UserDescribedDinaEntity {
 
+  @Size(max = 50)
+  @Column
+  private String protocolType;
+
   @NotBlank
   @Size(max = 50)
   @Column(name = "_group")
@@ -49,7 +53,7 @@ public class Protocol extends UserDescribedDinaEntity {
 
     @NotBlank
     @Size(max = 50)
-    private String key; // forward primer
+    private String key; // forward_primer
 
     private boolean vocabularyBased;
 

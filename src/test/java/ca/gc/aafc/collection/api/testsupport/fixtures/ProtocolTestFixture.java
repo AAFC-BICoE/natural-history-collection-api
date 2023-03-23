@@ -15,6 +15,7 @@ public class ProtocolTestFixture {
     protocolDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     protocolDto.setGroup(GROUP);
     protocolDto.setProtocolData(ProtocolFactory.newProtocolDataList());
+    protocolDto.setProtocolType("pcr_reaction"); //needs to match a value in vocabulary
 
     return protocolDto;
   }

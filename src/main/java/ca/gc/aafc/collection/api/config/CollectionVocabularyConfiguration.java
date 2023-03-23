@@ -24,11 +24,12 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/associationType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/materialSampleType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/unitsOfMeasurement.yml", factory = YamlPropertyLoaderFactory.class)
-@PropertySource(value = "classpath:vocabulary/protocolData.yml", factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/protocolVocabulary.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
 
   public static final String PROTOCOL_DATA_VOCAB_KEY = "protocolData";
+  public static final String PROTOCOL_TYPE_VOCAB_KEY = "protocolType";
 
   public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {
     super(vocabulary);
@@ -44,4 +45,5 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
   public List<CollectionVocabularyElement> getVocabularyByKey(String key) {
     return getVocabulary().get(key);
   }
+
 }
