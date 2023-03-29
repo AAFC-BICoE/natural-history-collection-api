@@ -1,28 +1,28 @@
 vocabulary:
   protocolData:
     - name: Forward Primer
-      term: forward_primer
+      key: forward_primer
       multilingualTitle.titles:
         - lang: en
           title: Forward Primer
         - lang: fr
           title: Amorce sens
     - name: Reverse Primer
-      term: reverse_primer
+      key: reverse_primer
       multilingualTitle.titles:
         - lang: en
           title: Reverse Primer
         - lang: fr
           title: Amorce antisens
     - name: Reaction Mix Volume Per Tube
-      term: reaction_mix_volume_per_tube
+      key: reaction_mix_volume_per_tube
       multilingualTitle.titles:
         - lang: en
           title: Reaction Mix Volume Per Tube
         - lang: fr
           title: Volume de mélange réactionnel par tube
     - name: Total Reaction Mix Volume
-      term: total_reaction_mix_volume
+      key: total_reaction_mix_volume
       multilingualTitle.titles:
         - lang: en
           title: Total Reaction Mix Volume
@@ -30,21 +30,21 @@ vocabulary:
           title: Volume total du mélange réactionnel
   protocolType:
     - name: DNA Extraction
-      term: dna_extraction
+      key: dna_extraction
       multilingualTitle.titles:
         - lang: en
           title: DNA Extraction
         - lang: fr
           title: Extraction ADN
     - name: PCR Reaction
-      term: pcr_reaction
+      key: pcr_reaction
       multilingualTitle.titles:
         - lang: en
           title: PCR Reaction
         - lang: fr
           title: Reaction PCR
     - name: Sequencing Reaction
-      term: sequence_reaction
+      key: sequence_reaction
       multilingualTitle.titles:
         - lang: en
           title: Sequencing Reaction
