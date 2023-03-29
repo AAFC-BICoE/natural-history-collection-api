@@ -40,7 +40,7 @@ abstract class VocabularyBasedValidator<T> implements Validator {
   }
 
   /**
-   * Checks if the provided value matches an entry in vocabularyElement list by comparing it to terms (ignore case).
+   * Checks if the provided value matches an entry in vocabularyElement list by comparing it to keys (ignore case).
    * @param value value to validate and standardize
    * @param fieldName used to report error
    * @param vocabularyElements valid elements for the vocabulary
@@ -50,7 +50,7 @@ abstract class VocabularyBasedValidator<T> implements Validator {
   protected String validateAndStandardizeValueAgainstVocabulary(String value, String fieldName, List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements, Errors errors) {
     Optional<CollectionVocabularyConfiguration.CollectionVocabularyElement> foundVocabularyElement = findInVocabulary(value, vocabularyElements);
     if (foundVocabularyElement.isPresent()) {
-      return foundVocabularyElement.get().getTerm();
+      return foundVocabularyElement.get().getKey();
     } else {
       String errorMessage = getMessage(VALUE_NOT_IN_VOCABULARY, fieldName);
       errors.rejectValue(fieldName, VALUE_NOT_IN_VOCABULARY, errorMessage);
@@ -59,13 +59,13 @@ abstract class VocabularyBasedValidator<T> implements Validator {
   }
 
   /**
-   * Finds the first CollectionVocabularyElement where the term is matching (ignore case) the provided value.
+   * Finds the first CollectionVocabularyElement where the key is matching (ignore case) the provided value.
    * @param value
    * @param vocabularyElements
    * @return
    */
   protected Optional<CollectionVocabularyConfiguration.CollectionVocabularyElement> findInVocabulary(String value, List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements) {
-    return vocabularyElements.stream().filter(o -> o.getTerm().equalsIgnoreCase(value)).findFirst();
+    return vocabularyElements.stream().filter(o -> o.getKey().equalsIgnoreCase(value)).findFirst();
   }
 
   protected abstract void validateVocabularyBasedAttribute(T target, Errors errors);

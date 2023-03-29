@@ -1,33 +1,38 @@
 vocabulary:
   unitsOfMeasurement:
-    - name: ug.mL-1
+    - key: microgram_per_millilitre
+      name: ug.mL-1
       term: https://w3id.org/uom/ug.mL-1
       multilingualTitle.titles:
         - lang: en
           title: μg/mL
         - lang: fr
           title: μg/mL
-    - name: uL
+    - key: microlitre
+      name: uL
       term: https://w3id.org/uom/uL
       multilingualTitle.titles:
         - lang: en
           title: μL
         - lang: fr
           title: μL
-    - name: uL.rxn
+    - key: microliter_per_reaction
+      name: uL.rxn
       multilingualTitle.titles:
         - lang: en
           title: µl/rxn
         - lang: fr
           title: µl/rxn
-    - name: mM
+    - key: millimolar
+      name: mM
       term: http://www.wikidata.org/entity/Q105687351
       multilingualTitle.titles:
         - lang: en
           title: mM
         - lang: fr
           title: mM
-    - name: uM
+    - key: micromole_per_liter
+      name: uM
       term: http://purl.obolibrary.org/obo/NCIT_C48508
       multilingualTitle.titles:
         - lang: en
