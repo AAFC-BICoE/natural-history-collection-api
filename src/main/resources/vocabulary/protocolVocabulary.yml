@@ -50,3 +50,11 @@ vocabulary:
           title: Sequencing Reaction
         - lang: fr
           title: Reaction séquençage
+    - name: Collection Method
+      key: collection_method
+      multilingualTitle.titles:
+        - lang: en
+          title: Collection Method
+        - lang: fr
+          title: Méthode de collecte
+          
