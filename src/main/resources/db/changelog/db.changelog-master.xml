@@ -161,4 +161,5 @@
   <include file="db/changelog/migrations/154-Create_materialSampleType_cultureStrain.xml"/>
   <include file="db/changelog/migrations/155-Add_preparation_managed_attribute.xml"/>
   <include file="db/changelog/migrations/156-Add_ProtocolType_to_Protocol.xml"/>
+  <include file="db/changelog/migrations/157-Add_protocol_to_collecting-event.xml"/>
 </databaseChangeLog>

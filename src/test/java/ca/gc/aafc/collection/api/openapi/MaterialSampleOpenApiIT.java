@@ -213,14 +213,14 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       );
     }
 
-    private String postResource(String resourceType, Object dto) {
-      return JsonAPITestHelper.extractId(sendPost(
-              resourceType,
-              JsonAPITestHelper.toJsonAPIMap(
-                      resourceType,
-                      JsonAPITestHelper.toAttributeMap(dto))
-      ));
-    }
+  private String postResource(String resourceType, Object dto) {
+    return JsonAPITestHelper.extractId(sendPost(
+            resourceType,
+            JsonAPITestHelper.toJsonAPIMap(
+                    resourceType,
+                    JsonAPITestHelper.toAttributeMap(dto))
+    ));
+  }
 
   /**
    * Set {@link MaterialSampleDto} relationships to null, so they won't be serialized as attributes.

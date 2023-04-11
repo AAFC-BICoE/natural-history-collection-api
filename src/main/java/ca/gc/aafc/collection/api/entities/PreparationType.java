@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * A noun representing what is getting prepared
+ * A noun representing what is getting prepared.
  */
 @Entity
 @SuperBuilder
