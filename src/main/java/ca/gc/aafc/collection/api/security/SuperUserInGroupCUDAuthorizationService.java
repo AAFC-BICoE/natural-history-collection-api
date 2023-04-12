@@ -1,8 +1,9 @@
 package ca.gc.aafc.collection.api.security;
 
-import ca.gc.aafc.dina.security.PermissionAuthorizationService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
+import ca.gc.aafc.dina.security.auth.PermissionAuthorizationService;
 
 /**
  * Authorization service that will authorize SUPER_USER (and DINA_ADMIN) for the group of the entity.
