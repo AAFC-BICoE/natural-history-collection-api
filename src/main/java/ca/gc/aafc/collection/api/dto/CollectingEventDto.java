@@ -91,6 +91,10 @@ public class CollectingEventDto {
   @JsonApiRelation
   private CollectionMethodDto collectionMethod;
 
+  @ShallowReference
+  @JsonApiRelation
+  private ProtocolDto protocol;
+
   private String dwcVerbatimLocality;
 
   private String host;

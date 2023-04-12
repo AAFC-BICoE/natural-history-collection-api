@@ -4,6 +4,8 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -210,6 +212,10 @@ public class CollectingEvent implements DinaEntity {
 
   @ManyToOne
   private CollectionMethod collectionMethod;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "protocol_id")
+  private Protocol protocol;
 
   private Boolean publiclyReleasable;
 
