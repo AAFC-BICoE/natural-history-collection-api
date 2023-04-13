@@ -88,7 +88,10 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setParentMaterialSample(parent);
     child = materialSampleRepository.create(child);
-    MaterialSampleDto result = materialSampleRepository.findOne(parent.getUuid(), new QuerySpec(MaterialSampleDto.class));
+
+    QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
+    querySpec.includeRelation(PathSpec.of(MaterialSample.CHILDREN_COL_NAME));
+    MaterialSampleDto result = materialSampleRepository.findOne(parent.getUuid(), querySpec);
     assertEquals(child.getUuid(), result.getMaterialSampleChildren().get(0).getUuid());
   }
 
