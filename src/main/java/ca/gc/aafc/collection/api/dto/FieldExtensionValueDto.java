@@ -21,6 +21,7 @@ public class FieldExtensionValueDto {
     private final String id;
     
     private final String extensionName;
+    private final String extensionKey;
     private final Field field;
 
 }

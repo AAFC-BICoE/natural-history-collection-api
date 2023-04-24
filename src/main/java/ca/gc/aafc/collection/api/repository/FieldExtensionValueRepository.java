@@ -12,10 +12,12 @@ import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
 import ca.gc.aafc.dina.repository.NoLinkInformation;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.dto.ExtensionDto;
 import ca.gc.aafc.collection.api.dto.FieldExtensionValueDto;
+import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
 import io.crnk.core.resource.list.DefaultResourceList;
@@ -57,10 +59,7 @@ public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBas
 
   @Override
   public ResourceList<FieldExtensionValueDto> findAll(QuerySpec querySpec) {
-    System.out.println(querySpec);
-    List<FieldExtensionValueDto> dtos = new ArrayList<FieldExtensionValueDto>();
-    DefaultPagedMetaInformation meta = new DefaultPagedMetaInformation();
-    return new DefaultResourceList<>(dtos, meta, new NoLinkInformation());
+    throw new MethodNotAllowedException("findAll", null);
   }
 
   @Override
@@ -68,8 +67,6 @@ public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBas
     // Allow lookup by component extension key + field key.
     // e.g. mixs_soil_v4.alkalinity
     var matcher = KEY_LOOKUP_PATTERN.matcher(path.toString());
-    String extensionName = "";
-    Field field = null;
     if (matcher.groupCount() == 2) {
       if (matcher.find()) {
         String extensionKey = matcher.group(1);
@@ -77,13 +74,11 @@ public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBas
         for (ExtensionDto extensionDto : extensions) {
           Extension extension = extensionDto.getExtension();
           if (extension.getKey().equals(extensionKey)) {
-            extensionName = extension.getName();
-            field = extension.getFieldByKey(fieldKey);
+            return new FieldExtensionValueDto(path, extension.getName(), extensionKey, extension.getFieldByKey(fieldKey));
           }
         }
       }
-
     }
-    return new FieldExtensionValueDto(path, extensionName, field);
+    throw new ResourceNotFoundException("Field Extension Value not found: " + path);
   }
 }
