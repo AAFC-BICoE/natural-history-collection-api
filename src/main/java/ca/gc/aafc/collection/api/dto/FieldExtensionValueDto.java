@@ -16,11 +16,11 @@ import lombok.Data;
 @Builder
 @JsonApiResource(type = "field-extension-value")
 public class FieldExtensionValueDto {
-    @JsonApiId
-    private final String id;
-    
-    private final String extensionName;
-    private final String extensionKey;
-    private final Field field;
+  @JsonApiId
+  private final String id;
+
+  private final String extensionName;
+  private final String extensionKey;
+  private final Field field;
 
 }
