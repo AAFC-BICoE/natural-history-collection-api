@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -8,8 +7,6 @@ import java.util.stream.Collectors;
 
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
-import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
-import ca.gc.aafc.dina.repository.NoLinkInformation;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.MethodNotAllowedException;
@@ -20,9 +17,7 @@ import ca.gc.aafc.collection.api.dto.FieldExtensionValueDto;
 import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
-import io.crnk.core.resource.list.DefaultResourceList;
 import io.crnk.core.resource.list.ResourceList;
-import io.crnk.core.resource.meta.DefaultPagedMetaInformation;
 import lombok.NonNull;
 
 @Repository

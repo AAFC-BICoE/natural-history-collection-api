@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.io.Serializable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
