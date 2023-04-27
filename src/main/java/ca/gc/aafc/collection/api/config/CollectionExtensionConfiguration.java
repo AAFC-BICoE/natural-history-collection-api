@@ -22,6 +22,7 @@ import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 @PropertySource(value = "classpath:extension/mixsWaterv4.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/mixsMicrobialv4.yml", factory  = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:extension/agronomy_ontology.yml", factory = YamlPropertyLoaderFactory.class)
+//@Validated need to increase the maximum of desc field on base-api
 public class CollectionExtensionConfiguration {
 
   private final Map<String, Extension> extension;

@@ -730,7 +730,7 @@ extension:
       name: "relevant electronic resources"
       multilingualDescription.descriptions:
         - lang: en
-          desc: ""
+          desc: "relevant electronic resources"
       dinaComponent: "COLLECTING_EVENT"
     - key: "sop"
       name: "relevant standard operating procedures"
