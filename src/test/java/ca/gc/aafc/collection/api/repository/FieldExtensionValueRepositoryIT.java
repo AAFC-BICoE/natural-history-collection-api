@@ -20,7 +20,7 @@ public class FieldExtensionValueRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = FieldExtensionValueTestFixture.GROUP + ":SUPER_USER")
-  void findOneByKey_whenKeyProvided_managedAttributeFetched() {
+  void findOneByKey_whenKeyProvided_fieldExtensionValueFetched() {
     FieldExtensionValueDto fieldExtensionValueDto = FieldExtensionValueTestFixture.newFieldExtensionValueDto();
     QuerySpec querySpec = new QuerySpec(FieldExtensionValueDto.class);
     FieldExtensionValueDto fetchedFieldExtensionValue = repo.findOne("mixs_microbial_v4.alkyl_diethers", querySpec);
