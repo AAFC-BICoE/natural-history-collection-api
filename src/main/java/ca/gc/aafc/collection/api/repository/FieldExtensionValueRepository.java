@@ -1,19 +1,17 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-import ca.gc.aafc.dina.extension.FieldExtensionDefinition;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.MethodNotAllowedException;
 
 import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
-import ca.gc.aafc.collection.api.dto.ExtensionDto;
 import ca.gc.aafc.collection.api.dto.FieldExtensionValueDto;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
+
 import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
@@ -23,33 +21,14 @@ import lombok.NonNull;
 @Repository
 public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBase<FieldExtensionValueDto, String> {
 
-  private final List<ExtensionDto> extensions;
+  private final Map<String, Extension> extensions;
+
   public static final Pattern KEY_LOOKUP_PATTERN = Pattern.compile("(.*)\\.(.*)");
 
   protected FieldExtensionValueRepository(
       @NonNull CollectionExtensionConfiguration extensionConfiguration) {
     super(FieldExtensionValueDto.class);
-    checkArguments(extensionConfiguration.getExtension());
-
-    extensions = extensionConfiguration.getExtension()
-        .entrySet()
-        .stream()
-        .map(entry -> new ExtensionDto(entry.getKey(), entry.getValue()))
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * Very common configuration issue that could lead to errors.
-   *
-   * @param extension
-   */
-  private void checkArguments(Map<String, FieldExtensionDefinition.Extension> extension) {
-    for (var entry : extension.entrySet()) {
-      if (!entry.getKey().equals(entry.getValue().getKey())) {
-        throw new IllegalStateException("Extension map key not matching extension key: "
-            + entry.getKey() + " vs " + entry.getValue().getKey());
-      }
-    }
+    extensions = extensionConfiguration.getExtension();
   }
 
   @Override
@@ -61,19 +40,19 @@ public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBas
   public FieldExtensionValueDto findOne(String path, QuerySpec querySpec) {
     // Allow lookup by component extension key + field key.
     // e.g. mixs_soil_v4.alkalinity
-    var matcher = KEY_LOOKUP_PATTERN.matcher(path.toString());
+    var matcher = KEY_LOOKUP_PATTERN.matcher(path);
     if (matcher.groupCount() == 2) {
       if (matcher.find()) {
         String extensionKey = matcher.group(1);
         String fieldKey = matcher.group(2);
-        for (ExtensionDto extensionDto : extensions) {
-          Extension extension = extensionDto.getExtension();
-          if (extension.getKey().equals(extensionKey)) {
-            return new FieldExtensionValueDto(path, extension.getName(), extensionKey, extension.getFieldByKey(fieldKey));
-          }
+
+        Extension ext = extensions.get(extensionKey);
+        if (ext != null && ext.getFieldByKey(fieldKey) != null) {
+          return new FieldExtensionValueDto(path, ext.getName(), extensionKey,
+            ext.getFieldByKey(fieldKey));
         }
       }
     }
-    throw new ResourceNotFoundException("Field Extension Value not found: " + path);
+    throw new ResourceNotFoundException("Field Extension Value not found: " + TextHtmlSanitizer.sanitizeText(path));
   }
 }
