@@ -10,14 +10,16 @@ public class FieldExtensionValueTestFixture {
   public static final String GROUP = "dina";
 
   public static FieldExtensionValueDto newFieldExtensionValueDto() {
-    final String id = "mixs_microbial_v4.alkyl_diethers";
-    final String extensionName = "MIxS Microbial v4";
-    final String extensionKey = "mixs_microbial_v4";
-    final Field field = Field.builder().key("alkyl_diethers").name("alkyl diethers").dinaComponent("COLLECTING_EVENT")
-        .multilingualDescription(new MultilingualDescription(List.of(MultilingualDescription
-        .MultilingualPair.of("en", "concentration of alkyl diethers ")))).build();
-    FieldExtensionValueDto fieldExtensionValueDto = new FieldExtensionValueDto(id, extensionName, extensionKey, field);
-    return fieldExtensionValueDto;
+    String id = "mixs_microbial_v4.alkyl_diethers";
+    String extensionName = "MIxS Microbial v4";
+    String extensionKey = "mixs_microbial_v4";
+    Field field = Field.builder().key("alkyl_diethers")
+      .name("alkyl diethers").dinaComponent("COLLECTING_EVENT")
+      .multilingualDescription(new MultilingualDescription(List.of(MultilingualDescription
+        .MultilingualPair.of("en", "concentration of alkyl diethers "))))
+      .build();
+
+    return new FieldExtensionValueDto(id, extensionName, extensionKey, field);
   }
 
 }
