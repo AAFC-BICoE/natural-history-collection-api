@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.validation.annotation.Validated;
 
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
 import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
