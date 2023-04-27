@@ -1,43 +1,37 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import ca.gc.aafc.collection.api.dto.AssemblageDto;
-import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
-import ca.gc.aafc.collection.api.dto.ProtocolDto;
-import ca.gc.aafc.collection.api.dto.StorageUnitDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationMethodTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.dto.AssemblageDto;
+import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
+import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
+import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationMethodTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -48,6 +42,13 @@ import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 
 import io.restassured.RestAssured;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -121,6 +122,10 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     projectDto.setCreatedBy(CREATED_BY);
     projectDto.setAttachment(null);
 
+    CollectionDto collectionDto = CollectionFixture.newCollection()
+            .build();
+    collectionDto.setCreatedBy(CREATED_BY);
+
     AssemblageDto assemblageDto = AssemblageTestFixture.newAssemblage();
     assemblageDto.setCreatedBy(CREATED_BY);
     assemblageDto.setAttachment(null);
@@ -160,6 +165,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String assemblageUUID = postResource(AssemblageDto.TYPENAME, assemblageDto);
     String projectUUID = postResource(ProjectDto.TYPENAME, projectDto);
     String storageUnitUUID = postResource(StorageUnitDto.TYPENAME, storageUnitDto);
+    String collectionUUID = postResource(CollectionDto.TYPENAME, collectionDto);
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     Map<String, Object> toManyRelationships = Map.of(
@@ -167,7 +173,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
       "projects", getRelationshipListType("project", projectUUID),
       "assemblages", getRelationshipListType("assemblage", assemblageUUID),
-      "organism", getRelationshipListType("organism", organismUUID));
+      "organism", getRelationshipListType("organism", organismUUID)
+    );
 
     Map<String, Object> toOneRelationships = JsonAPITestHelper.toRelationshipMap(
         List.of(
@@ -175,7 +182,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           JsonAPIRelationship.of("preparationMethod", PreparationMethodDto.TYPENAME, preparationMethodUUID),
           JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID),
           JsonAPIRelationship.of("preparationProtocol", ProtocolDto.TYPENAME, protocolUUID),
-          JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, storageUnitUUID)));
+          JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, storageUnitUUID),
+          JsonAPIRelationship.of("collection", CollectionDto.TYPENAME, collectionUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(toManyRelationships);
     relationshipMap.putAll(toOneRelationships);
@@ -236,6 +244,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     materialSampleDto.setAcquisitionEvent(null);
     materialSampleDto.setProjects(null);
     materialSampleDto.setAssemblages(null);
+    materialSampleDto.setCollection(null);
   }
 
   private Map<String, Object> getRelationshipListType(String type, String uuid) {
