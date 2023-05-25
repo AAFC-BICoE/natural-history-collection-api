@@ -12,11 +12,11 @@
             DECLARE
               rec RECORD;
             BEGIN
-              SELECT material_sample.id, parent_material_sample_id, jsonb_path_query_first(organism.determination, ''$[*] ? (@.isPrimary == true)'') as organism_primary_determination FROM material_sample LEFT OUTER JOIN organism ON material_sample.id = organism.material_sample_id
-                INTO rec;
+            SELECT material_sample.id, parent_material_sample_id, jsonb_agg(jsonb_path_query_first(organism.determination, ''$[*] ? (@.isPrimary == true)'')) as organism_primary_determination FROM material_sample LEFT OUTER JOIN organism ON material_sample.id = organism.material_sample_id and (organism.is_target or organism.is_target IS NULL) WHERE material_sample.id = mat_sample_id GROUP BY material_sample.id, parent_material_sample_id
+              INTO rec;
 
-              IF rec.organism_primary_determination IS NULL and rec.parent_material_sample_id IS NOT NULL THEN
-                RETURN (select organism_primary_determination from find_determination(rec.parent_material_sample_id));
+              IF rec.organism_primary_determination = ''[null]'' AND rec.parent_material_sample_id IS NOT NULL THEN
+                RETURN (SELECT * FROM find_determination(rec.parent_material_sample_id));
               ELSE
                 RETURN rec.organism_primary_determination;
               END IF;

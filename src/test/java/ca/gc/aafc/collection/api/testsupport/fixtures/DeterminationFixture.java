@@ -11,6 +11,10 @@ import java.util.UUID;
 public class DeterminationFixture {
 
   public static Determination newDetermination() throws MalformedURLException {
+    return newDeterminationBuilder().build();
+  }
+
+  public static Determination.DeterminationBuilder newDeterminationBuilder() throws MalformedURLException {
     return Determination.builder()
         .verbatimScientificName("verbatimScientificName")
         .verbatimDeterminer("verbatimDeterminer")
@@ -35,7 +39,6 @@ public class DeterminationFixture {
             .recordedOn(LocalDate.now().minusDays(1))
             .labelHtml("label <i>italic</i>")
             .build())
-        .isFiledAs(true)
-        .build();
+        .isFiledAs(true);
   }
 }
