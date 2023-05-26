@@ -27,6 +27,6 @@ public class MaterialSampleSummaryDto {
 
   private String materialSampleName;
 
-  private List<Determination> effectiveDetermination;
+  private List<Determination> effectiveDeterminations;
 
 }

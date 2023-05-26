@@ -25,7 +25,7 @@
     </changeSet>
     <changeSet id="158-Add_material_sample_summary_view-2" context="schema-change" author="cgendreau">
         <createView viewName="material_sample_summary">
-            SELECT ms.uuid, ms.material_sample_name, find_determination(ms.id) as effective_determination FROM material_sample ms;
+            SELECT ms.uuid, ms.material_sample_name, find_determination(ms.id) as effective_determinations FROM material_sample ms;
         </createView>
     </changeSet>
 </databaseChangeLog>

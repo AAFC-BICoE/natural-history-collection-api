@@ -15,6 +15,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
@@ -44,7 +45,8 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
     MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(materialSampleDto.getUuid(), new QuerySpec(
       MaterialSampleSummaryDto.class));
 
-    assertNotNull(mssDto.getEffectiveDetermination());
+    assertNotNull(mssDto.getEffectiveDeterminations());
+    assertEquals(1, mssDto.getEffectiveDeterminations().size());
   }
 
 }

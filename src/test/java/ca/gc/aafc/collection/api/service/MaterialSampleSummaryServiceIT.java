@@ -46,6 +46,7 @@ public class MaterialSampleSummaryServiceIT extends CollectionModuleBaseIT {
 
     MaterialSampleSummary msSummary = materialSampleSummaryService.findMaterialSampleSummary(sample2.getUuid());
     Assertions.assertNotNull(msSummary);
-    Assertions.assertEquals("name 2", msSummary.getEffectiveDetermination().get(0).getVerbatimScientificName());
+    Assertions.assertNotNull(msSummary.getEffectiveDeterminations());
+    Assertions.assertEquals("name 2", msSummary.getEffectiveDeterminations().get(0).getVerbatimScientificName());
   }
 }

@@ -42,7 +42,7 @@ public class MaterialSampleSummaryRepository extends ReadOnlyResourceRepositoryB
     return MaterialSampleSummaryDto.builder()
       .uuid(mss.getUuid())
       .materialSampleName(mss.getMaterialSampleName())
-      .effectiveDetermination(mss.getEffectiveDetermination())
+      .effectiveDeterminations(mss.getEffectiveDeterminations())
       .build();
   }
 

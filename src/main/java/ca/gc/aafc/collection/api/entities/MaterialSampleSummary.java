@@ -25,7 +25,7 @@ public class MaterialSampleSummary {
    * This is a list of determination to cover the case when there is no target organism (all primary determination will be returned).
    */
   @Type(type = "jsonb")
-  private List<Determination> effectiveDetermination;
+  private List<Determination> effectiveDeterminations;
 
 }
 
