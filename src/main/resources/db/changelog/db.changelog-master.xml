@@ -162,4 +162,5 @@
   <include file="db/changelog/migrations/155-Add_preparation_managed_attribute.xml"/>
   <include file="db/changelog/migrations/156-Add_ProtocolType_to_Protocol.xml"/>
   <include file="db/changelog/migrations/157-Add_protocol_to_collecting-event.xml"/>
+  <include file="db/changelog/migrations/158-Add_material_sample_summary_view.xml"/>
 </databaseChangeLog>

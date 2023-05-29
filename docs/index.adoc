@@ -6,5 +6,6 @@ You can run checkstyle and spotbugs using the following:
 mvn checkstyle:check com.github.spotbugs:spotbugs-maven-plugin:check
 ....
 
+include::api.adoc[]
 include::database.adoc[]
 include::managed_attributes.adoc[]

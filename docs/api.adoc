@@ -1,0 +1,13 @@
+= API
+
+== Additional endpoints
+
+=== material-sample-summary
+Get a summary of an existing material sample. The summary includes the https://aafc-bicoe.github.io/dina-documentation/#_effective_determinations[effective determination].
+
+GET `/material-sample-summary/{uuid}`
+
+=== material-sample-identifier-generator
+
+POST `/material-sample-identifier-generator`
+

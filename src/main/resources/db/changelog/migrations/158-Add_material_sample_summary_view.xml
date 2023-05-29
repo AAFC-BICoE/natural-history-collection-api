@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="158-Add_material_sample_summary_view-1" context="schema-change" author="cgendreau">
+        <sql>
+            CREATE or REPLACE function find_determination(mat_sample_id int) returns jsonb
+            language plpgsql
+            AS '
+            DECLARE
+              rec RECORD;
+            BEGIN
+            SELECT material_sample.id, parent_material_sample_id, jsonb_agg(jsonb_path_query_first(organism.determination, ''$[*] ? (@.isPrimary == true)'')) as organism_primary_determination FROM material_sample LEFT OUTER JOIN organism ON material_sample.id = organism.material_sample_id and (organism.is_target or organism.is_target IS NULL) WHERE material_sample.id = mat_sample_id GROUP BY material_sample.id, parent_material_sample_id
+              INTO rec;
+
+              IF rec.organism_primary_determination = ''[null]'' AND rec.parent_material_sample_id IS NOT NULL THEN
+                RETURN (SELECT * FROM find_determination(rec.parent_material_sample_id));
+              ELSE
+                RETURN rec.organism_primary_determination;
+              END IF;
+            END';
+        </sql>
+    </changeSet>
+    <changeSet id="158-Add_material_sample_summary_view-2" context="schema-change" author="cgendreau">
+        <createView viewName="material_sample_summary">
+            SELECT ms.uuid, ms.material_sample_name, find_determination(ms.id) as effective_determinations FROM material_sample ms;
+        </createView>
+    </changeSet>
+</databaseChangeLog>
