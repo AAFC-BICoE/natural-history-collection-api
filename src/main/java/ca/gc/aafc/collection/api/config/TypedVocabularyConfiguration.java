@@ -50,5 +50,6 @@ public class TypedVocabularyConfiguration {
     private MultilingualTitle multilingualTitle;
     private MultilingualDescription multilingualDescription;
     private String term;
+    private String unit;
   }
 }

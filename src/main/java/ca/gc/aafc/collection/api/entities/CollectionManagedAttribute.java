@@ -74,6 +74,9 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   @Column(columnDefinition = "text[]")
   private String[] acceptedValues;
 
+  @Size(max = 50)
+  private String unit;
+
   @Override
   public String getTerm() {
     return null;

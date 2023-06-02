@@ -8,9 +8,10 @@ import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.entities.DinaComponent;
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
+import ca.gc.aafc.dina.extension.FieldExtensionValue;
+
 import lombok.NonNull;
 
 public class BaseExtensionValueValidator implements Validator {
@@ -42,7 +43,7 @@ public class BaseExtensionValueValidator implements Validator {
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return ExtensionValue.class.isAssignableFrom(clazz);
+    return FieldExtensionValue.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -51,7 +52,7 @@ public class BaseExtensionValueValidator implements Validator {
       throw new IllegalArgumentException("ExtensionValueValidator not supported for class " + target.getClass());
     }
 
-    ExtensionValue extensionValue = (ExtensionValue) target;
+    FieldExtensionValue extensionValue = (FieldExtensionValue) target;
     handleValidation(errors, extensionValue);
   }
 
@@ -62,7 +63,7 @@ public class BaseExtensionValueValidator implements Validator {
    * @param errors if any validation problems occur, errors will be reported here.
    * @param extensionValue extension value being validated against.
    */
-  private void handleValidation(Errors errors, ExtensionValue extensionValue) {
+  private void handleValidation(Errors errors, FieldExtensionValue extensionValue) {
 
     for (Extension extension : configuration.getExtension().values()) {
       // First, check if the extension key matches
@@ -95,9 +96,9 @@ public class BaseExtensionValueValidator implements Validator {
    * @param errors
    * @param extensionValue
    */
-  private void checkNotBlankValue(Errors errors, ExtensionValue extensionValue) {
+  private void checkNotBlankValue(Errors errors, FieldExtensionValue extensionValue) {
     if(StringUtils.isBlank(extensionValue.getValue())) {
-      errors.rejectValue(ExtensionValue.VALUE_KEY_NAME, BLANK_VALUE, getMessageForKey(BLANK_VALUE));
+      errors.rejectValue(FieldExtensionValue.VALUE_KEY_NAME, BLANK_VALUE, getMessageForKey(BLANK_VALUE));
     }
   }
 
@@ -109,11 +110,11 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extensionValue extension value being validated against.
    * @param extension the extension set of values that that matches the key and version.
    */
-  private void checkExtensionFieldKey(Errors errors, ExtensionValue extensionValue, Extension extension) {
+  private void checkExtensionFieldKey(Errors errors, FieldExtensionValue extensionValue, Extension extension) {
     if(!extension.containsKey(extensionValue.getExtFieldKey())) {
       String errorMessage = getMessageForKey(NO_MATCH_FIELD_KEY, extensionValue.getExtKey(),
               extensionValue.getExtFieldKey());
-      errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, NO_MATCH_FIELD_KEY, errorMessage);
+      errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_FIELD_KEY, errorMessage);
     }
   }
 
@@ -133,7 +134,7 @@ public class BaseExtensionValueValidator implements Validator {
 
     if (!extensionComponent.equals(componentType)) {
       String errorMessage = getMessageForKey(INCORRECT_DINA_COMPONENT, componentType, field.getDinaComponent());
-      errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, INCORRECT_DINA_COMPONENT, errorMessage);
+      errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, INCORRECT_DINA_COMPONENT, errorMessage);
     }
   }
 
@@ -145,7 +146,7 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extensionValue extension value being validated against.
    * @param field the field that was matched with the term.
    */
-  private void checkExtensionConfigurationAcceptedValues(Errors errors, ExtensionValue extensionValue, Field field) {
+  private void checkExtensionConfigurationAcceptedValues(Errors errors, FieldExtensionValue extensionValue, Field field) {
     // Check if the field has accepted values, if it does, check that the value provided matches a accepted value.
     if (field.getAcceptedValues() == null || field.isAcceptedValues(extensionValue.getValue())) {
       return;
@@ -155,7 +156,7 @@ public class BaseExtensionValueValidator implements Validator {
       NO_MATCH_ACCEPTED_VALUE, 
       extensionValue.getValue(),
       String.join(", ", field.getAcceptedValues()));
-    errors.rejectValue(ExtensionValue.FIELD_KEY_NAME, NO_MATCH_ACCEPTED_VALUE, errorMessage);
+    errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_ACCEPTED_VALUE, errorMessage);
   }
 
   private String getMessageForKey(String key, Object... objects) {

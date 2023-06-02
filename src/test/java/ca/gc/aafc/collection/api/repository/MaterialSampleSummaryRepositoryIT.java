@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
@@ -15,7 +16,6 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
@@ -46,7 +46,7 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
       MaterialSampleSummaryDto.class));
 
     assertNotNull(mssDto.getEffectiveDeterminations());
-    assertEquals(1, mssDto.getEffectiveDeterminations().size());
+    Assertions.assertEquals(1, mssDto.getEffectiveDeterminations().size());
   }
 
 }
