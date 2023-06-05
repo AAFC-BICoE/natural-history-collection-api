@@ -12,7 +12,7 @@ import org.springframework.validation.Errors;
 import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.DinaComponent;
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
+import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
 import javax.inject.Inject;
@@ -43,13 +43,13 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenValid_NoErrors() {
-    ExtensionValue collectionExtensionValue = newCollectingEventExtensionValue();
+    FieldExtensionValue collectionExtensionValue = newCollectingEventExtensionValue();
 
     Errors collectionErrors = ValidationErrorsHelper.newErrorsObject(collectionExtensionValue.getExtKey(), collectionExtensionValue);
     collectingEventValidator.validate(collectionExtensionValue, collectionErrors);
     Assertions.assertFalse(collectionErrors.hasErrors());
 
-    ExtensionValue restrictionExtensionValue = newCollectingEventExtensionValue();
+    FieldExtensionValue restrictionExtensionValue = newCollectingEventExtensionValue();
     
     Errors restrictionErrors = ValidationErrorsHelper.newErrorsObject(restrictionExtensionValue.getExtKey(), restrictionExtensionValue);
     collectingEventValidator.validate(restrictionExtensionValue, restrictionErrors);
@@ -58,7 +58,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_onNoMatchFieldKey_hasErrors() {
-    ExtensionValue extensionValue = newCollectingEventExtensionValue();
+    FieldExtensionValue extensionValue = newCollectingEventExtensionValue();
     extensionValue.setExtFieldKey(NON_MATCH);
 
     String expectedErrorMessage = getExpectedErrorMessage(
@@ -78,7 +78,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   @NullSource
   @ValueSource(strings = {"", " "})
   void validate_onBlankValue_hasErrors(String sourceValue) {
-    ExtensionValue extensionValue = newCollectingEventExtensionValue();
+    FieldExtensionValue extensionValue = newCollectingEventExtensionValue();
     extensionValue.setValue(sourceValue);
 
     String expectedErrorMessage = getExpectedErrorMessage(
@@ -94,7 +94,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_NoMatchKey_HasErrors() {
-    ExtensionValue extensionValue = newCollectingEventExtensionValue();
+    FieldExtensionValue extensionValue = newCollectingEventExtensionValue();
     extensionValue.setExtKey(NON_MATCH);
 
     String expectedErrorMessage = getExpectedErrorMessage(
@@ -111,7 +111,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_IncorrectDinaComponentProvided_HasErrors() {
-    ExtensionValue extensionValue = newRestrictionExtensionValue();
+    FieldExtensionValue extensionValue = newRestrictionExtensionValue();
 
     String expectedErrorMessage = getExpectedErrorMessage(
       CollectingEventExtensionValueValidator.INCORRECT_DINA_COMPONENT, 
@@ -130,7 +130,7 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
 
   @Test
   void validate_NoMatchAcceptedValues_HasErrors() {
-    ExtensionValue extensionValue = newRestrictionExtensionValue();
+    FieldExtensionValue extensionValue = newRestrictionExtensionValue();
     extensionValue.setValue(NON_MATCH);
 
     String expectedErrorMessage = getExpectedErrorMessage(
@@ -146,16 +146,16 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
-  private static ExtensionValue newCollectingEventExtensionValue() {
-    return ExtensionValue.builder()
+  private static FieldExtensionValue newCollectingEventExtensionValue() {
+    return FieldExtensionValue.builder()
         .extKey(COLLECTING_EVENT_KEY)
         .extFieldKey(COLLECTING_EVENT_FIELD_KEY)
         .value(COLLECTING_EVENT_VALUE)
         .build();
   }
 
-  private static ExtensionValue newRestrictionExtensionValue() {
-    return ExtensionValue.builder()
+  private static FieldExtensionValue newRestrictionExtensionValue() {
+    return FieldExtensionValue.builder()
         .extKey(RESTRICTION_KEY)
         .extFieldKey(RESTRICTION_FIELD_KEY)
         .value(RESTRICTION_VALUE)

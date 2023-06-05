@@ -4,7 +4,6 @@ import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.ExtensionValue;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
@@ -12,6 +11,7 @@ import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValid
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
+import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
@@ -179,12 +179,12 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   private void validateExtensionValues(@NonNull MaterialSample entity) {
 
-    if(MapUtils.isNotEmpty(entity.getExtensionValues())) {
+    if (MapUtils.isNotEmpty(entity.getExtensionValues())) {
       for (String currExt : entity.getExtensionValues().keySet()) {
         entity.getExtensionValues().get(currExt).forEach((k, v) -> applyBusinessRule(
-                entity.getUuid().toString(),
-                ExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
-                materialSampleExtensionValueValidator
+          entity.getUuid().toString(),
+          FieldExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
+          materialSampleExtensionValueValidator
         ));
       }
     }
@@ -192,9 +192,9 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     if (MapUtils.isNotEmpty(entity.getRestrictionFieldsExtension())) {
       for (String currExt : entity.getRestrictionFieldsExtension().keySet()) {
         entity.getRestrictionFieldsExtension().get(currExt).forEach((k, v) -> applyBusinessRule(
-                entity.getUuid().toString(),
-                ExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
-                restrictionExtensionValueValidator
+          entity.getUuid().toString(),
+          FieldExtensionValue.builder().extKey(currExt).extFieldKey(k).value(v).build(),
+          restrictionExtensionValueValidator
         ));
       }
     }
