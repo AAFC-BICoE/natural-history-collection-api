@@ -164,4 +164,5 @@
   <include file="db/changelog/migrations/157-Add_protocol_to_collecting-event.xml"/>
   <include file="db/changelog/migrations/158-Add_material_sample_summary_view.xml"/>
   <include file="db/changelog/migrations/159-Add_unit_to_managed_attribute.xml"/>
+  <include file="db/changelog/migrations/160-Remove_acquisition_event.xml"/>
 </databaseChangeLog>
