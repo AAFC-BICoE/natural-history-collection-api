@@ -168,7 +168,4 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "protocol_id")
   private Protocol preparationProtocol;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "acquisition_event_id")
-  private AcquisitionEvent acquisitionEvent;
 }

@@ -38,7 +38,7 @@ public class MaterialSampleValidator implements Validator {
   }
 
   private void checkHasParentOrEventOrAcquisitionEvent(Errors errors, MaterialSample materialSample) {
-    if (isMoreThanOne(materialSample.getParentMaterialSample() != null, materialSample.getCollectingEvent() != null, materialSample.getAcquisitionEvent() != null)) {
+    if (materialSample.getParentMaterialSample() != null && materialSample.getCollectingEvent() != null) {
       String errorMessage = getMessage(PARENT_AND_EVENT_ERROR_KEY);
       errors.rejectValue("parentMaterialSample", PARENT_AND_EVENT_ERROR_KEY, errorMessage);
     }
@@ -50,10 +50,6 @@ public class MaterialSampleValidator implements Validator {
       String errorMessage = getMessage(VALID_PARENT_RELATIONSHIP_LOOP);
       errors.rejectValue("parentMaterialSample", VALID_PARENT_RELATIONSHIP_LOOP, errorMessage);
     }
-  }
-  
-  private Boolean isMoreThanOne(boolean b1, boolean b2, boolean b3) {
-    return b1 && b2 || b1 && b3 || b2 && b3;
   }
 
   private String getMessage(String key) {
