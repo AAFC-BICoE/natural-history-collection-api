@@ -146,10 +146,6 @@ public class MaterialSampleDto {
 
   @ShallowReference
   @JsonApiRelation
-  private AcquisitionEventDto acquisitionEvent;
-
-  @ShallowReference
-  @JsonApiRelation
   private ProtocolDto preparationProtocol;
 
   @ShallowReference
