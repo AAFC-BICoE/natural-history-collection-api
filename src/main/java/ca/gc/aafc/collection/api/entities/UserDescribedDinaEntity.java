@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
+
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,6 +54,7 @@ public abstract class UserDescribedDinaEntity implements DinaEntity {
 
   @Type(type = "jsonb")
   @Column(name = "multilingual_description")
+  @Valid
   private MultilingualDescription multilingualDescription;
 
 }
