@@ -746,6 +746,7 @@ extension:
           desc: "Depth is defined as the vertical distance below local surface, e.g.\
         \ For sediment or soil samples depth is measured from sediment or soil surface,\
         \ respectively. Depth can be reported as an interval for subsurface samples"
+      unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "elev"
       name: "elevation"
@@ -755,6 +756,7 @@ extension:
         \ point, most commonly the mean sea level. Elevation is mainly used when referring\
         \ to points on the earth's surface, while altitude is used for points above\
         \ the surface, such as an aircraft in flight or a spacecraft in orbit"
+      unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "cur_land_use"
       name: "current land use"
@@ -888,12 +890,14 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Mean annual temperature"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "season_temp"
       name: "mean seasonal temperature"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Mean seasonal temperature"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "annual_precpt"
       name: "mean annual precipitation"
@@ -902,6 +906,7 @@ extension:
           desc: "The average of all annual precipitation values known, or an estimated\
         \ equivalent value derived by such methods as regional indexes or Isohyetal\
         \ maps."
+      unit: "millimeter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "season_precpt"
       name: "mean seasonal precipitation"
@@ -910,6 +915,7 @@ extension:
           desc: "The average of all seasonal precipitation values known, or an estimated\
         \ equivalent value derived by such methods as regional indexes or Isohyetal\
         \ maps."
+      unit: "millimeter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "link_class_info"
       name: "link to classification information"
@@ -956,6 +962,7 @@ extension:
           desc: "Commonly called 'slope'. The angle between ground surface and a horizontal\
         \ line (in percent). This is the direction that overland water would flow. This\
         \ measure is usually taken with a hand level meter or clinometer"
+      unit: "percentage"
       dinaComponent: "COLLECTING_EVENT"
     - key: "slope_aspect"
       name: "slope aspect"
@@ -965,6 +972,7 @@ extension:
         \ to record the direction you are facing (direction or degrees); e.g., nw or\
         \ 315 degrees. This measure provides an indication of sun and wind exposure\
         \ that will influence soil temperature and evapotranspiration."
+      unit: "degree"
       dinaComponent: "COLLECTING_EVENT"
     - key: "profile_position"
       name: "profile position"
@@ -1057,6 +1065,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measured salinity"
+      unit: "millisiemens per meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "salinity_meth"
       name: "extreme_unusual_properties/salinity method"
@@ -1070,6 +1079,7 @@ extension:
         - lang: en
           desc: "Heavy metals present and concentrationsany drug used by subject and\
         \ the frequency of usage; can include multiple heavy metals and concentrations"
+      unit: "microgram per gram"
       dinaComponent: "COLLECTING_EVENT"
     - key: "heavy_metals_meth"
       name: "extreme_unusual_properties/heavy metals method"
@@ -1082,6 +1092,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Aluminum saturation (esp. For tropical soils)"
+      unit: "percentage"
       dinaComponent: "COLLECTING_EVENT"
     - key: "al_sat_meth"
       name: "extreme_unusual_properties/Al saturation method"

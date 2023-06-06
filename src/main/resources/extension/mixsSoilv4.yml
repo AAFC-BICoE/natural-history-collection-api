@@ -20,7 +20,7 @@ extension:
         \ Webin/Sequin systems to Genbank, ENA and DDBJ. Although this field is\
         \ mandatory, it is meant as a self-test field, therefore it is not necessary\
         \ to include this field in contextual data submitted to databases"
-      dinaComponentnaComponent: "COLLECTING_EVENT"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "investigation_type"
       name: "investigation type"
       multilingualDescription.descriptions:
@@ -446,7 +446,6 @@ extension:
           desc: "Standard operating procedures used in assembly and/or annotation of genomes,\
         \ metagenomes or environmental sequences"
       dinaComponent: "COLLECTING_EVENT"
-    ###
     - key: "alt"
       name: "altitude"
       multilingualDescription.descriptions:

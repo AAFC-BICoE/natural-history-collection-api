@@ -38,6 +38,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "measurement of atmospheric data; can include multiple data"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "bac_prod"
       name: "bacterial production"
       multilingualDescription.descriptions:
@@ -162,6 +163,7 @@ extension:
         - lang: en
           desc: "concentration of dissolved inorganic nitrogen"
       unit: "microgram per liter"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "diss_inorg_phosp"
       name: "dissolved inorganic phosphorus"
       multilingualDescription.descriptions:
@@ -202,6 +204,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "raw or converted fluorescence of water"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "glucosidase_act"
       name: "glucosidase activity"
       multilingualDescription.descriptions:
@@ -317,6 +320,7 @@ extension:
         - lang: en
           desc: "type of perturbation, e.g. chemical administration, physical disturbance, etc.,\
         \ coupled with time that perturbation occurred; can include multiple perturbation types"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "petroleum_hydrocarb"
       name: "petroleum hydrocarbon"
       multilingualDescription.descriptions:
@@ -396,6 +400,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "duration for which sample was stored"
+      dinaComponent: "COLLECTING_EVENT"
     - key: "samp_store_loc"
       name: "sample storage location"
       multilingualDescription.descriptions:
