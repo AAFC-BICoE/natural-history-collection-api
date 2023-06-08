@@ -241,7 +241,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     materialSampleDto.setMaterialSampleChildren(null);
     materialSampleDto.setPreparedBy(null);
     materialSampleDto.setPreparationProtocol(null);
-    materialSampleDto.setAcquisitionEvent(null);
     materialSampleDto.setProjects(null);
     materialSampleDto.setAssemblages(null);
     materialSampleDto.setCollection(null);
