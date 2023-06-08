@@ -6,7 +6,7 @@
 
     <changeSet id="160-Remove_acquisition_event" context="schema-change" author="cgendreau">
 
-        <preConditions onFail="WARN">
+        <preConditions onFail="CONTINUE">
             <rowCount expectedRows="0"
                       tableName="acquisition_event"/>
         </preConditions>
