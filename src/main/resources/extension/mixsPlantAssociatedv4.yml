@@ -11,6 +11,7 @@ extension:
           desc: "information about treatment involving an exposure to varying temperatures;\
         \ should include the temperature, treatment duration, interval and total experimental\
         \ duration; can include different temperature regimens"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "antibiotic_regm"
       name: "antibiotic regimen"
@@ -19,6 +20,7 @@ extension:
           desc: "information about treatment involving antibiotic administration; should include\
         \ the name of antibiotic, amount administered, treatment duration, interval and total\
         \ experimental duration; can include multiple antibiotic regimens"
+      unit: "milligram"
       dinaComponent: "COLLECTING_EVENT"
     - key: "chem_administration"
       name: "chemical administration"
@@ -36,6 +38,7 @@ extension:
           desc: "treatment involving use of mutagens; should include the name of mutagen, amount\
         \ administered, treatment duration, interval and total experimental duration; can include\
         \ multiple mutagen regimens"
+      unit: "milligram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "climate_environment"
       name: "climate environment"
@@ -67,6 +70,7 @@ extension:
           desc: "use of conditions with differing gaseous environments; should include the\
         \ name of gaseous compound, amount administered, treatment duration, interval and\
         \ total experimental duration; can include multiple gaseous environment regimens"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "gravity"
       name: "gravity"
@@ -197,6 +201,7 @@ extension:
         \ humidity; information about treatment involving use of growth hormones; should\
         \ include amount of humidity administered, treatment duration, interval and total\
         \ experimental duration; can include multiple regimens"
+      unit: "gram per cubic meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "mechanical_damage"
       name: "mechanical damage"
@@ -279,6 +284,7 @@ extension:
         \ a particular radiation regimen; should include the radiation type, amount or intensity\
         \ administered, treatment duration, interval and total experimental duration; can include\
         \ multiple radiation regimens"
+      unit: "becquerel"
       dinaComponent: "COLLECTING_EVENT"
     - key: "rainfall_regm"
       name: "rainfall regimen"
@@ -286,6 +292,7 @@ extension:
         - lang: en
           desc: "information about treatment involving an exposure to a given amount of rainfall;\
         \ can include multiple regimens"
+      unit: "millimeter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "salt_regm"
       name: "salt regimen"
@@ -318,6 +325,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "temperature at which sample was stored, e.g. -80 degree Celsius"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "samp_vol_we_dna_ext"
       name: "sample volume or weight for DNA extraction"
@@ -344,6 +352,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "temperature of the sample at time of sampling"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "tiss_cult_growth_med"
       name: "tissue culture growth media"
@@ -357,6 +366,7 @@ extension:
         - lang: en
           desc: "information about treatment involving an exposure to water with varying degree\
         \ of temperature; can include multiple regimens"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "watering_regm"
       name: "watering regimen"

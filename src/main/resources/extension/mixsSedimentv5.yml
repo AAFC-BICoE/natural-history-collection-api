@@ -60,6 +60,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Please refer to the definitions of depth in the environmental packages"
+      unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "alt_elev"
       name: "geographic location (altitude/elevation)"
@@ -755,6 +756,7 @@ extension:
         \ point, most commonly the mean sea level. Elevation is mainly used when referring\
         \ to points on the earth's surface, while altitude is used for points above\
         \ the surface, such as an aircraft in flight or a spacecraft in orbit"
+      unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "alkalinity"
       name: "alkalinity"
@@ -768,12 +770,14 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of alkyl diethers"
+      unit: "mole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "aminopept_act"
       name: "aminopeptidase activity"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measurement of aminopeptidase activity"
+      unit: "mole per liter per hour"
       dinaComponent: "COLLECTING_EVENT"
     - key: "ammonium"
       name: "ammonium"
@@ -786,6 +790,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measurement of bacterial carbon production"
+      unit: "nanogram per hour"
       dinaComponent: "COLLECTING_EVENT"
     - key: "biomass"
       name: "biomass"
@@ -805,6 +810,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of bromide"
+      unit: "parts per million"
       dinaComponent: "COLLECTING_EVENT"
     - key: "calcium"
       name: "calcium"
@@ -852,6 +858,7 @@ extension:
         - lang: en
           desc: "Concentration of diether lipids; can include multiple types of diether\
         \ lipids"
+      unit: "nanogram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "diss_carb_dioxide"
       name: "dissolved carbon dioxide"
@@ -865,6 +872,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of dissolved hydrogen"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "diss_inorg_carb"
       name: "dissolved inorganic carbon"
@@ -898,6 +906,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measurement of glucosidase activity"
+      unit: "mol per liter per hour"
       dinaComponent: "COLLECTING_EVENT"
     - key: "magnesium"
       name: "magnesium"
@@ -910,12 +919,14 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measurement of mean friction velocity"
+      unit: "meter per second"
       dinaComponent: "COLLECTING_EVENT"
     - key: "mean_peak_frict_vel"
       name: "mean peak friction velocity"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measurement of mean peak friction velocity"
+      unit: "meter per second"
       dinaComponent: "COLLECTING_EVENT"
     - key: "methane"
       name: "methane"
@@ -935,6 +946,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of n-alkanes; can include multiple n-alkanes"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "nitrate"
       name: "nitrate"
@@ -953,24 +965,28 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of nitrogen (total)"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "org_carb"
       name: "organic carbon"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of organic carbon"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "org_matter"
       name: "organic matter"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of organic matter"
+      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "org_nitro"
       name: "organic nitrogen"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of organic nitrogen"
+      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "organism_count"
       name: "organism count"
@@ -1007,6 +1023,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of particulate organic carbon"
+      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "perturbation"
       name: "perturbation"
@@ -1022,18 +1039,21 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of petroleum hydrocarbon"
+      unit: "micromole gram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "phaeopigments"
       name: "phaeopigments"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of phaeopigments; can include multiple phaeopigments"
+      unit: "milligram per cubic meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "phosphate"
       name: "phosphate"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of phosphate"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "phosplipid_fatt_acid"
       name: "phospholipid fatty acid"
@@ -1047,6 +1067,7 @@ extension:
         - lang: en
           desc: "Porosity of deposited sediment is volume of voids divided by the\
         \ total volume of sample"
+      unit: "percentage"
       dinaComponent: "COLLECTING_EVENT"
     - key: "potassium"
       name: "potassium"
@@ -1059,6 +1080,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Pressure to which the sample is subject to, in atmospheres"
+      unit: "atmosphere"
       dinaComponent: "COLLECTING_EVENT"
     - key: "redox_potential"
       name: "redox potential"
@@ -1066,6 +1088,7 @@ extension:
         - lang: en
           desc: "Redox potential, measured relative to a hydrogen cell, indicating\
         \ oxidation or reduction potential"
+      unit: "millivolt"
       dinaComponent: "COLLECTING_EVENT"
     - key: "salinity"
       name: "salinity"
@@ -1095,6 +1118,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Temperature at which sample was stored, e.g. -80 degree Celsius"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "samp_vol_we_dna_ext"
       name: "sample volume or weight for DNA extraction"
@@ -1114,6 +1138,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of silicate"
+      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "sodium"
       name: "sodium"
@@ -1138,6 +1163,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Temperature of the sample at the time of sampling"
+      unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
     - key: "tidal_stage"
       name: "tidal stage"
@@ -1150,12 +1176,14 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Total carbon content"
+      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "tot_depth_water_col"
       name: "total depth of water column"
       multilingualDescription.descriptions:
         - lang: en
           desc: "Measurement of total depth of water column"
+      unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "tot_nitro_content"
       name: "total nitrogen content"
