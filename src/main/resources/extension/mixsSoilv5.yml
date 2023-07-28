@@ -55,19 +55,6 @@ extension:
           desc: "The geographical origin of the sample as defined by latitude and\
         \ longitude. The values should be reported in decimal degrees and in WGS84 system"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "depth"
-      name: "geographic location (depth)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Please refer to the definitions of depth in the environmental packages"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "alt_elev"
-      name: "geographic location (altitude/elevation)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Please refer to the definitions of either altitude or elevation in\
-        \ the environmental packages"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "geo_loc_name"
       name: "geographic location (country and/or sea,region)"
       multilingualDescription.descriptions:
@@ -748,6 +735,7 @@ extension:
         \ respectively. Depth can be reported as an interval for subsurface samples"
       unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "elev"
       name: "elevation"
       multilingualDescription.descriptions:

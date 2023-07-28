@@ -11,6 +11,7 @@ import ca.gc.aafc.collection.api.entities.DinaComponent;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
+import ca.gc.aafc.dina.validation.TypedVocabularyElementValidator;
 
 import lombok.NonNull;
 
@@ -18,9 +19,11 @@ public class BaseExtensionValueValidator implements Validator {
 
   public static final String NO_MATCH_KEY_VERSION = "validation.constraint.violation.noMatchKeyVersion";
   public static final String NO_MATCH_FIELD_KEY = "validation.constraint.violation.noMatchFieldKey";
-  public static final String NO_MATCH_ACCEPTED_VALUE = "validation.constraint.violation.noMatchAcceptedValue";
   public static final String INCORRECT_DINA_COMPONENT = "validation.constraint.violation.incorrectDinaComponent";
   public static final String BLANK_VALUE = "validation.constraint.violation.valueBlank";
+
+  public static final String NO_MATCH_ACCEPTED_VALUE_KEY = "validation.fieldExtension.violation.noMatchAcceptedValue";
+  public static final String INVALID_VALUE_KEY = "validation.fieldExtension.violation.invalidValue";
 
   private final DinaComponent componentType;
   private final MessageSource messageSource;
@@ -77,7 +80,7 @@ public class BaseExtensionValueValidator implements Validator {
 
         // only run the last check if there is no errors
         if (!errors.hasErrors()) {
-          checkExtensionConfigurationAcceptedValues(errors, extensionValue,
+          validateValue(errors, extensionValue,
               extension.getFieldByKey(extensionValue.getExtFieldKey()));
         }
         return;
@@ -139,24 +142,36 @@ public class BaseExtensionValueValidator implements Validator {
   }
 
   /**
-   * Checks if the field contains any accepted values. If it does, the extension value provided must
-   * match one of those accepted values.
+   * Checks if the value assigned to the field is valid.
+   * Also checks accepted values if required.
    * 
    * @param errors if any validation problems occur, errors will be reported here.
    * @param extensionValue extension value being validated against.
    * @param field the field that was matched with the term.
    */
-  private void checkExtensionConfigurationAcceptedValues(Errors errors, FieldExtensionValue extensionValue, Field field) {
+  private void validateValue(Errors errors, FieldExtensionValue extensionValue, Field field) {
+
+    // validate the value assigned against the field definition (unless there is no VocabularyElementType)
+    if(field.getVocabularyElementType() != null && !TypedVocabularyElementValidator.isValidElement(field, extensionValue.getValue())) {
+      String errorMessage = getMessageForKey(
+        INVALID_VALUE_KEY,
+        extensionValue.getValue(),
+        extensionValue.getExtFieldKey());
+      errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, INVALID_VALUE_KEY, errorMessage);
+      //we don't need to continue
+      return;
+    }
+
     // Check if the field has accepted values, if it does, check that the value provided matches a accepted value.
     if (field.getAcceptedValues() == null || field.isAcceptedValues(extensionValue.getValue())) {
       return;
     }
 
     String errorMessage = getMessageForKey(
-      NO_MATCH_ACCEPTED_VALUE, 
+      NO_MATCH_ACCEPTED_VALUE_KEY,
       extensionValue.getValue(),
       String.join(", ", field.getAcceptedValues()));
-    errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_ACCEPTED_VALUE, errorMessage);
+    errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_ACCEPTED_VALUE_KEY, errorMessage);
   }
 
   private String getMessageForKey(String key, Object... objects) {

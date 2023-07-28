@@ -129,12 +129,27 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
+  void validate_IncorrectValueProvided_HasErrors() {
+    FieldExtensionValue extensionValue = newCollectingEventExtensionValue();
+    extensionValue.setExtFieldKey("depth");
+    extensionValue.setValue("abc");
+    Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
+
+    String expectedErrorMessage = getExpectedErrorMessage(
+      CollectingEventExtensionValueValidator.INVALID_VALUE_KEY, "abc", "depth");
+
+    collectingEventValidator.validate(extensionValue, errors);
+    Assertions.assertEquals(1, errors.getAllErrors().size());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
   void validate_NoMatchAcceptedValues_HasErrors() {
     FieldExtensionValue extensionValue = newRestrictionExtensionValue();
     extensionValue.setValue(NON_MATCH);
 
     String expectedErrorMessage = getExpectedErrorMessage(
-      RestrictionExtensionValueValidator.NO_MATCH_ACCEPTED_VALUE, 
+      RestrictionExtensionValueValidator.NO_MATCH_ACCEPTED_VALUE_KEY,
       extensionValue.getValue(), 
       String.join(", ", configuration.getExtension().get(RESTRICTION_KEY).getFieldByKey(RESTRICTION_FIELD_KEY).getAcceptedValues()));
 
