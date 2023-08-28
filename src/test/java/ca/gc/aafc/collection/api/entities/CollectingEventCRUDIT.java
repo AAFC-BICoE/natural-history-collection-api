@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import lombok.SneakyThrows;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory.TEST_COUNTRY;
+import static ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory.TEST_PROVINCE;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
@@ -49,16 +52,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   private static final BigDecimal dwcMinimumElevationInMeters = new BigDecimal("11.11");
   private static final BigDecimal dwcMinimumDepthInMeters = new BigDecimal("10.32");
 
-  private static final GeographicPlaceNameSourceDetail.Country TEST_COUNTRY =
-      GeographicPlaceNameSourceDetail.Country.builder().code("Al").name("Atlantis")
-          .build();
-  private static final GeographicPlaceNameSourceDetail.SourceAdministrativeLevel TEST_PROVINCE =
-      GeographicPlaceNameSourceDetail.SourceAdministrativeLevel.builder().id("A32F")
-          .element("N").placeType("province").name("Island of Pharo's")
-          .build();
-
-  private static final CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource = CollectingEvent.GeographicPlaceNameSource.OSM;
-
   public static final LocalDateTime TEST_DATE_TIME = LocalDateTime.of(2000, 2, 3, 0, 0);
   private static GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
   private CollectingEvent collectingEvent;
@@ -67,11 +60,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
   @SneakyThrows
   @BeforeAll
   static void beforeAll() {
-    geographicPlaceNameSourceDetail = GeographicPlaceNameSourceDetail
-        .builder()
-        .country(TEST_COUNTRY)
-        .stateProvince(TEST_PROVINCE)
-        .sourceUrl("https://github.com/orgs/AAFC-BICoE/dashboard").build();
+    geographicPlaceNameSourceDetail = CollectingEventTestFixture.newGeographicPlaceNameSourceDetail();
   }
 
   @BeforeEach
@@ -100,7 +89,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
       .habitat(habitat)
       .dwcCountryCode(dwcCountryCode)
       .dwcStateProvince(dwcStateProvince)
-      .geographicPlaceNameSource(geographicPlaceNameSource)
+      .geographicPlaceNameSource(CollectingEventFactory.GEOGRAPHIC_PLACE_NAME_SOURCE)
       .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
       .dwcMinimumElevationInMeters(dwcMinimumElevationInMeters)
       .dwcMinimumDepthInMeters(dwcMinimumDepthInMeters)
@@ -291,7 +280,7 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     assertEquals(dwcCountry, fetchedCollectingEvent.getDwcCountry());
     assertEquals(dwcCountryCode, fetchedCollectingEvent.getDwcCountryCode());
     assertEquals(dwcStateProvince, fetchedCollectingEvent.getDwcStateProvince());
-    assertEquals(geographicPlaceNameSource, fetchedCollectingEvent.getGeographicPlaceNameSource());
+    assertEquals(CollectingEventFactory.GEOGRAPHIC_PLACE_NAME_SOURCE, fetchedCollectingEvent.getGeographicPlaceNameSource());
     assertEquals(
       geographicPlaceNameSourceDetail.getCountry(),
       fetchedCollectingEvent.getGeographicPlaceNameSourceDetail().getCountry());
