@@ -87,9 +87,13 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     if (entity.getGeographicPlaceNameSourceDetail() != null) {
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
+
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
       entity.getGeoReferenceAssertions().forEach(geo -> geo.setCreatedOn(OffsetDateTime.now()));
     }
+
+    mapGeographicPlaceNameFromSource(entity);
+
     entity.getPrimaryAssertion().ifPresentOrElse(//Set event Geom from primary assertion
       geo -> entity.setEventGeom(mapAssertionToGeometry(geo)),
       () -> entity.setEventGeom(null));
@@ -131,6 +135,30 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     values.entrySet().removeIf(
       entry -> StringUtils.isBlank(entry.getValue())
     );
+  }
+
+  /**
+   * Map GeographicPlaceNameSourceDetail to dwcCountryCode, dwcCountry and dwcStateProvince if required.
+   * If a GeographicPlaceNameSource is specified, we must take the data from there. Otherwise, the data should be provided
+   * directly in dwcCountryCode, dwcCountry and dwcStateProvince without any GeographicPlaceNameSource.
+   * @param entity
+   */
+  private static void mapGeographicPlaceNameFromSource(CollectingEvent entity) {
+
+    if (entity.getGeographicPlaceNameSource() == null) {
+      return;
+    }
+
+    var country = entity.getGeographicPlaceNameSourceDetail().getCountry();
+    if( country != null) {
+      entity.setDwcCountryCode(country.getCode());
+      entity.setDwcCountry(country.getName());
+    }
+
+    var stateProvince = entity.getGeographicPlaceNameSourceDetail().getStateProvince();
+    if(stateProvince != null) {
+      entity.setDwcStateProvince(stateProvince.getName());
+    }
   }
 
   private static Point<G2D> mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
