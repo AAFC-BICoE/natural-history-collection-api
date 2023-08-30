@@ -48,13 +48,6 @@ extension:
         \ please see http://purl.bioontology.org/ontology/EFO; for a browser of OBI\
         \ (v 2013-10-25) terms please see http://purl.bioontology.org/ontology/OBI"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "lat_lon"
-      name: "geographic location (latitude and longitude)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "The geographical origin of the sample as defined by latitude and\
-        \ longitude. The values should be reported in decimal degrees and in WGS84 system"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "depth"
       name: "geographic location (depth)"
       multilingualDescription.descriptions:
@@ -76,16 +69,6 @@ extension:
         \ sea name followed by specific region name. Country or sea names should be\
         \ chosen from the INSDC country list (http://insdc.org/country.html), or the\
         \ GAZ ontology (v 1.512) (http://purl.bioontology.org/ontology/GAZ)"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "collection_date"
-      name: "collection date"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "The time of sampling, either as an instance (single point in time)\
-        \ or interval. In case no exact time is available, the date/time can be right\
-        \ truncated i.e. all of these are valid times: 2008-01-23T19:23:10+00:00;\
-        \ 2008-01-23T19:23:10; 2008-01-23; 2008-01; 2008; Except: 2008-01; 2008 all\
-        \ are ISO8601 compliant"
       dinaComponent: "COLLECTING_EVENT"
     - key: "env_biome"
       name: "environment (biome)"
