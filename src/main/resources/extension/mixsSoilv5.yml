@@ -48,13 +48,6 @@ extension:
         \ (OBI). For a browser of EFO (v 2.95) terms, please see http://purl.bioontology.org/ontology/EFO;\
         \ for a browser of OBI (v 2018-02-12) terms please see http://purl.bioontology.org/ontology/OBI"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "lat_lon"
-      name: "geographic location (latitude and longitude)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "The geographical origin of the sample as defined by latitude and\
-        \ longitude. The values should be reported in decimal degrees and in WGS84 system"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "geo_loc_name"
       name: "geographic location (country and/or sea,region)"
       multilingualDescription.descriptions:

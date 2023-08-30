@@ -1010,6 +1010,7 @@ extension:
           desc: "Ph measurement of the sample, or liquid portion of sample, or aqueous\
         \ phase of the fluid"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "particle_class"
       name: "particle classification"
       multilingualDescription.descriptions:
