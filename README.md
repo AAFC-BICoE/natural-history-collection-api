@@ -3,7 +3,7 @@
 AAFC DINA Natural History Collection module implementation.
 
 Features :
- * Implements DINA collection [specification](https://dina-web.github.io/object-store-specs/)
+ * Implements DINA collection [specification](https://dina-web.github.io/collection-specs/)
  * Aligns with [Darwin Core](https://dwc.tdwg.org/terms/) standard
  * Supports field extensions based on [MixS](https://github.com/GenomicsStandardsConsortium/mixs) specification
  * Optional Message Queue producer for integration (e.g. search index)
