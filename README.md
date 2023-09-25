@@ -2,7 +2,14 @@
 
 AAFC DINA Natural History Collection module implementation.
 
-See DINA Collection module OpenAPI [specifications](https://dina-web.github.io/collection-specs/).
+Features :
+ * Implements DINA collection [specification](https://dina-web.github.io/object-store-specs/)
+ * Aligns with [Darwin Core](https://dwc.tdwg.org/terms/) standard
+ * Supports field extensions based on [MixS](https://github.com/GenomicsStandardsConsortium/mixs) specification
+ * Optional Message Queue producer for integration (e.g. search index)
+
+## Container Image
+The Docker Image is available on [DockerHub](https://hub.docker.com/r/aafcbicoe/natural-history-collection-api/tags).
 
 ## Required
 
