@@ -1,12 +1,15 @@
 package ca.gc.aafc.collection.api.repository;
 
+import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.UUID;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.access.AccessDeniedException;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
@@ -48,5 +51,13 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
     assertNotNull(mssDto.getEffectiveDeterminations());
     Assertions.assertEquals(1, mssDto.getEffectiveDeterminations().size());
   }
+
+  @Test
+  public void onMaterialSample_notFound_repoFindOneReturnRightSummary() {
+    Assertions.assertThrows(ResourceNotFoundException.class, () ->
+      materialSampleSummaryRepository.findOne(UUID.randomUUID(), new QuerySpec(
+        MaterialSampleSummaryDto.class)));
+  }
+
 
 }
