@@ -21,3 +21,8 @@ logging:
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 dev-user:
   enabled: false
+  groupRole :
+    aafc :
+      - user
+    bicoe :
+      - read-only
