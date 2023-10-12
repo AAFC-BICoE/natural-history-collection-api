@@ -165,4 +165,6 @@
   <include file="db/changelog/migrations/158-Add_material_sample_summary_view.xml"/>
   <include file="db/changelog/migrations/159-Add_unit_to_managed_attribute.xml"/>
   <include file="db/changelog/migrations/160-Remove_acquisition_event.xml"/>
+  <include file="db/changelog/migrations/161-Increase_organism_sex_field_length.xml"/>
+
 </databaseChangeLog>

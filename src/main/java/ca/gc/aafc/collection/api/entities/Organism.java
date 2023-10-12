@@ -58,7 +58,7 @@ public class Organism implements DinaEntity {
   @Size(max = 50)
   private String lifeStage;
 
-  @Size(max = 25)
+  @Size(max = 256)
   private String sex;
 
   @Size(max = 1000)
