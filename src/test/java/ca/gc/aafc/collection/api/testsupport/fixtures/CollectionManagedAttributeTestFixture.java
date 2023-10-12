@@ -14,13 +14,12 @@ public class CollectionManagedAttributeTestFixture {
     collectionManagedAttributeDto.setName(RandomStringUtils.randomAlphabetic(5));
     collectionManagedAttributeDto.setGroup(GROUP);
     collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.INTEGER);
-    collectionManagedAttributeDto.setAcceptedValues(new String[]{"value"});
+    collectionManagedAttributeDto.setAcceptedValues(new String[]{"1", "2"});
+    collectionManagedAttributeDto.setUnit("cm");
     collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     collectionManagedAttributeDto.setCreatedBy("created by");   
     collectionManagedAttributeDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     return collectionManagedAttributeDto;
   }
-
-
 
 }
