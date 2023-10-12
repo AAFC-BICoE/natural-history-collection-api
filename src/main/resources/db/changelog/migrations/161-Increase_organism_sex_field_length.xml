@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="161-Increase_organism_sex_field_length.xml" context="schema-change" author="jschmidt">
+    <changeSet id="161-Increase_organism_sex_field_length" context="schema-change" author="jschmidt">
         <modifyDataType tableName="organism" columnName="sex" newDataType="varchar(256)" />
     </changeSet>
 </databaseChangeLog>
