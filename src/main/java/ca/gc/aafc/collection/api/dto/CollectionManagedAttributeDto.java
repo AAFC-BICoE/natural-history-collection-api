@@ -30,6 +30,7 @@ public class CollectionManagedAttributeDto {
   private String name;
   private String key;
   private TypedVocabularyElement.VocabularyElementType vocabularyElementType;
+  private String unit;
   private CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent;
   private String[] acceptedValues;
   private OffsetDateTime createdOn;
