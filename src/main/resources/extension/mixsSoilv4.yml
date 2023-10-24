@@ -671,6 +671,8 @@ extension:
           desc: "Definition for soil: total organic carbon content of the soil, definition\
         \ otherwise: total organic carbon content"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "percentage"
     - key: "tot_org_c_meth"
       name: "total organic carbon method"
       multilingualDescription.descriptions:
@@ -683,6 +685,8 @@ extension:
         - lang: en
           desc: "total nitrogen content of the sample"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "percentage"
     - key: "tot_n_meth"
       name: "total nitrogen method"
       multilingualDescription.descriptions:
