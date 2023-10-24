@@ -31,8 +31,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of ammonium"
-      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "bacteria_carb_prod"
       name: "bacterial carbon production"
       multilingualDescription.descriptions:
@@ -66,6 +67,8 @@ extension:
         - lang: en
           desc: "concentration of calcium"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "carb_nitro_ratio"
       name: "carbon/nitrogen ratio"
       multilingualDescription.descriptions:
@@ -201,8 +204,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of nitrate"
-      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "nitrite"
       name: "nitrite"
       multilingualDescription.descriptions:
@@ -321,8 +325,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of potassium "
-      unit: "parts per million"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "pressure"
       name: "pressure"
       multilingualDescription.descriptions:
@@ -388,6 +393,8 @@ extension:
         - lang: en
           desc: "sodium concentration"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "sulfate"
       name: "sulfate"
       multilingualDescription.descriptions:

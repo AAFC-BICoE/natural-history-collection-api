@@ -4,12 +4,6 @@ extension:
     key: "mixs_sediment_v5"
     version: "v5"
     fields:
-    - key: "Structured comment name"
-      name: "Item"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Definition"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "submitted_to_insdc"
       name: "submitted to insdc"
       multilingualDescription.descriptions:
@@ -724,24 +718,6 @@ extension:
           desc: "Standard operating procedures used in assembly and/or annotation\
         \ of genomes, metagenomes or environmental sequences"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "depth"
-      name: "depth"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Depth is defined as the vertical distance below local surface, e.g.\
-        \ For sediment or soil samples depth is measured from sediment or soil surface,\
-        \ respectively. Depth can be reported as an interval for subsurface samples"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "elev"
-      name: "elevation"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Elevation of the sampling site is its height above a fixed reference\
-        \ point, most commonly the mean sea level. Elevation is mainly used when referring\
-        \ to points on the earth's surface, while altitude is used for points above\
-        \ the surface, such as an aircraft in flight or a spacecraft in orbit"
-      unit: "meter"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "alkalinity"
       name: "alkalinity"
       multilingualDescription.descriptions:
@@ -769,6 +745,8 @@ extension:
         - lang: en
           desc: "Concentration of ammonium in the sample"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "bacteria_carb_prod"
       name: "bacterial carbon production"
       multilingualDescription.descriptions:
@@ -802,6 +780,8 @@ extension:
         - lang: en
           desc: "Concentration of calcium in the sample"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "carb_nitro_ratio"
       name: "carbon/nitrogen ratio"
       multilingualDescription.descriptions:
@@ -938,6 +918,8 @@ extension:
         - lang: en
           desc: "Concentration of nitrate in the sample"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "nitrite"
       name: "nitrite"
       multilingualDescription.descriptions:
@@ -1060,6 +1042,8 @@ extension:
         - lang: en
           desc: "Concentration of potassium in the sample"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "pressure"
       name: "pressure"
       multilingualDescription.descriptions:
@@ -1131,6 +1115,8 @@ extension:
         - lang: en
           desc: "Sodium concentration in the sample"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "sulfate"
       name: "sulfate"
       multilingualDescription.descriptions:
