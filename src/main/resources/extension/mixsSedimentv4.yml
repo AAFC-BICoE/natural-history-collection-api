@@ -233,7 +233,8 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of organic matter"
-      unit: "microgram per liter"
+      unit: "percentage"
+      vocabularyElementType: "DECIMAL"
       dinaComponent: "COLLECTING_EVENT"
     - key: "org_nitro"
       name: "organic nitrogen"
@@ -425,8 +426,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "total carbon content"
-      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "percentage"
     - key: "tot_nitro"
       name: "total nitrogen"
       multilingualDescription.descriptions:

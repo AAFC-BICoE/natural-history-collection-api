@@ -4,12 +4,6 @@ extension:
     key: "mixs_soil_v4"
     version: "v4"
     fields:
-    - key: "Structured comment name"
-      name: "Item"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Definition"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "submitted_to_insdc"
       name: "submitted to insdc"
       multilingualDescription.descriptions:
@@ -47,19 +41,6 @@ extension:
         \ for Biomedical Investigations (OBI). For a browser of EFO (v 2.43) terms,\
         \ please see http://purl.bioontology.org/ontology/EFO; for a browser of OBI\
         \ (v 2013-10-25) terms please see http://purl.bioontology.org/ontology/OBI"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "depth"
-      name: "geographic location (depth)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Please refer to the definitions of depth in the environmental packages"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "alt_elev"
-      name: "geographic location (altitude/elevation)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Please refer to the definitions of either altitude or elevation in\
-        \ the environmental"
       dinaComponent: "COLLECTING_EVENT"
     - key: "geo_loc_name"
       name: "geographic location (country and/or sea,region)"

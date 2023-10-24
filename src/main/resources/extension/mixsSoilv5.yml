@@ -4,12 +4,6 @@ extension:
     key: "mixs_soil_v5"
     version: "v5"
     fields:
-    - key: "Structured comment name"
-      name: "Item"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Definition"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "submitted_to_insdc"
       name: "submitted to insdc"
       multilingualDescription.descriptions:

@@ -49,13 +49,6 @@ extension:
           desc: "Please refer to the definitions of depth in the environmental packages"
       unit: "meter"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "alt_elev"
-      name: "geographic location (altitude/elevation)"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "Please refer to the definitions of either altitude or elevation in\
-        \ the environmental packages"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "geo_loc_name"
       name: "geographic location (country and/or sea,region)"
       multilingualDescription.descriptions:
@@ -945,8 +938,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Concentration of organic matter"
-      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "percentage"
     - key: "org_nitro"
       name: "organic nitrogen"
       multilingualDescription.descriptions:
@@ -1147,8 +1141,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Total carbon content"
-      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "percentage"
     - key: "tot_depth_water_col"
       name: "total depth of water column"
       multilingualDescription.descriptions:
