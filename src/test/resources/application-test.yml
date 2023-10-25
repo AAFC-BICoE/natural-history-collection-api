@@ -14,6 +14,7 @@ embedded.postgresql:
   init-script-file: init-collection-module.sql
   database: collection_test
   schema: collection
+
 logging:
   level:
     org.springframework: ERROR
@@ -21,3 +22,8 @@ logging:
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 dev-user:
   enabled: false
+  groupRole:
+    aafc:
+      - user
+    bicoe:
+      - read-only
