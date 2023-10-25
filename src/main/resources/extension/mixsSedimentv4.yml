@@ -88,7 +88,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of chloride"
-      unit: "milligram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "chlorophyll"
       name: "chlorophyll"
@@ -129,7 +128,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "dissolved inorganic carbon concentration"
-      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "diss_org_carb"
       name: "dissolved organic carbon"
@@ -165,6 +163,8 @@ extension:
         - lang: en
           desc: "concentration of magnesium"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "ppm"
     - key: "mean_frict_vel"
       name: "mean friction velocity"
       multilingualDescription.descriptions:
@@ -197,7 +197,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of n-alkanes; can include multiple n-alkanes"
-      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "nitrate"
       name: "nitrate"
@@ -212,7 +211,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of nitrite"
-      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "nitro"
       name: "nitrogen"
@@ -226,8 +224,9 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of organic carbon"
-      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
+      unit: "percentage"
+      vocabularyElementType: "DECIMAL"
     - key: "org_matter"
       name: "organic matter"
       multilingualDescription.descriptions:
@@ -241,7 +240,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of organic nitrogen"
-      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "organism_count"
       name: "organism count"
@@ -261,7 +259,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of particulate organic carbon"
-      unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "particle_class"
       name: "particle classification"
@@ -305,7 +302,6 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "concentration of phosphate"
-      unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
     - key: "phosplipid_fatt_acid"
       name: "phospholipid fatty acid"
