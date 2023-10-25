@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="162-Increase_name_size_controlled_vocabulary.xml" context="schema-change" author="jschmidt">
+    <changeSet id="162-Increase_name_size_controlled_vocabulary" context="schema-change" author="jschmidt">
         <modifyDataType tableName="collection_method" columnName="name" newDataType="varchar(512)" />
         <modifyDataType tableName="preparation_method" columnName="name" newDataType="varchar(512)" />
         <modifyDataType tableName="preparation_type" columnName="name" newDataType="varchar(512)" />
