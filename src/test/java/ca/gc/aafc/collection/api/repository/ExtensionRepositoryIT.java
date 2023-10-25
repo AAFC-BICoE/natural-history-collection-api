@@ -40,12 +40,10 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
       listOfExtension,
       Matchers.containsInAnyOrder(
         collectionExtensionConfiguration.getExtension().get("mixs_soil_v5"),
-        collectionExtensionConfiguration.getExtension().get("mixs_sediment_v5"),
         collectionExtensionConfiguration.getExtension().get("mixs_soil_v4"),
         collectionExtensionConfiguration.getExtension().get("mixs_sediment_v4"),
         collectionExtensionConfiguration.getExtension().get("mixs_plant_associated_v4"),
         collectionExtensionConfiguration.getExtension().get("mixs_water_v4"),
-        collectionExtensionConfiguration.getExtension().get("mixs_microbial_v4"),
         collectionExtensionConfiguration.getExtension().get("cfia_ppc"),
         collectionExtensionConfiguration.getExtension().get("phac_human_rg"),
         collectionExtensionConfiguration.getExtension().get("phac_animal_rg"),
