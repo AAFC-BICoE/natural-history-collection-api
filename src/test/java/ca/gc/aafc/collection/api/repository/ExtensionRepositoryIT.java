@@ -29,7 +29,7 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_ExtensionConfiguration() {
     List<ExtensionDto> listOfExtensionDtos =
       extensionRepository.findAll(new QuerySpec(ExtensionDto.class));
-    assertEquals(12, listOfExtensionDtos.size());
+    assertEquals(10, listOfExtensionDtos.size());
 
     List<Extension> listOfExtension = new ArrayList<>();
     for (ExtensionDto extensionDto : listOfExtensionDtos) {
