@@ -9,17 +9,21 @@ public class FieldExtensionValueTestFixture {
 
   public static final String GROUP = "dina";
 
+  public static final String FIELD_KEY = "tot_org_carb";
+
+  public static final String EXT_NAME = "MIxS Soil v4";
+  public static final String EXT_KEY = "mixs_soil_v4";
+
+  public static final String FIELD_EXTENSION_KEY = EXT_KEY + "." + FIELD_KEY;
+
   public static FieldExtensionValueDto newFieldExtensionValueDto() {
-    String id = "mixs_microbial_v4.alkyl_diethers";
-    String extensionName = "MIxS Microbial v4";
-    String extensionKey = "mixs_microbial_v4";
-    Field field = Field.builder().key("alkyl_diethers")
-      .name("alkyl diethers").dinaComponent("COLLECTING_EVENT")
+    Field field = Field.builder().key(FIELD_KEY)
+      .name("total organic carbon").dinaComponent("COLLECTING_EVENT")
       .multilingualDescription(new MultilingualDescription(List.of(MultilingualDescription
-        .MultilingualPair.of("en", "concentration of alkyl diethers "))))
+        .MultilingualPair.of("en", "total organic carbon content"))))
       .build();
 
-    return new FieldExtensionValueDto(id, extensionName, extensionKey, field);
+    return new FieldExtensionValueDto(FIELD_EXTENSION_KEY, EXT_NAME, EXT_KEY, field);
   }
 
 }

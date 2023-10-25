@@ -32,12 +32,12 @@ public class ExtensionConfigurationTest extends CollectionModuleBaseIT {
 
   @Test
   void getMixSSediment() {
-    Extension mixsSediment = extensionConfiguration.getExtension().get("mixs_sediment_v5");
+    Extension mixsSediment = extensionConfiguration.getExtension().get("mixs_sediment_v4");
 
     assertNotNull(mixsSediment);
-    assertEquals("MIxS Sediment v5", mixsSediment.getName());
-    assertEquals("mixs_sediment_v5", mixsSediment.getKey());
-    assertEquals("v5", mixsSediment.getVersion());
+    assertEquals("MIxS Sediment v4", mixsSediment.getName());
+    assertEquals("mixs_sediment_v4", mixsSediment.getKey());
+    assertEquals("v4", mixsSediment.getVersion());
   }
 
   @Test
