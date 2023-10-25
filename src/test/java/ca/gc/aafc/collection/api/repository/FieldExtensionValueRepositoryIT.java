@@ -23,7 +23,7 @@ public class FieldExtensionValueRepositoryIT extends CollectionModuleBaseIT {
   void findOneByKey_whenKeyProvided_fieldExtensionValueFetched() {
     FieldExtensionValueDto fieldExtensionValueDto = FieldExtensionValueTestFixture.newFieldExtensionValueDto();
     QuerySpec querySpec = new QuerySpec(FieldExtensionValueDto.class);
-    FieldExtensionValueDto fetchedFieldExtensionValue = repo.findOne("mixs_microbial_v4.alkyl_diethers", querySpec);
+    FieldExtensionValueDto fetchedFieldExtensionValue = repo.findOne(FieldExtensionValueTestFixture.FIELD_EXTENSION_KEY, querySpec);
     assertEquals(fetchedFieldExtensionValue.getExtensionKey(), fieldExtensionValueDto.getExtensionKey());
     assertEquals(fetchedFieldExtensionValue.getExtensionName(), fieldExtensionValueDto.getExtensionName());
     assertEquals(fetchedFieldExtensionValue.getField().getName(), fieldExtensionValueDto.getField().getName());
