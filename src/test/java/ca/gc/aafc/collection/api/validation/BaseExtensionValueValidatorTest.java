@@ -19,7 +19,7 @@ import javax.inject.Inject;
 
 public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   
-  private static final String COLLECTING_EVENT_KEY = "mixs_soil_v5";
+  private static final String COLLECTING_EVENT_KEY = "mixs_soil_v4";
   private static final String COLLECTING_EVENT_FIELD_KEY = "experimental_factor";
   private static final String COLLECTING_EVENT_VALUE = "definition of experimentWal factor";
 
@@ -131,12 +131,12 @@ public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   @Test
   void validate_IncorrectValueProvided_HasErrors() {
     FieldExtensionValue extensionValue = newCollectingEventExtensionValue();
-    extensionValue.setExtFieldKey("depth");
+    extensionValue.setExtFieldKey("water_content");
     extensionValue.setValue("abc");
     Errors errors = ValidationErrorsHelper.newErrorsObject(extensionValue.getExtKey(), extensionValue);
 
     String expectedErrorMessage = getExpectedErrorMessage(
-      CollectingEventExtensionValueValidator.INVALID_VALUE_KEY, "abc", "depth");
+      CollectingEventExtensionValueValidator.INVALID_VALUE_KEY, "abc", "water_content");
 
     collectingEventValidator.validate(extensionValue, errors);
     Assertions.assertEquals(1, errors.getAllErrors().size());

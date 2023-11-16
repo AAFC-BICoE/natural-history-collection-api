@@ -410,30 +410,6 @@ extension:
           desc: "Standard operating procedures used in assembly and/or annotation of genomes,\
         \ metagenomes or environmental sequences"
       dinaComponent: "COLLECTING_EVENT"
-    - key: "alt"
-      name: "altitude"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "the altitude of the sample is the vertical distance between Earth's surface\
-        \ above sea level and the sampled position in the air"
-      unit: "meter"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "depth"
-      name: "depth"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "depth is defined as the vertical distance below local surface, e.g. for sediment\
-        \ or soil samples depth is measured from sediment or soil surface, respectivly. Depth\
-        \ can be reported as an interval for subsurface samples"
-      dinaComponent: "COLLECTING_EVENT"
-    - key: "elev"
-      name: "elevation"
-      multilingualDescription.descriptions:
-        - lang: en
-          desc: "the elevation of the sampling site as measured by the vertical distance from\
-        \ mean sea level"
-      unit: "meter"
-      dinaComponent: "COLLECTING_EVENT"
     - key: "cur_land_use"
       name: "current land use"
       multilingualDescription.descriptions:
@@ -525,6 +501,8 @@ extension:
         - lang: en
           desc: "water content measurement"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
+      unit: "percentage"
     - key: "water_content_soil_meth"
       name: "water content method"
       multilingualDescription.descriptions:
