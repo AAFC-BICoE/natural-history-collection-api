@@ -1,6 +1,7 @@
 vocabulary:
   degreeOfEstablishment:
     - name: captive
+      key: captive
       term: https://dwc.tdwg.org/doe/#dwcdoe_d002
       multilingualTitle.titles:
         - lang: en
@@ -8,6 +9,7 @@ vocabulary:
         - lang: fr
           title: captif
     - name: cultivated
+      key: cultivated
       term: https://dwc.tdwg.org/doe/#dwcdoe_d003
       multilingualTitle.titles:
         - lang: en
