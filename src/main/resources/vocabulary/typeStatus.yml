@@ -1,6 +1,7 @@
 vocabulary:
   typeStatus:
     - name: None
+      key: none
       term: No Value
       multilingualTitle.titles:
         - lang: en
@@ -8,6 +9,7 @@ vocabulary:
         - lang: fr
           title: Aucun
     - name: Holotype
+      key: holotype
       term: https://www.wikidata.org/wiki/Q1061403
       multilingualTitle.titles:
         - lang: en
@@ -15,6 +17,7 @@ vocabulary:
         - lang: fr
           title: Holotype
     - name: Paratype
+      key: paratype
       term: https://www.wikidata.org/wiki/Q926578
       multilingualTitle.titles:
         - lang: en
@@ -22,6 +25,7 @@ vocabulary:
         - lang: fr
           title: Paratype
     - name: Allotype
+      key: allotype
       term: https://www.wikidata.org/wiki/Q19353437
       multilingualTitle.titles:
         - lang: en
@@ -29,6 +33,7 @@ vocabulary:
         - lang: fr
           title: Allotype
     - name: Neotype
+      key: neotype
       term: https://www.wikidata.org/wiki/Q19353453
       multilingualTitle.titles:
         - lang: en
@@ -36,6 +41,7 @@ vocabulary:
         - lang: fr
           title: Neotype
     - name: Syntype
+      key: syntype
       term: https://www.wikidata.org/wiki/Q719822
       multilingualTitle.titles:
         - lang: en
@@ -43,6 +49,7 @@ vocabulary:
         - lang: fr
           title: Syntype
     - name: Lectotype
+      key: lectotype
       term: https://www.wikidata.org/wiki/Q2439719
       multilingualTitle.titles:
         - lang: en
@@ -50,6 +57,7 @@ vocabulary:
         - lang: fr
           title: Lectotype
     - name: Paralectotype
+      key: paralectotype
       term: https://www.wikidata.org/wiki/Q19353473
       multilingualTitle.titles:
         - lang: en
@@ -57,6 +65,7 @@ vocabulary:
         - lang: fr
           title: Paralectotype
     - name: Hapantotype
+      key: hapantotype
       term: https://www.wikidata.org/wiki/Q19353478
       multilingualTitle.titles:
         - lang: en
@@ -64,6 +73,7 @@ vocabulary:
         - lang: fr
           title: Hapantotype
     - name: Iconotype
+      key: iconotype
       term: https://en.wikipedia.org/wiki/Type_(biology)
       multilingualTitle.titles:
         - lang: en
@@ -71,6 +81,7 @@ vocabulary:
         - lang: fr
           title: Iconotype
     - name: Ergatotype
+      key: ergatotype
       term: https://www.wikidata.org/wiki/Q19353481
       multilingualTitle.titles:
         - lang: en

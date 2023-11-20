@@ -1,6 +1,7 @@
 vocabulary:
   srs:
     - name: WGS84 (EPSG:4326)
+      key: wsg84
       term: https://www.wikidata.org/wiki/Q11902211
       multilingualTitle.titles:
         - lang: en
@@ -8,6 +9,7 @@ vocabulary:
         - lang: fr
           title: WGS84 (EPSG:4326)
     - name: NAD27 (EPSG:4276)
+      key: nad27
       term: https://www.wikidata.org/wiki/Q100400484
       multilingualTitle.titles:
         - lang: en

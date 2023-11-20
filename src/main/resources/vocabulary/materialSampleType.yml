@@ -1,6 +1,7 @@
 vocabulary:
   materialSampleType:
     - name: WHOLE_ORGANISM
+      key: whole_organism
       term:
       multilingualTitle.titles:
         - lang: en
@@ -8,6 +9,7 @@ vocabulary:
         - lang: fr
           title: Organisme entier
     - name: CULTURE_STRAIN
+      key: culture_strain
       term:
       multilingualTitle.titles:
         - lang: en
@@ -15,6 +17,7 @@ vocabulary:
         - lang: fr
           title: Culture de souche
     - name: ORGANISM_PART
+      key: organism_part
       term:
       multilingualTitle.titles:
         - lang: en
@@ -22,6 +25,7 @@ vocabulary:
         - lang: fr
           title: Partie d'organisme
     - name: MIXED_ORGANISMS
+      key: mixed_organisms
       term:
       multilingualTitle.titles:
         - lang: en
@@ -29,6 +33,7 @@ vocabulary:
         - lang: fr
           title: Organismes mixtes
     - name: MOLECULAR_SAMPLE
+      key: molecular_sample
       term:
       multilingualTitle.titles:
         - lang: en
