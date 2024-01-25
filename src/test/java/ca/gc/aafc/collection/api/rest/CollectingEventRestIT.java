@@ -101,12 +101,13 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
   }
 
   private String postProtocol(ProtocolDto p) {
-    return sendPost(ProtocolDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-      ProtocolDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(p),
-      null,
-      null)
-    ).extract().body().jsonPath().getString("data.id");
+    return JsonAPITestHelper.extractId(
+      sendPost(ProtocolDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        ProtocolDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(p),
+        null,
+        null)
+      ));
   }
 
   private void sendPatch(CollectingEventDto body, String id,  String protocolUuid) {
