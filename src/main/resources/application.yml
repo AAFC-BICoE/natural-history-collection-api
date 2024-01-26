@@ -62,12 +62,9 @@ dina.auditing.enabled: true
 
 rabbitmq:
   queue: dina.search.queue
-  exchange: dina.search.exchange
-  routingkey: dina.search.routingkey
   username: guest
   password: guest
   host: ${RABBITMQ_HOSTNAME:localhost}
-  port: 15672
 messaging:
   isProducer: false
 

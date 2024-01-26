@@ -36,7 +36,7 @@ public class MainConfiguration {
   @Configuration
   public static class FallbackMessageProducer {
     @Bean
-    @ConditionalOnProperty(name = "messaging.isProducer", havingValue = "false")
+    @ConditionalOnProperty(name = "dina.messaging.isProducer", havingValue = "false")
     public MessageProducer init() {
       return new LogBasedMessageProducer();
     }
