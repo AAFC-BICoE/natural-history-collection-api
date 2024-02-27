@@ -1,0 +1,74 @@
+vocabulary:
+  taxonomicRank:
+    - name: kingdom
+      key: kingdom
+      term: http://rs.gbif.org/vocabulary/gbif/rank/kingdom
+      multilingualTitle.titles:
+        - lang: en
+          title: kingdom
+        - lang: fr
+          title: règne
+    - name: phylum
+      key: phylum
+      term: http://rs.gbif.org/vocabulary/gbif/rank/phylum
+      multilingualTitle.titles:
+        - lang: en
+          title: phylum
+        - lang: fr
+          title: phylum
+    - name: class
+      key: class
+      term: http://rs.gbif.org/vocabulary/gbif/rank/class
+      multilingualTitle.titles:
+        - lang: en
+          title: class
+        - lang: fr
+          title: classe
+    - name: order
+      key: order
+      term: http://rs.gbif.org/vocabulary/gbif/rank/order
+      multilingualTitle.titles:
+        - lang: en
+          title: order
+        - lang: fr
+          title: ordre
+    - name: family
+      key: family
+      term: http://rs.gbif.org/vocabulary/gbif/rank/family
+      multilingualTitle.titles:
+        - lang: en
+          title: family
+        - lang: fr
+          title: famille
+    - name: genus
+      key: genus
+      term: http://rs.gbif.org/vocabulary/gbif/rank/genus
+      multilingualTitle.titles:
+        - lang: en
+          title: genus
+        - lang: fr
+          title: genre
+    - name: species
+      key: species
+      term: http://rs.gbif.org/vocabulary/gbif/rank/species
+      multilingualTitle.titles:
+        - lang: en
+          title: species
+        - lang: fr
+          title: espèce
+    - name: subspecies
+      key: subspecies
+      term: http://rs.gbif.org/vocabulary/gbif/rank/subspecies
+      multilingualTitle.titles:
+        - lang: en
+          title: subspecies
+        - lang: fr
+          title: sous-espèce
+    - name: variety
+      key: variety
+      term: http://rs.gbif.org/vocabulary/gbif/rank/variety
+      multilingualTitle.titles:
+        - lang: en
+          title: variety
+        - lang: fr
+          title: variété
