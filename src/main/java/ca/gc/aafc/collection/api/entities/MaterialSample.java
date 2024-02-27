@@ -147,6 +147,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @Size(max = 1000)
   private String materialSampleRemarks;
 
+  @Size(max = 50)
+  private String sourceSet;
+
   @Type(type = "list-array")
   @Column(name = "prepared_by", columnDefinition = "uuid[]")
   @UniqueElements

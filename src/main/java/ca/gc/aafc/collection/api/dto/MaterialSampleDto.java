@@ -114,6 +114,8 @@ public class MaterialSampleDto {
 
   private String restrictionRemarks;
 
+  private String sourceSet;
+
   // -- Relationships --
   @ShallowReference
   @JsonApiRelation
