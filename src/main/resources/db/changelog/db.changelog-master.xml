@@ -167,4 +167,5 @@
   <include file="db/changelog/migrations/160-Remove_acquisition_event.xml"/>
   <include file="db/changelog/migrations/161-Increase_organism_sex_field_length.xml"/>
   <include file="db/changelog/migrations/162-Increase_name_size_controlled_vocabulary.xml"/>
+  <include file="db/changelog/migrations/163-Add_source_set_to_material_sample.xml"/>
 </databaseChangeLog>
