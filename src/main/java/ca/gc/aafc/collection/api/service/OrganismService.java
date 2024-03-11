@@ -6,14 +6,14 @@ import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValid
 import ca.gc.aafc.collection.api.validation.OrganismValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
-
-import java.util.UUID;
 
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
@@ -35,7 +35,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
   protected void preCreate(Organism entity) {
     // allow user provided UUID
     if(entity.getUuid() == null) {
-      entity.setUuid(UUID.randomUUID());
+      entity.setUuid(UUIDHelper.generateUUIDv7());
     }
 
     setupDeterminations(entity);
