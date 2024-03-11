@@ -1,10 +1,11 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class MaterialSampleFactory implements TestableEntityFactory<MaterialSample> {
@@ -25,7 +26,7 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
         return MaterialSample
             .builder()
             .barcode(RandomStringUtils.randomAlphabetic(5))
-            .uuid(UUID.randomUUID())
+            .uuid(UUIDHelper.generateUUIDv7())
             .materialSampleName("soil sample")
             .associations(new ArrayList<>())
             .createdBy("test user")

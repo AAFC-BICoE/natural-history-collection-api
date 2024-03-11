@@ -3,11 +3,11 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
-
-import java.util.UUID;
 
 @Service
 public class InstitutionService extends DefaultDinaService<Institution> {
@@ -21,6 +21,6 @@ public class InstitutionService extends DefaultDinaService<Institution> {
 
   @Override
   protected void preCreate(Institution entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
   }
 }

@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -9,6 +7,8 @@ import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.validation.ProjectValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 
 @Service
@@ -27,7 +27,7 @@ public class ProjectService extends DefaultDinaService<Project> {
 
   @Override
   protected void preCreate(Project entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
   }
 
   @Override

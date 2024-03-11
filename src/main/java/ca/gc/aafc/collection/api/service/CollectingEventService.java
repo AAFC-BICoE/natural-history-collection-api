@@ -23,10 +23,10 @@ import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.search.messaging.types.DocumentOperationType;
 import ca.gc.aafc.dina.service.MessageProducingService;
+import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.time.OffsetDateTime;
 import java.util.EnumSet;
-import java.util.UUID;
 import lombok.NonNull;
 
 @Service
@@ -62,7 +62,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
 
     // allow user provided UUID
     if(entity.getUuid() == null) {
-      entity.setUuid(UUID.randomUUID());
+      entity.setUuid(UUIDHelper.generateUUIDv7());
     }
 
     cleanupManagedAttributes(entity);

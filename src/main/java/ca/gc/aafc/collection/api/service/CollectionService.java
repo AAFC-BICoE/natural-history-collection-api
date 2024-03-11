@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -10,6 +8,7 @@ import ca.gc.aafc.collection.api.entities.CollectionSequence;
 import ca.gc.aafc.collection.api.validation.CollectionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
 
 import lombok.NonNull;
 
@@ -32,7 +31,7 @@ public class CollectionService extends DefaultDinaService<Collection> {
 
   @Override
   protected void preCreate(Collection entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
   }
 
   @Override
