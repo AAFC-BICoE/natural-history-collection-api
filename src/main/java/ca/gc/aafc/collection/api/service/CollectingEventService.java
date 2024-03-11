@@ -27,7 +27,6 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.time.OffsetDateTime;
 import java.util.EnumSet;
-import java.util.UUID;
 import lombok.NonNull;
 
 @Service
