@@ -12,6 +12,10 @@
         <cve>CVE-2024-22243</cve>
     </suppress>
     <suppress>
+        <notes>AuthenticatedVoter no used</notes>
+        <cve>CVE-2024-22257</cve>
+    </suppress>
+    <suppress>
         <notes>no untrusted source</notes>
         <cve>CVE-2022-1471</cve>
     </suppress>
