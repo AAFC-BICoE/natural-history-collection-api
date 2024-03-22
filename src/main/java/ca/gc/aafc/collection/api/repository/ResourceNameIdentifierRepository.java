@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
 import ca.gc.aafc.collection.api.dto.CollectionDto;
+import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ResourceNameIdentifierResponseDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.collection.api.entities.Project;
+import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.repository.ResourceNameIdentifierBaseRepository;
 import ca.gc.aafc.dina.service.ResourceNameIdentifierService;
 
@@ -33,7 +37,10 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
 
   public ResourceNameIdentifierRepository(
     ResourceNameIdentifierService resourceNameIdentifierService) {
-    super(resourceNameIdentifierService, Map.of(CollectionDto.TYPENAME, Collection.class));
+    super(resourceNameIdentifierService,
+      Map.of(CollectionDto.TYPENAME, Collection.class,
+        ProjectDto.TYPENAME, Project.class,
+        StorageUnitDto.TYPENAME, StorageUnit.class));
   }
 
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)
