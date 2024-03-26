@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +17,7 @@ import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.repository.ResourceNameIdentifierBaseRepository;
+import ca.gc.aafc.dina.service.NameUUIDPair;
 import ca.gc.aafc.dina.service.ResourceNameIdentifierService;
 
 import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
@@ -24,8 +25,8 @@ import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -44,21 +45,23 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
   }
 
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)
-  public ResponseEntity<RepresentationModel<?>> findOne(HttpServletRequest req) {
+  public ResponseEntity<RepresentationModel<?>> findAll(HttpServletRequest req) {
 
     String query = URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
-    ResourceNameIdentifierResponseDto dto;
+    List<ResourceNameIdentifierResponseDto> dtos ;
     try {
-      Pair<String, UUID> identifier = findOne(query);
-      dto = ResourceNameIdentifierResponseDto.builder()
-        .id(identifier.getValue())
-        .name(identifier.getKey())
-        .build();
+      List<NameUUIDPair> identifiers = findAll(query);
+
+      dtos = identifiers.stream().map(nuPair -> ResourceNameIdentifierResponseDto.builder()
+        .id(nuPair.uuid())
+        .name(nuPair.name())
+        .build()).toList();
+
     } catch (IllegalArgumentException iaEx) {
       return ResponseEntity.badRequest().build();
     }
 
-    JsonApiModelBuilder builder = jsonApiModel().model(dto);
+    JsonApiModelBuilder builder = jsonApiModel().model(CollectionModel.of(dtos));
 
     return ResponseEntity.ok(builder.build());
   }

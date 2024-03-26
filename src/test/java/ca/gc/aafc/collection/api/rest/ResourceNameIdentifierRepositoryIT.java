@@ -59,7 +59,7 @@ public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
 
     String uuid = newRequest().get("api/v1/" + ResourceNameIdentifierResponseDto.TYPE +
         "?filter[type][EQ]=collection&filter[name][EQ]=aaaeeee&filter[group][EQ]=aafc")
-      .then().extract().body().jsonPath().getString("data.id");
+      .then().extract().body().jsonPath().getString("data.id[0]");
 
     assertEquals(createdUUID, uuid);
   }
