@@ -30,7 +30,7 @@
     <checkstyle.version>9.3</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.120-SNAPSHOT</dina-base-api.version>
+    <dina-base-api.version>0.120</dina-base-api.version>
     <spring-hateoas-jsonapi.version>1.6.0</spring-hateoas-jsonapi.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
