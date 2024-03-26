@@ -26,8 +26,10 @@
     <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
     <dependency.check.version>8.4.3</dependency.check.version>
     <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+    
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>9.3</checkstyle.version>
+    <checkstyle-antlr.version>4.9.3</checkstyle-antlr.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
     <dina-base-api.version>0.120</dina-base-api.version>
@@ -208,6 +210,11 @@
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
             <version>${checkstyle.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${checkstyle-antlr.version}</version>
           </dependency>
         </dependencies>
         <configuration>
