@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.84-SNAPSHOT</version>
+  <version>0.85-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -35,7 +35,9 @@
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
-    <postgresql.version>42.4.3</postgresql.version>
+
+    <org.springframework.security.version>5.7.12</org.springframework.security.version>
+    <postgresql.version>42.4.4</postgresql.version>
   </properties>
 
   <dependencies>
