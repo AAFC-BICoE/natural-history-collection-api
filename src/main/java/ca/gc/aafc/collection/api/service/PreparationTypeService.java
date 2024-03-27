@@ -1,12 +1,12 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import ca.gc.aafc.collection.api.entities.PreparationType;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 import org.springframework.validation.SmartValidator;
 
@@ -18,7 +18,7 @@ public class PreparationTypeService extends DefaultDinaService<PreparationType> 
 
   @Override
   protected void preCreate(PreparationType entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
   }
   
 }

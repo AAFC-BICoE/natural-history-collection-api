@@ -15,6 +15,8 @@ import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -132,7 +134,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   @Override
   protected void preCreate(MaterialSample entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
     linkAssociations(entity);
   }
 

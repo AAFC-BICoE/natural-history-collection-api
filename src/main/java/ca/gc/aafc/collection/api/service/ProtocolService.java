@@ -1,13 +1,13 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.validation.ProtocolValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 import org.springframework.validation.SmartValidator;
 
@@ -23,7 +23,7 @@ public class ProtocolService extends DefaultDinaService<Protocol> {
 
   @Override
   protected void preCreate(Protocol entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
   }
 
   @Override

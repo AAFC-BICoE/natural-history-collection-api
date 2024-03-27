@@ -26,11 +26,14 @@
     <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
     <dependency.check.version>8.4.3</dependency.check.version>
     <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+    
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>9.3</checkstyle.version>
+    <checkstyle-antlr.version>4.9.3</checkstyle-antlr.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.118</dina-base-api.version>
+    <dina-base-api.version>0.120</dina-base-api.version>
+    <spring-hateoas-jsonapi.version>1.6.0</spring-hateoas-jsonapi.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
@@ -63,6 +66,16 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-hateoas</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.toedter</groupId>
+      <artifactId>spring-hateoas-jsonapi</artifactId>
+      <version>${spring-hateoas-jsonapi.version}</version>
     </dependency>
 
     <!-- actuator -->
@@ -197,6 +210,11 @@
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
             <version>${checkstyle.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${checkstyle-antlr.version}</version>
           </dependency>
         </dependencies>
         <configuration>
