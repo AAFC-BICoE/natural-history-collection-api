@@ -5,10 +5,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Service;
+
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.VocabularyDto;
 import ca.gc.aafc.dina.service.PredicateBasedReadOnlyDinaService;
 
+@Service
 public class VocabularyService implements PredicateBasedReadOnlyDinaService<String, VocabularyDto> {
 
   private final List<VocabularyDto> vocabulary;
