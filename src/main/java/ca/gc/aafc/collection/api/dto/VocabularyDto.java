@@ -8,11 +8,15 @@ import lombok.Getter;
 
 import java.util.List;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @AllArgsConstructor
 @Getter
-@JsonApiResource(type = "vocabulary")
+@JsonApiResource(type = VocabularyDto.TYPE)
+@JsonApiTypeForClass(VocabularyDto.TYPE)
 public class VocabularyDto {
-  
+  public static final String TYPE = "vocabulary";
+
   @JsonApiId
   private final String id;
 
