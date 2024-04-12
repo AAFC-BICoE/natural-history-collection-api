@@ -105,6 +105,15 @@ public class Determination {
   }
 
   /**
+   * Check if the scientificNameSource is not CUSTOM or null.
+   */
+  @Transient
+  @JsonIgnore
+  public boolean isExternalScientificNameSource() {
+    return scientificNameSource != null && scientificNameSource != ScientificNameSource.CUSTOM;
+  }
+
+  /**
    * Checks if scientificNameDetails and scientificNameSource are provided in pair.
    * In pair means they are both provided are both not provided but never one without the other one.
    * 

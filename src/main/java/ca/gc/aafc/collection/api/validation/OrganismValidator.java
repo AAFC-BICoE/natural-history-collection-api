@@ -62,40 +62,18 @@ public class OrganismValidator implements Validator {
           rejectValueWithMessage("determination", errors, VALID_DETERMINATION_SCIENTIFICNAME);
         }
 
-        // if scientificName is provided
-//        if (StringUtils.isNotBlank(determination.getScientificName())) {
-//          // nameSource and scientificNameDetails are required
-//          if (determination.getScientificNameSource() == null || determination.getScientificNameDetails() == null) {
-//            rejectValueWithMessage("determination", errors, MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
-//          }
-//        } else {
-          // if scientificName is blank, it means we only have verbatim since we already check that we have 1 of the 2 set
+        // If we have an external scientificNameSource (not CUSTOM or null)
+        if (determination.isExternalScientificNameSource()) {
 
-          // ScientificNameDetails and NameSource (could be CUSTOM) should be provided in pair.
-//          if (!determination.areSourceAndDetailsInPair()) {
-//            rejectValueWithMessage("determination", errors, INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
-//          }
-
-          // scientificNameSource can only be CUSTOM or null (when we only have verbatimScientificName set)
-          if (!determination.isCustomScientificNameSourceOrNull()) {
-
-            if (StringUtils.isBlank(determination.getScientificName())) {
-              rejectValueWithMessage("determination", errors, SOURCE_REQUIRES_SCIENTIFIC_NAME);
-            }
-
-            if (determination.getScientificNameSource() == null || determination.getScientificNameDetails() == null) {
-              rejectValueWithMessage("determination", errors, MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
-            }
-
-            //rejectValueWithMessage("determination", errors, INVALID_SOURCE_PROVIDED);
-//            if (!determination.areSourceAndDetailsInPair()) {
-//              rejectValueWithMessage("determination", errors, INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
-//            }
-          } else {
-
+          if (StringUtils.isBlank(determination.getScientificName())) {
+            rejectValueWithMessage("determination", errors, SOURCE_REQUIRES_SCIENTIFIC_NAME);
           }
 
-//        }
+          if (determination.getScientificNameDetails() == null) {
+            rejectValueWithMessage("determination", errors,
+              MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
+          }
+        }
       }
     }
   }
