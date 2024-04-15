@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @MappedSuperclass
 @NoArgsConstructor
 @SuperBuilder
-public abstract class AbstractStorageUnit implements DinaEntity {
+public abstract class AbstractStorageUnit implements DinaEntityIdentifiableByName {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
