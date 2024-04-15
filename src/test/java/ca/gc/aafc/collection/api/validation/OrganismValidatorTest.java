@@ -27,7 +27,7 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   private MessageSource messageSource;
 
   @Test
-  void validate_WhenMoreThanOneIsPrimary_HasError() {
+  void validate_whenMoreThanOneIsPrimary_HasError() {
     String expectedErrorMessageNonMixed = getExpectedErrorMessage(OrganismValidator.MISSING_PRIMARY_DETERMINATION);
 
     Determination determinationA = DeterminationFactory.newDetermination()
@@ -126,9 +126,7 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_InvalidScientificSourceDetailsPair_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.INVALID_SCIENTIFICNAMESOURCE_DETAILS_PAIR);
-
+  void validate_classificationWithNoSource_noError() {
     Determination determination = DeterminationFactory.newDetermination()
         .isPrimary(true)
         .scientificNameSource(null)
@@ -147,9 +145,7 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     Errors errors = ValidationErrorsHelper.newErrorsObject(organism);
     organismValidator.validate(organism, errors);
 
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertFalse(errors.hasErrors());
   }
 
   @Test
@@ -185,9 +181,8 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
     organismValidator.validate(organism, errors);
 
     Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(2, errors.getAllErrors().size());
+    Assertions.assertEquals(1, errors.getAllErrors().size());
     Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(1).getDefaultMessage());
   }
 
   @Test
@@ -216,8 +211,8 @@ public class OrganismValidatorTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_VerbatimScientificNameIsSetIncorrectSourceProvided_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.INVALID_SOURCE_PROVIDED);
+  void validate_verbatimScientificNameIsSetIncorrectSourceProvided_HasError() {
+    String expectedErrorMessage = getExpectedErrorMessage(OrganismValidator.SOURCE_REQUIRES_SCIENTIFIC_NAME);
 
     Determination determination = DeterminationFactory.newDetermination()
         .isPrimary(true)
