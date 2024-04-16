@@ -11,3 +11,7 @@ GET `/material-sample-summary/{uuid}`
 
 POST `/material-sample-identifier-generator`
 
+=== resource-name-identifier
+Get the identifier (UUID) based on the name, the type and the group.
+
+GET `/resource-name-identifier?filter[type][EQ]=material-sample&filter[name][EQ]=name1&filter[group][EQ]=aafc`
