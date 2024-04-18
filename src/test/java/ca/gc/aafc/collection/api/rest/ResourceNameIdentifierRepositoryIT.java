@@ -44,7 +44,7 @@ public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
   }
 
   @Test
-  public void resourceNameIdentifierRepository_onPost_responseReturned() {
+  public void resourceNameIdentifierRepository_onGet_responseReturned() {
 
     CollectionDto collectionDto = newCollection();
     CollectionFixture.newCollection();
@@ -56,12 +56,23 @@ public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
       null,
       null)
     ).extract().body().jsonPath().getString("data.id");
-
+    
     String uuid = newRequest().get("api/v1/" + ResourceNameIdentifierResponseDto.TYPE +
         "?filter[type][EQ]=collection&filter[name][EQ]=aaaeeee&filter[group][EQ]=aafc")
       .then().extract().body().jsonPath().getString("data.id[0]");
 
     assertEquals(createdUUID, uuid);
+  }
+
+  @Test
+  public void resourceNameIdentifierRepository_onBadRequest_responseCodeReturned() {
+
+    int returnedCode = newRequest().get("api/v1/" + ResourceNameIdentifierResponseDto.TYPE +
+        "?filter[type][EQ]=collection&filter[name][EQ]=aaaeeee")
+      .then().extract().response()
+      .getStatusCode();
+
+    assertEquals(400, returnedCode);
   }
 
   private RequestSpecification newRequest() {

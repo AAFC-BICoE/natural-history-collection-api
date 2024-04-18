@@ -1,12 +1,14 @@
 package ca.gc.aafc.collection.api.repository;
 
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiError;
+import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
 import ca.gc.aafc.collection.api.dto.CollectionDto;
@@ -25,6 +27,7 @@ import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.repository.ResourceNameIdentifierBaseRepository;
+import ca.gc.aafc.dina.security.auth.GroupWithReadAuthorizationService;
 import ca.gc.aafc.dina.service.NameUUIDPair;
 import ca.gc.aafc.dina.service.ResourceNameIdentifierService;
 
@@ -45,8 +48,10 @@ import javax.servlet.http.HttpServletRequest;
 public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBaseRepository {
 
   public ResourceNameIdentifierRepository(
-    ResourceNameIdentifierService resourceNameIdentifierService) {
+    ResourceNameIdentifierService resourceNameIdentifierService,
+    GroupWithReadAuthorizationService authorizationService) {
     super(resourceNameIdentifierService,
+      authorizationService,
       Map.of(CollectionDto.TYPENAME, Collection.class,
         ProjectDto.TYPENAME, Project.class,
         StorageUnitDto.TYPENAME, StorageUnit.class,
@@ -57,7 +62,7 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
   }
 
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)
-  public ResponseEntity<RepresentationModel<?>> findAll(HttpServletRequest req) {
+  public ResponseEntity<?> findAll(HttpServletRequest req) {
 
     String query = URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
     List<ResourceNameIdentifierResponseDto> dtos ;
@@ -70,7 +75,12 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
         .build()).toList();
 
     } catch (IllegalArgumentException iaEx) {
-      return ResponseEntity.badRequest().build();
+      return ResponseEntity.badRequest().body(
+        JsonApiErrors.create().withError(
+          JsonApiError.create()
+            .withTitle(HttpStatus.BAD_REQUEST.toString())
+            .withStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+            .withDetail(iaEx.getMessage())));
     }
 
     JsonApiModelBuilder builder = jsonApiModel().model(CollectionModel.of(dtos));
