@@ -15,3 +15,13 @@ POST `/material-sample-identifier-generator`
 Get the identifier (UUID) based on the name, the type and the group.
 
 GET `/resource-name-identifier?filter[type][EQ]=material-sample&filter[name][EQ]=name1&filter[group][EQ]=aafc`
+
+Available for types :
+
+* collection
+* project
+* storage-unit
+* material-sample
+* preparation-type
+* preparation-method
+* protocol
