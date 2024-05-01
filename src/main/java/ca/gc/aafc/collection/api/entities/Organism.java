@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +52,11 @@ public class Organism implements DinaEntity {
 
   // null allowed to represent that the concept of target is not used
   private Boolean isTarget;
+
+  @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, String> managedAttributes = Map.of();
 
   @Type(type = "jsonb")
   @Valid
