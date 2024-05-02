@@ -11,6 +11,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiError;
 import com.toedter.spring.hateoas.jsonapi.JsonApiErrors;
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
+import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
@@ -19,6 +20,7 @@ import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.ResourceNameIdentifierResponseDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
+import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.PreparationMethod;
@@ -58,7 +60,8 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
         MaterialSampleDto.TYPENAME, MaterialSample.class,
         PreparationTypeDto.TYPENAME, PreparationType.class,
         PreparationMethodDto.TYPENAME, PreparationMethod.class,
-        ProtocolDto.TYPENAME, Protocol.class));
+        ProtocolDto.TYPENAME, Protocol.class,
+        AssemblageDto.TYPENAME, Assemblage.class));
   }
 
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)
