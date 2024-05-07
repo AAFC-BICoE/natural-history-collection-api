@@ -21,7 +21,7 @@ import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValid
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.search.messaging.types.DocumentOperationType;
+import ca.gc.aafc.dina.messaging.message.DocumentOperationType;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 

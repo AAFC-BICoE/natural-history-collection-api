@@ -2,8 +2,8 @@ package ca.gc.aafc.collection.api;
 
 import javax.inject.Inject;
 
-import ca.gc.aafc.dina.search.messaging.producer.LogBasedMessageProducer;
-import ca.gc.aafc.dina.search.messaging.producer.MessageProducer;
+import ca.gc.aafc.dina.messaging.producer.DocumentOperationNotificationMessageProducer;
+import ca.gc.aafc.dina.messaging.producer.LogBasedMessageProducer;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +37,7 @@ public class MainConfiguration {
   public static class FallbackMessageProducer {
     @Bean
     @ConditionalOnProperty(name = "dina.messaging.isProducer", havingValue = "false")
-    public MessageProducer init() {
+    public DocumentOperationNotificationMessageProducer init() {
       return new LogBasedMessageProducer();
     }
   }
