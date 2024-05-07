@@ -4,8 +4,10 @@ import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
@@ -18,10 +20,13 @@ import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.util.Objects;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
@@ -111,6 +116,9 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
           if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
             setChildrenOrdinal(ms);
           }
+          if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
+            setTargetOrganismPrimaryScientificName(ms);
+          }
         } catch (JsonProcessingException e) {
           throw new RuntimeException(e);
         }
@@ -130,6 +138,29 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     for (int i = 0; i < sortedChildren.size(); i++) {
       sortedChildren.get(i).setOrdinal(i);
     }
+  }
+
+  public void setTargetOrganismPrimaryScientificName(MaterialSample sample) {
+
+    if (CollectionUtils.isEmpty(sample.getOrganism())) {
+      return;
+    }
+
+    // Filter the target organism or use all of them if target is not used (null)
+    // Map to primary determination and make sure it's not null (should not happen but just in case)
+    List<Determination> det = sample.getOrganism().stream()
+      .filter(ms -> ms.getIsTarget() == null || ms.getIsTarget())
+      .map(Organism::getPrimaryDetermination)
+      .filter(Objects::nonNull).toList();
+
+    String s = det.stream()
+      .map( d -> {
+        if(StringUtils.isNotBlank(d.getScientificName())) {
+          return d.getScientificName();
+        }
+        return d.getVerbatimScientificName();
+      }).collect(Collectors.joining(","));
+    sample.setTargetOrganismPrimaryScientificName(s);
   }
 
   @Override

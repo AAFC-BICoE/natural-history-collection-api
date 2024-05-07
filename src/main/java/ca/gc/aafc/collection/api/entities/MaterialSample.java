@@ -74,6 +74,7 @@ public class MaterialSample extends AbstractMaterialSample {
 
   public static final String CHILDREN_COL_NAME = "materialSampleChildren";
   public static final String HIERARCHY_PROP_NAME = "hierarchy";
+  public static final String ORGANISM_PROP_NAME = "organism";
 
   @Version
   private int version;
@@ -135,6 +136,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @Transient
   @DiffIgnore
   private List<MaterialSampleHierarchyObject> hierarchy;
+
+  @Transient
+  private String targetOrganismPrimaryScientificName;
 
   @Size(max = 50)
   private String materialSampleState;
