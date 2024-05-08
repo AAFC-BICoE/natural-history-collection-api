@@ -80,6 +80,21 @@ public class Organism implements DinaEntity {
   private String createdBy;
 
   /**
+   * Return the Primary Determination.
+   * If the entity is in invalid state and there is more than 1 primary determination, the first
+   * one found will be returned.
+   * @return Primary Determination or null if none
+   */
+  public Determination getPrimaryDetermination() {
+    if (CollectionUtils.isEmpty(determination)) {
+      return null;
+    }
+    return determination.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).findFirst()
+      .orElse(null);
+  }
+
+
+  /**
    * Count the number of primary Determination.
    * If there is no Determination 0 will be returned.
    *

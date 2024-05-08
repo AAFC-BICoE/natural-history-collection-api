@@ -84,6 +84,11 @@ public class MaterialSampleDto {
   @DiffIgnore
   private List<MaterialSampleHierarchyObject> hierarchy;
 
+  // calculated field
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private String targetOrganismPrimaryScientificName;
+
   private String barcode;
 
   private Boolean publiclyReleasable;

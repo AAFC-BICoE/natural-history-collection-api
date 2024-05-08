@@ -149,6 +149,9 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     assertEquals(2, freshMaterialSample.getHierarchy().size());
     assertNotNull(freshMaterialSample.getHierarchy().get(1).getOrganismPrimaryDetermination());
 
+    materialSampleService.setTargetOrganismPrimaryScientificName(parentMaterialSample);
+    assertEquals("verbatimScientificName", parentMaterialSample.getTargetOrganismPrimaryScientificName());
+
     //cleanup
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
