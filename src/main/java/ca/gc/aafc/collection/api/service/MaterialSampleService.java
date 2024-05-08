@@ -159,7 +159,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
           return d.getScientificName();
         }
         return d.getVerbatimScientificName();
-      }).collect(Collectors.joining(","));
+      }).collect(Collectors.joining("|"));
     sample.setTargetOrganismPrimaryScientificName(s);
   }
 
