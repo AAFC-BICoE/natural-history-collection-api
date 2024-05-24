@@ -1,6 +1,10 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -132,6 +136,20 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
   private StorageUnit storageUnit;
+
+  @Min(value = 1)
+  @Max(value = 255)
+  @Column(name = "well_column")
+  private Integer wellColumn;
+
+  @Size(max = 2)
+  @Pattern(regexp = "[a-zA-Z]")
+  @Column(name = "well_row")
+  private String wellRow;
+
+  // calculated field
+  @Transient
+  private int cellNumber;
 
   @Transient
   @DiffIgnore
