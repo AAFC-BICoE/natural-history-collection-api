@@ -101,6 +101,10 @@ public class MaterialSampleDto {
   private LocalDate stateChangedOn;
   private String stateChangeRemarks;
 
+  private Integer wellColumn;
+  private String wellRow;
+  //private int cellNumber;
+
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 

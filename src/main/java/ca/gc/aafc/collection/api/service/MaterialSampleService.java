@@ -11,6 +11,7 @@ import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
+import ca.gc.aafc.collection.api.validation.MaterialSampleLocationValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
@@ -46,6 +47,7 @@ import java.util.stream.Collectors;
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
+  private final MaterialSampleLocationValidator locationValidator;
   private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
 
@@ -63,6 +65,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull MaterialSampleValidator materialSampleValidator,
+    @NonNull MaterialSampleLocationValidator locationValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
     @NonNull AssociationValidator associationValidator,
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
@@ -72,6 +75,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
+    this.locationValidator = locationValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
     this.hierarchicalDataService = hierarchicalDataService;
@@ -188,8 +192,17 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   public void validateBusinessRules(MaterialSample entity) {
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
+    validateStorageLocation(entity);
     validateAssociations(entity);
     validateExtensionValues(entity);
+  }
+
+  private void validateStorageLocation(MaterialSample entity) {
+    // if there is no location data we can return immediately
+    if (entity.getWellRow() == null && entity.getWellColumn() == null) {
+      return;
+    }
+    applyBusinessRule(entity, locationValidator);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
