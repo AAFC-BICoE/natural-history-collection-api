@@ -148,6 +148,10 @@ public class MaterialSampleDto {
 
   @ShallowReference
   @JsonApiRelation
+  private StorageUnitCoordinatesDto storageUnitCoordinates;
+
+  @ShallowReference
+  @JsonApiRelation
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<OrganismDto> organism = List.of();
 

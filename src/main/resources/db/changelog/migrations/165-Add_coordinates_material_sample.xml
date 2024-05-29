@@ -25,5 +25,11 @@
                 <constraints foreignKeyName="fk_storage_unit_coordinates_storage_unit_id" references="storage_unit(id)"/>
             </column>
         </createTable>
+
+        <addColumn tableName="material_sample">
+            <column name="storage_unit_coordinates_id" type="integer">
+                <constraints foreignKeyName="fk_material_sample_storage_unit_coordinates_id" references="storage_unit_coordinates(id)"/>
+            </column>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>
