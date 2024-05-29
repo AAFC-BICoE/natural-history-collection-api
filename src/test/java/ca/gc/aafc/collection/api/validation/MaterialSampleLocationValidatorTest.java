@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.validation.Errors;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitTypeFactory;
 import ca.gc.aafc.dina.entity.StorageGridLayout;
@@ -25,8 +24,8 @@ public class MaterialSampleLocationValidatorTest extends CollectionModuleBaseIT 
 
   @Test
   void validate_WhenValid_NoErrors() {
-    MaterialSample sample = MaterialSampleFactory.newMaterialSample().build();
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
+    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     StorageGridLayout storageGridLayout = StorageGridLayout.builder()
       .numberOfColumns(8)
@@ -40,18 +39,18 @@ public class MaterialSampleLocationValidatorTest extends CollectionModuleBaseIT 
     StorageUnit su = StorageUnitFactory.newStorageUnit()
       .storageUnitType(sut).build();
 
-    sample.setWellRow("A");
-    sample.setWellColumn(1);
-    sample.setStorageUnit(su);
+    coordinates.setWellRow("A");
+    coordinates.setWellColumn(1);
+    coordinates.setStorageUnit(su);
 
-    sampleLocationValidator.validate(sample, errors);
+    sampleLocationValidator.validate(coordinates, errors);
     assertFalse(errors.hasErrors());
   }
 
   @Test
   void validate_onInvalidLocation_error() {
-    MaterialSample sample = MaterialSampleFactory.newMaterialSample().build();
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
+    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     StorageGridLayout storageGridLayout = StorageGridLayout.builder()
       .numberOfColumns(8)
@@ -65,11 +64,11 @@ public class MaterialSampleLocationValidatorTest extends CollectionModuleBaseIT 
     StorageUnit su = StorageUnitFactory.newStorageUnit()
         .storageUnitType(sut).build();
 
-    sample.setWellRow("Z");
-    sample.setWellColumn(1);
-    sample.setStorageUnit(su);
+    coordinates.setWellRow("Z");
+    coordinates.setWellColumn(1);
+    coordinates.setStorageUnit(su);
 
-    sampleLocationValidator.validate(sample, errors);
+    sampleLocationValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
 
    assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Invalid well row"));
@@ -77,13 +76,13 @@ public class MaterialSampleLocationValidatorTest extends CollectionModuleBaseIT 
 
   @Test
   void validate_onNoStorage_error() {
-    MaterialSample sample = MaterialSampleFactory.newMaterialSample().build();
-    Errors errors = ValidationErrorsHelper.newErrorsObject(sample);
+    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
-    sample.setWellRow("Z");
-    sample.setWellColumn(1);
+    coordinates.setWellRow("Z");
+    coordinates.setWellColumn(1);
 
-    sampleLocationValidator.validate(sample, errors);
+    sampleLocationValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
     assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("StorageUnit must be set"));
   }

@@ -5,11 +5,25 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <changeSet id="165-Add_coordinates_material_sample" context="schema-change" author="cgendreau">
-        <addColumn tableName="material_sample">
+
+        <createTable tableName="storage_unit_coordinates">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_storage_unit_coordinates_id"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true"/>
+            </column>
             <column name="well_column" type="INTEGER">
                 <constraints checkConstraint="CHECK (int_value &gt;=1  AND int_value &lt;=255)"/>
             </column>
             <column name="well_row" type="VARCHAR(2)"/>
-        </addColumn>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+            <column name="created_by" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="storage_unit_id" type="integer">
+                <constraints foreignKeyName="fk_storage_unit_coordinates_storage_unit_id" references="storage_unit(id)"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

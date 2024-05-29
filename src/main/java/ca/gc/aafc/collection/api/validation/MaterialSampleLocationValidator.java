@@ -10,6 +10,7 @@ import org.springframework.validation.Errors;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.validation.AbstractStorageLocationValidator;
 
@@ -31,7 +32,7 @@ public class MaterialSampleLocationValidator extends AbstractStorageLocationVali
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return MaterialSample.class.isAssignableFrom(clazz);
+    return StorageUnitCoordinates.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -40,7 +41,7 @@ public class MaterialSampleLocationValidator extends AbstractStorageLocationVali
       throw new IllegalArgumentException("MaterialSampleLocationValidator not supported for class " + target.getClass());
     }
 
-    MaterialSample entity = (MaterialSample) target;
+    StorageUnitCoordinates entity = (StorageUnitCoordinates) target;
     checkRowAndColumn(entity.getWellRow(), entity.getWellColumn(), errors);
 
     // this will trigger lazy-loading (unless hints are used when loading the material-sample)
