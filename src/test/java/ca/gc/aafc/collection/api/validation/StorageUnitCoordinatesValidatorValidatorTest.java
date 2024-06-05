@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.inject.Inject;
 
-public class MaterialSampleLocationValidatorTest extends CollectionModuleBaseIT {
+public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModuleBaseIT {
 
   @Inject
-  private MaterialSampleLocationValidator sampleLocationValidator;
+  private StorageUnitCoordinatesValidator sampleLocationValidator;
 
   @Test
   void validate_WhenValid_NoErrors() {

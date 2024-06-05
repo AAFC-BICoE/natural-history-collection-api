@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
 import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
-import ca.gc.aafc.collection.api.validation.MaterialSampleLocationValidator;
+import ca.gc.aafc.collection.api.validation.StorageUnitCoordinatesValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
 import ca.gc.aafc.dina.util.UUIDHelper;
@@ -14,9 +14,9 @@ import lombok.NonNull;
 @Service
 public class StorageUnitCoordinatesService extends DefaultDinaService<StorageUnitCoordinates> {
 
-  private final MaterialSampleLocationValidator coordinatesValidator;
+  private final StorageUnitCoordinatesValidator coordinatesValidator;
 
-  public StorageUnitCoordinatesService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv, MaterialSampleLocationValidator coordinatesValidator) {
+  public StorageUnitCoordinatesService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv, StorageUnitCoordinatesValidator coordinatesValidator) {
     super(baseDAO, sv);
     this.coordinatesValidator = coordinatesValidator;
   }

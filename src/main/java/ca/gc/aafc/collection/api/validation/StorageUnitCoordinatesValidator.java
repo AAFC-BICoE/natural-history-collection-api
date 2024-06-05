@@ -8,23 +8,22 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.validation.AbstractStorageLocationValidator;
 
 /**
- * Validates the well location of a {@link MaterialSample}.
+ * Validates the well location of a {@link StorageUnitCoordinates}.
  */
 @Component
-public class MaterialSampleLocationValidator extends AbstractStorageLocationValidator {
+public class StorageUnitCoordinatesValidator extends AbstractStorageLocationValidator {
 
   static final String NO_STORAGE_UNIT_KEY = "validation.materialSample.location.noStorageType";
 
   private final MessageSource messageSource;
 
-  public MaterialSampleLocationValidator(@Named("validationMessageSource") MessageSource messageSourceFromBase,
+  public StorageUnitCoordinatesValidator(@Named("validationMessageSource") MessageSource messageSourceFromBase,
                                          MessageSource messageSource) {
     super(messageSourceFromBase);
     this.messageSource = messageSource;

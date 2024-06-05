@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -46,6 +47,9 @@ public class StorageUnitCoordinates implements DinaEntity {
   @NotNull
   private UUID uuid;
 
+  @Transient
+  private String group;
+
   @Min(value = 1)
   @Max(value = 255)
   @Column(name = "well_column")
@@ -64,8 +68,19 @@ public class StorageUnitCoordinates implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
   private StorageUnit storageUnit;
+
+  public String getGroup() {
+    if (storageUnit == null) {
+      return null;
+    }
+    return storageUnit.getGroup();
+  }
+
+  public void setGroup(String group) {
+    // no op
+  }
 
 }
