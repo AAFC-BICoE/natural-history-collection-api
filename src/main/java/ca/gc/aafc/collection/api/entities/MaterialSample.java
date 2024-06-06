@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -132,6 +133,10 @@ public class MaterialSample extends AbstractMaterialSample {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
   private StorageUnit storageUnit;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "storage_unit_coordinates_id")
+  private StorageUnitCoordinates storageUnitCoordinates;
 
   @Transient
   @DiffIgnore

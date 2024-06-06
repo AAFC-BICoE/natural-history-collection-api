@@ -16,11 +16,11 @@ jobs:
           cache: 'maven'
 
       - name: Build with Maven
-        run: mvn verify
+        run: mvn -q verify
       - name: Run Checkstyle
-        run: mvn checkstyle:check
+        run: mvn -q checkstyle:check
       - name: Run SpotBugs
-        run: mvn spotbugs:check
+        run: mvn -q spotbugs:check
 
       - name: Run OWASP dependency-check (only on dev)
         run: mvn org.owasp:dependency-check-maven:check
