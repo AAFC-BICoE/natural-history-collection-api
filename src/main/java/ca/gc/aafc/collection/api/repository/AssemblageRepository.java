@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class AssemblageRepository extends DinaRepository<AssemblageDto, Assemblage> {
 
@@ -45,9 +47,13 @@ public class AssemblageRepository extends DinaRepository<AssemblageDto, Assembla
 
   @Override
   public <S extends AssemblageDto> S create(S resource) {
-    if( dinaAuthenticatedUser != null) {
+    if (dinaAuthenticatedUser != null) {
       resource.setCreatedBy(dinaAuthenticatedUser.getUsername());
     }
     return super.create(resource);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

@@ -10,6 +10,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> {
 
@@ -26,6 +28,10 @@ public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> 
   @Override
   public <T> T findOneById(Object id, Class<T> entityClass) {
     return super.findOneById(id, entityClass);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 
 }

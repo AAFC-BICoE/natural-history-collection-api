@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class InstitutionRepository extends DinaRepository<InstitutionDto, Institution> {
 
@@ -51,4 +53,7 @@ public class InstitutionRepository extends DinaRepository<InstitutionDto, Instit
     return super.create(resource);
   }
 
+  protected final void finalize() {
+    // no-op
+  }
 }

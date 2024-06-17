@@ -47,6 +47,6 @@ public class MaterialSampleIdentifierGeneratorDto {
    * used to return the result
    */
   @JsonApiField(postable = false)
-  public List<String> nextIdentifiers;
+  private List<String> nextIdentifiers;
 
 }

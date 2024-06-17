@@ -12,6 +12,8 @@ import lombok.NonNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class VocabularyRepository extends ReadOnlyResourceRepositoryBase<VocabularyDto, String> {
   
@@ -31,5 +33,9 @@ public class VocabularyRepository extends ReadOnlyResourceRepositoryBase<Vocabul
   @Override
   public ResourceList<VocabularyDto> findAll(QuerySpec querySpec) {
     return querySpec.apply(vocabulary);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

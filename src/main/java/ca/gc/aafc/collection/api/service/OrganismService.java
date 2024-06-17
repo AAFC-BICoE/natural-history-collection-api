@@ -15,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
 
@@ -43,7 +45,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
   @Override
   protected void preCreate(Organism entity) {
     // allow user provided UUID
-    if(entity.getUuid() == null) {
+    if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
 
@@ -95,5 +97,9 @@ public class OrganismService extends DefaultDinaService<Organism> {
         }
       });
     }
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

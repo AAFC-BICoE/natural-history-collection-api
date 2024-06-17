@@ -14,6 +14,8 @@ import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class ExtensionRepository extends ReadOnlyResourceRepositoryBase<ExtensionDto, String> {
 
@@ -49,5 +51,8 @@ public class ExtensionRepository extends ReadOnlyResourceRepositoryBase<Extensio
   public ResourceList<ExtensionDto> findAll(QuerySpec querySpec) {
     return querySpec.apply(extension);
   }
-  
+
+  protected final void finalize() {
+    // no-op
+  }
 }

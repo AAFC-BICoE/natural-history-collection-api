@@ -35,10 +35,10 @@ public class VocabularyService implements PredicateBasedReadOnlyDinaService<Stri
 
     Stream<VocabularyDto> stream = vocabulary.stream().filter(predicate);
 
-    if(pageOffset != null) {
+    if (pageOffset != null) {
       stream = stream.skip(pageOffset);
     }
-    if(pageLimit != null) {
+    if (pageLimit != null) {
       stream = stream.limit(pageLimit);
     }
     return stream.collect(Collectors.toList());

@@ -9,6 +9,8 @@ import org.springframework.validation.SmartValidator;
 
 import java.util.UUID;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class FormTemplateService extends DefaultDinaService<FormTemplate> {
   public FormTemplateService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
@@ -18,5 +20,9 @@ public class FormTemplateService extends DefaultDinaService<FormTemplate> {
   @Override
   protected void preCreate(FormTemplate entity) {
     entity.setUuid(UUID.randomUUID());
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

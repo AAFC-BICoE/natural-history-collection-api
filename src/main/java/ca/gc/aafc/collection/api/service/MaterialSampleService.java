@@ -41,6 +41,8 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 @Log4j2
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
@@ -102,7 +104,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
 
     // sanity checks
-    if(entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
+    if (entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
       return all;
     }
 
@@ -155,7 +157,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
     String s = det.stream()
       .map( d -> {
-        if(StringUtils.isNotBlank(d.getScientificName())) {
+        if (StringUtils.isNotBlank(d.getScientificName())) {
           return d.getScientificName();
         }
         return d.getVerbatimScientificName();
@@ -256,5 +258,9 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
       detach(sample.getParentMaterialSample());
     }
     return sample;
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

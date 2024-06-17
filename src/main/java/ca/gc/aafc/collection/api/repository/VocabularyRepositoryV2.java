@@ -35,7 +35,7 @@ public class VocabularyRepositoryV2 extends ReadOnlyDinaRepositoryV2<String, Voc
 
     VocabularyDto dto = findOne(id);
 
-    if(dto == null) {
+    if (dto == null) {
       return ResponseEntity.notFound().build();
     }
 

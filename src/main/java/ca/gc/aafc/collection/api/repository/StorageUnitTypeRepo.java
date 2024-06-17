@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class StorageUnitTypeRepo extends DinaRepository<StorageUnitTypeDto, StorageUnitType> {
 
@@ -46,5 +48,9 @@ public class StorageUnitTypeRepo extends DinaRepository<StorageUnitTypeDto, Stor
   public <S extends StorageUnitTypeDto> S create(S resource) {
     authenticatedUser.ifPresent(user -> resource.setCreatedBy(user.getUsername()));
     return super.create(resource);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

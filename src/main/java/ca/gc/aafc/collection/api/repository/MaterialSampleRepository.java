@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Log4j2
 @Repository
 public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, MaterialSample> {
@@ -77,4 +79,9 @@ public class MaterialSampleRepository extends DinaRepository<MaterialSampleDto, 
   protected Predicate<String> supplyCheckSubmittedDataPredicate() {
     return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
   }
+
+  protected final void finalize() {
+    // no-op
+  }
+
 }

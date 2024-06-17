@@ -21,6 +21,8 @@ import javax.persistence.PersistenceException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit> {
 
@@ -71,4 +73,7 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
     }
   }
 
+  protected final void finalize() {
+    // no-op
+  }
 }

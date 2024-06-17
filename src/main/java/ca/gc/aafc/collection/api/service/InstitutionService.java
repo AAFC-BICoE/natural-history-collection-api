@@ -9,6 +9,8 @@ import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class InstitutionService extends DefaultDinaService<Institution> {
 
@@ -22,5 +24,9 @@ public class InstitutionService extends DefaultDinaService<Institution> {
   @Override
   protected void preCreate(Institution entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

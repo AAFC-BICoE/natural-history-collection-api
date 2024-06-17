@@ -15,7 +15,6 @@ import ca.gc.aafc.dina.entity.DinaEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -27,7 +26,6 @@ import lombok.experimental.SuperBuilder;
 public class CollectionSequence implements DinaEntity {
 
   @Id
-  @NonNull
   @Column(name = "collection_id")
   private Integer id;
 

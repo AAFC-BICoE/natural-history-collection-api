@@ -9,6 +9,8 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectionSequenceService extends DefaultDinaService<CollectionSequence> {
 
@@ -16,4 +18,7 @@ public class CollectionSequenceService extends DefaultDinaService<CollectionSequ
     super(baseDAO, sv);
   }
 
+  protected final void finalize() {
+    // no-op
+  }
 }
