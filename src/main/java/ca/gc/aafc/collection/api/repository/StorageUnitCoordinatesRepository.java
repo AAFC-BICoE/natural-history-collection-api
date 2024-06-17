@@ -17,6 +17,8 @@ import ca.gc.aafc.dina.security.auth.GroupWithReadAuthorizationService;
 import java.util.Optional;
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class StorageUnitCoordinatesRepository extends
   DinaRepository<StorageUnitCoordinatesDto, StorageUnitCoordinates> {
@@ -49,6 +51,10 @@ public class StorageUnitCoordinatesRepository extends
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 
 }

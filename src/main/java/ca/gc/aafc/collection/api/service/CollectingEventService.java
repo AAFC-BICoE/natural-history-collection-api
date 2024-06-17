@@ -29,6 +29,8 @@ import java.time.OffsetDateTime;
 import java.util.EnumSet;
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectingEventService extends MessageProducingService<CollectingEvent> {
 
@@ -61,7 +63,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   protected void preCreate(CollectingEvent entity) {
 
     // allow user provided UUID
-    if(entity.getUuid() == null) {
+    if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
 
@@ -150,13 +152,13 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     }
 
     var country = entity.getGeographicPlaceNameSourceDetail().getCountry();
-    if( country != null) {
+    if (country != null) {
       entity.setDwcCountryCode(country.getCode());
       entity.setDwcCountry(country.getName());
     }
 
     var stateProvince = entity.getGeographicPlaceNameSourceDetail().getStateProvince();
-    if(stateProvince != null) {
+    if (stateProvince != null) {
       entity.setDwcStateProvince(stateProvince.getName());
     }
   }
@@ -167,5 +169,9 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     }
     return DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
       geo.getDwcDecimalLongitude(), geo.getDwcDecimalLatitude()));
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

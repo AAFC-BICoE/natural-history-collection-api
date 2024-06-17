@@ -12,6 +12,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectionManagedAttributeService extends ManagedAttributeService<CollectionManagedAttribute> {
 
@@ -69,5 +71,9 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
     if (countFirstLevelKeys > 0) {
       throw new IllegalStateException("Managed attribute key: " + key + ", is currently in use.");
     }
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

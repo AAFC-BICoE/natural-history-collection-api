@@ -11,6 +11,8 @@ import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class AssemblageService extends DefaultDinaService<Assemblage> {
 
@@ -28,7 +30,7 @@ public class AssemblageService extends DefaultDinaService<Assemblage> {
   @Override
   protected void preCreate(Assemblage entity) {
     // allow user provided UUID
-    if(entity.getUuid() == null) {
+    if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
   }
@@ -40,5 +42,9 @@ public class AssemblageService extends DefaultDinaService<Assemblage> {
 
   private void validateManagedAttribute(Assemblage entity) {
     collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(), validationContext);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

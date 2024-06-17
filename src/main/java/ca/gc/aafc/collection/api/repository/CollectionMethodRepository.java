@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class CollectionMethodRepository extends DinaRepository<CollectionMethodDto, CollectionMethod> {
 
@@ -49,5 +51,9 @@ public class CollectionMethodRepository extends DinaRepository<CollectionMethodD
       resource.setCreatedBy(dinaAuthenticatedUser.getUsername());
     }
     return super.create(resource);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

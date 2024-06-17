@@ -22,6 +22,8 @@ import ca.gc.aafc.dina.service.OnCreate;
 
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectionSequenceGeneratorService extends DefaultDinaService<CollectionSequenceGenerationRequest> {
 
@@ -100,5 +102,9 @@ public class CollectionSequenceGeneratorService extends DefaultDinaService<Colle
   @Override
   public boolean exists(Class<?> entityClass, Object naturalId) {
     throw new MethodNotAllowedException("exists", null);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

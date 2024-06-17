@@ -9,6 +9,8 @@ import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectionMethodService extends DefaultDinaService<CollectionMethod> {
 
@@ -22,5 +24,9 @@ public class CollectionMethodService extends DefaultDinaService<CollectionMethod
   @Override
   protected void preCreate(CollectionMethod entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 }

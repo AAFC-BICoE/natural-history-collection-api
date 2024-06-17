@@ -53,11 +53,11 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT : generatorDto.getStrategy();
 
 
-    if(amount > MAX_GENERATION_AMOUNT) {
+    if (amount > MAX_GENERATION_AMOUNT) {
       throw new IllegalArgumentException("over maximum amount");
     }
 
-    if(generatorDto.getStrategy() == MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED &&
+    if (generatorDto.getStrategy() == MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED &&
       generatorDto.getMaterialSampleType() == null) {
       throw new IllegalArgumentException("materialSampleType must be provided for strategy TYPE_BASED");
     }

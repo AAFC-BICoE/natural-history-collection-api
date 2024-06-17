@@ -11,6 +11,8 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class StorageUnitCoordinatesService extends DefaultDinaService<StorageUnitCoordinates> {
 
@@ -31,4 +33,7 @@ public class StorageUnitCoordinatesService extends DefaultDinaService<StorageUni
     applyBusinessRule(entity, coordinatesValidator);
   }
 
+  protected final void finalize() {
+    // no-op
+  }
 }

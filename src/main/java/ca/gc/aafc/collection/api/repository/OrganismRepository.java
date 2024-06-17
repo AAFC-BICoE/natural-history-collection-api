@@ -21,6 +21,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class OrganismRepository extends DinaRepository<OrganismDto, Organism> {
 
@@ -58,6 +60,10 @@ public class OrganismRepository extends DinaRepository<OrganismDto, Organism> {
 
   private static boolean isSafeSimpleText(String txt) {
     return StringUtils.isBlank(txt) || Jsoup.isValid(txt, SIMPLE_TEXT);
+  }
+
+  protected final void finalize() {
+    // no-op
   }
 
 }

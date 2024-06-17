@@ -11,6 +11,8 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import lombok.NonNull;
 
+// CHECKSTYLE:OFF NoFinalizer
+// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class ProjectService extends DefaultDinaService<Project> {
 
@@ -34,5 +36,8 @@ public class ProjectService extends DefaultDinaService<Project> {
   public void validateBusinessRules(Project entity) {
     applyBusinessRule(entity, projectValidator);
   }
-  
+
+  protected final void finalize() {
+    // no-op
+  }
 }

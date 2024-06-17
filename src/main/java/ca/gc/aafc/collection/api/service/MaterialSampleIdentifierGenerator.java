@@ -77,12 +77,12 @@ public class MaterialSampleIdentifierGenerator {
 
 
     // if there is no descendant we need to start a new series
-    if(params.descendantNames.isEmpty()) {
+    if (params.descendantNames.isEmpty()) {
       return startSeries(params.basename, IDENTIFIER_SEPARATOR, characterType);
     }
 
     // if we reached the max we need to stop
-    if(params.descendantNames.size() == MAX_MAT_SAMPLE) {
+    if (params.descendantNames.size() == MAX_MAT_SAMPLE) {
       throw new IllegalStateException("maximum number of descendant reached.");
     }
 
@@ -146,10 +146,10 @@ public class MaterialSampleIdentifierGenerator {
 
   private void extractAllDescendantNames(List<MaterialSample> materialSample, List<String> materialSampleNameAccumulator, MaterialSample.MaterialSampleType type) {
     List<Integer> childrenId = new ArrayList<>();
-    for(MaterialSample currMs : materialSample) {
+    for (MaterialSample currMs : materialSample) {
       if (currMs.getMaterialSampleChildren() != null) {
         for (AbstractMaterialSample currChild : currMs.getMaterialSampleChildren()) {
-          if(type == null || type == currChild.getMaterialSampleType()) {
+          if (type == null || type == currChild.getMaterialSampleType()) {
             childrenId.add(currChild.getId());
             materialSampleNameAccumulator.add(currChild.getMaterialSampleName());
           }
@@ -157,7 +157,7 @@ public class MaterialSampleIdentifierGenerator {
       }
     }
 
-    if(!childrenId.isEmpty()) {
+    if (!childrenId.isEmpty()) {
       extractAllDescendantNames(findMaterialSampleById(childrenId), materialSampleNameAccumulator, type);
     }
   }
@@ -219,7 +219,7 @@ public class MaterialSampleIdentifierGenerator {
 
     //try letters
     Matcher currMatcher = TRAILING_LETTERS_REGEX.matcher(providedIdentifier);
-    if(currMatcher.find()) {
+    if (currMatcher.find()) {
       currSuffix = currMatcher.group(1);
 
       int matchingNumber = NumberLetterTranslator.toNumber(currSuffix);
@@ -233,7 +233,7 @@ public class MaterialSampleIdentifierGenerator {
 
     //otherwise try numbers
     currMatcher = TRAILING_NUMBERS_REGEX.matcher(providedIdentifier);
-    if(currMatcher.find()) {
+    if (currMatcher.find()) {
       currSuffix = currMatcher.group(1);
       int nextValue = Integer.parseInt(currSuffix) + 1;
 

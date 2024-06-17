@@ -100,7 +100,7 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extensionValue
    */
   private void checkNotBlankValue(Errors errors, FieldExtensionValue extensionValue) {
-    if(StringUtils.isBlank(extensionValue.getValue())) {
+    if (StringUtils.isBlank(extensionValue.getValue())) {
       errors.rejectValue(FieldExtensionValue.VALUE_KEY_NAME, BLANK_VALUE, getMessageForKey(BLANK_VALUE));
     }
   }
@@ -114,7 +114,7 @@ public class BaseExtensionValueValidator implements Validator {
    * @param extension the extension set of values that that matches the key and version.
    */
   private void checkExtensionFieldKey(Errors errors, FieldExtensionValue extensionValue, Extension extension) {
-    if(!extension.containsKey(extensionValue.getExtFieldKey())) {
+    if (!extension.containsKey(extensionValue.getExtFieldKey())) {
       String errorMessage = getMessageForKey(NO_MATCH_FIELD_KEY, extensionValue.getExtKey(),
               extensionValue.getExtFieldKey());
       errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_FIELD_KEY, errorMessage);
@@ -152,7 +152,7 @@ public class BaseExtensionValueValidator implements Validator {
   private void validateValue(Errors errors, FieldExtensionValue extensionValue, Field field) {
 
     // validate the value assigned against the field definition (unless there is no VocabularyElementType)
-    if(field.getVocabularyElementType() != null && !TypedVocabularyElementValidator.isValidElement(field, extensionValue.getValue())) {
+    if (field.getVocabularyElementType() != null && !TypedVocabularyElementValidator.isValidElement(field, extensionValue.getValue())) {
       String errorMessage = getMessageForKey(
         INVALID_VALUE_KEY,
         extensionValue.getValue(),

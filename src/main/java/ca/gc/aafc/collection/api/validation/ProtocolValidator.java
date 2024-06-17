@@ -33,7 +33,7 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
     validateProtocolType(target, errors);
 
     List<Protocol.ProtocolData> protocolData = target.getProtocolData();
-    if(protocolData == null) {
+    if (protocolData == null) {
       return;
     }
 
