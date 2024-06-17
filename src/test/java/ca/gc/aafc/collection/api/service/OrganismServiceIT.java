@@ -13,6 +13,9 @@ import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
 import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import javax.validation.ValidationException;
@@ -36,6 +39,23 @@ public class OrganismServiceIT extends CollectionModuleBaseIT {
     organismService.create(organism);
 
     assertTrue(organism.getDetermination().get(0).getIsPrimary());
+  }
+
+  @Test
+  void organismDetermination_onNullIsPrimary_isPrimary() throws MalformedURLException {
+    Determination determination = DeterminationFactory.newDetermination()
+      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .sourceUrl(new URL("https://www.google.com").toString())
+        .recordedOn(LocalDate.now().minusDays(1))
+        .classificationPath("a|b|c")
+        .classificationRanks("family|genus|c")
+        .build())
+      .isPrimary(null) // force null
+      .build();
+
+    Map<String, String> a = organismService.setupClassification(determination);
+
+    assertTrue(a.containsKey("family"));
   }
 
   @Test
