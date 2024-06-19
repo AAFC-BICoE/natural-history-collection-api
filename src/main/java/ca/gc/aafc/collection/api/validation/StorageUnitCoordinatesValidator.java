@@ -47,7 +47,7 @@ public class StorageUnitCoordinatesValidator extends AbstractStorageLocationVali
     checkStorageOrTypeNotBoth(entity, errors);
 
     // if we have errors return since we won't be able to find the type in a reliable way
-    if(errors.hasErrors()) {
+    if (errors.hasErrors()) {
       return;
     }
 
@@ -65,8 +65,8 @@ public class StorageUnitCoordinatesValidator extends AbstractStorageLocationVali
   }
 
   private void checkStorageOrTypeNotBoth(StorageUnitCoordinates storageUnitCoordinates, Errors errors) {
-    if ((storageUnitCoordinates.getStorageUnit() == null && storageUnitCoordinates.getStorageUnitType() == null) ||
-      (storageUnitCoordinates.getStorageUnit() != null && storageUnitCoordinates.getStorageUnitType() != null)) {
+    if (storageUnitCoordinates.getStorageUnit() == null && storageUnitCoordinates.getStorageUnitType() == null ||
+      storageUnitCoordinates.getStorageUnit() != null && storageUnitCoordinates.getStorageUnitType() != null) {
       errors.rejectValue("storageUnit", STORAGE_UNIT_OR_TYPE_KEY,
         messageSource.getMessage(STORAGE_UNIT_OR_TYPE_KEY, null, LocaleContextHolder.getLocale()));
     }
