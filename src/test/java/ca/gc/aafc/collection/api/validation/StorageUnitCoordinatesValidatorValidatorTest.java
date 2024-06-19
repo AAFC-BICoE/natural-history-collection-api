@@ -84,7 +84,7 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
 
     sampleLocationValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
-    assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("StorageUnit must be set"));
+    assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Storage Unit or Storage Unit Type must be provided but not both"));
   }
 
 

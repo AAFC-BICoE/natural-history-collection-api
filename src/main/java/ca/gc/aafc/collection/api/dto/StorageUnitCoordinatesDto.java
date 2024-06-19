@@ -14,7 +14,6 @@ import lombok.Setter;
 import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
-
 @Getter
 @Setter
 @Builder
@@ -34,6 +33,9 @@ public class StorageUnitCoordinatesDto {
 
   private OffsetDateTime createdOn;
   private String createdBy;
+
+  @JsonApiRelation
+  private StorageUnitTypeDto storageUnitType;
 
   @JsonApiRelation
   private StorageUnitDto storageUnit;
