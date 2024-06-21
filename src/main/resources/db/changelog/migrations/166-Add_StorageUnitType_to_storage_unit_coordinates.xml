@@ -1,0 +1,18 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="166-Add_StorageUnitType_to_storage_unit_coordinates" context="schema-change" author="cgendreau">
+        <addColumn tableName="storage_unit_coordinates">
+            <column name="storage_unit_type_id" type="integer">
+                <constraints foreignKeyName="fk_storage_unit_coordinates_storage_unit_type_id" references="storage_unit_type(id)"/>
+            </column>
+        </addColumn>
+
+        <sql>
+            ALTER TABLE storage_unit_coordinates ADD CONSTRAINT storage_unit_xor_type CHECK (num_nonnulls(storage_unit_type_id, storage_unit_id) = 1)
+        </sql>
+    </changeSet>
+</databaseChangeLog>

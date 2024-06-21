@@ -170,4 +170,5 @@
   <include file="db/changelog/migrations/163-Add_source_set_to_material_sample.xml"/>
   <include file="db/changelog/migrations/164-Add_organism_managed_attribute.xml"/>
   <include file="db/changelog/migrations/165-Add_coordinates_material_sample.xml"/>
+  <include file="db/changelog/migrations/166-Add_StorageUnitType_to_storage_unit_coordinates.xml"/>
 </databaseChangeLog>

@@ -68,15 +68,28 @@ public class StorageUnitCoordinates implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
+  /**
+   * Only set if storageUnit is not.
+   */
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "storage_unit_type_id")
+  private StorageUnitType storageUnitType;
+
+  /**
+   * Only set if storageUnitType is not.
+   */
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "storage_unit_id")
   private StorageUnit storageUnit;
 
   public String getGroup() {
-    if (storageUnit == null) {
+    if (storageUnit != null) {
+      return storageUnit.getGroup();
+    } else if (storageUnitType != null) {
+      return storageUnitType.getGroup();
+    } else {
       return null;
     }
-    return storageUnit.getGroup();
   }
 
   public void setGroup(String group) {
