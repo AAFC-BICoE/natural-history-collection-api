@@ -83,10 +83,13 @@ public class StorageUnitCoordinates implements DinaEntity {
   private StorageUnit storageUnit;
 
   public String getGroup() {
-    if (storageUnit == null) {
+    if (storageUnit != null) {
+      return storageUnit.getGroup();
+    } else if (storageUnitType != null) {
+      return storageUnitType.getGroup();
+    } else {
       return null;
     }
-    return storageUnit.getGroup();
   }
 
   public void setGroup(String group) {
