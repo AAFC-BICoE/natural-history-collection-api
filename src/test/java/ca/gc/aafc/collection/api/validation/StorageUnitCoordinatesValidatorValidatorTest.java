@@ -22,19 +22,19 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
   @Inject
   private StorageUnitCoordinatesValidator sampleLocationValidator;
 
+  private static final StorageGridLayout TEST_GRID_LAYOUT = StorageGridLayout.builder()
+    .numberOfColumns(8)
+    .numberOfRows(8)
+    .fillDirection(StorageGridLayout.FillDirection.BY_ROW)
+    .build();
+
   @Test
-  void validate_WhenValid_NoErrors() {
+  void validate_WhenValidUnit_NoErrors() {
     StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
-    StorageGridLayout storageGridLayout = StorageGridLayout.builder()
-      .numberOfColumns(8)
-      .numberOfRows(8)
-      .fillDirection(StorageGridLayout.FillDirection.BY_ROW)
-      .build();
-
     StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
-      .gridLayoutDefinition(storageGridLayout)
+      .gridLayoutDefinition(TEST_GRID_LAYOUT)
       .build();
     StorageUnit su = StorageUnitFactory.newStorageUnit()
       .storageUnitType(sut).build();
@@ -48,18 +48,29 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
   }
 
   @Test
+  void validate_WhenValidType_NoErrors() {
+    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
+
+    StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
+      .gridLayoutDefinition(TEST_GRID_LAYOUT)
+      .build();
+
+    coordinates.setWellRow("A");
+    coordinates.setWellColumn(1);
+    coordinates.setStorageUnitType(sut);
+
+    sampleLocationValidator.validate(coordinates, errors);
+    assertFalse(errors.hasErrors());
+  }
+
+  @Test
   void validate_onInvalidLocation_error() {
     StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
-    StorageGridLayout storageGridLayout = StorageGridLayout.builder()
-      .numberOfColumns(8)
-      .numberOfRows(8)
-      .fillDirection(StorageGridLayout.FillDirection.BY_ROW)
-      .build();
-
     StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
-      .gridLayoutDefinition(storageGridLayout)
+      .gridLayoutDefinition(TEST_GRID_LAYOUT)
       .build();
     StorageUnit su = StorageUnitFactory.newStorageUnit()
         .storageUnitType(sut).build();
@@ -81,6 +92,27 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
 
     coordinates.setWellRow("Z");
     coordinates.setWellColumn(1);
+
+    sampleLocationValidator.validate(coordinates, errors);
+    assertTrue(errors.hasErrors());
+    assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Storage Unit or Storage Unit Type must be provided but not both"));
+  }
+
+  @Test
+  void validate_onStorageAndType_error() {
+    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
+
+    StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
+      .gridLayoutDefinition(TEST_GRID_LAYOUT)
+      .build();
+    StorageUnit su = StorageUnitFactory.newStorageUnit()
+      .storageUnitType(sut).build();
+
+    coordinates.setWellRow("Z");
+    coordinates.setWellColumn(1);
+    coordinates.setStorageUnit(su);
+    coordinates.setStorageUnitType(sut);
 
     sampleLocationValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
