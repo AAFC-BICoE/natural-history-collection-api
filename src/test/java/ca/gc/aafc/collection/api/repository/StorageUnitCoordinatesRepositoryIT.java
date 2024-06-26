@@ -16,6 +16,7 @@ import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import javax.inject.Inject;
 import javax.validation.ValidationException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled = true")
@@ -42,8 +43,10 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
     storageUnitDto = storageUnitRepo.create(storageUnitDto);
 
     StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(storageUnitDto);
-    storageUnitCoordinatesRepository.create(dto);
 
+
+    StorageUnitCoordinatesDto stored = storageUnitCoordinatesRepository.create(dto);
+    assertEquals(1, stored.getCellNumber());
   }
 
   @Test

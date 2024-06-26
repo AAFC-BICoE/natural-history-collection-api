@@ -30,6 +30,7 @@ public class StorageUnitCoordinatesDto {
 
   private Integer wellColumn;
   private String wellRow;
+  private int cellNumber;
 
   private OffsetDateTime createdOn;
   private String createdBy;

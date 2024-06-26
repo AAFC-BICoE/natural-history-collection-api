@@ -51,8 +51,7 @@ public class StorageUnitCoordinatesValidator extends AbstractStorageLocationVali
       return;
     }
 
-    StorageUnitType sut = entity.getStorageUnitType() != null ? entity.getStorageUnitType() :
-      entity.getStorageUnit().getStorageUnitType();
+    StorageUnitType sut = entity.getEffectiveStorageUnitType();
 
     // make sure we have a storage unit type
     if (sut != null && sut.getGridLayoutDefinition() != null) {

@@ -60,6 +60,10 @@ public class StorageUnitCoordinates implements DinaEntity {
   @Column(name = "well_row")
   private String wellRow;
 
+  // calculated field
+  @Transient
+  private int cellNumber;
+
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
@@ -90,6 +94,16 @@ public class StorageUnitCoordinates implements DinaEntity {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Returns the storageUnitType or the one from storageUnit depending which one
+   * is set.
+   * @return
+   */
+  public StorageUnitType getEffectiveStorageUnitType() {
+    return storageUnitType != null ? storageUnitType :
+      storageUnit.getStorageUnitType();
   }
 
   public void setGroup(String group) {
