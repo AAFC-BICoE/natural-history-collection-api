@@ -14,6 +14,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,5 +73,23 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
     // access denied since they group is loaded from the storage
     assertThrows(AccessDeniedException.class, ()-> storageUnitCoordinatesRepository.create(dto));
   }
-  
+
+  @Test
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
+  public void storageUnitCoordinatesRepository_onCreateWithoutCoordinates_exception() {
+
+    StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
+    storageUnitTypeDto = storageUnitTypeRepo.create(storageUnitTypeDto);
+
+    StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
+    storageUnitDto.setStorageUnitType(storageUnitTypeDto);
+    storageUnitDto = storageUnitRepo.create(storageUnitDto);
+
+    StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(storageUnitDto);
+    dto.setWellColumn(null);
+    dto.setWellRow(null);
+
+    // access denied since they group is loaded from the storage
+    assertThrows(ConstraintViolationException.class, ()-> storageUnitCoordinatesRepository.create(dto));
+  }
 }

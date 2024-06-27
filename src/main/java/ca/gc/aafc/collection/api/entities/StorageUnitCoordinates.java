@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -52,11 +53,13 @@ public class StorageUnitCoordinates implements DinaEntity {
   @Transient
   private String group;
 
+  @NotNull
   @Min(value = 1)
   @Max(value = 255)
   @Column(name = "well_column")
   private Integer wellColumn;
 
+  @NotEmpty
   @Size(max = 2)
   @Pattern(regexp = "[a-zA-Z]")
   @Column(name = "well_row")
