@@ -112,7 +112,7 @@ public class StorageUnitCoordinates implements DinaEntity {
       return null;
     }
 
-    if(wellRow == null || wellColumn == null) {
+    if (wellRow == null || wellColumn == null) {
       return null;
     }
 
