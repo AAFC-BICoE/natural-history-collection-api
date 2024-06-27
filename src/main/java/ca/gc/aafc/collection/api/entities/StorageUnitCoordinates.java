@@ -29,6 +29,8 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.entity.StorageGridLayout;
+import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
 @Entity
 @AllArgsConstructor
@@ -60,10 +62,6 @@ public class StorageUnitCoordinates implements DinaEntity {
   @Column(name = "well_row")
   private String wellRow;
 
-  // calculated field
-  @Transient
-  private int cellNumber;
-
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
@@ -71,6 +69,10 @@ public class StorageUnitCoordinates implements DinaEntity {
   @NotBlank
   @Column(name = "created_by", updatable = false)
   private String createdBy;
+
+  // declared since the mapper needs it for consistency
+  @Transient
+  private Integer cellNumber;
 
   /**
    * Only set if storageUnit is not.
@@ -96,14 +98,42 @@ public class StorageUnitCoordinates implements DinaEntity {
     }
   }
 
+  public void setCellNumber(Integer i) {
+    // nop-op, read only
+  }
+
+  /**
+   * Calculated cell number (if possible to compute)
+   * @return cell number or null
+   */
+  public Integer getCellNumber() {
+    StorageUnitType sut = getEffectiveStorageUnitType();
+    if (sut == null || sut.getGridLayoutDefinition() == null) {
+      return null;
+    }
+
+    if(wellRow == null || wellColumn == null) {
+      return null;
+    }
+
+    StorageGridLayout restriction = sut.getGridLayoutDefinition();
+    return restriction.calculateCellNumber(NumberLetterTranslator.toNumber(wellRow), wellColumn);
+  }
+
   /**
    * Returns the storageUnitType or the one from storageUnit depending which one
    * is set.
-   * @return
+   * @return effective storageUnitType or null if none
    */
   public StorageUnitType getEffectiveStorageUnitType() {
-    return storageUnitType != null ? storageUnitType :
-      storageUnit.getStorageUnitType();
+    if (storageUnitType != null) {
+      return storageUnitType;
+    }
+
+    if (storageUnit != null) {
+      return storageUnit.getStorageUnitType();
+    }
+    return null;
   }
 
   public void setGroup(String group) {

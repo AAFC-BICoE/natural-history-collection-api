@@ -44,7 +44,6 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
 
     StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(storageUnitDto);
 
-
     StorageUnitCoordinatesDto stored = storageUnitCoordinatesRepository.create(dto);
     assertEquals(1, stored.getCellNumber());
   }
