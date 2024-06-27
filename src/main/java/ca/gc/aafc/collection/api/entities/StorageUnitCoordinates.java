@@ -30,6 +30,8 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.entity.StorageGridLayout;
+import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
 @Entity
 @AllArgsConstructor
@@ -71,6 +73,10 @@ public class StorageUnitCoordinates implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
+  // declared since the mapper needs it for consistency
+  @Transient
+  private Integer cellNumber;
+
   /**
    * Only set if storageUnit is not.
    */
@@ -93,6 +99,44 @@ public class StorageUnitCoordinates implements DinaEntity {
     } else {
       return null;
     }
+  }
+
+  public void setCellNumber(Integer i) {
+    // nop-op, read only
+  }
+
+  /**
+   * Calculated cell number (if possible to compute)
+   * @return cell number or null
+   */
+  public Integer getCellNumber() {
+    StorageUnitType sut = getEffectiveStorageUnitType();
+    if (sut == null || sut.getGridLayoutDefinition() == null) {
+      return null;
+    }
+
+    if (wellRow == null || wellColumn == null) {
+      return null;
+    }
+
+    StorageGridLayout restriction = sut.getGridLayoutDefinition();
+    return restriction.calculateCellNumber(NumberLetterTranslator.toNumber(wellRow), wellColumn);
+  }
+
+  /**
+   * Returns the storageUnitType or the one from storageUnit depending which one
+   * is set.
+   * @return effective storageUnitType or null if none
+   */
+  public StorageUnitType getEffectiveStorageUnitType() {
+    if (storageUnitType != null) {
+      return storageUnitType;
+    }
+
+    if (storageUnit != null) {
+      return storageUnit.getStorageUnitType();
+    }
+    return null;
   }
 
   public void setGroup(String group) {
