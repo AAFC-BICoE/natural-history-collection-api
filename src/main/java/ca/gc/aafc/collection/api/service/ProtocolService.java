@@ -11,8 +11,6 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 import lombok.NonNull;
 import org.springframework.validation.SmartValidator;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class ProtocolService extends DefaultDinaService<Protocol> {
 
@@ -31,9 +29,5 @@ public class ProtocolService extends DefaultDinaService<Protocol> {
   @Override
   public void validateBusinessRules(Protocol entity) {
     applyBusinessRule(entity, protocolValidator);
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }
