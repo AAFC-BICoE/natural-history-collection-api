@@ -17,8 +17,6 @@ import ca.gc.aafc.dina.security.auth.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class ProjectRepository extends DinaRepository<ProjectDto, Project> {
   
@@ -51,9 +49,5 @@ public class ProjectRepository extends DinaRepository<ProjectDto, Project> {
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

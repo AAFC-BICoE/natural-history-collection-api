@@ -12,8 +12,6 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectionService extends DefaultDinaService<Collection> {
 
@@ -64,9 +62,4 @@ public class CollectionService extends DefaultDinaService<Collection> {
   public void validateBusinessRules(Collection entity) {
     applyBusinessRule(entity, collectionValidator);
   }
-
-  protected final void finalize() {
-    // no-op
-  }
-
 }

@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class CollectingEventRepository extends DinaRepository<CollectingEventDto, CollectingEvent> {
 
@@ -64,10 +62,4 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   protected Predicate<String> supplyCheckSubmittedDataPredicate() {
     return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
   }
-
-  protected final void finalize() {
-    // no-op
-  }
-
 }
-

@@ -18,8 +18,6 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class CollectionRepository extends DinaRepository<CollectionDto, Collection> {
 
@@ -51,9 +49,5 @@ public class CollectionRepository extends DinaRepository<CollectionDto, Collecti
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

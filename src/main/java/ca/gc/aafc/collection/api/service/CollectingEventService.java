@@ -29,8 +29,6 @@ import java.time.OffsetDateTime;
 import java.util.EnumSet;
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectingEventService extends MessageProducingService<CollectingEvent> {
 
@@ -169,9 +167,5 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     }
     return DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
       geo.getDwcDecimalLongitude(), geo.getDwcDecimalLatitude()));
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

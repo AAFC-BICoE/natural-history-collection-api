@@ -18,8 +18,6 @@ import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBase<FieldExtensionValueDto, String> {
 
@@ -56,9 +54,5 @@ public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBas
       }
     }
     throw new ResourceNotFoundException("Field Extension Value not found: " + TextHtmlSanitizer.sanitizeText(path));
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

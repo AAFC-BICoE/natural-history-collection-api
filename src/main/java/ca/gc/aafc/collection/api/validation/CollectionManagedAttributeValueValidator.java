@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Component
 public class CollectionManagedAttributeValueValidator extends ManagedAttributeValueValidator<CollectionManagedAttribute> {
 
@@ -110,9 +108,4 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
   private String getMessageForKey(String key, Object... objects) {
     return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
   }
-
-  protected final void finalize() {
-    // no-op
-  }
-
 }

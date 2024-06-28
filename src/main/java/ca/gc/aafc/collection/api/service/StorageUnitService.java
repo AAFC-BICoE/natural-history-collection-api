@@ -25,8 +25,6 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class StorageUnitService extends MessageProducingService<StorageUnit> {
 
@@ -103,9 +101,4 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     }
     unit.setHierarchy(storageHierarchicalObjects);
   }
-
-  protected final void finalize() {
-    // no-op
-  }
-
 }

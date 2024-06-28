@@ -16,8 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class FormTemplateRepository extends DinaRepository<FormTemplateDto, FormTemplate> {
 
@@ -47,9 +45,5 @@ public class FormTemplateRepository extends DinaRepository<FormTemplateDto, Form
       resource.setCreatedBy(authenticatedUser.getUsername());
     }
     return super.create(resource);
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

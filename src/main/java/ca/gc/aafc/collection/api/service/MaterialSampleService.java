@@ -41,8 +41,6 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 @Log4j2
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
@@ -258,9 +256,5 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
       detach(sample.getParentMaterialSample());
     }
     return sample;
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }
