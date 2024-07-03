@@ -15,8 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
 
@@ -97,9 +95,5 @@ public class OrganismService extends DefaultDinaService<Organism> {
         }
       });
     }
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }
