@@ -21,8 +21,6 @@ import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class CollectionManagedAttributeRepo extends DinaRepository<CollectionManagedAttributeDto, CollectionManagedAttribute> {
 
@@ -84,9 +82,5 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
     }
 
     return super.findOne(id, querySpec);
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

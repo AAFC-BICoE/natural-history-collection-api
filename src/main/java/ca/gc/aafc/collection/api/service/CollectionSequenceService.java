@@ -9,16 +9,10 @@ import ca.gc.aafc.dina.service.DefaultDinaService;
 
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class CollectionSequenceService extends DefaultDinaService<CollectionSequence> {
 
   public CollectionSequenceService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
     super(baseDAO, sv);
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

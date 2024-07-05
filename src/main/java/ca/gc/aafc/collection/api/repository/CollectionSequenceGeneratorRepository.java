@@ -28,8 +28,6 @@ import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.resource.list.ResourceList;
 import lombok.NonNull;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Repository
 public class CollectionSequenceGeneratorRepository extends DinaRepository<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> {
 
@@ -126,9 +124,5 @@ public class CollectionSequenceGeneratorRepository extends DinaRepository<Collec
   @Override
   public void delete(Serializable id) {
     throw new MethodNotAllowedException("DELETE");
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }

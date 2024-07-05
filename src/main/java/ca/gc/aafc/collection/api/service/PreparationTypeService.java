@@ -10,8 +10,6 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 import lombok.NonNull;
 import org.springframework.validation.SmartValidator;
 
-// CHECKSTYLE:OFF NoFinalizer
-// CHECKSTYLE:OFF SuperFinalize
 @Service
 public class PreparationTypeService extends DefaultDinaService<PreparationType> {
   public PreparationTypeService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
@@ -21,9 +19,5 @@ public class PreparationTypeService extends DefaultDinaService<PreparationType> 
   @Override
   protected void preCreate(PreparationType entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
-  }
-
-  protected final void finalize() {
-    // no-op
   }
 }
