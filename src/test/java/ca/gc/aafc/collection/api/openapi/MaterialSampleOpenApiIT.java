@@ -217,7 +217,10 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "MaterialSample", 
       RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
         .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude)).asString(),
-      ValidationRestrictionOptions.builder().allowAdditionalFields(false).allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent", "organismPrimaryDetermination")).build()
+      ValidationRestrictionOptions.builder()
+        .allowAdditionalFields(false)
+        .allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent", "organismPrimaryDetermination", "storageUnitCoordinates"))
+        .build()
       );
     }
 
