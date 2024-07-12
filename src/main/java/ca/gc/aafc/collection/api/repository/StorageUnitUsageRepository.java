@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.gc.aafc.collection.api.dto.StorageUnitCoordinatesDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
 import ca.gc.aafc.collection.api.service.StorageUnitCoordinatesService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
@@ -18,12 +18,12 @@ import java.util.Optional;
 import lombok.NonNull;
 
 @Repository
-public class StorageUnitCoordinatesRepository extends
-  DinaRepository<StorageUnitCoordinatesDto, StorageUnitCoordinates> {
+public class StorageUnitUsageRepository extends
+  DinaRepository<StorageUnitUsageDto, StorageUnitCoordinates> {
 
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
-  public StorageUnitCoordinatesRepository(
+  public StorageUnitUsageRepository(
     @NonNull StorageUnitCoordinatesService dinaService,
     GroupWithReadAuthorizationService groupWithReadAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
@@ -35,8 +35,8 @@ public class StorageUnitCoordinatesRepository extends
       dinaService,
       groupWithReadAuthorizationService,
       Optional.empty(),
-      new DinaMapper<>(StorageUnitCoordinatesDto.class),
-      StorageUnitCoordinatesDto.class,
+      new DinaMapper<>(StorageUnitUsageDto.class),
+      StorageUnitUsageDto.class,
       StorageUnitCoordinates.class,
       null,
       externalResourceProvider,
@@ -45,7 +45,7 @@ public class StorageUnitCoordinatesRepository extends
   }
 
   @Override
-  public <S extends StorageUnitCoordinatesDto> S create(S resource) {
+  public <S extends StorageUnitUsageDto> S create(S resource) {
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);

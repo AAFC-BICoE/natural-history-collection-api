@@ -20,10 +20,10 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(StorageUnitCoordinates.class)
-@JsonApiResource(type = StorageUnitCoordinatesDto.TYPENAME)
-public class StorageUnitCoordinatesDto {
+@JsonApiResource(type = StorageUnitUsageDto.TYPENAME)
+public class StorageUnitUsageDto {
 
-  public static final String TYPENAME = "storage-unit-coordinates";
+  public static final String TYPENAME = "storage-unit-usage";
 
   @JsonApiId
   private UUID uuid;
