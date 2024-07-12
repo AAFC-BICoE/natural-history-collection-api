@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
-import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
-import ca.gc.aafc.collection.api.service.StorageUnitCoordinatesService;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
+import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -19,12 +19,12 @@ import lombok.NonNull;
 
 @Repository
 public class StorageUnitUsageRepository extends
-  DinaRepository<StorageUnitUsageDto, StorageUnitCoordinates> {
+  DinaRepository<StorageUnitUsageDto, StorageUnitUsage> {
 
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
   public StorageUnitUsageRepository(
-    @NonNull StorageUnitCoordinatesService dinaService,
+    @NonNull StorageUnitUsageService dinaService,
     GroupWithReadAuthorizationService groupWithReadAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
@@ -37,7 +37,7 @@ public class StorageUnitUsageRepository extends
       Optional.empty(),
       new DinaMapper<>(StorageUnitUsageDto.class),
       StorageUnitUsageDto.class,
-      StorageUnitCoordinates.class,
+      StorageUnitUsage.class,
       null,
       externalResourceProvider,
       buildProperties, objectMapper);

@@ -40,7 +40,7 @@ import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 @Getter
 @RequiredArgsConstructor
 @Table
-public class StorageUnitCoordinates implements DinaEntity {
+public class StorageUnitUsage implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
 @Getter
@@ -19,7 +19,7 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RelatedEntity(StorageUnitCoordinates.class)
+@RelatedEntity(StorageUnitUsage.class)
 @JsonApiResource(type = StorageUnitUsageDto.TYPENAME)
 public class StorageUnitUsageDto {
 
