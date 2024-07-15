@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
-import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitTypeFactory;
@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.inject.Inject;
 
-public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModuleBaseIT {
+public class StorageUnitUsageValidatorTest extends CollectionModuleBaseIT {
 
   @Inject
-  private StorageUnitCoordinatesValidator sampleLocationValidator;
+  private StorageUnitUsageValidator storageUnitUsageValidator;
 
   private static final StorageGridLayout TEST_GRID_LAYOUT = StorageGridLayout.builder()
     .numberOfColumns(8)
@@ -30,7 +30,7 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
 
   @Test
   void validate_WhenValidUnit_NoErrors() {
-    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    StorageUnitUsage coordinates = new StorageUnitUsage();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
@@ -43,13 +43,13 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
     coordinates.setWellColumn(1);
     coordinates.setStorageUnit(su);
 
-    sampleLocationValidator.validate(coordinates, errors);
+    storageUnitUsageValidator.validate(coordinates, errors);
     assertFalse(errors.hasErrors());
   }
 
   @Test
   void validate_WhenValidType_NoErrors() {
-    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    StorageUnitUsage coordinates = new StorageUnitUsage();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
@@ -60,13 +60,13 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
     coordinates.setWellColumn(1);
     coordinates.setStorageUnitType(sut);
 
-    sampleLocationValidator.validate(coordinates, errors);
+    storageUnitUsageValidator.validate(coordinates, errors);
     assertFalse(errors.hasErrors());
   }
 
   @Test
   void validate_onInvalidLocation_error() {
-    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    StorageUnitUsage coordinates = new StorageUnitUsage();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
@@ -79,7 +79,7 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
     coordinates.setWellColumn(1);
     coordinates.setStorageUnit(su);
 
-    sampleLocationValidator.validate(coordinates, errors);
+    storageUnitUsageValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
 
    assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Invalid well row"));
@@ -87,20 +87,20 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
 
   @Test
   void validate_onNoStorage_error() {
-    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    StorageUnitUsage coordinates = new StorageUnitUsage();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     coordinates.setWellRow("Z");
     coordinates.setWellColumn(1);
 
-    sampleLocationValidator.validate(coordinates, errors);
+    storageUnitUsageValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
     assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Storage Unit or Storage Unit Type must be provided but not both"));
   }
 
   @Test
   void validate_onStorageAndType_error() {
-    StorageUnitCoordinates coordinates = new StorageUnitCoordinates();
+    StorageUnitUsage coordinates = new StorageUnitUsage();
     Errors errors = ValidationErrorsHelper.newErrorsObject(coordinates);
 
     StorageUnitType sut = StorageUnitTypeFactory.newStorageUnitType()
@@ -114,7 +114,7 @@ public class StorageUnitCoordinatesValidatorValidatorTest extends CollectionModu
     coordinates.setStorageUnit(su);
     coordinates.setStorageUnitType(sut);
 
-    sampleLocationValidator.validate(coordinates, errors);
+    storageUnitUsageValidator.validate(coordinates, errors);
     assertTrue(errors.hasErrors());
     assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Storage Unit or Storage Unit Type must be provided but not both"));
   }

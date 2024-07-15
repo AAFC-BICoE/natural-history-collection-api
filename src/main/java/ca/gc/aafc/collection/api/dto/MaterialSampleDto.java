@@ -148,7 +148,7 @@ public class MaterialSampleDto {
 
   @ShallowReference
   @JsonApiRelation
-  private StorageUnitCoordinatesDto storageUnitCoordinates;
+  private StorageUnitUsageDto storageUnitUsage;
 
   @ShallowReference
   @JsonApiRelation

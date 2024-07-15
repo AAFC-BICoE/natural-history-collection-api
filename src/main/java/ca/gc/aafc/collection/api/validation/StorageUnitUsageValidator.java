@@ -8,30 +8,30 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.validation.AbstractStorageLocationValidator;
 
 /**
- * Validates the well location of a {@link StorageUnitCoordinates}.
+ * Validates the well location of a {@link StorageUnitUsage}.
  */
 @Component
-public class StorageUnitCoordinatesValidator extends AbstractStorageLocationValidator {
+public class StorageUnitUsageValidator extends AbstractStorageLocationValidator {
 
   static final String NO_STORAGE_UNIT_KEY = "validation.materialSample.location.noStorageType";
   static final String STORAGE_UNIT_OR_TYPE_KEY = "validation.storageUnitCoordinates.storageUnitOrType";
 
   private final MessageSource messageSource;
 
-  public StorageUnitCoordinatesValidator(@Named("validationMessageSource") MessageSource messageSourceFromBase,
-                                         MessageSource messageSource) {
+  public StorageUnitUsageValidator(@Named("validationMessageSource") MessageSource messageSourceFromBase,
+                                   MessageSource messageSource) {
     super(messageSourceFromBase);
     this.messageSource = messageSource;
   }
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return StorageUnitCoordinates.class.isAssignableFrom(clazz);
+    return StorageUnitUsage.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -40,7 +40,7 @@ public class StorageUnitCoordinatesValidator extends AbstractStorageLocationVali
       throw new IllegalArgumentException("StorageUnitCoordinatesValidator not supported for class " + target.getClass());
     }
 
-    StorageUnitCoordinates entity = (StorageUnitCoordinates) target;
+    StorageUnitUsage entity = (StorageUnitUsage) target;
     checkRowAndColumn(entity.getWellRow(), entity.getWellColumn(), errors);
 
     // this will trigger lazy-loading (unless hints are used when loading the material-sample)
@@ -63,7 +63,7 @@ public class StorageUnitCoordinatesValidator extends AbstractStorageLocationVali
     }
   }
 
-  private void checkStorageOrTypeNotBoth(StorageUnitCoordinates storageUnitCoordinates, Errors errors) {
+  private void checkStorageOrTypeNotBoth(StorageUnitUsage storageUnitCoordinates, Errors errors) {
     if (storageUnitCoordinates.getStorageUnit() == null && storageUnitCoordinates.getStorageUnitType() == null ||
       storageUnitCoordinates.getStorageUnit() != null && storageUnitCoordinates.getStorageUnitType() != null) {
       errors.rejectValue("storageUnit", STORAGE_UNIT_OR_TYPE_KEY,

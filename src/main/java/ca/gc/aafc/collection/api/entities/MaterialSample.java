@@ -135,8 +135,8 @@ public class MaterialSample extends AbstractMaterialSample {
   private StorageUnit storageUnit;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "storage_unit_coordinates_id")
-  private StorageUnitCoordinates storageUnitCoordinates;
+  @JoinColumn(name = "storage_unit_usage_id")
+  private StorageUnitUsage storageUnitUsage;
 
   @Transient
   @DiffIgnore

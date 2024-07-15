@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.gc.aafc.collection.api.dto.StorageUnitCoordinatesDto;
-import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
-import ca.gc.aafc.collection.api.service.StorageUnitCoordinatesService;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
+import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
 import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
@@ -18,13 +18,13 @@ import java.util.Optional;
 import lombok.NonNull;
 
 @Repository
-public class StorageUnitCoordinatesRepository extends
-  DinaRepository<StorageUnitCoordinatesDto, StorageUnitCoordinates> {
+public class StorageUnitUsageRepository extends
+  DinaRepository<StorageUnitUsageDto, StorageUnitUsage> {
 
   private Optional<DinaAuthenticatedUser> dinaAuthenticatedUser;
 
-  public StorageUnitCoordinatesRepository(
-    @NonNull StorageUnitCoordinatesService dinaService,
+  public StorageUnitUsageRepository(
+    @NonNull StorageUnitUsageService dinaService,
     GroupWithReadAuthorizationService groupWithReadAuthorizationService,
     ExternalResourceProvider externalResourceProvider,
     @NonNull BuildProperties buildProperties,
@@ -35,9 +35,9 @@ public class StorageUnitCoordinatesRepository extends
       dinaService,
       groupWithReadAuthorizationService,
       Optional.empty(),
-      new DinaMapper<>(StorageUnitCoordinatesDto.class),
-      StorageUnitCoordinatesDto.class,
-      StorageUnitCoordinates.class,
+      new DinaMapper<>(StorageUnitUsageDto.class),
+      StorageUnitUsageDto.class,
+      StorageUnitUsage.class,
       null,
       externalResourceProvider,
       buildProperties, objectMapper);
@@ -45,7 +45,7 @@ public class StorageUnitCoordinatesRepository extends
   }
 
   @Override
-  public <S extends StorageUnitCoordinatesDto> S create(S resource) {
+  public <S extends StorageUnitUsageDto> S create(S resource) {
     dinaAuthenticatedUser.ifPresent(
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);

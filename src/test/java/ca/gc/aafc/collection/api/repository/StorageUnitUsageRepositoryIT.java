@@ -5,10 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.StorageUnitCoordinatesDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitCoordinatesTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled = true")
-public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
+public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
   private StorageUnitTypeRepo storageUnitTypeRepo;
@@ -30,7 +30,7 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
   private StorageUnitRepo storageUnitRepo;
 
   @Inject
-  private StorageUnitCoordinatesRepository storageUnitCoordinatesRepository;
+  private StorageUnitUsageRepository storageUnitUsageRepository;
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
@@ -43,10 +43,11 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
     storageUnitDto.setStorageUnitType(storageUnitTypeDto);
     storageUnitDto = storageUnitRepo.create(storageUnitDto);
 
-    StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(storageUnitDto);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
 
-    StorageUnitCoordinatesDto stored = storageUnitCoordinatesRepository.create(dto);
+    StorageUnitUsageDto stored = storageUnitUsageRepository.create(dto);
     assertEquals(1, stored.getCellNumber());
+    assertEquals(storageUnitDto.getName(), stored.getStorageUnitName());
   }
 
   @Test
@@ -60,18 +61,18 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
     storageUnitDto.setStorageUnitType(storageUnitTypeDto);
     storageUnitDto = storageUnitRepo.create(storageUnitDto);
 
-    StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(storageUnitDto);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
     dto.setWellColumn(200);
-    assertThrows(ValidationException.class, ()-> storageUnitCoordinatesRepository.create(dto));
+    assertThrows(ValidationException.class, ()-> storageUnitUsageRepository.create(dto));
   }
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
   public void storageUnitCoordinatesRepository_onCreateWithoutStorage_exception() {
 
-    StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(null);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(null);
     // access denied since they group is loaded from the storage
-    assertThrows(AccessDeniedException.class, ()-> storageUnitCoordinatesRepository.create(dto));
+    assertThrows(AccessDeniedException.class, ()-> storageUnitUsageRepository.create(dto));
   }
 
   @Test
@@ -85,11 +86,11 @@ public class StorageUnitCoordinatesRepositoryIT extends CollectionModuleBaseIT {
     storageUnitDto.setStorageUnitType(storageUnitTypeDto);
     storageUnitDto = storageUnitRepo.create(storageUnitDto);
 
-    StorageUnitCoordinatesDto dto = StorageUnitCoordinatesTestFixture.newStorageUnitCoordinates(storageUnitDto);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
     dto.setWellColumn(null);
     dto.setWellRow(null);
 
     // access denied since they group is loaded from the storage
-    assertThrows(ConstraintViolationException.class, ()-> storageUnitCoordinatesRepository.create(dto));
+    assertThrows(ConstraintViolationException.class, ()-> storageUnitUsageRepository.create(dto));
   }
 }
