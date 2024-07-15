@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 
@@ -10,6 +11,7 @@ public class StorageUnitUsageTestFixture {
     storageUnitCoordinatesDto.setWellColumn(1);
     storageUnitCoordinatesDto.setWellRow("A");
     storageUnitCoordinatesDto.setCreatedBy("test user");
+    storageUnitCoordinatesDto.setUsageType(MaterialSampleDto.TYPENAME);
 
     storageUnitCoordinatesDto.setStorageUnit(storageUnit);
 

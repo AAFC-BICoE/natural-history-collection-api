@@ -30,7 +30,11 @@ public class StorageUnitUsageDto {
 
   private Integer wellColumn;
   private String wellRow;
+  private String usageType;
+
+  // read-only calculated fields
   private Integer cellNumber;
+  private String storageUnitName;
 
   private OffsetDateTime createdOn;
   private String createdBy;

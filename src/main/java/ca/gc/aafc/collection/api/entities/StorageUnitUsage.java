@@ -65,6 +65,10 @@ public class StorageUnitUsage implements DinaEntity {
   @Column(name = "well_row")
   private String wellRow;
 
+  @NotEmpty
+  @Size(max = 50)
+  private String usageType;
+
   @Column(name = "created_on", insertable = false, updatable = false)
   @Generated(value = GenerationTime.INSERT)
   private OffsetDateTime createdOn;
@@ -76,6 +80,9 @@ public class StorageUnitUsage implements DinaEntity {
   // declared since the mapper needs it for consistency
   @Transient
   private Integer cellNumber;
+
+  @Transient
+  private String storageUnitName;
 
   /**
    * Only set if storageUnit is not.
@@ -104,6 +111,9 @@ public class StorageUnitUsage implements DinaEntity {
   public void setCellNumber(Integer i) {
     // nop-op, read only
   }
+  public void setStorageUnitName(String s) {
+    // nop-op, read only
+  }
 
   /**
    * Calculated cell number (if possible to compute)
@@ -121,6 +131,17 @@ public class StorageUnitUsage implements DinaEntity {
 
     StorageGridLayout restriction = sut.getGridLayoutDefinition();
     return restriction.calculateCellNumber(NumberLetterTranslator.toNumber(wellRow), wellColumn);
+  }
+
+  /**
+   * Calculated field.
+   * @return
+   */
+  public String getStorageUnitName() {
+    if (storageUnit != null) {
+      return storageUnit.getName();
+    }
+    return null;
   }
 
   /**

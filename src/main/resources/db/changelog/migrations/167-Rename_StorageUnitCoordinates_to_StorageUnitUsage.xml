@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="167-Rename_StorageUnitCoordinates_to_StorageUnitUsage" context="schema-change" author="cgendreau">
+    <changeSet id="167-Rename_StorageUnitCoordinates_to_StorageUnitUsage-1" context="schema-change" author="cgendreau">
         <renameTable oldTableName="storage_unit_coordinates" newTableName="storage_unit_usage"/>
 
         <sql>
@@ -14,9 +14,15 @@
         <renameColumn  tableName="material_sample"
                        oldColumnName="storage_unit_coordinates_id"
                        newColumnName="storage_unit_usage_id"/>
-
         <sql>
             ALTER TABLE material_sample RENAME CONSTRAINT fk_material_sample_storage_unit_coordinates_id TO fk_material_sample_storage_unit_usage_id;
         </sql>
+    </changeSet>
+    <changeSet id="167-Rename_StorageUnitCoordinates_to_StorageUnitUsage-2" context="schema-change" author="cgendreau">
+        <addColumn tableName="storage_unit_usage">
+            <column name="usage_type" type="VARCHAR(50)" defaultValue="material-sample">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

@@ -47,6 +47,7 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
 
     StorageUnitUsageDto stored = storageUnitUsageRepository.create(dto);
     assertEquals(1, stored.getCellNumber());
+    assertEquals(storageUnitDto.getName(), stored.getStorageUnitName());
   }
 
   @Test
