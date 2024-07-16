@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitUsageFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,24 +47,29 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
   private static final LocalDate preparationDate = LocalDate.now();
   private static final String materialSampleUniqueName = "unique-test";
   private static final String ORGANISM_LIFESTAGE = "lifestage-test";
+
   private PreparationType preparationType;
   private MaterialSample.MaterialSampleType materialSampleType;
   private MaterialSample materialSample;
-  private StorageUnit storageUnit;
+  private StorageUnitUsage storageUnitUsage;
   private Collection collection;
-
 
   @BeforeEach
   void setup() {
     Institution institution = InstitutionFixture.newInstitutionEntity().build();
     service.save(institution);
 
-    storageUnit = StorageUnitFactory.newStorageUnit()
+    StorageUnit storageUnit = StorageUnitFactory.newStorageUnit()
         .createdBy(storageUnitExpectedCreatedBy)
         .group(storageUnitExpectedGroup)
         .name(storageUnitExpectedName)
         .build();
     storageUnitService.create(storageUnit);
+
+    storageUnitUsage = StorageUnitUsageFactory.newStorageUnitUsage()
+      .storageUnit(storageUnit)
+      .build();
+    storageUnitUsageService.create(storageUnitUsage);
 
     preparationType = PreparationTypeFactory.newPreparationType()
         .createdBy(preparationExpectedCreatedBy)
@@ -92,7 +98,7 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
         .preparationDate(preparationDate)
         .preparationType(preparationType)
         .materialSampleType(materialSampleType)
-        .storageUnit(storageUnit)
+        .storageUnitUsage(storageUnitUsage)
         .preparationRemarks(expectedPreparationRemarks)
         .dwcDegreeOfEstablishment(expectDwcDegreeOfEstablishment)
         .collection(collection)
@@ -124,10 +130,12 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     assertEquals(preparedBy, materialSample.getPreparedBy().get(0));
     assertEquals(preparationDate, materialSample.getPreparationDate());
 
-    assertEquals(storageUnit.getId(), materialSample.getStorageUnit().getId());
-    assertEquals(storageUnitExpectedCreatedBy, materialSample.getStorageUnit().getCreatedBy());
-    assertEquals(storageUnitExpectedGroup, materialSample.getStorageUnit().getGroup());
-    assertEquals(storageUnitExpectedName, materialSample.getStorageUnit().getName());
+    assertEquals(storageUnitUsage.getId(), materialSample.getStorageUnitUsage().getId());
+
+    StorageUnit storageUnit = materialSample.getStorageUnitUsage().getStorageUnit();
+    assertEquals(storageUnitExpectedCreatedBy, storageUnit.getCreatedBy());
+    assertEquals(storageUnitExpectedGroup, storageUnit.getGroup());
+    assertEquals(storageUnitExpectedName, storageUnit.getName());
     assertEquals(collection.getUuid(), materialSample.getCollection().getUuid());
   }
 
@@ -153,10 +161,11 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
 
     assertEquals(materialSampleType, fetchedMaterialSample.getMaterialSampleType());
 
-    assertEquals(storageUnit.getId(), fetchedMaterialSample.getStorageUnit().getId());
-    assertEquals(storageUnitExpectedCreatedBy, fetchedMaterialSample.getStorageUnit().getCreatedBy());
-    assertEquals(storageUnitExpectedGroup, fetchedMaterialSample.getStorageUnit().getGroup());
-    assertEquals(storageUnitExpectedName, fetchedMaterialSample.getStorageUnit().getName());
+    assertEquals(storageUnitUsage.getId(), fetchedMaterialSample.getStorageUnitUsage().getId());
+    StorageUnit storageUnit = fetchedMaterialSample.getStorageUnitUsage().getStorageUnit();
+    assertEquals(storageUnitExpectedCreatedBy, storageUnit.getCreatedBy());
+    assertEquals(storageUnitExpectedGroup, storageUnit.getGroup());
+    assertEquals(storageUnitExpectedName, storageUnit.getName());
 
     assertEquals(preparedBy, fetchedMaterialSample.getPreparedBy().get(0));
     assertEquals(preparationDate, fetchedMaterialSample.getPreparationDate());

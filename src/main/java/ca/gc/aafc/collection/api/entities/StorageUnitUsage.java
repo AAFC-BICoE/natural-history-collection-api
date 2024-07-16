@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
@@ -53,13 +54,11 @@ public class StorageUnitUsage implements DinaEntity {
   @Transient
   private String group;
 
-  @NotNull
   @Min(value = 1)
   @Max(value = 255)
   @Column(name = "well_column")
   private Integer wellColumn;
 
-  @NotEmpty
   @Size(max = 2)
   @Pattern(regexp = "[a-zA-Z]")
   @Column(name = "well_row")
@@ -108,13 +107,6 @@ public class StorageUnitUsage implements DinaEntity {
     }
   }
 
-  public void setCellNumber(Integer i) {
-    // nop-op, read only
-  }
-  public void setStorageUnitName(String s) {
-    // nop-op, read only
-  }
-
   /**
    * Calculated cell number (if possible to compute)
    * @return cell number or null
@@ -125,12 +117,21 @@ public class StorageUnitUsage implements DinaEntity {
       return null;
     }
 
-    if (wellRow == null || wellColumn == null) {
+    if (!areCoordinatesSet()) {
       return null;
     }
 
     StorageGridLayout restriction = sut.getGridLayoutDefinition();
     return restriction.calculateCellNumber(NumberLetterTranslator.toNumber(wellRow), wellColumn);
+  }
+
+  /**
+   * Returns true if wellRow and wellColumn are BOTH set.
+   * Coordinates might be set but invalid. Validation is still required.
+   * @return
+   */
+  public boolean areCoordinatesSet() {
+    return StringUtils.isNotBlank(wellRow) && wellColumn != null;
   }
 
   /**
@@ -162,6 +163,13 @@ public class StorageUnitUsage implements DinaEntity {
 
   public void setGroup(String group) {
     // no op
+  }
+
+  public void setCellNumber(Integer i) {
+    // nop-op, read only
+  }
+  public void setStorageUnitName(String s) {
+    // nop-op, read only
   }
 
 }

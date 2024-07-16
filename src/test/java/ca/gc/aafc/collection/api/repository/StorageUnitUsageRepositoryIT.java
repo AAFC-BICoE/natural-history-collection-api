@@ -68,7 +68,7 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
-  public void storageUnitCoordinatesRepository_onCreateWithoutStorage_exception() {
+  public void storageUnitUsageRepository_onCreateWithoutStorage_exception() {
 
     StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(null);
     // access denied since they group is loaded from the storage
@@ -77,9 +77,10 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
-  public void storageUnitCoordinatesRepository_onCreateWithoutCoordinates_exception() {
+  public void storageUnitUsageRepository_onCreateWithoutCoordinates() {
 
     StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
+    storageUnitTypeDto.setGridLayoutDefinition(null);
     storageUnitTypeDto = storageUnitTypeRepo.create(storageUnitTypeDto);
 
     StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
@@ -90,7 +91,6 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
     dto.setWellColumn(null);
     dto.setWellRow(null);
 
-    // access denied since they group is loaded from the storage
-    assertThrows(ConstraintViolationException.class, ()-> storageUnitUsageRepository.create(dto));
+    storageUnitUsageRepository.create(dto);
   }
 }
