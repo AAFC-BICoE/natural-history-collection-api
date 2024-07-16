@@ -16,7 +16,7 @@ jobs:
       - name: Copy images
         run: |
           mkdir generated-docs/images
-          cp -r images/. generated-docs/images
+          cp -r docs/images/. generated-docs/images
 
       - name: Deploy GitHub Pages (only on master branch)
         # if: ${{ github.ref == 'refs/heads/main' }}
@@ -24,4 +24,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: generated-docs
-          
