@@ -21,11 +21,12 @@ public class StorageUnitFactory implements TestableEntityFactory<StorageUnit> {
      */
     public static StorageUnit.StorageUnitBuilder<?, ?> newStorageUnit() {
       return StorageUnit
-          .builder()
-          .group("test group")
-          .barcode("ABC-928723619")
-          .name(RandomStringUtils.randomAlphabetic(4))
-          .createdBy("test user");
+        .builder()
+        .group("test group")
+        .barcode("ABC-928723619")
+        .name(RandomStringUtils.randomAlphabetic(4))
+        .isGeneric(false)
+        .createdBy("test user");
     }
 
   }
