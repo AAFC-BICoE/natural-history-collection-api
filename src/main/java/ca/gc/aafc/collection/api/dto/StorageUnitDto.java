@@ -41,6 +41,8 @@ public class StorageUnitDto {
 
   private String barcode;
 
+  private Boolean isGeneric;
+
   @ShallowReference
   @JsonApiRelation
   private StorageUnitDto parentStorageUnit;

@@ -173,4 +173,5 @@
   <include file="db/changelog/migrations/166-Add_StorageUnitType_to_storage_unit_coordinates.xml"/>
   <include file="db/changelog/migrations/167-Rename_StorageUnitCoordinates_to_StorageUnitUsage.xml"/>
   <include file="db/changelog/migrations/168-Remove_StorageUnit_from_MaterialSample.xml"/>
+  <include file="db/changelog/migrations/169-Add_isGeneric_flag_to_storageUnit.xml"/>
 </databaseChangeLog>
