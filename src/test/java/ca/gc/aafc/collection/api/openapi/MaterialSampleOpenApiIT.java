@@ -17,6 +17,7 @@ import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
@@ -32,6 +33,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -141,7 +143,24 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     protocolDto.setCreatedBy(CREATED_BY);
 
     StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
-    
+    String storageUnitUUID = postResource(StorageUnitDto.TYPENAME, storageUnitDto);
+
+    StorageUnitUsageDto storageUnitUsageDto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
+    storageUnitUsageDto.setStorageUnit(null);
+    storageUnitUsageDto.setStorageUnitType(null);
+    storageUnitUsageDto.setWellRow(null);
+    storageUnitUsageDto.setWellColumn(null);
+
+    String storageUnitUsageUUID = JsonAPITestHelper.extractId(sendPost(
+      StorageUnitUsageDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitUsageDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(storageUnitUsageDto),
+        JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, storageUnitUUID)),
+      null
+      )
+    ));
+
     String parentUUID = JsonAPITestHelper.extractId(sendPost(
       MaterialSampleDto.TYPENAME,
       JsonAPITestHelper.toJsonAPIMap(
@@ -164,7 +183,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     String organismUUID = postResource(OrganismDto.TYPENAME, organismDto);
     String assemblageUUID = postResource(AssemblageDto.TYPENAME, assemblageDto);
     String projectUUID = postResource(ProjectDto.TYPENAME, projectDto);
-    String storageUnitUUID = postResource(StorageUnitDto.TYPENAME, storageUnitDto);
     String collectionUUID = postResource(CollectionDto.TYPENAME, collectionDto);
 
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
@@ -182,7 +200,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           JsonAPIRelationship.of("preparationMethod", PreparationMethodDto.TYPENAME, preparationMethodUUID),
           JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, parentUUID),
           JsonAPIRelationship.of("preparationProtocol", ProtocolDto.TYPENAME, protocolUUID),
-          JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, storageUnitUUID),
+          JsonAPIRelationship.of("storageUnitUsage", StorageUnitUsageDto.TYPENAME, storageUnitUsageUUID),
           JsonAPIRelationship.of("collection", CollectionDto.TYPENAME, collectionUUID)));
 
     Map<String, Object> relationshipMap = new HashMap<>(toManyRelationships);

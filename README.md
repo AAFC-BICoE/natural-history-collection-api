@@ -11,11 +11,14 @@ Features :
 ## Container Image
 The Docker Image is available on [DockerHub](https://hub.docker.com/r/aafcbicoe/natural-history-collection-api/tags).
 
+## Documentation
+See [documentation](https://aafc-bicoe.github.io/natural-history-collection-api/) page.
+
 ## Required
 
-* Java 17
-* Maven 3.6 (tested)
-* Docker 19+ (for running integration tests)
+* Java 21
+* Maven 3.8 (tested)
+* Docker 20+ (for running integration tests)
 
 ## dina-base-api
 

@@ -144,10 +144,6 @@ public class MaterialSampleDto {
 
   @ShallowReference
   @JsonApiRelation
-  private StorageUnitDto storageUnit;
-
-  @ShallowReference
-  @JsonApiRelation
   private StorageUnitUsageDto storageUnitUsage;
 
   @ShallowReference

@@ -18,7 +18,7 @@ import ca.gc.aafc.dina.validation.AbstractStorageLocationValidator;
 @Component
 public class StorageUnitUsageValidator extends AbstractStorageLocationValidator {
 
-  static final String NO_STORAGE_UNIT_KEY = "validation.materialSample.location.noStorageType";
+  static final String NO_STORAGE_UNIT_KEY = "validation.storageUnitUsage.noGridEnabledStorageType";
   static final String STORAGE_UNIT_OR_TYPE_KEY = "validation.storageUnitCoordinates.storageUnitOrType";
 
   private final MessageSource messageSource;
@@ -37,7 +37,7 @@ public class StorageUnitUsageValidator extends AbstractStorageLocationValidator 
   @Override
   public void validate(@NonNull Object target, @NonNull Errors errors) {
     if (!supports(target.getClass())) {
-      throw new IllegalArgumentException("StorageUnitCoordinatesValidator not supported for class " + target.getClass());
+      throw new IllegalArgumentException("StorageUnitUsageValidator not supported for class " + target.getClass());
     }
 
     StorageUnitUsage entity = (StorageUnitUsage) target;
@@ -58,15 +58,17 @@ public class StorageUnitUsageValidator extends AbstractStorageLocationValidator 
       checkWellAgainstGrid(entity.getWellRow(), entity.getWellColumn(),
         sut.getGridLayoutDefinition(), errors);
     } else {
-      errors.rejectValue("storageUnit", "storageUnit.null",
-        messageSource.getMessage(NO_STORAGE_UNIT_KEY, null, LocaleContextHolder.getLocale()));
+      if (entity.areCoordinatesSet()) {
+        errors.rejectValue("storageUnitType", NO_STORAGE_UNIT_KEY,
+          messageSource.getMessage(NO_STORAGE_UNIT_KEY, null, LocaleContextHolder.getLocale()));
+      }
     }
   }
 
   private void checkStorageOrTypeNotBoth(StorageUnitUsage storageUnitCoordinates, Errors errors) {
     if (storageUnitCoordinates.getStorageUnit() == null && storageUnitCoordinates.getStorageUnitType() == null ||
       storageUnitCoordinates.getStorageUnit() != null && storageUnitCoordinates.getStorageUnitType() != null) {
-      errors.rejectValue("storageUnit", STORAGE_UNIT_OR_TYPE_KEY,
+      errors.rejectValue("storageUnitType", STORAGE_UNIT_OR_TYPE_KEY,
         messageSource.getMessage(STORAGE_UNIT_OR_TYPE_KEY, null, LocaleContextHolder.getLocale()));
     }
   }
