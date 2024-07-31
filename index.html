@@ -503,7 +503,47 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_material_sample_identifier_generator">material-sample-identifier-generator</h3>
 <div class="paragraph">
+<p>Allows to generate (but not reserve) identifiers for material-sample based on settings.</p>
+</div>
+<div class="paragraph">
 <p>POST <code>/material-sample-identifier-generator</code></p>
+</div>
+<div class="paragraph">
+<p>Generate identifiers for a single parent:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "material-sample-identifier-generator",
+    "attributes": {
+      "currentParentUUID": "parent UUID",
+      "quantity": "2",
+      "strategy" : "DIRECT_PARENT"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Generate identifiers for multiple parents:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "material-sample-identifier-generator",
+    "attributes": {
+      "currentParentsUUID": ["parent UUID 1", "parent UUID 1"],
+      "strategy": "TYPE_BASED",
+      "materialSampleType": "CULTURE_STRAIN"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Documentation on strategies can be found in the <a href="https://aafc-bicoe.github.io/dina-documentation/#direct-parent-strategy">DINA User Guide</a></p>
 </div>
 </div>
 <div class="sect2">
@@ -621,7 +661,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-07-26 14:52:21 UTC
+Last updated 2024-07-31 15:38:26 UTC
 </div>
 </div>
 </body>
