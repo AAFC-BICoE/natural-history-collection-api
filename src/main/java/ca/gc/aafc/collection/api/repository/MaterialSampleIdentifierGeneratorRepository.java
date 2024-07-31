@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -27,7 +28,7 @@ import java.util.UUID;
 @Repository
 public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepository<MaterialSampleIdentifierGeneratorDto, Serializable> {
 
-  private static final int MAX_GENERATION_AMOUNT = 500;
+  private static final int MAX_GENERATION_QTY = 500;
 
   private final MaterialSampleIdentifierGenerator identifierGenerator;
 
@@ -56,8 +57,13 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
     MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy = generatorDto.getStrategy() == null ?
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT : generatorDto.getStrategy();
 
-    if (quantity > MAX_GENERATION_AMOUNT) {
-      throw new IllegalArgumentException("over maximum amount");
+    // Sanity checks
+    if (quantity > MAX_GENERATION_QTY) {
+      throw new IllegalArgumentException("over maximum quantity");
+    }
+
+    if (generatorDto.getCurrentParentUUID() != null && CollectionUtils.isNotEmpty(generatorDto.getCurrentParentsUUID())) {
+      throw new IllegalArgumentException("currentParentUUID or currentParentsUUID (list) can be provided but not both");
     }
 
     if (generatorDto.getStrategy() == MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED &&
@@ -77,6 +83,8 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
                                                                                 MaterialSampleNameGeneration.CharacterType characterType,
                                                                                 MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
                                                                                 int qty) {
+    Objects.requireNonNull(dto.getCurrentParentUUID());
+
     List<String> nextIdentifiers = new ArrayList<>(qty);
     String lastIdentifier = identifierGenerator.generateNextIdentifier(dto.getCurrentParentUUID(),
       strategy, dto.getMaterialSampleType(), characterType);
@@ -94,6 +102,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
   private <S extends MaterialSampleIdentifierGeneratorDto> S handleMultipleParents(S dto,
                                                                                    MaterialSampleNameGeneration.CharacterType characterType,
                                                                                    MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy) {
+    Objects.requireNonNull(dto.getCurrentParentsUUID());
 
     List<String> nextIdentifiers = new ArrayList<>(dto.getCurrentParentsUUID().size());
     Map<UUID, List<String>> responseMap = new HashMap<>();

@@ -21,7 +21,8 @@ Generate identifiers for a single parent:
     "attributes": {
       "currentParentUUID": "parent UUID",
       "quantity": "2",
-      "strategy" : "DIRECT_PARENT"
+      "strategy": "DIRECT_PARENT",
+      "characterType": "UPPER_LETTER"
     }
   }
 }
@@ -35,7 +36,8 @@ Generate identifiers for multiple parents:
     "attributes": {
       "currentParentsUUID": ["parent UUID 1", "parent UUID 1"],
       "strategy": "TYPE_BASED",
-      "materialSampleType": "CULTURE_STRAIN"
+      "materialSampleType": "CULTURE_STRAIN",
+      "characterType": "LOWER_LETTER"
     }
   }
 }
