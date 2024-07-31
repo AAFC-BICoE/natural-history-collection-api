@@ -9,7 +9,39 @@ GET `/material-sample-summary/{uuid}`
 
 === material-sample-identifier-generator
 
+Allows to generate (but not reserve) identifiers for material-sample based on settings.
+
 POST `/material-sample-identifier-generator`
+
+Generate identifiers for a single parent:
+```json
+{
+  "data": {
+    "type": "material-sample-identifier-generator",
+    "attributes": {
+      "currentParentUUID": "parent UUID",
+      "quantity": "2",
+      "strategy" : "DIRECT_PARENT"
+    }
+  }
+}
+```
+
+Generate identifiers for multiple parents:
+```json
+{
+  "data": {
+    "type": "material-sample-identifier-generator",
+    "attributes": {
+      "currentParentsUUID": ["parent UUID 1", "parent UUID 1"],
+      "strategy": "TYPE_BASED",
+      "materialSampleType": "CULTURE_STRAIN"
+    }
+  }
+}
+```
+
+Documentation on strategies can be found in the https://aafc-bicoe.github.io/dina-documentation/#direct-parent-strategy[DINA User Guide]
 
 === resource-name-identifier
 Get the identifier (UUID) based on the name, the type and the group.
