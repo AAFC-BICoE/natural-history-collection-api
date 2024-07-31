@@ -9,7 +9,6 @@ import io.crnk.core.repository.ResourceRepository;
 import io.crnk.core.resource.list.ResourceList;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,11 +98,11 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
     List<String> nextIdentifiers = new ArrayList<>(dto.getCurrentParentsUUID().size());
     Map<UUID, List<String>> responseMap = new HashMap<>();
 
-    for( UUID parentUUID : dto.getCurrentParentsUUID()) {
+    for (UUID parentUUID : dto.getCurrentParentsUUID()) {
       String nextIdentifier = identifierGenerator.generateNextIdentifier(parentUUID,
         strategy, dto.getMaterialSampleType(), characterType);
 
-      if(!nextIdentifiers.contains(nextIdentifier)) {
+      if (!nextIdentifiers.contains(nextIdentifier)) {
         nextIdentifiers.add(nextIdentifier);
       } else {
         nextIdentifier = findNextIdentifier(nextIdentifiers, nextIdentifier);
@@ -121,7 +120,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
   private String findNextIdentifier(List<String> nextIdentifiers, String currentIdentifier) {
     String nextIdentifier = identifierGenerator.generateNextIdentifier(currentIdentifier);
 
-    if(!nextIdentifiers.contains(nextIdentifier)) {
+    if (!nextIdentifiers.contains(nextIdentifier)) {
       return nextIdentifier;
     }
     return findNextIdentifier(nextIdentifiers, nextIdentifier);
