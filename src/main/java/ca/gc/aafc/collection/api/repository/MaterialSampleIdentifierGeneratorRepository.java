@@ -7,13 +7,18 @@ import io.crnk.core.exception.MethodNotAllowedException;
 import io.crnk.core.queryspec.QuerySpec;
 import io.crnk.core.repository.ResourceRepository;
 import io.crnk.core.resource.list.ResourceList;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -23,7 +28,7 @@ import java.util.UUID;
 @Repository
 public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepository<MaterialSampleIdentifierGeneratorDto, Serializable> {
 
-  private static final int MAX_GENERATION_AMOUNT = 500;
+  private static final int MAX_GENERATION_QTY = 500;
 
   private final MaterialSampleIdentifierGenerator identifierGenerator;
 
@@ -46,15 +51,19 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
   public <S extends MaterialSampleIdentifierGeneratorDto> S create(S generatorDto) {
 
     // Make sure we have sane default values
-    int amount = generatorDto.getAmount() == null ? 1 : generatorDto.getAmount();
+    int quantity = generatorDto.getQuantity() == null ? 1 : generatorDto.getQuantity();
     MaterialSampleNameGeneration.CharacterType characterType = generatorDto.getCharacterType() == null ?
       MaterialSampleNameGeneration.CharacterType.LOWER_LETTER : generatorDto.getCharacterType();
     MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy = generatorDto.getStrategy() == null ?
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT : generatorDto.getStrategy();
 
+    // Sanity checks
+    if (quantity > MAX_GENERATION_QTY) {
+      throw new IllegalArgumentException("over maximum quantity");
+    }
 
-    if (amount > MAX_GENERATION_AMOUNT) {
-      throw new IllegalArgumentException("over maximum amount");
+    if (generatorDto.getCurrentParentUUID() != null && CollectionUtils.isNotEmpty(generatorDto.getCurrentParentsUUID())) {
+      throw new IllegalArgumentException("currentParentUUID or currentParentsUUID (list) can be provided but not both");
     }
 
     if (generatorDto.getStrategy() == MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED &&
@@ -62,19 +71,68 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       throw new IllegalArgumentException("materialSampleType must be provided for strategy TYPE_BASED");
     }
 
-    List<String> nextIdentifiers = new ArrayList<>(amount);
-    String lastIdentifier = identifierGenerator.generateNextIdentifier(generatorDto.getCurrentParentUUID(),
-      strategy, generatorDto.getMaterialSampleType(), characterType);
+    if (CollectionUtils.isEmpty(generatorDto.getCurrentParentsUUID())) {
+      return handleSingleParent(generatorDto, characterType, strategy, quantity);
+    } else {
+      return handleMultipleParents(generatorDto, characterType, strategy);
+    }
+
+  }
+
+  private <S extends MaterialSampleIdentifierGeneratorDto> S handleSingleParent(S dto,
+                                                                                MaterialSampleNameGeneration.CharacterType characterType,
+                                                                                MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
+                                                                                int qty) {
+    Objects.requireNonNull(dto.getCurrentParentUUID());
+
+    List<String> nextIdentifiers = new ArrayList<>(qty);
+    String lastIdentifier = identifierGenerator.generateNextIdentifier(dto.getCurrentParentUUID(),
+      strategy, dto.getMaterialSampleType(), characterType);
     nextIdentifiers.add(lastIdentifier);
-    for (int i = 1; i < amount; i++) {
+    for (int i = 1; i < qty; i++) {
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
       nextIdentifiers.add(lastIdentifier);
     }
     // Id is mandatory per json:api, so we simply reuse the identifier
-    generatorDto.setId(UUID.randomUUID().toString());
-    generatorDto.setNextIdentifiers(nextIdentifiers);
+    dto.setId(UUID.randomUUID().toString());
+    dto.setNextIdentifiers(Map.of(dto.getCurrentParentUUID(), nextIdentifiers));
+    return dto;
+  }
 
-    return generatorDto;
+  private <S extends MaterialSampleIdentifierGeneratorDto> S handleMultipleParents(S dto,
+                                                                                   MaterialSampleNameGeneration.CharacterType characterType,
+                                                                                   MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy) {
+    Objects.requireNonNull(dto.getCurrentParentsUUID());
+
+    List<String> nextIdentifiers = new ArrayList<>(dto.getCurrentParentsUUID().size());
+    Map<UUID, List<String>> responseMap = new HashMap<>();
+
+    for (UUID parentUUID : dto.getCurrentParentsUUID()) {
+      String nextIdentifier = identifierGenerator.generateNextIdentifier(parentUUID,
+        strategy, dto.getMaterialSampleType(), characterType);
+
+      if (!nextIdentifiers.contains(nextIdentifier)) {
+        nextIdentifiers.add(nextIdentifier);
+      } else {
+        nextIdentifier = findNextIdentifier(nextIdentifiers, nextIdentifier);
+        nextIdentifiers.add(nextIdentifier);
+      }
+      responseMap.put(parentUUID, List.of(nextIdentifier));
+    }
+
+    // Id is mandatory per json:api, so we simply reuse the identifier
+    dto.setId(UUID.randomUUID().toString());
+    dto.setNextIdentifiers(responseMap);
+    return dto;
+  }
+
+  private String findNextIdentifier(List<String> nextIdentifiers, String currentIdentifier) {
+    String nextIdentifier = identifierGenerator.generateNextIdentifier(currentIdentifier);
+
+    if (!nextIdentifiers.contains(nextIdentifier)) {
+      return nextIdentifier;
+    }
+    return findNextIdentifier(nextIdentifiers, nextIdentifier);
   }
 
   @Override
