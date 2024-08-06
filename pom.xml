@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.92</version>
+  <version>0.93-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
