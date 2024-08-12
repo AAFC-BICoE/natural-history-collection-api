@@ -56,6 +56,9 @@ public class MaterialSampleDto {
 
   private String materialSampleName;
 
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, String> identifiers = Map.of();
+
   private MaterialSample.MaterialSampleType materialSampleType;
 
   @DiffIgnore

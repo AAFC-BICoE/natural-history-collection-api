@@ -72,8 +72,15 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "string-array")
   private String[] dwcOtherCatalogNumbers;
 
+  // Represents the Primary ID
   @Column(name = "material_sample_name")
   private String materialSampleName;
+
+  // Represents the alternative identifiers
+  @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, String> identifiers = Map.of();
 
   // Preparation related
 
