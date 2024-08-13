@@ -1,0 +1,9 @@
+vocabulary:
+  materialSampleIdentifierType:
+    - name: SeqDB ID
+      key: seqdb_id
+      multilingualTitle.titles:
+        - lang: en
+          title: SeqDB ID
+        - lang: fr
+          title: ID SeqDB
