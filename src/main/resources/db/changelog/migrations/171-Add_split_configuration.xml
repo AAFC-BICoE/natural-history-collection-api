@@ -20,7 +20,7 @@
             </column>
 
             <column name="name" type="VARCHAR(250)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="_group" type="VARCHAR(50)">
@@ -43,5 +43,12 @@
 
             <column name="material_sample_type_created_by_split" type="VARCHAR(50)"/>
         </createTable>
+
+        <createIndex indexName="split_configuration_name_group_unique"
+                     tableName="split_configuration"
+                     unique="true">
+            <column name="LOWER(name)"/>
+            <column name="LOWER(_group)"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
