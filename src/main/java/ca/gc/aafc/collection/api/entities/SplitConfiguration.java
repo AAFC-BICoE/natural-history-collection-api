@@ -33,8 +33,8 @@ import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 @Getter
 @RequiredArgsConstructor
 @TypeDef(name = "material-sample-type-array", typeClass = EnumArrayType.class,
-  defaultForType = MaterialSample.MaterialSampleType[].class, parameters = {
-  @Parameter(name = EnumArrayType.SQL_ARRAY_TYPE, value = "material_sample_type_enum")})
+  defaultForType = MaterialSample.MaterialSampleType[].class,
+  parameters = {@Parameter(name = EnumArrayType.SQL_ARRAY_TYPE, value = "material_sample_type_enum")})
 public class SplitConfiguration implements DinaEntityIdentifiableByName {
 
   @Id
