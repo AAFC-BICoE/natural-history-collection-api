@@ -62,7 +62,7 @@ public class MaterialSampleIdentifierGenerator {
 
     Objects.requireNonNull(strategy);
     Objects.requireNonNull(characterType);
-    char separator = identifierSeparator == null ? DEFAULT_IDENTIFIER_SEPARATOR : identifierSeparator;
+    char separator = identifierSeparator == null  ? DEFAULT_IDENTIFIER_SEPARATOR : identifierSeparator;
 
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
