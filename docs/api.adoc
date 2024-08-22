@@ -7,6 +7,10 @@ Get a summary of an existing material sample. The summary includes the https://a
 
 GET `/material-sample-summary/{uuid}`
 
+=== split-configuration
+
+Allows to store split configuration currently used by the ui to customize identifiers.
+
 === material-sample-identifier-generator
 
 Allows to generate (but not reserve) identifiers for material-sample based on settings.
