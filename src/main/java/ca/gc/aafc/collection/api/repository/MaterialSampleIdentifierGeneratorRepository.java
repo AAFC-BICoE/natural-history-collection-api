@@ -87,7 +87,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
 
     List<String> nextIdentifiers = new ArrayList<>(qty);
     String lastIdentifier = identifierGenerator.generateNextIdentifier(dto.getCurrentParentUUID(),
-      strategy, dto.getMaterialSampleType(), characterType);
+      strategy, dto.getMaterialSampleType(), characterType, dto.getSeparator());
     nextIdentifiers.add(lastIdentifier);
     for (int i = 1; i < qty; i++) {
       lastIdentifier = identifierGenerator.generateNextIdentifier(lastIdentifier);
@@ -109,7 +109,7 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
 
     for (UUID parentUUID : dto.getCurrentParentsUUID()) {
       String nextIdentifier = identifierGenerator.generateNextIdentifier(parentUUID,
-        strategy, dto.getMaterialSampleType(), characterType);
+        strategy, dto.getMaterialSampleType(), characterType, dto.getSeparator());
 
       if (!nextIdentifiers.contains(nextIdentifier)) {
         nextIdentifiers.add(nextIdentifier);

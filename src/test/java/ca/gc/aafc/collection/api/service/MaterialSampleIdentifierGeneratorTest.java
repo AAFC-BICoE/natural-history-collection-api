@@ -56,13 +56,13 @@ public class MaterialSampleIdentifierGeneratorTest extends CollectionModuleBaseI
     String nextIdentifier = msig.generateNextIdentifier(parent.getUuid(),
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED,
       MaterialSample.MaterialSampleType.CULTURE_STRAIN,
-      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER);
+      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER, null);
     assertEquals("ABC-01-d", nextIdentifier);
 
     String nextIdentifierMolecular = msig.generateNextIdentifier(child2.getUuid(),
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED,
       MaterialSample.MaterialSampleType.MOLECULAR_SAMPLE,
-      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER);
+      MaterialSampleNameGeneration.CharacterType.LOWER_LETTER, null);
     assertEquals("ABC-01-b-B", nextIdentifierMolecular);
   }
 
@@ -89,12 +89,12 @@ public class MaterialSampleIdentifierGeneratorTest extends CollectionModuleBaseI
 
     String nextIdentifier = msig.generateNextIdentifier(child2.getUuid(),
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT,
-      null, MaterialSampleNameGeneration.CharacterType.LOWER_LETTER);
+      null, MaterialSampleNameGeneration.CharacterType.LOWER_LETTER, null);
     assertEquals("ABC-01-a-A-a", nextIdentifier);
 
     nextIdentifier = msig.generateNextIdentifier(child1.getUuid(),
       MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT,
-      null, MaterialSampleNameGeneration.CharacterType.UPPER_LETTER);
+      null, MaterialSampleNameGeneration.CharacterType.UPPER_LETTER, null);
     assertEquals("ABC-01-a-B", nextIdentifier);
 
   }

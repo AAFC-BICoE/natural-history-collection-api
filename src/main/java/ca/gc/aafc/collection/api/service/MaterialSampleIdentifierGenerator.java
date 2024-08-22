@@ -38,7 +38,7 @@ public class MaterialSampleIdentifierGenerator {
   private static final Pattern TRAILING_NUMBERS_REGEX = Pattern.compile("(\\d+)$");
 
   private static final Integer MAX_MAT_SAMPLE = 500;
-  private static final String IDENTIFIER_SEPARATOR = "-";
+  private static final char DEFAULT_IDENTIFIER_SEPARATOR = '-';
 
   private final MaterialSampleService materialSampleService;
 
@@ -57,10 +57,12 @@ public class MaterialSampleIdentifierGenerator {
   public String generateNextIdentifier(UUID currentParentUUID,
                                        MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
                                        MaterialSample.MaterialSampleType materialSampleType,
-                                       MaterialSampleNameGeneration.CharacterType characterType) {
+                                       MaterialSampleNameGeneration.CharacterType characterType,
+                                       Character identifierSeparator) {
 
     Objects.requireNonNull(strategy);
     Objects.requireNonNull(characterType);
+    char separator = identifierSeparator == null ? DEFAULT_IDENTIFIER_SEPARATOR : identifierSeparator;
 
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
@@ -78,7 +80,7 @@ public class MaterialSampleIdentifierGenerator {
 
     // if there is no descendant we need to start a new series
     if (params.descendantNames.isEmpty()) {
-      return startSeries(params.basename, IDENTIFIER_SEPARATOR, characterType);
+      return startSeries(params.basename, separator, characterType);
     }
 
     // if we reached the max we need to stop
@@ -89,10 +91,10 @@ public class MaterialSampleIdentifierGenerator {
     // get of max of all children of all loaded material sample
     // max is applied of the last part of the identifier (after the last separator)
     Optional<String>
-      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, IDENTIFIER_SEPARATOR))
+      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, separator))
       .max(Comparator.naturalOrder());
 
-    return generateNextIdentifier(params.basename + IDENTIFIER_SEPARATOR + lastName.orElse("?"));
+    return generateNextIdentifier(params.basename + separator + lastName.orElse("?"));
   }
 
   /**
@@ -198,7 +200,7 @@ public class MaterialSampleIdentifierGenerator {
    * @param characterType
    * @return
    */
-  private static String startSeries(String basename, String separator, MaterialSampleNameGeneration.CharacterType characterType) {
+  private static String startSeries(String basename, char separator, MaterialSampleNameGeneration.CharacterType characterType) {
     return basename + separator + switch (characterType) {
       case NUMBER -> "1";
       case LOWER_LETTER -> "a";

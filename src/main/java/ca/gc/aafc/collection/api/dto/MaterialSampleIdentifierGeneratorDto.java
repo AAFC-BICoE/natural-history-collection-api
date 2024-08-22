@@ -47,6 +47,7 @@ public class MaterialSampleIdentifierGeneratorDto {
   private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
   private MaterialSample.MaterialSampleType materialSampleType;
   private MaterialSampleNameGeneration.CharacterType characterType;
+  private Character separator;
 
   /**
    * used to return the result
