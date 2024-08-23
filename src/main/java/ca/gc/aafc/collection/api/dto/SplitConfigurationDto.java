@@ -4,12 +4,9 @@ import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.entities.SplitConfiguration;
-import ca.gc.aafc.collection.api.json.StringNoTrimDeserializer;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -42,8 +39,7 @@ public class SplitConfigurationDto {
 
   private MaterialSampleNameGeneration.CharacterType characterType;
 
-  @JsonDeserialize(using = StringNoTrimDeserializer.class)
-  private String separator;
+  private SplitConfiguration.Separator separator;
 
   private MaterialSample.MaterialSampleType materialSampleTypeCreatedBySplit;
 

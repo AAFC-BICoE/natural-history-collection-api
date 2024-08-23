@@ -26,7 +26,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
-import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 
 @Entity
 @SuperBuilder
@@ -37,6 +36,8 @@ import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
   defaultForType = MaterialSample.MaterialSampleType[].class,
   parameters = {@Parameter(name = EnumArrayType.SQL_ARRAY_TYPE, value = "material_sample_type_enum")})
 public class SplitConfiguration implements DinaEntityIdentifiableByName {
+
+  public enum Separator {SPACE, DASH, UNDERSCORE}
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,7 +75,8 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   private MaterialSampleNameGeneration.CharacterType characterType;
 
   @NotNull
-  private String separator;
+  @Size(max = 1)
+  private Separator separator;
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
