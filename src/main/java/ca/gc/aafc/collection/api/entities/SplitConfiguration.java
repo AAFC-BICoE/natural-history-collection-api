@@ -75,7 +75,7 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   private MaterialSampleNameGeneration.CharacterType characterType;
 
   @NotNull
-  @Size(max = 1)
+  @Enumerated(EnumType.STRING)
   private Separator separator;
 
   @Type(type = "pgsql_enum")

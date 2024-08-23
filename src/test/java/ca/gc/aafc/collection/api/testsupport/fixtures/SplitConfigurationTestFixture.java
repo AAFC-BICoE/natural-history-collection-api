@@ -5,6 +5,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import ca.gc.aafc.collection.api.dto.SplitConfigurationDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 
 public class SplitConfigurationTestFixture {
 
@@ -15,7 +16,7 @@ public class SplitConfigurationTestFixture {
     splitConfigurationDto.setName(RandomStringUtils.randomAlphabetic(5));
     splitConfigurationDto.setGroup(GROUP);
     splitConfigurationDto.setStrategy(MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED);
-    splitConfigurationDto.setSeparator("-");
+    splitConfigurationDto.setSeparator(SplitConfiguration.Separator.DASH);
     splitConfigurationDto.setConditionalOnMaterialSampleTypes(
       new MaterialSample.MaterialSampleType[] {
         MaterialSample.MaterialSampleType.WHOLE_ORGANISM,

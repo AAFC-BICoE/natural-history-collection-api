@@ -9,6 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.SplitConfigurationDto;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.collection.api.testsupport.fixtures.SplitConfigurationTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -34,13 +35,13 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
   void splitConfiguration_onCreateUpdate_separatorPreserved() {
     SplitConfigurationDto splitConfigurationDto =
       SplitConfigurationTestFixture.newSplitConfiguration();
-    splitConfigurationDto.setSeparator(" ");
+    splitConfigurationDto.setSeparator(SplitConfiguration.Separator.SPACE);
 
     String id = JsonAPITestHelper.extractId(
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(splitConfigurationDto))));
 
     sendGet(TYPE_NAME, id)
-      .body("data.attributes.separator", Matchers.is(" "));
+      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE));
 
     sendPatch(
       TYPE_NAME, id,
@@ -52,5 +53,7 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
       200
     );
 
+    sendGet(TYPE_NAME, id)
+      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE));
   }
 }
