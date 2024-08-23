@@ -3,25 +3,20 @@ package ca.gc.aafc.collection.api.dto;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
-import org.springframework.boot.jackson.JsonComponent;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.entities.SplitConfiguration;
+import ca.gc.aafc.collection.api.json.StringNoTrimDeserializer;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Data;
-
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Data
 @JsonApiResource(type = SplitConfigurationDto.TYPENAME)
@@ -47,17 +42,9 @@ public class SplitConfigurationDto {
 
   private MaterialSampleNameGeneration.CharacterType characterType;
 
-  @JsonDeserialize(using = SplitConfigurationDto.NoTrimJsonDeserializer.class)
+  @JsonDeserialize(using = StringNoTrimDeserializer.class)
   private String separator;
 
   private MaterialSample.MaterialSampleType materialSampleTypeCreatedBySplit;
-
-  // this is not called
-  public static class NoTrimJsonDeserializer extends JsonDeserializer<String> {
-    @Override
-    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-      return jsonParser.getValueAsString();
-    }
-  }
 
 }
