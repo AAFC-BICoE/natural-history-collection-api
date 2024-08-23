@@ -34,7 +34,7 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
   void splitConfiguration_onCreateUpdate_separatorPreserved() {
     SplitConfigurationDto splitConfigurationDto =
       SplitConfigurationTestFixture.newSplitConfiguration();
-    splitConfigurationDto.setSeparator(' ');
+    splitConfigurationDto.setSeparator(" ");
 
     String id = JsonAPITestHelper.extractId(
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(splitConfigurationDto))));

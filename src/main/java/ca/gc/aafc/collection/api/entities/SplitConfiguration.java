@@ -26,6 +26,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
+import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 
 @Entity
 @SuperBuilder
@@ -73,7 +74,7 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   private MaterialSampleNameGeneration.CharacterType characterType;
 
   @NotNull
-  private Character separator;
+  private String separator;
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
