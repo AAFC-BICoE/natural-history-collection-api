@@ -37,7 +37,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="separator" type="VARCHAR(1)">
+            <column name="separator" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
 

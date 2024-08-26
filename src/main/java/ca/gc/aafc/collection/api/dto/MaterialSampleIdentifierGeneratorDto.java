@@ -15,6 +15,7 @@ import java.util.List;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 
 /**
  * DTO representing a request to get the identifier that should follow the provided one.
@@ -47,6 +48,7 @@ public class MaterialSampleIdentifierGeneratorDto {
   private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
   private MaterialSample.MaterialSampleType materialSampleType;
   private MaterialSampleNameGeneration.CharacterType characterType;
+  private SplitConfiguration.Separator separator;
 
   /**
    * used to return the result

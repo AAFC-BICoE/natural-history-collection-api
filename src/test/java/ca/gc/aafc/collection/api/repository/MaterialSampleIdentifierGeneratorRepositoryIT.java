@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
@@ -86,6 +87,30 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
 
     nextIdentifiers = dto.getNextIdentifiers().get(child2.getUuid());
     assertEquals("ABC-01-d", nextIdentifiers.get(0));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  public void materialSampleIdentifierGeneratorRepositoryNext_customSeparator() {
+
+    MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
+    parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
+    parentDto.setMaterialSampleName("ABC-01");
+    parentDto = materialSampleRepository.create(parentDto);
+
+    MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
+      .currentParentUUID(parentDto.getUuid())
+      .strategy(MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED)
+      .characterType(MaterialSampleNameGeneration.CharacterType.LOWER_LETTER)
+      .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
+      .separator(SplitConfiguration.Separator.SPACE)
+      .quantity(2)
+      .build();
+
+    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
+    List<String> nextIdentifiers = dto.getNextIdentifiers().get(parentDto.getUuid());
+    assertEquals("ABC-01 a", nextIdentifiers.get(0));
+    assertEquals("ABC-01 b", nextIdentifiers.get(1));
   }
 
 }

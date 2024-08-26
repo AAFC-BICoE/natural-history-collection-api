@@ -1,11 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
-import java.time.OffsetDateTime;
-import java.util.UUID;
-import lombok.Data;
-
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -14,6 +8,12 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+
+import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiResource;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+import lombok.Data;
 
 @Data
 @JsonApiResource(type = SplitConfigurationDto.TYPENAME)
@@ -38,7 +38,8 @@ public class SplitConfigurationDto {
   private MaterialSample.MaterialSampleType[] conditionalOnMaterialSampleTypes;
 
   private MaterialSampleNameGeneration.CharacterType characterType;
-  private Character separator;
+
+  private SplitConfiguration.Separator separator;
 
   private MaterialSample.MaterialSampleType materialSampleTypeCreatedBySplit;
 

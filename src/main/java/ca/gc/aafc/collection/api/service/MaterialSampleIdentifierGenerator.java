@@ -9,6 +9,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.entities.AbstractMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
@@ -38,7 +39,6 @@ public class MaterialSampleIdentifierGenerator {
   private static final Pattern TRAILING_NUMBERS_REGEX = Pattern.compile("(\\d+)$");
 
   private static final Integer MAX_MAT_SAMPLE = 500;
-  private static final String IDENTIFIER_SEPARATOR = "-";
 
   private final MaterialSampleService materialSampleService;
 
@@ -57,10 +57,13 @@ public class MaterialSampleIdentifierGenerator {
   public String generateNextIdentifier(UUID currentParentUUID,
                                        MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
                                        MaterialSample.MaterialSampleType materialSampleType,
-                                       MaterialSampleNameGeneration.CharacterType characterType) {
+                                       MaterialSampleNameGeneration.CharacterType characterType,
+                                       SplitConfiguration.Separator identifierSeparator) {
 
     Objects.requireNonNull(strategy);
     Objects.requireNonNull(characterType);
+
+    SplitConfiguration.Separator separator = identifierSeparator != null ? identifierSeparator : SplitConfiguration.Separator.DASH;
 
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
@@ -78,7 +81,7 @@ public class MaterialSampleIdentifierGenerator {
 
     // if there is no descendant we need to start a new series
     if (params.descendantNames.isEmpty()) {
-      return startSeries(params.basename, IDENTIFIER_SEPARATOR, characterType);
+      return startSeries(params.basename, separator, characterType);
     }
 
     // if we reached the max we need to stop
@@ -89,10 +92,10 @@ public class MaterialSampleIdentifierGenerator {
     // get of max of all children of all loaded material sample
     // max is applied of the last part of the identifier (after the last separator)
     Optional<String>
-      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, IDENTIFIER_SEPARATOR))
+      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, separator.getSeparatorChar()))
       .max(Comparator.naturalOrder());
 
-    return generateNextIdentifier(params.basename + IDENTIFIER_SEPARATOR + lastName.orElse("?"));
+    return generateNextIdentifier(params.basename + separator.getSeparatorChar() + lastName.orElse("?"));
   }
 
   /**
@@ -198,8 +201,8 @@ public class MaterialSampleIdentifierGenerator {
    * @param characterType
    * @return
    */
-  private static String startSeries(String basename, String separator, MaterialSampleNameGeneration.CharacterType characterType) {
-    return basename + separator + switch (characterType) {
+  private static String startSeries(String basename, SplitConfiguration.Separator separator, MaterialSampleNameGeneration.CharacterType characterType) {
+    return basename + separator.getSeparatorChar() + switch (characterType) {
       case NUMBER -> "1";
       case LOWER_LETTER -> "a";
       case UPPER_LETTER -> "A";
