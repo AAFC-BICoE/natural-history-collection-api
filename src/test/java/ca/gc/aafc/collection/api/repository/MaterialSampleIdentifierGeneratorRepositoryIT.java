@@ -6,6 +6,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
@@ -102,7 +103,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .strategy(MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED)
       .characterType(MaterialSampleNameGeneration.CharacterType.LOWER_LETTER)
       .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
-      .separator(' ')
+      .separator(SplitConfiguration.Separator.SPACE)
       .quantity(2)
       .build();
 

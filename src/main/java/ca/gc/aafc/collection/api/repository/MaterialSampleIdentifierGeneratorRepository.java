@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -30,7 +29,6 @@ import java.util.UUID;
 public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepository<MaterialSampleIdentifierGeneratorDto, Serializable> {
 
   private static final int MAX_GENERATION_QTY = 500;
-  private static final Set<Character> SUPPORTED_SEPARATOR_CHAR = Set.of(' ', '-', '_');
 
   private final MaterialSampleIdentifierGenerator identifierGenerator;
 
@@ -73,16 +71,11 @@ public class MaterialSampleIdentifierGeneratorRepository implements ResourceRepo
       throw new IllegalArgumentException("materialSampleType must be provided for strategy TYPE_BASED");
     }
 
-    if (generatorDto.getSeparator() != null && !SUPPORTED_SEPARATOR_CHAR.contains(generatorDto.getSeparator())) {
-      throw new IllegalArgumentException("Unsupported separator character");
-    }
-
     if (CollectionUtils.isEmpty(generatorDto.getCurrentParentsUUID())) {
       return handleSingleParent(generatorDto, characterType, strategy, quantity);
     } else {
       return handleMultipleParents(generatorDto, characterType, strategy);
     }
-
   }
 
   private <S extends MaterialSampleIdentifierGeneratorDto> S handleSingleParent(S dto,

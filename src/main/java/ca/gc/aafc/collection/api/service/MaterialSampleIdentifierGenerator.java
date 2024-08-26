@@ -9,6 +9,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.entities.AbstractMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
@@ -58,11 +59,12 @@ public class MaterialSampleIdentifierGenerator {
                                        MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
                                        MaterialSample.MaterialSampleType materialSampleType,
                                        MaterialSampleNameGeneration.CharacterType characterType,
-                                       Character identifierSeparator) {
+                                       SplitConfiguration.Separator identifierSeparator) {
 
     Objects.requireNonNull(strategy);
     Objects.requireNonNull(characterType);
-    char separator = identifierSeparator == null  ? DEFAULT_IDENTIFIER_SEPARATOR : identifierSeparator;
+
+    SplitConfiguration.Separator separator = identifierSeparator != null ? identifierSeparator : SplitConfiguration.Separator.DASH;
 
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
@@ -91,10 +93,10 @@ public class MaterialSampleIdentifierGenerator {
     // get of max of all children of all loaded material sample
     // max is applied of the last part of the identifier (after the last separator)
     Optional<String>
-      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, separator))
+      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, separator.getSeparatorChar()))
       .max(Comparator.naturalOrder());
 
-    return generateNextIdentifier(params.basename + separator + lastName.orElse("?"));
+    return generateNextIdentifier(params.basename + separator.getSeparatorChar() + lastName.orElse("?"));
   }
 
   /**
@@ -200,8 +202,8 @@ public class MaterialSampleIdentifierGenerator {
    * @param characterType
    * @return
    */
-  private static String startSeries(String basename, char separator, MaterialSampleNameGeneration.CharacterType characterType) {
-    return basename + separator + switch (characterType) {
+  private static String startSeries(String basename, SplitConfiguration.Separator separator, MaterialSampleNameGeneration.CharacterType characterType) {
+    return basename + separator.getSeparatorChar() + switch (characterType) {
       case NUMBER -> "1";
       case LOWER_LETTER -> "a";
       case UPPER_LETTER -> "A";

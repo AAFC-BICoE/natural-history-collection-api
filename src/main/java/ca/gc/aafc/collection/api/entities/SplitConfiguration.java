@@ -45,7 +45,7 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
       this.separatorChar = separatorChar;
     }
 
-    String getSeparatorChar() {
+    public String getSeparatorChar() {
       return separatorChar;
     }
   }
