@@ -41,7 +41,7 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(splitConfigurationDto))));
 
     sendGet(TYPE_NAME, id)
-      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE));
+      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE.name()));
 
     sendPatch(
       TYPE_NAME, id,
@@ -54,6 +54,6 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
     );
 
     sendGet(TYPE_NAME, id)
-      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE));
+      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE.name()));
   }
 }
