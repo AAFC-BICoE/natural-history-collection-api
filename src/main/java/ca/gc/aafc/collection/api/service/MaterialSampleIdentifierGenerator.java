@@ -39,7 +39,6 @@ public class MaterialSampleIdentifierGenerator {
   private static final Pattern TRAILING_NUMBERS_REGEX = Pattern.compile("(\\d+)$");
 
   private static final Integer MAX_MAT_SAMPLE = 500;
-  private static final char DEFAULT_IDENTIFIER_SEPARATOR = '-';
 
   private final MaterialSampleService materialSampleService;
 

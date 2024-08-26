@@ -26,7 +26,8 @@ Generate identifiers for a single parent:
       "currentParentUUID": "parent UUID",
       "quantity": "2",
       "strategy": "DIRECT_PARENT",
-      "characterType": "UPPER_LETTER"
+      "characterType": "UPPER_LETTER",
+      "separator": "SPACE"
     }
   }
 }
