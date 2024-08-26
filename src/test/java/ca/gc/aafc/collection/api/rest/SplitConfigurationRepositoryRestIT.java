@@ -35,14 +35,15 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
   void splitConfiguration_onCreateUpdate_separatorPreserved() {
     SplitConfigurationDto splitConfigurationDto =
       SplitConfigurationTestFixture.newSplitConfiguration();
-    splitConfigurationDto.setSeparator(SplitConfiguration.Separator.SPACE);
+    splitConfigurationDto.setSeparator(SplitConfiguration.Separator.DASH);
 
     String id = JsonAPITestHelper.extractId(
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(splitConfigurationDto))));
 
     sendGet(TYPE_NAME, id)
-      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.SPACE.name()));
+      .body("data.attributes.separator", Matchers.is(SplitConfiguration.Separator.DASH.name()));
 
+    splitConfigurationDto.setSeparator(SplitConfiguration.Separator.SPACE);
     sendPatch(
       TYPE_NAME, id,
       JsonAPITestHelper.toJsonAPIMap(

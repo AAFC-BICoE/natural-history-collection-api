@@ -37,7 +37,18 @@ import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
   parameters = {@Parameter(name = EnumArrayType.SQL_ARRAY_TYPE, value = "material_sample_type_enum")})
 public class SplitConfiguration implements DinaEntityIdentifiableByName {
 
-  public enum Separator {SPACE, DASH, UNDERSCORE}
+  public enum Separator {
+    SPACE(" "), DASH("-"), UNDERSCORE("_");
+    private final String separatorChar;
+
+    Separator(String separatorChar) {
+      this.separatorChar = separatorChar;
+    }
+
+    String getSeparatorChar() {
+      return separatorChar;
+    }
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
