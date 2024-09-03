@@ -1,0 +1,32 @@
+extension:
+  ncbi_sra_project_v1:
+    name: " NCBI_SRA_project_v1"
+    key: " ncbi_sra_project_v1"
+    version: "v1"
+    fields:
+    - key: "submitted_to_sra"
+      name: "Submitted to SRA"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "Date project was submitted to SRA."
+      dinaComponent: "PROJECT"
+    - key: "sra_url_link"
+      name: "SRA URL link"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "URL for the SRA project Submission."
+      dinaComponent: "PROJECT"
+    - key: "bioproject_accession_number"
+      name: "bioproject accession number"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "BioProject describes the goal of your research effort.\
+          \ The accession number should look like: PRJNAXXXXXX."
+      dinaComponent: "PROJECT"
+    - key: "bioproject_release_date"
+      name: "bioproject release date"
+      multilingualDescription.descriptions:
+        - lang: en
+          desc: "When will the Bioproject be released? \
+          \ This may be immediate or a specified date."
+      dinaComponent: "PROJECT"
