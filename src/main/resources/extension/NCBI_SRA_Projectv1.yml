@@ -9,6 +9,7 @@ extension:
       multilingualDescription.descriptions:
         - lang: en
           desc: "Date project was submitted to SRA."
+      vocabularyElementType: date
       dinaComponent: "PROJECT"
     - key: "sra_url_link"
       name: "SRA URL link"
@@ -29,4 +30,5 @@ extension:
         - lang: en
           desc: "When will the Bioproject be released? \
           \ This may be immediate or a specified date."
+      vocabularyElementType: date
       dinaComponent: "PROJECT"
