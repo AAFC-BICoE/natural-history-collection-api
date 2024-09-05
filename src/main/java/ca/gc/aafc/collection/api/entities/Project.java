@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -38,5 +39,9 @@ public class Project extends UserDescribedDinaEntity {
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
+
+  @Type(type = "jsonb")
+  @Column(name = "extension_values", columnDefinition = "jsonb")
+  private Map<String, Map<String, String>> extensionValues = Map.of();
 
 }
