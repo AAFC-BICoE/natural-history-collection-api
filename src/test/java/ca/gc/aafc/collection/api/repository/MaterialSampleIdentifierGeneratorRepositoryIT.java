@@ -55,7 +55,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
-  public void materialSampleIdentifierGeneratorRepositoryNextTwo_nextIdentifierReturned() {
+  public void materialSampleIdentifierGeneratorRepositorySameType_nextIdentifierReturned() {
 
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN);
