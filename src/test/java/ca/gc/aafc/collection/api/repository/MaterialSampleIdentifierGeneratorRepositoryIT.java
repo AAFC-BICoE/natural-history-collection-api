@@ -60,6 +60,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN);
     parentDto.setMaterialSampleName("Sample10");
+    parentDto.setIsBaseForSplitByType(true);
     parentDto = materialSampleRepository.create(parentDto);
 
     MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
@@ -120,6 +121,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
     parentDto.setMaterialSampleName("ABC-01");
+    parentDto.setIsBaseForSplitByType(true);
     parentDto = materialSampleRepository.create(parentDto);
 
     MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()

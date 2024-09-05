@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,9 @@ public class MaterialSampleIdentifierGenerator {
       case TYPE_BASED -> prepareTypeBasedNameGeneration(ms, materialSampleType);
     };
 
+    if (StringUtils.isBlank(params.basename())) {
+      throw new IllegalStateException("Could not find a basename.");
+    }
 
     // if there is no descendant we need to start a new series
     if (params.descendantNames.isEmpty()) {
@@ -128,7 +132,7 @@ public class MaterialSampleIdentifierGenerator {
     List<String> descendantNames = new ArrayList<>();
     extractAllDescendantNames(hierarchyMaterialSample, descendantNames,  materialSampleType);
 
-    return new IdentifierGenerationParameters(getBaseName(hierarchyMaterialSample, materialSampleType),
+    return new IdentifierGenerationParameters(getBaseNameForSplitByType(hierarchyMaterialSample, materialSampleType),
       descendantNames);
   }
 
@@ -167,18 +171,30 @@ public class MaterialSampleIdentifierGenerator {
 
   /**
    * Get the basename from a list of material-sample representing the entire hierarchy and a type.
-   * Basename is defined as the name of the first parent where the type is different from the provided type.
+   * Basename is defined as the name of the first parent where the type is different from the provided type
+   * or the first parent where isBaseForSplitByType is true.
    *
    * @param materialSampleHierarchy the entire hierarchy as material-sample
-   * @param type the material-sample type to be created with the generated identifier
-   * @return
+   * @return basename or null
    */
-  private static String getBaseName(List<MaterialSample> materialSampleHierarchy, MaterialSample.MaterialSampleType type) {
-    return materialSampleHierarchy.stream()
+  private static String getBaseNameForSplitByType(List<MaterialSample> materialSampleHierarchy, MaterialSample.MaterialSampleType type) {
+
+    // First try to check if we have a change in material-sample type
+    String basename = materialSampleHierarchy.stream()
       .filter(ms -> ms.getMaterialSampleType() != type)
       .max(Comparator.comparingInt(MaterialSample::getId))
       .map(MaterialSample::getMaterialSampleName)
       .orElse(null);
+
+    // If the hierarchy is of the same type, check for isBaseForSplitByType
+    if(StringUtils.isBlank(basename)) {
+      return materialSampleHierarchy.stream()
+        .filter(ms -> BooleanUtils.toBoolean(ms.getIsBaseForSplitByType()))
+        .max(Comparator.comparingInt(MaterialSample::getId))
+        .map(MaterialSample::getMaterialSampleName)
+        .orElse(null);
+    }
+    return basename;
   }
 
   /**
