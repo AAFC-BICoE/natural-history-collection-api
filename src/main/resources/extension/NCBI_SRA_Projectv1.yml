@@ -1,7 +1,7 @@
 extension:
   ncbi_sra_project_v1:
-    name: " NCBI_SRA_project_v1"
-    key: " ncbi_sra_project_v1"
+    name: "NCBI SRA Project v1"
+    key: "ncbi_sra_project_v1"
     version: "v1"
     fields:
     - key: "submitted_to_sra"

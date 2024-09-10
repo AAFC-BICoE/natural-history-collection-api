@@ -29,7 +29,7 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_ExtensionConfiguration() {
     List<ExtensionDto> listOfExtensionDtos =
       extensionRepository.findAll(new QuerySpec(ExtensionDto.class));
-    assertEquals(10, listOfExtensionDtos.size());
+    assertEquals(11, listOfExtensionDtos.size());
 
     List<Extension> listOfExtension = new ArrayList<>();
     for (ExtensionDto extensionDto : listOfExtensionDtos) {
@@ -48,7 +48,8 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
         collectionExtensionConfiguration.getExtension().get("phac_human_rg"),
         collectionExtensionConfiguration.getExtension().get("phac_animal_rg"),
         collectionExtensionConfiguration.getExtension().get("phac_cl"),
-        collectionExtensionConfiguration.getExtension().get("agronomy_ontology_v1")
+        collectionExtensionConfiguration.getExtension().get("agronomy_ontology_v1"),
+        collectionExtensionConfiguration.getExtension().get("ncbi_sra_project_v1")
       ));
   }
   

@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="172-Add_isBaseForSplitByType_to_material_sample" context="schema-change" author="cgendreau">
+    <changeSet id="173-Add_isBaseForSplitByType_to_material_sample" context="schema-change" author="cgendreau">
         <addColumn tableName="material_sample">
             <column name="is_base_for_split_by_type" type="boolean"/>
         </addColumn>
