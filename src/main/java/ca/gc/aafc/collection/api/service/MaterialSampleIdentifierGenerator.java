@@ -187,7 +187,7 @@ public class MaterialSampleIdentifierGenerator {
       .orElse(null);
 
     // If the hierarchy is of the same type, check for isBaseForSplitByType
-    if(StringUtils.isBlank(basename)) {
+    if (StringUtils.isBlank(basename)) {
       return materialSampleHierarchy.stream()
         .filter(ms -> BooleanUtils.toBoolean(ms.getIsBaseForSplitByType()))
         .max(Comparator.comparingInt(MaterialSample::getId))
