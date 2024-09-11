@@ -55,6 +55,31 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  public void materialSampleIdentifierGeneratorRepositorySameType_nextIdentifierReturned() {
+
+    MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
+    parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN);
+    parentDto.setMaterialSampleName("Sample10");
+    parentDto.setIsBaseForSplitByType(true);
+    parentDto = materialSampleRepository.create(parentDto);
+
+    MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()
+      .currentParentUUID(parentDto.getUuid())
+      .strategy(MaterialSampleNameGeneration.IdentifierGenerationStrategy.TYPE_BASED)
+      .characterType(MaterialSampleNameGeneration.CharacterType.UPPER_LETTER)
+      .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
+      .separator(SplitConfiguration.Separator.DASH)
+      .quantity(2)
+      .build();
+
+    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
+    List<String> nextIdentifiers = dto.getNextIdentifiers().get(parentDto.getUuid());
+    assertEquals("Sample10-A", nextIdentifiers.get(0));
+    assertEquals("Sample10-B", nextIdentifiers.get(1));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
   public void materialSampleIdentifierGeneratorRepositoryMultipleNext_nextIdentifierReturned() {
 
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
@@ -96,6 +121,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
     parentDto.setMaterialSampleName("ABC-01");
+    parentDto.setIsBaseForSplitByType(true);
     parentDto = materialSampleRepository.create(parentDto);
 
     MaterialSampleIdentifierGeneratorDto generatedDto = MaterialSampleIdentifierGeneratorDto.builder()

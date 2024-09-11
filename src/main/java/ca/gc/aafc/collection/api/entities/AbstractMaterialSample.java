@@ -153,4 +153,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 1000)
   private String restrictionRemarks;
 
+  private Boolean isBaseForSplitByType;
+
 }

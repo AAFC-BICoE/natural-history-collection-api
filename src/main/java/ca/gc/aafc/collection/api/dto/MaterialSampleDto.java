@@ -124,6 +124,8 @@ public class MaterialSampleDto {
 
   private String sourceSet;
 
+  private Boolean isBaseForSplitByType;
+
   // -- Relationships --
   @ShallowReference
   @JsonApiRelation
