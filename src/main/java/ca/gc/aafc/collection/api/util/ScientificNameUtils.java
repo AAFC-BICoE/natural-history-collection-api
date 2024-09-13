@@ -12,6 +12,9 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
 
+/**
+ * Utility class for handling scientific names
+ */
 public final class ScientificNameUtils {
 
   private ScientificNameUtils() {
@@ -19,7 +22,8 @@ public final class ScientificNameUtils {
   }
 
   /**
-   *
+   * From a list of organism(s), return the scientificName (or verbatim if there is scientificName)
+   * of the primary determination of the target organism (if there is one).
    * @param orgList list of {@link Organism}
    * @return
    */
@@ -37,7 +41,15 @@ public final class ScientificNameUtils {
       .collect(Collectors.joining("|"));
   }
 
+  /**
+   * From an ordered list of {@link MaterialSampleHierarchyObject} representing the hierarchy from the
+   * current materials-sample to the root, find the first determination and return
+   * the scientificName (or verbatim if there is scientificName).
+   * @param hierarchy
+   * @return the scientificName or null
+   */
   public static String extractEffectiveScientificName(List<MaterialSampleHierarchyObject> hierarchy) {
+
     Optional<List<MaterialSampleHierarchyObject.DeterminationSummary>> effectiveDetermination =
       hierarchy.stream()
         .map(MaterialSampleHierarchyObject::getOrganismPrimaryDetermination)
@@ -45,13 +57,12 @@ public final class ScientificNameUtils {
         .findFirst();
 
     if(effectiveDetermination.isEmpty()) {
-      return "";
+      return null;
     }
 
     return effectiveDetermination.get().stream()
       .map(d -> chooseScientificName(d.getScientificName(), d.getVerbatimScientificName()))
       .collect(Collectors.joining("|"));
-
   }
 
   private static String chooseScientificName(String scientificName, String verbatimScientificName) {

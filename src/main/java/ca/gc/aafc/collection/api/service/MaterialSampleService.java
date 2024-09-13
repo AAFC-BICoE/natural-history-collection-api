@@ -1,13 +1,19 @@
 package ca.gc.aafc.collection.api.service;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.util.ScientificNameUtils;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -20,30 +26,17 @@ import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.util.Objects;
-import java.util.Optional;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
-
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.SmartValidator;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
