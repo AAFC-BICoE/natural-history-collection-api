@@ -160,7 +160,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
       return;
     }
 
-    sample.setTargetOrganismPrimaryScientificName(
+    sample.setEffectiveScientificName(
       ScientificNameUtils.extractEffectiveScientificName(sample.getHierarchy())
     );
   }
