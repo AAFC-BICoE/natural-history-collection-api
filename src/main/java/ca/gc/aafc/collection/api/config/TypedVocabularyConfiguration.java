@@ -19,10 +19,12 @@ import java.util.Map;
  * The top level of each file should be "typedVocabulary".
  */
 @Configuration
+@PropertySource(value = "classpath:typed-vocabulary/identifierType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:typed-vocabulary/protocolElement.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 public class TypedVocabularyConfiguration {
 
+  public static final String IDENTIFIER_TYPE_ELEMENT_KEY = "identifierType";
   public static final String PROTOCOL_DATA_ELEMENT_KEY = "protocolDataElement";
 
   private final Map<String, List<TypedVocabularyElementImpl>> typedVocabulary;
@@ -35,6 +37,10 @@ public class TypedVocabularyConfiguration {
     return typedVocabulary;
   }
 
+  public List<? extends TypedVocabularyElement> getIdentifierType() {
+    return typedVocabulary.get(IDENTIFIER_TYPE_ELEMENT_KEY);
+  }
+
   public List<? extends TypedVocabularyElement> getProtocolDataElement() {
     return typedVocabulary.get(PROTOCOL_DATA_ELEMENT_KEY);
   }
@@ -42,7 +48,7 @@ public class TypedVocabularyConfiguration {
   @NoArgsConstructor
   @Getter
   @Setter
-  static class TypedVocabularyElementImpl implements TypedVocabularyElement {
+  public static class TypedVocabularyElementImpl implements TypedVocabularyElement {
     private String key;
     private String name;
     private VocabularyElementType vocabularyElementType;

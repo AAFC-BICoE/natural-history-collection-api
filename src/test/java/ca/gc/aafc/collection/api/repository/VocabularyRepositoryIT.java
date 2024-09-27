@@ -25,7 +25,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
   public void findAll_VocabularyConfiguration() {
     List<VocabularyDto> listOfVocabularies =
       vocabularyConfigurationRepository.findAll("");
-    assertEquals(13, listOfVocabularies.size());
+    assertEquals(12, listOfVocabularies.size());
 
     List<List<CollectionVocabularyConfiguration.CollectionVocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
@@ -46,8 +46,7 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
         vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement"),
         vocabularyConfiguration.getVocabulary().get("protocolData"),
         vocabularyConfiguration.getVocabulary().get("protocolType"),
-        vocabularyConfiguration.getVocabulary().get("taxonomicRank"),
-        vocabularyConfiguration.getVocabulary().get("materialSampleIdentifierType")
+        vocabularyConfiguration.getVocabulary().get("taxonomicRank")
       ));
   }
 }
