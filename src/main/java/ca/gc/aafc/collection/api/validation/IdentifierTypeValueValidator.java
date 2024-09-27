@@ -23,7 +23,7 @@ import java.util.Optional;
 @Component
 public class IdentifierTypeValueValidator implements Validator {
 
-  private static final String FIELD_NAME = "identifier";
+  private static final String FIELD_NAME = "identifiers";
   private static final String INVALID_KEY_KEY = "validation.identifier.violation.invalidKey";
   private static final String INVALID_VALUE_KEY = "validation.identifier.violation.invalidValue";
 
@@ -67,7 +67,7 @@ public class IdentifierTypeValueValidator implements Validator {
       }
 
       if (!TypedVocabularyElementValidator.isValidElement(typedVocab.get(), entry.getValue())) {
-        String errorMessage = getMessageForKey(INVALID_VALUE_KEY, entry.getKey(), entry.getValue());
+        String errorMessage = getMessageForKey(INVALID_VALUE_KEY, entry.getValue(), entry.getKey());
         errors.rejectValue(FIELD_NAME, INVALID_VALUE_KEY, errorMessage);
         return;
       }
