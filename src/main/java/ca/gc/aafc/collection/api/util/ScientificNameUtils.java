@@ -25,9 +25,13 @@ public final class ScientificNameUtils {
    * From a list of organism(s), return the scientificName (or verbatim if there is scientificName)
    * of the primary determination of the target organism (if there is one).
    * @param orgList list of {@link Organism}
-   * @return
+   * @return the target organism primary scientific name or null if the list is empty
    */
   public static String extractTargetOrganismPrimaryScientificName(List<Organism> orgList) {
+
+    if (CollectionUtils.isEmpty(orgList)) {
+      return null;
+    }
 
     // Filter the target organism or use all of them if target is not used (null)
     // Map to primary determination and make sure it's not null (should not happen but just in case)
@@ -37,7 +41,7 @@ public final class ScientificNameUtils {
       .filter(Objects::nonNull).toList();
 
     return det.stream()
-      .map(d -> chooseScientificName(d.getScientificName(), d.getVerbatimScientificName()))
+      .map(d -> pickScientificName(d.getScientificName(), d.getVerbatimScientificName()))
       .collect(Collectors.joining("|"));
   }
 
@@ -50,26 +54,35 @@ public final class ScientificNameUtils {
    */
   public static String extractEffectiveScientificName(List<MaterialSampleHierarchyObject> hierarchy) {
 
+    if (CollectionUtils.isEmpty(hierarchy)) {
+      return null;
+    }
+
     Optional<List<MaterialSampleHierarchyObject.DeterminationSummary>> effectiveDetermination =
       hierarchy.stream()
         .map(MaterialSampleHierarchyObject::getOrganismPrimaryDetermination)
         .filter(CollectionUtils::isNotEmpty)
         .findFirst();
 
-    if(effectiveDetermination.isEmpty()) {
+    if (effectiveDetermination.isEmpty()) {
       return null;
     }
 
     return effectiveDetermination.get().stream()
-      .map(d -> chooseScientificName(d.getScientificName(), d.getVerbatimScientificName()))
+      .map(d -> pickScientificName(d.getScientificName(), d.getVerbatimScientificName()))
       .collect(Collectors.joining("|"));
   }
 
-  private static String chooseScientificName(String scientificName, String verbatimScientificName) {
+  /**
+   * Returns scientificName if not blank or verbatimScientificName otherwise.
+   * @param scientificName
+   * @param verbatimScientificName
+   * @return
+   */
+  private static String pickScientificName(String scientificName, String verbatimScientificName) {
     if (StringUtils.isNotBlank(scientificName)) {
       return scientificName;
     }
     return verbatimScientificName;
   }
-
 }
