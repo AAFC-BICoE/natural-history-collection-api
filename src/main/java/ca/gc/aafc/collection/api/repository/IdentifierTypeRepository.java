@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,9 @@ public class IdentifierTypeRepository extends ReadOnlyDinaRepositoryV2<String, I
   @GetMapping(IdentifierTypeDto.TYPE)
   public ResponseEntity<RepresentationModel<?>> handleFindAll(HttpServletRequest req) {
 
-    String queryString = URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
+    String queryString = StringUtils.isBlank(req.getQueryString()) ? "" :
+      URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
+
     List<IdentifierTypeDto> dtos ;
     try {
       dtos = findAll(queryString);
