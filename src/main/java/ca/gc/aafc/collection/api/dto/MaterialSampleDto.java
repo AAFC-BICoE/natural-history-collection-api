@@ -92,6 +92,10 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String targetOrganismPrimaryScientificName;
 
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private String effectiveScientificName;
+
   private String barcode;
 
   private Boolean publiclyReleasable;

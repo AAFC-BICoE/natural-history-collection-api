@@ -141,6 +141,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @Transient
   private String targetOrganismPrimaryScientificName;
 
+  @Transient
+  private String effectiveScientificName;
+
   @Size(max = 50)
   private String materialSampleState;
 
