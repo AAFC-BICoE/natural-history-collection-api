@@ -39,12 +39,13 @@ public class IndexRefreshRepository {
 
     dinaAdminCUDAuthorizationService.authorizeCreate(indexRefreshDto);
 
-    if(indexRefreshDto == null) {
+    if (indexRefreshDto == null) {
       return ResponseEntity.badRequest().build();
     }
 
     try {
-      indexRefreshService.reindexDocument(indexRefreshDto.getId().toString(), indexRefreshDto.getDocType());
+      indexRefreshService.reindexDocument(indexRefreshDto.getId().toString(),
+        indexRefreshDto.getDocType());
     } catch (IllegalStateException isEx) {
       return ResponseEntity.badRequest().build();
     }
