@@ -64,6 +64,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
+    entity.setGroup(standardizeGroupName(entity));
 
     cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);

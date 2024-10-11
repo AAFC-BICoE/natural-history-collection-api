@@ -31,6 +31,7 @@ public class AssemblageService extends DefaultDinaService<Assemblage> {
     if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override

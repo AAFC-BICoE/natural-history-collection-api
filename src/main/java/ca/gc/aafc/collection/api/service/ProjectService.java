@@ -34,6 +34,7 @@ public class ProjectService extends DefaultDinaService<Project> {
   @Override
   protected void preCreate(Project entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override

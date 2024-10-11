@@ -1,15 +1,13 @@
 package ca.gc.aafc.collection.api.validation;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.dina.validation.DinaBaseValidator;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Based, package-protected class used to validate values against specific vocabulary.

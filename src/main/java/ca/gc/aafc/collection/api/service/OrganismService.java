@@ -46,7 +46,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
     if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
-
+    entity.setGroup(standardizeGroupName(entity));
     setupDeterminations(entity);
   }
 

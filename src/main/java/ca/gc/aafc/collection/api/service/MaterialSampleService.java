@@ -166,6 +166,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   @Override
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
+
     linkAssociations(entity);
   }
 
