@@ -19,7 +19,7 @@ class CollectionManagedAttributeCRUDIT extends CollectionModuleBaseIT {
     String expectedValue = "value";
     String expectedCreatedBy = "dina";
     String expectedName = "dina test attribute";
-    String expectedGroup = "dinaGroup";
+    String expectedGroup = "dina-group";
     UUID uuid = collectionManagedAttributeService.create(CollectionManagedAttributeFactory.newCollectionManagedAttribute()
       .vocabularyElementType(VocabularyElementType.STRING)
       .acceptedValues(new String[]{expectedValue})

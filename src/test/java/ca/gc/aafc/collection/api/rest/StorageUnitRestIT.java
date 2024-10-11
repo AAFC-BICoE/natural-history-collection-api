@@ -220,7 +220,6 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   private static StorageUnitDto newUnit() {
     StorageUnitDto unitDto = StorageUnitTestFixture.newStorageUnit();
     unitDto.setName(RandomStringUtils.randomAlphabetic(3));
-    unitDto.setGroup(RandomStringUtils.randomAlphabetic(4));
     unitDto.setStorageUnitChildren(null);
     unitDto.setParentStorageUnit(null);
     unitDto.setStorageUnitType(null);

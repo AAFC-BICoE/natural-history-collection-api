@@ -1,41 +1,27 @@
 package ca.gc.aafc.collection.api.validation;
 
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.entities.Project;
-import lombok.NonNull;
+import ca.gc.aafc.dina.validation.DinaBaseValidator;
 
 @Component
-public class ProjectValidator implements Validator {
-
-  private final MessageSource messageSource;
+public class ProjectValidator extends DinaBaseValidator<Project> {
 
   static final String VALID_EVENT_DATE_KEY = "validation.constraint.violation.validEventDateTime";
 
   public ProjectValidator(MessageSource messageSource) {
-    this.messageSource = messageSource;
+    super(Project.class, messageSource);
   }
 
   @Override
-  public boolean supports(@NonNull Class<?> clazz) {
-    return Project.class.isAssignableFrom(clazz);
-
+  public void validateTarget(Project target, Errors errors) {
+    validateStartEndDate(target, errors);
   }
 
-  @Override
-  public void validate(@NonNull Object target, @NonNull Errors errors) {
-    if (!supports(target.getClass())) {
-      throw new IllegalArgumentException("ProjectValidator not supported for class " + target.getClass());
-    }
-    Project project = (Project) target;
-    validateStartEndDate(errors, project);
-  }
-
-  private void validateStartEndDate(Errors errors, Project project) {
+  private void validateStartEndDate(Project project, Errors errors) {
     if (project.getStartDate() == null && project.getEndDate() != null ||
       project.getEndDate() != null && project.getStartDate()
         .isAfter(project.getEndDate())) {
@@ -50,10 +36,7 @@ public class ProjectValidator implements Validator {
    * @param messageBundleKey
    */
   private void addError(Errors errors, String messageBundleKey) {
-    String errorMessage = messageSource.getMessage(
-        messageBundleKey,
-        null,
-        LocaleContextHolder.getLocale());
+    String errorMessage = getMessage(messageBundleKey);
     errors.reject(messageBundleKey, errorMessage);
   }
 }

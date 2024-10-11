@@ -28,7 +28,7 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
   }
 
   @Override
-  protected void validateVocabularyBasedAttribute(Protocol target, Errors errors) {
+  public void validateTarget(Protocol target, Errors errors) {
 
     validateProtocolType(target, errors);
 

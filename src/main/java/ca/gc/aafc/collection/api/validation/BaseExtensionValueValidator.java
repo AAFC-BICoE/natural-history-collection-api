@@ -2,20 +2,17 @@ package ca.gc.aafc.collection.api.validation;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.entities.DinaComponent;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
+import ca.gc.aafc.dina.validation.DinaBaseValidator;
 import ca.gc.aafc.dina.validation.TypedVocabularyElementValidator;
 
-import lombok.NonNull;
-
-public class BaseExtensionValueValidator implements Validator {
+public class BaseExtensionValueValidator extends DinaBaseValidator<FieldExtensionValue> {
 
   public static final String NO_MATCH_KEY_VERSION = "validation.constraint.violation.noMatchKeyVersion";
   public static final String NO_MATCH_FIELD_KEY = "validation.constraint.violation.noMatchFieldKey";
@@ -26,7 +23,6 @@ public class BaseExtensionValueValidator implements Validator {
   public static final String INVALID_VALUE_KEY = "validation.fieldExtension.violation.invalidValue";
 
   private final DinaComponent componentType;
-  private final MessageSource messageSource;
   private final CollectionExtensionConfiguration configuration;
 
   /**
@@ -39,34 +35,24 @@ public class BaseExtensionValueValidator implements Validator {
       DinaComponent componentType, 
       MessageSource messageSource, 
       CollectionExtensionConfiguration configuration) {
+    super(FieldExtensionValue.class, messageSource);
     this.componentType = componentType;
-    this.messageSource = messageSource;
     this.configuration = configuration;
   }
 
   @Override
-  public boolean supports(@NonNull Class<?> clazz) {
-    return FieldExtensionValue.class.isAssignableFrom(clazz);
-  }
-
-  @Override
-  public void validate(@NonNull Object target, @NonNull Errors errors) {
-    if (!supports(target.getClass())) {
-      throw new IllegalArgumentException("ExtensionValueValidator not supported for class " + target.getClass());
-    }
-
-    FieldExtensionValue extensionValue = (FieldExtensionValue) target;
-    handleValidation(errors, extensionValue);
+  public void validateTarget(FieldExtensionValue target, Errors errors) {
+    handleValidation(target, errors);
   }
 
   /**
    * Check if the key and version match. Once a match is found, the field key is searched to ensure
    * it exists within the configuration.
-   * 
-   * @param errors if any validation problems occur, errors will be reported here.
+   *
    * @param extensionValue extension value being validated against.
+   * @param errors if any validation problems occur, errors will be reported here.
    */
-  private void handleValidation(Errors errors, FieldExtensionValue extensionValue) {
+  private void handleValidation(FieldExtensionValue extensionValue, Errors errors) {
 
     for (Extension extension : configuration.getExtension().values()) {
       // First, check if the extension key matches
@@ -87,9 +73,7 @@ public class BaseExtensionValueValidator implements Validator {
       }
     }
 
-    String errorMessage = getMessageForKey(
-      NO_MATCH_KEY_VERSION, 
-      extensionValue.getExtKey());
+    String errorMessage = getMessage(NO_MATCH_KEY_VERSION, extensionValue.getExtKey());
     errors.rejectValue("extKey", NO_MATCH_KEY_VERSION, errorMessage);
   }
 
@@ -101,7 +85,7 @@ public class BaseExtensionValueValidator implements Validator {
    */
   private void checkNotBlankValue(Errors errors, FieldExtensionValue extensionValue) {
     if (StringUtils.isBlank(extensionValue.getValue())) {
-      errors.rejectValue(FieldExtensionValue.VALUE_KEY_NAME, BLANK_VALUE, getMessageForKey(BLANK_VALUE));
+      errors.rejectValue(FieldExtensionValue.VALUE_KEY_NAME, BLANK_VALUE, getMessage(BLANK_VALUE));
     }
   }
 
@@ -115,7 +99,7 @@ public class BaseExtensionValueValidator implements Validator {
    */
   private void checkExtensionFieldKey(Errors errors, FieldExtensionValue extensionValue, Extension extension) {
     if (!extension.containsKey(extensionValue.getExtFieldKey())) {
-      String errorMessage = getMessageForKey(NO_MATCH_FIELD_KEY, extensionValue.getExtKey(),
+      String errorMessage = getMessage(NO_MATCH_FIELD_KEY, extensionValue.getExtKey(),
               extensionValue.getExtFieldKey());
       errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_FIELD_KEY, errorMessage);
     }
@@ -136,7 +120,7 @@ public class BaseExtensionValueValidator implements Validator {
     DinaComponent extensionComponent = DinaComponent.valueOf(field.getDinaComponent());
 
     if (!extensionComponent.equals(componentType)) {
-      String errorMessage = getMessageForKey(INCORRECT_DINA_COMPONENT, componentType, field.getDinaComponent());
+      String errorMessage = getMessage(INCORRECT_DINA_COMPONENT, componentType, field.getDinaComponent());
       errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, INCORRECT_DINA_COMPONENT, errorMessage);
     }
   }
@@ -153,7 +137,7 @@ public class BaseExtensionValueValidator implements Validator {
 
     // validate the value assigned against the field definition (unless there is no VocabularyElementType)
     if (field.getVocabularyElementType() != null && !TypedVocabularyElementValidator.isValidElement(field, extensionValue.getValue())) {
-      String errorMessage = getMessageForKey(
+      String errorMessage = getMessage(
         INVALID_VALUE_KEY,
         extensionValue.getValue(),
         extensionValue.getExtFieldKey());
@@ -167,15 +151,10 @@ public class BaseExtensionValueValidator implements Validator {
       return;
     }
 
-    String errorMessage = getMessageForKey(
+    String errorMessage = getMessage(
       NO_MATCH_ACCEPTED_VALUE_KEY,
       extensionValue.getValue(),
       String.join(", ", field.getAcceptedValues()));
     errors.rejectValue(FieldExtensionValue.FIELD_KEY_NAME, NO_MATCH_ACCEPTED_VALUE_KEY, errorMessage);
   }
-
-  private String getMessageForKey(String key, Object... objects) {
-    return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
-  }
-  
 }

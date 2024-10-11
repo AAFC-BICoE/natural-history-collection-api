@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class AssemblageCRUDIT extends CollectionModuleBaseIT {
 
   private static final String EXPECTED_NAME = "name";
-  private static final String EXPECTED_GROUP = "DINA GROUP";
+  private static final String EXPECTED_GROUP = "dina-group";
   private static final String EXPECTED_CREATED_BY = "createdBy";
   private final List<UUID> EXPECT_ATTACHMENTS = List.of(UUID.randomUUID(), UUID.randomUUID());
 

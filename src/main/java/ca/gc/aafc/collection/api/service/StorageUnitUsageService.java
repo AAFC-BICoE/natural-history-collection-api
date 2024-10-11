@@ -24,6 +24,7 @@ public class StorageUnitUsageService extends DefaultDinaService<StorageUnitUsage
   @Override
   protected void preCreate(StorageUnitUsage entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override
