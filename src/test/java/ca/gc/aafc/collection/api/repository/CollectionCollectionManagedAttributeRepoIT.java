@@ -26,7 +26,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
     String expectedCreatedBy = "dina";
-    String expectedGroup = "dinaGroup";
+    String expectedGroup = "dina-group";
 
     CollectionManagedAttributeDto dto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     dto.setName(expectedName);

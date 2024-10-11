@@ -19,7 +19,7 @@ import ca.gc.aafc.dina.i18n.MultilingualDescription;
 public class ProtocolCRUDIT extends CollectionModuleBaseIT {
 
   private static final String EXPECTED_NAME = "name";
-  private static final String EXPECTED_GROUP = "DINA GROUP";
+  private static final String EXPECTED_GROUP = "dina-group";
   private static final String EXPECTED_CREATED_BY = "createdBy";
   private final List<UUID> EXPECTED_ATTACHMENT_IDENTIFIERS = List.of(UUID.randomUUID(), UUID.randomUUID());
 
