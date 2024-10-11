@@ -21,7 +21,7 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   private CollectionManagedAttributeRepo repo;
 
   @Test
-  @WithMockKeycloakUser(groupRole = "dinaGroup:SUPER_USER")
+  @WithMockKeycloakUser(groupRole = "dina-group:SUPER_USER")
   void create_recordCreated() {
     String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
