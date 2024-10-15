@@ -16,6 +16,7 @@ import ca.gc.aafc.dina.mapper.DinaMapper;
 import ca.gc.aafc.dina.repository.DinaRepository;
 import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import ca.gc.aafc.dina.service.AuditService;
 import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
@@ -76,7 +77,7 @@ public class CollectionManagedAttributeRepo extends DinaRepository<CollectionMan
         if (managedAttribute != null) {
           return getMappingLayer().toDtoSimpleMapping(managedAttribute);
         } else {
-          throw new ResourceNotFoundException("Managed Attribute not found: " + id);
+          throw new ResourceNotFoundException("Managed Attribute not found: " + TextHtmlSanitizer.sanitizeText(id.toString()));
         }
       }
     }
