@@ -60,7 +60,7 @@ public class StorageUnitUsage implements DinaEntity {
   private Integer wellColumn;
 
   @Size(max = 2)
-  @Pattern(regexp = "[a-zA-Z]")
+  @Pattern(regexp = "[a-zA-Z]{1,2}")
   @Column(name = "well_row")
   private String wellRow;
 
