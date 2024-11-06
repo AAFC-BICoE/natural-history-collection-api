@@ -62,6 +62,4 @@ public class CollectingEventRepository extends DinaRepository<CollectingEventDto
   protected Predicate<String> supplyCheckSubmittedDataPredicate() {
     return txt -> TextHtmlSanitizer.isSafeText(txt) || TextHtmlSanitizer.isAcceptableText(txt);
   }
-
 }
-

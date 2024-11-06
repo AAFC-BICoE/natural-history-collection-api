@@ -17,8 +17,8 @@ import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.exception.ResourceNotFoundException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBaseIT {

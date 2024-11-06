@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
@@ -22,6 +21,7 @@ import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
+import ca.gc.aafc.dina.util.UUIDHelper;
 
 import lombok.NonNull;
 
@@ -45,7 +45,8 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
 
   @Override
   protected void preCreate(StorageUnit entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override
@@ -101,5 +102,4 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     }
     unit.setHierarchy(storageHierarchicalObjects);
   }
-
 }

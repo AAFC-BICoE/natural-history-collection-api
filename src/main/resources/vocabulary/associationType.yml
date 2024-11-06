@@ -1,60 +1,70 @@
 vocabulary:
   associationType:
-    - name: has_host
+    - key: has_host
+      name: has_host
       term: http://purl.obolibrary.org/obo/RO_0002454
       inverseOf: host_of
       multilingualTitle.titles:
         - lang: en
           title: has host
-    - name: host_of
+    - key: host_of
+      name: host_of
       term: http://purl.obolibrary.org/obo/RO_0002453
       inverseOf: has_host
       multilingualTitle.titles:
         - lang: en
           title: host of
-    - name: parasite_of
+    - key: parasite_of
+      name: parasite_of
       term: http://purl.obolibrary.org/obo/RO_0002444
       inverseOf: parasitized_by
       multilingualTitle.titles:
         - lang: en
           title: parasite of
-    - name: parasitized_by
+    - key: parasitized_by
+      name: parasitized_by
       term: http://purl.obolibrary.org/obo/RO_0002445
       inverseOf: parasite_of
       multilingualTitle.titles:
         - lang: en
           title: parasitized by
-    - name: pollinates
+    - key: pollinates
+      name: pollinates
       term: http://purl.obolibrary.org/obo/RO_0002455
       inverseOf: pollinated_by
       multilingualTitle.titles:
         - lang: en
           title: pollinates
-    - name: pollinated_by
+    - key: pollinated_by
+      name: pollinated_by
       term: http://purl.obolibrary.org/obo/RO_0002456
       inverseOf: pollinates
       multilingualTitle.titles:
         - lang: en
           title: pollinated by
-    - name: has_vector
+    - key: has_vector
+      name: has_vector
       term: http://purl.obolibrary.org/obo/RO_0002460
       inverseOf: is_vector_for
       multilingualTitle.titles:
         - lang: en
           title: has vector
-    - name: is_vector_for
+    - key: is_vector_for
+      name: is_vector_for
       term: http://purl.obolibrary.org/obo/RO_0002459
       inverseOf: has_vector
       multilingualTitle.titles:
         - lang: en
           title: is vector for
-    - name: has_pathogen
+    - key: has_pathogen
+      name: has_pathogen
       term: http://purl.obolibrary.org/obo/RO_0002557
       inverseOf: pathogen_of
       multilingualTitle.titles:
         - lang: en
           title: has pathogen
-    - name: pathogen_of
+    - key: pathogen_of
+      name: pathogen_of
       term: http://purl.obolibrary.org/obo/RO_0002556
       inverseOf: has_pathogen
       multilingualTitle.titles:

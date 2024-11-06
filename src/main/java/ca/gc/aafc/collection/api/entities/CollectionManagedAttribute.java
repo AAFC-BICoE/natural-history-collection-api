@@ -34,6 +34,7 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   public enum ManagedAttributeComponent {
     COLLECTING_EVENT,
     MATERIAL_SAMPLE,
+    ORGANISM,
     DETERMINATION,
     PREPARATION,
     ASSEMBLAGE;

@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,7 @@ public class MaterialSample extends AbstractMaterialSample {
 
   public static final String CHILDREN_COL_NAME = "materialSampleChildren";
   public static final String HIERARCHY_PROP_NAME = "hierarchy";
+  public static final String ORGANISM_PROP_NAME = "organism";
 
   @Version
   private int version;
@@ -128,13 +130,19 @@ public class MaterialSample extends AbstractMaterialSample {
     }
   }
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "storage_unit_id")
-  private StorageUnit storageUnit;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "storage_unit_usage_id")
+  private StorageUnitUsage storageUnitUsage;
 
   @Transient
   @DiffIgnore
   private List<MaterialSampleHierarchyObject> hierarchy;
+
+  @Transient
+  private String targetOrganismPrimaryScientificName;
+
+  @Transient
+  private String effectiveScientificName;
 
   @Size(max = 50)
   private String materialSampleState;
@@ -146,6 +154,9 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Size(max = 1000)
   private String materialSampleRemarks;
+
+  @Size(max = 50)
+  private String sourceSet;
 
   @Type(type = "list-array")
   @Column(name = "prepared_by", columnDefinition = "uuid[]")

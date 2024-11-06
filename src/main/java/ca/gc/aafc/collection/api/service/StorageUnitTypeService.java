@@ -3,12 +3,12 @@ package ca.gc.aafc.collection.api.service;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
-
-import java.util.UUID;
 
 @Service
 public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> {
@@ -19,7 +19,8 @@ public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> 
 
   @Override
   protected void preCreate(StorageUnitType entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Cacheable(value = "storage_unit_type_cache")
@@ -27,5 +28,4 @@ public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> 
   public <T> T findOneById(Object id, Class<T> entityClass) {
     return super.findOneById(id, entityClass);
   }
-
 }

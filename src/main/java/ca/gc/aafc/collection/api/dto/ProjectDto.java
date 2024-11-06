@@ -1,9 +1,12 @@
 package ca.gc.aafc.collection.api.dto;
 
+import io.crnk.core.resource.annotations.JsonApiField;
+import io.crnk.core.resource.annotations.PatchStrategy;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
@@ -49,5 +52,8 @@ public class ProjectDto {
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   private MultilingualDescription multilingualDescription;
+
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, Map<String, String>> extensionValues = Map.of();
 
 }

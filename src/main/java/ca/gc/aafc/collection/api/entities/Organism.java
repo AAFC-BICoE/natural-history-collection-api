@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
+
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,6 +54,11 @@ public class Organism implements DinaEntity {
   private Boolean isTarget;
 
   @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, String> managedAttributes = Map.of();
+
+  @Type(type = "jsonb")
   @Valid
   private List<Determination> determination;
 
@@ -71,6 +78,21 @@ public class Organism implements DinaEntity {
   @NotBlank
   @Column(name = "created_by", updatable = false)
   private String createdBy;
+
+  /**
+   * Return the Primary Determination.
+   * If the entity is in invalid state and there is more than 1 primary determination, the first
+   * one found will be returned.
+   * @return Primary Determination or null if none
+   */
+  public Determination getPrimaryDetermination() {
+    if (CollectionUtils.isEmpty(determination)) {
+      return null;
+    }
+    return determination.stream().filter(d -> d.getIsPrimary() != null && d.getIsPrimary()).findFirst()
+      .orElse(null);
+  }
+
 
   /**
    * Count the number of primary Determination.

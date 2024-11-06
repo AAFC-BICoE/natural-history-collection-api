@@ -1,13 +1,23 @@
 package ca.gc.aafc.collection.api.service;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.SmartValidator;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.util.ScientificNameUtils;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.IdentifierTypeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
@@ -15,24 +25,19 @@ import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.service.MessageProducingService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.SmartValidator;
+import ca.gc.aafc.dina.util.UUIDHelper;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
@@ -49,6 +54,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
 
+  private final IdentifierTypeValueValidator identifierTypeValueValidator;
   private final MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator;
   private final RestrictionExtensionValueValidator restrictionExtensionValueValidator;
 
@@ -61,6 +67,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator,
     @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
+    IdentifierTypeValueValidator identifierTypeValueValidator,
     ApplicationEventPublisher eventPublisher
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
@@ -70,6 +77,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.hierarchicalDataService = hierarchicalDataService;
     this.materialSampleExtensionValueValidator = materialSampleExtensionValueValidator;
     this.restrictionExtensionValueValidator = restrictionExtensionValueValidator;
+    this.identifierTypeValueValidator = identifierTypeValueValidator;
+
     this.materialSampleValidationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
             .from(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
     this.preparationValidationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
@@ -95,7 +104,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
 
     // sanity checks
-    if(entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
+    if (entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
       return all;
     }
 
@@ -108,6 +117,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
           }
           if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
             setChildrenOrdinal(ms);
+          }
+          if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
+            setTargetOrganismPrimaryScientificName(ms);
+            setEffectiveScientificName(ms);
           }
         } catch (JsonProcessingException e) {
           throw new RuntimeException(e);
@@ -130,9 +143,31 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     }
   }
 
+  public void setTargetOrganismPrimaryScientificName(MaterialSample sample) {
+
+    if (CollectionUtils.isEmpty(sample.getOrganism())) {
+      return;
+    }
+    String s = ScientificNameUtils.extractTargetOrganismPrimaryScientificName(sample.getOrganism());
+    sample.setTargetOrganismPrimaryScientificName(s);
+  }
+
+  public void setEffectiveScientificName(MaterialSample sample) {
+
+    if (CollectionUtils.isEmpty(sample.getHierarchy())) {
+      return;
+    }
+
+    sample.setEffectiveScientificName(
+      ScientificNameUtils.extractEffectiveScientificName(sample.getHierarchy())
+    );
+  }
+
   @Override
   protected void preCreate(MaterialSample entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
+
     linkAssociations(entity);
   }
 
@@ -157,6 +192,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     validateManagedAttribute(entity);
     validateAssociations(entity);
     validateExtensionValues(entity);
+
+    applyBusinessRule(entity, identifierTypeValueValidator);
   }
 
   private void validateManagedAttribute(MaterialSample entity) {

@@ -18,7 +18,6 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 
-
 @Repository
 public class ProtocolRepository extends DinaRepository<ProtocolDto, Protocol> {
 
@@ -52,5 +51,4 @@ public class ProtocolRepository extends DinaRepository<ProtocolDto, Protocol> {
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
   }
-  
 }

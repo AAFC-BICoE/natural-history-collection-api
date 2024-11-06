@@ -57,4 +57,18 @@ vocabulary:
           title: Collection Method
         - lang: fr
           title: Méthode de collecte
+    - name: Chemical Extraction
+      key: chemical_extraction
+      multilingualTitle.titles:
+        - lang: en
+          title: Chemical Extraction
+        - lang: fr
+          title: Extraction chimique
+    - name: Isolation Method
+      key: isolation_method
+      multilingualTitle.titles:
+        - lang: en
+          title: Isolation Method
+        - lang: fr
+          title: Méthode d'isolation
           

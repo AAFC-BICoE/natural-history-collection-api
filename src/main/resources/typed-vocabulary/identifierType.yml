@@ -1,0 +1,10 @@
+typedVocabulary:
+  identifierType:
+    - name: SeqDB ID
+      key: seqdb_id
+      vocabularyElementType: INTEGER
+      multilingualTitle.titles:
+        - lang: en
+          title: SeqDB ID
+        - lang: fr
+          title: ID SeqDB

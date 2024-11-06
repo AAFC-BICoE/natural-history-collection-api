@@ -6,38 +6,47 @@ import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValid
 import ca.gc.aafc.collection.api.validation.OrganismValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.DefaultDinaService;
-import lombok.NonNull;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
-
-import java.util.UUID;
 
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
 
   private final OrganismValidator organismValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
 
-  public OrganismService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv, OrganismValidator organismValidator,
-      CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator) {
+  private static final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+    ORGANISM_VALIDATION_CONTEXT =
+    CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+      .from(CollectionManagedAttribute.ManagedAttributeComponent.ORGANISM);
+
+  private static final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+    DETERMINATION_VALIDATION_CONTEXT =
+    CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
+      .from(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION);
+
+  public OrganismService(BaseDAO baseDAO,
+                         SmartValidator sv,
+                         OrganismValidator organismValidator,
+                         CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator) {
     super(baseDAO, sv);
     this.organismValidator = organismValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
-    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-            .from(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION);
   }
 
   @Override
   protected void preCreate(Organism entity) {
     // allow user provided UUID
-    if(entity.getUuid() == null) {
-      entity.setUuid(UUID.randomUUID());
+    if (entity.getUuid() == null) {
+      entity.setUuid(UUIDHelper.generateUUIDv7());
     }
-
+    entity.setGroup(standardizeGroupName(entity));
     setupDeterminations(entity);
   }
 
@@ -49,6 +58,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
   @Override
   public void validateBusinessRules(Organism entity) {
     applyBusinessRule(entity, organismValidator);
+    validateOrganismManagedAttribute(entity);
     validateDeterminationManagedAttribute(entity);
   }
 
@@ -66,6 +76,13 @@ public class OrganismService extends DefaultDinaService<Organism> {
     }
   }
 
+  private void validateOrganismManagedAttribute(Organism organism) {
+    if (MapUtils.isNotEmpty(organism.getManagedAttributes())) {
+      collectionManagedAttributeValueValidator.validate(organism, organism.getManagedAttributes(),
+        ORGANISM_VALIDATION_CONTEXT);
+    }
+  }
+
   private void validateDeterminationManagedAttribute(Organism organism) {
     // An organism can have multiple determinations, go through each of them and validate.
     if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
@@ -74,7 +91,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
           collectionManagedAttributeValueValidator.validate(
               organism.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()),
               determination,
-              determination.getManagedAttributes(), validationContext);
+              determination.getManagedAttributes(), DETERMINATION_VALIDATION_CONTEXT);
         }
       });
     }

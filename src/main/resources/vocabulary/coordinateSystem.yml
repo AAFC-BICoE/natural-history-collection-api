@@ -1,27 +1,31 @@
 vocabulary:
   coordinateSystem:
-    - name: decimal degrees
+    - key: decimal_degrees
+      name: decimal degrees
       term: https://www.wikidata.org/wiki/Q1798227
       multilingualTitle.titles:
         - lang: en
           title: decimal degrees
         - lang: fr
           title: degrés décimaux
-    - name: degrees decimal minutes
+    - key: degrees_decimal_minutes
+      name: degrees decimal minutes
       term: http://wiki.gis.com/wiki/index.php/Decimal_degrees
       multilingualTitle.titles:
         - lang: en
           title: degrees decimal minutes
         - lang: fr
           title: degrés décimales minutes
-    - name: degrees minutes seconds
+    - key: degrees_minutes_seconds
+      name: degrees minutes seconds
       term: https://gsp.humboldt.edu/olm/Lessons/GIS/01%20SphericalCoordinates/Reporting_Geographic_Coordinates.html
       multilingualTitle.titles:
         - lang: en
           title: degrees minutes seconds
         - lang: fr
           title: Degrés Minutes Secondes
-    - name: UTM
+    - key: utm
+      name: UTM
       term: https://www.wikidata.org/wiki/Q588975
       multilingualTitle.titles:
         - lang: en

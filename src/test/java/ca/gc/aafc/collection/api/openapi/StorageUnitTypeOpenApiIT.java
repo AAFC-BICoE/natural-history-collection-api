@@ -34,7 +34,7 @@ public class StorageUnitTypeOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void storageUnitType_SpecValid() {
-    StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();  
+    StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
 
     OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "StorageUnitType",
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(storageUnitTypeDto))

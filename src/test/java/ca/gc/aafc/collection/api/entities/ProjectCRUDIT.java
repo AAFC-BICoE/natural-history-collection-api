@@ -17,7 +17,7 @@ import ca.gc.aafc.dina.i18n.MultilingualDescription;
 public class ProjectCRUDIT extends CollectionModuleBaseIT {
 
   private static final String EXPECTED_NAME = "name";
-  private static final String EXPECTED_GROUP = "DINA GROUP";
+  private static final String EXPECTED_GROUP = "dina-group";
   private static final String EXPECTED_CREATED_BY = "createdBy";
   private static final String EXPECTED_STATUS= "READY";
   private static final LocalDate EXPECTED_START_DATE = LocalDate.of(1991, 01, 01);

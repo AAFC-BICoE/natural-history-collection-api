@@ -49,5 +49,4 @@ public class ExtensionRepository extends ReadOnlyResourceRepositoryBase<Extensio
   public ResourceList<ExtensionDto> findAll(QuerySpec querySpec) {
     return querySpec.apply(extension);
   }
-  
 }

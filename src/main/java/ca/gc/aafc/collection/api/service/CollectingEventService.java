@@ -21,12 +21,12 @@ import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValid
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.search.messaging.types.DocumentOperationType;
+import ca.gc.aafc.dina.messaging.message.DocumentOperationType;
 import ca.gc.aafc.dina.service.MessageProducingService;
+import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.time.OffsetDateTime;
 import java.util.EnumSet;
-import java.util.UUID;
 import lombok.NonNull;
 
 @Service
@@ -61,9 +61,10 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   protected void preCreate(CollectingEvent entity) {
 
     // allow user provided UUID
-    if(entity.getUuid() == null) {
-      entity.setUuid(UUID.randomUUID());
+    if (entity.getUuid() == null) {
+      entity.setUuid(UUIDHelper.generateUUIDv7());
     }
+    entity.setGroup(standardizeGroupName(entity));
 
     cleanupManagedAttributes(entity);
     assignAutomaticValues(entity);
@@ -150,13 +151,13 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     }
 
     var country = entity.getGeographicPlaceNameSourceDetail().getCountry();
-    if( country != null) {
+    if (country != null) {
       entity.setDwcCountryCode(country.getCode());
       entity.setDwcCountry(country.getName());
     }
 
     var stateProvince = entity.getGeographicPlaceNameSourceDetail().getStateProvince();
-    if(stateProvince != null) {
+    if (stateProvince != null) {
       entity.setDwcStateProvince(stateProvince.getName());
     }
   }

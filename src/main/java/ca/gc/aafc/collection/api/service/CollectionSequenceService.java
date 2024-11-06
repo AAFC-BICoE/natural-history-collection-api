@@ -15,5 +15,4 @@ public class CollectionSequenceService extends DefaultDinaService<CollectionSequ
   public CollectionSequenceService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv) {
     super(baseDAO, sv);
   }
-
 }

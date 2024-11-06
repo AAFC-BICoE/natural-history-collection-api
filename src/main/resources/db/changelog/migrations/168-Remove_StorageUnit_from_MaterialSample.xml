@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="168-Remove_StorageUnit_from_MaterialSample" context="schema-change" author="cgendreau">
+
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM material_sample
+                WHERE storage_unit_id is NOT NULL
+            </sqlCheck>
+        </preConditions>
+        <comment>Make sure all material_sample.storage_unit_id are null.</comment>
+
+        <dropColumn tableName="material_sample">
+            <column name="storage_unit_id"/>
+        </dropColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -1,27 +1,31 @@
 vocabulary:
   materialSampleState:
-    - name: destroyed
+    - key: destroyed
+      name: destroyed
       term: https://www.wikidata.org/wiki/Property:P3082
       multilingualTitle.titles:
         - lang: en
           title: destroyed
         - lang: fr
           title: détruit
-    - name: damaged
+    - key: damaged
+      name: damaged
       term: https://www.wikidata.org/wiki/Property:P3081
       multilingualTitle.titles:
         - lang: en
           title: damaged
         - lang: fr
           title: endommagé
-    - name: lost
+    - key: lost
+      name: lost
       term:
       multilingualTitle.titles:
         - lang: en
           title: lost
         - lang: fr
           title: perdu
-    - name: decommissioned
+    - key: decommissioned
+      name: decommissioned
       term: https://www.wikidata.org/wiki/Q11639308
       multilingualTitle.titles:
         - lang: en

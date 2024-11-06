@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.validation.annotation.Validated;
 
 import ca.gc.aafc.dina.property.YamlPropertyLoaderFactory;
 import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
@@ -25,7 +26,9 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/materialSampleType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/unitsOfMeasurement.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/protocolVocabulary.yml", factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/taxonomicRank.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
+@Validated
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
 
   public static final String PROTOCOL_DATA_VOCAB_KEY = "protocolData";

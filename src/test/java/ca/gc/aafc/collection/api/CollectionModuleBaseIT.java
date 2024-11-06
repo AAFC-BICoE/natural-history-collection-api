@@ -14,6 +14,7 @@ import ca.gc.aafc.collection.api.service.ProjectService;
 import ca.gc.aafc.collection.api.service.ProtocolService;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
+import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import org.springframework.boot.info.BuildProperties;
@@ -66,6 +67,9 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected StorageUnitService storageUnitService;
+
+  @Inject
+  protected StorageUnitUsageService storageUnitUsageService;
 
   @Inject
   protected StorageUnitTypeService storageUnitTypeService;

@@ -4,13 +4,13 @@ import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.service.ManagedAttributeService;
 import ca.gc.aafc.dina.service.PostgresJsonbService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
-
-import java.util.UUID;
 
 @Service
 public class CollectionManagedAttributeService extends ManagedAttributeService<CollectionManagedAttribute> {
@@ -34,7 +34,8 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
 
   @Override
   protected void preCreate(CollectionManagedAttribute entity) {
-    entity.setUuid(UUID.randomUUID());
+    entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
     super.preCreate(entity);
   }
 

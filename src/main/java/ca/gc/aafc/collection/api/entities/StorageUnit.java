@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
+
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,9 @@ public class StorageUnit extends AbstractStorageUnit {
   public static final String TYPE_COLUMN_NAME = "storage_unit_type_id";
 
   public static final String HIERARCHY_PROP_NAME = "hierarchy";
+
+  @NotNull
+  private Boolean isGeneric = false;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = PARENT_ID_COLUMN_NAME)
