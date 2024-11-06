@@ -178,4 +178,5 @@
   <include file="db/changelog/migrations/171-Add_split_configuration.xml"/>
   <include file="db/changelog/migrations/172-Add_field_extension_values_to_project.xml"/>
   <include file="db/changelog/migrations/173-Add_isBaseForSplitByType_to_material_sample.xml"/>
+  <include file="db/changelog/migrations/174-Add_geographic_thesaurus_collecting_event.xml"/>
 </databaseChangeLog>

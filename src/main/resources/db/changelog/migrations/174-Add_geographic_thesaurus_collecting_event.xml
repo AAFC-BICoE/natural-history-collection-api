@@ -4,10 +4,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="163-Add_tgn_source_detail" context="schema-change" author="jschmidt">
+    <changeSet id="174-Add_geographic_thesaurus_collecting_event" context="schema-change" author="jschmidt">
         <addColumn tableName="collecting_event">
-            <column name="tgn_source_details" type="jsonb"/>
+            <column name="geographic_thesaurus" type="jsonb"/>
         </addColumn>
     </changeSet>
-
 </databaseChangeLog>

@@ -10,7 +10,15 @@ import java.util.List;
 @Data
 @Builder
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
-public class TgnSourceDetail {
+public class GeographicThesaurus {
+
+  public enum GeographicThesaurusSource {
+    TGN
+  }
+
+  @NotNull
+  private GeographicThesaurusSource source;
+
   @NotNull
   private String subjectId;
 
@@ -20,4 +28,5 @@ public class TgnSourceDetail {
   private String preferredParent;
 
   private List<String> additionalParents;
+
 }
