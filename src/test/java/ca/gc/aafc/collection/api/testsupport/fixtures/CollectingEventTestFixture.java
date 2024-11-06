@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
+import ca.gc.aafc.collection.api.entities.GeographicThesaurus;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -112,6 +113,15 @@ public class CollectingEventTestFixture {
     ce.setGeographicPlaceNameSourceDetail(newGeographicPlaceNameSourceDetail());
     ce.setGeographicPlaceNameSource(GEOGRAPHIC_PLACE_NAME_SOURCE);
     ce.setGeoReferenceAssertions(assertions);
+
+    ce.setGeographicThesaurus(GeographicThesaurus.builder()
+      .source(GeographicThesaurus.GeographicThesaurusSource.TGN)
+      .subjectId("123")
+      .preferredTerm("Ottawa")
+      .preferredParent("Canada")
+      .additionalParents(List.of("North America"))
+      .build());
+
     ce.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
     ce.setCollectors(
