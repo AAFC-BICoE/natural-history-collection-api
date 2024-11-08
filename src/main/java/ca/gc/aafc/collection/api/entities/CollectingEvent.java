@@ -207,6 +207,11 @@ public class CollectingEvent implements DinaEntity {
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
+  @Type(type = "jsonb")
+  @Column(name = "geographic_thesaurus", columnDefinition = "jsonb")
+  @Valid
+  private GeographicThesaurus geographicThesaurus;
+
   @Size(max = 250)
   private String host;
 

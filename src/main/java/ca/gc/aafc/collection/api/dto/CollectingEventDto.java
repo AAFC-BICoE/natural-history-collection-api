@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import ca.gc.aafc.collection.api.entities.GeographicThesaurus;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
@@ -128,6 +129,8 @@ public class CollectingEventDto {
 
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
+
+  private GeographicThesaurus geographicThesaurus;
 
   /**
    * Map of Managed attribute key to value object.
