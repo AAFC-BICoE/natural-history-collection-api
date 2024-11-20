@@ -71,4 +71,10 @@ vocabulary:
           title: Isolation Method
         - lang: fr
           title: Méthode d'isolation
-          
+    - name: Molecular Analysis
+      key: molecular_analysis
+      multilingualTitle.titles:
+       - lang: en
+         title: Molecular Analysis
+       - lang: fr
+         title: Analyse moléculaire
