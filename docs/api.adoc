@@ -65,3 +65,19 @@ Available for types :
 * preparation-type
 * preparation-method
 * protocol
+
+=== index-refresh
+Trigger a message to (re)index a resource.
+
+POST `/index-refresh`
+
+```json
+{
+  "data": {
+    "type": "index-refresh",
+    "id": "01939c16-ed4d-7f08-b4d9-bbb825d56cf3",
+    "attributes": {
+      "docType": "material-sample"
+    }
+  }
+}
