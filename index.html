@@ -451,23 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_split_configuration">split-configuration</a></li>
 <li><a href="#_material_sample_identifier_generator">material-sample-identifier-generator</a></li>
 <li><a href="#_resource_name_identifier">resource-name-identifier</a></li>
-</ul>
-</li>
-<li><a href="#_storage">Storage</a></li>
-</ul>
-</li>
-<li><a href="#_database">Database</a>
-<ul class="sectlevel1">
-<li><a href="#_triggers">Triggers</a>
-<ul class="sectlevel2">
-<li><a href="#_check_material_name_unique">check_material_name_unique</a></li>
-<li><a href="#_check_storage_hierarchy">check_storage_hierarchy</a></li>
-<li><a href="#_check_organism_is_target">check_organism_is_target</a></li>
-</ul>
-</li>
-<li><a href="#_functions">Functions</a>
-<ul class="sectlevel2">
-<li><a href="#_jsonb_path_exists_varchar">jsonb_path_exists_varchar</a></li>
+<li><a href="#_index_refresh">index-refresh</a></li>
 </ul>
 </li>
 </ul>
@@ -589,81 +573,73 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>preparation-method</p>
 </li>
 <li>
-<p>protocol
-= Design</p>
+<p>protocol</p>
 </li>
 </ul>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_storage">Storage</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<img src="./images/storage.drawio.png" alt="storage.drawio">
-</div>
-</div>
-</div>
-</div>
-<h1 id="_database" class="sect0">Database</h1>
-<div class="sect1">
-<h2 id="_triggers">Triggers</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_check_material_name_unique">check_material_name_unique</h3>
+<h3 id="_index_refresh">index-refresh</h3>
 <div class="paragraph">
-<p>Make sure <code>material_sample_name</code> is unique within a collection unless <code>allow_duplicate_name</code> is set to true (for legacy data).</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_check_storage_hierarchy">check_storage_hierarchy</h3>
-<div class="paragraph">
-<p>Ensures <code>storage_unit</code> 's hierarchy is except of cycles.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_check_organism_is_target">check_organism_is_target</h3>
-<div class="paragraph">
-<p>Ensures that <code>organism</code> attached to a <code>material_sample</code> are using the <code>is_target</code> concept or are not using it but never a mix of both.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_functions">Functions</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_jsonb_path_exists_varchar">jsonb_path_exists_varchar</h3>
-<div class="paragraph">
-<p><code>jsonb_path_exists_varchar(target jsonb, path varchar, vars varchar, caseSensitive boolean)</code>
-= Managed Attributes</p>
+<p>Trigger a message to (re)index a resource.</p>
 </div>
 <div class="paragraph">
-<p>Managed Attributes can be fetched either by UUID or by a "{component}.{key}" formatted url path.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>component: The value of the ManagedAttribute&#8217;s managedAttributeComponent field.</p>
-</li>
-<li>
-<p>key: The value of the ManagedAttribute&#8217;s unique "key" field.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>e.g.</p>
+<p>POST <code>/index-refresh</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>/managed-attribute/collecting_event.my_managed_attribute.</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>/managed-attribute/32746f92-0530-4913-b891-242b1ff629b6.</code></pre>
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "index-refresh",
+    "id": "01939c16-ed4d-7f08-b4d9-bbb825d56cf3",
+    "attributes": {
+      "docType": "material-sample"
+    }
+  }
+}
+= Design
+
+== Storage
+
+image::storage.drawio.png[]
+= Database
+
+== Triggers
+
+=== check_material_name_unique
+
+Make sure `material_sample_name` is unique within a collection unless `allow_duplicate_name` is set to true (for legacy data).
+
+=== check_storage_hierarchy
+
+Ensures `storage_unit` 's hierarchy is except of cycles.
+
+=== check_organism_is_target
+
+Ensures that `organism` attached to a `material_sample` are using the `is_target` concept or are not using it but never a mix of both.
+
+== Functions
+
+=== jsonb_path_exists_varchar
+`jsonb_path_exists_varchar(target jsonb, path varchar, vars varchar, caseSensitive boolean)`
+= Managed Attributes
+
+Managed Attributes can be fetched either by UUID or by a "{component}.{key}" formatted url path.
+
+* component: The value of the ManagedAttribute's managedAttributeComponent field.
+* key: The value of the ManagedAttribute's unique "key" field.
+
+e.g.
+
+[source]
+----
+/managed-attribute/collecting_event.my_managed_attribute.
+----
+
+[source]
+----
+/managed-attribute/32746f92-0530-4913-b891-242b1ff629b6.
+----</code></pre>
 </div>
 </div>
 </div>
@@ -672,7 +648,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-20 19:09:45 UTC
+Last updated 2024-12-06 13:10:56 UTC
 </div>
 </div>
 </body>
