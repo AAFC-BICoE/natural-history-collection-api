@@ -47,6 +47,8 @@ public class OrganismDto {
   private String sex;
   private String remarks;
 
+  private String dwcVernacularName;
+
   /**
    * Map of Managed attribute key to value object.
    */
