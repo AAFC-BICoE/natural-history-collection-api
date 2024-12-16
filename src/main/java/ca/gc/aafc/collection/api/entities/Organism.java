@@ -68,6 +68,9 @@ public class Organism implements DinaEntity {
   @Size(max = 256)
   private String sex;
 
+  @Size(max = 100)
+  private String dwcVernacularName;
+
   @Size(max = 1000)
   private String remarks;
 
