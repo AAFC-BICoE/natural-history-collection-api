@@ -18,6 +18,7 @@ public class OrganismTestFixture {
         .lifeStage("larva")
         .sex("female")
         .remarks("remark")
+        .dwcVernacularName(RandomStringUtils.randomAlphabetic(12))
         .build();
   }
 }
