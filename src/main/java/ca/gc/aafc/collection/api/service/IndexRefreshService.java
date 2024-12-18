@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
@@ -55,6 +56,12 @@ public class IndexRefreshService {
     searchRabbitMQMessageProducer.send(don);
   }
 
+  /**
+   * Usually the transaction boundaries are at the repository level but here we only need one for
+   * reindexAll
+   * @param type
+   */
+  @Transactional(readOnly = true)
   public void reindexAll(String type) {
 
     if (!queryAllByDocumentTypes.containsKey(type)) {
