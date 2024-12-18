@@ -6,7 +6,6 @@ import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.validation.ValidationContext;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
@@ -28,15 +27,12 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
   private static final String COMPONENT_FIELD_NAME = "managedAttributeComponent";
 
   private final ManagedAttributeService<CollectionManagedAttribute> dinaService;
-  private final MessageSource messageSource;
 
   public CollectionManagedAttributeValueValidator(
       @Named("validationMessageSource") MessageSource baseMessageSource, // from dina-base
-      @NonNull MessageSource messageSource,
       @NonNull ManagedAttributeService<CollectionManagedAttribute> dinaService) {
     super(baseMessageSource, dinaService);
     this.dinaService = dinaService;
-    this.messageSource = messageSource;
   }
 
   public <D extends DinaEntity> void validate(D entity, Map<String, String> managedAttributes, CollectionManagedAttributeValidationContext context) {
@@ -105,7 +101,4 @@ public class CollectionManagedAttributeValueValidator extends ManagedAttributeVa
     }
   }
 
-  private String getMessageForKey(String key, Object... objects) {
-    return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
-  }
 }

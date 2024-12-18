@@ -44,8 +44,14 @@ public class IndexRefreshRepository {
     }
 
     try {
-      indexRefreshService.reindexDocument(indexRefreshDto.getId().toString(),
-        indexRefreshDto.getDocType());
+      // refresh a single document
+      if (indexRefreshDto.getId() != null) {
+        indexRefreshService.reindexDocument(indexRefreshDto.getId().toString(),
+          indexRefreshDto.getDocType());
+      } else {
+        //refresh all documents of a certain type
+        indexRefreshService.reindexAll(indexRefreshDto.getDocType());
+      }
     } catch (IllegalStateException isEx) {
       return ResponseEntity.badRequest().build();
     }
@@ -53,4 +59,3 @@ public class IndexRefreshRepository {
     return ResponseEntity.accepted().build();
   }
 }
-
