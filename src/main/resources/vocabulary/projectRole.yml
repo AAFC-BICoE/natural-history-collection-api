@@ -1,0 +1,42 @@
+vocabulary:
+  projectRole:
+    - key: ProjectLeader
+      name: project_leader
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: Project Leader
+        - lang: fr
+          title: Chef de projet
+    - key: ProjectMember
+      name: project_member
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: Project Member
+        - lang: fr
+          title: Membre du projet
+    - key: DataCurator
+      name: data_curator
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: Data Curator
+        - lang: fr
+          title: Conservateur de données
+    - key: DataManager
+      name: data_manager
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: Data Manager
+        - lang: fr
+          title: Gestionnaire de données
+    - key: ContactPerson
+      name: contact_person
+      term:
+      multilingualTitle.titles:
+        - lang: en
+          title: Contact Person
+        - lang: fr
+          title: Personne-ressource

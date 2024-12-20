@@ -8,6 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.entity.AgentRoles;
 
 public class ProjectTestFixture {
 
@@ -16,16 +17,20 @@ public class ProjectTestFixture {
   private static final LocalDate END_DATE = LocalDate.now();
 
   public static ProjectDto newProject() {
-    ProjectDto preparationTypeDto = new ProjectDto();
-    preparationTypeDto.setName(RandomStringUtils.randomAlphabetic(5));
-    preparationTypeDto.setStatus(RandomStringUtils.randomAlphabetic(5));
-    preparationTypeDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
-    preparationTypeDto.setStartDate(START_DATE);
-    preparationTypeDto.setEndDate(END_DATE);
-    preparationTypeDto.setGroup(GROUP);
-    preparationTypeDto.setAttachment(List.of(
+    ProjectDto projectDto = new ProjectDto();
+    projectDto.setName(RandomStringUtils.randomAlphabetic(5));
+    projectDto.setStatus(RandomStringUtils.randomAlphabetic(5));
+    projectDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
+    projectDto.setStartDate(START_DATE);
+    projectDto.setEndDate(END_DATE);
+    projectDto.setGroup(GROUP);
+    projectDto.setContributors(List.of(
+      AgentRoles.builder().agent(UUID.randomUUID()).roles(List.of("project_leader")).build()
+    ));
+
+    projectDto.setAttachment(List.of(
       ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
-    return preparationTypeDto;
+    return projectDto;
   }
   
 }

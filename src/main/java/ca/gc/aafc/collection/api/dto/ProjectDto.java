@@ -16,6 +16,7 @@ import org.javers.core.metamodel.annotation.TypeName;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import io.crnk.core.resource.annotations.JsonApiId;
@@ -46,7 +47,9 @@ public class ProjectDto {
   private LocalDate startDate;
   private LocalDate endDate;
   private String status;
-  
+
+  private List<AgentRoles> contributors = List.of();
+
   @JsonApiExternalRelation(type = "metadata")
   @JsonApiRelation
   private List<ExternalRelationDto> attachment = new ArrayList<>();
