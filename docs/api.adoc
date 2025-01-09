@@ -65,3 +65,22 @@ Available for types :
 * preparation-type
 * preparation-method
 * protocol
+
+== Administrative Endpoints
+=== Index Refresh
+
+Trigger a message to (re)index a resource. `dina-admin` role required. if the `id` is omitted, all records will be processed.
+
+POST `/index-refresh`
+
+```json
+{
+  "data": {
+    "type": "index-refresh",
+    "id": "c9e66a08-8b59-4183-8346-e2298af32bfe",
+    "attributes": {
+      "docType": "material-sample"
+    }
+  }
+}
+```
