@@ -453,6 +453,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_resource_name_identifier">resource-name-identifier</a></li>
 </ul>
 </li>
+<li><a href="#_administrative_endpoints">Administrative Endpoints</a>
+<ul class="sectlevel2">
+<li><a href="#_index_refresh">Index Refresh</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_design">Design</a>
+<ul class="sectlevel1">
 <li><a href="#_storage">Storage</a></li>
 </ul>
 </li>
@@ -589,14 +598,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>preparation-method</p>
 </li>
 <li>
-<p>protocol
-= Design</p>
+<p>protocol</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_administrative_endpoints">Administrative Endpoints</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_index_refresh">Index Refresh</h3>
+<div class="paragraph">
+<p>Trigger a message to (re)index a resource. <code>dina-admin</code> role required. if the <code>id</code> is omitted, all records will be processed.</p>
+</div>
+<div class="paragraph">
+<p>POST <code>/index-refresh</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "data": {
+    "type": "index-refresh",
+    "id": "c9e66a08-8b59-4183-8346-e2298af32bfe",
+    "attributes": {
+      "docType": "material-sample"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_design" class="sect0">Design</h1>
 <div class="sect1">
 <h2 id="_storage">Storage</h2>
 <div class="sectionbody">
@@ -672,7 +708,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-20 15:39:39 UTC
+Last updated 2025-01-09 20:44:52 UTC
 </div>
 </div>
 </body>
