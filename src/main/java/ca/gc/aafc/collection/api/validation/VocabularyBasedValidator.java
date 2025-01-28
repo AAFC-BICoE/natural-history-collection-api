@@ -41,6 +41,26 @@ abstract class VocabularyBasedValidator<T> extends DinaBaseValidator<T> {
   }
 
   /**
+   * Checks that each value are in the vocabulary (matching the key, case-sensitive)
+   * Only one error will be reported even if multiple values are not matching.
+   * @param values
+   * @param fieldName
+   * @param vocabularyElements
+   * @param errors
+   */
+  protected void validateValuesAgainstVocabulary(List<String> values, String fieldName,
+                                                 List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements,
+                                                 Errors errors) {
+    for (String value : values) {
+      if (!isInVocabulary(value, vocabularyElements)) {
+        String errorMessage = getMessage(VALUE_NOT_IN_VOCABULARY, fieldName);
+        errors.rejectValue(fieldName, VALUE_NOT_IN_VOCABULARY, errorMessage);
+        return;
+      }
+    }
+  }
+
+  /**
    * Finds the first CollectionVocabularyElement where the key is matching (ignore case) the provided value.
    * @param value
    * @param vocabularyElements
@@ -48,5 +68,20 @@ abstract class VocabularyBasedValidator<T> extends DinaBaseValidator<T> {
    */
   protected Optional<CollectionVocabularyConfiguration.CollectionVocabularyElement> findInVocabulary(String value, List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements) {
     return vocabularyElements.stream().filter(o -> o.getKey().equalsIgnoreCase(value)).findFirst();
+  }
+
+  /**
+   * Checks if the provided key (case-sensitive) is in the vocabulary.
+   * @param key
+   * @param vocabularyElements
+   * @return key is in the vocabulary or not
+   */
+  protected boolean isInVocabulary(String key, List<CollectionVocabularyConfiguration.CollectionVocabularyElement> vocabularyElements) {
+    for (CollectionVocabularyConfiguration.CollectionVocabularyElement el : vocabularyElements) {
+      if (el.getKey().equals(key)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

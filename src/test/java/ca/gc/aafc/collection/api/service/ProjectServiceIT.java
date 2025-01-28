@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.validation.ValidationException;
 
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
+import ca.gc.aafc.dina.entity.AgentRoles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,6 +28,22 @@ public class ProjectServiceIT extends CollectionModuleBaseIT {
     Project projectReloaded = projectService.findOne(project.getUuid(), Project.class);
 
     assertEquals(project.getName(), projectReloaded.getName());
+  }
+
+  @Test
+  void project_onInvalidProjectRole_exception() {
+    Project project = ProjectFactory.newProject()
+      .contributors(List.of(AgentRoles.builder().agent(UUID.randomUUID()).roles(List.of("abc")).build()))
+      .build();
+    assertThrows(ValidationException.class, () -> projectService.create(project));
+  }
+
+  @Test
+  void project_onValidProjectRole_NoException() {
+    Project project = ProjectFactory.newProject()
+      .contributors(List.of(AgentRoles.builder().agent(UUID.randomUUID()).roles(List.of("data_curator")).build()))
+      .build();
+    projectService.create(project);
   }
 
   @Test
