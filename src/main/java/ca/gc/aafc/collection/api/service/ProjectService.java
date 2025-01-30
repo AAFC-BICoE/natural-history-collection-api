@@ -54,8 +54,8 @@ public class ProjectService extends DefaultDinaService<Project> {
     if (CollectionUtils.isEmpty(entity.getContributors())) {
       return;
     }
-    for(AgentRoles ar : entity.getContributors()) {
-      applyBusinessRule(entity.getUuid().toString(), ar, agentRolesValidator);
+    for (AgentRoles ar : entity.getContributors()) {
+      applyBusinessRule(ar.getAgent().toString(), ar, agentRolesValidator);
     }
   }
 
