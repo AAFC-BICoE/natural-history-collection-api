@@ -7,6 +7,7 @@ import org.springframework.validation.Errors;
 
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.Protocol;
+import ca.gc.aafc.dina.validation.VocabularyBasedValidator;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
   private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement> protocolDataVocabulary;
 
   public ProtocolValidator(MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
-    super(messageSource, Protocol.class);
+    super(Protocol.class, messageSource);
     this.protocolTypeVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(CollectionVocabularyConfiguration.PROTOCOL_TYPE_VOCAB_KEY);
     this.protocolDataVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(CollectionVocabularyConfiguration.PROTOCOL_DATA_VOCAB_KEY);
   }

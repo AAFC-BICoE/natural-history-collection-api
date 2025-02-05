@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.dina.entity.AgentRoles;
+import ca.gc.aafc.dina.validation.VocabularyBasedValidator;
 
 @Component
 public class AgentRolesValidator extends VocabularyBasedValidator<AgentRoles> {
@@ -19,7 +20,7 @@ public class AgentRolesValidator extends VocabularyBasedValidator<AgentRoles> {
     projectRoleVocabulary;
 
   AgentRolesValidator(MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
-    super(messageSource, AgentRoles.class);
+    super(AgentRoles.class, messageSource);
     this.projectRoleVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(
       CollectionVocabularyConfiguration.PROJECT_ROLE_VOCAB_KEY);
   }
