@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.validation;
 
 import java.util.List;
 
+import javax.inject.Named;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,7 @@ public class AgentRolesValidator extends VocabularyBasedValidator<AgentRoles> {
   private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement>
     projectRoleVocabulary;
 
-  AgentRolesValidator(MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
+  AgentRolesValidator(@Named("validationMessageSource") MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
     super(AgentRoles.class, messageSource);
     this.projectRoleVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(
       CollectionVocabularyConfiguration.PROJECT_ROLE_VOCAB_KEY);

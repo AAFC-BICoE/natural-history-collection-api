@@ -11,6 +11,8 @@ import ca.gc.aafc.dina.validation.VocabularyBasedValidator;
 
 import java.util.List;
 
+import javax.inject.Named;
+
 @Component
 public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
 
@@ -22,7 +24,7 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
   private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement> protocolTypeVocabulary;
   private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement> protocolDataVocabulary;
 
-  public ProtocolValidator(MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
+  public ProtocolValidator(@Named("validationMessageSource") MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
     super(Protocol.class, messageSource);
     this.protocolTypeVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(CollectionVocabularyConfiguration.PROTOCOL_TYPE_VOCAB_KEY);
     this.protocolDataVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(CollectionVocabularyConfiguration.PROTOCOL_DATA_VOCAB_KEY);
