@@ -24,10 +24,18 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
   private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement> protocolTypeVocabulary;
   private final List<CollectionVocabularyConfiguration.CollectionVocabularyElement> protocolDataVocabulary;
 
-  public ProtocolValidator(@Named("validationMessageSource") MessageSource messageSource, CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
-    super(Protocol.class, messageSource);
-    this.protocolTypeVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(CollectionVocabularyConfiguration.PROTOCOL_TYPE_VOCAB_KEY);
-    this.protocolDataVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(CollectionVocabularyConfiguration.PROTOCOL_DATA_VOCAB_KEY);
+  public ProtocolValidator(
+      @Named("validationMessageSource") MessageSource validationMessageSource,
+      MessageSource defaultMessageSource,
+      CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
+      
+    // Use validationMessageSource if available, otherwise fall back to defaultMessageSource
+    super(Protocol.class, validationMessageSource != null ? validationMessageSource : defaultMessageSource);
+    
+    this.protocolTypeVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(
+        CollectionVocabularyConfiguration.PROTOCOL_TYPE_VOCAB_KEY);
+    this.protocolDataVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(
+        CollectionVocabularyConfiguration.PROTOCOL_DATA_VOCAB_KEY);
   }
 
   @Override
