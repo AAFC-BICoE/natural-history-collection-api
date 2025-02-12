@@ -60,10 +60,6 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
         if (findInVocabulary(p.getKey(), protocolDataVocabulary).isPresent()) {
           errors.rejectValue(PROTOCOL_DATA_FIELD_NAME,
               VOCABULARY_KEY_USED_WITH_NON_VOCABULARY_BASED,
-              getMessage(VOCABULARY_KEY_USED_WITH_NON_VOCABULARY_BASED));
-
-          errors.rejectValue(PROTOCOL_DATA_FIELD_NAME,
-              VOCABULARY_KEY_USED_WITH_NON_VOCABULARY_BASED,
               this.messageSource.getMessage(VOCABULARY_KEY_USED_WITH_NON_VOCABULARY_BASED, null,
                   LocaleContextHolder.getLocale()));
         }

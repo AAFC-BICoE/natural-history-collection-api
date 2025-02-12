@@ -46,7 +46,7 @@ public class ProtocolValidatorTest extends CollectionModuleBaseIT {
     Errors errors = new BeanPropertyBindingResult(protocol, protocol.getUuid().toString());
     validator.validate(protocol, errors);
     Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Value not found in"));
+    Assertions.assertTrue(errors.getAllErrors().get(0).getDefaultMessage().contains("Key abc not found in protocolData vocabulary"));
 
     // Test a valid key but without setting vocabularyBased
     Protocol.ProtocolData protocolData2 = ProtocolFactory.newProtocolData()
