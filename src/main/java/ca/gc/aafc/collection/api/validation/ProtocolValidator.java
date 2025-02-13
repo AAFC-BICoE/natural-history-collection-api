@@ -27,11 +27,11 @@ public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {
   private final MessageSource messageSource;
 
   public ProtocolValidator(
-      @Named("validationMessageSource") MessageSource validationMessageSource,
+      @Named("validationMessageSource") MessageSource baseValidationMessageSource,
       MessageSource messageSource,
       CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
 
-    super(Protocol.class, validationMessageSource);
+    super(Protocol.class, baseValidationMessageSource);
     this.messageSource = messageSource;
 
     this.protocolTypeVocabulary = collectionVocabularyConfiguration.getVocabularyByKey(
