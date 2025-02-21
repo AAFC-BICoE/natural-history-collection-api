@@ -8,15 +8,19 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import ca.gc.aafc.dina.entity.AgentRoles;
 
 @Entity
 @SuperBuilder
@@ -43,5 +47,10 @@ public class Project extends UserDescribedDinaEntity {
   @Type(type = "jsonb")
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
+
+  @Type(type = "jsonb")
+  @Valid
+  @Builder.Default
+  private List<AgentRoles> contributors = List.of();
 
 }

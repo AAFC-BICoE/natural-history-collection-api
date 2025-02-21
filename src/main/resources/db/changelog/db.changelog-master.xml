@@ -180,4 +180,5 @@
   <include file="db/changelog/migrations/173-Add_isBaseForSplitByType_to_material_sample.xml"/>
   <include file="db/changelog/migrations/174-Add_geographic_thesaurus_collecting_event.xml"/>
   <include file="db/changelog/migrations/175-Add_vernacularName_to_organism.xml"/>
+  <include file="db/changelog/migrations/176-Add_contributors_to_project.xml"/>
 </databaseChangeLog>

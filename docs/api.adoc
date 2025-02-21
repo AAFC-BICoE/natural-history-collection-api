@@ -1,6 +1,6 @@
 = API
 
-== Additional endpoints
+== Additional Endpoints
 
 === material-sample-summary
 Get a summary of an existing material sample. The summary includes the https://aafc-bicoe.github.io/dina-documentation/#_effective_determinations[effective determination].
@@ -66,8 +66,11 @@ Available for types :
 * preparation-method
 * protocol
 
-=== index-refresh
-Trigger a message to (re)index a resource.
+== Administrative Endpoints
+
+=== Index Refresh
+
+Trigger a message to (re)index a resource. `DINA_ADMIN` role required. If `id` is omitted, all records will be processed.
 
 POST `/index-refresh`
 
@@ -75,7 +78,7 @@ POST `/index-refresh`
 {
   "data": {
     "type": "index-refresh",
-    "id": "01939c16-ed4d-7f08-b4d9-bbb825d56cf3",
+    "id": "c9e66a08-8b59-4183-8346-e2298af32bfe",
     "attributes": {
       "docType": "material-sample"
     }
