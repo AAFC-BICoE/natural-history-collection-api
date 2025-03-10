@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
 
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+@Log4j2
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
 
@@ -91,20 +93,36 @@ public class OrganismService extends DefaultDinaService<Organism> {
     }
   }
 
-  public Map<String, String> setupClassification(Determination primaryDetermination) {
+  /**
+   * From the provided determination extract the classification by matching
+   * the known ranks from {@link CollectionVocabularyConfiguration} and the classification
+   * path and ranks from {@link Determination.ScientificNameSourceDetails}.
+   * @param primaryDetermination
+   * @return
+   */
+  public Map<String, String> extractClassification(Determination primaryDetermination) {
+
+    if (primaryDetermination == null) {
+      return null;
+    }
+
     Map<String, String> classification = new HashMap<>();
-    if(primaryDetermination.getScientificNameDetails() != null) {
+    if (primaryDetermination.getScientificNameDetails() != null) {
       String path = primaryDetermination.getScientificNameDetails().getClassificationPath();
       String ranks = primaryDetermination.getScientificNameDetails().getClassificationRanks();
 
-      if(StringUtils.isNotBlank(path) && StringUtils.isNotBlank(ranks)) {
-        String[] classificationNames = StringUtils.split(path,"|");
-        String[] classificationRanks = StringUtils.split(ranks,"|");
+      if (StringUtils.isNotBlank(path) && StringUtils.isNotBlank(ranks)) {
+        String[] classificationNames = StringUtils.split(path, "|");
+        String[] classificationRanks = StringUtils.split(ranks, "|");
 
-        for (int i = 0; i < classificationNames.length; i++) {
-          if(knownTaxonomicRanks.contains(classificationRanks[i])) {
-            classification.put(classificationRanks[i], classificationNames[i]);
+        if(classificationNames.length == classificationRanks.length) {
+          for (int i = 0; i < classificationNames.length; i++) {
+            if (knownTaxonomicRanks.contains(classificationRanks[i])) {
+              classification.put(classificationRanks[i], classificationNames[i]);
+            }
           }
+        } else {
+          log.debug("classificationNames and classificationRanks arrays size are not the same");
         }
       }
     }
