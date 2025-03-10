@@ -32,6 +32,7 @@ public class CollectionService extends DefaultDinaService<Collection> {
   @Override
   protected void preCreate(Collection entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override
@@ -62,5 +63,4 @@ public class CollectionService extends DefaultDinaService<Collection> {
   public void validateBusinessRules(Collection entity) {
     applyBusinessRule(entity, collectionValidator);
   }
-
 }

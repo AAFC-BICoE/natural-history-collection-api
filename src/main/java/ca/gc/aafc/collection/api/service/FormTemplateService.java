@@ -19,4 +19,5 @@ public class FormTemplateService extends DefaultDinaService<FormTemplate> {
   protected void preCreate(FormTemplate entity) {
     entity.setUuid(UUID.randomUUID());
   }
+
 }

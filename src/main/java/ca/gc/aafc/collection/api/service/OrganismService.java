@@ -58,10 +58,10 @@ public class OrganismService extends DefaultDinaService<Organism> {
   @Override
   protected void preCreate(Organism entity) {
     // allow user provided UUID
-    if(entity.getUuid() == null) {
+    if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
-
+    entity.setGroup(standardizeGroupName(entity));
     setupDeterminations(entity);
   }
 

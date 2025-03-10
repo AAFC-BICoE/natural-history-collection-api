@@ -1,23 +1,22 @@
 package ca.gc.aafc.collection.api.validation;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectingEvent.GeographicPlaceNameSource;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
-import lombok.NonNull;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+import ca.gc.aafc.dina.validation.DinaBaseValidator;
 
 import java.util.List;
 import java.util.Set;
 
 @Component
-public class CollectingEventValidator implements Validator {
+public class CollectingEventValidator extends DinaBaseValidator<CollectingEvent> {
 
   private static final Set<String> OSM_ELEMENTS = Set.of("N", "W", "R");
 
@@ -31,36 +30,25 @@ public class CollectingEventValidator implements Validator {
   static final String VALID_MAX_LESS_THAN_MIN_ELEVATION = "validation.constraint.violation.validMaxLessThanMinElevation";
   static final String VALID_MAX_LESS_THAN_MIN_DEPTH = "validation.constraint.violation.validMaxLessThanMinDepth";
 
-  private final MessageSource messageSource;
-
   public CollectingEventValidator(MessageSource messageSource) {
-    this.messageSource = messageSource;
+    super(CollectingEvent.class, messageSource);
   }
 
   @Override
-  public boolean supports(@NonNull Class<?> clazz) {
-    return CollectingEvent.class.isAssignableFrom(clazz);
+  public void validateTarget(CollectingEvent target, Errors errors) {
+    validateMinMaxElevationDepth(target, errors);
+    validateDateTimes(target, errors);
+    validatePrimaryAssertion(target.getGeoReferenceAssertions(), errors);
+    validateGeographicPlaceNameSourceDetail(target, errors);
   }
 
-  @Override
-  public void validate(@NonNull Object target, @NonNull Errors errors) {
-    if (!supports(target.getClass())) {
-      throw new IllegalArgumentException("CollectingEventValidator not supported for class " + target.getClass());
-    }
-    CollectingEvent collectingEvent = (CollectingEvent) target;
-    validateMinMaxElevationDepth(errors, collectingEvent);
-    validateDateTimes(errors, collectingEvent);
-    validatePrimaryAssertion(errors, collectingEvent.getGeoReferenceAssertions());
-    validateGeographicPlaceNameSourceDetail(errors, collectingEvent);
-  }
-
-  private void validatePrimaryAssertion(Errors errors, List<GeoreferenceAssertionDto> geoReferenceAssertions) {
+  private void validatePrimaryAssertion(List<GeoreferenceAssertionDto> geoReferenceAssertions, Errors errors) {
     if (CollectionUtils.isNotEmpty(geoReferenceAssertions) && countPrimaries(geoReferenceAssertions) != 1) {
       addError(errors,  VALID_PRIMARY_KEY);
     }
   }
 
-  private void validateMinMaxElevationDepth(Errors errors, CollectingEvent collectingEvent) {
+  private void validateMinMaxElevationDepth(CollectingEvent collectingEvent, Errors errors) {
     if (collectingEvent.getDwcMaximumDepthInMeters() != null && collectingEvent.getDwcMinimumDepthInMeters() != null &&
         collectingEvent.getDwcMaximumDepthInMeters().compareTo(collectingEvent.getDwcMinimumDepthInMeters()) < 0) {
       addError(errors, VALID_MAX_LESS_THAN_MIN_DEPTH);
@@ -77,7 +65,7 @@ public class CollectingEventValidator implements Validator {
     }
   }
 
-  private void validateDateTimes(Errors errors, CollectingEvent collectingEvent) {
+  private void validateDateTimes(CollectingEvent collectingEvent, Errors errors) {
     if (collectingEvent.getStartEventDateTime() == null && collectingEvent.getEndEventDateTime() != null ||
         collectingEvent.getEndEventDateTime() != null && collectingEvent.getStartEventDateTime()
             .isAfter(collectingEvent.getEndEventDateTime())) {
@@ -85,7 +73,7 @@ public class CollectingEventValidator implements Validator {
     }
   }
 
-  private void validateGeographicPlaceNameSourceDetail(Errors errors, CollectingEvent collectingEvent) {
+  private void validateGeographicPlaceNameSourceDetail(CollectingEvent collectingEvent, Errors errors) {
     GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = collectingEvent.getGeographicPlaceNameSourceDetail();
     if (geographicPlaceNameSourceDetail != null) {
       if (collectingEvent.getGeographicPlaceNameSource() == null ||
@@ -98,17 +86,17 @@ public class CollectingEventValidator implements Validator {
         addError(errors, VALID_GEOGRAPHIC_PLACE_NAME_SOURCE_DETAIL_KEY);
       }
       if (geographicPlaceNameSourceDetail.getSelectedGeographicPlace() != null) {
-        validateSourceAdministrativeLevel(errors, geographicPlaceNameSourceDetail.getSelectedGeographicPlace());
+        validateSourceAdministrativeLevel(geographicPlaceNameSourceDetail.getSelectedGeographicPlace(), errors);
       }
       if (CollectionUtils.isNotEmpty(geographicPlaceNameSourceDetail.getHigherGeographicPlaces())) {
         for (SourceAdministrativeLevel sal : geographicPlaceNameSourceDetail.getHigherGeographicPlaces()) {
-          validateSourceAdministrativeLevel(errors, sal);
+          validateSourceAdministrativeLevel(sal, errors);
         }
       }
     }
   }
 
-  private void validateSourceAdministrativeLevel(Errors errors, SourceAdministrativeLevel sal) {
+  private void validateSourceAdministrativeLevel(SourceAdministrativeLevel sal, Errors errors) {
     if (!OSM_ELEMENTS.contains(sal.getElement())) {
       addError(errors, VALID_SOURCE_ADMINISTRATION_LEVEL_KEY);
     }
@@ -128,10 +116,7 @@ public class CollectingEventValidator implements Validator {
    * @param messageBundleKey
    */
   private void addError(Errors errors, String messageBundleKey) {
-    String errorMessage = messageSource.getMessage(
-        messageBundleKey,
-        null,
-        LocaleContextHolder.getLocale());
+    String errorMessage = getMessage(messageBundleKey);
     errors.reject(messageBundleKey, errorMessage);
   }
 }

@@ -1,15 +1,55 @@
 = API
 
-== Additional endpoints
+== Additional Endpoints
 
 === material-sample-summary
 Get a summary of an existing material sample. The summary includes the https://aafc-bicoe.github.io/dina-documentation/#_effective_determinations[effective determination].
 
 GET `/material-sample-summary/{uuid}`
 
+=== split-configuration
+
+Allows to store split configuration currently used by the ui to customize identifiers.
+
 === material-sample-identifier-generator
 
+Allows to generate (but not reserve) identifiers for material-sample based on settings.
+
 POST `/material-sample-identifier-generator`
+
+Generate identifiers for a single parent:
+```json
+{
+  "data": {
+    "type": "material-sample-identifier-generator",
+    "attributes": {
+      "currentParentUUID": "parent UUID",
+      "quantity": "2",
+      "strategy": "DIRECT_PARENT",
+      "characterType": "UPPER_LETTER",
+      "separator": "DASH"
+    }
+  }
+}
+```
+
+Generate identifiers for multiple parents:
+```json
+{
+  "data": {
+    "type": "material-sample-identifier-generator",
+    "attributes": {
+      "currentParentsUUID": ["parent UUID 1", "parent UUID 1"],
+      "strategy": "TYPE_BASED",
+      "materialSampleType": "CULTURE_STRAIN",
+      "characterType": "LOWER_LETTER",
+      "separator": "DASH"
+    }
+  }
+}
+```
+
+Documentation on strategies can be found in the https://aafc-bicoe.github.io/dina-documentation/#direct-parent-strategy[DINA User Guide]
 
 === resource-name-identifier
 Get the identifier (UUID) based on the name, the type and the group.
@@ -25,3 +65,22 @@ Available for types :
 * preparation-type
 * preparation-method
 * protocol
+
+== Administrative Endpoints
+=== Index Refresh
+
+Trigger a message to (re)index a resource. `DINA_ADMIN` role required. If `id` is omitted, all records will be processed.
+
+POST `/index-refresh`
+
+```json
+{
+  "data": {
+    "type": "index-refresh",
+    "id": "c9e66a08-8b59-4183-8346-e2298af32bfe",
+    "attributes": {
+      "docType": "material-sample"
+    }
+  }
+}
+```

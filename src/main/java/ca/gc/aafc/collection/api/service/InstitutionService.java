@@ -23,4 +23,5 @@ public class InstitutionService extends DefaultDinaService<Institution> {
   protected void preCreate(Institution entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
   }
+
 }

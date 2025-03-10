@@ -27,6 +27,7 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/unitsOfMeasurement.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/protocolVocabulary.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/taxonomicRank.yml", factory = YamlPropertyLoaderFactory.class)
+@PropertySource(value = "classpath:vocabulary/projectRole.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 @Validated
 public class CollectionVocabularyConfiguration extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
@@ -34,6 +35,7 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
   public static final String PROTOCOL_DATA_VOCAB_KEY = "protocolData";
   public static final String PROTOCOL_TYPE_VOCAB_KEY = "protocolType";
   public static final String TAXONOMIC_RANK_KEY = "taxonomicRank";
+  public static final String PROJECT_ROLE_VOCAB_KEY = "projectRole";
 
   public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {
     super(vocabulary);

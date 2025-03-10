@@ -19,5 +19,4 @@ public class PreparationMethodService extends DefaultDinaService<PreparationMeth
   protected void preCreate(PreparationMethod entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
   }
-  
 }

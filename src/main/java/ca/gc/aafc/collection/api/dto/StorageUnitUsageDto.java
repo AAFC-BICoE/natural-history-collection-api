@@ -11,29 +11,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import ca.gc.aafc.collection.api.entities.StorageUnitCoordinates;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RelatedEntity(StorageUnitCoordinates.class)
-@JsonApiResource(type = StorageUnitCoordinatesDto.TYPENAME)
-public class StorageUnitCoordinatesDto {
+@RelatedEntity(StorageUnitUsage.class)
+@JsonApiResource(type = StorageUnitUsageDto.TYPENAME)
+public class StorageUnitUsageDto {
 
-  public static final String TYPENAME = "storage-unit-coordinates";
+  public static final String TYPENAME = "storage-unit-usage";
 
   @JsonApiId
   private UUID uuid;
 
   private Integer wellColumn;
   private String wellRow;
+  private String usageType;
+
+  // read-only calculated fields
+  private Integer cellNumber;
+  private String storageUnitName;
 
   private OffsetDateTime createdOn;
   private String createdBy;
+
+  @JsonApiRelation
+  private StorageUnitTypeDto storageUnitType;
 
   @JsonApiRelation
   private StorageUnitDto storageUnit;

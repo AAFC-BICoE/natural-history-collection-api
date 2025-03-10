@@ -45,7 +45,7 @@ public class AssemblageRepository extends DinaRepository<AssemblageDto, Assembla
 
   @Override
   public <S extends AssemblageDto> S create(S resource) {
-    if( dinaAuthenticatedUser != null) {
+    if (dinaAuthenticatedUser != null) {
       resource.setCreatedBy(dinaAuthenticatedUser.getUsername());
     }
     return super.create(resource);

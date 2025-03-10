@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.dto;
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.JsonApiResource;
+import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 
 /**
  * DTO representing a request to get the identifier that should follow the provided one.
@@ -36,17 +38,22 @@ public class MaterialSampleIdentifierGeneratorDto {
   @JsonApiId
   private String id;
 
+  // for single parent use
   private UUID currentParentUUID;
+  private Integer quantity;
+
+  // for multiple parents use (only 1 generated identifier per parent supported)
+  private List<UUID> currentParentsUUID;
+
   private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
   private MaterialSample.MaterialSampleType materialSampleType;
   private MaterialSampleNameGeneration.CharacterType characterType;
-
-  private Integer amount;
+  private SplitConfiguration.Separator separator;
 
   /**
    * used to return the result
    */
   @JsonApiField(postable = false)
-  public List<String> nextIdentifiers;
+  private Map<UUID, List<String>> nextIdentifiers;
 
 }

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.repository;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,10 +68,12 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)
   public ResponseEntity<?> findAll(HttpServletRequest req) {
 
-    String query = URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
+    String queryString = StringUtils.isBlank(req.getQueryString()) ? "" :
+      URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
+
     List<ResourceNameIdentifierResponseDto> dtos ;
     try {
-      List<NameUUIDPair> identifiers = findAll(query);
+      List<NameUUIDPair> identifiers = findAll(queryString);
 
       dtos = identifiers.stream().map(nuPair -> ResourceNameIdentifierResponseDto.builder()
         .id(nuPair.uuid())

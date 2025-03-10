@@ -70,5 +70,4 @@ public class StorageUnitRepo extends DinaRepository<StorageUnitDto, StorageUnit>
       throw e;
     }
   }
-
 }

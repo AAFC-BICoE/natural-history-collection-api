@@ -130,13 +130,9 @@ public class MaterialSample extends AbstractMaterialSample {
     }
   }
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "storage_unit_id")
-  private StorageUnit storageUnit;
-
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "storage_unit_coordinates_id")
-  private StorageUnitCoordinates storageUnitCoordinates;
+  @JoinColumn(name = "storage_unit_usage_id")
+  private StorageUnitUsage storageUnitUsage;
 
   @Transient
   @DiffIgnore
@@ -144,6 +140,9 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Transient
   private String targetOrganismPrimaryScientificName;
+
+  @Transient
+  private String effectiveScientificName;
 
   @Size(max = 50)
   private String materialSampleState;

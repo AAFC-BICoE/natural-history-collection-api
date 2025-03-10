@@ -41,10 +41,9 @@ public class FormTemplateRepository extends DinaRepository<FormTemplateDto, Form
 
   @Override
   public <S extends FormTemplateDto> S create(S resource) {
-    if(authenticatedUser != null) {
+    if (authenticatedUser != null) {
       resource.setCreatedBy(authenticatedUser.getUsername());
     }
     return super.create(resource);
   }
-  
 }

@@ -18,7 +18,6 @@ import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import lombok.NonNull;
 
-
 @Repository
 public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto, PreparationType> {
 
@@ -52,5 +51,4 @@ public class PreparationTypeRepository extends DinaRepository<PreparationTypeDto
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
   }
-  
 }

@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.89-SNAPSHOT</version>
+  <version>0.102-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -16,27 +16,29 @@
   </parent>
 
   <properties>
-    <java.version>17</java.version>
+    <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <javax.interceptor-api>1.2.2</javax.interceptor-api>
     <jcip-annotations.version>1.0</jcip-annotations.version>
 
-    <spotbugs.version>4.7.3</spotbugs.version>
-    <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.5.0</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.8.5</spotbugs.version>
+
     <dependency.check.version>8.4.3</dependency.check.version>
-    <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
-    
-    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-    <checkstyle.version>9.3</checkstyle.version>
-    <checkstyle-antlr.version>4.9.3</checkstyle-antlr.version>
+    <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+
+    <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
+    <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.125</dina-base-api.version>
+    <dina-base-api.version>0.137</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
 
+    <!-- versions override-->
+    <spring-framework.version>5.3.38</spring-framework.version>
     <org.springframework.security.version>5.7.12</org.springframework.security.version>
     <postgresql.version>42.4.4</postgresql.version>
   </properties>
@@ -46,6 +48,12 @@
       <groupId>io.github.aafc-bicoe</groupId>
       <artifactId>dina-base-api</artifactId>
       <version>${dina-base-api.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.persistence</groupId>
+          <artifactId>javax.persistence</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- Spring -->
     <dependency>
@@ -203,11 +211,6 @@
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
             <version>${checkstyle.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-            <version>${checkstyle-antlr.version}</version>
           </dependency>
         </dependencies>
         <configuration>

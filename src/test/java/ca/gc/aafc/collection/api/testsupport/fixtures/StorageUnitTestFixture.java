@@ -12,6 +12,7 @@ public class StorageUnitTestFixture {
     unitDto.setName(RandomStringUtils.randomAlphabetic(8));
     unitDto.setGroup(GROUP);
     unitDto.setCreatedBy("test user");
+    unitDto.setIsGeneric(false);
     return unitDto;
   }
 }

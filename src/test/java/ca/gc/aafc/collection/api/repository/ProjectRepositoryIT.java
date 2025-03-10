@@ -14,6 +14,9 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.QuerySpec;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class ProjectRepositoryIT extends CollectionModuleKeycloakBaseIT {
   
   @Inject 
@@ -26,9 +29,9 @@ public class ProjectRepositoryIT extends CollectionModuleKeycloakBaseIT {
     ProjectDto result = projectRepository.findOne(
       projectRepository.create(project).getUuid(),
       new QuerySpec(ProjectDto.class));
-    Assertions.assertNotNull(result.getCreatedBy());
-    Assertions.assertEquals(project.getName(), result.getName());
-    Assertions.assertEquals(project.getGroup(), result.getGroup());
+    assertNotNull(result.getCreatedBy());
+    assertEquals(project.getName(), result.getName());
+    assertEquals(project.getGroup(), result.getGroup());
   }
 
   @Test

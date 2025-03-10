@@ -35,6 +35,7 @@ public class CollectionManagedAttributeService extends ManagedAttributeService<C
   @Override
   protected void preCreate(CollectionManagedAttribute entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
     super.preCreate(entity);
   }
 

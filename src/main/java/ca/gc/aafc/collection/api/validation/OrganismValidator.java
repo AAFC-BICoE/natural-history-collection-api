@@ -1,18 +1,17 @@
 package ca.gc.aafc.collection.api.validation;
 
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.Organism;
-import lombok.NonNull;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.dina.validation.DinaBaseValidator;
 
 @Component
-public class OrganismValidator implements Validator {
+public class OrganismValidator extends DinaBaseValidator<Organism> {
 
   public static final String VALID_DETERMINATION_SCIENTIFICNAME = "validation.constraint.violation.determination.scientificname";
   public static final String MISSING_PRIMARY_DETERMINATION = "validation.constraint.violation.determination.primaryDeterminationMissing";
@@ -20,24 +19,13 @@ public class OrganismValidator implements Validator {
   public static final String MISSING_SCIENTIFICNAMESOURCE_DETAILS_PAIR = "validation.constraint.violation.determination.scientificNameSourceOrDetailsMissing";
   public static final String SOURCE_REQUIRES_SCIENTIFIC_NAME = "validation.constraint.violation.determination.sourceRequiresScientificName";
 
-  private final MessageSource messageSource;
-
   public OrganismValidator(MessageSource messageSource) {
-    this.messageSource = messageSource;
+    super(Organism.class, messageSource);
   }
 
   @Override
-  public boolean supports(@NonNull Class<?> clazz) {
-    return Organism.class.isAssignableFrom(clazz);
-  }
-
-  @Override
-  public void validate(@NonNull Object target, @NonNull Errors errors) {
-    if (!supports(target.getClass())) {
-      throw new IllegalArgumentException("OrganismValidator not supported for class " + target.getClass());
-    }
-    Organism organism = (Organism) target;
-    checkDetermination(organism, errors);
+  public void validateTarget(Organism target, Errors errors) {
+    checkDetermination(target, errors);
   }
 
   private void checkDetermination(Organism organism, Errors errors) {
@@ -79,7 +67,6 @@ public class OrganismValidator implements Validator {
   }
 
   private void rejectValueWithMessage(String field, Errors errors, String messageKey) {
-    errors.rejectValue(field, messageKey,
-        messageSource.getMessage(messageKey, null, LocaleContextHolder.getLocale()));
+    errors.rejectValue(field, messageKey, getMessage(messageKey));
   }
 }

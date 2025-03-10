@@ -59,5 +59,4 @@ public class OrganismRepository extends DinaRepository<OrganismDto, Organism> {
   private static boolean isSafeSimpleText(String txt) {
     return StringUtils.isBlank(txt) || Jsoup.isValid(txt, SIMPLE_TEXT);
   }
-
 }

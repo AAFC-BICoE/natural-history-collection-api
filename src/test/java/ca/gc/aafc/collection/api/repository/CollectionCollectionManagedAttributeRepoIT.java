@@ -6,6 +6,8 @@ import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
+
+import io.crnk.core.exception.ResourceNotFoundException;
 import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.inject.Inject;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionCollectionManagedAttributeRepoIT extends CollectionModuleBaseIT {
 
@@ -21,12 +26,12 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   private CollectionManagedAttributeRepo repo;
 
   @Test
-  @WithMockKeycloakUser(groupRole = "dinaGroup:SUPER_USER")
+  @WithMockKeycloakUser(groupRole = "dina-group:SUPER_USER")
   void create_recordCreated() {
     String expectedName = "dina attribute #12";
     String expectedValue = "dina value";
     String expectedCreatedBy = "dina";
-    String expectedGroup = "dinaGroup";
+    String expectedGroup = "dina-group";
 
     CollectionManagedAttributeDto dto = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     dto.setName(expectedName);
@@ -65,5 +70,15 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     CollectionManagedAttributeDto fetchedAttribute = repo.findOne("collecting_event.collecting_event_attribute_1", querySpec);
 
     Assertions.assertEquals(newAttributeUuid, fetchedAttribute.getUuid());
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  void findOneByKey_whenBadKeyProvided_responseSanitized() {
+
+    QuerySpec querySpec = new QuerySpec(CollectionManagedAttributeDto.class);
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () ->repo.findOne("MATERIAL_SAMPLE.attr_1<iframe src=javascript:alert(24109)", querySpec));
+
+    assertFalse(exception.getMessage().contains("alert(24109)"));
   }
 }

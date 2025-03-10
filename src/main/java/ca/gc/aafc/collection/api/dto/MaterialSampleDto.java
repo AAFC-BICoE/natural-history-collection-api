@@ -56,6 +56,9 @@ public class MaterialSampleDto {
 
   private String materialSampleName;
 
+  @JsonApiField(patchStrategy = PatchStrategy.SET)
+  private Map<String, String> identifiers = Map.of();
+
   private MaterialSample.MaterialSampleType materialSampleType;
 
   @DiffIgnore
@@ -89,6 +92,10 @@ public class MaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String targetOrganismPrimaryScientificName;
 
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private String effectiveScientificName;
+
   private String barcode;
 
   private Boolean publiclyReleasable;
@@ -121,6 +128,8 @@ public class MaterialSampleDto {
 
   private String sourceSet;
 
+  private Boolean isBaseForSplitByType;
+
   // -- Relationships --
   @ShallowReference
   @JsonApiRelation
@@ -144,11 +153,7 @@ public class MaterialSampleDto {
 
   @ShallowReference
   @JsonApiRelation
-  private StorageUnitDto storageUnit;
-
-  @ShallowReference
-  @JsonApiRelation
-  private StorageUnitCoordinatesDto storageUnitCoordinates;
+  private StorageUnitUsageDto storageUnitUsage;
 
   @ShallowReference
   @JsonApiRelation

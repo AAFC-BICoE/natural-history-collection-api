@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @Repository
 public class PreparationMethodRepository extends DinaRepository<PreparationMethodDto, PreparationMethod> {
 
@@ -50,5 +49,4 @@ public class PreparationMethodRepository extends DinaRepository<PreparationMetho
       authenticatedUser -> resource.setCreatedBy(authenticatedUser.getUsername()));
     return super.create(resource);
   }
-  
 }

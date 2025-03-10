@@ -46,6 +46,7 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
   @Override
   protected void preCreate(StorageUnit entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override
@@ -101,5 +102,4 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     }
     unit.setHierarchy(storageHierarchicalObjects);
   }
-
 }

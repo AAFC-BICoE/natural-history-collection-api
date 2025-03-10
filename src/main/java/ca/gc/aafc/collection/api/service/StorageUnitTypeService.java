@@ -20,6 +20,7 @@ public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> 
   @Override
   protected void preCreate(StorageUnitType entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Cacheable(value = "storage_unit_type_cache")
@@ -27,5 +28,4 @@ public class StorageUnitTypeService extends DefaultDinaService<StorageUnitType> 
   public <T> T findOneById(Object id, Class<T> entityClass) {
     return super.findOneById(id, entityClass);
   }
-
 }

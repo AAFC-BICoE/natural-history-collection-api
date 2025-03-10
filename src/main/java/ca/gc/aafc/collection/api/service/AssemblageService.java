@@ -28,9 +28,10 @@ public class AssemblageService extends DefaultDinaService<Assemblage> {
   @Override
   protected void preCreate(Assemblage entity) {
     // allow user provided UUID
-    if(entity.getUuid() == null) {
+    if (entity.getUuid() == null) {
       entity.setUuid(UUIDHelper.generateUUIDv7());
     }
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override

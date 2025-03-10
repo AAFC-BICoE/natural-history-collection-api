@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.dto.ImmutableStorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -217,9 +218,8 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
   }
 
   private static StorageUnitDto newUnit() {
-    StorageUnitDto unitDto = new StorageUnitDto();
+    StorageUnitDto unitDto = StorageUnitTestFixture.newStorageUnit();
     unitDto.setName(RandomStringUtils.randomAlphabetic(3));
-    unitDto.setGroup(RandomStringUtils.randomAlphabetic(4));
     unitDto.setStorageUnitChildren(null);
     unitDto.setParentStorageUnit(null);
     unitDto.setStorageUnitType(null);

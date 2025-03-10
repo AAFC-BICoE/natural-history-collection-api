@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.VocabularyDto;
-import io.crnk.core.queryspec.QuerySpec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
 
   @Inject
-  private VocabularyRepository vocabularyConfigurationRepository;
+  private VocabularyRepositoryV2 vocabularyConfigurationRepository;
 
   @Inject
   private CollectionVocabularyConfiguration vocabularyConfiguration;
@@ -25,8 +24,8 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
   @Test
   public void findAll_VocabularyConfiguration() {
     List<VocabularyDto> listOfVocabularies =
-      vocabularyConfigurationRepository.findAll(new QuerySpec(VocabularyDto.class));
-    assertEquals(12, listOfVocabularies.size());
+      vocabularyConfigurationRepository.findAll("");
+    assertEquals(13, listOfVocabularies.size());
 
     List<List<CollectionVocabularyConfiguration.CollectionVocabularyElement>> listOfVocabularyElements = new ArrayList<>();
     for (VocabularyDto vocabularyDto : listOfVocabularies) {
@@ -47,8 +46,8 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
         vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement"),
         vocabularyConfiguration.getVocabulary().get("protocolData"),
         vocabularyConfiguration.getVocabulary().get("protocolType"),
-        vocabularyConfiguration.getVocabulary().get("taxonomicRank")
+        vocabularyConfiguration.getVocabulary().get("taxonomicRank"),
+        vocabularyConfiguration.getVocabulary().get("projectRole")
       ));
   }
-
 }

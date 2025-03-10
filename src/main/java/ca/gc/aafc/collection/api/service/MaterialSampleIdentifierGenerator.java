@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.entities.AbstractMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
+import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
@@ -38,7 +40,6 @@ public class MaterialSampleIdentifierGenerator {
   private static final Pattern TRAILING_NUMBERS_REGEX = Pattern.compile("(\\d+)$");
 
   private static final Integer MAX_MAT_SAMPLE = 500;
-  private static final String IDENTIFIER_SEPARATOR = "-";
 
   private final MaterialSampleService materialSampleService;
 
@@ -57,10 +58,13 @@ public class MaterialSampleIdentifierGenerator {
   public String generateNextIdentifier(UUID currentParentUUID,
                                        MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
                                        MaterialSample.MaterialSampleType materialSampleType,
-                                       MaterialSampleNameGeneration.CharacterType characterType) {
+                                       MaterialSampleNameGeneration.CharacterType characterType,
+                                       SplitConfiguration.Separator identifierSeparator) {
 
     Objects.requireNonNull(strategy);
     Objects.requireNonNull(characterType);
+
+    SplitConfiguration.Separator separator = identifierSeparator != null ? identifierSeparator : SplitConfiguration.Separator.DASH;
 
     // load current parent with hierarchy
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
@@ -75,24 +79,27 @@ public class MaterialSampleIdentifierGenerator {
       case TYPE_BASED -> prepareTypeBasedNameGeneration(ms, materialSampleType);
     };
 
+    if (StringUtils.isBlank(params.basename())) {
+      throw new IllegalStateException("Could not find a basename.");
+    }
 
     // if there is no descendant we need to start a new series
-    if(params.descendantNames.isEmpty()) {
-      return startSeries(params.basename, IDENTIFIER_SEPARATOR, characterType);
+    if (params.descendantNames.isEmpty()) {
+      return startSeries(params.basename, separator, characterType);
     }
 
     // if we reached the max we need to stop
-    if(params.descendantNames.size() == MAX_MAT_SAMPLE) {
+    if (params.descendantNames.size() == MAX_MAT_SAMPLE) {
       throw new IllegalStateException("maximum number of descendant reached.");
     }
 
     // get of max of all children of all loaded material sample
     // max is applied of the last part of the identifier (after the last separator)
     Optional<String>
-      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, IDENTIFIER_SEPARATOR))
+      lastName = params.descendantNames.stream().map(str -> StringUtils.substringAfterLast(str, separator.getSeparatorChar()))
       .max(Comparator.naturalOrder());
 
-    return generateNextIdentifier(params.basename + IDENTIFIER_SEPARATOR + lastName.orElse("?"));
+    return generateNextIdentifier(params.basename + separator.getSeparatorChar() + lastName.orElse("?"));
   }
 
   /**
@@ -125,7 +132,7 @@ public class MaterialSampleIdentifierGenerator {
     List<String> descendantNames = new ArrayList<>();
     extractAllDescendantNames(hierarchyMaterialSample, descendantNames,  materialSampleType);
 
-    return new IdentifierGenerationParameters(getBaseName(hierarchyMaterialSample, materialSampleType),
+    return new IdentifierGenerationParameters(getBaseNameForSplitByType(hierarchyMaterialSample, materialSampleType),
       descendantNames);
   }
 
@@ -146,10 +153,10 @@ public class MaterialSampleIdentifierGenerator {
 
   private void extractAllDescendantNames(List<MaterialSample> materialSample, List<String> materialSampleNameAccumulator, MaterialSample.MaterialSampleType type) {
     List<Integer> childrenId = new ArrayList<>();
-    for(MaterialSample currMs : materialSample) {
+    for (MaterialSample currMs : materialSample) {
       if (currMs.getMaterialSampleChildren() != null) {
         for (AbstractMaterialSample currChild : currMs.getMaterialSampleChildren()) {
-          if(type == null || type == currChild.getMaterialSampleType()) {
+          if (type == null || type == currChild.getMaterialSampleType()) {
             childrenId.add(currChild.getId());
             materialSampleNameAccumulator.add(currChild.getMaterialSampleName());
           }
@@ -157,25 +164,37 @@ public class MaterialSampleIdentifierGenerator {
       }
     }
 
-    if(!childrenId.isEmpty()) {
+    if (!childrenId.isEmpty()) {
       extractAllDescendantNames(findMaterialSampleById(childrenId), materialSampleNameAccumulator, type);
     }
   }
 
   /**
    * Get the basename from a list of material-sample representing the entire hierarchy and a type.
-   * Basename is defined as the name of the first parent where the type is different from the provided type.
+   * Basename is defined as the name of the first parent where the type is different from the provided type
+   * or the first parent where isBaseForSplitByType is true.
    *
    * @param materialSampleHierarchy the entire hierarchy as material-sample
-   * @param type the material-sample type to be created with the generated identifier
-   * @return
+   * @return basename or null
    */
-  private static String getBaseName(List<MaterialSample> materialSampleHierarchy, MaterialSample.MaterialSampleType type) {
-    return materialSampleHierarchy.stream()
+  private static String getBaseNameForSplitByType(List<MaterialSample> materialSampleHierarchy, MaterialSample.MaterialSampleType type) {
+
+    // First try to check if we have a change in material-sample type
+    String basename = materialSampleHierarchy.stream()
       .filter(ms -> ms.getMaterialSampleType() != type)
       .max(Comparator.comparingInt(MaterialSample::getId))
       .map(MaterialSample::getMaterialSampleName)
       .orElse(null);
+
+    // If the hierarchy is of the same type, check for isBaseForSplitByType
+    if (StringUtils.isBlank(basename)) {
+      return materialSampleHierarchy.stream()
+        .filter(ms -> BooleanUtils.toBoolean(ms.getIsBaseForSplitByType()))
+        .max(Comparator.comparingInt(MaterialSample::getId))
+        .map(MaterialSample::getMaterialSampleName)
+        .orElse(null);
+    }
+    return basename;
   }
 
   /**
@@ -198,8 +217,8 @@ public class MaterialSampleIdentifierGenerator {
    * @param characterType
    * @return
    */
-  private static String startSeries(String basename, String separator, MaterialSampleNameGeneration.CharacterType characterType) {
-    return basename + separator + switch (characterType) {
+  private static String startSeries(String basename, SplitConfiguration.Separator separator, MaterialSampleNameGeneration.CharacterType characterType) {
+    return basename + separator.getSeparatorChar() + switch (characterType) {
       case NUMBER -> "1";
       case LOWER_LETTER -> "a";
       case UPPER_LETTER -> "A";
@@ -219,7 +238,7 @@ public class MaterialSampleIdentifierGenerator {
 
     //try letters
     Matcher currMatcher = TRAILING_LETTERS_REGEX.matcher(providedIdentifier);
-    if(currMatcher.find()) {
+    if (currMatcher.find()) {
       currSuffix = currMatcher.group(1);
 
       int matchingNumber = NumberLetterTranslator.toNumber(currSuffix);
@@ -233,7 +252,7 @@ public class MaterialSampleIdentifierGenerator {
 
     //otherwise try numbers
     currMatcher = TRAILING_NUMBERS_REGEX.matcher(providedIdentifier);
-    if(currMatcher.find()) {
+    if (currMatcher.find()) {
       currSuffix = currMatcher.group(1);
       int nextValue = Integer.parseInt(currSuffix) + 1;
 

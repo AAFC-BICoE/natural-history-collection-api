@@ -49,16 +49,15 @@ public class MaterialSampleIdentifierGeneratorRestIT extends BaseRestAssuredTest
             .builder()
       .currentParentUUID(UUID.fromString(matSampleUUID))
       .strategy(MaterialSampleNameGeneration.IdentifierGenerationStrategy.DIRECT_PARENT)
-      .amount(1).build();
+      .quantity(1).build();
     assertEquals("TEST-POST-2-a", postMaterialSampleIdentifierGeneratorRest(dto));
   }
 
-  private String postMaterialSampleIdentifierGeneratorRest(
-    MaterialSampleIdentifierGeneratorDto dto) {
+  private String postMaterialSampleIdentifierGeneratorRest(MaterialSampleIdentifierGeneratorDto dto) {
     return sendPost(
       MaterialSampleIdentifierGeneratorDto.TYPENAME,
       JsonAPITestHelper.toJsonAPIMap(MaterialSampleIdentifierGeneratorDto.TYPENAME, dto)
-    ).extract().body().jsonPath().getString("data.attributes.nextIdentifiers[0]");
+    ).extract().body().jsonPath().getString("data.attributes.nextIdentifiers." + dto.getCurrentParentUUID() + "[0]");
   }
 
 }

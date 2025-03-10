@@ -24,11 +24,11 @@ public class ProtocolService extends DefaultDinaService<Protocol> {
   @Override
   protected void preCreate(Protocol entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
   }
 
   @Override
   public void validateBusinessRules(Protocol entity) {
     applyBusinessRule(entity, protocolValidator);
   }
-  
 }

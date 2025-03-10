@@ -50,5 +50,4 @@ public class InstitutionRepository extends DinaRepository<InstitutionDto, Instit
     }
     return super.create(resource);
   }
-
 }

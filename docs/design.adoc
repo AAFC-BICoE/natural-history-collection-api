@@ -1,0 +1,5 @@
+= Design
+
+== Storage
+
+image::storage.drawio.png[]
