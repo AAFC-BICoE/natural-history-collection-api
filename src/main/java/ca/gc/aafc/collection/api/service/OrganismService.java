@@ -115,7 +115,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
         String[] classificationNames = StringUtils.split(path, "|");
         String[] classificationRanks = StringUtils.split(ranks, "|");
 
-        if(classificationNames.length == classificationRanks.length) {
+        if (classificationNames.length == classificationRanks.length) {
           for (int i = 0; i < classificationNames.length; i++) {
             if (knownTaxonomicRanks.contains(classificationRanks[i])) {
               classification.put(classificationRanks[i], classificationNames[i]);
