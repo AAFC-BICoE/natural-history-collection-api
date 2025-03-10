@@ -14,6 +14,7 @@ import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.util.ScientificNameUtils;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
@@ -53,6 +54,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     preparationValidationContext;
 
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
+  private final OrganismService organismService;
 
   private final IdentifierTypeValueValidator identifierTypeValueValidator;
   private final MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator;
@@ -68,13 +70,17 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator,
     @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
     IdentifierTypeValueValidator identifierTypeValueValidator,
+    OrganismService organismService,
     ApplicationEventPublisher eventPublisher
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.associationValidator = associationValidator;
+
     this.hierarchicalDataService = hierarchicalDataService;
+    this.organismService = organismService;
+
     this.materialSampleExtensionValueValidator = materialSampleExtensionValueValidator;
     this.restrictionExtensionValueValidator = restrictionExtensionValueValidator;
     this.identifierTypeValueValidator = identifierTypeValueValidator;
@@ -121,6 +127,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
           if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
             setTargetOrganismPrimaryScientificName(ms);
             setEffectiveScientificName(ms);
+            setOrganismClassification(ms);
           }
         } catch (JsonProcessingException e) {
           throw new RuntimeException(e);
@@ -150,6 +157,23 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     }
     String s = ScientificNameUtils.extractTargetOrganismPrimaryScientificName(sample.getOrganism());
     sample.setTargetOrganismPrimaryScientificName(s);
+  }
+
+  public void setOrganismClassification(MaterialSample sample) {
+
+    if (CollectionUtils.isEmpty(sample.getOrganism())) {
+      return;
+    }
+
+    List<Organism> targetOrganisms = ScientificNameUtils.extractTargetOrganisms(sample.getOrganism());
+
+    if (targetOrganisms.size() == 1) {
+      sample.setTargetOrganismPrimaryClassification(
+        organismService.extractClassification(targetOrganisms.getFirst()
+          .getPrimaryDetermination()));
+    } else {
+      log.debug("Multiple target organisms found, targetOrganismPrimaryClassification won't be set");
+    }
   }
 
   public void setEffectiveScientificName(MaterialSample sample) {

@@ -94,6 +94,10 @@ public class MaterialSampleDto {
 
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  private Map<String, String> targetOrganismPrimaryClassification;
+
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String effectiveScientificName;
 
   private String barcode;

@@ -22,6 +22,19 @@ public final class ScientificNameUtils {
   }
 
   /**
+   * Extract target organism(s). If the target organism concept is not used (isTarget == null)
+   * they will all be returned.
+   *
+   * @param orgList
+   * @return
+   */
+  public static List<Organism> extractTargetOrganisms(List<Organism> orgList) {
+    return orgList.stream()
+      .filter(org -> org.getIsTarget() == null || org.getIsTarget())
+      .toList();
+  }
+
+  /**
    * From a list of organism(s), return the scientificName (or verbatim if there is scientificName)
    * of the primary determination of the target organism (if there is one).
    * @param orgList list of {@link Organism}
