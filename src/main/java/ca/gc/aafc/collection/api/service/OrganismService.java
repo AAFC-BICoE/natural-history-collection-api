@@ -1,6 +1,14 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
+
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.OrganismValidator;
@@ -15,11 +23,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+@Log4j2
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
 
   private final OrganismValidator organismValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+  private final Set<String> knownTaxonomicRanks;
 
   private static final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
     ORGANISM_VALIDATION_CONTEXT =
@@ -34,10 +44,17 @@ public class OrganismService extends DefaultDinaService<Organism> {
   public OrganismService(BaseDAO baseDAO,
                          SmartValidator sv,
                          OrganismValidator organismValidator,
-                         CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator) {
+                         CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+                         CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
     super(baseDAO, sv);
     this.organismValidator = organismValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+
+    knownTaxonomicRanks = collectionVocabularyConfiguration
+      .getVocabularyByKey(CollectionVocabularyConfiguration.TAXONOMIC_RANK_KEY)
+      .stream()
+      .map(e -> e.getName().toLowerCase())
+      .collect(Collectors.toSet());
   }
 
   @Override
@@ -74,6 +91,42 @@ public class OrganismService extends DefaultDinaService<Organism> {
         !BooleanUtils.isTrue(organism.getDetermination().get(0).getIsPrimary())) {
       organism.getDetermination().get(0).setIsPrimary(true);
     }
+  }
+
+  /**
+   * From the provided determination extract the classification by matching
+   * the known ranks from {@link CollectionVocabularyConfiguration} and the classification
+   * path and ranks from {@link Determination.ScientificNameSourceDetails}.
+   * @param primaryDetermination
+   * @return
+   */
+  public Map<String, String> extractClassification(Determination primaryDetermination) {
+
+    if (primaryDetermination == null) {
+      return null;
+    }
+
+    Map<String, String> classification = new HashMap<>();
+    if (primaryDetermination.getScientificNameDetails() != null) {
+      String path = primaryDetermination.getScientificNameDetails().getClassificationPath();
+      String ranks = primaryDetermination.getScientificNameDetails().getClassificationRanks();
+
+      if (StringUtils.isNotBlank(path) && StringUtils.isNotBlank(ranks)) {
+        String[] classificationNames = StringUtils.split(path, "|");
+        String[] classificationRanks = StringUtils.split(ranks, "|");
+
+        if (classificationNames.length == classificationRanks.length) {
+          for (int i = 0; i < classificationNames.length; i++) {
+            if (knownTaxonomicRanks.contains(classificationRanks[i])) {
+              classification.put(classificationRanks[i], classificationNames[i]);
+            }
+          }
+        } else {
+          log.debug("classificationNames and classificationRanks arrays size are not the same");
+        }
+      }
+    }
+    return classification;
   }
 
   private void validateOrganismManagedAttribute(Organism organism) {

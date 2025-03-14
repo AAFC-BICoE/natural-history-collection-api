@@ -34,6 +34,7 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
 
   public static final String PROTOCOL_DATA_VOCAB_KEY = "protocolData";
   public static final String PROTOCOL_TYPE_VOCAB_KEY = "protocolType";
+  public static final String TAXONOMIC_RANK_KEY = "taxonomicRank";
   public static final String PROJECT_ROLE_VOCAB_KEY = "projectRole";
 
   public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {

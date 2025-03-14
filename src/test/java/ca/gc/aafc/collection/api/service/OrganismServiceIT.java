@@ -1,25 +1,25 @@
 package ca.gc.aafc.collection.api.service;
 
+import org.junit.jupiter.api.Test;
+
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
-
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Map;
-import javax.validation.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import javax.validation.ValidationException;
 
 public class OrganismServiceIT extends CollectionModuleBaseIT {
 
@@ -36,6 +36,23 @@ public class OrganismServiceIT extends CollectionModuleBaseIT {
     organismService.create(organism);
 
     assertTrue(organism.getDetermination().get(0).getIsPrimary());
+  }
+
+  @Test
+  void organismDetermination_extractClassification_expectedResultReturned() {
+    Determination determination = DeterminationFactory.newDetermination()
+      .scientificNameDetails(Determination.ScientificNameSourceDetails.builder()
+        .sourceUrl(URI.create("https://www.google.com").toString())
+        .recordedOn(LocalDate.now().minusDays(1))
+        .classificationPath("a|b|c")
+        .classificationRanks("family|genus|c")
+        .build())
+      .isPrimary(null) // force null
+      .build();
+
+    Map<String, String> a = organismService.extractClassification(determination);
+
+    assertTrue(a.containsKey("family"));
   }
 
   @Test
