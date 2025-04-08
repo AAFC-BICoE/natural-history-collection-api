@@ -593,6 +593,7 @@ extension:
         \ measure is usually taken with a hand level meter or clinometer"
       unit: "percentage"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "slope_aspect"
       name: "slope aspect"
       multilingualDescription.descriptions:
@@ -636,6 +637,7 @@ extension:
         - lang: en
           desc: "pH measurement"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "ph_meth"
       name: "pH method"
       multilingualDescription.descriptions:
