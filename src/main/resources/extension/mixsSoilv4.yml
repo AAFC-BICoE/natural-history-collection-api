@@ -603,6 +603,7 @@ extension:
         \ degrees. This measure provides an indication of sun and wind exposure that will influence soil temperature and evapotranspiration."
       unit: "degree"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "profile_position"
       name: "profile position"
       multilingualDescription.descriptions:
