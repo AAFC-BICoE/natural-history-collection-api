@@ -121,6 +121,7 @@ extension:
           desc: "electrical conductivity of water"
       unit: "milliSiemens per centimeter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "density"
       name: "density"
       multilingualDescription.descriptions:
@@ -180,6 +181,7 @@ extension:
           desc: "concentration of dissolved organic carbon"
       unit: "micromole per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "diss_org_nitro"
       name: "dissolved organic nitrogen"
       multilingualDescription.descriptions:
@@ -187,6 +189,7 @@ extension:
           desc: "dissolved organic nitrogen concentration measured as; total\
         \ dissolved nitrogen - NH4 - NO3 - NO2"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "diss_oxygen"
       name: "dissolved oxygen"
       multilingualDescription.descriptions:
@@ -310,6 +313,7 @@ extension:
           desc: "concentration of particulate organic carbon"
       unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "part_org_nitro"
       name: "particulate organic nitrogen"
       multilingualDescription.descriptions:
@@ -317,6 +321,7 @@ extension:
           desc: "concentration of particulate organic nitrogen"
       unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "perturbation"
       name: "perturbation"
       multilingualDescription.descriptions:
@@ -463,6 +468,7 @@ extension:
           desc: "concentration of suspended particulate matter"
       unit: "milligram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "temp"
       name: "temperature"
       multilingualDescription.descriptions:
@@ -470,6 +476,7 @@ extension:
           desc: "temperature of the sample at time of sampling"
       unit: "degree Celsius"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "tidal_stage"
       name: "tidal stage"
       multilingualDescription.descriptions:
@@ -491,6 +498,7 @@ extension:
         \ total dissolved nitrogen = NH4 + NO3NO2 + dissolved organic nitrogen"
       unit: "microgram per liter"
       dinaComponent: "COLLECTING_EVENT"
+      vocabularyElementType: "DECIMAL"
     - key: "tot_inorg_nitro"
       name: "total inorganic nitrogen"
       multilingualDescription.descriptions:
