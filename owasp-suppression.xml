@@ -36,6 +36,10 @@
         <cve>CVE-2024-38821</cve>
     </suppress>
     <suppress>
+        <notes>Not applicable</notes>
+        <cve>CVE-2025-22228</cve>
+    </suppress>
+    <suppress>
         <notes>not valid for api</notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*$</packageUrl>
         <cve>CVE-2016-1000027</cve>
