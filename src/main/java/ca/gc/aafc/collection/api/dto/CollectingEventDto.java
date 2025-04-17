@@ -9,6 +9,7 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -42,7 +43,7 @@ import java.util.function.Supplier;
 @Data
 @JsonApiResource(type = CollectingEventDto.TYPENAME)
 @TypeName(CollectingEventDto.TYPENAME)
-public class CollectingEventDto {
+public class CollectingEventDto extends AttributeMetaInfoProvider {
 
   public static final String TYPENAME = "collecting-event";
 
