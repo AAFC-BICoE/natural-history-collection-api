@@ -20,6 +20,7 @@ import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 
 import io.crnk.core.resource.annotations.JsonApiField;
@@ -34,7 +35,7 @@ import lombok.Data;
 @JsonApiResource(type = MaterialSampleDto.TYPENAME)
 @TypeName(MaterialSampleDto.TYPENAME)
 @CustomFieldAdapter(adapters = AssociationDto.AssociationListMapperAdapter.class)
-public class MaterialSampleDto {
+public class MaterialSampleDto extends AttributeMetaInfoProvider {
 
   public static final String TYPENAME = "material-sample";
 
