@@ -65,6 +65,7 @@ rabbitmq:
   username: guest
   password: guest
   host: ${RABBITMQ_HOSTNAME:localhost}
+dina.messaging.isProducer: false
 
 mybatis:
   mapper-locations: classpath:my-batis/*Mapper.xml
