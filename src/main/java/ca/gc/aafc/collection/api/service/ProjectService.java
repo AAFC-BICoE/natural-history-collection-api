@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.service;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -14,6 +13,8 @@ import ca.gc.aafc.collection.api.validation.ProjectValidator;
 import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
+import ca.gc.aafc.dina.messaging.DinaEventPublisher;
+import ca.gc.aafc.dina.messaging.EntityChanged;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
@@ -32,7 +33,7 @@ public class ProjectService extends MessageProducingService<Project> {
     @NonNull ProjectValidator projectValidator,
     ProjectExtensionValueValidator projectExtensionValueValidator,
     AgentRolesValidator agentRolesValidator,
-    ApplicationEventPublisher eventPublisher
+    DinaEventPublisher<EntityChanged> eventPublisher
   ) {
     super(baseDAO, sv, ProjectDto.TYPENAME, eventPublisher);
     this.projectValidator = projectValidator;
