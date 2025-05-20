@@ -41,7 +41,7 @@
     <spring-framework.version>5.3.38</spring-framework.version>
     <org.springframework.security.version>5.7.12</org.springframework.security.version>
     <postgresql.version>42.4.4</postgresql.version>
-    <tomcat.version>9.0.99</tomcat.version>
+    <tomcat.version>9.0.104</tomcat.version>
   </properties>
 
   <dependencies>
