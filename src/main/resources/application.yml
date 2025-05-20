@@ -58,14 +58,17 @@ javers:
   packagesToScan: ca.gc.aafc.collection.api  
 # Wait for requests to finish before shutting down:
 server.shutdown: graceful
-dina.auditing.enabled: true
+
+dina:
+  apiPrefix: /api/v1
+  auditing.enabled: true
+  messaging.isProducer: false
 
 rabbitmq:
   queue: dina.search.queue
   username: guest
   password: guest
   host: ${RABBITMQ_HOSTNAME:localhost}
-dina.messaging.isProducer: false
 
 mybatis:
   mapper-locations: classpath:my-batis/*Mapper.xml

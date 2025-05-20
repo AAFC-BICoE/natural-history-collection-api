@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.service;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -25,6 +24,8 @@ import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.jpa.PredicateSupplier;
+import ca.gc.aafc.dina.messaging.DinaEventPublisher;
+import ca.gc.aafc.dina.messaging.EntityChanged;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
@@ -71,7 +72,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
     IdentifierTypeValueValidator identifierTypeValueValidator,
     OrganismService organismService,
-    ApplicationEventPublisher eventPublisher
+    DinaEventPublisher<EntityChanged> eventPublisher
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
