@@ -15,6 +15,10 @@ import ca.gc.aafc.collection.api.util.ManagedAttributeIdMapper;
 import ca.gc.aafc.dina.DinaBaseApiAutoConfiguration;
 import io.crnk.core.engine.registry.ResourceRegistry;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.toedter.spring.hateoas.jsonapi.JsonApiConfiguration;
+
 @Configuration
 @ComponentScan(basePackageClasses = DinaBaseApiAutoConfiguration.class)
 @ImportAutoConfiguration(DinaBaseApiAutoConfiguration.class)
@@ -28,6 +32,17 @@ public class MainConfiguration {
 
     resourceInfo.setIdStringMapper(
       new ManagedAttributeIdMapper(resourceInfo.getIdStringMapper()));
+  }
+
+  @Bean
+  public JsonApiConfiguration jsonApiConfiguration() {
+    return new JsonApiConfiguration()
+      .withPluralizedTypeRendered(false)
+      .withPageMetaAutomaticallyCreated(false)
+      .withObjectMapperCustomizer(objectMapper -> {
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.registerModule(new JavaTimeModule());
+      });
   }
 
   /**
