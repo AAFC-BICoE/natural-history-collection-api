@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.mapper.CollectionManagedAttributeMapper;
+import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
+import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
@@ -29,9 +32,8 @@ import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.security.auth.DinaAdminCUDAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
-import ca.gc.aafc.dina.service.DinaService;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import lombok.NonNull;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
@@ -43,12 +45,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class CollectionManagedAttributeRepo extends 
     DinaRepositoryV2<CollectionManagedAttributeDto, CollectionManagedAttribute> {
 
+  public static final Pattern KEY_LOOKUP_PATTERN = Pattern.compile("(.*)\\.(.*)");
+
+  private final CollectionManagedAttributeService dinaService;
+
   // Bean does not exist with keycloak disabled.
   private final DinaAuthenticatedUser authenticatedUser;
 
   public CollectionManagedAttributeRepo(
-    @NonNull DinaService<CollectionManagedAttribute> dinaService,
-    @NonNull DinaAdminCUDAuthorizationService authorizationService,
+    @NonNull CollectionManagedAttributeService dinaService,
+    @NonNull SuperUserInGroupCUDAuthorizationService authorizationService,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull BuildProperties props,
     @NonNull AuditService auditService,
@@ -62,20 +68,44 @@ public class CollectionManagedAttributeRepo extends
       CollectionManagedAttribute.class,
       props, objMapper);
     this.authenticatedUser = authenticatedUser.orElse(null);
+    this.dinaService = dinaService;
   }
 
   @Override
   protected Link generateLinkToResource(CollectionManagedAttributeDto dto) {
     try {
-      return linkTo(methodOn(CollectionManagedAttributeRepo.class).onFindOne(dto.getUuid(), null)).withSelfRel();
+      return linkTo(methodOn(CollectionManagedAttributeRepo.class).onFindOne(dto.getUuid().toString(), null)).withSelfRel();
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
   }
 
   @GetMapping(CollectionManagedAttributeDto.TYPENAME + "/{id}")
-  public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable UUID id, HttpServletRequest req) throws ResourceNotFoundException, ResourceGoneException {
-    return handleFindOne(id, req);
+  public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable String id, HttpServletRequest req)
+    throws ResourceNotFoundException, ResourceGoneException {
+
+    // Allow lookup by component type + key.
+    // e.g. collecting_event.attribute_name
+    var matcher = KEY_LOOKUP_PATTERN.matcher(id);
+    if (matcher.groupCount() == 2) {
+      if (matcher.find()) {
+        CollectionManagedAttribute.ManagedAttributeComponent component =
+          CollectionManagedAttribute.ManagedAttributeComponent
+            .fromString(matcher.group(1));
+        String attributeKey = matcher.group(2);
+
+        CollectionManagedAttribute managedAttribute =
+          dinaService.findOneByKeyAndComponent(attributeKey, component);
+
+        if (managedAttribute != null) {
+          return handleFindOne(managedAttribute.getUuid(), req);
+        } else{
+          throw ResourceNotFoundException.create(CollectionManagedAttributeDto.TYPENAME,
+            TextHtmlSanitizer.sanitizeText(id));
+        }
+      }
+    }
+    return handleFindOne(UUID.fromString(id), req);
   }
 
   @PostMapping(path = CollectionManagedAttributeDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH,
