@@ -19,7 +19,12 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.repository.GoneException;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import io.crnk.core.queryspec.PathSpec;
@@ -194,14 +199,19 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
-  public void create_onManagedAttributeValue_validationOccur() {
+  public void create_onManagedAttributeValue_validationOccur()
+    throws ResourceGoneException, ResourceNotFoundException {
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
 
-    newAttribute = collManagedAttributeRepo.create(newAttribute);
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, CollectionManagedAttributeDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(newAttribute)
+    );
+    collManagedAttributeRepo.onCreate(docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
@@ -222,21 +232,32 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
-  public void create_onManagedAttributeValue_canUseKeyEvenIfUsedByAnotherComponent() {
+  public void create_onManagedAttributeValue_canUseKeyEvenIfUsedByAnotherComponent()
+    throws ResourceGoneException, ResourceNotFoundException {
 
     CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttributeCE.setName("test");
     newAttributeCE.setVocabularyElementType(VocabularyElementType.DATE);
     newAttributeCE.setAcceptedValues(null);
     newAttributeCE.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
-    collManagedAttributeRepo.create(newAttributeCE);
+
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, CollectionManagedAttributeDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(newAttributeCE)
+    );
+    collManagedAttributeRepo.onCreate(docToCreate);
 
     CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
     newAttribute.setName("test");
     newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
-    newAttribute = collManagedAttributeRepo.create(newAttribute);
+
+    docToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, CollectionManagedAttributeDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(newAttribute)
+    );
+    collManagedAttributeRepo.onCreate(docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);

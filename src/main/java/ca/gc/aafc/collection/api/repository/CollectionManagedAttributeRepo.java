@@ -135,8 +135,7 @@ public class CollectionManagedAttributeRepo extends
 
   @PostMapping(CollectionManagedAttributeDto.TYPENAME)
   @Transactional
-  public ResponseEntity<RepresentationModel<?>> onCreate(@RequestBody JsonApiDocument postedDocument)
-      throws ResourceNotFoundException, ResourceGoneException {
+  public ResponseEntity<RepresentationModel<?>> onCreate(@RequestBody JsonApiDocument postedDocument) {
 
     return handleCreate(postedDocument, dto -> {
       if (authenticatedUser != null) {
