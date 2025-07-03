@@ -82,7 +82,7 @@ public class CollectionManagedAttributeRepo extends
 
   @GetMapping(CollectionManagedAttributeDto.TYPENAME + "/{id}")
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable String id, HttpServletRequest req)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
 
     // Allow lookup by component type + key.
     // e.g. collecting_event.attribute_name
@@ -99,7 +99,7 @@ public class CollectionManagedAttributeRepo extends
 
         if (managedAttribute != null) {
           return handleFindOne(managedAttribute.getUuid(), req);
-        } else{
+        } else {
           throw ResourceNotFoundException.create(CollectionManagedAttributeDto.TYPENAME,
             TextHtmlSanitizer.sanitizeText(id));
         }
