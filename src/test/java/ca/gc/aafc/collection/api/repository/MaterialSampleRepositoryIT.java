@@ -211,7 +211,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
       null, CollectionManagedAttributeDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(newAttribute)
     );
-    collManagedAttributeRepo.onCreate(docToCreate);
+    newAttribute = collManagedAttributeRepo.create(docToCreate, null).getDto();
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
@@ -257,7 +257,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
       null, CollectionManagedAttributeDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(newAttribute)
     );
-    collManagedAttributeRepo.onCreate(docToCreate);
+    newAttribute = collManagedAttributeRepo.create(docToCreate, null).getDto();
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
