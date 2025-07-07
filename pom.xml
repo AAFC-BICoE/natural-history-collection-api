@@ -46,6 +46,7 @@
     <postgresql.version>42.4.4</postgresql.version>
     <tomcat.version>9.0.106</tomcat.version>
     <jackson-bom.version>2.15.4</jackson-bom.version>
+    <snakeyaml.version>1.33</snakeyaml.version>
   </properties>
 
   <dependencies>
