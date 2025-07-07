@@ -11,10 +11,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
@@ -22,16 +22,15 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 import javax.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
-public class CollectionCollectionManagedAttributeRepoIT extends CollectionModuleBaseIT {
+public class CollectionCollectionManagedAttributeRepoIT extends CollectionModuleBaseRepositoryIT {
 
   private static final String BASE_URL = "/api/v1/" + CollectionManagedAttributeDto.TYPENAME;
 
@@ -43,8 +42,15 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
   @Inject
   private CollectionManagedAttributeRepo repo;
 
-  @Inject
-  private ObjectMapper objMapper;
+  @Autowired
+  public CollectionCollectionManagedAttributeRepoIT(ObjectMapper objMapper) {
+    super(BASE_URL, objMapper);
+  }
+
+  @Override
+  protected MockMvc getMockMvc() {
+    return mockMvc;
+  }
 
   @BeforeEach
   public void setup() {
@@ -75,15 +81,8 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     var created = repo.onCreate(docToCreate);
     UUID uuid = JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(created);
 
-    var findOneResponse = mockMvc.perform(
-        get(BASE_URL + "/" + uuid.toString())
-          .contentType(JSON_API)
-      )
-      .andExpect(status().isOk())
-      .andReturn();
-
-    JsonApiDocument apiDoc = objMapper.readValue(findOneResponse.getResponse().getContentAsString(),
-      JsonApiDocument.class);
+    var findOneResponse = sendGet(uuid.toString());
+    JsonApiDocument apiDoc = toJsonApiDocument(findOneResponse);
 
      CollectionManagedAttributeDto findOneDto = objMapper.convertValue(apiDoc.getAttributes(),
        CollectionManagedAttributeDto.class);
@@ -115,25 +114,19 @@ public class CollectionCollectionManagedAttributeRepoIT extends CollectionModule
     var created = repo.onCreate(docToCreate);
     UUID newAttributeUuid = JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(created);
 
-    var findOneResponse = mockMvc.perform(
-        get(BASE_URL + "/collecting_event.collecting_event_attribute_1")
-          .contentType(JSON_API)
-      )
-      .andExpect(status().isOk())
-      .andReturn();
+    var findOneResponse = sendGet("/collecting_event.collecting_event_attribute_1");
     JsonApiDocument apiDoc = objMapper.readValue(findOneResponse.getResponse().getContentAsString(),
       JsonApiDocument.class);
 
     assertEquals(newAttributeUuid, apiDoc.getId());
   }
 
-//  @Test
-//  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
-//  void findOneByKey_whenBadKeyProvided_responseSanitized() {
-//
-//    QuerySpec querySpec = new QuerySpec(CollectionManagedAttributeDto.class);
-//    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () ->repo.findOne("MATERIAL_SAMPLE.attr_1<iframe src=javascript:alert(24109)", querySpec));
-//
-//    assertFalse(exception.getMessage().contains("alert(24109)"));
-//  }
+  @Test
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  void findOneByKey_whenBadKeyProvided_responseSanitized() throws Exception {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+      () -> repo.onFindOne("MATERIAL_SAMPLE.attr_1<iframe src=javascript:alert(24109)", null));
+
+    assertFalse(exception.getMessage().contains("alert(24109)"));
+  }
 }
