@@ -1,58 +1,50 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.List;
+import ca.gc.aafc.dina.repository.ReadOnlyDinaRepositoryV2;
 
-import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
-
-import org.springframework.stereotype.Repository;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.MethodNotAllowedException;
 
-import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
-import ca.gc.aafc.collection.api.dto.FieldExtensionValueDto;
-import ca.gc.aafc.dina.security.TextHtmlSanitizer;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
-import io.crnk.core.exception.ResourceNotFoundException;
-import io.crnk.core.queryspec.QuerySpec;
-import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
-import io.crnk.core.resource.list.ResourceList;
+import ca.gc.aafc.collection.api.dto.FieldExtensionValueDto;
+import ca.gc.aafc.collection.api.service.FieldExtensionValueService;
 import lombok.NonNull;
 
-@Repository
-public class FieldExtensionValueRepository extends ReadOnlyResourceRepositoryBase<FieldExtensionValueDto, String> {
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
 
-  private final Map<String, Extension> extensions;
-
-  public static final Pattern KEY_LOOKUP_PATTERN = Pattern.compile("(.*)\\.(.*)");
+@RestController
+@RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
+public class FieldExtensionValueRepository extends ReadOnlyDinaRepositoryV2<String, FieldExtensionValueDto> {
 
   protected FieldExtensionValueRepository(
-      @NonNull CollectionExtensionConfiguration extensionConfiguration) {
-    super(FieldExtensionValueDto.class);
-    extensions = extensionConfiguration.getExtension();
+      @NonNull FieldExtensionValueService service) {
+    super(service);
   }
 
   @Override
-  public ResourceList<FieldExtensionValueDto> findAll(QuerySpec querySpec) {
+  public List<FieldExtensionValueDto> findAll(String queryString) {
     throw new MethodNotAllowedException("findAll", null);
   }
 
-  @Override
-  public FieldExtensionValueDto findOne(String path, QuerySpec querySpec) {
-    // Allow lookup by component extension key + field key.
-    // e.g. mixs_soil_v4.alkalinity
-    var matcher = KEY_LOOKUP_PATTERN.matcher(path);
-    if (matcher.groupCount() == 2) {
-      if (matcher.find()) {
-        String extensionKey = matcher.group(1);
-        String fieldKey = matcher.group(2);
+  @GetMapping("fieldextensionvalue/{id}") //TODO check this
+  public ResponseEntity<RepresentationModel<?>> handleFindOne(@PathVariable String id) {
 
-        Extension ext = extensions.get(extensionKey);
-        if (ext != null && ext.getFieldByKey(fieldKey) != null) {
-          return new FieldExtensionValueDto(path, ext.getName(), extensionKey,
-            ext.getFieldByKey(fieldKey));
-        }
-      }
+    FieldExtensionValueDto dto = findOne(id);
+
+    if (dto == null) {
+      return ResponseEntity.notFound().build();
     }
-    throw new ResourceNotFoundException("Field Extension Value not found: " + TextHtmlSanitizer.sanitizeText(path));
+
+    JsonApiModelBuilder builder = jsonApiModel().model(RepresentationModel.of(dto));
+
+    return ResponseEntity.ok(builder.build());
   }
 }
