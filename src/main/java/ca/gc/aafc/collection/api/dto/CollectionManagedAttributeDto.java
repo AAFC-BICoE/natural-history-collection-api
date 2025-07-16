@@ -4,8 +4,6 @@ import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
@@ -15,17 +13,20 @@ import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @RelatedEntity(CollectionManagedAttribute.class)
 @Data
-@JsonApiResource(type = CollectionManagedAttributeDto.TYPENAME)
+@JsonApiTypeForClass(CollectionManagedAttributeDto.TYPENAME)
 @TypeName(CollectionManagedAttributeDto.TYPENAME)
-public class CollectionManagedAttributeDto {
+public class CollectionManagedAttributeDto implements ca.gc.aafc.dina.dto.JsonApiResource {
 
   public static final String TYPENAME = "managed-attribute";
 
-  @JsonApiId
   @Id
   @PropertyName("id")
+  @com.toedter.spring.hateoas.jsonapi.JsonApiId
   private UUID uuid;
   private String name;
   private String key;
@@ -38,4 +39,15 @@ public class CollectionManagedAttributeDto {
   private String group;
   private MultilingualDescription multilingualDescription;
 
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }
