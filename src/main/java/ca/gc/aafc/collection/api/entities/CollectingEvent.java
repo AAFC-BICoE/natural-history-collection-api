@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.geolatte.geom.G2D;
@@ -230,6 +232,10 @@ public class CollectingEvent implements DinaEntity {
   @Type(type = "string-array")
   private String[] tags;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @ToString.Exclude
+  private Expedition expedition;
+  
   // Field calculated by CollectingEventService
   private Point<G2D> eventGeom;
 
