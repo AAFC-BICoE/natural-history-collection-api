@@ -52,7 +52,7 @@ public class ExpeditionDto {
 
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
-  private List<ExternalRelationDto> attachment = new ArrayList<>();
+  private List<ExternalRelationDto> participants = new ArrayList<>();
 
   private MultilingualDescription multilingualDescription;
 
