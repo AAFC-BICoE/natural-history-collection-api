@@ -48,8 +48,6 @@ public class ExpeditionDto {
   private LocalDate endDate;
   private String geographicContext;
 
-  private List<AgentRoles> contributors = List.of();
-
   @JsonApiExternalRelation(type = "person")
   @JsonApiRelation
   private List<ExternalRelationDto> participants = new ArrayList<>();
