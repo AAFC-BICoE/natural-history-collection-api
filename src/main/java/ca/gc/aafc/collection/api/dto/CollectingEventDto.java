@@ -98,6 +98,10 @@ public class CollectingEventDto extends AttributeMetaInfoProvider {
   @JsonApiRelation
   private ProtocolDto protocol;
 
+  @ShallowReference
+  @JsonApiRelation
+  private ExpeditionDto expedition;
+
   private String dwcVerbatimLocality;
 
   private String host;
