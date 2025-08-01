@@ -47,7 +47,7 @@ import javax.servlet.http.HttpServletRequest;
  * Endpoint used to get identifiers (uuid) based on name.
  */
 @RestController
-@RequestMapping(value = "/api/v1", produces = JSON_API_VALUE)
+@RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
 public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBaseRepository {
 
   public ResourceNameIdentifierRepository(

@@ -20,7 +20,7 @@ import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
  *
  */
 @RestController
-@RequestMapping(value = "/api/v1", produces = JSON_API_VALUE)
+@RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
 @ConditionalOnProperty(prefix = "dina.messaging", name = "isProducer", havingValue = "true")
 public class IndexRefreshRepository {
 
