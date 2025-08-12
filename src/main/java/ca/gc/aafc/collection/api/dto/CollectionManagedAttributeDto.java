@@ -1,20 +1,21 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.i18n.MultilingualDescription;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
-import lombok.Data;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
-
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.i18n.MultilingualDescription;
+import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+import lombok.Data;
 
 @RelatedEntity(CollectionManagedAttribute.class)
 @Data
@@ -28,8 +29,13 @@ public class CollectionManagedAttributeDto implements ca.gc.aafc.dina.dto.JsonAp
   @PropertyName("id")
   @com.toedter.spring.hateoas.jsonapi.JsonApiId
   private UUID uuid;
+
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private String name;
+
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private String key;
+
   private TypedVocabularyElement.VocabularyElementType vocabularyElementType;
   private String unit;
   private CollectionManagedAttribute.ManagedAttributeComponent managedAttributeComponent;

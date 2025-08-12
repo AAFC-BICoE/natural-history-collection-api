@@ -32,7 +32,7 @@
     <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.145</dina-base-api.version>
+    <dina-base-api.version>0.149</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
