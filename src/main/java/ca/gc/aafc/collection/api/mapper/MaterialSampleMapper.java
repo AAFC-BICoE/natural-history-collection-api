@@ -49,7 +49,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
 
   /**
    * Ignore internal id
-   * Ignore special fields like acSubtype and acSubtypeId.
+   * Ignore special fields like associations
    * Ignore relationships for MapStruct mapping dto -> entity
    * @param dto
    * @param provided provided properties so only those will be set
