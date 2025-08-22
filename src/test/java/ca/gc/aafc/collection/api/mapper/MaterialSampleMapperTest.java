@@ -19,6 +19,7 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MaterialSampleMapperTest {
@@ -56,6 +57,10 @@ public class MaterialSampleMapperTest {
     assertArrayEquals(dto.getDwcOtherCatalogNumbers(), entity.getDwcOtherCatalogNumbers());
     assertEquals(dto.getCreatedBy(), entity.getCreatedBy());
     assertEquals(dto.getGroup(), entity.getGroup());
+
+    // check nested structures
+    assertNotNull(dto.getRestrictionFieldsExtension().get(MaterialSampleTestFixture.RESTRICTION_KEY));
+    assertEquals(dto.getRestrictionFieldsExtension(), entity.getRestrictionFieldsExtension());
 
     // should be null since relationships are not mapped by the mapper
     assertNull(entity.getAttachment());
