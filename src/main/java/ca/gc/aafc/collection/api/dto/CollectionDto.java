@@ -2,13 +2,15 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.CollectionIdentifier;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
-import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiRelation;
-import io.crnk.core.resource.annotations.JsonApiResource;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,9 +32,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(Collection.class)
-@JsonApiResource(type = CollectionDto.TYPENAME)
+@JsonApiTypeForClass(CollectionDto.TYPENAME)
 @TypeName(CollectionDto.TYPENAME)
-public class CollectionDto extends AttributeMetaInfoProvider {
+public class CollectionDto implements JsonApiResource {
 
   public static final String TYPENAME = "collection";
   
@@ -50,10 +52,6 @@ public class CollectionDto extends AttributeMetaInfoProvider {
 
   private String code;
 
-  @ShallowReference
-  @JsonApiRelation
-  private InstitutionDto institution;
-
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private MultilingualDescription multilingualDescription;
 
@@ -66,7 +64,20 @@ public class CollectionDto extends AttributeMetaInfoProvider {
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
   @ShallowReference
-  @JsonApiRelation
   private CollectionDto parentCollection;
 
+  @ShallowReference
+  private InstitutionDto institution;
+
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }
