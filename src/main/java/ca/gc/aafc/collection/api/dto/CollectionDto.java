@@ -61,6 +61,7 @@ public class CollectionDto implements JsonApiResource {
   private String remarks;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  @Builder.Default
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
   @ShallowReference

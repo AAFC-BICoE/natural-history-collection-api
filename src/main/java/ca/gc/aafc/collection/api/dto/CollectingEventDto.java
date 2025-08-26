@@ -5,20 +5,19 @@ import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
 import ca.gc.aafc.dina.mapper.CustomFieldAdapter;
 import ca.gc.aafc.dina.mapper.DinaFieldAdapter;
 import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
-import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiRelation;
-import io.crnk.core.resource.annotations.JsonApiResource;
-import io.crnk.core.resource.annotations.PatchStrategy;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.geolatte.geom.G2D;
@@ -35,15 +34,21 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import lombok.Setter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 @RelatedEntity(CollectingEvent.class)
-@CustomFieldAdapter(adapters = {
-  CollectingEventDto.StartEventDateTimeAdapter.class,
-  CollectingEventDto.EndEventDateTimeAdapter.class})
-@Data
-@JsonApiResource(type = CollectingEventDto.TYPENAME)
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonApiTypeForClass(CollectingEventDto.TYPENAME)
 @TypeName(CollectingEventDto.TYPENAME)
-public class CollectingEventDto extends AttributeMetaInfoProvider {
+public class CollectingEventDto implements JsonApiResource {
 
   public static final String TYPENAME = "collecting-event";
 
@@ -52,7 +57,7 @@ public class CollectingEventDto extends AttributeMetaInfoProvider {
   @PropertyName("id")
   private UUID uuid;
 
-  @JsonApiField(postable = false)
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private int version;
 
   private String dwcFieldNumber;
@@ -64,11 +69,10 @@ public class CollectingEventDto extends AttributeMetaInfoProvider {
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = List.of();
 
   // Read-only field
-  @JsonApiField(postable = false, patchable = false)
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private Point<G2D> eventGeom;
 
   private String dwcVerbatimCoordinates;
@@ -83,19 +87,15 @@ public class CollectingEventDto extends AttributeMetaInfoProvider {
   private String verbatimEventDateTime;
 
   @JsonApiExternalRelation(type = "person")
-  @JsonApiRelation
   private List<ExternalRelationDto> collectors = List.of();
 
   @JsonApiExternalRelation(type = "metadata")
-  @JsonApiRelation
   private List<ExternalRelationDto> attachment = List.of();
 
   @ShallowReference
-  @JsonApiRelation
   private CollectionMethodDto collectionMethod;
 
   @ShallowReference
-  @JsonApiRelation
   private ProtocolDto protocol;
 
   private String dwcVerbatimLocality;
@@ -105,7 +105,6 @@ public class CollectingEventDto extends AttributeMetaInfoProvider {
   /**
    * Map of Managed attribute key to value object.
    */
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = Map.of();
 
   private String dwcVerbatimLatitude;
@@ -136,85 +135,96 @@ public class CollectingEventDto extends AttributeMetaInfoProvider {
   /**
    * Map of Managed attribute key to value object.
    */
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
-  @NoArgsConstructor
-  public static final class StartEventDateTimeAdapter
-    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
-
-    @Override
-    public String toDTO(@Nullable ISODateTime isoDateTime) {
-      return isoDateTime == null ? null : isoDateTime.toString();
-    }
-
-    @Override
-    public ISODateTime toEntity(@Nullable String startEventDateTime) {
-      if (StringUtils.isBlank(startEventDateTime)) {
-        return null;
-      }
-      return ISODateTime.parse(startEventDateTime);
-    }
-
-    @Override
-    public Consumer<ISODateTime> entityApplyMethod(CollectingEvent entityRef) {
-      return entityRef::applyStartISOEventDateTime;
-    }
-
-    @Override
-    public Consumer<String> dtoApplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::setStartEventDateTime;
-    }
-
-    @Override
-    public Supplier<ISODateTime> entitySupplyMethod(CollectingEvent entityRef) {
-      return entityRef::supplyStartISOEventDateTime;
-    }
-
-    @Override
-    public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::getStartEventDateTime;
-    }
-
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
   }
 
-  @NoArgsConstructor
-  public static final class EndEventDateTimeAdapter
-    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
-
-    @Override
-    public String toDTO(@Nullable ISODateTime isoDateTime) {
-      return isoDateTime == null ? null : isoDateTime.toString();
-    }
-
-    @Override
-    public ISODateTime toEntity(@Nullable String endEventDateTime) {
-      if (StringUtils.isBlank(endEventDateTime)) {
-        return null;
-      }
-      return ISODateTime.parse(endEventDateTime);
-    }
-
-    @Override
-    public Consumer<ISODateTime> entityApplyMethod(CollectingEvent entityRef) {
-      return entityRef::applyEndISOEventDateTime;
-    }
-
-    @Override
-    public Consumer<String> dtoApplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::setEndEventDateTime;
-    }
-
-    @Override
-    public Supplier<ISODateTime> entitySupplyMethod(CollectingEvent entityRef) {
-      return entityRef::supplyEndISOEventDateTime;
-    }
-
-    @Override
-    public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
-      return dtoRef::getEndEventDateTime;
-    }
-
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
   }
+
+//  @NoArgsConstructor
+//  public static final class StartEventDateTimeAdapter
+//    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+//
+//    @Override
+//    public String toDTO(@Nullable ISODateTime isoDateTime) {
+//      return isoDateTime == null ? null : isoDateTime.toString();
+//    }
+//
+//    @Override
+//    public ISODateTime toEntity(@Nullable String startEventDateTime) {
+//      if (StringUtils.isBlank(startEventDateTime)) {
+//        return null;
+//      }
+//      return ISODateTime.parse(startEventDateTime);
+//    }
+//
+//    @Override
+//    public Consumer<ISODateTime> entityApplyMethod(CollectingEvent entityRef) {
+//      return entityRef::applyStartISOEventDateTime;
+//    }
+//
+//    @Override
+//    public Consumer<String> dtoApplyMethod(CollectingEventDto dtoRef) {
+//      return dtoRef::setStartEventDateTime;
+//    }
+//
+//    @Override
+//    public Supplier<ISODateTime> entitySupplyMethod(CollectingEvent entityRef) {
+//      return entityRef::supplyStartISOEventDateTime;
+//    }
+//
+//    @Override
+//    public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
+//      return dtoRef::getStartEventDateTime;
+//    }
+//
+//  }
+//
+//  @NoArgsConstructor
+//  public static final class EndEventDateTimeAdapter
+//    implements DinaFieldAdapter<CollectingEventDto, CollectingEvent, String, ISODateTime> {
+//
+//    @Override
+//    public String toDTO(@Nullable ISODateTime isoDateTime) {
+//      return isoDateTime == null ? null : isoDateTime.toString();
+//    }
+//
+//    @Override
+//    public ISODateTime toEntity(@Nullable String endEventDateTime) {
+//      if (StringUtils.isBlank(endEventDateTime)) {
+//        return null;
+//      }
+//      return ISODateTime.parse(endEventDateTime);
+//    }
+//
+//    @Override
+//    public Consumer<ISODateTime> entityApplyMethod(CollectingEvent entityRef) {
+//      return entityRef::applyEndISOEventDateTime;
+//    }
+//
+//    @Override
+//    public Consumer<String> dtoApplyMethod(CollectingEventDto dtoRef) {
+//      return dtoRef::setEndEventDateTime;
+//    }
+//
+//    @Override
+//    public Supplier<ISODateTime> entitySupplyMethod(CollectingEvent entityRef) {
+//      return entityRef::supplyEndISOEventDateTime;
+//    }
+//
+//    @Override
+//    public Supplier<String> dtoSupplyMethod(CollectingEventDto dtoRef) {
+//      return dtoRef::getEndEventDateTime;
+//    }
+//
+//  }
 
 }
