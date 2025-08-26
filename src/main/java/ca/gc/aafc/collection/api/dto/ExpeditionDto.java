@@ -12,8 +12,10 @@ import java.util.UUID;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ca.gc.aafc.collection.api.entities.Expedition;
+import ca.gc.aafc.collection.api.entities.ExpeditionIdentifier;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.entity.AgentRoles;
@@ -54,4 +56,6 @@ public class ExpeditionDto {
 
   private MultilingualDescription multilingualDescription;
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<ExpeditionIdentifier> identifiers = new ArrayList<>();
 }

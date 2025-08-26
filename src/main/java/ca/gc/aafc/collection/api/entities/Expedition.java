@@ -28,7 +28,7 @@ import ca.gc.aafc.dina.entity.AgentRoles;
 @Getter
 @RequiredArgsConstructor
 public class Expedition extends UserDescribedDinaEntity {
-  
+
   @NotBlank
   @Size(max = 50)
   @Column(name = "_group")
@@ -39,9 +39,12 @@ public class Expedition extends UserDescribedDinaEntity {
 
   @Size(max = 250)
   private String geographicContext;
-  
+
   @Type(type = "list-array")
   @Column(name = "participants", columnDefinition = "uuid[]")
   private List<UUID> participants = new ArrayList<>();
 
+  @Type(type = "jsonb")
+  @Valid
+  private List<ExpeditionIdentifier> identifiers = new ArrayList<>();
 }

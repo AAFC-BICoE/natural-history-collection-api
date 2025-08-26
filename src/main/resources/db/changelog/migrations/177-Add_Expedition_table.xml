@@ -35,6 +35,8 @@
             <column name="multilingual_description" type="jsonb"/>
 
             <column name="participants" type="uuid[]"/>
+
+            <column name="identifiers" type="jsonb"/>
         </createTable>
     </changeSet>
 
