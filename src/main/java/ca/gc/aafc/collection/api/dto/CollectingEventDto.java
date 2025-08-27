@@ -99,7 +99,6 @@ public class CollectingEventDto implements JsonApiResource {
   private ProtocolDto protocol;
 
   @ShallowReference
-  @JsonApiRelation
   private ExpeditionDto expedition;
 
   private String dwcVerbatimLocality;

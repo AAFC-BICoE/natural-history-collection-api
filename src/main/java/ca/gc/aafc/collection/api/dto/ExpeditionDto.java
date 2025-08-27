@@ -1,12 +1,9 @@
 package ca.gc.aafc.collection.api.dto;
 
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.PatchStrategy;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
@@ -18,19 +15,20 @@ import ca.gc.aafc.collection.api.entities.Expedition;
 import ca.gc.aafc.collection.api.entities.ExpeditionIdentifier;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiRelation;
-import io.crnk.core.resource.annotations.JsonApiResource;
+import ca.gc.aafc.dina.dto.JsonApiResource;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @RelatedEntity(Expedition.class)
-@JsonApiResource(type = ExpeditionDto.TYPENAME)
+@JsonApiTypeForClass(ExpeditionDto.TYPENAME)
 @TypeName(ExpeditionDto.TYPENAME)
-public class ExpeditionDto {
+public class ExpeditionDto implements JsonApiResource {
 
   public static final String TYPENAME = "expedition";
 
@@ -51,11 +49,22 @@ public class ExpeditionDto {
   private String geographicContext;
 
   @JsonApiExternalRelation(type = "person")
-  @JsonApiRelation
   private List<ExternalRelationDto> participants = new ArrayList<>();
 
   private MultilingualDescription multilingualDescription;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ExpeditionIdentifier> identifiers = new ArrayList<>();
+
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }

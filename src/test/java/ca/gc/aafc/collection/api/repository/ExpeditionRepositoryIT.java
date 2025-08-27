@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.repository;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 import ca.gc.aafc.collection.api.CollectionModuleKeycloakBaseIT;
 import org.junit.jupiter.api.Assertions;
@@ -9,10 +10,10 @@ import org.springframework.security.access.AccessDeniedException;
 
 import ca.gc.aafc.collection.api.dto.ExpeditionDto;
 import ca.gc.aafc.collection.api.entities.Expedition;
+import ca.gc.aafc.collection.api.repository.ExpeditionRepository;
 import ca.gc.aafc.collection.api.testsupport.factories.ExpeditionFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ExpeditionTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.queryspec.QuerySpec;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,9 +27,8 @@ public class ExpeditionRepositoryIT extends CollectionModuleKeycloakBaseIT {
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
   public void create_WithAuthenticatedUser_SetsCreatedBy() {
     ExpeditionDto expedition = ExpeditionTestFixture.newExpedition();
-    ExpeditionDto result = expeditionRepository.findOne(
-      expeditionRepository.create(expedition).getUuid(),
-      new QuerySpec(ExpeditionDto.class));
+    UUID expeditionUUID = createWithRepository(expedition, expeditionRepository::onCreate);
+    ExpeditionDto result = expeditionRepository.getOne(expeditionUUID, null).getDto().getDetermination().getFirst();
     assertNotNull(result.getCreatedBy());
     assertEquals(expedition.getName(), result.getName());
     assertEquals(expedition.getGroup(), result.getGroup());
