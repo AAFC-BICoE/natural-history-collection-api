@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.mapper;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,7 +23,7 @@ import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
 import java.util.Set;
 
-@Mapper(imports = { MapperStaticConverter.class })
+@Mapper(imports = { MapperStaticConverter.class }, collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE)
 public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, CollectingEvent> {
 
   CollectingEventMapper INSTANCE = Mappers.getMapper(CollectingEventMapper.class);
