@@ -138,6 +138,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "collectors", qualifiedByName = "uuidToPersonExternalRelations")
   @Mapping(target = "attachment", qualifiedByName = "uuidToMetadataExternalRelations")
   @Mapping(target = "protocol.attachments", ignore = true)
+  @Mapping(target = "expedition.participants", ignore = true)
   CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
