@@ -13,4 +13,9 @@ public class ServiceTransactionWrapper {
     return dinaServiceMethod.apply(entity);
   }
 
+  @Transactional
+  public <R,P> R executeWithParam (Function<P, R> dinaServiceMethod, P param) {
+    return dinaServiceMethod.apply(param);
+  }
+
 }
