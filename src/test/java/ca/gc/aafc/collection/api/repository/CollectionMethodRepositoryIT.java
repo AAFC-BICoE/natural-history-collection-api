@@ -1,36 +1,38 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import org.junit.jupiter.api.Test;
+
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionMethodTestFixture;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.queryspec.QuerySpec;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.UUID;
 import javax.inject.Inject;
 
-@SpringBootTest(
-  properties = "keycloak.enabled = true"
-)
-class CollectionMethodRepositoryIT extends CollectionModuleBaseIT {
+class CollectionMethodRepositoryIT extends BaseRepositoryIT {
 
   @Inject
   private CollectionMethodRepository repository;
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:super-user"})
-  void create_WithAuthUser_CreatedBySet() {
-    CollectionMethodDto expected = repository.create(CollectionMethodTestFixture.newMethod());
-    CollectionMethodDto result = repository.findOne(
-      expected.getUuid(), new QuerySpec(CollectionMethodDto.class));
-    Assertions.assertNotNull(result.getCreatedBy());
-    Assertions.assertEquals(expected.getName(), result.getName());
-    Assertions.assertEquals(expected.getGroup(), result.getGroup());
-    Assertions.assertEquals(expected.getCreatedBy(), result.getCreatedBy());
-    Assertions.assertEquals(
-      expected.getMultilingualDescription().getDescriptions().get(0).getLang(),
-      result.getMultilingualDescription().getDescriptions().get(0).getLang());
+  void create_WithAuthUser_CreatedBySet() throws ResourceGoneException, ResourceNotFoundException {
+    CollectionMethodDto expected = CollectionMethodTestFixture.newMethod();
+    UUID collMethodUUID = createWithRepository(expected, repository::onCreate);
+
+    CollectionMethodDto result = repository.getOne(collMethodUUID, "").getDto();
+
+    assertNotNull(result.getCreatedBy());
+    assertEquals(expected.getName(), result.getName());
+    assertEquals(expected.getGroup(), result.getGroup());
+    assertEquals("dev", result.getCreatedBy());
+    assertEquals(
+      expected.getMultilingualDescription().getDescriptions().getFirst().getLang(),
+      result.getMultilingualDescription().getDescriptions().getFirst().getLang());
   }
 }
