@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.PatchStrategy;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -15,20 +13,22 @@ import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiRelation;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 @Data
 @RelatedEntity(Project.class)
-@JsonApiResource(type = ProjectDto.TYPENAME)
+@JsonApiTypeForClass(ProjectDto.TYPENAME)
 @TypeName(ProjectDto.TYPENAME)
-public class ProjectDto {
+public class ProjectDto implements JsonApiResource {
   
   public static final String TYPENAME = "project";
 
@@ -51,12 +51,21 @@ public class ProjectDto {
   private List<AgentRoles> contributors = List.of();
 
   @JsonApiExternalRelation(type = "metadata")
-  @JsonApiRelation
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   private MultilingualDescription multilingualDescription;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }
