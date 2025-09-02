@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.107</version>
+  <version>0.108</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -25,14 +25,14 @@
     <spotbugs-maven-plugin.version>4.8.5.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.5</spotbugs.version>
 
-    <dependency.check.version>8.4.3</dependency.check.version>
+    <dependency.check.version>12.1.3</dependency.check.version>
     <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
     <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
     <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.149</dina-base-api.version>
+    <dina-base-api.version>0.151</dina-base-api.version>
     <spring-boot-maven-plugin.fork>false</spring-boot-maven-plugin.fork>
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.8.2</geolatte-geom.version>
@@ -427,6 +427,7 @@
           <suppressionFiles>
             <suppressionFile>owasp-suppression.xml</suppressionFile> <!-- Required due to bug in plugin https://github.com/jeremylong/DependencyCheck/issues/1827 -->
           </suppressionFiles>
+          <nvdApiServerId>nvd</nvdApiServerId>
         </configuration>
       </plugin>
 
