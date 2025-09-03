@@ -2,11 +2,9 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.InstitutionIdentifier;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
-import ca.gc.aafc.dina.repository.meta.AttributeMetaInfoProvider;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
@@ -30,9 +31,9 @@ import org.javers.core.metamodel.annotation.TypeName;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(Institution.class)
-@JsonApiResource(type = InstitutionDto.TYPENAME)
+@JsonApiTypeForClass(InstitutionDto.TYPENAME)
 @TypeName(InstitutionDto.TYPENAME)
-public class InstitutionDto extends AttributeMetaInfoProvider {
+public class InstitutionDto implements JsonApiResource {
 
   public static final String TYPENAME = "institution";
 
@@ -56,5 +57,17 @@ public class InstitutionDto extends AttributeMetaInfoProvider {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<InstitutionIdentifier> identifiers = new ArrayList<>();
+
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 
 }

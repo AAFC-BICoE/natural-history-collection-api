@@ -1,14 +1,5 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.function.BiFunction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
@@ -17,13 +8,15 @@ import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import lombok.NonNull;
 
 @Service
@@ -61,24 +54,11 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
   }
 
   @Override
-  public <T> List<T> findAll(
-    @NonNull Class<T> entityClass,
-    @NonNull PredicateSupplier<T> where,
-    BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
-    int startIndex,
-    int maxResult,
-    @NonNull Set<String> includes,
-    @NonNull Set<String> relationships
-  ) {
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, relationships);
-    if (includes.contains(StorageUnit.HIERARCHY_PROP_NAME) && CollectionUtils.isNotEmpty(all) && entityClass == StorageUnit.class) {
-      all.forEach(t -> {
-        if (t instanceof StorageUnit) {
-          setHierarchy((StorageUnit) t);
-        }
-      });
+  public StorageUnit handleOptionalFields(StorageUnit entity, Map<String, List<String>> optionalFields) {
+    if (optionalFields.getOrDefault(StorageUnitDto.TYPENAME, List.of()).contains(StorageUnit.HIERARCHY_PROP_NAME)) {
+      setHierarchy(entity);
     }
-    return all;
+    return entity;
   }
 
   private void setHierarchy(StorageUnit unit) {
