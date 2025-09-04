@@ -1,45 +1,33 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import org.junit.jupiter.api.Test;
+import org.springframework.security.access.AccessDeniedException;
+
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
-import ca.gc.aafc.collection.api.dto.InstitutionDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.Institution;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.service.MaterialSampleService;
+import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
-import ca.gc.aafc.dina.repository.GoneException;
 import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.access.AccessDeniedException;
-
-import java.util.Set;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
-
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 
 import static ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture.RESTRICTION_FIELD_KEY;
 import static ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture.RESTRICTION_VALUE;
@@ -48,8 +36,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(properties = "keycloak.enabled=true")
-public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
+import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import javax.inject.Inject;
+import javax.validation.ValidationException;
+
+public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
+
+  @Inject
+  protected MaterialSampleService materialSampleService;
 
   @Inject
   private MaterialSampleRepository materialSampleRepository;
@@ -66,6 +63,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private CollectionManagedAttributeRepo collManagedAttributeRepo;
 
+  @Inject
+  protected ServiceTransactionWrapper serviceTransactionWrapper;
+
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
   public void create_WithAuthenticatedUser_SetsCreatedBy()
@@ -81,9 +81,9 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
       JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
         .onCreate(materialSampleToCreate));
 
-    //"include=" + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM
-
-    MaterialSampleDto result = materialSampleRepository.getOne(matSampleId, null).getDto();
+    MaterialSampleDto result = materialSampleRepository.getOne(matSampleId,
+        "optfields[" + "material-sample" + "]=" + MaterialSample.HIERARCHY_PROP_NAME)
+      .getDto();
 
     assertNotNull(result.getCreatedBy());
     assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
@@ -93,7 +93,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
     assertEquals(MaterialSampleTestFixture.ALLOW_DUPLICATE_NAME, result.getAllowDuplicateName());
     assertEquals(materialSampleDto.getBarcode(), result.getBarcode());
-  //  assertEquals(1, result.getHierarchy().size());
+    assertEquals(1, result.getHierarchy().size());
   }
 
   @Test
@@ -124,39 +124,53 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     assertEquals(childMatSampleId, result.getMaterialSampleChildren().getFirst().getUuid());
   }
 
-//  @Test
-//  @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
-//  public void create_WithCollection_PersistedWithCollection() {
-//    Institution institution = InstitutionFixture.newInstitutionEntity().build();
-//    service.save(institution);
-//    CollectionDto collectionDto = collectionRepository.create(CollectionFixture.newCollection()
-//      .group("aafc")
-//      .institution(InstitutionDto.builder().uuid(institution.getUuid()).build()).build());
-//    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-//    materialSampleDto.setCollection(collectionDto);
-//    QuerySpec querySpec = new QuerySpec(MaterialSampleDto.class);
-//    querySpec.includeRelation(PathSpec.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM));
-//    assertEquals(collectionDto.getUuid(),
-//      materialSampleRepository.findOne(
-//        materialSampleRepository.create(materialSampleDto).getUuid(),querySpec).getCollection().getUuid());
-//  }
-//
-//  @Test
-//  @WithMockKeycloakUser(groupRole = {"aafc:user"})
-//  public void create_recordCreated() {
-//    CollectingEventDto event = eventRepository.findOne(
-//            eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(), new QuerySpec(CollectingEventDto.class));
-//    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-//    materialSampleDto.setCollectingEvent(event);
-//    MaterialSampleDto result = materialSampleRepository.findOne(
-//            materialSampleRepository.create(materialSampleDto).getUuid(),
-//            new QuerySpec(MaterialSampleDto.class)
-//    );
-//    assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
-//    assertEquals(event.getUuid(), result.getCollectingEvent().getUuid());
-//    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().get(0).getId());
-//    assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
-//  }
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
+  public void create_WithCollection_PersistedWithCollection()
+      throws ResourceGoneException, ResourceNotFoundException {
+
+    UUID collectionUuid = createWithRepository(CollectionFixture
+      .newCollection()
+      .group("aafc")
+      .build(), collectionRepository::onCreate);
+    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(MaterialSampleTestFixture.newMaterialSample()),
+      Map.of("collection", JsonApiDocument.ResourceIdentifier.builder()
+        .id(collectionUuid).type(CollectionDto.TYPENAME).build())
+    );
+
+    UUID matSampleUuid = JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
+      .onCreate(materialSampleToCreate));
+
+    MaterialSampleDto result = materialSampleRepository.getOne(matSampleUuid, "include=collection").getDto();
+    assertEquals(collectionUuid, result.getCollection().getUuid());
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  public void create_recordCreated() throws ResourceGoneException, ResourceNotFoundException {
+
+    UUID collEventUUID = createWithRepository(CollectingEventTestFixture.newEventDto(), eventRepository::onCreate);
+
+    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(MaterialSampleTestFixture.newMaterialSample()),
+      Map.of(
+        "collectingEvent", JsonApiDocument.ResourceIdentifier.builder().id(collEventUUID).type(CollectingEventDto.TYPENAME).build(),
+        "preparedBy", List.of(JsonApiDocument.ResourceIdentifier.builder().id(MaterialSampleTestFixture.PREPARED_BY).type("person").build())
+      )
+    );
+
+    UUID matSampleUuid = JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
+      .onCreate(materialSampleToCreate));
+    MaterialSampleDto result = materialSampleRepository.getOne(matSampleUuid, "include=collectingEvent,preparedBy").getDto();
+
+    assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
+    assertEquals(collEventUUID, result.getCollectingEvent().getUuid());
+    assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getFirst().getId());
+    assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
+  }
 
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
@@ -164,7 +178,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
       throws ResourceGoneException, ResourceNotFoundException {
     MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
         .group(MaterialSampleTestFixture.GROUP).createdBy("dina").build();
-    materialSampleService.create(testMaterialSample);
+
+    serviceTransactionWrapper.execute((ms) -> materialSampleService.create(ms), testMaterialSample);
 
     MaterialSampleDto retrievedMaterialSample = materialSampleRepository
         .getOne(testMaterialSample.getUuid(), "").getDto();
@@ -175,35 +190,32 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     );
 
     assertThrows(AccessDeniedException.class,
-        () -> materialSampleRepository.handleUpdate(docToUpdate, retrievedMaterialSample.getJsonApiId()));
+        () -> materialSampleRepository.onUpdate(docToUpdate, retrievedMaterialSample.getJsonApiId()));
   }
 
-//  @Test
-//  @WithMockKeycloakUser(groupRole = { "aafc:user" })
-//  public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted()
-//    throws ResourceGoneException, ResourceNotFoundException {
-//    CollectingEventDto event = eventRepository
-//        .findOne(eventRepository.create(CollectingEventTestFixture.newEventDto()).getUuid(),
-//            new QuerySpec(CollectingEventDto.class));
-//
-//    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-//    materialSampleDto.setCollectingEvent(event);
-//
-//    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
-//      UUID.randomUUID(), MaterialSampleDto.TYPENAME,
-//      JsonAPITestHelper.toAttributeMap(materialSampleDto));
-//
-//    UUID materialSampleUuid =
-//      JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
-//        .onCreate(docToCreate));
-//
-//    MaterialSampleDto result = materialSampleRepository.getOne(materialSampleUuid, "").getDto();
-//
-//    assertNotNull(result.getUuid());
-//    materialSampleRepository.delete(result.getUuid());
-//
-//    assertThrows(ResourceGoneException.class, () -> materialSampleRepository.getOne(materialSampleUuid, ""));
-//  }
+  @Test
+  @WithMockKeycloakUser(groupRole = { "aafc:user" })
+  public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted()
+      throws ResourceGoneException, ResourceNotFoundException {
+
+    UUID collEventUUID = createWithRepository(CollectingEventTestFixture.newEventDto(), eventRepository::onCreate);
+
+    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(MaterialSampleTestFixture.newMaterialSample()),
+      Map.of("collectingEvent", JsonApiDocument.ResourceIdentifier.builder()
+        .id(collEventUUID).type(CollectingEventDto.TYPENAME).build())
+    );
+    UUID matSampleUuid = JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
+      .onCreate(materialSampleToCreate));
+
+    MaterialSampleDto result = materialSampleRepository.getOne(matSampleUuid, "").getDto();
+
+    assertNotNull(result.getUuid());
+    materialSampleRepository.onDelete(result.getUuid());
+
+    assertThrows(ResourceGoneException.class, () -> materialSampleRepository.getOne(matSampleUuid, ""));
+  }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
@@ -221,27 +233,45 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
     assertThrows(ValidationException.class, () -> materialSampleRepository.onCreate(docToCreate));
   }
 
-//  @Test
-//  @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ":user" })
-//  public void updateMaterialSample_WithOrganism_accepted() throws MalformedURLException {
-//
-//    OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
-//    UUID organismUUID = organismRepository.create(organismDto).getUuid();
-//    OrganismDto result = organismRepository.findOne(organismUUID,
-//            new QuerySpec(OrganismDto.class));
-//    assertNotNull(result.getCreatedBy());
-//
-//    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-//    UUID matSampleUUID = materialSampleRepository.create(materialSampleDto).getUuid();
-//
-//    MaterialSampleDto result2 = materialSampleRepository.findOne(matSampleUUID,
-//            new QuerySpec(MaterialSampleDto.class));
-//
-//    result2.setOrganism(List.of(result));
-//    materialSampleRepository.save(result2);
-//
-//    organismRepository.delete(organismUUID);
-//  }
+  @Test
+  @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ":user" })
+  public void updateMaterialSample_WithOrganism_accepted()
+      throws MalformedURLException, ResourceGoneException, ResourceNotFoundException {
+
+    OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
+    UUID organismUUID = createWithRepository(organismDto, organismRepository::onCreate);
+
+    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(MaterialSampleTestFixture.newMaterialSample()),
+      Map.of("organism", List.of(JsonApiDocument.ResourceIdentifier.builder()
+        .id(organismUUID).type(OrganismDto.TYPENAME).build()))
+    );
+    UUID matSampleUuid = JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
+      .onCreate(materialSampleToCreate));
+
+    MaterialSampleDto result = materialSampleRepository.getOne(matSampleUuid, "include=organism").getDto();
+    assertEquals(organismUUID, result.getOrganism().getFirst().getUuid());
+
+    // swap the organism for a new one
+    OrganismDto organismDto2 = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
+    UUID organism2UUID = createWithRepository(organismDto2, organismRepository::onCreate);
+
+    JsonApiDocument materialSampleToUpdate = JsonApiDocuments.createJsonApiDocument(
+      matSampleUuid, MaterialSampleDto.TYPENAME,
+      Map.of(),
+      Map.of("organism", List.of(JsonApiDocument.ResourceIdentifier.builder()
+        .id(organism2UUID).type(OrganismDto.TYPENAME).build()))
+    );
+
+    materialSampleRepository.onUpdate(materialSampleToUpdate, matSampleUuid);
+
+    result = materialSampleRepository.getOne(matSampleUuid, "include=organism").getDto();
+    assertEquals(organism2UUID, result.getOrganism().getFirst().getUuid());
+
+    // we should be able to delete the first one since it's not used anymore
+    organismRepository.onDelete(organismUUID);
+  }
 
   @Test
   @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
@@ -257,7 +287,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
       null, CollectionManagedAttributeDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(newAttribute)
     );
-    newAttribute = collManagedAttributeRepo.create(docToCreate, null).getDto();
+    newAttribute = serviceTransactionWrapper.executeWithParam( (p) ->
+      collManagedAttributeRepo.create(p, null).getDto(), docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
@@ -282,7 +313,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         .onCreate(matSampleDocToRetry));
 
     //cleanup
-    materialSampleRepository.delete(matSampleId);
+    materialSampleRepository.onDelete(matSampleId);
 
     // can't delete managed attribute for now since the check for key in use is using a fresh transaction
   }
@@ -314,7 +345,8 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
       null, CollectionManagedAttributeDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(newAttribute)
     );
-    newAttribute = collManagedAttributeRepo.create(docToCreate, null).getDto();
+    newAttribute = serviceTransactionWrapper.executeWithParam( (p) ->
+      collManagedAttributeRepo.create(p, null).getDto(), docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
@@ -331,7 +363,7 @@ public class MaterialSampleRepositoryIT extends CollectionModuleBaseIT {
         .onCreate(materialSampleToCreate));
 
     //cleanup
-    materialSampleRepository.delete(matSampleId);
+    materialSampleRepository.onDelete(matSampleId);
 
     // can't delete managed attribute for now since the check for key in use is using a fresh transaction
   }

@@ -31,6 +31,7 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -118,24 +119,29 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     // augment information where required
     all.forEach(t -> {
       if (t instanceof MaterialSample ms) {
-        try {
-          if (includes.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
-            setHierarchy(ms);
-          }
-          if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
-            setChildrenOrdinal(ms);
-          }
-          if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
-            setTargetOrganismPrimaryScientificName(ms);
-            setEffectiveScientificName(ms);
-            setOrganismClassification(ms);
-          }
-        } catch (JsonProcessingException e) {
-          throw new RuntimeException(e);
+        if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
+          setChildrenOrdinal(ms);
+        }
+        if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
+          setTargetOrganismPrimaryScientificName(ms);
+          setEffectiveScientificName(ms);
+          setOrganismClassification(ms);
         }
       }
     });
     return all;
+  }
+
+  @Override
+  public MaterialSample handleOptionalFields(MaterialSample entity, Map<String, List<String>> optionalFields) {
+    if (optionalFields.getOrDefault(MaterialSampleDto.TYPENAME, List.of()).contains(MaterialSample.HIERARCHY_PROP_NAME)) {
+      try {
+        setHierarchy(entity);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return entity;
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
