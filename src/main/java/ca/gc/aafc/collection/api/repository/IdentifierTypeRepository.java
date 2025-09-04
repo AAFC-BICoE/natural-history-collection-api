@@ -24,7 +24,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(value = "/api/v1", produces = JSON_API_VALUE)
+@RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
 public class IdentifierTypeRepository extends ReadOnlyDinaRepositoryV2<String, IdentifierTypeDto> {
 
   public IdentifierTypeRepository(IdentifierTypeService service) {
