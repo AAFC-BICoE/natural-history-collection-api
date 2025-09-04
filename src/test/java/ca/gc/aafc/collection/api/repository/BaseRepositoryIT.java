@@ -40,11 +40,14 @@ public class BaseRepositoryIT {
   }
 
   protected UUID createWithRepository(JsonApiResource dto, Function<JsonApiDocument, ResponseEntity<RepresentationModel<?>>> onCreateMethod) {
-    JsonApiDocument organismToCreate = JsonApiDocuments.createJsonApiDocument(
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
       null, dto.getJsonApiType(),
       JsonAPITestHelper.toAttributeMap(dto)
     );
+    return JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(onCreateMethod.apply(docToCreate));
+  }
 
-    return JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(onCreateMethod.apply(organismToCreate));
+  protected UUID createWithRepository(JsonApiDocument jsonApiDocument, Function<JsonApiDocument, ResponseEntity<RepresentationModel<?>>> onCreateMethod) {
+    return JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(onCreateMethod.apply(jsonApiDocument));
   }
 }
