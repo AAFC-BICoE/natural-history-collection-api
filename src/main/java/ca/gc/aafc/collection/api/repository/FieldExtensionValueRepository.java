@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.List;
 import ca.gc.aafc.dina.repository.ReadOnlyDinaRepositoryV2;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.MethodNotAllowedException;
 
 import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
@@ -29,12 +27,7 @@ public class FieldExtensionValueRepository extends ReadOnlyDinaRepositoryV2<Stri
     super(service);
   }
 
-  @Override
-  public List<FieldExtensionValueDto> findAll(String queryString) {
-    throw new MethodNotAllowedException("findAll", null);
-  }
-
-  @GetMapping("fieldextensionvalue/{id}") //TODO check this
+  @GetMapping(FieldExtensionValueDto.TYPENAME + "/{id}")
   public ResponseEntity<RepresentationModel<?>> handleFindOne(@PathVariable String id) {
 
     FieldExtensionValueDto dto = findOne(id);

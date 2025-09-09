@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import io.crnk.core.queryspec.QuerySpec;
 import java.net.MalformedURLException;
 import java.util.List;
 import javax.inject.Inject;
@@ -42,8 +41,7 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
     // we need to flush to make sure it will be visible in the PG view
     organismService.flush();
 
-    MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(materialSampleDto.getUuid(), new QuerySpec(
-      MaterialSampleSummaryDto.class));
+    MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(materialSampleDto.getUuid());
 
     assertNotNull(mssDto.getEffectiveDeterminations());
     Assertions.assertEquals(1, mssDto.getEffectiveDeterminations().size());

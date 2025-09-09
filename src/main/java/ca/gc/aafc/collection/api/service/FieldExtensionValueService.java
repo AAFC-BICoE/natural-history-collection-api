@@ -23,7 +23,7 @@ public class FieldExtensionValueService extends CollectionBackedReadOnlyDinaServ
       .entrySet()
       .stream()
       .map(entry -> new FieldExtensionValueDto(null, entry.getValue().getName(), entry.getValue().getKey(), 
-          entry.getValue().getFieldByKey(entry.getValue().getKey()))) //TODO check this
+          entry.getValue().getFieldByKey(entry.getValue().getKey())))
       .collect(Collectors.toList()), FieldExtensionValueDto::getId);
 
     extensions = collectionExtensionConfiguration.getExtension();
@@ -46,6 +46,6 @@ public class FieldExtensionValueService extends CollectionBackedReadOnlyDinaServ
         }
       }
     }
-    return null; //TODO check this
+    return null;
   }
 }
