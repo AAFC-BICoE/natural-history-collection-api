@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.rest;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -32,6 +34,7 @@ import java.util.UUID;
 )
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(CollectionModuleBaseIT.CollectionModuleTestConfiguration.class)
 public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
   protected MaterialSampleRestIT() {
@@ -286,8 +289,9 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
       Map.of("include", "collectingEvent"),
       200
     );
+
     response.body("data.id", Matchers.is(sampleId));
-    response.body("data.relationships.collectingEvent.data", Matchers.hasSize(1));
+    response.body("data.relationships.collectingEvent.data.id", Matchers.is(collectingEventUUID));
     response.body("included", Matchers.hasSize(1));
     response.body("included[0].id", Matchers.is(collectingEventUUID));
     response.body("included[0].attributes.dwcRecordNumber", Matchers.is(collectingEvent.getDwcRecordNumber()));

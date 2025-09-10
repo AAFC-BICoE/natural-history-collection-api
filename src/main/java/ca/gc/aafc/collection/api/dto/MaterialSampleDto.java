@@ -126,44 +126,56 @@ public class MaterialSampleDto implements JsonApiResource {
 
   // -- Relationships --
   @ShallowReference
+  @JsonIgnore
   private MaterialSampleDto parentMaterialSample;
 
   @ShallowReference
+  @JsonIgnore
   private CollectingEventDto collectingEvent;
 
   @ShallowReference
+  @JsonIgnore
   private CollectionDto collection;
 
   @ShallowReference
+  @JsonIgnore
   private PreparationTypeDto preparationType;
 
   @ShallowReference
+  @JsonIgnore
   private PreparationMethodDto preparationMethod;
 
   @ShallowReference
+  @JsonIgnore
   private StorageUnitUsageDto storageUnitUsage;
 
   @ShallowReference
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<OrganismDto> organism = List.of();
 
   @ShallowReference
+  @JsonIgnore
   private ProtocolDto preparationProtocol;
 
   @ShallowReference
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ProjectDto> projects = List.of();
 
   @ShallowReference
+  @JsonIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<AssemblageDto> assemblages = List.of();
 
   // -- External relationships --
 
   @JsonApiExternalRelation(type = "person")
+  @JsonIgnore
   private List<ExternalRelationDto> preparedBy = List.of();
 
   @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
   private List<ExternalRelationDto> attachment = List.of();
 
   @Override

@@ -1,14 +1,18 @@
 package ca.gc.aafc.collection.api.mapper;
 
+import org.geolatte.geom.builder.DSL;
+import org.geolatte.geom.crs.CoordinateReferenceSystems;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
@@ -23,6 +27,17 @@ import java.util.Set;
 public class CollectingEventMapperTest {
 
   private static final CollectingEventMapper MAPPER = CollectingEventMapper.INSTANCE;
+
+  @Test
+  public void testGeomToEntity() {
+    CollectingEvent ceEntity = new CollectingEvent();
+    // mimic what the service is doing
+    ceEntity.setEventGeom(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
+      CollectingEventTestFixture.LONGITUDE, CollectingEventTestFixture.LATITUDE)));
+    CollectingEventDto ceDto = MAPPER.toDto(ceEntity, Set.of("eventGeom"), null);
+
+    assertNotNull(ceDto.getEventGeom());
+  }
 
   @Test
   public void testEventDateMappingToEntity() {

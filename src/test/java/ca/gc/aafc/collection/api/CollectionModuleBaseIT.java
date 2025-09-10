@@ -95,7 +95,7 @@ public class CollectionModuleBaseIT {
   protected OrganismService organismService;
 
   @TestConfiguration
-  static class CollectionModuleTestConfiguration {
+  public static class CollectionModuleTestConfiguration {
     @Bean
     public BuildProperties buildProperties() {
       Properties props = new Properties();
