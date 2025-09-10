@@ -2,18 +2,19 @@ package ca.gc.aafc.collection.api.mapper;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Condition;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.SourcePropertyName;
 import org.mapstruct.factory.Mappers;
 
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
@@ -34,16 +35,16 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
-import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
+import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
-@Mapper
+@Mapper(imports = { MapperStaticConverter.class })
 public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, MaterialSample> {
 
   MaterialSampleMapper INSTANCE = Mappers.getMapper(MaterialSampleMapper.class);
 
-  @Mapping(source = "preparedBy", target = "preparedBy", qualifiedByName = "uuidToPersonExternalRelations")
-  @Mapping(source = "attachment", target = "attachment", qualifiedByName = "uuidToMetadataExternalRelations")
+  @Mapping(target = "preparedBy", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getPreparedBy(), \"person\"))")
+  @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   MaterialSampleDto toDto(MaterialSample entity, @Context Set<String> provided,
                           @Context String scope);
 
@@ -114,6 +115,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   default StorageUnitUsageDto toDto(StorageUnitUsage entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toStorageUnitUsageDto(entity, provided, "storageUnitUsage");
   }
+
   default StorageUnitUsage toEntity(StorageUnitUsageDto dto, @Context Set<String> provided, @Context String scope) {
     return dto == null ? null : toStorageUnitUsage(dto, provided, "storageUnitUsage");
   }
@@ -135,11 +137,10 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   }
 
   // Relationships handling
-  @Mapping(target = "collectors", qualifiedByName = "uuidToPersonExternalRelations")
-  @Mapping(target = "attachment", qualifiedByName = "uuidToMetadataExternalRelations")
+  @Mapping(target = "collectors", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getCollectors(), \"person\"))")
+  @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   @Mapping(target = "protocol.attachments", ignore = true)
-  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  CollectingEventDto toCollectingEventDto(CollectingEvent entity, @Context Set<String> provided, String scope);
+  CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
 
@@ -149,13 +150,13 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "storageUnit.storageUnitChildren", ignore = true)
   StorageUnitUsage toStorageUnitUsage(StorageUnitUsageDto dto, Set<String> provided, String scope);
 
-  @Mapping(target = "attachment", qualifiedByName = "uuidToMetadataExternalRelations")
+  @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   ProjectDto toProjectDto(Project entity, Set<String> provided, String scope);
 
-  @Mapping(target = "attachments", qualifiedByName = "uuidToMetadataExternalRelations")
+  @Mapping(target = "attachments", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachments(), \"metadata\"))")
   ProtocolDto toProtocolDto(Protocol entity, Set<String> provided, String scope);
 
-  @Mapping(target = "attachment", qualifiedByName = "uuidToMetadataExternalRelations")
+  @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   AssemblageDto toAssemblageDto(Assemblage entity,  Set<String> provided, String scope);
 
   @Mapping(target = "id", ignore = true)
@@ -189,19 +190,9 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
     }
   }
 
-  // move to dina-base
-  @Named("uuidToPersonExternalRelations")
-  static List<ExternalRelationDto> uuidToPersonExternalRelations(List<UUID> personUUID) {
-    return personUUID == null ? null :
-      personUUID.stream().map(uuid ->
-        ExternalRelationDto.builder().id(uuid.toString()).type("person").build()).toList();
-  }
-
-  @Named("uuidToMetadataExternalRelations")
-  static List<ExternalRelationDto> uuidToMetadataExternalRelations(List<UUID> metadataUUIDs) {
-    return metadataUUIDs == null ? null :
-      metadataUUIDs.stream().map(uuid ->
-        ExternalRelationDto.builder().id(uuid.toString()).type("metadata").build()).toList();
+  @Condition
+  default boolean isPropertyProvidedInsideContext(@SourcePropertyName String sourcePropertyName, Set<String> provided, String scope) {
+    return StringUtils.isBlank(scope) ? provided.contains(sourcePropertyName) : provided.contains(scope + "." + sourcePropertyName);
   }
 
 }
