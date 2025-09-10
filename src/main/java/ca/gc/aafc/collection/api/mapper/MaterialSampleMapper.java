@@ -104,41 +104,42 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
    * @return
    */
   default CollectingEventDto toDto(CollectingEvent entity, @Context Set<String> provided, @Context String scope) {
-    return toCollectingEventDto(entity, provided, "collectingEvent");
+    return entity == null ? null : toCollectingEventDto(entity, provided, "collectingEvent");
   }
 
   default CollectionDto toDto(Collection entity, @Context Set<String> provided, @Context String scope) {
-    return toCollectionDto(entity, provided, "collection");
+    return entity == null ? null : toCollectionDto(entity, provided, "collection");
   }
 
   default StorageUnitUsageDto toDto(StorageUnitUsage entity, @Context Set<String> provided, @Context String scope) {
-    return toStorageUnitUsageDto(entity, provided, "storageUnitUsage");
+    return entity == null ? null : toStorageUnitUsageDto(entity, provided, "storageUnitUsage");
   }
   default StorageUnitUsage toEntity(StorageUnitUsageDto dto, @Context Set<String> provided, @Context String scope) {
-    return toStorageUnitUsage(dto, provided, "storageUnitUsage");
+    return dto == null ? null : toStorageUnitUsage(dto, provided, "storageUnitUsage");
   }
 
   default ProjectDto toDto(Project entity, @Context Set<String> provided, @Context String scope) {
-    return toProjectDto(entity, provided, "storageUnitUsage");
+    return entity == null ? null : toProjectDto(entity, provided, "storageUnitUsage");
   }
 
   default ProtocolDto toDto(Protocol entity, @Context Set<String> provided, @Context String scope) {
-    return toProtocolDto(entity, provided, "storageUnitUsage");
+    return entity == null ? null : toProtocolDto(entity, provided, "storageUnitUsage");
   }
 
   default AssemblageDto toDto(Assemblage entity, @Context Set<String> provided, @Context String scope) {
-    return toAssemblageDto(entity, provided, "assemblage");
+    return entity == null ? null : toAssemblageDto(entity, provided, "assemblage");
   }
 
   default ImmutableMaterialSampleDto toDto(ImmutableMaterialSample entity, @Context Set<String> provided, @Context String scope) {
-    return toImmutableMaterialSampleDto(entity, provided, "materialSampleChildren");
+    return entity == null ? null : toImmutableMaterialSampleDto(entity, provided, "materialSampleChildren");
   }
 
   // Relationships handling
   @Mapping(target = "collectors", qualifiedByName = "uuidToPersonExternalRelations")
   @Mapping(target = "attachment", qualifiedByName = "uuidToMetadataExternalRelations")
   @Mapping(target = "protocol.attachments", ignore = true)
-  CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
+  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  CollectingEventDto toCollectingEventDto(CollectingEvent entity, @Context Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
 

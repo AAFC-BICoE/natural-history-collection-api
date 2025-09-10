@@ -57,9 +57,6 @@ public class MaterialSampleDto implements JsonApiResource {
 
   private MaterialSample.MaterialSampleType materialSampleType;
 
-  @DiffIgnore
-  private List<ImmutableMaterialSampleDto> materialSampleChildren;
-
   private LocalDate preparationDate;
   private String preservationType;
   private String preparationFixative;
@@ -108,9 +105,6 @@ public class MaterialSampleDto implements JsonApiResource {
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
-  
-  @IgnoreDinaMapping
-  private List<AssociationDto> associations = List.of();
 
   private Boolean allowDuplicateName = false;
 
@@ -128,6 +122,10 @@ public class MaterialSampleDto implements JsonApiResource {
   @ShallowReference
   @JsonIgnore
   private MaterialSampleDto parentMaterialSample;
+
+  @DiffIgnore
+  @JsonIgnore
+  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   @ShallowReference
   @JsonIgnore
@@ -148,6 +146,11 @@ public class MaterialSampleDto implements JsonApiResource {
   @ShallowReference
   @JsonIgnore
   private StorageUnitUsageDto storageUnitUsage;
+
+  @IgnoreDinaMapping
+  @ShallowReference
+  @JsonIgnore
+  private List<AssociationDto> associations = List.of();
 
   @ShallowReference
   @JsonIgnore

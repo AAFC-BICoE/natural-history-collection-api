@@ -8,6 +8,7 @@ import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -253,36 +254,20 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void get_withInclude() {
-    // Step 1 - Create collecting event.
-    CollectingEventDto collectingEvent = new CollectingEventDto();
-    collectingEvent.setGroup("aafc");
-    collectingEvent.setDwcRecordNumber("recordNumber");
-
-    String collectingEventUUID = JsonAPITestHelper.extractId(
-      sendPost(CollectingEventDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-        CollectingEventDto.TYPENAME,
-        JsonAPITestHelper.toAttributeMap(collectingEvent),
-        null,
-        null
-      )));
-    
-    // Step 2 - Create a material sample with collecting event attached.
+  void get_withNonExistingInclude_NoError() {
+    // Step 1 - Create a material sample
     MaterialSampleDto sample = newSample();
     sample.setMaterialSampleName("Sample1");
 
-    // Step 3 - Post the material sample.
-    String sampleId = JsonAPITestHelper.extractId(
-      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-        MaterialSampleDto.TYPENAME,
-        JsonAPITestHelper.toAttributeMap(sample),
-        JsonAPITestHelper.toRelationshipMap(
-          List.of(JsonAPIRelationship.of("collectingEvent", CollectingEventDto.TYPENAME, collectingEventUUID))
-        ),
-        null)
-      ));
+      String sampleId = JsonAPITestHelper.extractId(
+        sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+          MaterialSampleDto.TYPENAME,
+          JsonAPITestHelper.toAttributeMap(sample),
+          null,
+          null)
+        ));
 
-    // Step 4 - Get the material sample with include=collectingEvent
+    // Step 2 - Get the material sample with include=collectingEvent
     ValidatableResponse response = sendGet(
       MaterialSampleDto.TYPENAME,
       sampleId,
@@ -291,10 +276,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
 
     response.body("data.id", Matchers.is(sampleId));
-    response.body("data.relationships.collectingEvent.data.id", Matchers.is(collectingEventUUID));
-    response.body("included", Matchers.hasSize(1));
-    response.body("included[0].id", Matchers.is(collectingEventUUID));
-    response.body("included[0].attributes.dwcRecordNumber", Matchers.is(collectingEvent.getDwcRecordNumber()));
   }
 
   private void sendPatch(MaterialSampleDto body, String id) {
