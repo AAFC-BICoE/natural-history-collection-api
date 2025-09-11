@@ -40,7 +40,7 @@ public interface StorageUnitMapper extends DinaMapperV2<StorageUnitDto, StorageU
                    @Context Set<String> provided, @Context String scope);
 
   default ImmutableStorageUnitDto toDto(ImmutableStorageUnit entity, @Context Set<String> provided, @Context String scope) {
-    return toImmutableStorageUnitDto(entity, provided, "storageUnitChildren");
+    return entity == null ? null : toImmutableStorageUnitDto(entity, provided, "storageUnitChildren");
   }
 
   @Mapping(target = "id", ignore = true)

@@ -41,8 +41,11 @@ public class StorageUnitUsageDto implements JsonApiResource {
   private OffsetDateTime createdOn;
   private String createdBy;
 
-  // relationships
+  // -- Relationships --
+  @JsonIgnore
   private StorageUnitTypeDto storageUnitType;
+
+  @JsonIgnore
   private StorageUnitDto storageUnit;
 
   @Override

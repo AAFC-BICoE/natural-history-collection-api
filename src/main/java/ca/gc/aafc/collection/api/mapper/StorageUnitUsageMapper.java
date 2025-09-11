@@ -38,11 +38,11 @@ public interface StorageUnitUsageMapper extends DinaMapperV2<StorageUnitUsageDto
                    @Context Set<String> provided, @Context String scope);
 
   default StorageUnitTypeDto toDto(StorageUnitType entity, @Context Set<String> provided, @Context String scope) {
-    return toStorageUnitTypeDto(entity, provided, "storageUnitType");
+    return entity == null ? null : toStorageUnitTypeDto(entity, provided, "storageUnitType");
   }
 
   default StorageUnitDto toDto(StorageUnit entity, @Context Set<String> provided, @Context String scope) {
-    return toStorageUnitDto(entity, provided, "storageUnit");
+    return entity == null ? null : toStorageUnitDto(entity, provided, "storageUnit");
   }
 
   StorageUnitTypeDto toStorageUnitTypeDto(StorageUnitType entity, Set<String> provided, String scope);

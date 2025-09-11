@@ -74,18 +74,6 @@ public class CollectingEventDto implements JsonApiResource {
 
   private String verbatimEventDateTime;
 
-  @JsonApiExternalRelation(type = "person")
-  private List<ExternalRelationDto> collectors = List.of();
-
-  @JsonApiExternalRelation(type = "metadata")
-  private List<ExternalRelationDto> attachment = List.of();
-
-  @ShallowReference
-  private CollectionMethodDto collectionMethod;
-
-  @ShallowReference
-  private ProtocolDto protocol;
-
   private String dwcVerbatimLocality;
 
   private String host;
@@ -124,6 +112,24 @@ public class CollectingEventDto implements JsonApiResource {
    * Map of Managed attribute key to value object.
    */
   private Map<String, Map<String, String>> extensionValues = Map.of();
+
+  // -- Relationships --
+  @ShallowReference
+  @JsonIgnore
+  private CollectionMethodDto collectionMethod;
+
+  @ShallowReference
+  @JsonIgnore
+  private ProtocolDto protocol;
+
+  // -- External relationships --
+  @JsonApiExternalRelation(type = "person")
+  @JsonIgnore
+  private List<ExternalRelationDto> collectors = List.of();
+
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
+  private List<ExternalRelationDto> attachment = List.of();
 
   @Override
   @JsonIgnore

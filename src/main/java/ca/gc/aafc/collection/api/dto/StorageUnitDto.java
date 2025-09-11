@@ -46,18 +46,22 @@ public class StorageUnitDto implements JsonApiResource {
 
   private Boolean isGeneric;
 
-  @ShallowReference
-  private StorageUnitDto parentStorageUnit;
-
-  @ShallowReference
-  private StorageUnitTypeDto storageUnitType;
-
   @DiffIgnore
   private List<ImmutableStorageUnitDto> storageUnitChildren = List.of();
 
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<StorageHierarchicalObject> hierarchy;
+
+  // -- Relationships --
+  @ShallowReference
+  @JsonIgnore
+  private StorageUnitDto parentStorageUnit;
+
+  @ShallowReference
+  @JsonIgnore
+  private StorageUnitTypeDto storageUnitType;
+
 
   @Override
   @JsonIgnore

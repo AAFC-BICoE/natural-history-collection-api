@@ -64,9 +64,12 @@ public class CollectionDto implements JsonApiResource {
   @Builder.Default
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
+  // -- Relationships --
+  @JsonIgnore
   @ShallowReference
   private CollectionDto parentCollection;
 
+  @JsonIgnore
   @ShallowReference
   private InstitutionDto institution;
 

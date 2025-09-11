@@ -63,11 +63,11 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
                    @Context Set<String> provided, @Context String scope);
 
   default ProtocolDto toDto(Protocol entity, @Context Set<String> provided, @Context String scope) {
-    return toProtocolDto(entity, provided, "protocol");
+    return entity == null ? null : toProtocolDto(entity, provided, "protocol");
   }
 
   default CollectionMethodDto toDto(CollectionMethod entity, @Context Set<String> provided, @Context String scope) {
-    return toCollectionMethodDto(entity, provided, "collectionMethod");
+    return entity == null ? null : toCollectionMethodDto(entity, provided, "collectionMethod");
   }
 
   @Mapping(target = "attachments", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachments(), \"metadata\"))")

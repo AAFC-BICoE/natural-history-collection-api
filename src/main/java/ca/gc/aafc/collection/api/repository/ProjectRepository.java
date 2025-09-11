@@ -80,8 +80,7 @@ public class ProjectRepository extends DinaRepositoryV2<ProjectDto, Project> {
   }
 
   @Override
-  protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(
-    ExternalRelationDto externalRelationDto) {
+  protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(ExternalRelationDto externalRelationDto) {
     return ExternalRelationshipMapper.externalRelationDtoToJsonApiExternalResource(externalRelationDto);
   }
 

@@ -41,9 +41,6 @@ public class AssemblageDto implements JsonApiResource {
 
   private String name;
 
-  @JsonApiExternalRelation(type = "metadata")
-  private List<ExternalRelationDto> attachment = List.of();
-
   /**
    * Map of Managed attribute key to value object.
    */
@@ -51,6 +48,10 @@ public class AssemblageDto implements JsonApiResource {
 
   private MultilingualTitle multilingualTitle;
   private MultilingualDescription multilingualDescription;
+
+  // -- External relationships --
+  @JsonApiExternalRelation(type = "metadata")
+  private List<ExternalRelationDto> attachment = List.of();
 
   @Override
   @JsonIgnore
