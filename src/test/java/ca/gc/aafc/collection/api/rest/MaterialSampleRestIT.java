@@ -3,12 +3,10 @@ package ca.gc.aafc.collection.api.rest;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
-import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
@@ -271,7 +269,34 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     ValidatableResponse response = sendGet(
       MaterialSampleDto.TYPENAME,
       sampleId,
-      Map.of("include", "collectingEvent"),
+      Map.of("include", "attachment"),
+      200
+    );
+
+    response.body("data.id", Matchers.is(sampleId));
+  }
+
+  @Test
+  void get_withExistingExternalInclude_NoError() {
+    // Step 1 - Create a material sample
+    MaterialSampleDto sample = newSample();
+    sample.setMaterialSampleName("Sample1");
+
+    String sampleId = JsonAPITestHelper.extractId(
+      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sample),
+        JsonAPITestHelper.toRelationshipMapByName(
+          List.of(JsonAPIRelationship.of("attachment", "metadata", UUID.randomUUID().toString()))
+        ),
+        null)
+      ));
+
+    // Step 2 - Get the material sample with include=attachment
+    ValidatableResponse response = sendGet(
+      MaterialSampleDto.TYPENAME,
+      sampleId,
+      Map.of("include", "attachment"),
       200
     );
 
