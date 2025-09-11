@@ -18,8 +18,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.entities.Project;
+import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;
 import ca.gc.aafc.collection.api.mapper.ProjectMapper;
 import ca.gc.aafc.collection.api.service.ProjectService;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiExternalResource;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.exception.ResourcesGoneException;
@@ -74,6 +77,12 @@ public class ProjectRepository extends DinaRepositoryV2<ProjectDto, Project> {
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(
+    ExternalRelationDto externalRelationDto) {
+    return ExternalRelationshipMapper.externalRelationDtoToJsonApiExternalResource(externalRelationDto);
   }
 
   @PostMapping(path = ProjectDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)

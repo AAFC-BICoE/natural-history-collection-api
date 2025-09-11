@@ -27,7 +27,7 @@ public final class ExternalRelationshipMapper {
     return switch (externalRelationDto.getType()) {
       case PersonExternalDto.EXTERNAL_TYPENAME -> PersonExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
       case MetadataExternalDto.EXTERNAL_TYPENAME -> MetadataExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
-      default -> null;
+      default -> throw new IllegalStateException("Unsupported type for JsonApiExternalResource: " + externalRelationDto.getType());
     };
   }
 

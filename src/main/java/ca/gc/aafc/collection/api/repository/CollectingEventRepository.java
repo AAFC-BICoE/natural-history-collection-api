@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.external.MetadataExternalDto;
-import ca.gc.aafc.collection.api.dto.external.PersonExternalDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.mapper.CollectingEventMapper;
 import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;

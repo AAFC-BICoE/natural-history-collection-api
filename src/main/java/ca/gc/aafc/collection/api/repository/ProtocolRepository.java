@@ -18,9 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.entities.Protocol;
+import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;
 import ca.gc.aafc.collection.api.mapper.ProtocolMapper;
 import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.collection.api.service.ProtocolService;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiExternalResource;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.exception.ResourcesGoneException;
@@ -76,6 +79,11 @@ public class ProtocolRepository extends DinaRepositoryV2<ProtocolDto, Protocol> 
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(ExternalRelationDto externalRelationDto) {
+    return ExternalRelationshipMapper.externalRelationDtoToJsonApiExternalResource(externalRelationDto);
   }
 
   @PostMapping(path = ProtocolDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)

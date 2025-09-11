@@ -17,13 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.dto.external.MetadataExternalDto;
-import ca.gc.aafc.collection.api.dto.external.PersonExternalDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;
 import ca.gc.aafc.collection.api.mapper.MaterialSampleMapper;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
-import ca.gc.aafc.dina.dto.JsonApiDto;
 import ca.gc.aafc.dina.dto.JsonApiExternalResource;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
@@ -90,15 +88,7 @@ public class MaterialSampleRepository extends DinaRepositoryV2<MaterialSampleDto
 
   @Override
   protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(ExternalRelationDto externalRelationDto) {
-    if (externalRelationDto == null) {
-      return null;
-    }
-
-    return switch (externalRelationDto.getType()) {
-      case PersonExternalDto.EXTERNAL_TYPENAME -> PersonExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
-      case MetadataExternalDto.EXTERNAL_TYPENAME -> MetadataExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
-      default -> null;
-    };
+    return ExternalRelationshipMapper.externalRelationDtoToJsonApiExternalResource(externalRelationDto);
   }
 
   @PostMapping(path = MaterialSampleDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)
