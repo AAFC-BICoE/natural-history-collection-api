@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 
@@ -11,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-@JsonSerialize(using = ToStringSerializer.class)
 @Data
 @AllArgsConstructor
 @Builder
