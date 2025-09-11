@@ -17,9 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.external.MetadataExternalDto;
+import ca.gc.aafc.collection.api.dto.external.PersonExternalDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.mapper.CollectingEventMapper;
+import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiExternalResource;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.exception.ResourcesGoneException;
@@ -78,6 +83,11 @@ public class CollectingEventRepository extends DinaRepositoryV2<CollectingEventD
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(ExternalRelationDto externalRelationDto) {
+    return ExternalRelationshipMapper.externalRelationDtoToJsonApiExternalResource(externalRelationDto);
   }
 
   @PostMapping(path = CollectingEventDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)
