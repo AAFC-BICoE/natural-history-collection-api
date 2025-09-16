@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 public class FieldExtensionValueService extends CollectionBackedReadOnlyDinaService<String, FieldExtensionValueDto> {
   
   public FieldExtensionValueService(CollectionExtensionConfiguration collectionExtensionConfiguration) {
-      super(collectionExtensionConfiguration.getExtension().values().stream()
-      .flatMap(extension -> extension.getFields().stream()
-      .map(field -> new FieldExtensionValueDto(extension.getKey() + "." + field.getKey(), extension.getName(), extension.getKey(), field)))
+    super(collectionExtensionConfiguration.getExtension().values().stream() //get all extentions
+      .flatMap(extension -> extension.getFields().stream() //extract nested field value lists into flat structure
+      .map(field -> new FieldExtensionValueDto(extension.getKey() + "." + field.getKey(), extension.getName(), extension.getKey(), field))) //convert to DTO
       .collect(Collectors.toList()), FieldExtensionValueDto::getId);
   }
 }
