@@ -51,6 +51,7 @@ public class AssemblageDto implements JsonApiResource {
 
   // -- External relationships --
   @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
   private List<ExternalRelationDto> attachment = List.of();
 
   @Override
