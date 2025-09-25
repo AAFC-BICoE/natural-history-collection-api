@@ -1,0 +1,73 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="177-Add_controlled_vocabulary" context="schema-change" author="cgendreau">
+        <sql>
+            CREATE TYPE controlled_vocabulary_type AS ENUM (
+            'MANAGED_ATTRIBUTE',
+            'SYSTEM'
+            );
+        </sql>
+        <sql>
+            CREATE TYPE controlled_vocabulary_class AS ENUM (
+            'CONTROLLED_TERM',
+            'QUALIFIED_VALUE'
+            );
+        </sql>
+        <createTable tableName="controlled_vocabulary">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_controlled_vocabulary_id" />
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="type" type="controlled_vocabulary_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vocab_class" type="controlled_vocabulary_class">
+                <constraints nullable="false"/>
+            </column>
+            <column name="key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="term" type="varchar(255)"/>
+            <column name="version" type="varchar(255)"/>
+            <column name="multilingual_title" type="jsonb"/>
+            <column name="multilingual_description" type="jsonb"/>
+
+            <column name="created_by" type="varchar(255)"/>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+        </createTable>
+        <createTable tableName="controlled_vocabulary_item">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_controlled_vocabulary_item_id" />
+            </column>
+
+            <column name="controlled_vocabulary_id" type="integer">
+                <constraints foreignKeyName="fk_controlled_vocabulary_id" references="controlled_vocabulary(id)"/>
+            </column>
+
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="term" type="varchar(255)"/>
+            <column name="accepted_values" type="text[]"/>
+            <column name="vocabulary_element_type" type="varchar(50)"/>
+            <column name="unit" type="varchar(50)"/>
+            <column name="dina_component" type="varchar(255)"/>
+            <column name="multilingual_title" type="jsonb"/>
+            <column name="multilingual_description" type="jsonb"/>
+
+            <column name="created_by" type="varchar(255)"/>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
