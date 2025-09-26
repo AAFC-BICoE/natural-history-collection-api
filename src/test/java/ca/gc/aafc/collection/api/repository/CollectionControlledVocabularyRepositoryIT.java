@@ -1,8 +1,5 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.util.UUID;
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +11,19 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
-import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
-import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
-import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.UUID;
+import javax.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionControlledVocabularyRepositoryIT extends CollectionModuleBaseRepositoryIT {
+
+  public static final UUID MANAGED_ATTRIBUTE_UUID = UUID.fromString("01998155-a6f0-7c2f-9fcc-994d74222f9c");
 
   private static final String BASE_URL = "/api/v1/" + CollectionControlledVocabularyDto.TYPENAME;
 
@@ -60,12 +53,12 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
   @Test
   @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
   void findOneByKey_whenKeyProvided_managedAttributeFetched() throws Exception {
+    var findOneResponse = sendGet("managed_attribute");
+    JsonApiDocument apiDoc = objMapper.readValue(findOneResponse.getResponse().getContentAsString(),
+      JsonApiDocument.class);
+    assertEquals(MANAGED_ATTRIBUTE_UUID, apiDoc.getId());
 
-    var findOneResponse = getMockMvc().perform(
-        get(baseUrl)
-          .contentType(BaseRestAssuredTest.JSON_API_CONTENT_TYPE)
-      )
-      .andExpect(status().isOk())
-      .andReturn();
+    // try by uuid
+    sendGet(MANAGED_ATTRIBUTE_UUID.toString());
   }
 }

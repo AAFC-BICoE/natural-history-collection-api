@@ -24,7 +24,9 @@
             <column name="uuid" type="uuid">
                 <constraints nullable="false" unique="true" />
             </column>
-            <column name="name" type="varchar(255)"/>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="type" type="controlled_vocabulary_type">
                 <constraints nullable="false"/>
             </column>
@@ -32,7 +34,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="key" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="term" type="varchar(255)"/>
             <column name="version" type="varchar(255)"/>
@@ -48,13 +50,18 @@
             </column>
 
             <column name="controlled_vocabulary_id" type="integer">
-                <constraints foreignKeyName="fk_controlled_vocabulary_id" references="controlled_vocabulary(id)"/>
+                <constraints foreignKeyName="fk_controlled_vocabulary_id" references="controlled_vocabulary(id)" nullable="false"/>
             </column>
 
             <column name="uuid" type="uuid">
                 <constraints nullable="false" unique="true" />
             </column>
-            <column name="name" type="varchar(255)"/>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="_group" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
             <column name="key" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -69,5 +76,9 @@
             <column name="created_by" type="varchar(255)"/>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
         </createTable>
+        <addUniqueConstraint
+                columnNames="controlled_vocabulary_id, key, dina_component"
+                constraintName="unique_key_per_controlled_vocabulary_per_component"
+                tableName="controlled_vocabulary_item"/>
     </changeSet>
 </databaseChangeLog>

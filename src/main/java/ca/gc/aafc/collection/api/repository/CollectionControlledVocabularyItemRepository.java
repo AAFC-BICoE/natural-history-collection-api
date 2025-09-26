@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
-import ca.gc.aafc.collection.api.mapper.CollectionControlledVocabularyMapper;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
+import ca.gc.aafc.collection.api.mapper.CollectionControlledVocabularyItemMapper;
+import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
+import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyItemService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyService;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
@@ -29,7 +33,6 @@ import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
-import ca.gc.aafc.dina.security.auth.DinaAdminCUDAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
@@ -45,16 +48,18 @@ import lombok.NonNull;
 
 @RestController
 @RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
-public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<CollectionControlledVocabularyDto, CollectionControlledVocabulary> {
+public class CollectionControlledVocabularyItemRepository extends DinaRepositoryV2<CollectionControlledVocabularyItemDto, CollectionControlledVocabularyItem> {
 
   // Bean does not exist with keycloak disabled.
   private final DinaAuthenticatedUser authenticatedUser;
 
   private final CollectionControlledVocabularyService collectionControlledVocabularyService;
+  private final CollectionControlledVocabularyItemService collectionControlledVocabularyItemService;
 
-  public CollectionControlledVocabularyRepository(
-    @NonNull CollectionControlledVocabularyService dinaService,
-    @NonNull DinaAdminCUDAuthorizationService authorizationService,
+  public CollectionControlledVocabularyItemRepository(
+    @NonNull CollectionControlledVocabularyItemService dinaService,
+    @NonNull CollectionControlledVocabularyService collectionControlledVocabularyService,
+    @NonNull SuperUserInGroupCUDAuthorizationService authorizationService,
     Optional<DinaAuthenticatedUser> authenticatedUser,
     @NonNull BuildProperties props,
     @NonNull AuditService auditService,
@@ -63,29 +68,30 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
     super(
       dinaService, authorizationService,
       Optional.of(auditService),
-      CollectionControlledVocabularyMapper.INSTANCE,
-      CollectionControlledVocabularyDto.class,
-      CollectionControlledVocabulary.class,
+      CollectionControlledVocabularyItemMapper.INSTANCE,
+      CollectionControlledVocabularyItemDto.class,
+      CollectionControlledVocabularyItem.class,
       props, objMapper);
     this.authenticatedUser = authenticatedUser.orElse(null);
-    this.collectionControlledVocabularyService = dinaService;
+    this.collectionControlledVocabularyItemService = dinaService;
+    this.collectionControlledVocabularyService = collectionControlledVocabularyService;
   }
 
   @Override
-  protected Link generateLinkToResource(CollectionControlledVocabularyDto dto) {
+  protected Link generateLinkToResource(CollectionControlledVocabularyItemDto dto) {
     try {
-      return linkTo(methodOn(CollectionControlledVocabularyRepository.class).onFindOne(dto.getUuid().toString(), null)).withSelfRel();
+      return linkTo(methodOn(CollectionControlledVocabularyItemRepository.class).onFindOne(dto.getUuid().toString(), null)).withSelfRel();
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
   }
 
-  @GetMapping(CollectionControlledVocabularyDto.TYPENAME + "/{idOrKey}")
+  @GetMapping(CollectionControlledVocabularyItemDto.TYPENAME + "/{idOrKey}")
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable String idOrKey, HttpServletRequest req)
     throws ResourceNotFoundException, ResourceGoneException {
 
     if (StringUtils.isBlank(idOrKey)) {
-      throw ResourceNotFoundException.create(CollectionControlledVocabularyDto.TYPENAME, "");
+      throw ResourceNotFoundException.create(CollectionControlledVocabularyItemDto.TYPENAME, "");
     }
 
     Optional<UUID> id = UUIDHelper.toUUID(idOrKey);
@@ -93,14 +99,21 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
       return handleFindOne(id.get(), req);
     }
 
-    CollectionControlledVocabulary entity = collectionControlledVocabularyService.findOneByKey(idOrKey);
-    if (entity == null) {
-      throw ResourceNotFoundException.create(CollectionControlledVocabularyDto.TYPENAME, idOrKey);
+    // key is always a compound key vocabKey.itemKey[.dinaComponent]
+    String[] keyParts = StringUtils.split(idOrKey, ".");
+
+    if(keyParts.length == 2 || keyParts.length == 3) {
+      CollectionControlledVocabulary vocab = collectionControlledVocabularyService.findOneByKey(keyParts[0]);
+      if(vocab != null) {
+        CollectionControlledVocabularyItem item = collectionControlledVocabularyItemService.findOneByKey(keyParts[1], vocab.getUuid(),
+          keyParts.length == 3 ? keyParts[2] : null);
+        return handleFindOne(item.getUuid(), req);
+      }
     }
-    return handleFindOne(entity.getUuid(), req);
+    throw ResourceNotFoundException.create(CollectionControlledVocabularyDto.TYPENAME, idOrKey);
   }
 
-  @PostMapping(path = CollectionControlledVocabularyDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH,
+  @PostMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH,
     consumes = JSON_API_BULK)
   public ResponseEntity<RepresentationModel<?>> onBulkLoad(@RequestBody
                                                            JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument,
@@ -109,12 +122,12 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
     return handleBulkLoad(jsonApiBulkDocument, req);
   }
 
-  @GetMapping(CollectionControlledVocabularyDto.TYPENAME)
+  @GetMapping(CollectionControlledVocabularyItemDto.TYPENAME)
   public ResponseEntity<RepresentationModel<?>> onFindAll(HttpServletRequest req) {
     return handleFindAll(req);
   }
 
-  @PostMapping(path = CollectionControlledVocabularyDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
+  @PostMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkCreate(@RequestBody
                                                              JsonApiBulkDocument jsonApiBulkDocument) {
@@ -125,7 +138,7 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
     });
   }
 
-  @PostMapping(CollectionControlledVocabularyDto.TYPENAME)
+  @PostMapping(CollectionControlledVocabularyItemDto.TYPENAME)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onCreate(@RequestBody JsonApiDocument postedDocument) {
 
@@ -136,21 +149,21 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
     });
   }
 
-  @PatchMapping(path = CollectionControlledVocabularyDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
+  @PatchMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkUpdate(@RequestBody JsonApiBulkDocument jsonApiBulkDocument)
     throws ResourceNotFoundException, ResourceGoneException {
     return handleBulkUpdate(jsonApiBulkDocument);
   }
 
-  @PatchMapping(CollectionControlledVocabularyDto.TYPENAME + "/{id}")
+  @PatchMapping(CollectionControlledVocabularyItemDto.TYPENAME + "/{id}")
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onUpdate(@RequestBody JsonApiDocument partialPatchDto,
                                                          @PathVariable UUID id) throws ResourceNotFoundException, ResourceGoneException {
     return handleUpdate(partialPatchDto, id);
   }
 
-  @DeleteMapping(path = CollectionControlledVocabularyDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
+  @DeleteMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkDelete(@RequestBody
                                                              JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument)
@@ -158,7 +171,7 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
     return handleBulkDelete(jsonApiBulkDocument);
   }
 
-  @DeleteMapping(CollectionControlledVocabularyDto.TYPENAME + "/{id}")
+  @DeleteMapping(CollectionControlledVocabularyItemDto.TYPENAME + "/{id}")
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onDelete(@PathVariable UUID id) throws ResourceNotFoundException, ResourceGoneException {
     return handleDelete(id);
