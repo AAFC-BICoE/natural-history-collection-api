@@ -183,4 +183,5 @@
   <include file="db/changelog/migrations/176-Add_contributors_to_project.xml"/>
   <include file="db/changelog/migrations/177-Add_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/3-Create_managed_attribute_controlled_vocabulary.xml"/>
+  <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
 </databaseChangeLog>
