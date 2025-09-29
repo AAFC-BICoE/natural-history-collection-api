@@ -4,6 +4,7 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
@@ -25,6 +26,7 @@ public class CollectionControlledVocabularyItemDto extends BaseControlledVocabul
   }
 
   @Override
+  @JsonIgnore
   public CollectionControlledVocabularyDto getControlledVocabulary() {
     return controlledVocabulary;
   }
