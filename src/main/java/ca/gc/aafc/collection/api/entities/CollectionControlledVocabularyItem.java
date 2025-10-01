@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -14,6 +15,7 @@ import ca.gc.aafc.dina.entity.ControlledVocabularyItem;
 @SuperBuilder
 @Getter
 @Setter
+@NoArgsConstructor
 public class CollectionControlledVocabularyItem extends ControlledVocabularyItem {
 
   @ManyToOne(fetch = FetchType.LAZY)

@@ -13,10 +13,9 @@ import org.springframework.validation.SmartValidator;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.validation.CollectingEventExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorCollectingEvent;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
@@ -35,8 +34,9 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
 
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
-  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
+  private final CollectionManagedAttributeValueValidatorCollectingEvent
+    collectionManagedAttributeValueValidator;
+
   private final CollectingEventExtensionValueValidator extensionValueValidator;
 
   public CollectingEventService(
@@ -44,7 +44,8 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     @NonNull SmartValidator sv,
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
-    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+    @NonNull
+    CollectionManagedAttributeValueValidatorCollectingEvent collectionManagedAttributeValueValidator,
     @NonNull CollectingEventExtensionValueValidator extensionValueValidator,
     DinaEventPublisher<EntityChanged> eventPublisher
   ) {
@@ -53,8 +54,6 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
-    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-            .from(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     this.extensionValueValidator = extensionValueValidator;
   }
 
@@ -125,7 +124,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(), validationContext);
+    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes());
   }
 
   private void cleanupManagedAttributes(CollectingEvent entity) {
@@ -143,6 +142,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
    * Map GeographicPlaceNameSourceDetail to dwcCountryCode, dwcCountry and dwcStateProvince if required.
    * If a GeographicPlaceNameSource is specified, we must take the data from there. Otherwise, the data should be provided
    * directly in dwcCountryCode, dwcCountry and dwcStateProvince without any GeographicPlaceNameSource.
+   *
    * @param entity
    */
   private static void mapGeographicPlaceNameFromSource(CollectingEvent entity) {
@@ -164,7 +164,8 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   }
 
   private static Point<G2D> mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
-    if (geo == null || geo.getDwcDecimalLongitude() == null || geo.getDwcDecimalLatitude() == null) {
+    if (geo == null || geo.getDwcDecimalLongitude() == null ||
+      geo.getDwcDecimalLatitude() == null) {
       return null;
     }
     return DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
