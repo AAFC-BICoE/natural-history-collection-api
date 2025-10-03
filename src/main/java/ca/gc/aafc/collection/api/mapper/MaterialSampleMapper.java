@@ -1,31 +1,24 @@
 package ca.gc.aafc.collection.api.mapper;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
-import org.mapstruct.Condition;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.SourcePropertyName;
 import org.mapstruct.factory.Mappers;
 
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
-import ca.gc.aafc.collection.api.dto.CollectionDto;
-import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
@@ -37,6 +30,10 @@ import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 import ca.gc.aafc.dina.mapper.MapperStaticConverter;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(imports = { MapperStaticConverter.class })
 public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, MaterialSample> {
@@ -189,10 +186,4 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
         .collect(Collectors.toList()));
     }
   }
-
-  @Condition
-  default boolean isPropertyProvidedInsideContext(@SourcePropertyName String sourcePropertyName, Set<String> provided, String scope) {
-    return StringUtils.isBlank(scope) ? provided.contains(sourcePropertyName) : provided.contains(scope + "." + sourcePropertyName);
-  }
-
 }
