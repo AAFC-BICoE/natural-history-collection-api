@@ -8,6 +8,9 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
@@ -25,6 +28,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -301,6 +306,34 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
 
     response.body("data.id", Matchers.is(sampleId));
+  }
+
+  @Test
+  public void bulkCreateBulkLoad_HttpOkReturned() {
+    MaterialSampleDto msDto1 = newSample();
+    MaterialSampleDto msDto2 = newSample();
+
+    JsonApiBulkDocument bulkDocument = JsonApiBulkDocument.builder()
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(MaterialSampleDto.TYPENAME)
+        .attributes(JsonAPITestHelper.toAttributeMap(msDto1)).build())
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(MaterialSampleDto.TYPENAME)
+        .attributes(JsonAPITestHelper.toAttributeMap(msDto2)).build())
+      .build();
+
+    var response = sendBulkCreate(MaterialSampleDto.TYPENAME, bulkDocument);
+    List<String> ids = response.extract().body().jsonPath().getList("data.id");
+
+    assertEquals(2, ids.size());
+    sendBulkLoad(MaterialSampleDto.TYPENAME, JsonApiBulkResourceIdentifierDocument.builder()
+      .addData(JsonApiDocument.ResourceIdentifier.builder()
+        .type(MaterialSampleDto.TYPENAME)
+        .id(UUID.fromString(ids.get(0))).build())
+      .addData(JsonApiDocument.ResourceIdentifier.builder()
+        .type(MaterialSampleDto.TYPENAME)
+        .id(UUID.fromString(ids.get(1))).build())
+      .build());
   }
 
   private void sendPatch(MaterialSampleDto body, String id) {
