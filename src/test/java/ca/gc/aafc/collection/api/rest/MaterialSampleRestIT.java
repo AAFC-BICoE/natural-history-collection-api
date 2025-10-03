@@ -309,11 +309,11 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  public void bulkCreateBulkLoad_HttpOkReturned() {
+  public void bulkCreateUpdateBulkLoad_HttpOkReturned() {
     MaterialSampleDto msDto1 = newSample();
     MaterialSampleDto msDto2 = newSample();
 
-    JsonApiBulkDocument bulkDocument = JsonApiBulkDocument.builder()
+    JsonApiBulkDocument bulkDocumentCreate = JsonApiBulkDocument.builder()
       .addData(JsonApiDocument.ResourceObject.builder()
         .type(MaterialSampleDto.TYPENAME)
         .attributes(JsonAPITestHelper.toAttributeMap(msDto1)).build())
@@ -322,17 +322,32 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
         .attributes(JsonAPITestHelper.toAttributeMap(msDto2)).build())
       .build();
 
-    var response = sendBulkCreate(MaterialSampleDto.TYPENAME, bulkDocument);
+    var response = sendBulkCreate(MaterialSampleDto.TYPENAME, bulkDocumentCreate);
     List<String> ids = response.extract().body().jsonPath().getList("data.id");
-
     assertEquals(2, ids.size());
+
+    UUID uuid1 = UUID.fromString(ids.get(0));
+    UUID uuid2 = UUID.fromString(ids.get(1));
+
+    JsonApiBulkDocument bulkDocumentUpdate = JsonApiBulkDocument.builder()
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(MaterialSampleDto.TYPENAME)
+        .id(uuid1)
+        .attributes(JsonAPITestHelper.toAttributeMap(msDto1)).build())
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(MaterialSampleDto.TYPENAME)
+        .id(uuid2)
+        .attributes(JsonAPITestHelper.toAttributeMap(msDto2)).build())
+      .build();
+    sendBulkUpdate(MaterialSampleDto.TYPENAME, bulkDocumentUpdate);
+
     sendBulkLoad(MaterialSampleDto.TYPENAME, JsonApiBulkResourceIdentifierDocument.builder()
       .addData(JsonApiDocument.ResourceIdentifier.builder()
         .type(MaterialSampleDto.TYPENAME)
-        .id(UUID.fromString(ids.get(0))).build())
+        .id(uuid1).build())
       .addData(JsonApiDocument.ResourceIdentifier.builder()
         .type(MaterialSampleDto.TYPENAME)
-        .id(UUID.fromString(ids.get(1))).build())
+        .id(uuid2).build())
       .build());
   }
 
