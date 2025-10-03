@@ -3,10 +3,12 @@ package ca.gc.aafc.collection.api.rest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
@@ -31,6 +33,7 @@ import java.util.Map;
 )
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(CollectionModuleBaseIT.CollectionModuleTestConfiguration.class)
 public class CollectingEventRestIT extends BaseRestAssuredTest {
 
   protected CollectingEventRestIT() {
@@ -76,7 +79,6 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
       "mixs_soil_v4", Map.of("tillage", "abc")));
     ce.setManagedAttributes(Map.of(managedAttributeKey, "2"));
 
-
     String uuid = postCollectingEvent(ce, protocolUuid);
 
     findCollectingEvent(uuid).body("data.attributes.extensionValues.mixs_soil_v5", Matchers.aMapWithSize(9));
@@ -120,7 +122,7 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
           List.of(
             JsonAPIRelationship.of("protocol", ProtocolDto.TYPENAME, protocolUuid)
           )),
-        null),
+        id),
       200
     );
   }
