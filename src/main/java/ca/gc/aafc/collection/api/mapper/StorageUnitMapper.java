@@ -10,8 +10,12 @@ import org.mapstruct.factory.Mappers;
 
 import ca.gc.aafc.collection.api.dto.ImmutableStorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.ImmutableStorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
+import ca.gc.aafc.collection.api.entities.StorageUnitType;
+import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 
 import java.util.Set;
@@ -42,6 +46,12 @@ public interface StorageUnitMapper extends DinaMapperV2<StorageUnitDto, StorageU
   default ImmutableStorageUnitDto toDto(ImmutableStorageUnit entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toImmutableStorageUnitDto(entity, provided, "storageUnitChildren");
   }
+
+  default StorageUnitTypeDto toDto(StorageUnitType entity, @Context Set<String> provided, @Context String scope) {
+    return entity == null ? null : toStorageUnitUsageDto(entity, provided, "storageUnitType");
+  }
+
+  StorageUnitTypeDto toStorageUnitUsageDto(StorageUnitType entity, Set<String> provided, String scope);
 
   @Mapping(target = "id", ignore = true)
   ImmutableStorageUnitDto toImmutableStorageUnitDto(ImmutableStorageUnit entity, Set<String> provided, String scope);
