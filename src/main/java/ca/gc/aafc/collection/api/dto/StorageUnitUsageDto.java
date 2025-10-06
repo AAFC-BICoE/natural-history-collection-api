@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
@@ -35,7 +36,9 @@ public class StorageUnitUsageDto implements JsonApiResource {
   private String usageType;
 
   // read-only calculated fields
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Integer cellNumber;
+  
   private String storageUnitName;
 
   private OffsetDateTime createdOn;

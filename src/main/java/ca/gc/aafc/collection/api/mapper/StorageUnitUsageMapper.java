@@ -28,11 +28,13 @@ public interface StorageUnitUsageMapper extends DinaMapperV2<StorageUnitUsageDto
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "storageUnit", ignore = true)
   @Mapping(target = "storageUnitType", ignore = true)
+  @Mapping(target = "cellNumber", ignore = true) //calculated field
   StorageUnitUsage toEntity(StorageUnitUsageDto dto, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "storageUnit", ignore = true)
   @Mapping(target = "storageUnitType", ignore = true)
+  @Mapping(target = "cellNumber", ignore = true) //calculated field
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   void patchEntity(@MappingTarget StorageUnitUsage entity, StorageUnitUsageDto dto,
                    @Context Set<String> provided, @Context String scope);

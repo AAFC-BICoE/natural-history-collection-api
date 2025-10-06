@@ -58,7 +58,7 @@ public class StorageUnitUsageRepositoryIT extends BaseRepositoryIT {
     // reload
     StorageUnitUsageDto reloadedDto = serviceTransactionWrapper.executeWithParam( (a) -> {
       try {
-        return storageUnitUsageRepository.getOne(a, "").getDto();
+        return storageUnitUsageRepository.getOne(a, "optfields[storage-unit-usage]=cellNumber").getDto();
       } catch (ResourceNotFoundException | ResourceGoneException e) {
         throw new RuntimeException(e);
       }
