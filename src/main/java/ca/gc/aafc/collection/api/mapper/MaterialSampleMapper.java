@@ -113,10 +113,6 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
     return entity == null ? null : toStorageUnitUsageDto(entity, provided, "storageUnitUsage");
   }
 
-  default StorageUnitUsage toEntity(StorageUnitUsageDto dto, @Context Set<String> provided, @Context String scope) {
-    return dto == null ? null : toStorageUnitUsage(dto, provided, "storageUnitUsage");
-  }
-
   default ProjectDto toDto(Project entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toProjectDto(entity, provided, "storageUnitUsage");
   }
@@ -141,11 +137,9 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
 
-  @Mapping(target = "storageUnit.storageUnitChildren", ignore = true)
+  @Mapping(target = "storageUnit", ignore = true)
+  @Mapping(target = "storageUnitType", ignore = true)
   StorageUnitUsageDto toStorageUnitUsageDto(StorageUnitUsage entity, Set<String> provided, String scope);
-
-  @Mapping(target = "storageUnit.storageUnitChildren", ignore = true)
-  StorageUnitUsage toStorageUnitUsage(StorageUnitUsageDto dto, Set<String> provided, String scope);
 
   @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   ProjectDto toProjectDto(Project entity, Set<String> provided, String scope);

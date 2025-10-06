@@ -92,6 +92,7 @@ public class MaterialSampleRepository extends DinaRepositoryV2<MaterialSampleDto
   }
 
   @PostMapping(path = MaterialSampleDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)
+  @Transactional(readOnly = true)
   public ResponseEntity<RepresentationModel<?>> onBulkLoad(@RequestBody JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument,
                                                            HttpServletRequest req)
       throws ResourcesNotFoundException, ResourcesGoneException {
@@ -99,12 +100,14 @@ public class MaterialSampleRepository extends DinaRepositoryV2<MaterialSampleDto
   }
 
   @GetMapping(MaterialSampleDto.TYPENAME + "/{id}")
+  @Transactional(readOnly = true)
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable UUID id, HttpServletRequest req)
       throws ResourceNotFoundException, ResourceGoneException {
     return handleFindOne(id, req);
   }
 
   @GetMapping(MaterialSampleDto.TYPENAME)
+  @Transactional(readOnly = true)
   public ResponseEntity<RepresentationModel<?>> onFindAll(HttpServletRequest req) {
     return handleFindAll(req);
   }
