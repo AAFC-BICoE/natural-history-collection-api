@@ -16,9 +16,11 @@ import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -184,6 +186,48 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     sendPatchRelationsOnly(topId, getParentStorageUnitRelationshipMap(middleId), HttpStatus.OK.value());
     sendPatchRelationsOnly(middleId, getParentStorageUnitRelationshipMap(bottomId), HttpStatus.OK.value());
     sendPatchRelationsOnly(bottomId, getParentStorageUnitRelationshipMap(topId), HttpStatus.BAD_REQUEST.value());
+  }
+
+  @Test
+  void get_withStorageUnitType_gridLayoutDefinitionLoaded() {
+    // Step 1 - Create a storage unit type
+    StorageUnitTypeDto storageUnitType = StorageUnitTypeTestFixture.newStorageUnitType();
+    String storageUnitTypeId = JsonAPITestHelper.extractId(
+      sendPost(StorageUnitTypeDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitTypeDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(storageUnitType),
+        null,
+        null)
+      ));
+
+    // Step 2 - Create a storage unit linked to the storage unit type
+    StorageUnitDto storageUnit = StorageUnitTestFixture.newStorageUnit();
+    String storageUnitId = JsonAPITestHelper.extractId(
+      sendPost(StorageUnitDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(storageUnit),
+        JsonAPITestHelper.toRelationshipMap(
+          JsonAPIRelationship.of("storageUnitType", StorageUnitTypeDto.TYPENAME, storageUnitTypeId)
+        ),
+        null)
+      ));
+
+    // Step 3 - Get the storage unit with include=storageUnitType
+    ValidatableResponse response = sendGet(
+      StorageUnitDto.TYPENAME,
+      storageUnitId,
+      Map.of("include", "storageUnitType"),
+      200
+    );
+
+    // Step 4 - Validate the response includes storage unit type data and gridLayoutDefinition
+    response.body("data.id", Matchers.is(storageUnitId));
+    response.body("data.relationships.storageUnitType.data.id", Matchers.is(storageUnitTypeId));
+    response.body("included[0].id", Matchers.is(storageUnitTypeId));
+    response.body("included[0].type", Matchers.is(StorageUnitTypeDto.TYPENAME));
+    response.body("included[0].attributes.gridLayoutDefinition.numberOfRows", Matchers.is(storageUnitType.getGridLayoutDefinition().getNumberOfRows()));
+    response.body("included[0].attributes.gridLayoutDefinition.numberOfColumns", Matchers.is(storageUnitType.getGridLayoutDefinition().getNumberOfColumns()));
+    response.body("included[0].attributes.gridLayoutDefinition.fillDirection", Matchers.is(storageUnitType.getGridLayoutDefinition().getFillDirection().name()));
   }
 
   private ValidatableResponse findUnit(String unitId) {
