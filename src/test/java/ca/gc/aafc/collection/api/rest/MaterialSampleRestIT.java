@@ -6,7 +6,13 @@ import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
@@ -279,6 +285,70 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
 
     response.body("data.id", Matchers.is(sampleId));
+  }
+
+  @Test
+  void get_withStorageUnitUsage_NoError() {
+    // Step 1 - Create a storage unit type
+    StorageUnitTypeDto storageUnitType = StorageUnitTypeTestFixture.newStorageUnitType();
+    String storageUnitTypeId = JsonAPITestHelper.extractId(
+      sendPost(StorageUnitTypeDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitTypeDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(storageUnitType),
+        null,
+        null)
+      ));
+
+    // Step 2 - Create a storage unit linked to the storage unit type
+    StorageUnitDto storageUnit = StorageUnitTestFixture.newStorageUnit();
+    String storageUnitId = JsonAPITestHelper.extractId(
+      sendPost(StorageUnitDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(storageUnit),
+        JsonAPITestHelper.toRelationshipMap(
+          JsonAPIRelationship.of("storageUnitType", StorageUnitTypeDto.TYPENAME, storageUnitTypeId)
+        ),
+        null)
+      ));
+
+    // Step 3 - Create a storage unit usage linked to the storage unit
+    StorageUnitUsageDto storageUnitUsage = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnit);
+
+    String storageUnitUsageId = JsonAPITestHelper.extractId(
+      sendPost(StorageUnitUsageDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        StorageUnitUsageDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(storageUnitUsage),
+        JsonAPITestHelper.toRelationshipMap(
+          JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, storageUnitId)
+        ),
+        null)
+      ));
+
+    // Step 4 - Create a material sample linked to the storage unit usage
+    MaterialSampleDto sample = newSample();
+    sample.setMaterialSampleName("Sample1");
+
+    String sampleId = JsonAPITestHelper.extractId(
+      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sample),
+        JsonAPITestHelper.toRelationshipMap(
+          JsonAPIRelationship.of("storageUnitUsage", StorageUnitUsageDto.TYPENAME, storageUnitUsageId)
+        ),
+        null)
+      ));
+
+    // Step 5 - Get the material sample with include=storageUnitUsage
+    ValidatableResponse response = sendGet(
+      MaterialSampleDto.TYPENAME,
+      sampleId,
+      Map.of("include", "storageUnitUsage"),
+      200
+    );
+
+    response.body("data.id", Matchers.is(sampleId));
+    response.body("data.relationships.storageUnitUsage.data.id", Matchers.is(storageUnitUsageId));
+    
   }
 
   @Test
