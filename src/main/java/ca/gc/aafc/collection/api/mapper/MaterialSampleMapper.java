@@ -16,6 +16,7 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
@@ -25,6 +26,7 @@ import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
@@ -125,6 +127,10 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
     return entity == null ? null : toAssemblageDto(entity, provided, "assemblage");
   }
 
+  default OrganismDto toDto(Organism entity, @Context Set<String> provided, @Context String scope) {
+    return entity == null ? null : toOrganismDto(entity, provided, "organism");
+  }
+
   default ImmutableMaterialSampleDto toDto(ImmutableMaterialSample entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toImmutableMaterialSampleDto(entity, provided, "materialSampleChildren");
   }
@@ -152,6 +158,8 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
 
   @Mapping(target = "id", ignore = true)
   ImmutableMaterialSampleDto toImmutableMaterialSampleDto(ImmutableMaterialSample entity, Set<String> provided, String scope);
+
+  OrganismDto toOrganismDto(Organism entity, Set<String> provided, String scope);
 
   // Specific type mapping ---
   default List<AssociationDto> associationToAssociationDto(List<Association> associations) {
