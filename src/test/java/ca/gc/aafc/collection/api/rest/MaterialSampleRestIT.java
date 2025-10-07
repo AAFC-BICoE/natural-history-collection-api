@@ -9,11 +9,14 @@ import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -348,7 +351,52 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
     response.body("data.id", Matchers.is(sampleId));
     response.body("data.relationships.storageUnitUsage.data.id", Matchers.is(storageUnitUsageId));
-    
+  }
+
+  @Test
+  void get_withOrganismInclude_determinationLoaded() {
+    // Step 1 - Create an organism with determination
+    Determination determination = DeterminationFactory.newDetermination().build();
+    OrganismDto organism = OrganismTestFixture.newOrganism(determination);
+    String organismId = JsonAPITestHelper.extractId(
+      sendPost(OrganismDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        OrganismDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(organism),
+        null,
+        null)
+      ));
+
+    // Step 2 - Create a material sample linked to the organism
+    MaterialSampleDto sample = newSample();
+    sample.setMaterialSampleName("Sample1");
+    sample.setOrganism(List.of(OrganismDto.builder().uuid(UUID.fromString(organismId)).build())); 
+    String sampleId = JsonAPITestHelper.extractId(
+      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sample),
+        JsonAPITestHelper.toRelationshipMapByName(
+          List.of(JsonAPIRelationship.of("organism", OrganismDto.TYPENAME, organismId))
+        ),
+        null)
+      ));
+
+    // Step 3 - Get the material sample with include=organism
+    ValidatableResponse response = sendGet(
+      MaterialSampleDto.TYPENAME,
+      sampleId,
+      Map.of("include", "organism"),
+      200
+    );
+
+    // Step 4 - Organism and determination are included
+    response.body("data.id", Matchers.is(sampleId));
+    response.body("included.find { it.type == 'organism' }.id", Matchers.is(organismId));
+    response.body("included.find { it.type == 'organism' }.attributes.determination.size()", 
+                Matchers.greaterThan(0));
+    response.body("included.find { it.type == 'organism' }.attributes.determination[0].verbatimScientificName", 
+                Matchers.is(determination.getVerbatimScientificName()));
+    response.body("included.find { it.type == 'organism' }.attributes.determination[0].scientificNameDetails.sourceUrl", 
+                Matchers.is(determination.getScientificNameDetails().getSourceUrl()));
   }
 
   @Test
