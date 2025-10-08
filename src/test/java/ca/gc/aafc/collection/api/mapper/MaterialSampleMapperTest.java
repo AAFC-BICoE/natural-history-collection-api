@@ -123,8 +123,8 @@ public class MaterialSampleMapperTest {
       new HashSet<>(JsonAPITestHelper.toAttributeMap(assemblageTest)
         .keySet());
 
-    attributesName.add("assemblages");
-    attributesName.addAll(relAttributesName.stream().map( e -> "assemblages." + e).collect(Collectors.toSet()));
+    attributesName.add(MaterialSample.ASSEMBLAGES_PROP_NAME);
+    attributesName.addAll(relAttributesName.stream().map( e -> MaterialSample.ASSEMBLAGES_PROP_NAME + "." + e).collect(Collectors.toSet()));
 
     MaterialSampleDto dto = MAPPER.toDto(entity, attributesName, null);
     assertEquals(assemblageTest.getName(), dto.getAssemblages().getFirst().getName());

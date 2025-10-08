@@ -95,7 +95,6 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   void patchEntity(@MappingTarget MaterialSample entity, MaterialSampleDto dto,
                    @Context Set<String> provided, @Context String scope);
 
-
   /**
    * Default method to intercept the mapping and set the context to the relationship
    * @param entity
@@ -104,35 +103,35 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
    * @return
    */
   default CollectingEventDto toDto(CollectingEvent entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toCollectingEventDto(entity, provided, "collectingEvent");
+    return entity == null ? null : toCollectingEventDto(entity, provided, MaterialSample.COLLECTING_EVENT_PROP_NAME);
   }
 
   default CollectionDto toDto(Collection entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toCollectionDto(entity, provided, "collection");
+    return entity == null ? null : toCollectionDto(entity, provided, MaterialSample.COLLECTION_PROP_NAME);
   }
 
   default StorageUnitUsageDto toDto(StorageUnitUsage entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toStorageUnitUsageDto(entity, provided, "storageUnitUsage");
+    return entity == null ? null : toStorageUnitUsageDto(entity, provided, MaterialSample.STORAGE_UNIT_USAGE_PROP_NAME);
   }
 
   default ProjectDto toDto(Project entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toProjectDto(entity, provided, "projects");
+    return entity == null ? null : toProjectDto(entity, provided, MaterialSample.PROJECTS_PROP_NAME);
   }
 
   default ProtocolDto toDto(Protocol entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toProtocolDto(entity, provided, "storageUnitUsage");
+    return entity == null ? null : toProtocolDto(entity, provided, MaterialSample.PREPARATION_PROTOCOL_PROP_NAME);
   }
 
   default AssemblageDto toDto(Assemblage entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toAssemblageDto(entity, provided, "assemblages");
+    return entity == null ? null : toAssemblageDto(entity, provided, MaterialSample.ASSEMBLAGES_PROP_NAME);
   }
 
   default OrganismDto toDto(Organism entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toOrganismDto(entity, provided, "organism");
+    return entity == null ? null : toOrganismDto(entity, provided, MaterialSample.ORGANISM_PROP_NAME);
   }
 
   default ImmutableMaterialSampleDto toDto(ImmutableMaterialSample entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toImmutableMaterialSampleDto(entity, provided, "materialSampleChildren");
+    return entity == null ? null : toImmutableMaterialSampleDto(entity, provided, MaterialSample.CHILDREN_COL_NAME);
   }
 
   // Relationships handling
