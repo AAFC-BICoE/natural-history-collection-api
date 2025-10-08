@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.testsupport.factories.AssemblageFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
@@ -102,6 +106,28 @@ public class MaterialSampleMapperTest {
 
     // make sure external relationship is mapped in entity to dto
     assertEquals(entity.getAttachment().getFirst().toString(), dto.getAttachment().getFirst().getId());
+  }
+
+  @Test
+  public void testToDtoRelationships() {
+
+    MaterialSample entity = MaterialSampleFactory.newMaterialSampleNoRelationships().build();
+    Assemblage assemblageTest = AssemblageFactory.newAssemblage().build();
+    entity.setAssemblages(List.of(assemblageTest));
+
+    // we are using all attributes as provided
+    Set<String> attributesName =
+      new HashSet<>(JsonAPITestHelper.toAttributeMap(MaterialSampleTestFixture.newMaterialSample())
+        .keySet());
+    Set<String> relAttributesName =
+      new HashSet<>(JsonAPITestHelper.toAttributeMap(assemblageTest)
+        .keySet());
+
+    attributesName.add("assemblages");
+    attributesName.addAll(relAttributesName.stream().map( e -> "assemblages." + e).collect(Collectors.toSet()));
+
+    MaterialSampleDto dto = MAPPER.toDto(entity, attributesName, null);
+    assertEquals(assemblageTest.getName(), dto.getAssemblages().getFirst().getName());
   }
 
   @Test
