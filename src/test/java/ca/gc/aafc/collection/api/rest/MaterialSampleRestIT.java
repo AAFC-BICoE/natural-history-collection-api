@@ -10,6 +10,7 @@ import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
+import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
@@ -19,6 +20,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -431,10 +433,11 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   @Test
   public void get_withExistingAssemblageInclude_NoError() {
     // Step 1 - Create an assemblage
+    AssemblageDto assemblage = AssemblageTestFixture.newAssemblage();
     String assemblageId = JsonAPITestHelper.extractId(
       sendPost(AssemblageDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
         AssemblageDto.TYPENAME,
-        JsonAPITestHelper.toAttributeMap(AssemblageTestFixture.newAssemblage()),
+        JsonAPITestHelper.toAttributeMap(assemblage),
         null,
         null)
       ));
@@ -463,6 +466,48 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
     response.body("data.id", Matchers.is(sampleId));
     response.body("data.relationships.assemblages.data.id", Matchers.contains(assemblageId));
+    response.body("included.find { it.type == 'assemblage' }.id", Matchers.is(assemblageId));
+    response.body("included.find { it.type == 'assemblage' }.attributes.name",
+        Matchers.is(assemblage.getName()));
+  }
+
+  @Test
+  public void get_withExistingProjectsInclude_NoError() {
+    // Step 1 - Create a project
+    ProjectDto project = ProjectTestFixture.newProject();
+    String projectId = JsonAPITestHelper.extractId(
+      sendPost(ProjectDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        ProjectDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(project),
+        null,
+        null)
+      ));
+
+    // Step 2 - Create a material sample linked to the project
+    MaterialSampleDto sample = newSample();
+    String sampleId = JsonAPITestHelper.extractId(
+      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sample),
+        JsonAPITestHelper.toRelationshipMapByName(
+          List.of(JsonAPIRelationship.of("projects", ProjectDto.TYPENAME, projectId))
+        ),
+        null)
+      ));
+
+    // Step 3 - Get the material sample with include=projects
+    ValidatableResponse response = sendGet(
+      MaterialSampleDto.TYPENAME,
+      sampleId,
+      Map.of("include", "projects"),
+      200
+    );
+
+    response.body("data.id", Matchers.is(sampleId));
+    response.body("data.relationships.projects.data.id", Matchers.contains(projectId));
+    response.body("included.find { it.type == 'project' }.id", Matchers.is(projectId));
+    response.body("included.find { it.type == 'project' }.attributes.name",
+        Matchers.is(project.getName()));
   }
 
   @Test

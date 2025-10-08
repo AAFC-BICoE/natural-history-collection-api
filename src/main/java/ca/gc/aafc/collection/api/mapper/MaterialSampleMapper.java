@@ -116,7 +116,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   }
 
   default ProjectDto toDto(Project entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toProjectDto(entity, provided, "storageUnitUsage");
+    return entity == null ? null : toProjectDto(entity, provided, "projects");
   }
 
   default ProtocolDto toDto(Protocol entity, @Context Set<String> provided, @Context String scope) {
