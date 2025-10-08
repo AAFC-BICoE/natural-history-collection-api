@@ -124,7 +124,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   }
 
   default AssemblageDto toDto(Assemblage entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toAssemblageDto(entity, provided, "assemblage");
+    return entity == null ? null : toAssemblageDto(entity, provided, "assemblages");
   }
 
   default OrganismDto toDto(Organism entity, @Context Set<String> provided, @Context String scope) {

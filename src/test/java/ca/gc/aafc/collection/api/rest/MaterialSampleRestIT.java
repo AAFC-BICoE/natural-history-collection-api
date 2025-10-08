@@ -462,7 +462,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
 
     response.body("data.id", Matchers.is(sampleId));
-    response.body("data.relationships.assemblage.data.id", Matchers.is(assemblageId));
+    response.body("data.relationships.assemblages.data.id", Matchers.contains(assemblageId));
   }
 
   @Test
