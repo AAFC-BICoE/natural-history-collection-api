@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.rest;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
@@ -17,6 +18,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixtur
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -424,6 +426,43 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     );
 
     response.body("data.id", Matchers.is(sampleId));
+  }
+
+  @Test
+  public void get_withExistingAssemblageInclude_NoError() {
+    // Step 1 - Create an assemblage
+    String assemblageId = JsonAPITestHelper.extractId(
+      sendPost(AssemblageDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        AssemblageDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(AssemblageTestFixture.newAssemblage()),
+        null,
+        null)
+      ));
+
+    // Step 2 - Create a material sample linked to the assemblage
+    MaterialSampleDto sample = newSample();
+    sample.setMaterialSampleName("Sample1");
+
+    String sampleId = JsonAPITestHelper.extractId(
+      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sample),
+        JsonAPITestHelper.toRelationshipMapByName(
+          List.of(JsonAPIRelationship.of("assemblages", AssemblageDto.TYPENAME, assemblageId))
+        ),
+        null)
+      ));
+
+    // Step 3 - Get the material sample with include=assemblage
+    ValidatableResponse response = sendGet(
+      MaterialSampleDto.TYPENAME,
+      sampleId,
+      Map.of("include", "assemblages"),
+      200
+    );
+
+    response.body("data.id", Matchers.is(sampleId));
+    response.body("data.relationships.assemblage.data.id", Matchers.is(assemblageId));
   }
 
   @Test
