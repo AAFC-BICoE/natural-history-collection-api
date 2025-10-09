@@ -12,11 +12,14 @@ import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.AssemblageFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -112,22 +115,36 @@ public class MaterialSampleMapperTest {
   public void testToDtoRelationships() {
 
     MaterialSample entity = MaterialSampleFactory.newMaterialSampleNoRelationships().build();
+
+    CollectingEvent collectingEventTest = CollectingEventFactory.newCollectingEvent()
+      .build();
+
     Assemblage assemblageTest = AssemblageFactory.newAssemblage().build();
+
     entity.setAssemblages(List.of(assemblageTest));
+    entity.setCollectingEvent(collectingEventTest);
 
     // we are using all attributes as provided
     Set<String> attributesName =
       new HashSet<>(JsonAPITestHelper.toAttributeMap(MaterialSampleTestFixture.newMaterialSample())
         .keySet());
-    Set<String> relAttributesName =
-      new HashSet<>(JsonAPITestHelper.toAttributeMap(assemblageTest)
-        .keySet());
 
-    attributesName.add(MaterialSample.ASSEMBLAGES_PROP_NAME);
-    attributesName.addAll(relAttributesName.stream().map( e -> MaterialSample.ASSEMBLAGES_PROP_NAME + "." + e).collect(Collectors.toSet()));
+    addRelationshipAttributes(attributesName, MaterialSample.ASSEMBLAGES_PROP_NAME, JsonAPITestHelper.toAttributeMap(assemblageTest)
+      .keySet());
+    addRelationshipAttributes(attributesName, MaterialSample.COLLECTING_EVENT_PROP_NAME, JsonAPITestHelper.toAttributeMap(collectingEventTest)
+      .keySet());
+
+    // we need to explicitly add it since it won't be part of the attribute since the value is null
+    // but, we still want to test the conversion with null value
+    attributesName.add(MaterialSample.COLLECTING_EVENT_PROP_NAME + ".startEventDateTime");
 
     MaterialSampleDto dto = MAPPER.toDto(entity, attributesName, null);
     assertEquals(assemblageTest.getName(), dto.getAssemblages().getFirst().getName());
+  }
+
+  private static void addRelationshipAttributes(Set<String> attributesName, String relName, Set<String> relAttributesName) {
+    attributesName.add(relName);
+    attributesName.addAll(relAttributesName.stream().map( e -> relName + "." + e).collect(Collectors.toSet()));
   }
 
   @Test
