@@ -85,6 +85,8 @@ public class MaterialSample extends AbstractMaterialSample {
   public static final String COLLECTION_PROP_NAME = "collection";
   public static final String COLLECTING_EVENT_PROP_NAME = "collectingEvent";
   public static final String PREPARATION_PROTOCOL_PROP_NAME = "preparationProtocol";
+  public static final String PREPARATION_TYPE_PROP_NAME = "preparationType";
+  public static final String PREPARATION_METHOD_PROP_NAME = "preparationMethod";
 
   @Version
   private int version;
