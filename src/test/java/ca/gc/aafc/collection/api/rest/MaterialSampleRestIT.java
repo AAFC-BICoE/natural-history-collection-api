@@ -4,6 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
@@ -20,6 +21,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
@@ -508,6 +510,46 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     response.body("included.find { it.type == 'project' }.id", Matchers.is(projectId));
     response.body("included.find { it.type == 'project' }.attributes.name",
         Matchers.is(project.getName()));
+  }
+
+  @Test
+  public void get_withExistingCollectingEventInclude_NoError() {
+    // Step 1 - Create a collecting event
+    CollectingEventDto collectingEvent = new CollectingEventDto();
+    collectingEvent.setGroup("aafc");
+    collectingEvent.setCreatedBy("test user");
+    collectingEvent.setDwcFieldNumber("abcd");
+    String collectingEventId = JsonAPITestHelper.extractId(
+      sendPost(CollectingEventDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        CollectingEventDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(collectingEvent),
+        null,
+        null)
+      ));
+
+    // Step 2 - Create a material sample linked to the collecting event
+    MaterialSampleDto sample = newSample();
+    String sampleId = JsonAPITestHelper.extractId(
+      sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        MaterialSampleDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(sample),
+        JsonAPITestHelper.toRelationshipMap(
+          JsonAPIRelationship.of("collectingEvent", CollectingEventDto.TYPENAME, collectingEventId)
+        ),
+        null)
+      ));
+
+    // Step 3 - Get the material sample with include=collectingEvent
+    ValidatableResponse response = sendGet(
+      MaterialSampleDto.TYPENAME,
+      sampleId,
+      Map.of("include", "collectingEvent"),
+      200
+    );
+
+    response.body("data.id", Matchers.is(sampleId));
+    response.body("data.relationships.collectingEvent.data.id", Matchers.is(collectingEventId));
+    response.body("included.find { it.type == 'collecting-event' }.id", Matchers.is(collectingEventId));
   }
 
   @Test
