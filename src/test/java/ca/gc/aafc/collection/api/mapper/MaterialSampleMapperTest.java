@@ -14,12 +14,14 @@ import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.collection.api.entities.PreparationType;
+import ca.gc.aafc.collection.api.entities.PreparationMethod;
 import ca.gc.aafc.collection.api.testsupport.factories.AssemblageFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.collection.api.testsupport.factories.PreparationMethodFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
-import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
@@ -121,8 +123,14 @@ public class MaterialSampleMapperTest {
 
     Assemblage assemblageTest = AssemblageFactory.newAssemblage().build();
 
+    PreparationType preparationTypeTest = PreparationTypeFactory.newPreparationType().name("preparationTypeName").build();
+
+    PreparationMethod preparationMethodTest = PreparationMethodFactory.newPreparationMethod().name("preparationMethodName").build();
+
     entity.setAssemblages(List.of(assemblageTest));
     entity.setCollectingEvent(collectingEventTest);
+    entity.setPreparationType(preparationTypeTest);
+    entity.setPreparationMethod(preparationMethodTest);
 
     // we are using all attributes as provided
     Set<String> attributesName =
@@ -133,6 +141,10 @@ public class MaterialSampleMapperTest {
       .keySet());
     addRelationshipAttributes(attributesName, MaterialSample.COLLECTING_EVENT_PROP_NAME, JsonAPITestHelper.toAttributeMap(collectingEventTest)
       .keySet());
+    addRelationshipAttributes(attributesName, MaterialSample.PREPARATION_TYPE_PROP_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeTest)
+      .keySet());
+    addRelationshipAttributes(attributesName, MaterialSample.PREPARATION_METHOD_PROP_NAME, JsonAPITestHelper.toAttributeMap(preparationMethodTest)
+      .keySet());
 
     // we need to explicitly add it since it won't be part of the attribute since the value is null
     // but, we still want to test the conversion with null value
@@ -140,6 +152,8 @@ public class MaterialSampleMapperTest {
 
     MaterialSampleDto dto = MAPPER.toDto(entity, attributesName, null);
     assertEquals(assemblageTest.getName(), dto.getAssemblages().getFirst().getName());
+    assertEquals(preparationTypeTest.getName(), dto.getPreparationType().getName());
+    assertEquals(preparationMethodTest.getName(), dto.getPreparationMethod().getName());
   }
 
   private static void addRelationshipAttributes(Set<String> attributesName, String relName, Set<String> relAttributesName) {

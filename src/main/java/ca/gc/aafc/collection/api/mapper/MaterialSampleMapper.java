@@ -20,6 +20,8 @@ import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
+import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
+import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
@@ -30,6 +32,8 @@ import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
+import ca.gc.aafc.collection.api.entities.PreparationType;
+import ca.gc.aafc.collection.api.entities.PreparationMethod;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
@@ -130,6 +134,14 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
     return entity == null ? null : toOrganismDto(entity, provided, MaterialSample.ORGANISM_PROP_NAME);
   }
 
+  default PreparationTypeDto toDto(PreparationType entity, @Context Set<String> provided, @Context String scope) {
+    return entity == null ? null : toPreparationTypeDto(entity, provided, MaterialSample.PREPARATION_TYPE_PROP_NAME);
+  }
+
+  default PreparationMethodDto toDto(PreparationMethod entity, @Context Set<String> provided, @Context String scope) {
+    return entity == null ? null : toPreparationMethodDto(entity, provided, MaterialSample.PREPARATION_METHOD_PROP_NAME);
+  }
+
   default ImmutableMaterialSampleDto toDto(ImmutableMaterialSample entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toImmutableMaterialSampleDto(entity, provided, MaterialSample.CHILDREN_COL_NAME);
   }
@@ -143,6 +155,10 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
+
+  PreparationTypeDto toPreparationTypeDto(PreparationType entity, Set<String> provided, String scope);
+
+  PreparationMethodDto toPreparationMethodDto(PreparationMethod entity, Set<String> provided, String scope);
 
   @Mapping(target = "storageUnit", ignore = true)
   @Mapping(target = "storageUnitType", ignore = true)
