@@ -3,7 +3,9 @@ package ca.gc.aafc.collection.api.repository;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
 public class CollectingEventRepositoryIT extends BaseRepositoryIT {
@@ -190,106 +193,106 @@ public class CollectingEventRepositoryIT extends BaseRepositoryIT {
     assertEquals(expectedAssertion.getGeoreferencedBy(), resultAssertion.getGeoreferencedBy());
   }
 
-  // FIXME migration to simple filter required
-//  @ParameterizedTest
-//  @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
-//  @WithMockKeycloakUser(groupRole = {"aafc:user"})
-//  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
-//    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
-//    ce.setStartEventDateTime(ISODateTime.parse(startDate).toString());
-//    ce.setEndEventDateTime(ISODateTime.parse("2020").toString());
-//
-//    createWithRepository(ce, collectingEventRepository::onCreate);
-//
-//    assertEquals(expectedSize, collectingEventRepository.getAll(
-//      QueryComponent.builder().fiql(input).build()).totalCount());
-//  }
+  @ParameterizedTest
+  @MethodSource({"equalFilterSource", "lt_FilterSource", "gt_FilterSource"})
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
+  void findAll_PrecisionBoundsTest_DateFilteredCorrectly(String startDate, String input, int expectedSize) {
+
+    CollectingEventDto ce = CollectingEventTestFixture.newEventDto();
+    ce.setStartEventDateTime(ISODateTime.parse(startDate).toString());
+    ce.setEndEventDateTime(ISODateTime.parse("2020").toString());
+
+    createWithRepository(ce, collectingEventRepository::onCreate);
+
+    assertEquals(expectedSize, collectingEventRepository.getAll(input).totalCount());
+  }
 
   private static Stream<Arguments> equalFilterSource() {
     return Stream.of(
       // Format YYYY
-      Arguments.of("1999", "startEventDateTime==1999", 1),
-      Arguments.of("1999", "startEventDateTime==1998", 0),
+      Arguments.of("1999", "filter[startEventDateTime]=1999", 1),
+      Arguments.of("1999", "filter[startEventDateTime]=1998", 0),
       // Format YYYY-MM
-      Arguments.of("1999-03", "startEventDateTime==1999-03", 1),
-      Arguments.of("1999-03", "startEventDateTime==1999-02", 0),
+      Arguments.of("1999-03", "filter[startEventDateTime]=1999-03", 1),
+      Arguments.of("1999-03", "filter[startEventDateTime]=1999-02", 0),
       // Format YYYY-MM-DD
-      Arguments.of("1999-03-03", "startEventDateTime==1999-03-03", 1),
-      Arguments.of("1999-03-03", "startEventDateTime==1999-03-02", 0),
+      Arguments.of("1999-03-03", "filter[startEventDateTime]=1999-03-03", 1),
+      Arguments.of("1999-03-03", "filter[startEventDateTime]=1999-03-02", 0),
       // Format YYYY-MM-DD-HH-MM
-      Arguments.of("1999-03-03T03:00", "startEventDateTime==1999-03-03T03:00", 1),
-      Arguments.of("1999-03-03T03:00", "startEventDateTime==1999-03-03T02:00", 0),
+      Arguments.of("1999-03-03T03:00", "filter[startEventDateTime]=1999-03-03T03:00", 1),
+      Arguments.of("1999-03-03T03:00", "filter[startEventDateTime]=1999-03-03T02:00", 0),
       // Format YYYY-MM-DD-HH-MM-SS
-      Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:03", 1),
-      Arguments.of("1999-03-03T03:00:03", "startEventDateTime==1999-03-03T03:00:02", 0)
+      Arguments.of("1999-03-03T03:00:03", "filter[startEventDateTime]=1999-03-03T03:00:03", 1),
+      Arguments.of("1999-03-03T03:00:03", "filter[startEventDateTime]=1999-03-03T03:00:02", 0)
     );
   }
 
   private static Stream<Arguments> lt_FilterSource() {
     return Stream.of(
       // Format YYYY
-      Arguments.of("1999", "startEventDateTime=le=1999", 1),
-      Arguments.of("1999", "startEventDateTime=le=1998", 0),
+      Arguments.of("1999", "filter[startEventDateTime][LOE]=1999", 1),
+      Arguments.of("1999", "filter[startEventDateTime][LOE]=1998", 0),
 
-      Arguments.of("1999", "startEventDateTime=lt=1999", 0),
-      Arguments.of("1999", "startEventDateTime=lt=2000", 1),
+      Arguments.of("1999", "filter[startEventDateTime][LT]=1999", 0),
+      Arguments.of("1999", "filter[startEventDateTime][LT]=2000", 1),
 
       // Format YYYY-MM
-      Arguments.of("1999", "startEventDateTime=le=1999-01", 0),
-      Arguments.of("1999-01", "startEventDateTime=le=1999-01", 1),
-      Arguments.of("1999-01", "startEventDateTime=le=1998-12", 0),
+      Arguments.of("1999", "filter[startEventDateTime][LOE]=1999-01", 0),
+      Arguments.of("1999-01", "filter[startEventDateTime][LOE]=1999-01", 1),
+      Arguments.of("1999-01", "filter[startEventDateTime][LOE]=1998-12", 0),
 
-      Arguments.of("1999-01", "startEventDateTime=lt=1999-01", 0),
-      Arguments.of("1999-01", "startEventDateTime=lt=1999-02", 1),
+      Arguments.of("1999-01", "filter[startEventDateTime][LT]=1999-01", 0),
+      Arguments.of("1999-01", "filter[startEventDateTime][LT]=1999-02", 1),
 
       // Format YYYY-MM-DD
-      Arguments.of("1999-01", "startEventDateTime=le=1999-01-01", 0),
-      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-02", 1),
-      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-01", 0),
+      Arguments.of("1999-01", "filter[startEventDateTime][LOE]=1999-01-01", 0),
+      Arguments.of("1999-01-02", "filter[startEventDateTime][LOE]=1999-01-02", 1),
+      Arguments.of("1999-01-02", "filter[startEventDateTime][LOE]=1999-01-01", 0),
 
-      Arguments.of("1999-01-02", "startEventDateTime=lt=1999-01-02", 0),
-      Arguments.of("1999-01-02", "startEventDateTime=lt=1999-01-03", 1),
+      Arguments.of("1999-01-02", "filter[startEventDateTime][LT]=1999-01-02", 0),
+      Arguments.of("1999-01-02", "filter[startEventDateTime][LT]=1999-01-03", 1),
       // Format YYYY-MM-DD-HH-MM
-      Arguments.of("1999-01-02", "startEventDateTime=le=1999-01-02T02:00", 0),
-      Arguments.of("1999-01-02T01:00", "startEventDateTime=le=1999-01-02T02:00", 1),
-      Arguments.of("1999-01-02T02:00", "startEventDateTime=le=1999-01-02T01:00", 0),
+      Arguments.of("1999-01-02", "filter[startEventDateTime][LOE]=1999-01-02T02:00", 0),
+      Arguments.of("1999-01-02T01:00", "filter[startEventDateTime][LOE]=1999-01-02T02:00", 1),
+      Arguments.of("1999-01-02T02:00", "filter[startEventDateTime][LOE]=1999-01-02T01:00", 0),
 
-      Arguments.of("1999-01-02T02:00", "startEventDateTime=lt=1999-01-02T02:00", 0),
-      Arguments.of("1999-01-02T02:00", "startEventDateTime=lt=1999-01-02T03:00", 1)
+      Arguments.of("1999-01-02T02:00", "filter[startEventDateTime][LT]=1999-01-02T02:00", 0),
+      Arguments.of("1999-01-02T02:00", "filter[startEventDateTime][LT]=1999-01-02T03:00", 1)
     );
   }
 
   private static Stream<Arguments> gt_FilterSource() {
     return Stream.of(
       // Format YYYY
-      Arguments.of("2010", "startEventDateTime=ge=2010", 1),
-      Arguments.of("2010", "startEventDateTime=ge=2011", 0),
+      Arguments.of("2010", "filter[startEventDateTime][GOE]=2010", 1),
+      Arguments.of("2010", "filter[startEventDateTime][GOE]=2011", 0),
 
-      Arguments.of("2010", "startEventDateTime=gt=2010", 0),
-      Arguments.of("2010", "startEventDateTime=gt=2009", 1),
+      Arguments.of("2010", "filter[startEventDateTime][GT]=2010", 0),
+      Arguments.of("2010", "filter[startEventDateTime][GT]=2009", 1),
 
       // Format YYYY-MM
-      Arguments.of("2010", "startEventDateTime=ge=2010-01", 0),
-      Arguments.of("2010-01", "startEventDateTime=ge=2010-01", 1),
-      Arguments.of("2010-01", "startEventDateTime=ge=2010-02", 0),
+      Arguments.of("2010", "filter[startEventDateTime][GOE]=2010-01", 0),
+      Arguments.of("2010-01", "filter[startEventDateTime][GOE]=2010-01", 1),
+      Arguments.of("2010-01", "filter[startEventDateTime][GOE]=2010-02", 0),
 
-      Arguments.of("2010-01", "startEventDateTime=gt=2010-01", 0),
-      Arguments.of("2010-01", "startEventDateTime=gt=2009-12", 1),
+      Arguments.of("2010-01", "filter[startEventDateTime][GT]=2010-01", 0),
+      Arguments.of("2010-01", "filter[startEventDateTime][GT]=2009-12", 1),
 
       // Format YYYY-MM-DD
-      Arguments.of("2010-01", "startEventDateTime=ge=2010-01-01", 0),
-      Arguments.of("2010-01-02", "startEventDateTime=ge=2010-01-02", 1),
-      Arguments.of("2010-01-02", "startEventDateTime=ge=2010-01-03", 0),
+      Arguments.of("2010-01", "filter[startEventDateTime][GOE]=2010-01-01", 0),
+      Arguments.of("2010-01-02", "filter[startEventDateTime][GOE]=2010-01-02", 1),
+      Arguments.of("2010-01-02", "filter[startEventDateTime][GOE]=2010-01-03", 0),
 
-      Arguments.of("2010-01-02", "startEventDateTime=gt=2010-01-02", 0),
-      Arguments.of("2010-01-02", "startEventDateTime=gt=2010-01-01", 1),
+      Arguments.of("2010-01-02", "filter[startEventDateTime][GT]=2010-01-02", 0),
+      Arguments.of("2010-01-02", "filter[startEventDateTime][GT]=2010-01-01", 1),
       // Format YYYY-MM-DD-HH-MM
-      Arguments.of("2010-01-02", "startEventDateTime=ge=2010-01-02T02:00", 0),
-      Arguments.of("2010-01-02T01:00", "startEventDateTime=ge=2010-01-02T02:00", 0),
-      Arguments.of("2010-01-02T02:00", "startEventDateTime=ge=2010-01-02T01:00", 1),
+      Arguments.of("2010-01-02", "filter[startEventDateTime][GOE]=2010-01-02T02:00", 0),
+      Arguments.of("2010-01-02T01:00", "filter[startEventDateTime][GOE]=2010-01-02T02:00", 0),
+      Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GOE]=2010-01-02T01:00", 1),
 
-      Arguments.of("2010-01-02T02:00", "startEventDateTime=gt=2010-01-02T02:00", 0),
-      Arguments.of("2010-01-02T02:00", "startEventDateTime=gt=2010-01-02T01:00", 1)
+      Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GT]=2010-01-02T02:00", 0),
+      Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GT]=2010-01-02T01:00", 1)
     );
   }
 }

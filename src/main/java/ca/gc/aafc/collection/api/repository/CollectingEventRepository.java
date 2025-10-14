@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ca.gc.aafc.collection.api.datetime.IsoDateTimeFilterComponentHandler;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.mapper.CollectingEventMapper;
@@ -27,6 +28,10 @@ import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.exception.ResourcesGoneException;
 import ca.gc.aafc.dina.exception.ResourcesNotFoundException;
+import ca.gc.aafc.dina.filter.FilterComponent;
+import ca.gc.aafc.dina.filter.FilterComponentMutator;
+import ca.gc.aafc.dina.filter.FilterExpression;
+import ca.gc.aafc.dina.filter.QueryComponent;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -41,6 +46,7 @@ import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -53,6 +59,10 @@ public class CollectingEventRepository extends DinaRepositoryV2<CollectingEventD
 
   // Bean does not exist with keycloak disabled.
   private final DinaAuthenticatedUser dinaAuthenticatedUser;
+
+  private static final Map<String, String> DATE_TIME_TRANSFORMATION_ATTRIBUTES =
+    Map.of("startEventDateTime", "startEventDateTimePrecision",
+      "endEventDateTime", "endEventDateTimePrecision");
 
   public CollectingEventRepository(
     @NonNull CollectingEventService dinaService,
@@ -81,6 +91,31 @@ public class CollectingEventRepository extends DinaRepositoryV2<CollectingEventD
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  protected QueryComponent transformQueryComponent(QueryComponent queryComponent) {
+
+    Predicate<FilterComponent> predicate = component -> component instanceof FilterExpression expr &&
+      DATE_TIME_TRANSFORMATION_ATTRIBUTES.containsKey(expr.attribute());
+
+    FilterComponentMutator.FilterComponentMutation mutation = component -> {
+      if (component instanceof FilterExpression expr) {
+
+        return switch (expr.operator()) {
+          case EQ -> IsoDateTimeFilterComponentHandler.equal(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          case GT, GOE, LT, LOE -> IsoDateTimeFilterComponentHandler.lessOrGreater(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          default -> null;
+        };
+      }
+      return component;
+    };
+
+    return FilterComponentMutator.mutate(
+      queryComponent,
+      predicate,
+      mutation
+    );
   }
 
   @Override
