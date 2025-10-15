@@ -292,7 +292,10 @@ public class CollectingEventRepositoryIT extends BaseRepositoryIT {
       Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GOE]=2010-01-02T01:00", 1),
 
       Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GT]=2010-01-02T02:00", 0),
-      Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GT]=2010-01-02T01:00", 1)
+      Arguments.of("2010-01-02T02:00", "filter[startEventDateTime][GT]=2010-01-02T01:00", 1),
+
+
+      Arguments.of("2012", "filter[startEventDateTime][GT]=2011-06", 1)
     );
   }
 }

@@ -101,6 +101,7 @@ public class CollectingEvent implements DinaEntity {
   @Setter(AccessLevel.NONE)
   @Past
   private LocalDateTime startEventDateTime;
+  private LocalDateTime startEventDateTimeEnd;
   @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
@@ -108,6 +109,7 @@ public class CollectingEvent implements DinaEntity {
   @Setter(AccessLevel.NONE)
   @Past
   private LocalDateTime endEventDateTime;
+  private LocalDateTime endEventDateTimeEnd;
   @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
 
@@ -247,8 +249,10 @@ public class CollectingEvent implements DinaEntity {
     if (startISOEventDateTime == null) {
       startEventDateTime = null;
       startEventDateTimePrecision = null;
+      startEventDateTimeEnd = null;
     } else {
       startEventDateTime = startISOEventDateTime.getLocalDateTime();
+      startEventDateTimeEnd = startISOEventDateTime.getLocalEndDateTime();
       startEventDateTimePrecision = startISOEventDateTime.getFormat().getPrecision();
     }
   }
@@ -259,6 +263,7 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(startEventDateTime)
+      .localEndDateTime(startEventDateTimeEnd)
       .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
       .build();
   }
@@ -273,9 +278,11 @@ public class CollectingEvent implements DinaEntity {
     if (endISOEventDateTime == null) {
       endEventDateTime = null;
       endEventDateTimePrecision = null;
+      endEventDateTimeEnd = null;
     } else {
       endEventDateTime = endISOEventDateTime.getLocalDateTime();
       endEventDateTimePrecision = endISOEventDateTime.getFormat().getPrecision();
+      endEventDateTimeEnd = endISOEventDateTime.getLocalEndDateTime();
     }
   }
 
@@ -286,6 +293,7 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(endEventDateTime)
+      .localEndDateTime(endEventDateTimeEnd)
       .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
       .build();
   }

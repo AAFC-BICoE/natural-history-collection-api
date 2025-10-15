@@ -104,7 +104,10 @@ public class CollectingEventRepository extends DinaRepositoryV2<CollectingEventD
 
         return switch (expr.operator()) {
           case EQ -> IsoDateTimeFilterComponentHandler.equal(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
-          case GT, GOE, LT, LOE -> IsoDateTimeFilterComponentHandler.lessOrGreater(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          case GT -> IsoDateTimeFilterComponentHandler.greater(expr);
+          case GOE -> IsoDateTimeFilterComponentHandler.greaterOrEqual(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          case LT -> IsoDateTimeFilterComponentHandler.less(expr);
+          case LOE -> IsoDateTimeFilterComponentHandler.lessOrEqual(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
           default -> null;
         };
       }
