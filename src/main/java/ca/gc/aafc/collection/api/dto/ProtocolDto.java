@@ -22,7 +22,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 @Data
 @RelatedEntity(Protocol.class)
-@JsonApiTypeForClass(ProjectDto.TYPENAME)
+@JsonApiTypeForClass(ProtocolDto.TYPENAME)
 @TypeName(ProtocolDto.TYPENAME)
 public class ProtocolDto implements JsonApiResource {
 
@@ -42,6 +42,7 @@ public class ProtocolDto implements JsonApiResource {
   private String protocolType;
 
   @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
   private List<ExternalRelationDto> attachments = List.of();
 
   private MultilingualDescription multilingualDescription;

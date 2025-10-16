@@ -51,6 +51,7 @@ public class ProjectDto implements JsonApiResource {
   private List<AgentRoles> contributors = List.of();
 
   @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
   private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   private MultilingualDescription multilingualDescription;

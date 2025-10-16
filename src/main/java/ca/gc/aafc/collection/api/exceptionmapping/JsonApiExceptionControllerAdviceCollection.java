@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.exceptionmapping;
 
+import java.time.format.DateTimeParseException;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +53,22 @@ public class JsonApiExceptionControllerAdviceCollection {
           .withStatus(HttpStatus.BAD_REQUEST.toString())
           .withTitle("Bad Request")
           .withDetail(details))
+    );
+  }
+
+  @ExceptionHandler
+  public ResponseEntity<JsonApiErrors> handleDateTimeParseException(DateTimeParseException dtpEx) {
+
+    String detail = messageSource.getMessage("exception.dateTimeParse.message",
+      new Object[]{dtpEx.getParsedString(), dtpEx.getErrorIndex()}, LocaleContextHolder.getLocale());
+
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
+      JsonApiErrors.create().withError(
+        JsonApiError.create()
+          .withCode(Integer.toString(HttpStatus.UNPROCESSABLE_ENTITY.value()))
+          .withStatus(HttpStatus.UNPROCESSABLE_ENTITY.toString())
+          .withTitle("Un-processable Entity")
+          .withDetail(detail))
     );
   }
 }
