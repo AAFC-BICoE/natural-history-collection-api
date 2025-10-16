@@ -140,7 +140,7 @@ public class MaterialSample extends AbstractMaterialSample {
       return;
     }
 
-    if(this.associations == null) {
+    if (this.associations == null) {
       this.associations = new ArrayList<>();
     }
     this.associations.clear();

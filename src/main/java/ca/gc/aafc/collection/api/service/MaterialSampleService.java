@@ -149,7 +149,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   public void setChildrenOrdinal(MaterialSample sample) {
-    if(sample.getMaterialSampleChildren() == null) {
+    if (sample.getMaterialSampleChildren() == null) {
       return;
     }
 
