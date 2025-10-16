@@ -193,7 +193,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   }
 
   @AfterMapping
-  default void afterObjectStoreMetadataMapping(@MappingTarget MaterialSample entity,
+  default void afterMaterialSampleMapping(@MappingTarget MaterialSample entity,
                                                MaterialSampleDto dto) {
     if (CollectionUtils.isNotEmpty(dto.getAssociations())) {
       entity.setAssociations(dto.getAssociations().stream()

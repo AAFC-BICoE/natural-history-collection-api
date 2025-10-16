@@ -32,7 +32,6 @@ import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
-import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import ca.gc.aafc.dina.security.auth.DinaAuthorizationService;
@@ -59,7 +58,6 @@ public class MaterialSampleRepository extends DinaRepositoryV2<MaterialSampleDto
 
   public MaterialSampleRepository(
       @NonNull MaterialSampleService dinaService,
-      ExternalResourceProvider externalResourceProvider,
       @NonNull AuditService auditService,
       Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
       DinaAuthorizationService groupAuthorizationService,

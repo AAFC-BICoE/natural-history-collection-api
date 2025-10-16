@@ -118,6 +118,11 @@ public class MaterialSampleDto implements JsonApiResource {
 
   private Boolean isBaseForSplitByType;
 
+
+  // not a relationship
+  @ShallowReference
+  private List<AssociationDto> associations = List.of();
+
   // -- Relationships --
   @ShallowReference
   @JsonIgnore
@@ -146,11 +151,6 @@ public class MaterialSampleDto implements JsonApiResource {
   @ShallowReference
   @JsonIgnore
   private StorageUnitUsageDto storageUnitUsage;
-
-  @IgnoreDinaMapping
-  @ShallowReference
-  @JsonIgnore
-  private List<AssociationDto> associations = List.of();
 
   @ShallowReference
   @JsonIgnore

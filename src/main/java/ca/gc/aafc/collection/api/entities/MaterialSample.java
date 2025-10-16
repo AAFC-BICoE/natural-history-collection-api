@@ -135,6 +135,14 @@ public class MaterialSample extends AbstractMaterialSample {
   private List<Association> associations = new ArrayList<>();
 
   public void setAssociations(List<Association> associations) {
+    if (associations == null) {
+      this.associations = null;
+      return;
+    }
+
+    if(this.associations == null) {
+      this.associations = new ArrayList<>();
+    }
     this.associations.clear();
     if (CollectionUtils.isNotEmpty(associations)) {
       this.associations.addAll(associations);

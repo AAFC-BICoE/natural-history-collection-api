@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 
 public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
@@ -68,6 +69,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
   public void create_WithAuthenticatedUser_SetsCreatedBy()
       throws ResourceGoneException, ResourceNotFoundException {
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
@@ -98,6 +100,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
   public void create_WithAParent() throws ResourceGoneException, ResourceNotFoundException {
 
     JsonApiDocument parentMaterialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
@@ -126,6 +129,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:DINA_ADMIN"})
+  @Transactional
   public void create_WithCollection_PersistedWithCollection()
       throws ResourceGoneException, ResourceNotFoundException {
 
@@ -149,6 +153,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
   public void create_recordCreated() throws ResourceGoneException, ResourceNotFoundException {
 
     UUID collEventUUID = createWithRepository(CollectingEventTestFixture.newEventDto(), eventRepository::onCreate);
@@ -174,6 +179,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
+  @Transactional
   public void updateFromDifferentGroup_throwAccessDenied()
       throws ResourceGoneException, ResourceNotFoundException {
     MaterialSample testMaterialSample = MaterialSampleFactory.newMaterialSample()
@@ -195,6 +201,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = { "aafc:user" })
+  @Transactional
   public void when_deleteAsUserFromMaterialSampleGroup_MaterialSampleDeleted()
       throws ResourceGoneException, ResourceNotFoundException {
 
@@ -235,6 +242,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
   @Test
   @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ":user" })
+  @Transactional
   public void updateMaterialSample_WithOrganism_accepted()
       throws MalformedURLException, ResourceGoneException, ResourceNotFoundException {
 

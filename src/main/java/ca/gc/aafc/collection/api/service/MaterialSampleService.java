@@ -149,6 +149,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   public void setChildrenOrdinal(MaterialSample sample) {
+    if(sample.getMaterialSampleChildren() == null) {
+      return;
+    }
+
     List<ImmutableMaterialSample> sortedChildren = sample.getMaterialSampleChildren().stream()
             .sorted(Comparator.comparingInt(ImmutableMaterialSample::getId)).toList();
 
