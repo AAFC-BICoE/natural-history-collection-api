@@ -63,6 +63,12 @@ public class CollectingEvent implements DinaEntity {
     OSM
   }
 
+  public static final List<ISODateTimeAttribute> ISO_DATETIME_ATTRIBUTES =
+    List.of(new ISODateTimeAttribute("startEventDateTime", "startEventDateTimeEnd",
+        "startEventDateTimePrecision"),
+      new ISODateTimeAttribute("endEventDateTime", "endEventDateTimeEnd",
+        "endEventDateTimePrecision"));
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -306,6 +312,10 @@ public class CollectingEvent implements DinaEntity {
       .stream()
       .filter(geo -> BooleanUtils.isTrue(geo.getIsPrimary()))
       .findFirst();
+  }
+
+  public record ISODateTimeAttribute(String attribute, String endAttribute,
+                                     String precisionAttribute) {
   }
 
 }

@@ -50,6 +50,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 
@@ -60,9 +61,9 @@ public class CollectingEventRepository extends DinaRepositoryV2<CollectingEventD
   // Bean does not exist with keycloak disabled.
   private final DinaAuthenticatedUser dinaAuthenticatedUser;
 
-  private static final Map<String, String> DATE_TIME_TRANSFORMATION_ATTRIBUTES =
-    Map.of("startEventDateTime", "startEventDateTimePrecision",
-      "endEventDateTime", "endEventDateTimePrecision");
+  private static final Map<String, CollectingEvent.ISODateTimeAttribute>
+    DATE_TIME_TRANSFORMATION_ATTRIBUTES = CollectingEvent.ISO_DATETIME_ATTRIBUTES.stream()
+      .collect(Collectors.toMap(CollectingEvent.ISODateTimeAttribute::attribute, a -> a));
 
   public CollectingEventRepository(
     @NonNull CollectingEventService dinaService,
@@ -103,11 +104,12 @@ public class CollectingEventRepository extends DinaRepositoryV2<CollectingEventD
       if (component instanceof FilterExpression expr) {
 
         return switch (expr.operator()) {
-          case EQ -> IsoDateTimeFilterComponentHandler.equal(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          case EQ -> IsoDateTimeFilterComponentHandler.equal(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()).precisionAttribute());
           case GT -> IsoDateTimeFilterComponentHandler.greater(expr);
-          case GOE -> IsoDateTimeFilterComponentHandler.greaterOrEqual(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          case GOE -> IsoDateTimeFilterComponentHandler.greaterOrEqual(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()).precisionAttribute());
           case LT -> IsoDateTimeFilterComponentHandler.less(expr);
-          case LOE -> IsoDateTimeFilterComponentHandler.lessOrEqual(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()));
+          case LOE -> IsoDateTimeFilterComponentHandler.lessOrEqual(expr, DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()).precisionAttribute(),
+            DATE_TIME_TRANSFORMATION_ATTRIBUTES.get(expr.attribute()).endAttribute());
           default -> null;
         };
       }

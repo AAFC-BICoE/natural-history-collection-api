@@ -196,14 +196,15 @@ public class IsoDateTimeFilterComponentHandler {
    */
   public static FilterComponent lessOrEqual(
     FilterExpression filterExpression,
-    String precisionAttribute) {
+    String precisionAttribute,
+    String endAttribute) {
     ISODateTime isoDateTime = ISODateTime.parse(filterExpression.value());
 
     return FilterGroup.builder()
       .conjunction(FilterGroup.Conjunction.OR)
       // Case 1: Stored date ENDS at or before query range ENDS (definitely <=)
       .component(new FilterExpression(
-        filterExpression.attribute() + "End",  // Need stored END datetime
+        endAttribute,
         Ops.LOE,
         isoDateTime.getLocalEndDateTime().toString()))
       // Case 2: Equal ranges - same start date AND same precision
