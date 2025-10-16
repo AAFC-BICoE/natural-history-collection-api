@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(imports = { MapperStaticConverter.class })
+@Mapper(imports = MapperStaticConverter.class)
 public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, MaterialSample> {
 
   MaterialSampleMapper INSTANCE = Mappers.getMapper(MaterialSampleMapper.class);

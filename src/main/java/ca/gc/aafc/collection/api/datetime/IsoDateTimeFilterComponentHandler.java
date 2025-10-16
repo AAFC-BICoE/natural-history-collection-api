@@ -13,7 +13,11 @@ import ca.gc.aafc.dina.filter.FilterGroup;
  * This handler converts ISO date-time filter expressions into compound filter groups
  * that consider both the date-time value and its precision level.
  */
-public class IsoDateTimeFilterComponentHandler {
+public final class IsoDateTimeFilterComponentHandler {
+
+  private IsoDateTimeFilterComponentHandler() {
+    // utility class
+  }
 
   /**
    * Creates a {@link FilterComponent} for exact equality comparison of ISO date-times.

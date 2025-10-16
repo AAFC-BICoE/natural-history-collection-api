@@ -23,7 +23,7 @@ import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
 import java.util.Set;
 
-@Mapper(imports = { MapperStaticConverter.class }, collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE)
+@Mapper(imports = MapperStaticConverter.class, collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE)
 public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, CollectingEvent> {
 
   CollectingEventMapper INSTANCE = Mappers.getMapper(CollectingEventMapper.class);
@@ -96,5 +96,4 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
       }
     }
   }
-
 }

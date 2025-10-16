@@ -11,11 +11,9 @@ import org.mapstruct.factory.Mappers;
 import ca.gc.aafc.collection.api.dto.ImmutableStorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
-import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.ImmutableStorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
-import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 
 import java.util.Set;
