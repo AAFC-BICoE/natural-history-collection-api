@@ -94,6 +94,18 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   @Override
+  public <T> T findOne(Object naturalId, Class<T> entityClass, Set<String> relationships) {
+    T entity = super.findOne(naturalId, entityClass, relationships);
+
+    // to be handled by dina-base since we would need to call it after handleOptionalFields
+    if (entity instanceof MaterialSample ms) {
+      augmentData(ms, relationships);
+    }
+
+    return entity;
+  }
+
+  @Override
   public <T> List<T> findAll(
     @NonNull Class<T> entityClass,
     @NonNull PredicateSupplier<T> where,
@@ -122,11 +134,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
         if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
           setChildrenOrdinal(ms);
         }
-        if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
-          setTargetOrganismPrimaryScientificName(ms);
-          setEffectiveScientificName(ms);
-          setOrganismClassification(ms);
-        }
+        // to be handled by dina-base since we would need to call it after handleOptionalFields
+        augmentData(ms, relationships);
       }
     });
     return all;
@@ -142,6 +151,20 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
       }
     }
     return entity;
+  }
+
+  /**
+   * Augment material-sample data if required.
+   * As opposed to optional fields the data set here does not need to be explicitly requested.
+   * @param ms
+   * @param relationships
+   */
+  public void augmentData(MaterialSample ms, Set<String> relationships) {
+    if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
+      setTargetOrganismPrimaryScientificName(ms);
+      setEffectiveScientificName(ms);
+      setOrganismClassification(ms);
+    }
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {

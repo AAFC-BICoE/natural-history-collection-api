@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.openapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -22,6 +23,7 @@ import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
+import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
 import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
@@ -59,6 +61,7 @@ import lombok.SneakyThrows;
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
+@Import(CollectionModuleBaseRepositoryIT.CollectionModuleTestConfiguration.class)
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   protected MaterialSampleOpenApiIT() {
@@ -229,13 +232,15 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     toInclude.addAll(toOneRelationships.keySet());
     toInclude.add("materialSampleChildren");
   //  toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
+    Set<String> optionalFields = Set.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
 
     //TODO requires to fix materialSampleChildren by moving it to optfields
 //    OpenAPI3Assertions.assertRemoteSchema(
 //        OpenAPIConstants.COLLECTION_API_SPECS_URL,
 //      "MaterialSample",
-//      RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-//        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude)).asString(),
+//      RestAssured.given().port(this.testPort).basePath(this.basePath)
+//        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude) +
+//          "&optfields[material-sample]=" + String.join(",", optionalFields)).asString(),
 //      ValidationRestrictionOptions.builder()
 //        .allowAdditionalFields(false)
 //        .allowableMissingFields(Set.of("collectingEvent", "organismPrimaryDetermination", "storageUnitCoordinates"))
