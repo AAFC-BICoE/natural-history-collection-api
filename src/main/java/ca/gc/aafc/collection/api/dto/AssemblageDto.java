@@ -2,15 +2,11 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiRelation;
-import io.crnk.core.resource.annotations.JsonApiResource;
-import io.crnk.core.resource.annotations.PatchStrategy;
 import lombok.Data;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
@@ -21,11 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @Data
 @RelatedEntity(Assemblage.class)
-@JsonApiResource(type = AssemblageDto.TYPENAME)
+@JsonApiTypeForClass(AssemblageDto.TYPENAME)
 @TypeName(AssemblageDto.TYPENAME)
-public class AssemblageDto {
+public class AssemblageDto implements JsonApiResource {
 
   public static final String TYPENAME = "assemblage";
 
@@ -41,17 +41,28 @@ public class AssemblageDto {
 
   private String name;
 
-  @JsonApiExternalRelation(type = "metadata")
-  @JsonApiRelation
-  private List<ExternalRelationDto> attachment = List.of();
-
   /**
    * Map of Managed attribute key to value object.
    */
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = Map.of();
 
   private MultilingualTitle multilingualTitle;
   private MultilingualDescription multilingualDescription;
 
+  // -- External relationships --
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
+  private List<ExternalRelationDto> attachment = List.of();
+
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }

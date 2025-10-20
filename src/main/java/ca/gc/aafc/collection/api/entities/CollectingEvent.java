@@ -63,6 +63,12 @@ public class CollectingEvent implements DinaEntity {
     OSM
   }
 
+  public static final List<ISODateTimeAttribute> ISO_DATETIME_ATTRIBUTES =
+    List.of(new ISODateTimeAttribute("startEventDateTime", "startEventDateTimeEnd",
+        "startEventDateTimePrecision"),
+      new ISODateTimeAttribute("endEventDateTime", "endEventDateTimeEnd",
+        "endEventDateTimePrecision"));
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -101,6 +107,7 @@ public class CollectingEvent implements DinaEntity {
   @Setter(AccessLevel.NONE)
   @Past
   private LocalDateTime startEventDateTime;
+  private LocalDateTime startEventDateTimeEnd;
   @Setter(AccessLevel.NONE)
   private Byte startEventDateTimePrecision;
 
@@ -108,6 +115,7 @@ public class CollectingEvent implements DinaEntity {
   @Setter(AccessLevel.NONE)
   @Past
   private LocalDateTime endEventDateTime;
+  private LocalDateTime endEventDateTimeEnd;
   @Setter(AccessLevel.NONE)
   private Byte endEventDateTimePrecision;
 
@@ -247,8 +255,10 @@ public class CollectingEvent implements DinaEntity {
     if (startISOEventDateTime == null) {
       startEventDateTime = null;
       startEventDateTimePrecision = null;
+      startEventDateTimeEnd = null;
     } else {
       startEventDateTime = startISOEventDateTime.getLocalDateTime();
+      startEventDateTimeEnd = startISOEventDateTime.getLocalEndDateTime();
       startEventDateTimePrecision = startISOEventDateTime.getFormat().getPrecision();
     }
   }
@@ -259,6 +269,7 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(startEventDateTime)
+      .localEndDateTime(startEventDateTimeEnd)
       .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
       .build();
   }
@@ -273,9 +284,11 @@ public class CollectingEvent implements DinaEntity {
     if (endISOEventDateTime == null) {
       endEventDateTime = null;
       endEventDateTimePrecision = null;
+      endEventDateTimeEnd = null;
     } else {
       endEventDateTime = endISOEventDateTime.getLocalDateTime();
       endEventDateTimePrecision = endISOEventDateTime.getFormat().getPrecision();
+      endEventDateTimeEnd = endISOEventDateTime.getLocalEndDateTime();
     }
   }
 
@@ -286,6 +299,7 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(endEventDateTime)
+      .localEndDateTime(endEventDateTimeEnd)
       .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
       .build();
   }
@@ -298,6 +312,10 @@ public class CollectingEvent implements DinaEntity {
       .stream()
       .filter(geo -> BooleanUtils.isTrue(geo.getIsPrimary()))
       .findFirst();
+  }
+
+  public record ISODateTimeAttribute(String attribute, String endAttribute,
+                                     String precisionAttribute) {
   }
 
 }

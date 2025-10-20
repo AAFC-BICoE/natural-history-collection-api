@@ -54,11 +54,7 @@ public class ImmutableMaterialSampleDto {
 
   private String dwcDegreeOfEstablishment;
 
-  private String host;
-
   private String barcode;
-
-  private String preparationMethod;
 
   private Integer ordinal;
 

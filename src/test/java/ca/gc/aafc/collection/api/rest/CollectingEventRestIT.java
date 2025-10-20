@@ -3,16 +3,21 @@ package ca.gc.aafc.collection.api.rest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
+import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
@@ -23,6 +28,9 @@ import io.restassured.response.ValidatableResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -31,6 +39,7 @@ import java.util.Map;
 )
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(CollectionModuleBaseIT.CollectionModuleTestConfiguration.class)
 public class CollectingEventRestIT extends BaseRestAssuredTest {
 
   protected CollectingEventRestIT() {
@@ -76,7 +85,6 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
       "mixs_soil_v4", Map.of("tillage", "abc")));
     ce.setManagedAttributes(Map.of(managedAttributeKey, "2"));
 
-
     String uuid = postCollectingEvent(ce, protocolUuid);
 
     findCollectingEvent(uuid).body("data.attributes.extensionValues.mixs_soil_v5", Matchers.aMapWithSize(9));
@@ -85,6 +93,49 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
     sendPatch(ce, uuid, protocolUuid);
 
     findCollectingEvent(uuid).body("data.attributes.extensionValues.mixs_soil_v5", Matchers.aMapWithSize(8));
+  }
+
+  @Test
+  public void bulkCreateUpdateBulkLoad_HttpOkReturned() {
+    CollectingEventDto ceDto1 = CollectingEventTestFixture.newEventDto();
+    CollectingEventDto ceDto2 = CollectingEventTestFixture.newEventDto();
+
+    JsonApiBulkDocument bulkDocumentCreate = JsonApiBulkDocument.builder()
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(CollectingEventDto.TYPENAME)
+        .attributes(JsonAPITestHelper.toAttributeMap(ceDto1)).build())
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(CollectingEventDto.TYPENAME)
+        .attributes(JsonAPITestHelper.toAttributeMap(ceDto2)).build())
+      .build();
+
+    var response = sendBulkCreate(CollectingEventDto.TYPENAME, bulkDocumentCreate);
+    List<String> ids = response.extract().body().jsonPath().getList("data.id");
+    assertEquals(2, ids.size());
+
+    UUID uuid1 = UUID.fromString(ids.get(0));
+    UUID uuid2 = UUID.fromString(ids.get(1));
+
+    JsonApiBulkDocument bulkDocumentUpdate = JsonApiBulkDocument.builder()
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(CollectingEventDto.TYPENAME)
+        .id(uuid1)
+        .attributes(JsonAPITestHelper.toAttributeMap(ceDto1)).build())
+      .addData(JsonApiDocument.ResourceObject.builder()
+        .type(CollectingEventDto.TYPENAME)
+        .id(uuid2)
+        .attributes(JsonAPITestHelper.toAttributeMap(ceDto2)).build())
+      .build();
+    sendBulkUpdate(CollectingEventDto.TYPENAME, bulkDocumentUpdate);
+
+    sendBulkLoad(CollectingEventDto.TYPENAME, JsonApiBulkResourceIdentifierDocument.builder()
+      .addData(JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectingEventDto.TYPENAME)
+        .id(uuid1).build())
+      .addData(JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectingEventDto.TYPENAME)
+        .id(uuid2).build())
+      .build());
   }
 
   private String postCollectingEvent(CollectingEventDto ce, String protocolUuid) {
@@ -120,7 +171,7 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
           List.of(
             JsonAPIRelationship.of("protocol", ProtocolDto.TYPENAME, protocolUuid)
           )),
-        null),
+        id),
       200
     );
   }

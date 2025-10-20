@@ -5,7 +5,13 @@ import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Determination.ScientificNameSource;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
-import io.crnk.core.queryspec.QuerySpec;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
+import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,13 +24,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class DeterminationIT extends CollectionModuleBaseIT {
 
   @Inject
   private OrganismRepository organismRepository;
 
   @Test
-  void find() {
+  void find() throws ResourceGoneException, ResourceNotFoundException {
 
     Determination determination = newDetermination()
         .isPrimary(true)
@@ -32,9 +40,17 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
     OrganismDto organismDto = OrganismTestFixture.newOrganism(determination);
 
+    JsonApiDocument organismToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, OrganismDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(organismDto)
+    );
+
+    UUID organismUUID =
+      JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(organismRepository
+        .onCreate(organismToCreate));
+
     Determination result = organismRepository
-        .findOne(organismRepository.create(organismDto).getUuid(),
-            new QuerySpec(OrganismDto.class)).getDetermination().get(0);
+        .getOne(organismUUID, null).getDto().getDetermination().getFirst();
 
     // Assert determination
     Assertions.assertNotNull(result);
@@ -66,7 +82,12 @@ class DeterminationIT extends CollectionModuleBaseIT {
 
     OrganismDto dto = OrganismTestFixture.newOrganism(determination);
 
-    Assertions.assertThrows(ValidationException.class, () -> organismRepository.create(dto));
+    JsonApiDocument organismToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, OrganismDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(dto)
+    );
+
+    assertThrows(ValidationException.class, () -> organismRepository.onCreate(organismToCreate));
   }
 
   @SneakyThrows

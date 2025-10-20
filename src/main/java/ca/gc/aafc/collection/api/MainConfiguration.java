@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api;
 
 import ca.gc.aafc.dina.messaging.producer.DocumentOperationNotificationMessageProducer;
 import ca.gc.aafc.dina.messaging.producer.LogBasedMessageProducer;
+
+import org.geolatte.geom.json.GeolatteGeomModule;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,7 @@ public class MainConfiguration {
       .withObjectMapperCustomizer(objectMapper -> {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new GeolatteGeomModule());
       });
   }
 

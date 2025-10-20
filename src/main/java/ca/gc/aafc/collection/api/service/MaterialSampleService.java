@@ -31,6 +31,7 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -93,6 +94,18 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   @Override
+  public <T> T findOne(Object naturalId, Class<T> entityClass, Set<String> relationships) {
+    T entity = super.findOne(naturalId, entityClass, relationships);
+
+    // to be handled by dina-base since we would need to call it after handleOptionalFields
+    if (entity instanceof MaterialSample ms) {
+      augmentData(ms, relationships);
+    }
+
+    return entity;
+  }
+
+  @Override
   public <T> List<T> findAll(
     @NonNull Class<T> entityClass,
     @NonNull PredicateSupplier<T> where,
@@ -118,24 +131,40 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     // augment information where required
     all.forEach(t -> {
       if (t instanceof MaterialSample ms) {
-        try {
-          if (includes.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
-            setHierarchy(ms);
-          }
-          if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
-            setChildrenOrdinal(ms);
-          }
-          if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
-            setTargetOrganismPrimaryScientificName(ms);
-            setEffectiveScientificName(ms);
-            setOrganismClassification(ms);
-          }
-        } catch (JsonProcessingException e) {
-          throw new RuntimeException(e);
+        if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
+          setChildrenOrdinal(ms);
         }
+        // to be handled by dina-base since we would need to call it after handleOptionalFields
+        augmentData(ms, relationships);
       }
     });
     return all;
+  }
+
+  @Override
+  public MaterialSample handleOptionalFields(MaterialSample entity, Map<String, List<String>> optionalFields) {
+    if (optionalFields.getOrDefault(MaterialSampleDto.TYPENAME, List.of()).contains(MaterialSample.HIERARCHY_PROP_NAME)) {
+      try {
+        setHierarchy(entity);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return entity;
+  }
+
+  /**
+   * Augment material-sample data if required.
+   * As opposed to optional fields the data set here does not need to be explicitly requested.
+   * @param ms
+   * @param relationships
+   */
+  public void augmentData(MaterialSample ms, Set<String> relationships) {
+    if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
+      setTargetOrganismPrimaryScientificName(ms);
+      setEffectiveScientificName(ms);
+      setOrganismClassification(ms);
+    }
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
@@ -143,6 +172,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   public void setChildrenOrdinal(MaterialSample sample) {
+    if (sample.getMaterialSampleChildren() == null) {
+      return;
+    }
+
     List<ImmutableMaterialSample> sortedChildren = sample.getMaterialSampleChildren().stream()
             .sorted(Comparator.comparingInt(ImmutableMaterialSample::getId)).toList();
 

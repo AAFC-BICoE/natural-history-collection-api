@@ -31,8 +31,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
-import ca.gc.aafc.dina.entity.StorageGridLayout;
-import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 
 @Entity
 @AllArgsConstructor
@@ -42,6 +40,8 @@ import ca.gc.aafc.dina.translator.NumberLetterTranslator;
 @RequiredArgsConstructor
 @Table
 public class StorageUnitUsage implements DinaEntity {
+
+  public static final String CELL_NUMBER_PROP_NAME = "cellNumber";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,7 +76,7 @@ public class StorageUnitUsage implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
-  // declared since the mapper needs it for consistency
+  // Calculated by the service
   @Transient
   private Integer cellNumber;
 
@@ -105,24 +105,6 @@ public class StorageUnitUsage implements DinaEntity {
     } else {
       return null;
     }
-  }
-
-  /**
-   * Calculated cell number (if possible to compute)
-   * @return cell number or null
-   */
-  public Integer getCellNumber() {
-    StorageUnitType sut = getEffectiveStorageUnitType();
-    if (sut == null || sut.getGridLayoutDefinition() == null) {
-      return null;
-    }
-
-    if (!areCoordinatesSet()) {
-      return null;
-    }
-
-    StorageGridLayout restriction = sut.getGridLayoutDefinition();
-    return restriction.calculateCellNumber(NumberLetterTranslator.toNumber(wellRow), wellColumn);
   }
 
   /**
@@ -165,9 +147,6 @@ public class StorageUnitUsage implements DinaEntity {
     // no op
   }
 
-  public void setCellNumber(Integer i) {
-    // nop-op, read only
-  }
   public void setStorageUnitName(String s) {
     // nop-op, read only
   }
