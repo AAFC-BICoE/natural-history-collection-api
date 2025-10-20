@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
@@ -117,11 +116,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   ) {
 
     log.debug("Relationships received: {}", relationships);
-    // We can't fetch join materialSampleChildren without getting duplicates since it's a read-only list and we can't use the OrderColumn
-    // This will let materialSampleChildren be lazy loaded
-    Set<String> filteredRelationships = relationships.stream().filter( rel -> !rel.equalsIgnoreCase(MaterialSample.CHILDREN_COL_NAME)).collect(Collectors.toSet());
-
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
+    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, relationships);
 
     // sanity checks
     if (entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
@@ -131,9 +126,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     // augment information where required
     all.forEach(t -> {
       if (t instanceof MaterialSample ms) {
-        if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
-          setChildrenOrdinal(ms);
-        }
         // to be handled by dina-base since we would need to call it after handleOptionalFields
         augmentData(ms, relationships);
       }
@@ -143,13 +135,25 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
   @Override
   public MaterialSample handleOptionalFields(MaterialSample entity, Map<String, List<String>> optionalFields) {
-    if (optionalFields.getOrDefault(MaterialSampleDto.TYPENAME, List.of()).contains(MaterialSample.HIERARCHY_PROP_NAME)) {
+
+    if (MapUtils.isEmpty(optionalFields)) {
+      return entity;
+    }
+
+    List<String> matSampleOptFields = optionalFields.getOrDefault(MaterialSampleDto.TYPENAME, List.of());
+    if (matSampleOptFields.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
       try {
         setHierarchy(entity);
       } catch (JsonProcessingException e) {
         throw new RuntimeException(e);
       }
     }
+
+    // We can't fetch join materialSampleChildren without getting duplicates since it's a read-only list and we can't use the OrderColumn
+    if (matSampleOptFields.contains(MaterialSample.CHILDREN_COL_NAME)) {
+      setChildrenOrdinal(entity);
+    }
+
     return entity;
   }
 
