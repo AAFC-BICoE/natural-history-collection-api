@@ -142,8 +142,13 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
     return entity == null ? null : toPreparationMethodDto(entity, provided, MaterialSample.PREPARATION_METHOD_PROP_NAME);
   }
 
-  default ImmutableMaterialSampleDto toDto(ImmutableMaterialSample entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toImmutableMaterialSampleDto(entity, provided, MaterialSample.CHILDREN_COL_NAME);
+  default  List<ImmutableMaterialSampleDto> toDto(List<ImmutableMaterialSample> entities, @Context Set<String> provided, @Context String scope) {
+
+    if (CollectionUtils.isEmpty(entities)) {
+      return null;
+    }
+    return entities.stream().map(this::toImmutableMaterialSampleDto)
+      .collect(Collectors.toList());
   }
 
   // Relationships handling
@@ -173,11 +178,18 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   AssemblageDto toAssemblageDto(Assemblage entity,  Set<String> provided, String scope);
 
-  @Mapping(target = "id", ignore = true)
-  ImmutableMaterialSampleDto toImmutableMaterialSampleDto(ImmutableMaterialSample entity, Set<String> provided, String scope);
-
   OrganismDto toOrganismDto(Organism entity, Set<String> provided, String scope);
 
+  // Optional fields
+
+  /**
+   * Considered an optional field so no scope is used.
+   * @param entity
+   * @return
+   */
+  @Mapping(target = "id", ignore = true)
+  ImmutableMaterialSampleDto toImmutableMaterialSampleDto(ImmutableMaterialSample entity);
+  
   // Specific type mapping ---
   default List<AssociationDto> associationToAssociationDto(List<Association> associations) {
     if (CollectionUtils.isNotEmpty(associations)) {

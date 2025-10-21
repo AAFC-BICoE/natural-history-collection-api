@@ -1,27 +1,28 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.HostOrganism;
-import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
+
 import io.crnk.core.resource.annotations.JsonApiField;
 import io.crnk.core.resource.annotations.JsonApiId;
 import io.crnk.core.resource.annotations.PatchStrategy;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 
-@RelatedEntity(ImmutableMaterialSample.class)
+/**
+ * We are not setting @RelatedEntity(ImmutableMaterialSample.class) on purpose
+ * The mapping is done by the Mapper
+ */
 @Getter
 @Setter
 public class ImmutableMaterialSampleDto {

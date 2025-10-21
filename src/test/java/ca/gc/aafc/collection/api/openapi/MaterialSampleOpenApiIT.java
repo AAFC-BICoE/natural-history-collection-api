@@ -22,9 +22,9 @@ import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
-import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
@@ -230,22 +230,20 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Set<String> toInclude = new HashSet<>();
     toInclude.addAll(toManyRelationships.keySet());
     toInclude.addAll(toOneRelationships.keySet());
-    toInclude.add("materialSampleChildren");
-  //  toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
-    Set<String> optionalFields = Set.of(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
+    Set<String> optionalFields = Set.of(MaterialSample.HIERARCHY_PROP_NAME, MaterialSample.CHILDREN_COL_NAME);
 
     //TODO requires to fix materialSampleChildren by moving it to optfields
-//    OpenAPI3Assertions.assertRemoteSchema(
-//        OpenAPIConstants.COLLECTION_API_SPECS_URL,
-//      "MaterialSample",
-//      RestAssured.given().port(this.testPort).basePath(this.basePath)
-//        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude) +
-//          "&optfields[material-sample]=" + String.join(",", optionalFields)).asString(),
-//      ValidationRestrictionOptions.builder()
-//        .allowAdditionalFields(false)
-//        .allowableMissingFields(Set.of("collectingEvent", "organismPrimaryDetermination", "storageUnitCoordinates"))
-//        .build()
-//      );
+    OpenAPI3Assertions.assertRemoteSchema(
+        OpenAPIConstants.COLLECTION_API_SPECS_URL,
+      "MaterialSample",
+      RestAssured.given().port(this.testPort).basePath(this.basePath)
+        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude) +
+          "&optfields[material-sample]=" + String.join(",", optionalFields)).asString(),
+      ValidationRestrictionOptions.builder()
+        .allowAdditionalFields(false)
+        .allowableMissingFields(Set.of("collectingEvent", "organismPrimaryDetermination", "storageUnitCoordinates", "effectiveScientificName"))
+        .build()
+      );
     }
 
   private String postResource(String resourceType, Object dto) {
