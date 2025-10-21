@@ -123,7 +123,8 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
       JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
         .onCreate(childMaterialSampleToCreate));
 
-    MaterialSampleDto result = materialSampleRepository.getOne(parentMatSampleId, "include=materialSampleChildren").getDto();
+    MaterialSampleDto result = materialSampleRepository.getOne(parentMatSampleId,
+      "optfields[" + MaterialSampleDto.TYPENAME + "]=materialSampleChildren").getDto();
     assertEquals(childMatSampleId, result.getMaterialSampleChildren().getFirst().getUuid());
   }
 

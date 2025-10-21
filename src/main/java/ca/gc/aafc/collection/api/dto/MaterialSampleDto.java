@@ -70,11 +70,11 @@ public class MaterialSampleDto implements JsonApiResource {
   
   private String dwcDegreeOfEstablishment;
 
+  // calculated fields
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @DiffIgnore
   private List<MaterialSampleHierarchyObject> hierarchy;
 
-  // calculated field
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String targetOrganismPrimaryScientificName;
@@ -86,6 +86,10 @@ public class MaterialSampleDto implements JsonApiResource {
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String effectiveScientificName;
+
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   private String barcode;
 
@@ -126,10 +130,6 @@ public class MaterialSampleDto implements JsonApiResource {
   @ShallowReference
   @JsonIgnore
   private MaterialSampleDto parentMaterialSample;
-
-  @DiffIgnore
-  @JsonIgnore
-  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   @ShallowReference
   @JsonIgnore
