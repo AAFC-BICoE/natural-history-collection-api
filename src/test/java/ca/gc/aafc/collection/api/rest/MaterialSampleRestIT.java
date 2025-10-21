@@ -631,7 +631,9 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   private ValidatableResponse findSample(String unitId) {
     return RestAssured.given().port(this.testPort).basePath(this.basePath)
       .get(MaterialSampleDto.TYPENAME + "/" + unitId + "?include=" +
-              String.join(",", "organism", "materialSampleChildren", "parentMaterialSample")).then().statusCode(200);
+        String.join(",", "organism", "parentMaterialSample") +
+        "&optfields[" + MaterialSampleDto.TYPENAME + "]=materialSampleChildren").then()
+      .statusCode(200);
   }
 
 }
