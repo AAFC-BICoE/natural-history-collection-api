@@ -50,7 +50,7 @@ public class SplitConfigurationRepositoryRestIT extends BaseRestAssuredTest {
         TYPE_NAME,
         JsonAPITestHelper.toAttributeMap(splitConfigurationDto),
         null,
-        null),
+        id),
       200
     );
 
