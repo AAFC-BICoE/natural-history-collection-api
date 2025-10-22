@@ -1,29 +1,32 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.CollectionModuleKeycloakBaseIT;
-import ca.gc.aafc.collection.api.dto.AssemblageDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
-import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import ca.gc.aafc.collection.api.dto.AssemblageDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AssemblageRepositoryIT extends CollectionModuleKeycloakBaseIT {
+import java.util.UUID;
+import javax.inject.Inject;
+
+public class AssemblageRepositoryIT extends BaseRepositoryIT {
 
   @Inject
   private AssemblageRepository assemblageRepository;
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
-  public void create_WithAuthenticatedUser_SetsCreatedBy() {
+  public void create_WithAuthenticatedUser_SetsCreatedBy()
+      throws ResourceGoneException, ResourceNotFoundException {
+
     AssemblageDto assemblage = AssemblageTestFixture.newAssemblage();
-    AssemblageDto result = assemblageRepository.findOne(
-            assemblageRepository.create(assemblage).getUuid(),
-            new QuerySpec(AssemblageDto.class));
+    UUID assemblageUUID = createWithRepository(assemblage, assemblageRepository::onCreate);
+    AssemblageDto result = assemblageRepository.getOne(assemblageUUID, "").getDto();
 
     assertNotNull(result.getCreatedBy());
     assertEquals(assemblage.getName(), result.getName());

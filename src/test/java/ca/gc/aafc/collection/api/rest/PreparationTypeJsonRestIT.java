@@ -44,14 +44,12 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
     preparationTypeDto_differentGroup.setGroup("NOTaafc");
     preparationTypeDto_differentGroup.setName("NOT" + preparationTypeDto.getName());  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
-
-    String actualUuid = sendGet(TYPE_NAME+"?filter[group][eq]=aafc", "").extract().response().body().path("data[0].id");
+    String actualUuid = sendGet(TYPE_NAME+"?filter[group][EQ]=aafc", "").extract().response().body().path("data[0].id");
 
     assertEquals(uuid, actualUuid);
   }
 
   @Test
-  @DisplayName("Assuming that we cannot use a filter called \"group\" with the default operator")
   void preparationType_filterByGroupWithoutOperator_BadRequest() {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();
     preparationTypeDto.setCreatedBy("test user");
@@ -61,9 +59,6 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
     preparationTypeDto_differentGroup.setGroup("NOTaafc");
     preparationTypeDto_differentGroup.setName("NOT" + preparationTypeDto.getName());  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
-
-    sendGet(TYPE_NAME+"?filter[group]=aafc", "", HttpStatus.BAD_REQUEST.value());
-
+    sendGet(TYPE_NAME+"?filter[group]=aafc", "", HttpStatus.OK.value());
   }
-  
 }

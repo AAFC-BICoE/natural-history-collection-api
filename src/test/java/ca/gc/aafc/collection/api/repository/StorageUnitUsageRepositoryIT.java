@@ -1,35 +1,33 @@
 package ca.gc.aafc.collection.api.repository;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.validation.Errors;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
-import ca.gc.aafc.collection.api.entities.StorageUnit;
-import ca.gc.aafc.collection.api.entities.StorageUnitType;
-import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
-import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitTypeFactory;
-import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
+import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
+import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
-import ca.gc.aafc.dina.entity.StorageGridLayout;
+import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
+import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
-
-import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(properties = "keycloak.enabled = true")
-public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
+import java.util.Map;
+import java.util.UUID;
+import javax.inject.Inject;
+import javax.validation.ValidationException;
+
+public class StorageUnitUsageRepositoryIT extends BaseRepositoryIT {
 
   @Inject
   private StorageUnitTypeRepo storageUnitTypeRepo;
@@ -40,22 +38,33 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
   @Inject
   private StorageUnitUsageRepository storageUnitUsageRepository;
 
+  @Inject
+  protected ServiceTransactionWrapper serviceTransactionWrapper;
+
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
-  public void storageUnitCoordinatesRepository_onCreateWithValidData_created() {
+  public void storageUnitCoordinatesRepository_onCreateWithValidData_created()
+      throws ResourceGoneException, ResourceNotFoundException {
 
     StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
-    storageUnitTypeDto = storageUnitTypeRepo.create(storageUnitTypeDto);
+    UUID storageUnitTypeUUID = createWithRepository(storageUnitTypeDto, storageUnitTypeRepo::onCreate);
 
     StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
-    storageUnitDto.setStorageUnitType(storageUnitTypeDto);
-    storageUnitDto = storageUnitRepo.create(storageUnitDto);
+    UUID storageUnitUUID = createStorageUnit(storageUnitDto, storageUnitTypeUUID);
 
     StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
+    UUID storageUnitUsageUUID = createStorageUnitUsage(dto, storageUnitUUID);
 
-    StorageUnitUsageDto stored = storageUnitUsageRepository.create(dto);
-    assertEquals(1, stored.getCellNumber());
-    assertEquals(storageUnitDto.getName(), stored.getStorageUnitName());
+    // reload
+    StorageUnitUsageDto reloadedDto = serviceTransactionWrapper.executeWithParam( (a) -> {
+      try {
+        return storageUnitUsageRepository.getOne(a, "optfields[storage-unit-usage]=cellNumber").getDto();
+      } catch (ResourceNotFoundException | ResourceGoneException e) {
+        throw new RuntimeException(e);
+      }
+    }, storageUnitUsageUUID);
+    assertEquals(1, reloadedDto.getCellNumber());
+    assertEquals(storageUnitDto.getName(), reloadedDto.getStorageUnitName());
   }
 
   @Test
@@ -63,15 +72,13 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
   public void storageUnitCoordinatesRepository_onCreateWithInvalidData_exception() {
 
     StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
-    storageUnitTypeDto = storageUnitTypeRepo.create(storageUnitTypeDto);
+    UUID storageUnitTypeUUID = createWithRepository(storageUnitTypeDto, storageUnitTypeRepo::onCreate);
+    UUID storageUnitUUID = createStorageUnit(StorageUnitTestFixture.newStorageUnit(), storageUnitTypeUUID);
 
-    StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
-    storageUnitDto.setStorageUnitType(storageUnitTypeDto);
-    storageUnitDto = storageUnitRepo.create(storageUnitDto);
-
-    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(null);
     dto.setWellColumn(200);
-    assertThrows(ValidationException.class, ()-> storageUnitUsageRepository.create(dto));
+
+    assertThrows(ValidationException.class, ()-> createStorageUnitUsage(dto, storageUnitUUID));
   }
 
   @Test
@@ -81,17 +88,15 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
     StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
     storageUnitTypeDto.getGridLayoutDefinition().setNumberOfColumns(10);
     storageUnitTypeDto.getGridLayoutDefinition().setNumberOfRows(50);
-    storageUnitTypeDto = storageUnitTypeRepo.create(storageUnitTypeDto);
+    UUID storageUnitTypeUUID = createWithRepository(storageUnitTypeDto, storageUnitTypeRepo::onCreate);
+    UUID storageUnitUUID = createStorageUnit(StorageUnitTestFixture.newStorageUnit(), storageUnitTypeUUID);
 
-    StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
-    storageUnitDto.setStorageUnitType(storageUnitTypeDto);
-    storageUnitDto = storageUnitRepo.create(storageUnitDto);
 
-    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(null);
     dto.setWellRow("AH");
     dto.setWellColumn(1);
 
-    storageUnitUsageRepository.create(dto);
+    assertNotNull(createStorageUnitUsage(dto, storageUnitUUID));
   }
 
   @Test
@@ -99,8 +104,8 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
   public void storageUnitUsageRepository_onCreateWithoutStorage_exception() {
 
     StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(null);
-    // access denied since they group is loaded from the storage
-    assertThrows(AccessDeniedException.class, ()-> storageUnitUsageRepository.create(dto));
+    // access denied since the group is loaded from the storage
+    assertThrows(AccessDeniedException.class, ()-> createStorageUnitUsage(dto, null));
   }
 
   @Test
@@ -109,16 +114,35 @@ public class StorageUnitUsageRepositoryIT extends CollectionModuleBaseIT {
 
     StorageUnitTypeDto storageUnitTypeDto = StorageUnitTypeTestFixture.newStorageUnitType();
     storageUnitTypeDto.setGridLayoutDefinition(null);
-    storageUnitTypeDto = storageUnitTypeRepo.create(storageUnitTypeDto);
+    UUID storageUnitTypeUUID = createWithRepository(storageUnitTypeDto, storageUnitTypeRepo::onCreate);
+    UUID storageUnitUUID = createStorageUnit(StorageUnitTestFixture.newStorageUnit(), storageUnitTypeUUID);
 
-    StorageUnitDto storageUnitDto = StorageUnitTestFixture.newStorageUnit();
-    storageUnitDto.setStorageUnitType(storageUnitTypeDto);
-    storageUnitDto = storageUnitRepo.create(storageUnitDto);
-
-    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(storageUnitDto);
+    StorageUnitUsageDto dto = StorageUnitUsageTestFixture.newStorageUnitUsage(null);
     dto.setWellColumn(null);
     dto.setWellRow(null);
 
-    storageUnitUsageRepository.create(dto);
+    createStorageUnitUsage(dto, storageUnitUUID);
+  }
+
+  private UUID createStorageUnit(StorageUnitDto storageUnitDto, UUID storageUnitTypeUUID) {
+    JsonApiDocument storageUnitToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, StorageUnitDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(storageUnitDto),
+      Map.of("storageUnitType", JsonApiDocument.ResourceIdentifier.builder()
+        .id(storageUnitTypeUUID).type(StorageUnitTypeDto.TYPENAME).build())
+    );
+    return JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(storageUnitRepo
+      .onCreate(storageUnitToCreate));
+  }
+
+  private UUID createStorageUnitUsage(StorageUnitUsageDto dto, UUID storageUnitUUID) {
+    JsonApiDocument storageUnitUsageToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, StorageUnitUsageDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(dto),
+      Map.of("storageUnit", JsonApiDocument.ResourceIdentifier.builder()
+        .id(storageUnitUUID).type(StorageUnitDto.TYPENAME).build())
+    );
+    return JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(storageUnitUsageRepository
+      .onCreate(storageUnitUsageToCreate));
   }
 }

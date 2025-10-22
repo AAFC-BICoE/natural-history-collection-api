@@ -7,19 +7,22 @@ import org.javers.core.metamodel.annotation.TypeName;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.entities.SplitConfiguration;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @Data
-@JsonApiResource(type = SplitConfigurationDto.TYPENAME)
 @TypeName(SplitConfigurationDto.TYPENAME)
 @RelatedEntity(SplitConfiguration.class)
-public class SplitConfigurationDto {
+@JsonApiTypeForClass(SplitConfigurationDto.TYPENAME)
+public class SplitConfigurationDto implements JsonApiResource {
 
   public static final String TYPENAME = "split-configuration";
 
@@ -43,4 +46,15 @@ public class SplitConfigurationDto {
 
   private MaterialSample.MaterialSampleType materialSampleTypeCreatedBySplit;
 
+  @JsonIgnore
+  @Override
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @JsonIgnore
+  @Override
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }

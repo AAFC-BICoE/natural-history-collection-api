@@ -25,6 +25,9 @@ public class CollectingEventTestFixture {
   public static final String XI_02_1798 = "XI-02-1798";
   public static final String VER_COOR = "26.089, 106.36";
 
+  public static double LATITUDE = 12.123456;
+  public static double LONGITUDE = 45.01;
+
   public static final LocalDate START_DATE = LocalDate.of(2000, 1, 1);
 
   public static final LocalDate END_DATE = LocalDate.of(2002, 10, 10);
@@ -36,7 +39,7 @@ public class CollectingEventTestFixture {
   public static final String DWC_VERBATIM_COORDINATE_SYSTEM = "decimal degrees";
   public static final String DWC_VERBATIM_SRS = "EPSG:4326";
   public static final String DWC_VERBATIM_ELEVATION = "100-200 m";
-  public static final String DWC_VERBATIM_DEPTH = "10-20 m ";
+  public static final String DWC_VERBATIM_DEPTH = "10-20 m";
   public static final BigDecimal DWC_MAXIMUM_ELEVATION_IN_METERS = new BigDecimal("100.01");
   public static final BigDecimal DWC_MAXIMUM_DEPTH_IN_METERS = new BigDecimal("20.02");
   public static final BigDecimal DWC_MINIMUM_ELEVATION_IN_METERS = new BigDecimal("50.50");
@@ -51,8 +54,8 @@ public class CollectingEventTestFixture {
   public static final String HOST = "host";
   public static final CollectingEvent.GeographicPlaceNameSource GEOGRAPHIC_PLACE_NAME_SOURCE = CollectingEvent.GeographicPlaceNameSource.OSM;
   public static final GeoreferenceAssertionDto GEOREFERENCE_ASSERTION_DTO = GeoreferenceAssertionDto.builder()
-    .dwcDecimalLatitude(12.123456)
-    .dwcDecimalLongitude(45.01)
+    .dwcDecimalLatitude(LATITUDE)
+    .dwcDecimalLongitude(LONGITUDE)
     .dwcGeoreferencedDate(TEST_GEOREFERENCE_DATE)
     .isPrimary(true)
     .georeferencedBy(Collections.singletonList(UUID.randomUUID()))

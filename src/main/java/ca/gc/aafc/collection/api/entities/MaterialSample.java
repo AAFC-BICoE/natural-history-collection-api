@@ -76,7 +76,17 @@ public class MaterialSample extends AbstractMaterialSample {
 
   public static final String CHILDREN_COL_NAME = "materialSampleChildren";
   public static final String HIERARCHY_PROP_NAME = "hierarchy";
+
+  // Relationships property name
   public static final String ORGANISM_PROP_NAME = "organism";
+  public static final String PROJECTS_PROP_NAME = "projects";
+  public static final String ASSEMBLAGES_PROP_NAME = "assemblages";
+  public static final String STORAGE_UNIT_USAGE_PROP_NAME = "storageUnitUsage";
+  public static final String COLLECTION_PROP_NAME = "collection";
+  public static final String COLLECTING_EVENT_PROP_NAME = "collectingEvent";
+  public static final String PREPARATION_PROTOCOL_PROP_NAME = "preparationProtocol";
+  public static final String PREPARATION_TYPE_PROP_NAME = "preparationType";
+  public static final String PREPARATION_METHOD_PROP_NAME = "preparationMethod";
 
   @Version
   private int version;
@@ -125,6 +135,14 @@ public class MaterialSample extends AbstractMaterialSample {
   private List<Association> associations = new ArrayList<>();
 
   public void setAssociations(List<Association> associations) {
+    if (associations == null) {
+      this.associations = null;
+      return;
+    }
+
+    if (this.associations == null) {
+      this.associations = new ArrayList<>();
+    }
     this.associations.clear();
     if (CollectionUtils.isNotEmpty(associations)) {
       this.associations.addAll(associations);

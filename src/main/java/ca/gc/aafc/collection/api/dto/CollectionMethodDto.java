@@ -1,10 +1,9 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.CollectionMethod;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,15 +17,19 @@ import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(CollectionMethod.class)
-@JsonApiResource(type = CollectionMethodDto.TYPENAME)
+@JsonApiTypeForClass(CollectionMethodDto.TYPENAME)
 @TypeName(CollectionMethodDto.TYPENAME)
-public class CollectionMethodDto {
+public class CollectionMethodDto implements JsonApiResource {
 
   public static final String TYPENAME = "collection-method";
 
@@ -45,4 +48,15 @@ public class CollectionMethodDto {
 
   private MultilingualDescription multilingualDescription;
 
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }
