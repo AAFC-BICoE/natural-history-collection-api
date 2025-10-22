@@ -23,7 +23,6 @@ import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;
 import ca.gc.aafc.dina.service.MessageProducingService;
@@ -34,10 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.BiFunction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
@@ -93,47 +88,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   @Override
-  public <T> T findOne(Object naturalId, Class<T> entityClass, Set<String> relationships) {
-    T entity = super.findOne(naturalId, entityClass, relationships);
-
-    // to be handled by dina-base since we would need to call it after handleOptionalFields
-    if (entity instanceof MaterialSample ms) {
-      augmentData(ms, relationships);
-    }
-
-    return entity;
-  }
-
-  @Override
-  public <T> List<T> findAll(
-    @NonNull Class<T> entityClass,
-    @NonNull PredicateSupplier<T> where,
-    BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
-    int startIndex,
-    int maxResult,
-    @NonNull Set<String> includes,
-    @NonNull Set<String> relationships
-  ) {
-
-    log.debug("Relationships received: {}", relationships);
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, relationships);
-
-    // sanity checks
-    if (entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
-      return all;
-    }
-
-    // augment information where required
-    all.forEach(t -> {
-      if (t instanceof MaterialSample ms) {
-        // to be handled by dina-base since we would need to call it after handleOptionalFields
-        augmentData(ms, relationships);
-      }
-    });
-    return all;
-  }
-
-  @Override
   public MaterialSample handleOptionalFields(MaterialSample entity, Map<String, List<String>> optionalFields) {
 
     if (MapUtils.isEmpty(optionalFields)) {
@@ -157,13 +111,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     return entity;
   }
 
-  /**
-   * Augment material-sample data if required.
-   * As opposed to optional fields the data set here does not need to be explicitly requested.
-   * @param ms
-   * @param relationships
-   */
-  public void augmentData(MaterialSample ms, Set<String> relationships) {
+  @Override
+  public void augmentEntity(MaterialSample ms, Set<String> relationships) {
     if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
       setTargetOrganismPrimaryScientificName(ms);
       setEffectiveScientificName(ms);

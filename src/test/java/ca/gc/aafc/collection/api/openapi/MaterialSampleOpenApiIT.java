@@ -232,7 +232,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     toInclude.addAll(toOneRelationships.keySet());
     Set<String> optionalFields = Set.of(MaterialSample.HIERARCHY_PROP_NAME, MaterialSample.CHILDREN_COL_NAME);
 
-    //TODO requires to fix materialSampleChildren by moving it to optfields
     OpenAPI3Assertions.assertRemoteSchema(
         OpenAPIConstants.COLLECTION_API_SPECS_URL,
       "MaterialSample",
@@ -241,7 +240,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
           "&optfields[material-sample]=" + String.join(",", optionalFields)).asString(),
       ValidationRestrictionOptions.builder()
         .allowAdditionalFields(false)
-        .allowableMissingFields(Set.of("collectingEvent", "organismPrimaryDetermination", "storageUnitCoordinates", "effectiveScientificName"))
+        .allowableMissingFields(Set.of("collectingEvent", "organismPrimaryDetermination", "storageUnitCoordinates"))
         .build()
       );
     }
