@@ -226,6 +226,9 @@ public class CollectingEvent implements DinaEntity {
   @ManyToOne
   private CollectionMethod collectionMethod;
 
+  @ManyToOne
+  private Expedition expedition;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "protocol_id")
   private Protocol protocol;
