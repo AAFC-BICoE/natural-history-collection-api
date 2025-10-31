@@ -49,6 +49,7 @@ public class StorageUnitDto implements JsonApiResource {
   @DiffIgnore
   private List<ImmutableStorageUnitDto> storageUnitChildren = List.of();
 
+  @JsonApiCalculatedAttribute
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<StorageHierarchicalObject> hierarchy;
