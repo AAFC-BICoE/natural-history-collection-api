@@ -14,6 +14,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiCalculatedAttribute;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
