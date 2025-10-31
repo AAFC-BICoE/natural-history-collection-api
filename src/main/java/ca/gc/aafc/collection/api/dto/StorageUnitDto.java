@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.service.StorageHierarchicalObject;
+import ca.gc.aafc.dina.dto.JsonApiCalculatedAttribute;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
@@ -49,6 +50,7 @@ public class StorageUnitDto implements JsonApiResource {
   @DiffIgnore
   private List<ImmutableStorageUnitDto> storageUnitChildren = List.of();
 
+  @JsonApiCalculatedAttribute
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<StorageHierarchicalObject> hierarchy;
