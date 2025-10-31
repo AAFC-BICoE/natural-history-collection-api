@@ -14,6 +14,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiCalculatedAttribute;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
@@ -71,9 +72,15 @@ public class MaterialSampleDto implements JsonApiResource {
   private String dwcDegreeOfEstablishment;
 
   // calculated fields
+  @JsonApiCalculatedAttribute
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @DiffIgnore
   private List<MaterialSampleHierarchyObject> hierarchy;
+
+  @JsonApiCalculatedAttribute
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -86,10 +93,6 @@ public class MaterialSampleDto implements JsonApiResource {
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String effectiveScientificName;
-
-  @DiffIgnore
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  private List<ImmutableMaterialSampleDto> materialSampleChildren;
 
   private String barcode;
 
