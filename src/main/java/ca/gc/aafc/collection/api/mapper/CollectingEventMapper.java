@@ -50,6 +50,7 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
   @Mapping(target = "attachment", ignore = true)
   @Mapping(target = "collectionMethod", ignore = true)
   @Mapping(target = "protocol", ignore = true)
+  @Mapping(target = "expedition", ignore = true)
   CollectingEvent toEntity(CollectingEventDto dto, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)

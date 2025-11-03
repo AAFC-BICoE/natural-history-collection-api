@@ -30,12 +30,18 @@
             <column name="start_date" type="date" />
             <column name="end_date" type="date" />
 
-            <column name="geographic_context" type="VARCHAR(250)"/>
-
+            <column name="geographic_context" type="text"/>
             <column name="multilingual_description" type="jsonb"/>
-
             <column name="participants" type="uuid[]"/>
         </createTable>
+    </changeSet>
+
+    <changeSet id="178-Add_relationship_between_CollectingEvent_and_Expedition" context="schema-change" author="jgrieb">
+        <addColumn tableName="collecting_event">
+            <column name="expedition_id" type="integer">
+                <constraints foreignKeyName="fk_expedition_id" references="expedition(id)"/>
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>
