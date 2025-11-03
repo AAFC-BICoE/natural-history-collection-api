@@ -122,6 +122,10 @@ public class CollectingEventDto implements JsonApiResource {
   @JsonIgnore
   private ProtocolDto protocol;
 
+  @ShallowReference
+  @JsonIgnore
+  private ExpeditionDto expedition;
+
   // -- External relationships --
   @JsonApiExternalRelation(type = "person")
   @JsonIgnore
