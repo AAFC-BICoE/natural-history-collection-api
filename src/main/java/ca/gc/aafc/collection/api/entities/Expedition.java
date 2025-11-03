@@ -1,24 +1,20 @@
 package ca.gc.aafc.collection.api.entities;
 
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Type;
-
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @SuperBuilder

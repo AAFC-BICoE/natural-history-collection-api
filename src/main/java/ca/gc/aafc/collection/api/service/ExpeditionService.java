@@ -1,15 +1,11 @@
 package ca.gc.aafc.collection.api.service;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
 import ca.gc.aafc.collection.api.dto.ExpeditionDto;
 import ca.gc.aafc.collection.api.entities.Expedition;
 import ca.gc.aafc.collection.api.validation.ExpeditionValidator;
-import ca.gc.aafc.dina.entity.AgentRoles;
-import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;

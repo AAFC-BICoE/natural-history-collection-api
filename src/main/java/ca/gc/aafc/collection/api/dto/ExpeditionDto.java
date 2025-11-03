@@ -1,29 +1,25 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 import ca.gc.aafc.collection.api.entities.Expedition;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import lombok.Data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.toedter.spring.hateoas.jsonapi.JsonApiId;
-import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+import lombok.Data;
 
 @Data
 @RelatedEntity(Expedition.class)
