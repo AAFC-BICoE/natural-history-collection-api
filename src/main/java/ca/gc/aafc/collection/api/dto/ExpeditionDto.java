@@ -13,7 +13,6 @@ import org.javers.core.metamodel.annotation.TypeName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ca.gc.aafc.collection.api.entities.Expedition;
-import ca.gc.aafc.collection.api.entities.ExpeditionIdentifier;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
