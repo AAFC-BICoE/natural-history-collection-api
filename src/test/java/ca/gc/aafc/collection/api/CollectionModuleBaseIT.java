@@ -5,6 +5,7 @@ import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
 import ca.gc.aafc.collection.api.service.CollectionService;
+import ca.gc.aafc.collection.api.service.ExpeditionService;
 import ca.gc.aafc.collection.api.service.FormTemplateService;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.service.OrganismService;
@@ -47,7 +48,7 @@ import java.util.Properties;
 @Import(CollectionModuleBaseIT.CollectionModuleTestConfiguration.class)
 public class CollectionModuleBaseIT {
   @Inject
-  protected DatabaseSupportService service;    
+  protected DatabaseSupportService service;
 
   @Inject
   protected CollectingEventService collectingEventService;
@@ -93,6 +94,9 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected OrganismService organismService;
+
+  @Inject
+  protected ExpeditionService expeditionService;
 
   @TestConfiguration
   public static class CollectionModuleTestConfiguration {
