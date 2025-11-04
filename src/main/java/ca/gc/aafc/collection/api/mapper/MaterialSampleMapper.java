@@ -157,6 +157,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "startEventDateTime", expression = "java(entity.supplyStartISOEventDateTime() != null ? entity.supplyStartISOEventDateTime().toString() : null)")
   @Mapping(target = "endEventDateTime", expression = "java(entity.supplyEndISOEventDateTime() != null ? entity.supplyEndISOEventDateTime().toString() : null)")
   @Mapping(target = "protocol.attachments", ignore = true)
+  @Mapping(target = "expedition.participants", ignore = true)
   CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
@@ -189,7 +190,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
    */
   @Mapping(target = "id", ignore = true)
   ImmutableMaterialSampleDto toImmutableMaterialSampleDto(ImmutableMaterialSample entity);
-  
+
   // Specific type mapping ---
   default List<AssociationDto> associationToAssociationDto(List<Association> associations) {
     if (CollectionUtils.isNotEmpty(associations)) {
