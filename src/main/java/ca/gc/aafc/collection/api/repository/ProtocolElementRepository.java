@@ -1,31 +1,64 @@
 package ca.gc.aafc.collection.api.repository;
 
-import ca.gc.aafc.collection.api.config.TypedVocabularyConfiguration;
-import ca.gc.aafc.collection.api.dto.ProtocolElementDto;
-import io.crnk.core.queryspec.QuerySpec;
-import io.crnk.core.repository.ReadOnlyResourceRepositoryBase;
-import io.crnk.core.resource.list.ResourceList;
-import org.springframework.stereotype.Repository;
-
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 
-@Repository
-public class ProtocolElementRepository extends ReadOnlyResourceRepositoryBase<ProtocolElementDto, String> {
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-  private final List<ProtocolElementDto> protocolElements;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
-  public ProtocolElementRepository(TypedVocabularyConfiguration typedVocabularyConfiguration) {
-    super(ProtocolElementDto.class);
-    protocolElements = typedVocabularyConfiguration.getProtocolDataElement()
-            .stream()
-            .map(entry -> new ProtocolElementDto(entry.getKey(), entry.getTerm(),
-                    entry.getVocabularyElementType(), entry.getMultilingualTitle()))
-            .collect(Collectors.toList());
+import ca.gc.aafc.collection.api.dto.ProtocolElementDto;
+import ca.gc.aafc.collection.api.service.ProtocolElementService;
+import ca.gc.aafc.dina.repository.ReadOnlyDinaRepositoryV2;
+
+import static com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder.jsonApiModel;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
+
+@RestController
+@RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
+public class ProtocolElementRepository extends ReadOnlyDinaRepositoryV2<String, ProtocolElementDto> {
+
+  public ProtocolElementRepository(ProtocolElementService service) {
+    super(service);
   }
 
-  @Override
-  public ResourceList<ProtocolElementDto> findAll(QuerySpec querySpec) {
-    return querySpec.apply(protocolElements);
+  @GetMapping(ProtocolElementDto.TYPENAME + "/{id}")
+  public ResponseEntity<RepresentationModel<?>> handleFindOne(@PathVariable String id) {
+
+    ProtocolElementDto dto = findOne(id);
+    if (dto == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    JsonApiModelBuilder builder = jsonApiModel().model(RepresentationModel.of(dto));
+
+    return ResponseEntity.ok(builder.build());
+  }
+
+  @GetMapping(ProtocolElementDto.TYPENAME)
+  public ResponseEntity<RepresentationModel<?>> handleFindAll(HttpServletRequest req) {
+
+    String queryString = StringUtils.isBlank(req.getQueryString()) ? "" :
+      URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
+
+    List<ProtocolElementDto> dtos ;
+    try {
+      dtos = findAll(queryString);
+    } catch (IllegalArgumentException iaEx) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    JsonApiModelBuilder builder = jsonApiModel().model(CollectionModel.of(dtos));
+
+    return ResponseEntity.ok(builder.build());
   }
 }

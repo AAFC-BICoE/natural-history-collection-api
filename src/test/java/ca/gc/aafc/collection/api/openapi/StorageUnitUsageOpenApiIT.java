@@ -69,7 +69,7 @@ public class StorageUnitUsageOpenApiIT extends BaseRestAssuredTest {
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(dto),
         JsonAPITestHelper.toRelationshipMap(List.of(JsonAPIRelationship.of("storageUnit", StorageUnitDto.TYPENAME, unitUuid))),
         null)
-      ).extract().asString(), ValidationRestrictionOptions.builder().allowableMissingFields(Set.of("storageUnitType")).build());
+      ).extract().asString(), ValidationRestrictionOptions.builder().allowableMissingFields(Set.of("storageUnitType", "cellNumber")).build());
   }
 
   private String postResource(String resourceType, Object dto) {

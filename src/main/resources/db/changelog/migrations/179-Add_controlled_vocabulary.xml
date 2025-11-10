@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="177-Add_controlled_vocabulary" context="schema-change" author="cgendreau">
+    <changeSet id="179-Add_controlled_vocabulary" context="schema-change" author="cgendreau">
         <sql>
             CREATE TYPE controlled_vocabulary_type AS ENUM (
             'MANAGED_ATTRIBUTE',

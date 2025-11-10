@@ -2,12 +2,9 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
-import io.crnk.core.resource.annotations.PatchStrategy;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,15 +19,19 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @RelatedEntity(Organism.class)
-@JsonApiResource(type = OrganismDto.TYPENAME)
+@JsonApiTypeForClass(OrganismDto.TYPENAME)
 @TypeName(OrganismDto.TYPENAME)
-public class OrganismDto {
+public class OrganismDto implements JsonApiResource {
 
   public static final String TYPENAME = "organism";
 
@@ -52,7 +53,6 @@ public class OrganismDto {
   /**
    * Map of Managed attribute key to value object.
    */
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
@@ -61,4 +61,15 @@ public class OrganismDto {
   private OffsetDateTime createdOn;
   private String createdBy;
 
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }

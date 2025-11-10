@@ -95,7 +95,7 @@ public abstract class CollectionModuleBaseRepositoryIT extends MockMvcBasedRepos
   }
 
   @TestConfiguration
-  static class CollectionModuleTestConfiguration {
+  public static class CollectionModuleTestConfiguration {
     @Bean
     public BuildProperties buildProperties() {
       Properties props = new Properties();

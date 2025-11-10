@@ -5,6 +5,7 @@ import java.util.Set;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
@@ -19,8 +20,10 @@ public interface CollectionManagedAttributeMapper extends DinaMapperV2<Collectio
 
   CollectionManagedAttributeDto toDto(CollectionManagedAttribute entity, @Context Set<String> provided, @Context String scope);
 
+  @Mapping(target = "id", ignore = true)
   CollectionManagedAttribute toEntity(CollectionManagedAttributeDto dto, @Context Set<String> provided, @Context String scope);
 
+  @Mapping(target = "id", ignore = true)
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   void patchEntity(@MappingTarget CollectionManagedAttribute entity, CollectionManagedAttributeDto dto, @Context Set<String> provided, @Context String scope);
 }

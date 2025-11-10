@@ -181,7 +181,9 @@
   <include file="db/changelog/migrations/174-Add_geographic_thesaurus_collecting_event.xml"/>
   <include file="db/changelog/migrations/175-Add_vernacularName_to_organism.xml"/>
   <include file="db/changelog/migrations/176-Add_contributors_to_project.xml"/>
-  <include file="db/changelog/migrations/177-Add_controlled_vocabulary.xml"/>
+  <include file="db/changelog/migrations/177-Add_event_ambiguity_end_datetime.xml"/>
+  <include file="db/changelog/migrations/178-Add_Expedition_table.xml"/>
+  <include file="db/changelog/migrations/179-Add_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/3-Create_managed_attribute_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
 </databaseChangeLog>
