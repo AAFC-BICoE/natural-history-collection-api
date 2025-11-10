@@ -1,0 +1,70 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <property name="myTableName" value="my_table"/>
+    <changeSet id="4-Create_coordinate_format_controlled_vocabulary" context="initial-data" author="cgendreau">
+        <insert tableName="controlled_vocabulary">
+            <column name="uuid" value="0199874f-a9bd-71c9-aec1-56b529471d0e"/>
+            <column name="name" value="Coordinate Format"/>
+            <column name="key" value="coordinate_format"/>
+            <column name="type" value="SYSTEM"/>
+            <column name="vocab_class" value="CONTROLLED_TERM"/>
+            <column name="version" value="1"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Coordinate Format"},{"lang":"fr","title":"Format de coordonnées"}]}'/>
+            <column name="multilingual_description" value='{
+      "descriptions": [
+      {
+      "lang": "en",
+      "desc": "The way of writing or representing geographic positions as text, independent of the coordinate reference system (CRS) or datum. The format defines the structure, units, and symbols used to express coordinates."
+      },
+      {
+      "lang": "fr",
+      "desc": " Manière d’écrire ou de représenter des positions géographiques sous forme textuelle, indépendamment du système de référence de coordonnées (SRC/CRS) ou du datum. Le format définit la structure, les unités et les symboles utilisés pour exprimer les coordonnées."
+      }
+      ]
+      }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="01998774-08e4-77ed-8b58-edecef4c994d"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='0199874f-a9bd-71c9-aec1-56b529471d0e')"/>
+            <column name="name" value="decimal degrees"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q1798227"/>
+            <column name="key" value="decimal_degrees"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"decimal degrees"},{"lang":"fr","title":"degrés décimaux"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="01998778-9922-7e4d-8664-57b2be04a395"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='0199874f-a9bd-71c9-aec1-56b529471d0e')"/>
+            <column name="name" value="degrees decimal minutes"/>
+            <column name="key" value="degrees_decimal_minutes"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"degrees decimal minutes"},{"lang":"fr","title":"degrés décimales minutes"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="0199877f-a0f7-7b85-af36-63914c49b073"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='0199874f-a9bd-71c9-aec1-56b529471d0e')"/>
+            <column name="name" value="degrees minutes seconds"/>
+            <column name="key" value="degrees_minutes_seconds"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"degrees minutes seconds"},{"lang":"fr","title":"degrés minutes secondes"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="0199877f-f27f-795c-8137-c5a71689fccc"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='0199874f-a9bd-71c9-aec1-56b529471d0e')"/>
+            <column name="name" value="utm"/>
+            <column name="term" value="http://www.wikidata.org/wiki/Q588975"/>
+            <column name="key" value="utm"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Universal Transverse Mercator"},{"lang":"fr","title":"Transverse Universelle de Mercator"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

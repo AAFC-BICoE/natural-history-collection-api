@@ -3,7 +3,10 @@ package ca.gc.aafc.collection.api.config;
 import java.util.List;
 import java.util.Map;
 
+import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.dina.vocabulary.VocabularyElementConfiguration;
+
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +39,27 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
   public static final String PROTOCOL_TYPE_VOCAB_KEY = "protocolType";
   public static final String TAXONOMIC_RANK_KEY = "taxonomicRank";
   public static final String PROJECT_ROLE_VOCAB_KEY = "projectRole";
+
+  // Constant, by Liquibase migration
+  public static final UUID MANAGED_ATTRIBUTE_VOCAB_UUID = UUID.fromString("01998155-a6f0-7c2f-9fcc-994d74222f9c");
+
+  public enum DinaComponent {
+    COLLECTING_EVENT,
+    MATERIAL_SAMPLE,
+    ORGANISM,
+    DETERMINATION,
+    PREPARATION,
+    ASSEMBLAGE;
+
+    public static CollectionManagedAttribute.ManagedAttributeComponent fromString(String s) {
+      for (CollectionManagedAttribute.ManagedAttributeComponent source : CollectionManagedAttribute.ManagedAttributeComponent.values()) {
+        if (source.name().equalsIgnoreCase(s)) {
+          return source;
+        }
+      }
+      return null;
+    }
+  }
 
   public CollectionVocabularyConfiguration(Map<String, List<CollectionVocabularyElement>> vocabulary) {
     super(vocabulary);
