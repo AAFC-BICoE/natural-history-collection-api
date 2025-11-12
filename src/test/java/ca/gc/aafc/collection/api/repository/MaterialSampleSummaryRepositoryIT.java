@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.repository;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +16,10 @@ import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
+import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -30,21 +36,33 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
 
   @Test
   public void onMaterialSampleWithDetermination_repoFindOneReturnRightSummary() throws MalformedURLException {
-    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+
     OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
     organismDto.setIsTarget(true);
+    JsonApiDocument organismToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, OrganismDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(organismDto)
+    );
+    UUID organismUUID =
+      JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(organismRepository
+        .onCreate(organismToCreate));
 
-    organismDto = organismRepository.create(organismDto);
-    materialSampleDto.setOrganism(List.of(organismDto));
-    materialSampleDto = materialSampleRepository.create(materialSampleDto);
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(materialSampleDto),
+      Map.of("organism", List.of(JsonApiDocument.ResourceIdentifier.builder().id(organismUUID).type(OrganismDto.TYPENAME)))
+    );
+
+    UUID matSampleId =
+      JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
+        .onCreate(materialSampleToCreate));
 
     // we need to flush to make sure it will be visible in the PG view
     organismService.flush();
 
     MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(materialSampleDto.getUuid());
-
     assertNotNull(mssDto.getEffectiveDeterminations());
     Assertions.assertEquals(1, mssDto.getEffectiveDeterminations().size());
   }
-
 }

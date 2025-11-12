@@ -23,7 +23,6 @@ import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.jpa.PredicateSupplier;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;
 import ca.gc.aafc.dina.service.MessageProducingService;
@@ -31,13 +30,9 @@ import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
@@ -93,49 +88,36 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   @Override
-  public <T> List<T> findAll(
-    @NonNull Class<T> entityClass,
-    @NonNull PredicateSupplier<T> where,
-    BiFunction<CriteriaBuilder, Root<T>, List<Order>> orderBy,
-    int startIndex,
-    int maxResult,
-    @NonNull Set<String> includes,
-    @NonNull Set<String> relationships
-  ) {
+  public MaterialSample handleOptionalFields(MaterialSample entity, Map<String, List<String>> optionalFields) {
 
-    log.debug("Relationships received: {}", relationships);
-    // We can't fetch join materialSampleChildren without getting duplicates since it's a read-only list and we can't use the OrderColumn
-    // This will let materialSampleChildren be lazy loaded
-    Set<String> filteredRelationships = relationships.stream().filter( rel -> !rel.equalsIgnoreCase(MaterialSample.CHILDREN_COL_NAME)).collect(Collectors.toSet());
-
-    List<T> all = super.findAll(entityClass, where, orderBy, startIndex, maxResult, includes, filteredRelationships);
-
-    // sanity checks
-    if (entityClass != MaterialSample.class || CollectionUtils.isEmpty(all)) {
-      return all;
+    if (MapUtils.isEmpty(optionalFields)) {
+      return entity;
     }
 
-    // augment information where required
-    all.forEach(t -> {
-      if (t instanceof MaterialSample ms) {
-        try {
-          if (includes.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
-            setHierarchy(ms);
-          }
-          if (includes.contains(MaterialSample.CHILDREN_COL_NAME)) {
-            setChildrenOrdinal(ms);
-          }
-          if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
-            setTargetOrganismPrimaryScientificName(ms);
-            setEffectiveScientificName(ms);
-            setOrganismClassification(ms);
-          }
-        } catch (JsonProcessingException e) {
-          throw new RuntimeException(e);
-        }
+    List<String> matSampleOptFields = optionalFields.getOrDefault(MaterialSampleDto.TYPENAME, List.of());
+    if (matSampleOptFields.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
+      try {
+        setHierarchy(entity);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
       }
-    });
-    return all;
+    }
+
+    // We can't fetch join materialSampleChildren without getting duplicates since it's a read-only list and we can't use the OrderColumn
+    if (matSampleOptFields.contains(MaterialSample.CHILDREN_COL_NAME)) {
+      setChildrenOrdinal(entity);
+    }
+
+    return entity;
+  }
+
+  @Override
+  public void augmentEntity(MaterialSample ms, Set<String> relationships) {
+    if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
+      setTargetOrganismPrimaryScientificName(ms);
+      setEffectiveScientificName(ms);
+      setOrganismClassification(ms);
+    }
   }
 
   public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
@@ -143,6 +125,10 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   public void setChildrenOrdinal(MaterialSample sample) {
+    if (sample.getMaterialSampleChildren() == null) {
+      return;
+    }
+
     List<ImmutableMaterialSample> sortedChildren = sample.getMaterialSampleChildren().stream()
             .sorted(Comparator.comparingInt(ImmutableMaterialSample::getId)).toList();
 

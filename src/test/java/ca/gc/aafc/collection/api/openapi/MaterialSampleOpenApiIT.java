@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.openapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -21,8 +22,9 @@ import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
-import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
+import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
@@ -59,6 +61,7 @@ import lombok.SneakyThrows;
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
+@Import(CollectionModuleBaseRepositoryIT.CollectionModuleTestConfiguration.class)
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
   protected MaterialSampleOpenApiIT() {
@@ -188,7 +191,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     Map<String, Object> attributeMap = JsonAPITestHelper.toAttributeMap(ms);
     Map<String, Object> toManyRelationships = Map.of(
       "attachment", JsonAPITestHelper.generateExternalRelationList("metadata", 1),
-      "preparedBy", JsonAPITestHelper.generateExternalRelation("person"),
+      "preparedBy", JsonAPITestHelper.generateExternalRelationList("person", 1),
       "projects", getRelationshipListType("project", projectUUID),
       "assemblages", getRelationshipListType("assemblage", assemblageUUID),
       "organism", getRelationshipListType("organism", organismUUID)
@@ -220,24 +223,24 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       MaterialSampleDto.TYPENAME,
       Map.of(),
       JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("parentMaterialSample", MaterialSampleDto.TYPENAME, materialSampleId)),
-      null
+      childUUID
     ));
     
     // Included relationships with the request
     Set<String> toInclude = new HashSet<>();
     toInclude.addAll(toManyRelationships.keySet());
     toInclude.addAll(toOneRelationships.keySet());
-    toInclude.add("materialSampleChildren");
-    toInclude.add(StorageUnitRepo.HIERARCHY_INCLUDE_PARAM);
+    Set<String> optionalFields = Set.of(MaterialSample.HIERARCHY_PROP_NAME, MaterialSample.CHILDREN_COL_NAME);
 
     OpenAPI3Assertions.assertRemoteSchema(
         OpenAPIConstants.COLLECTION_API_SPECS_URL,
-      "MaterialSample", 
-      RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
-        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude)).asString(),
+      "MaterialSample",
+      RestAssured.given().port(this.testPort).basePath(this.basePath)
+        .get(MaterialSampleDto.TYPENAME + "/" + materialSampleId + "?include=" + String.join(",", toInclude) +
+          "&optfields[material-sample]=" + String.join(",", optionalFields)).asString(),
       ValidationRestrictionOptions.builder()
         .allowAdditionalFields(false)
-        .allowableMissingFields(Set.of("collectingEvent", "acquisitionEvent", "organismPrimaryDetermination", "storageUnitCoordinates"))
+        .allowableMissingFields(Set.of("collectingEvent", "organismPrimaryDetermination", "storageUnitCoordinates"))
         .build()
       );
     }

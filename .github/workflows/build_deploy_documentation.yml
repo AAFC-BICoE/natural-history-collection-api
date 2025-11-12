@@ -1,6 +1,10 @@
 name: Build and Deploy Documentation
 
-on: [push]
+on:
+  push:
+    branches:
+      - dev
+      - master
 
 jobs:
   build:

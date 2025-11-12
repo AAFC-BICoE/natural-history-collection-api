@@ -1,18 +1,24 @@
-package ca.gc.aafc.collection.api;
+package ca.gc.aafc.collection.api.mapper;
 
-import ca.gc.aafc.dina.datetime.ISODateTime;
+import org.geolatte.geom.builder.DSL;
+import org.geolatte.geom.crs.CoordinateReferenceSystems;
+import org.junit.jupiter.api.Test;
+
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.dina.mapper.DinaMapper;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Map;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.dina.datetime.ISODateTime;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Collecting Event contains some custom mappings using {@link ca.gc.aafc.dina.mapper.DinaFieldAdapter}.
@@ -20,8 +26,18 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 public class CollectingEventMapperTest {
 
-  private static final DinaMapper<CollectingEventDto, CollectingEvent> CE_MAPPER =
-      new DinaMapper<>(CollectingEventDto.class);
+  private static final CollectingEventMapper MAPPER = CollectingEventMapper.INSTANCE;
+
+  @Test
+  public void testGeomToEntity() {
+    CollectingEvent ceEntity = new CollectingEvent();
+    // mimic what the service is doing
+    ceEntity.setEventGeom(DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
+      CollectingEventTestFixture.LONGITUDE, CollectingEventTestFixture.LATITUDE)));
+    CollectingEventDto ceDto = MAPPER.toDto(ceEntity, Set.of("eventGeom"), null);
+
+    assertNotNull(ceDto.getEventGeom());
+  }
 
   @Test
   public void testEventDateMappingToEntity() {
@@ -30,8 +46,8 @@ public class CollectingEventMapperTest {
     ceDto.setEndEventDateTime("2019-08-14");
 
     CollectingEvent ceEntity = new CollectingEvent();
-    CE_MAPPER.applyDtoToEntity(ceDto, ceEntity, Map.of(CollectingEventDto.class,
-        Collections.emptySet()), Collections.emptySet());
+    MAPPER.patchEntity(ceEntity, ceDto,
+      Set.of("startEventDateTime", "endEventDateTime"), null);
 
     assertEquals(LocalDateTime.of(2019,8,13,0, 0),
         ceEntity.getStartEventDateTime());
@@ -48,8 +64,8 @@ public class CollectingEventMapperTest {
     ceDto.setEndEventDateTime(null);
 
     CollectingEvent ceEntity = new CollectingEvent();
-    CE_MAPPER.applyDtoToEntity(ceDto, ceEntity, Map.of(CollectingEventDto.class,
-        Collections.emptySet()), Collections.emptySet());
+    MAPPER.patchEntity(ceEntity, ceDto,
+        Set.of("startEventDateTime", "endEventDateTime"), null);
     assertNull(ceEntity.getStartEventDateTime());
     assertNull(ceEntity.getEndEventDateTime());
   }
@@ -62,7 +78,10 @@ public class CollectingEventMapperTest {
         .startEventDateTimePrecision(null)
         .build();
 
-    CollectingEventDto ceDto = CE_MAPPER.toDto(ceEntity);
+    Map<String, Object> asMap = JsonAPITestHelper.toAttributeMap(ceEntity);
+    Set<String> attributesNames = new HashSet<>(asMap.keySet());
+
+    CollectingEventDto ceDto = MAPPER.toDto(ceEntity, attributesNames, null);
     assertNull(ceDto.getStartEventDateTime());
   }
 
@@ -75,8 +94,10 @@ public class CollectingEventMapperTest {
         .endEventDateTimePrecision(ISODateTime.Format.YYYY_MM_DD.getPrecision())
         .build();
 
-    CollectingEventDto ceDto = CE_MAPPER.toDto(ceEntity, Map.of(CollectingEvent.class,
-        Collections.emptySet()), Collections.emptySet());
+    Map<String, Object> asMap = JsonAPITestHelper.toAttributeMap(ceEntity);
+    Set<String> attributesNames = new HashSet<>(asMap.keySet());
+
+    CollectingEventDto ceDto = MAPPER.toDto(ceEntity, attributesNames, null);
     assertEquals("2019-08-13", ceDto.getStartEventDateTime());
     assertEquals("2019-08-14", ceDto.getEndEventDateTime());
   }
