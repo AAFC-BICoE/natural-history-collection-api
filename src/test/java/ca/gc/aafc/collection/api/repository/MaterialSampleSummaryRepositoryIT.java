@@ -1,13 +1,11 @@
 package ca.gc.aafc.collection.api.repository;
 
-import io.crnk.core.queryspec.QuerySpec;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
@@ -22,6 +20,7 @@ import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
@@ -62,11 +61,8 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
     // we need to flush to make sure it will be visible in the PG view
     organismService.flush();
 
-    MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(matSampleId, new QuerySpec(
-      MaterialSampleSummaryDto.class));
-
+    MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(matSampleId);
     assertNotNull(mssDto.getEffectiveDeterminations());
-    Assertions.assertEquals(1, mssDto.getEffectiveDeterminations().size());
+    assertEquals(1, mssDto.getEffectiveDeterminations().size());
   }
-
 }
