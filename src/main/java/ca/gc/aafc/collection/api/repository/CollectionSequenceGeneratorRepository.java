@@ -1,128 +1,97 @@
 package ca.gc.aafc.collection.api.repository;
 
-import java.io.Serializable;
-import java.util.Optional;
-import javax.inject.Inject;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import com.toedter.spring.hateoas.jsonapi.JsonApiModelBuilder;
 
+import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.CollectionSequenceGeneratorDto;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.CollectionSequenceGenerationRequest;
+import ca.gc.aafc.collection.api.mapper.CollectionSequenceGeneratorMapper;
 import ca.gc.aafc.collection.api.service.CollectionSequenceGeneratorService;
 import ca.gc.aafc.collection.api.service.CollectionService;
-import ca.gc.aafc.dina.mapper.DinaMapper;
-import ca.gc.aafc.dina.mapper.DinaMappingLayer;
-import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
-import ca.gc.aafc.dina.repository.DinaRepository;
-import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
-import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
+import ca.gc.aafc.dina.repository.DinaRepositoryV2;
 import ca.gc.aafc.dina.security.auth.DinaAuthorizationService;
 
-import io.crnk.core.exception.MethodNotAllowedException;
-import io.crnk.core.exception.ResourceNotFoundException;
-import io.crnk.core.queryspec.QuerySpec;
-import io.crnk.core.resource.list.ResourceList;
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
+
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import lombok.NonNull;
 
-@Repository
-public class CollectionSequenceGeneratorRepository extends DinaRepository<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> {
-
-  @Inject
-  private CollectionService collectionService;
+@RestController
+@RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
+public class CollectionSequenceGeneratorRepository extends DinaRepositoryV2<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> {
 
   private final CollectionSequenceGeneratorService collectionSequenceGeneratorService;
-  private final DinaMappingLayer<CollectionSequenceGeneratorDto, CollectionSequenceGenerationRequest> dinaMapper;
+  private final CollectionService collectionService;
   private final DinaAuthorizationService groupAuthorizationService;
 
   public CollectionSequenceGeneratorRepository(
     @NonNull CollectionSequenceGeneratorService dinaService,
-    ExternalResourceProvider externalResourceProvider,
+    CollectionService collectionService,
     DinaAuthorizationService groupAuthorizationService,
     @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
     ObjectMapper objectMapper
   ) {
     super(
       dinaService,
       groupAuthorizationService,
       Optional.empty(),
-      new DinaMapper<>(CollectionSequenceGeneratorDto.class),
+      CollectionSequenceGeneratorMapper.INSTANCE,
       CollectionSequenceGeneratorDto.class,
       CollectionSequenceGenerationRequest.class,
-      null,
-      externalResourceProvider,
       buildProperties, objectMapper);
 
-    // Create the dina mapper for CollectionSequenceGeneratorDto to CollectionSequenceGenerationRequest.
-    this.dinaMapper = new DinaMappingLayer<>(
-      CollectionSequenceGeneratorDto.class, 
-      new DinaMapper<>(CollectionSequenceGeneratorDto.class), 
-      dinaService, 
-      new DinaMappingRegistry(CollectionSequenceGeneratorDto.class)
-    );
     this.collectionSequenceGeneratorService = dinaService;
+    this.collectionService = collectionService;
     this.groupAuthorizationService = groupAuthorizationService;
   }
 
-  /**
-   * This method is completely overriding the super create method since it uses the findOne method
-   * which is not supported for the repository or service.
-   * 
-   * The CollectionSequenceGenerationRequest is a fake entity and is not mapped to a database.
-   */
+  @PostMapping(CollectionSequenceGeneratorDto.TYPENAME)
   @Transactional
-  @Override
-  public <S extends CollectionSequenceGeneratorDto> S create(S resource) {
+  public ResponseEntity<RepresentationModel<?>> onCreate(@RequestBody JsonApiDocument postedDocument)
+      throws ResourceNotFoundException {
+
+    this.checkSubmittedData(postedDocument.getAttributes());
+    CollectionSequenceGeneratorDto dto = objMapper.convertValue(postedDocument.getAttributes(), CollectionSequenceGeneratorDto.class);
 
     // Retrieve the collections group to use to check if the current user has permission to perform this.
-    Collection collection = collectionService.findOne(resource.getCollectionId(), Collection.class);
+    Collection collection = collectionService.findOne(dto.getCollectionId(), Collection.class);
     if (collection == null) {
-      throw new ResourceNotFoundException("The collection with the UUID of '" + resource.getCollectionId() + "' could not be found.");
+      throw ResourceNotFoundException.create(CollectionDto.TYPENAME, dto.getCollectionId());
     }
-    resource.setGroup(collection.getGroup());
+    dto.setGroup(collection.getGroup());
 
-    // Convert the Dto into an entity.
-    CollectionSequenceGenerationRequest entity = new CollectionSequenceGenerationRequest();
-    dinaMapper.mapToEntity(resource, entity);
-    
-    // Check to ensure the current user has permission to perform this action.
+    Set<String> attributesToConsider = new HashSet<>(this.registry.getAttributesPerClass().get(CollectionSequenceGeneratorDto.class));
+    attributesToConsider.removeAll(this.registry.getImmutableAttributesForClass(CollectionSequenceGeneratorDto.class, JsonApiImmutable.ImmutableOn.CREATE));
+    CollectionSequenceGenerationRequest entity = CollectionSequenceGeneratorMapper.INSTANCE.toEntity(dto, attributesToConsider, null);
     groupAuthorizationService.authorizeCreate(entity);
-
-    // Perform the action from the service.
     collectionSequenceGeneratorService.create(entity);
 
     // Return the resource back to the results from the service.
-    resource.setResult(entity.getResult());
+    dto.setResult(entity.getResult());
 
-    return resource;
-  }
+    var jsonDto = this.jsonApiDtoAssistant.toJsonApiDto(dto, Map.of(dto.getJsonApiType(), attributesToConsider.stream().toList()), Set.of());
 
-  @Override
-  public <S extends CollectionSequenceGeneratorDto> S save(S resource) {
-    throw new MethodNotAllowedException("PUT/PATCH");
-  }
-
-  @Override
-  public CollectionSequenceGeneratorDto findOne(Serializable id, QuerySpec querySpec) {
-    throw new MethodNotAllowedException("GET");
-  }
-
-  @Override
-  public ResourceList<CollectionSequenceGeneratorDto> findAll(QuerySpec querySpec) {
-    throw new MethodNotAllowedException("GET");
-  }
-
-  @Override
-  public ResourceList<CollectionSequenceGeneratorDto> findAll(java.util.Collection<Serializable> ids, QuerySpec querySpec) {
-    throw new MethodNotAllowedException("GET");
-  }
-
-  @Override
-  public void delete(Serializable id) {
-    throw new MethodNotAllowedException("DELETE");
+    JsonApiModelBuilder builder = this.jsonApiModelAssistant.createJsonApiModelBuilder(jsonDto);
+    RepresentationModel<?> model = builder.build();
+    URI uri = URI.create(dto.getJsonApiType());
+    return ResponseEntity.created(uri).body(model);
   }
 }
