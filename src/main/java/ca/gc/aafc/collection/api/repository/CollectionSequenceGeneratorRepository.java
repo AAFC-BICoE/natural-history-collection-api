@@ -71,6 +71,11 @@ public class CollectionSequenceGeneratorRepository extends DinaRepositoryV2<Coll
     this.checkSubmittedData(postedDocument.getAttributes());
     CollectionSequenceGeneratorDto dto = objMapper.convertValue(postedDocument.getAttributes(), CollectionSequenceGeneratorDto.class);
 
+    // if no collectionId was provided use the document id
+    if (dto.getCollectionId() == null && postedDocument.getId() != null) {
+      dto.setCollectionId(postedDocument.getId());
+    }
+
     // Retrieve the collections group to use to check if the current user has permission to perform this.
     Collection collection = collectionService.findOne(dto.getCollectionId(), Collection.class);
     if (collection == null) {
@@ -87,7 +92,7 @@ public class CollectionSequenceGeneratorRepository extends DinaRepositoryV2<Coll
     // Return the resource back to the results from the service.
     dto.setResult(entity.getResult());
 
-    var jsonDto = this.jsonApiDtoAssistant.toJsonApiDto(dto, Map.of(dto.getJsonApiType(), attributesToConsider.stream().toList()), Set.of());
+    var jsonDto = this.jsonApiDtoAssistant.toJsonApiDto(dto, Map.of(dto.getJsonApiType(), registry.getAttributesPerClass().get(CollectionSequenceGeneratorDto.class).stream().toList()), Set.of());
 
     JsonApiModelBuilder builder = this.jsonApiModelAssistant.createJsonApiModelBuilder(jsonDto);
     RepresentationModel<?> model = builder.build();
