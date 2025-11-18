@@ -81,7 +81,7 @@ public class FormTemplateRepository extends DinaRepositoryV2<FormTemplateDto, Fo
 
   @GetMapping(FormTemplateDto.TYPENAME + "/{id}")
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable UUID id, HttpServletRequest req)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
     return handleFindOne(id, req);
   }
 
