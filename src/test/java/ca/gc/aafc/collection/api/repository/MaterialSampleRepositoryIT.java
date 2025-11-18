@@ -125,7 +125,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
     MaterialSampleDto result = materialSampleRepository.getOne(parentMatSampleId,
       "optfields[" + MaterialSampleDto.TYPENAME + "]=materialSampleChildren").getDto();
-    assertEquals(childMatSampleId, result.getMaterialSampleChildren().getFirst().getUuid());
+    assertEquals(childMatSampleId, result.getMaterialSampleChildren().getFirst().getId());
   }
 
   @Test

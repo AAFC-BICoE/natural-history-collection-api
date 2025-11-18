@@ -4,17 +4,20 @@ import java.util.UUID;
 
 import ca.gc.aafc.collection.api.entities.CollectionSequenceGenerationRequest;
 import ca.gc.aafc.collection.api.service.CollectionSequenceMapper.CollectionSequenceReserved;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
 
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.Data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @Data
-@JsonApiResource(type = CollectionSequenceGeneratorDto.TYPENAME)
+@JsonApiTypeForClass(CollectionSequenceGeneratorDto.TYPENAME)
 @RelatedEntity(CollectionSequenceGenerationRequest.class)
-public class CollectionSequenceGeneratorDto {
+public class CollectionSequenceGeneratorDto implements JsonApiResource {
 
   public static final String TYPENAME = "collection-sequence-generator";
 
@@ -23,10 +26,21 @@ public class CollectionSequenceGeneratorDto {
 
   private Integer amount = 1;
 
-  @JsonApiField(postable = false)
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.CREATE)
   private CollectionSequenceReserved result;
 
-  // Retrieved from the collection.
-  @JsonApiField(postable = false)
+  // Retrieved from the collection
   private String group;
+
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return collectionId;
+  }
 }

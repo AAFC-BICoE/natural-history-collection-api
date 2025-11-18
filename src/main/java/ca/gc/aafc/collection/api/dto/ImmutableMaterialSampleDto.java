@@ -1,15 +1,10 @@
 package ca.gc.aafc.collection.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.dina.mapper.IgnoreDinaMapping;
 
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.PatchStrategy;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -27,11 +22,6 @@ import lombok.Setter;
 @Setter
 public class ImmutableMaterialSampleDto {
 
-  @JsonApiId
-  @JsonIgnore
-  private UUID uuid;
-
-  @IgnoreDinaMapping
   private UUID id;
 
   private String group;
@@ -48,7 +38,6 @@ public class ImmutableMaterialSampleDto {
 
   private LocalDate preparationDate;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, String> managedAttributes = new HashMap<>();
 
   private String preparationRemarks;
@@ -65,13 +54,4 @@ public class ImmutableMaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
 
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-    this.id = uuid;
-  }
-
-  public void setId(UUID id) {
-    this.uuid = id;
-    this.id = id;
-  }
 }
