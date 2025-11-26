@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 
 @Getter
 @Setter
@@ -20,7 +21,7 @@ import ca.gc.aafc.collection.api.entities.Determination;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonApiTypeForClass(MaterialSampleSummaryDto.TYPENAME)
-public class MaterialSampleSummaryDto {
+public class MaterialSampleSummaryDto implements JsonApiResource {
 
   public static final String TYPENAME = "material-sample-summary";
 
@@ -31,4 +32,13 @@ public class MaterialSampleSummaryDto {
 
   private List<Determination> effectiveDeterminations;
 
+  @Override
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }

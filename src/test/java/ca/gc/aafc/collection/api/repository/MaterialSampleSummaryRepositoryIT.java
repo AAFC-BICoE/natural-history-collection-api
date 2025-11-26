@@ -15,6 +15,7 @@ import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
@@ -35,7 +36,7 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
   private MaterialSampleSummaryRepository materialSampleSummaryRepository;
 
   @Test
-  public void onMaterialSampleWithDetermination_repoFindOneReturnRightSummary() throws MalformedURLException {
+  public void onMaterialSampleWithDetermination_repoFindOneReturnRightSummary() throws MalformedURLException, ResourceNotFoundException {
 
     OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
     organismDto.setIsTarget(true);
@@ -61,7 +62,7 @@ public class MaterialSampleSummaryRepositoryIT extends CollectionModuleBaseIT {
     // we need to flush to make sure it will be visible in the PG view
     organismService.flush();
 
-    MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.findOne(matSampleId);
+    MaterialSampleSummaryDto mssDto = materialSampleSummaryRepository.getOne(matSampleId).getDto();
     assertNotNull(mssDto.getEffectiveDeterminations());
     assertEquals(1, mssDto.getEffectiveDeterminations().size());
   }
