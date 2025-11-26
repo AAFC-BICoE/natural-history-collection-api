@@ -98,7 +98,7 @@ public class MaterialSampleSummaryRepository {
   public ResponseEntity<RepresentationModel<?>> handleFindOne(@PathVariable UUID id)
       throws ResourceNotFoundException {
 
-    JsonApiDto<MaterialSampleSummaryDto> jsonApiDto =getOne(id);
+    JsonApiDto<MaterialSampleSummaryDto> jsonApiDto = getOne(id);
     JsonApiModelBuilder builder = jsonApiModelAssistant.createJsonApiModelBuilder(jsonApiDto);
     return ResponseEntity.ok(builder.build());
   }
