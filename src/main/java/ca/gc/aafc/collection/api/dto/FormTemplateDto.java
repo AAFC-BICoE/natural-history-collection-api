@@ -1,12 +1,14 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.collection.api.entities.FormTemplate;
+import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
-import io.crnk.core.resource.annotations.PatchStrategy;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +24,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @RelatedEntity(FormTemplate.class)
-@JsonApiResource(type = FormTemplateDto.TYPENAME)
-public class FormTemplateDto {
+@JsonApiTypeForClass(FormTemplateDto.TYPENAME)
+public class FormTemplateDto implements JsonApiResource {
 
   public static final String TYPENAME = "form-template";
   
@@ -40,10 +42,20 @@ public class FormTemplateDto {
 
   private Boolean restrictToCreatedBy;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   private Map<String, Object> viewConfiguration;
 
-  @JsonApiField(patchStrategy = PatchStrategy.SET)
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<FormTemplate.FormComponent> components;
+
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }
