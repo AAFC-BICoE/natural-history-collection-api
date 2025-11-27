@@ -10,7 +10,9 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
+
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
@@ -31,6 +33,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -53,18 +57,19 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
     protocol.setAttachments(null);
     String protocolUuid = postProtocol(protocol);
 
-    CollectionManagedAttributeDto ceMa = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    CollectionControlledVocabularyItemDto ceMa = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
     ceMa.setAcceptedValues(null);
 
-    String managedAttributeUuid = JsonAPITestHelper.extractId(
-      sendPost(CollectionManagedAttributeDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
-        CollectionManagedAttributeDto.TYPENAME,
+    String managedAttributeItemUuid = JsonAPITestHelper.extractId(
+      sendPost(CollectionControlledVocabularyItemDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+        CollectionControlledVocabularyItemDto.TYPENAME,
         JsonAPITestHelper.toAttributeMap(ceMa),
-        null,
+        JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("controlledVocabulary",
+          CollectionControlledVocabularyDto.TYPENAME, MANAGED_ATTRIBUTE_VOCAB_UUID.toString())),
         null
       )));
 
-    String managedAttributeKey = sendGet(CollectionManagedAttributeDto.TYPENAME, managedAttributeUuid).
+    String managedAttributeKey = sendGet(CollectionControlledVocabularyItemDto.TYPENAME, managedAttributeItemUuid).
       extract().body().jsonPath().get("data.attributes.key");
 
     CollectingEventDto ce = CollectingEventTestFixture.newEventDto();

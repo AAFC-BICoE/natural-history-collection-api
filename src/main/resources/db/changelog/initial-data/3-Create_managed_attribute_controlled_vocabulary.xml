@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+                   
+  <changeSet id="3-Create_managed_attribute_controlled_vocabulary" context="initial-data" author="cgendreau">
+    <insert tableName="controlled_vocabulary">
+      <column name="uuid" value="01998155-a6f0-7c2f-9fcc-994d74222f9c"/>
+      <column name="name" value="Managed Attribute"/>
+      <column name="key" value="managed_attribute"/>
+      <column name="type" value="MANAGED_ATTRIBUTE"/>
+      <column name="vocab_class" value="QUALIFIED_VALUE"/>
+      <column name="version" value="1"/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Managed Attribute"},{"lang":"fr","title":"Attribut géré"}]}'/>
+      <column name="multilingual_description" value='{
+      "descriptions": [
+      {
+      "lang": "en",
+      "desc": "Attributes that can be created and used by users on-demand. They are usually used to capture data that is not common enough to be captured in a regular field."
+      },
+      {
+      "lang": "fr",
+      "desc": "Attributs pouvant être créés et utilisés sur demande par les utilisateurs. Ils sont généralement utilisés pour saisir des données qui ne sont pas suffisamment courantes pour être saisies dans un champ standard."
+      }
+      ]
+      }'/>
+      <column name="created_by" value="system"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
