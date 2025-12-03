@@ -188,7 +188,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
    * @param entity
    * @return
    */
-  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "id", source = "uuid")
   ImmutableMaterialSampleDto toImmutableMaterialSampleDto(ImmutableMaterialSample entity);
 
   // Specific type mapping ---

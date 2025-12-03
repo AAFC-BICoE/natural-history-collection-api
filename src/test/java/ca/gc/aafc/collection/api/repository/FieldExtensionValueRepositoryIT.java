@@ -4,7 +4,6 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.FieldExtensionValueDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.FieldExtensionValueTestFixture;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-import io.crnk.core.queryspec.QuerySpec;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -22,8 +21,7 @@ public class FieldExtensionValueRepositoryIT extends CollectionModuleBaseIT {
   @WithMockKeycloakUser(groupRole = FieldExtensionValueTestFixture.GROUP + ":SUPER_USER")
   void findOneByKey_whenKeyProvided_fieldExtensionValueFetched() {
     FieldExtensionValueDto fieldExtensionValueDto = FieldExtensionValueTestFixture.newFieldExtensionValueDto();
-    QuerySpec querySpec = new QuerySpec(FieldExtensionValueDto.class);
-    FieldExtensionValueDto fetchedFieldExtensionValue = repo.findOne(FieldExtensionValueTestFixture.FIELD_EXTENSION_KEY, querySpec);
+    FieldExtensionValueDto fetchedFieldExtensionValue = repo.findOne(FieldExtensionValueTestFixture.FIELD_EXTENSION_KEY);
     assertEquals(fetchedFieldExtensionValue.getExtensionKey(), fieldExtensionValueDto.getExtensionKey());
     assertEquals(fetchedFieldExtensionValue.getExtensionName(), fieldExtensionValueDto.getExtensionName());
     assertEquals(fetchedFieldExtensionValue.getField().getName(), fieldExtensionValueDto.getField().getName());
