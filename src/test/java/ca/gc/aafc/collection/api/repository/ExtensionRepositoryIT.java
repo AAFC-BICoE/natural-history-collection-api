@@ -15,7 +15,6 @@ import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.ExtensionDto;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
-import io.crnk.core.queryspec.QuerySpec;
 
 public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
 
@@ -28,7 +27,7 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
   @Test
   public void findAll_ExtensionConfiguration() {
     List<ExtensionDto> listOfExtensionDtos =
-      extensionRepository.findAll(new QuerySpec(ExtensionDto.class));
+      extensionRepository.findAll("");
     assertEquals(11, listOfExtensionDtos.size());
 
     List<Extension> listOfExtension = new ArrayList<>();

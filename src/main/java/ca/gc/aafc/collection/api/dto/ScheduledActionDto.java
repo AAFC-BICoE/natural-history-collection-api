@@ -6,7 +6,6 @@ import javax.validation.constraints.Size;
 
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
-import io.crnk.core.resource.annotations.JsonApiRelation;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ public class ScheduledActionDto {
   private String actionStatus;
 
   @JsonApiExternalRelation(type = "user")
-  @JsonApiRelation
   private ExternalRelationDto assignedTo;
 
   @Size(max = 1000)
