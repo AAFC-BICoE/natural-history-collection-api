@@ -1,5 +1,13 @@
 package ca.gc.aafc.collection.api;
 
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
 import ca.gc.aafc.collection.api.service.AssemblageService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
@@ -16,30 +24,12 @@ import ca.gc.aafc.collection.api.service.ProtocolService;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
-import ca.gc.aafc.dina.dto.JsonApiResource;
-import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
-import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
-import ca.gc.aafc.dina.repository.DinaRepositoryV2;
-import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
-import java.util.UUID;
-import java.util.function.Function;
+import java.util.Properties;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.Properties;
 
 @SpringBootTest(classes = CollectionModuleApiLauncher.class)
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")

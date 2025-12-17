@@ -1,8 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import io.crnk.core.resource.annotations.JsonApiField;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -13,9 +10,14 @@ import lombok.Setter;
 
 import java.util.List;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
 import ca.gc.aafc.collection.api.entities.SplitConfiguration;
+import ca.gc.aafc.dina.dto.JsonApiResource;
+import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
 
 /**
  * DTO representing a request to get the identifier that should follow the provided one.
@@ -26,8 +28,8 @@ import ca.gc.aafc.collection.api.entities.SplitConfiguration;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonApiResource(type = MaterialSampleIdentifierGeneratorDto.TYPENAME)
-public class MaterialSampleIdentifierGeneratorDto {
+@JsonApiTypeForClass(MaterialSampleIdentifierGeneratorDto.TYPENAME)
+public class MaterialSampleIdentifierGeneratorDto implements JsonApiResource {
 
   public static final String TYPENAME = "material-sample-identifier-generator";
 
@@ -36,7 +38,7 @@ public class MaterialSampleIdentifierGeneratorDto {
    *
    */
   @JsonApiId
-  private String id;
+  private UUID id;
 
   // for single parent use
   private UUID currentParentUUID;
@@ -53,7 +55,16 @@ public class MaterialSampleIdentifierGeneratorDto {
   /**
    * used to return the result
    */
-  @JsonApiField(postable = false)
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.CREATE)
   private Map<UUID, List<String>> nextIdentifiers;
 
+  @Override
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
+
+  @Override
+  public UUID getJsonApiId() {
+    return id;
+  }
 }
