@@ -58,6 +58,9 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
     if (optionalFields.getOrDefault(StorageUnitDto.TYPENAME, List.of()).contains(StorageUnit.HIERARCHY_PROP_NAME)) {
       setHierarchy(entity);
     }
+    if (optionalFields.getOrDefault(StorageUnitDto.TYPENAME, List.of()).contains(StorageUnit.CHILDREN_PROP_NAME)) {
+      entity.getStorageUnitChildren();
+    }
     return entity;
   }
 

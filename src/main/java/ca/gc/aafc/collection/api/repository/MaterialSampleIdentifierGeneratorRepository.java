@@ -56,9 +56,8 @@ public class MaterialSampleIdentifierGeneratorRepository {
   @PostMapping(MaterialSampleIdentifierGeneratorDto.TYPENAME)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onCreate(@RequestBody JsonApiDocument postedDocument)
-    throws ResourceNotFoundException {
+      throws ResourceNotFoundException {
 
-    //this.checkSubmittedData(postedDocument.getAttributes());
     MaterialSampleIdentifierGeneratorDto generatorDto = objectMapper.convertValue(postedDocument.getAttributes(), MaterialSampleIdentifierGeneratorDto.class);
 
     // Make sure we have sane default values
@@ -87,7 +86,6 @@ public class MaterialSampleIdentifierGeneratorRepository {
         handleSingleParent(generatorDto, characterType, strategy, quantity) :
         handleMultipleParents(generatorDto, characterType, strategy);
 
-
     JsonApiModelBuilder builder = this.jsonApiModelAssistant.createJsonApiModelBuilder(
       JsonApiDto.<MaterialSampleIdentifierGeneratorDto>builder().dto(responseDto).build());
     RepresentationModel<?> model = builder.build();
@@ -95,10 +93,10 @@ public class MaterialSampleIdentifierGeneratorRepository {
     return ResponseEntity.created(uri).body(model);
   }
 
-  private <S extends MaterialSampleIdentifierGeneratorDto> S handleSingleParent(S dto,
-                                                                                MaterialSampleNameGeneration.CharacterType characterType,
-                                                                                MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
-                                                                                int qty) {
+  private MaterialSampleIdentifierGeneratorDto handleSingleParent(MaterialSampleIdentifierGeneratorDto dto,
+                                                                  MaterialSampleNameGeneration.CharacterType characterType,
+                                                                  MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy,
+                                                                  int qty) {
     Objects.requireNonNull(dto.getCurrentParentUUID());
 
     List<String> nextIdentifiers = new ArrayList<>(qty);
@@ -114,9 +112,9 @@ public class MaterialSampleIdentifierGeneratorRepository {
     return dto;
   }
 
-  private <S extends MaterialSampleIdentifierGeneratorDto> S handleMultipleParents(S dto,
-                                                                                   MaterialSampleNameGeneration.CharacterType characterType,
-                                                                                   MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy) {
+  private MaterialSampleIdentifierGeneratorDto handleMultipleParents(MaterialSampleIdentifierGeneratorDto dto,
+                                                                     MaterialSampleNameGeneration.CharacterType characterType,
+                                                                     MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy) {
     Objects.requireNonNull(dto.getCurrentParentsUUID());
 
     List<String> nextIdentifiers = new ArrayList<>(dto.getCurrentParentsUUID().size());

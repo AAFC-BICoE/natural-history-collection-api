@@ -205,7 +205,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends CollectionMod
       .separator(SplitConfiguration.Separator.SPACE)
       .quantity(2)
       .build();
-    
+
     MaterialSampleIdentifierGeneratorDto resultDto = postAndReturnResult(generatedDto);
 
     List<String> nextIdentifiers = resultDto.getNextIdentifiers().get(parentUuid);
