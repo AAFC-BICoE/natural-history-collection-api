@@ -1,7 +1,15 @@
 package ca.gc.aafc.collection.api.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
@@ -15,14 +23,20 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 
-public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositoryIT {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class MaterialSampleIdentifierGeneratorRepositoryIT extends CollectionModuleBaseRepositoryIT {
+
+  private static final String BASE_URL = "/api/v1/" + MaterialSampleIdentifierGeneratorDto.TYPENAME;
+
+  @Autowired
+  private WebApplicationContext wac;
+
+  private MockMvc mockMvc;
 
   @Inject
   private MaterialSampleIdentifierGeneratorRepository materialSampleIdentifierGeneratorRepository;
@@ -30,9 +44,25 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
   @Inject
   protected MaterialSampleRepository materialSampleRepository;
 
+  @Autowired
+  public MaterialSampleIdentifierGeneratorRepositoryIT(ObjectMapper objMapper) {
+    super(BASE_URL, objMapper);
+  }
+
+  @Override
+  protected MockMvc getMockMvc() {
+    return mockMvc;
+  }
+
+  @BeforeEach
+  public void setup() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+  }
+
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
-  public void materialSampleIdentifierGeneratorRepositoryNext_nextIdentifierReturned() {
+  public void materialSampleIdentifierGeneratorRepositoryNext_nextIdentifierReturned()
+    throws Exception {
 
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
@@ -52,8 +82,9 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .quantity(2)
       .build();
 
-    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
-    List<String> nextIdentifiers = dto.getNextIdentifiers().get(child1Uuid);
+    MaterialSampleIdentifierGeneratorDto resultDto = postAndReturnResult(generatedDto);
+
+    List<String> nextIdentifiers = resultDto.getNextIdentifiers().get(child1Uuid);
     assertEquals("ABC-01-b", nextIdentifiers.get(0));
     assertEquals("ABC-01-c", nextIdentifiers.get(1));
   }
@@ -78,9 +109,25 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .onCreate(materialSampleToCreate));
   }
 
+  private MaterialSampleIdentifierGeneratorDto postAndReturnResult(MaterialSampleIdentifierGeneratorDto toPost)
+    throws Exception {
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, CollectionManagedAttributeDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(toPost)
+    );
+
+    var createdResponse = sendPost(docToCreate);
+    JsonApiDocument apiDoc = objMapper.readValue(createdResponse.getResponse().getContentAsString(),
+      JsonApiDocument.class);
+
+    return objMapper.convertValue(apiDoc.getAttributes(),
+      MaterialSampleIdentifierGeneratorDto.class);
+  }
+
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
-  public void materialSampleIdentifierGeneratorRepositorySameType_nextIdentifierReturned() {
+  public void materialSampleIdentifierGeneratorRepositorySameType_nextIdentifierReturned()
+    throws Exception {
 
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN);
@@ -97,15 +144,17 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .quantity(2)
       .build();
 
-    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
-    List<String> nextIdentifiers = dto.getNextIdentifiers().get(parentUuid);
+    MaterialSampleIdentifierGeneratorDto resultDto = postAndReturnResult(generatedDto);
+
+    List<String> nextIdentifiers = resultDto.getNextIdentifiers().get(parentUuid);
     assertEquals("Sample10-A", nextIdentifiers.get(0));
     assertEquals("Sample10-B", nextIdentifiers.get(1));
   }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
-  public void materialSampleIdentifierGeneratorRepositoryMultipleNext_nextIdentifierReturned() {
+  public void materialSampleIdentifierGeneratorRepositoryMultipleNext_nextIdentifierReturned()
+    throws Exception {
 
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
@@ -129,17 +178,18 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .materialSampleType(MaterialSample.MaterialSampleType.CULTURE_STRAIN)
       .build();
 
-    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
-    List<String> nextIdentifiers = dto.getNextIdentifiers().get(child1Uuid);
+    MaterialSampleIdentifierGeneratorDto resultDto = postAndReturnResult(generatedDto);
+
+    List<String> nextIdentifiers = resultDto.getNextIdentifiers().get(child1Uuid);
     assertEquals("ABC-01-c", nextIdentifiers.getFirst());
 
-    nextIdentifiers = dto.getNextIdentifiers().get(child2Uuid);
+    nextIdentifiers = resultDto.getNextIdentifiers().get(child2Uuid);
     assertEquals("ABC-01-d", nextIdentifiers.getFirst());
   }
 
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
-  public void materialSampleIdentifierGeneratorRepositoryNext_customSeparator() {
+  public void materialSampleIdentifierGeneratorRepositoryNext_customSeparator() throws Exception {
 
     MaterialSampleDto parentDto = MaterialSampleTestFixture.newMaterialSample();
     parentDto.setMaterialSampleType(MaterialSample.MaterialSampleType.WHOLE_ORGANISM);
@@ -156,10 +206,10 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends BaseRepositor
       .quantity(2)
       .build();
 
-    MaterialSampleIdentifierGeneratorDto dto = materialSampleIdentifierGeneratorRepository.create(generatedDto);
-    List<String> nextIdentifiers = dto.getNextIdentifiers().get(parentUuid);
+    MaterialSampleIdentifierGeneratorDto resultDto = postAndReturnResult(generatedDto);
+
+    List<String> nextIdentifiers = resultDto.getNextIdentifiers().get(parentUuid);
     assertEquals("ABC-01 a", nextIdentifiers.get(0));
     assertEquals("ABC-01 b", nextIdentifiers.get(1));
   }
-
 }

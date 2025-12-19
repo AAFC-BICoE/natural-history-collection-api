@@ -31,7 +31,6 @@ public class FieldExtensionValueRepository extends ReadOnlyDinaRepositoryV2<Stri
   public ResponseEntity<RepresentationModel<?>> handleFindOne(@PathVariable String id) {
 
     FieldExtensionValueDto dto = findOne(id);
-
     if (dto == null) {
       return ResponseEntity.notFound().build();
     }

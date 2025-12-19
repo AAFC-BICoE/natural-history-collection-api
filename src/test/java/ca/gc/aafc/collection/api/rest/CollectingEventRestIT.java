@@ -177,7 +177,7 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
   }
 
   private ValidatableResponse findCollectingEvent(String unitId) {
-    return RestAssured.given().header(CRNK_HEADER).port(this.testPort).basePath(this.basePath)
+    return RestAssured.given().port(this.testPort).basePath(this.basePath)
       .get(CollectingEventDto.TYPENAME + "/" + unitId).then();
   }
 }

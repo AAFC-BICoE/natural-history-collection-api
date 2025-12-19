@@ -20,5 +20,11 @@ See https://spotbugs.readthedocs.io/en/latest/filter.html
     <Package name="ca.gc.aafc.collection.api.mapper" />
     <Class name="~.*MapperImpl$"/>
   </Match>
+
+  <Match>
+    <Class name="ca.gc.aafc.collection.api.service.StorageUnitService" />
+    <Method name="handleOptionalFields" />
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT" />
+  </Match>
   
 </FindBugsFilter>

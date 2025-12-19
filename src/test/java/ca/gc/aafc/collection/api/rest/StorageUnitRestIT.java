@@ -13,8 +13,8 @@ import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.dto.ImmutableStorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
+import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
-import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -61,13 +61,12 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
       .body("data.attributes.group", Matchers.is(unit.getGroup()))
       .body("data.attributes.createdBy", Matchers.notNullValue())
       .body("data.attributes.createdOn", Matchers.notNullValue())
-      //.body("data.attributes.storageUnitChildren[0].id", Matchers.is(childId))
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(parentId))
       .body("data.relationships.storageUnitType.data.id", Matchers.is(unitTypeId));
 
     sendPatchWithRelations(childUnit, childId, getRelationshipsMap(unitId, unitTypeId));
     findUnit(childId)
-      .body("data.attributes.storageUnitChildren", Matchers.empty())
+      .body("data.attributes.storageUnitChildren", Matchers.nullValue())
       .body("data.relationships.parentStorageUnit.data.id", Matchers.is(unitId));
 
     findUnit(parentId)
@@ -108,10 +107,10 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     StorageUnitDto parent = newUnit();
 
     ImmutableStorageUnitDto childDto = new ImmutableStorageUnitDto();
-    childDto.setUuid(child.getUuid());
+    childDto.setId(child.getUuid());
     parent.setStorageUnitChildren(List.of(childDto));
 
-    findUnit(postUnit(parent)).body("data.attributes.storageUnitChildren", Matchers.empty());
+    findUnit(postUnit(parent)).body("data.attributes.storageUnitChildren", Matchers.nullValue());
   }
 
   @Test
@@ -124,14 +123,14 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     child.setUuid(UUID.fromString(childID));
 
     ImmutableStorageUnitDto childDto = new ImmutableStorageUnitDto();
-    childDto.setUuid(child.getUuid());
+    childDto.setId(child.getUuid());
     parent.setStorageUnitChildren(List.of(childDto));
 
     sendPatch(StorageUnitDto.TYPENAME, parentID,
       JsonAPITestHelper.toJsonAPIMap(StorageUnitDto.TYPENAME, JsonAPITestHelper.toAttributeMap(parent),
         null, parentID));
 
-    findUnit(parentID).body("data.attributes.storageUnitChildren", Matchers.empty());
+    findUnit(parentID).body("data.attributes.storageUnitChildren", Matchers.nullValue());
   }
 
   @Test
@@ -173,7 +172,7 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
     String unitId = postUnit(unit, getRelationshipsMap(parentId, unitTypeId));
     sendDelete(StorageUnitDto.TYPENAME, unitId);
     findUnit(parentId)
-      .body("data.relationships.storageUnitChildren.data", Matchers.empty())
+      .body("data.attributes.storageUnitChildren", Matchers.nullValue())
       .body("data.relationships.parentStorageUnit.data", Matchers.nullValue());
   }
 
@@ -232,8 +231,8 @@ public class StorageUnitRestIT extends BaseRestAssuredTest {
 
   private ValidatableResponse findUnit(String unitId) {
     return RestAssured.given().port(this.testPort).basePath(this.basePath)
-      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=storageUnitType,parentStorageUnit,storageUnitChildren&"
-        + "optfields[" + StorageUnitDto.TYPENAME + "]=" + StorageUnitRepo.HIERARCHY_INCLUDE_PARAM
+      .get(StorageUnitDto.TYPENAME + "/" + unitId + "?include=storageUnitType,parentStorageUnit&"
+        + "optfields[" + StorageUnitDto.TYPENAME + "]=" + StorageUnit.HIERARCHY_PROP_NAME + "," + StorageUnit.CHILDREN_PROP_NAME
       ).then();
   }
 

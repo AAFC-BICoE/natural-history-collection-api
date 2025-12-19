@@ -33,6 +33,7 @@ public class StorageUnit extends AbstractStorageUnit {
   public static final String TYPE_COLUMN_NAME = "storage_unit_type_id";
 
   public static final String HIERARCHY_PROP_NAME = "hierarchy";
+  public static final String CHILDREN_PROP_NAME = "storageUnitChildren";
 
   @NotNull
   private Boolean isGeneric = false;

@@ -1,15 +1,18 @@
 package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
 @AllArgsConstructor
 @Getter
-@JsonApiResource(type = "extension")
+@JsonApiTypeForClass(ExtensionDto.TYPENAME)
 public class ExtensionDto {
+
+  public static final String TYPENAME = "extension";
 
   @JsonApiId
   private final String id;

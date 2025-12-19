@@ -1,12 +1,12 @@
 package ca.gc.aafc.collection.api.exceptionmapping;
 
-import io.crnk.core.exception.BadRequestException;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PSQLException;
 import org.postgresql.util.ServerErrorMessage;
 
 import java.util.Objects;
 import java.util.function.Function;
+import javax.ws.rs.BadRequestException;
 
 /**
  * Dina Hierarchy exception are thrown by the database with the SQLCode defined by {@link #SQL_STATE_CODE}.
