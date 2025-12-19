@@ -4,11 +4,16 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="179-Add_organism_material_sample_index" context="schema-change" author="jgrieb">
+    <changeSet id="179-Add_organism_material_sample_index-1" context="schema-change" author="jgrieb">
         <createIndex indexName="organism_material_sample_id_idx"
             tableName="organism">
             <column name="material_sample_id"/>
         </createIndex>
     </changeSet>
 
+    <changeSet id="179-Add_organism_material_sample_index-2" context="schema-change" author="cgendreau">
+        <sql>
+            CREATE INDEX organism_is_null_idx ON organism (is_target) WHERE is_target OR is_target IS NULL;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
