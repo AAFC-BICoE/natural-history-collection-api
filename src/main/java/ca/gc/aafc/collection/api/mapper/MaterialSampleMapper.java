@@ -142,7 +142,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
     return entity == null ? null : toPreparationMethodDto(entity, provided, MaterialSample.PREPARATION_METHOD_PROP_NAME);
   }
 
-  default  List<ImmutableMaterialSampleDto> toDto(List<ImmutableMaterialSample> entities, @Context Set<String> provided, @Context String scope) {
+  default List<ImmutableMaterialSampleDto> toDto(List<ImmutableMaterialSample> entities, @Context Set<String> provided, @Context String scope) {
 
     if (CollectionUtils.isEmpty(entities)) {
       return null;

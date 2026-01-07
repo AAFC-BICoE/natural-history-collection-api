@@ -27,6 +27,7 @@ import ca.gc.aafc.dina.exception.ResourcesNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.security.auth.GroupWithReadAuthorizationService;
@@ -60,7 +61,7 @@ public class StorageUnitUsageRepository extends DinaRepositoryV2<StorageUnitUsag
       StorageUnitUsageMapper.INSTANCE,
       StorageUnitUsageDto.class,
       StorageUnitUsage.class,
-      buildProperties, objectMapper);
+      buildProperties, objectMapper, new DinaMappingRegistry(StorageUnitUsageDto.class, true));
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 

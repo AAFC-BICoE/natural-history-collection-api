@@ -15,7 +15,6 @@ import ca.gc.aafc.collection.api.config.CollectionExtensionConfiguration;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.ExtensionDto;
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Extension;
-import io.crnk.core.queryspec.QuerySpec;
 
 public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
 
@@ -28,7 +27,7 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
   @Test
   public void findAll_ExtensionConfiguration() {
     List<ExtensionDto> listOfExtensionDtos =
-      extensionRepository.findAll(new QuerySpec(ExtensionDto.class));
+      extensionRepository.findAll("");
     assertEquals(11, listOfExtensionDtos.size());
 
     List<Extension> listOfExtension = new ArrayList<>();
@@ -52,5 +51,23 @@ public class ExtensionRepositoryIT extends CollectionModuleBaseIT {
         collectionExtensionConfiguration.getExtension().get("ncbi_sra_project_v1")
       ));
   }
-  
+
+  @Test
+  public void findAll_WhenFilteredByDinaComponent_ReturnsSubset() {
+    // "fields" is a reserved word in the simple filter parser and it gets confused and ignores the filter.
+    List<ExtensionDto> listOfExtensionDtos =
+      extensionRepository.findAll("filter[extension.fields.dinaComponent]=MATERIAL_SAMPLE");
+    assertEquals(1, listOfExtensionDtos.size());
+
+    List<Extension> listOfExtension = new ArrayList<>();
+    for (ExtensionDto extensionDto : listOfExtensionDtos) {
+      listOfExtension.add(extensionDto.getExtension());
+    }
+
+    MatcherAssert.assertThat(
+      listOfExtension,
+      Matchers.containsInAnyOrder(
+        collectionExtensionConfiguration.getExtension().get("agronomy_ontology_v1")
+      ));
+  }
 }
