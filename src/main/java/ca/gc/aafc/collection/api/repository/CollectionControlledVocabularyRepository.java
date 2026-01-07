@@ -82,14 +82,14 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
 
   @GetMapping(CollectionControlledVocabularyDto.TYPENAME + "/{idOrKey}")
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable String idOrKey, HttpServletRequest req)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
 
     if (StringUtils.isBlank(idOrKey)) {
       throw ResourceNotFoundException.create(CollectionControlledVocabularyDto.TYPENAME, "");
     }
 
     Optional<UUID> id = UUIDHelper.toUUID(idOrKey);
-    if(id.isPresent()) {
+    if (id.isPresent()) {
       return handleFindOne(id.get(), req);
     }
 
@@ -105,7 +105,7 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
   public ResponseEntity<RepresentationModel<?>> onBulkLoad(@RequestBody
                                                            JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument,
                                                            HttpServletRequest req)
-    throws ResourcesNotFoundException, ResourcesGoneException {
+      throws ResourcesNotFoundException, ResourcesGoneException {
     return handleBulkLoad(jsonApiBulkDocument, req);
   }
 
@@ -139,7 +139,7 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
   @PatchMapping(path = CollectionControlledVocabularyDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkUpdate(@RequestBody JsonApiBulkDocument jsonApiBulkDocument)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
     return handleBulkUpdate(jsonApiBulkDocument);
   }
 
@@ -154,7 +154,7 @@ public class CollectionControlledVocabularyRepository extends DinaRepositoryV2<C
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkDelete(@RequestBody
                                                              JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
     return handleBulkDelete(jsonApiBulkDocument);
   }
 

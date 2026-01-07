@@ -88,23 +88,23 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
 
   @GetMapping(CollectionControlledVocabularyItemDto.TYPENAME + "/{idOrKey}")
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable String idOrKey, HttpServletRequest req)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
 
     if (StringUtils.isBlank(idOrKey)) {
       throw ResourceNotFoundException.create(CollectionControlledVocabularyItemDto.TYPENAME, "");
     }
 
     Optional<UUID> id = UUIDHelper.toUUID(idOrKey);
-    if(id.isPresent()) {
+    if (id.isPresent()) {
       return handleFindOne(id.get(), req);
     }
 
     // key is always a compound key vocabKey.itemKey[.dinaComponent]
     String[] keyParts = StringUtils.split(idOrKey, ".");
 
-    if(keyParts.length == 2 || keyParts.length == 3) {
+    if (keyParts.length == 2 || keyParts.length == 3) {
       CollectionControlledVocabulary vocab = collectionControlledVocabularyService.findOneByKey(keyParts[0]);
-      if(vocab != null) {
+      if (vocab != null) {
         CollectionControlledVocabularyItem item = collectionControlledVocabularyItemService.findOneByKey(keyParts[1], vocab.getUuid(),
           keyParts.length == 3 ? keyParts[2] : null);
         return handleFindOne(item.getUuid(), req);
@@ -118,7 +118,7 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
   public ResponseEntity<RepresentationModel<?>> onBulkLoad(@RequestBody
                                                            JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument,
                                                            HttpServletRequest req)
-    throws ResourcesNotFoundException, ResourcesGoneException {
+      throws ResourcesNotFoundException, ResourcesGoneException {
     return handleBulkLoad(jsonApiBulkDocument, req);
   }
 
@@ -152,7 +152,7 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
   @PatchMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkUpdate(@RequestBody JsonApiBulkDocument jsonApiBulkDocument)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
     return handleBulkUpdate(jsonApiBulkDocument);
   }
 
@@ -167,7 +167,7 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkDelete(@RequestBody
                                                              JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument)
-    throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException {
     return handleBulkDelete(jsonApiBulkDocument);
   }
 

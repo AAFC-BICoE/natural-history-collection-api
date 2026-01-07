@@ -21,7 +21,7 @@ public class CollectionControlledVocabularyItemDto extends BaseControlledVocabul
   private CollectionControlledVocabularyDto controlledVocabulary;
 
   @JsonApiId
-  public UUID getUuid(){
+  public UUID getUuid() {
     return uuid;
   }
 

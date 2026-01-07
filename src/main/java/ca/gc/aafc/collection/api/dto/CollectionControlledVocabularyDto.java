@@ -18,7 +18,7 @@ import ca.gc.aafc.dina.dto.RelatedEntity;
 public class CollectionControlledVocabularyDto extends BaseControlledVocabularyDto {
 
   @JsonApiId
-  public UUID getUuid(){
+  public UUID getUuid() {
     return uuid;
   }
 
