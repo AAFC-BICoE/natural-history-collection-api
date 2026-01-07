@@ -13,7 +13,6 @@ import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.repository.StorageUnitRepo;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
@@ -21,7 +20,6 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
@@ -65,7 +63,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   @Disabled
   void post_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
-    childDto.setUuid(UUID.fromString(postSample(newSample())));
+    childDto.setId(UUID.fromString(postSample(newSample())));
 
     MaterialSampleDto parent = newSample();
     parent.setMaterialSampleChildren(List.of(childDto));
@@ -249,7 +247,7 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   @Disabled
   void patch_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
-    childDto.setUuid(UUID.fromString(postSample(newSample())));
+    childDto.setId(UUID.fromString(postSample(newSample())));
 
     MaterialSampleDto parent = newSample();
     String parentId = postSample(parent);

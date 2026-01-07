@@ -183,7 +183,8 @@
   <include file="db/changelog/migrations/176-Add_contributors_to_project.xml"/>
   <include file="db/changelog/migrations/177-Add_event_ambiguity_end_datetime.xml"/>
   <include file="db/changelog/migrations/178-Add_Expedition_table.xml"/>
-  <include file="db/changelog/migrations/179-Add_controlled_vocabulary.xml"/>
+  <include file="db/changelog/migrations/179-Add_organism_material_sample_index.xml"/>
+  <include file="db/changelog/migrations/180-Add_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/3-Create_managed_attribute_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
 </databaseChangeLog>

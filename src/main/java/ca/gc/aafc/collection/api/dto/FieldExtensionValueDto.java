@@ -1,21 +1,22 @@
 package ca.gc.aafc.collection.api.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 
 import ca.gc.aafc.dina.extension.FieldExtensionDefinition.Field;
-import io.crnk.core.resource.annotations.JsonApiId;
-import io.crnk.core.resource.annotations.JsonApiResource;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-@JsonSerialize(using = ToStringSerializer.class)
 @Data
 @AllArgsConstructor
 @Builder
-@JsonApiResource(type = "field-extension-value")
+@JsonApiTypeForClass(FieldExtensionValueDto.TYPENAME)
 public class FieldExtensionValueDto {
+
+  public static final String TYPENAME = "field-extension-value";
+
   @JsonApiId
   private final String id;
 
