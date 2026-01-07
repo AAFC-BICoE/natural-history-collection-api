@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.mapper;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
@@ -16,7 +17,9 @@ import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper
 public interface StorageUnitMapper extends DinaMapperV2<StorageUnitDto, StorageUnit> {
@@ -41,8 +44,13 @@ public interface StorageUnitMapper extends DinaMapperV2<StorageUnitDto, StorageU
   void patchEntity(@MappingTarget StorageUnit entity, StorageUnitDto dto,
                    @Context Set<String> provided, @Context String scope);
 
-  default ImmutableStorageUnitDto toDto(ImmutableStorageUnit entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toImmutableStorageUnitDto(entity, provided, "storageUnitChildren");
+  default List<ImmutableStorageUnitDto> toDto(List<ImmutableStorageUnit> entities, @Context Set<String> provided, @Context String scope) {
+
+    if (CollectionUtils.isEmpty(entities)) {
+      return null;
+    }
+    return entities.stream().map(this::toImmutableStorageUnitDto)
+      .collect(Collectors.toList());
   }
 
   default StorageUnitTypeDto toDto(StorageUnitType entity, @Context Set<String> provided, @Context String scope) {
@@ -51,7 +59,12 @@ public interface StorageUnitMapper extends DinaMapperV2<StorageUnitDto, StorageU
 
   StorageUnitTypeDto toStorageUnitUsageDto(StorageUnitType entity, Set<String> provided, String scope);
 
-  @Mapping(target = "id", ignore = true)
-  ImmutableStorageUnitDto toImmutableStorageUnitDto(ImmutableStorageUnit entity, Set<String> provided, String scope);
-
+  // Optional fields
+  /**
+   * Considered an optional field so no scope is used.
+   * @param entity
+   * @return
+   */
+  @Mapping(target = "id", source = "uuid")
+  ImmutableStorageUnitDto toImmutableStorageUnitDto(ImmutableStorageUnit entity);
 }
