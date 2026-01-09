@@ -47,7 +47,10 @@ public class StorageUnitDto implements JsonApiResource {
 
   private Boolean isGeneric;
 
+  // -- Optional fields --
+  @JsonApiCalculatedAttribute
   @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private List<ImmutableStorageUnitDto> storageUnitChildren = List.of();
 
   @JsonApiCalculatedAttribute

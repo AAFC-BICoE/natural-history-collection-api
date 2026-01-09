@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api;
 
-import io.crnk.spring.setup.boot.core.CrnkBootConfigurer;
-import org.geolatte.geom.json.GeolatteGeomModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,10 +17,5 @@ public class AdditionalConfiguration {
     return ResourceNameIdentifierConfig.builder().
       config(MaterialSample.class, new ResourceNameIdentifierConfig.ResourceNameConfig("materialSampleName", "group"))
       .build();
-  }
-
-  @Bean
-  public CrnkBootConfigurer bootConfigurer() {
-    return boot -> boot.getObjectMapper().registerModule(new GeolatteGeomModule());
   }
 }

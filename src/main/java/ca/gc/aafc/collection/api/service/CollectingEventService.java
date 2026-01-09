@@ -35,9 +35,12 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
 
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
+
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
   private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
   private final CollectingEventExtensionValueValidator extensionValueValidator;
+
+  //  private final CollectionManagedAttributeValueValidatorCollectingEvent collectionManagedAttributeValueValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
@@ -45,7 +48,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
-    @NonNull CollectingEventExtensionValueValidator extensionValueValidator,
+    CollectingEventExtensionValueValidator extensionValueValidator,
     DinaEventPublisher<EntityChanged> eventPublisher
   ) {
     super(baseDAO, sv, CollectingEventDto.TYPENAME,
@@ -54,7 +57,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
     this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-            .from(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+      .from(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
     this.extensionValueValidator = extensionValueValidator;
   }
 
@@ -143,6 +146,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
    * Map GeographicPlaceNameSourceDetail to dwcCountryCode, dwcCountry and dwcStateProvince if required.
    * If a GeographicPlaceNameSource is specified, we must take the data from there. Otherwise, the data should be provided
    * directly in dwcCountryCode, dwcCountry and dwcStateProvince without any GeographicPlaceNameSource.
+   *
    * @param entity
    */
   private static void mapGeographicPlaceNameFromSource(CollectingEvent entity) {
@@ -164,7 +168,8 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   }
 
   private static Point<G2D> mapAssertionToGeometry(GeoreferenceAssertionDto geo) {
-    if (geo == null || geo.getDwcDecimalLongitude() == null || geo.getDwcDecimalLatitude() == null) {
+    if (geo == null || geo.getDwcDecimalLongitude() == null ||
+      geo.getDwcDecimalLatitude() == null) {
       return null;
     }
     return DSL.point(CoordinateReferenceSystems.WGS84, DSL.g(
