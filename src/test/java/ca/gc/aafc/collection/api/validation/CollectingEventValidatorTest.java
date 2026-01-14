@@ -8,7 +8,6 @@ import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.Country;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
@@ -37,7 +38,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(0, errors.getAllErrors().size());
+    assertEquals(0, errors.getAllErrors().size());
   }
 
   @Test
@@ -52,7 +53,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(0, errors.getAllErrors().size());
+    assertEquals(0, errors.getAllErrors().size());
   }
 
   @Test
@@ -65,7 +66,7 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(0, errors.getAllErrors().size());
+    assertEquals(0, errors.getAllErrors().size());
   }
 
   @Test
@@ -80,8 +81,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -96,8 +97,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -112,8 +113,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -125,8 +126,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -142,8 +143,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -162,9 +163,9 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(2, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(1).getDefaultMessage());
+    assertEquals(2, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(1).getDefaultMessage());
   }
 
   @Test
@@ -176,8 +177,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -189,8 +190,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -203,8 +204,8 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -217,8 +218,19 @@ class CollectingEventValidatorTest extends CollectionModuleBaseIT {
 
     Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
     validator.validate(event, errors);
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  void validate_negativeElevation_noError() {
+    CollectingEvent event = newEvent();
+    event.setDwcMaximumElevationInMeters(new BigDecimal("-90"));
+    event.setDwcMinimumElevationInMeters(new BigDecimal("-100"));
+
+    Errors errors = new BeanPropertyBindingResult(event, event.getUuid().toString());
+    validator.validate(event, errors);
+    assertEquals(0, errors.getAllErrors().size());
   }
 
   private String getExpectedErrorMessage(String key) {
