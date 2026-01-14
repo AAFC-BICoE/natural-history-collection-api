@@ -170,7 +170,7 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 500)
   private String habitat;
 
-  @Min(value = 0)
+  @Min(value = -15000)
   @Max(value = 15000)
   @Column(precision = 7, scale = 2)
   @Digits(integer = 5, fraction = 2)
@@ -182,7 +182,7 @@ public class CollectingEvent implements DinaEntity {
   @Digits(integer = 5, fraction = 2)
   private BigDecimal dwcMinimumDepthInMeters;
 
-  @Min(value = 0)
+  @Min(value = -15000)
   @Max(value = 15000)
   @Column(precision = 7, scale = 2)
   @Digits(integer = 5, fraction = 2)
