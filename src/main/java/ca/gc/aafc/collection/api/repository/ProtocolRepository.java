@@ -33,7 +33,6 @@ import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
-import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
 
@@ -54,7 +53,6 @@ public class ProtocolRepository extends DinaRepositoryV2<ProtocolDto, Protocol> 
 
   public ProtocolRepository(
     @NonNull ProtocolService dinaService,
-    ExternalResourceProvider externalResourceProvider,
     @NonNull AuditService auditService,
     SuperUserInGroupCUDAuthorizationService authorizationService,
     @NonNull BuildProperties buildProperties,

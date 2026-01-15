@@ -13,7 +13,6 @@ import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
-import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 import ca.gc.aafc.dina.service.AuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +49,6 @@ public class CollectionMethodRepository extends DinaRepositoryV2<CollectionMetho
   public CollectionMethodRepository(
     @NonNull CollectionMethodService collectionMethodService,
     @NonNull SuperUserInGroupCUDAuthorizationService authorizationService,
-    ExternalResourceProvider externalResourceProvider,
     @NonNull AuditService auditService,
     @NonNull BuildProperties buildProperties,
     Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
