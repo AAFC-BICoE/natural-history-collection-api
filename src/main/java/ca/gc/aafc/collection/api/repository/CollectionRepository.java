@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.service.CollectionService;
-import ca.gc.aafc.dina.repository.external.ExternalResourceProvider;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 
 import java.util.UUID;
@@ -51,7 +50,6 @@ public class CollectionRepository extends DinaRepositoryV2<CollectionDto, Collec
   
   public CollectionRepository(
     @NonNull CollectionService dinaService,
-    ExternalResourceProvider externalResourceProvider,
     @NonNull AuditService auditService,
     SuperUserInGroupCUDAuthorizationService authService,
     @NonNull BuildProperties buildProperties,
