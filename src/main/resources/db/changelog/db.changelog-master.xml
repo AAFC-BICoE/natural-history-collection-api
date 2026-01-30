@@ -185,6 +185,7 @@
   <include file="db/changelog/migrations/178-Add_Expedition_table.xml"/>
   <include file="db/changelog/migrations/179-Add_organism_material_sample_index.xml"/>
   <include file="db/changelog/migrations/180-Add_controlled_vocabulary.xml"/>
+  <include file="db/changelog/migrations/181-Add_material_sample_name_index.xml"/>
   <include file="db/changelog/initial-data/3-Create_managed_attribute_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
 </databaseChangeLog>
