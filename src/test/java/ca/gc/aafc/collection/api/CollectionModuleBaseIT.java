@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-
 import ca.gc.aafc.collection.api.service.AssemblageService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
@@ -21,6 +20,7 @@ import ca.gc.aafc.collection.api.service.PreparationMethodService;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
 import ca.gc.aafc.collection.api.service.ProjectService;
 import ca.gc.aafc.collection.api.service.ProtocolService;
+import ca.gc.aafc.collection.api.service.SiteService;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
@@ -88,6 +88,9 @@ public class CollectionModuleBaseIT {
   @Inject
   protected ExpeditionService expeditionService;
 
+  @Inject
+  protected SiteService siteService;
+
   @TestConfiguration
   public static class CollectionModuleTestConfiguration {
     @Bean
@@ -98,4 +101,3 @@ public class CollectionModuleBaseIT {
     }
   }
 }
-

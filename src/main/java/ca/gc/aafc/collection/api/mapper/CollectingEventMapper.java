@@ -36,7 +36,7 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
   @Mapping(target = "startEventDateTime", expression = "java(entity.supplyStartISOEventDateTime() != null ? entity.supplyStartISOEventDateTime().toString() : null)")
   @Mapping(target = "endEventDateTime", expression = "java(entity.supplyEndISOEventDateTime() != null ? entity.supplyEndISOEventDateTime().toString() : null)")
   CollectingEventDto toDto(CollectingEvent entity, @Context Set<String> provided,
-                           @Context String scope);
+      @Context String scope);
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "eventGeom", ignore = true)
@@ -51,6 +51,7 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
   @Mapping(target = "collectionMethod", ignore = true)
   @Mapping(target = "protocol", ignore = true)
   @Mapping(target = "expedition", ignore = true)
+  @Mapping(target = "site", ignore = true)
   CollectingEvent toEntity(CollectingEventDto dto, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)
@@ -66,9 +67,10 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
   @Mapping(target = "collectionMethod", ignore = true)
   @Mapping(target = "protocol", ignore = true)
   @Mapping(target = "expedition", ignore = true)
+  @Mapping(target = "site", ignore = true)
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   void patchEntity(@MappingTarget CollectingEvent entity, CollectingEventDto dto,
-                   @Context Set<String> provided, @Context String scope);
+      @Context Set<String> provided, @Context String scope);
 
   default ProtocolDto toDto(Protocol entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toProtocolDto(entity, provided, "protocol");
@@ -92,7 +94,7 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
 
   @AfterMapping
   default void handleDateTimes(CollectingEventDto dto, @MappingTarget CollectingEvent entity,
-                               @Context Set<String> provided) {
+      @Context Set<String> provided) {
 
     if (provided.contains("startEventDateTime")) {
       if (StringUtils.isBlank(dto.getStartEventDateTime())) {
