@@ -15,13 +15,13 @@ import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
 @Mapper(imports = MapperStaticConverter.class)
 public interface SiteMapper extends DinaMapperV2<SiteDto, Site> {
-    SiteMapper INSTANCE = Mappers.getMapper(SiteMapper.class);
+  SiteMapper INSTANCE = Mappers.getMapper(SiteMapper.class);
 
-    @Mapping(target = "id", ignore = true)
-    Site toEntity(SiteDto dto, @Context Set<String> provided, @Context String scope);
+  @Mapping(target = "id", ignore = true)
+  Site toEntity(SiteDto dto, @Context Set<String> provided, @Context String scope);
 
-    @Mapping(target = "id", ignore = true)
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void patchEntity(@MappingTarget Site entity, SiteDto dto,
-            @Context Set<String> provided, @Context String scope);
+  @Mapping(target = "id", ignore = true)
+  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  void patchEntity(@MappingTarget Site entity, SiteDto dto,
+      @Context Set<String> provided, @Context String scope);
 }

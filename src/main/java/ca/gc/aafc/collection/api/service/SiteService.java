@@ -14,25 +14,25 @@ import lombok.NonNull;
 
 @Service
 public class SiteService extends MessageProducingService<Site> {
-    private SiteValidator siteValidator;
+  private SiteValidator siteValidator;
 
-    public SiteService(
-            @NonNull BaseDAO baseDAO,
-            @NonNull SmartValidator sv,
-            @NonNull SiteValidator siteValidator,
-            DinaEventPublisher<EntityChanged> eventPublisher) {
-        super(baseDAO, sv, SiteDto.TYPENAME, eventPublisher);
-        this.siteValidator = siteValidator;
-    }
+  public SiteService(
+      @NonNull BaseDAO baseDAO,
+      @NonNull SmartValidator sv,
+      @NonNull SiteValidator siteValidator,
+      DinaEventPublisher<EntityChanged> eventPublisher) {
+    super(baseDAO, sv, SiteDto.TYPENAME, eventPublisher);
+    this.siteValidator = siteValidator;
+  }
 
-    @Override
-    protected void preCreate(Site entity) {
-        entity.setUuid(UUIDHelper.generateUUIDv7());
-        entity.setGroup(standardizeGroupName(entity));
-    }
+  @Override
+  protected void preCreate(Site entity) {
+    entity.setUuid(UUIDHelper.generateUUIDv7());
+    entity.setGroup(standardizeGroupName(entity));
+  }
 
-    @Override
-    public void validateBusinessRules(Site entity) {
-        applyBusinessRule(entity, siteValidator);
-    }
+  @Override
+  public void validateBusinessRules(Site entity) {
+    applyBusinessRule(entity, siteValidator);
+  }
 }

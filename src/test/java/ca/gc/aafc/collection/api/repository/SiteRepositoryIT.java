@@ -22,44 +22,44 @@ import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import ca.gc.aafc.collection.api.entities.Site;
 
 public class SiteRepositoryIT extends BaseRepositoryIT {
-    @Inject
-    private SiteRepository siteRepository;
+  @Inject
+  private SiteRepository siteRepository;
 
-    @Inject
-    private SiteService siteService;
+  @Inject
+  private SiteService siteService;
 
-    @Inject
-    protected ServiceTransactionWrapper serviceTransactionWrapper;
+  @Inject
+  protected ServiceTransactionWrapper serviceTransactionWrapper;
 
-    @Test
-    @WithMockKeycloakUser(username = "dev", groupRole = { "aafc:user" })
-    public void create_WithAuthenticatedUser_SetsCreatedBy()
-            throws ResourceGoneException, ResourceNotFoundException {
-        SiteDto siteDto = SiteTestFixture.newSite();
-        UUID siteUUID = createWithRepository(siteDto, siteRepository::onCreate);
+  @Test
+  @WithMockKeycloakUser(username = "dev", groupRole = { "aafc:user" })
+  public void create_WithAuthenticatedUser_SetsCreatedBy()
+      throws ResourceGoneException, ResourceNotFoundException {
+    SiteDto siteDto = SiteTestFixture.newSite();
+    UUID siteUUID = createWithRepository(siteDto, siteRepository::onCreate);
 
-        SiteDto result = siteRepository.getOne(siteUUID, "").getDto();
+    SiteDto result = siteRepository.getOne(siteUUID, "").getDto();
 
-        assertNotNull(result.getCreatedBy());
-        assertEquals(siteDto.getName(), result.getName());
-        assertEquals(siteDto.getGroup(), result.getGroup());
-    }
+    assertNotNull(result.getCreatedBy());
+    assertEquals(siteDto.getName(), result.getName());
+    assertEquals(siteDto.getGroup(), result.getGroup());
+  }
 
-    @Test
-    @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
-    public void updateFromDifferentGroup_throwAccessDenied()
-            throws ResourceGoneException, ResourceNotFoundException {
-        Site testSite = SiteFactory.newSite()
-                .group("preparation process definition")
-                .name("aafc")
-                .build();
-        serviceTransactionWrapper.execute(siteService::create, testSite);
+  @Test
+  @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
+  public void updateFromDifferentGroup_throwAccessDenied()
+      throws ResourceGoneException, ResourceNotFoundException {
+    Site testSite = SiteFactory.newSite()
+        .group("preparation process definition")
+        .name("aafc")
+        .build();
+    serviceTransactionWrapper.execute(siteService::create, testSite);
 
-        SiteDto retrievedSite = siteRepository.getOne(testSite.getUuid(), "").getDto();
-        JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
-                retrievedSite.getUuid(), CollectionManagedAttributeDto.TYPENAME,
-                JsonAPITestHelper.toAttributeMap(retrievedSite));
+    SiteDto retrievedSite = siteRepository.getOne(testSite.getUuid(), "").getDto();
+    JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
+        retrievedSite.getUuid(), CollectionManagedAttributeDto.TYPENAME,
+        JsonAPITestHelper.toAttributeMap(retrievedSite));
 
-        assertThrows(AccessDeniedException.class, () -> siteRepository.onUpdate(docToUpdate, docToUpdate.getId()));
-    }
+    assertThrows(AccessDeniedException.class, () -> siteRepository.onUpdate(docToUpdate, docToUpdate.getId()));
+  }
 }

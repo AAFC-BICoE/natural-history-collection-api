@@ -12,16 +12,16 @@ import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
  * @return Pre-configured builder with all mandatory fields set
  */
 public class SiteFactory implements TestableEntityFactory<Site> {
-    public static Site.SiteBuilder<?, ?> newSite() {
-        return Site.builder()
-                .group("aafc")
-                .name(TestableEntityFactory.generateRandomNameLettersOnly(7))
-                .uuid(UUID.randomUUID())
-                .createdBy("test user");
-    }
+  public static Site.SiteBuilder<?, ?> newSite() {
+    return Site.builder()
+        .group("aafc")
+        .name(TestableEntityFactory.generateRandomNameLettersOnly(7))
+        .uuid(UUID.randomUUID())
+        .createdBy("test user");
+  }
 
-    @Override
-    public Site getEntityInstance() {
-        return newSite().build();
-    }
+  @Override
+  public Site getEntityInstance() {
+    return newSite().build();
+  }
 }

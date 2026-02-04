@@ -20,34 +20,34 @@ import lombok.Data;
 @JsonApiTypeForClass(SiteDto.TYPENAME)
 @TypeName(SiteDto.TYPENAME)
 public class SiteDto implements JsonApiResource {
-    public static final String TYPENAME = "site";
+  public static final String TYPENAME = "site";
 
-    @JsonApiId
-    @Id
-    @PropertyName("id")
-    private UUID uuid;
-    private OffsetDateTime createdOn;
-    private String createdBy;
+  @JsonApiId
+  @Id
+  @PropertyName("id")
+  private UUID uuid;
+  private OffsetDateTime createdOn;
+  private String createdBy;
 
-    private String group;
+  private String group;
 
-    private String name;
+  private String name;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String geographicContext;
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private String geographicContext;
 
-    private MultilingualDescription multilingualDescription;
+  private MultilingualDescription multilingualDescription;
 
-    @Override
-    @JsonIgnore
-    public String getJsonApiType() {
-        return TYPENAME;
-    }
+  @Override
+  @JsonIgnore
+  public String getJsonApiType() {
+    return TYPENAME;
+  }
 
-    @Override
-    @JsonIgnore
-    public UUID getJsonApiId() {
-        return uuid;
-    }
+  @Override
+  @JsonIgnore
+  public UUID getJsonApiId() {
+    return uuid;
+  }
 }
