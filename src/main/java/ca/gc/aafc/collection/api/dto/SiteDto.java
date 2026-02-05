@@ -26,17 +26,13 @@ public class SiteDto implements JsonApiResource {
   @Id
   @PropertyName("id")
   private UUID uuid;
+
   private OffsetDateTime createdOn;
   private String createdBy;
-
   private String group;
-
   private String name;
-
   private LocalDate startDate;
   private LocalDate endDate;
-  private String geographicContext;
-
   private MultilingualDescription multilingualDescription;
 
   @Override

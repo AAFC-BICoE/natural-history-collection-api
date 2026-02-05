@@ -43,7 +43,6 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_NAME, result.getName());
     Assertions.assertEquals(EXPECTED_GROUP, result.getGroup());
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
-    Assertions.assertEquals(EXPECTED_GEOGRAPHIC_CONTEXT, result.getGeographicContext());
     Assertions.assertEquals(EXPECTED_START_DATE, result.getStartDate());
     Assertions.assertEquals(EXPECTED_END_DATE, result.getEndDate());
     Assertions.assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(),
@@ -87,7 +86,6 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
         .group(EXPECTED_GROUP)
         .createdBy(EXPECTED_CREATED_BY)
         .multilingualDescription(MULTILINGUAL_DESCRIPTION)
-        .geographicContext(EXPECTED_GEOGRAPHIC_CONTEXT)
         .startDate(EXPECTED_START_DATE)
         .endDate(EXPECTED_END_DATE)
         .build();

@@ -25,7 +25,4 @@ public class Site extends UserDescribedDinaEntity {
   private LocalDate startDate;
   private LocalDate endDate;
 
-  @Size(max = 250)
-  private String geographicContext;
-
 }

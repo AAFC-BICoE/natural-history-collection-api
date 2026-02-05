@@ -12,7 +12,6 @@ public class SiteTestFixture {
   public static SiteDto newSite() {
     SiteDto siteDto = new SiteDto();
     siteDto.setName(RandomStringUtils.randomAlphabetic(5));
-    siteDto.setGeographicContext(RandomStringUtils.randomAlphabetic(5));
     siteDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     siteDto.setStartDate(START_DATE);
     siteDto.setEndDate(END_DATE);
