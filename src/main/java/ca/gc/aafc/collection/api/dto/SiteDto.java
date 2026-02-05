@@ -33,6 +33,7 @@ public class SiteDto implements JsonApiResource {
   private String name;
   private LocalDate startDate;
   private LocalDate endDate;
+  private String siteCode;
   private MultilingualDescription multilingualDescription;
 
   @Override

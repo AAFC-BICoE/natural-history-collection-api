@@ -25,4 +25,6 @@ public class Site extends UserDescribedDinaEntity {
   private LocalDate startDate;
   private LocalDate endDate;
 
+  @Size(max = 50)
+  private String siteCode;
 }

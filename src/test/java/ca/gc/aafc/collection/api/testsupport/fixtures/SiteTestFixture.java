@@ -8,6 +8,7 @@ public class SiteTestFixture {
   private static final String GROUP = "aafc";
   private static final LocalDate START_DATE = LocalDate.of(1991, 01, 01);
   private static final LocalDate END_DATE = LocalDate.now();
+  private static final String SITE_CODE = "LTAE-M";
 
   public static SiteDto newSite() {
     SiteDto siteDto = new SiteDto();
@@ -15,6 +16,7 @@ public class SiteTestFixture {
     siteDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     siteDto.setStartDate(START_DATE);
     siteDto.setEndDate(END_DATE);
+    siteDto.setSiteCode(SITE_CODE);
     siteDto.setGroup(GROUP);
 
     return siteDto;
