@@ -8,7 +8,8 @@
         <sql>
             CREATE TYPE controlled_vocabulary_type AS ENUM (
             'MANAGED_ATTRIBUTE',
-            'SYSTEM'
+            'SYSTEM',
+            'PROJECT_ROLE'
             );
         </sql>
         <sql>

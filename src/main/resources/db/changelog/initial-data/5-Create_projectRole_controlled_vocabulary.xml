@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+                   
+  <changeSet id="5-Create_project_role_controlled_vocabulary" context="initial-data" author="cgendreau">
+    <insert tableName="controlled_vocabulary">
+      <column name="uuid" value="617cb134-250b-4543-91b7-e2a17a8d930a"/>
+      <column name="name" value="Project Role"/>
+      <column name="key" value="project_role"/>
+      <column name="type" value="PROJECT_ROLE"/>
+      <column name="vocab_class" value="CONTROLLED_TERM"/>
+      <column name="version" value="1"/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Role"},{"lang":"fr","title":"Rôle de projet"}]}'/>
+      <column name="multilingual_description" value='{
+      "descriptions": [
+      {
+      "lang": "en",
+      "desc": "Project roles that define the responsibilities and permissions of individuals within a project."
+      },
+      {
+      "lang": "fr",
+      "desc": "Les rôles de projet qui définissent les responsabilités et les permissions des individus au sein dun projet."
+      }
+      ]
+      }'/>
+      <column name="created_by" value="system"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

@@ -187,4 +187,6 @@
   <include file="db/changelog/migrations/180-Add_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/3-Create_managed_attribute_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
+  <include file="db/changelog/initial-data/5-Create_projectRole_controlled_vocabulary.xml"/>
+  <include file="db/changelog/initial-data/6-Create_projectRole_item.xml"/>
 </databaseChangeLog>
