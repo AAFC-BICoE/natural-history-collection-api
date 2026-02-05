@@ -16,7 +16,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
   private static final String EXPECTED_CREATED_BY = "createdBy";
   private static final LocalDate EXPECTED_START_DATE = LocalDate.of(1991, 01, 01);
   private static final LocalDate EXPECTED_END_DATE = LocalDate.now();
-  private static final String EXPECTED_SITE_CODE = "LTAE-M";
+  private static final String EXPECTED_CODE = "LTAE-M";
   private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescriptionFactory
       .newMultilingualDescription();
 
@@ -45,7 +45,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_CREATED_BY, result.getCreatedBy());
     Assertions.assertEquals(EXPECTED_START_DATE, result.getStartDate());
     Assertions.assertEquals(EXPECTED_END_DATE, result.getEndDate());
-    Assertions.assertEquals(EXPECTED_SITE_CODE, result.getSiteCode());
+    Assertions.assertEquals(EXPECTED_CODE, result.getCode());
     Assertions.assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(),
         result.getMultilingualDescription().getDescriptions());
   }
@@ -89,7 +89,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
         .multilingualDescription(MULTILINGUAL_DESCRIPTION)
         .startDate(EXPECTED_START_DATE)
         .endDate(EXPECTED_END_DATE)
-        .siteCode(EXPECTED_SITE_CODE)
+        .code(EXPECTED_CODE)
         .build();
   }
 
