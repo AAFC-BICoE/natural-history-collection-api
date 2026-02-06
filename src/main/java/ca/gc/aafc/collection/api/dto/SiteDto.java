@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,6 @@ public class SiteDto implements JsonApiResource {
   private String createdBy;
   private String group;
   private String name;
-  private LocalDate startDate;
-  private LocalDate endDate;
   private String code;
 
   @JsonApiExternalRelation(type = "metadata")
