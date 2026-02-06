@@ -1,0 +1,86 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+                   
+  <changeSet id="5-Create_project_role_controlled_vocabulary" context="initial-data" author="cgendreau">
+    <insert tableName="controlled_vocabulary">
+      <column name="uuid" value="019c33cb-9be2-79aa-9932-9248b05e5c97"/>
+      <column name="name" value="Project Role"/>
+      <column name="key" value="project_role"/>
+      <column name="type" value="SYSTEM"/>
+      <column name="vocab_class" value="QUALIFIED_VALUE"/>
+      <column name="version" value="1"/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Role"},{"lang":"fr","title":"Rôle de projet"}]}'/>
+      <column name="multilingual_description" value='{
+      "descriptions": [
+      {
+      "lang": "en",
+      "desc": "Roles that define the responsibilities and permissions of individuals within a project."
+      },
+      {
+      "lang": "fr",
+      "desc": "Rôles de projet qui définissent les responsabilités et les permissions des individus au sein d’un projet."
+      }
+      ]
+      }'/>
+      <column name="created_by" value="system"/>
+    </insert>
+
+    <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019c33cb-9be2-76d9-95cd-7ff8b48ade68"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
+            <column name="name" value="Project Leader"/>
+            <column name="term" value=""/>
+            <column name="key" value="project_leader"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Leader"},{"lang":"fr","title":"Chef de projet"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019c33cb-9be2-7c9d-bdef-58ed8c3a8c30"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
+            <column name="name" value="Project Member"/>
+            <column name="term" value=""/>
+            <column name="key" value="project_member"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Member"},{"lang":"fr","title":"Membre du projet"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019c33cb-9be2-7161-bd4e-9968eb8139c5"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
+            <column name="name" value="Data Curator"/>
+            <column name="term" value=""/>
+            <column name="key" value="data_curator"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Curator"},{"lang":"fr","title":"Conservateur de données"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019c33cb-9be2-7962-9f60-9ba1f61dc578"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
+            <column name="name" value="Data Manager"/>
+            <column name="term" value=""/>
+            <column name="key" value="data_manager"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Manager"},{"lang":"fr","title":"Gestionnaire de données"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019c33cb-9be2-731d-998a-1b6cd75900f8"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
+            <column name="name" value="Contact Person"/>
+            <column name="term" value=""/>
+            <column name="key" value="contact_person"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne ressource"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+  </changeSet>
+</databaseChangeLog>
