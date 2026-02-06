@@ -6,7 +6,7 @@
                    
   <changeSet id="5-Create_project_role_controlled_vocabulary" context="initial-data" author="cgendreau">
     <insert tableName="controlled_vocabulary">
-      <column name="uuid" value="617cb134-250b-4543-91b7-e2a17a8d930a"/>
+      <column name="uuid" value="019c33cb-9be2-79aa-9932-9248b05e5c97"/>
       <column name="name" value="Project Role"/>
       <column name="key" value="project_role"/>
       <column name="type" value="SYSTEM"/>
@@ -21,7 +21,7 @@
       },
       {
       "lang": "fr",
-      "desc": "Les rôles de projet qui définissent les responsabilités et les permissions des individus au sein dun projet."
+      "desc": "Les rôles de projet qui définissent les responsabilités et les permissions des individus au sein d’un projet."
       }
       ]
       }'/>
@@ -29,8 +29,8 @@
     </insert>
 
     <insert tableName="controlled_vocabulary_item">
-            <column name="uuid" value="01bfe1a3-b2c3-44f4-8e11-50158b5f761c"/>
-            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="uuid" value="019c33cb-9be2-76d9-95cd-7ff8b48ade68"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
             <column name="name" value="Project Leader"/>
             <column name="term" value=""/>
             <column name="key" value="project_leader"/>
@@ -40,8 +40,8 @@
         </insert>
 
         <insert tableName="controlled_vocabulary_item">
-            <column name="uuid" value="f649c848-13b2-48f9-a7af-cb52b0259381"/>
-            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="uuid" value="019c33cb-9be2-7c9d-bdef-58ed8c3a8c30"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
             <column name="name" value="Project Member"/>
             <column name="term" value=""/>
             <column name="key" value="project_member"/>
@@ -51,8 +51,8 @@
         </insert>
 
         <insert tableName="controlled_vocabulary_item">
-            <column name="uuid" value="fccb54b0-64fc-4b11-a4b8-6f9f0ef8bd76"/>
-            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="uuid" value="019c33cb-9be2-7161-bd4e-9968eb8139c5"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
             <column name="name" value="Data Curator"/>
             <column name="term" value=""/>
             <column name="key" value="data_curator"/>
@@ -62,8 +62,8 @@
         </insert>
 
         <insert tableName="controlled_vocabulary_item">
-            <column name="uuid" value="38a6df42-083b-42c5-b307-27d21a12a32a"/>
-            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="uuid" value="019c33cb-9be2-7962-9f60-9ba1f61dc578"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
             <column name="name" value="Data Manager"/>
             <column name="term" value=""/>
             <column name="key" value="data_manager"/>
@@ -73,8 +73,8 @@
         </insert>
 
         <insert tableName="controlled_vocabulary_item">
-            <column name="uuid" value="cc65cd2d-26a1-46d0-aeb6-c3de556921bd"/>
-            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="uuid" value="019c33cb-9be2-731d-998a-1b6cd75900f8"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c33cb-9be2-79aa-9932-9248b05e5c97')"/>
             <column name="name" value="Contact Person"/>
             <column name="term" value=""/>
             <column name="key" value="contact_person"/>
