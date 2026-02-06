@@ -1,6 +1,9 @@
 package ca.gc.aafc.collection.api.entities;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
 import javax.validation.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
   private static final String EXPECTED_CODE = "LTAE-M";
   private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescriptionFactory
       .newMultilingualDescription();
+  private final List<UUID> EXPECT_ATTACHMENTS = List.of(UUID.randomUUID(), UUID.randomUUID());
 
   @Test
   void create() {
@@ -48,6 +52,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
     Assertions.assertEquals(EXPECTED_CODE, result.getCode());
     Assertions.assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(),
         result.getMultilingualDescription().getDescriptions());
+    Assertions.assertEquals(EXPECT_ATTACHMENTS, result.getAttachment());
   }
 
   @Test
@@ -90,6 +95,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
         .startDate(EXPECTED_START_DATE)
         .endDate(EXPECTED_END_DATE)
         .code(EXPECTED_CODE)
+        .attachment(EXPECT_ATTACHMENTS)
         .build();
   }
 

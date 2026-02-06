@@ -31,7 +31,7 @@
             <column name="end_date" type="date" />
             <column name="code" type="VARCHAR(50)" />
             <column name="multilingual_description" type="jsonb"/>
-            
+            <column name="attachment" type="uuid[]"/>
         </createTable>
     </changeSet>
 

@@ -17,6 +17,9 @@ import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 public interface SiteMapper extends DinaMapperV2<SiteDto, Site> {
   SiteMapper INSTANCE = Mappers.getMapper(SiteMapper.class);
 
+  @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
+  SiteDto toDto(Site entity, @Context Set<String> provided, @Context String scope);
+
   @Mapping(target = "id", ignore = true)
   Site toEntity(SiteDto dto, @Context Set<String> provided, @Context String scope);
 

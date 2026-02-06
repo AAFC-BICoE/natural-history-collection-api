@@ -1,8 +1,11 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import ca.gc.aafc.collection.api.dto.SiteDto;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 
 public class SiteTestFixture {
   private static final String GROUP = "aafc";
@@ -18,6 +21,9 @@ public class SiteTestFixture {
     siteDto.setEndDate(END_DATE);
     siteDto.setCode(CODE);
     siteDto.setGroup(GROUP);
+
+    siteDto.setAttachment(List.of(
+        ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
 
     return siteDto;
   }

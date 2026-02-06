@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.dto;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
@@ -10,9 +12,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 import ca.gc.aafc.collection.api.entities.Site;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
+import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import lombok.Data;
 
 @Data
@@ -34,6 +38,11 @@ public class SiteDto implements JsonApiResource {
   private LocalDate startDate;
   private LocalDate endDate;
   private String code;
+
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
+  private List<ExternalRelationDto> attachment = new ArrayList<>();
+
   private MultilingualDescription multilingualDescription;
 
   @Override

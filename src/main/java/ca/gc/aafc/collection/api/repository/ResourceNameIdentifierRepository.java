@@ -20,6 +20,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.ResourceNameIdentifierResponseDto;
+import ca.gc.aafc.collection.api.dto.SiteDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.Collection;
@@ -28,6 +29,7 @@ import ca.gc.aafc.collection.api.entities.PreparationMethod;
 import ca.gc.aafc.collection.api.entities.PreparationType;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
+import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.repository.ResourceNameIdentifierBaseRepository;
 import ca.gc.aafc.dina.security.auth.GroupWithReadAuthorizationService;
@@ -51,42 +53,43 @@ import javax.servlet.http.HttpServletRequest;
 public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBaseRepository {
 
   public ResourceNameIdentifierRepository(
-    ResourceNameIdentifierService resourceNameIdentifierService,
-    GroupWithReadAuthorizationService authorizationService) {
+      ResourceNameIdentifierService resourceNameIdentifierService,
+      GroupWithReadAuthorizationService authorizationService) {
     super(resourceNameIdentifierService,
-      authorizationService,
-      Map.of(CollectionDto.TYPENAME, Collection.class,
-        ProjectDto.TYPENAME, Project.class,
-        StorageUnitDto.TYPENAME, StorageUnit.class,
-        MaterialSampleDto.TYPENAME, MaterialSample.class,
-        PreparationTypeDto.TYPENAME, PreparationType.class,
-        PreparationMethodDto.TYPENAME, PreparationMethod.class,
-        ProtocolDto.TYPENAME, Protocol.class,
-        AssemblageDto.TYPENAME, Assemblage.class));
+        authorizationService,
+        Map.of(CollectionDto.TYPENAME, Collection.class,
+            ProjectDto.TYPENAME, Project.class,
+            StorageUnitDto.TYPENAME, StorageUnit.class,
+            MaterialSampleDto.TYPENAME, MaterialSample.class,
+            PreparationTypeDto.TYPENAME, PreparationType.class,
+            PreparationMethodDto.TYPENAME, PreparationMethod.class,
+            ProtocolDto.TYPENAME, Protocol.class,
+            AssemblageDto.TYPENAME, Assemblage.class,
+            SiteDto.TYPENAME, Site.class));
   }
 
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)
   public ResponseEntity<?> findAll(HttpServletRequest req) {
 
-    String queryString = StringUtils.isBlank(req.getQueryString()) ? "" :
-      URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
+    String queryString = StringUtils.isBlank(req.getQueryString()) ? ""
+        : URLDecoder.decode(req.getQueryString(), StandardCharsets.UTF_8);
 
-    List<ResourceNameIdentifierResponseDto> dtos ;
+    List<ResourceNameIdentifierResponseDto> dtos;
     try {
       List<NameUUIDPair> identifiers = findAll(queryString);
 
       dtos = identifiers.stream().map(nuPair -> ResourceNameIdentifierResponseDto.builder()
-        .id(nuPair.uuid())
-        .name(nuPair.name())
-        .build()).toList();
+          .id(nuPair.uuid())
+          .name(nuPair.name())
+          .build()).toList();
 
     } catch (IllegalArgumentException iaEx) {
       return ResponseEntity.badRequest().body(
-        JsonApiErrors.create().withError(
-          JsonApiError.create()
-            .withTitle(HttpStatus.BAD_REQUEST.toString())
-            .withStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-            .withDetail(iaEx.getMessage())));
+          JsonApiErrors.create().withError(
+              JsonApiError.create()
+                  .withTitle(HttpStatus.BAD_REQUEST.toString())
+                  .withStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                  .withDetail(iaEx.getMessage())));
     }
 
     JsonApiModelBuilder builder = jsonApiModel().model(CollectionModel.of(dtos));

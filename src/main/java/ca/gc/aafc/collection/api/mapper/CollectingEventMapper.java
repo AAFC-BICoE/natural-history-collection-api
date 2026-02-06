@@ -15,10 +15,12 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.dto.ExpeditionDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
+import ca.gc.aafc.collection.api.dto.SiteDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.CollectionMethod;
 import ca.gc.aafc.collection.api.entities.Expedition;
 import ca.gc.aafc.collection.api.entities.Protocol;
+import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 import ca.gc.aafc.dina.mapper.MapperStaticConverter;
@@ -84,6 +86,10 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
     return entity == null ? null : toExpeditionDto(entity, provided, "expedition");
   }
 
+  default SiteDto toDto(Site entity, @Context Set<String> provided, @Context String scope) {
+    return entity == null ? null : toSiteDto(entity, provided, "site");
+  }
+
   @Mapping(target = "attachments", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachments(), \"metadata\"))")
   ProtocolDto toProtocolDto(Protocol entity, Set<String> provided, String scope);
 
@@ -91,6 +97,9 @@ public interface CollectingEventMapper extends DinaMapperV2<CollectingEventDto, 
 
   @Mapping(target = "participants", ignore = true)
   ExpeditionDto toExpeditionDto(Expedition entity, Set<String> provided, String scope);
+
+  @Mapping(target = "attachment", ignore = true)
+  SiteDto toSiteDto(Site entity, Set<String> provided, String scope);
 
   @AfterMapping
   default void handleDateTimes(CollectingEventDto dto, @MappingTarget CollectingEvent entity,

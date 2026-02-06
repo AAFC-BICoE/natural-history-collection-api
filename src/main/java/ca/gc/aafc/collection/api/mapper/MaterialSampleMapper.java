@@ -49,7 +49,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "preparedBy", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getPreparedBy(), \"person\"))")
   @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   MaterialSampleDto toDto(MaterialSample entity, @Context Set<String> provided,
-                          @Context String scope);
+      @Context String scope);
 
   /**
    * Ignore internal id
@@ -77,7 +77,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "attachment", ignore = true)
   @Mapping(target = "associations", ignore = true)
   MaterialSample toEntity(MaterialSampleDto dto, @Context Set<String> provided,
-                          @Context String scope);
+      @Context String scope);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   @Mapping(target = "id", ignore = true)
@@ -97,7 +97,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "attachment", ignore = true)
   @Mapping(target = "associations", ignore = true)
   void patchEntity(@MappingTarget MaterialSample entity, MaterialSampleDto dto,
-                   @Context Set<String> provided, @Context String scope);
+      @Context Set<String> provided, @Context String scope);
 
   /**
    * Default method to intercept the mapping and set the context to the relationship
@@ -139,16 +139,18 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   }
 
   default PreparationMethodDto toDto(PreparationMethod entity, @Context Set<String> provided, @Context String scope) {
-    return entity == null ? null : toPreparationMethodDto(entity, provided, MaterialSample.PREPARATION_METHOD_PROP_NAME);
+    return entity == null ? null
+        : toPreparationMethodDto(entity, provided, MaterialSample.PREPARATION_METHOD_PROP_NAME);
   }
 
-  default List<ImmutableMaterialSampleDto> toDto(List<ImmutableMaterialSample> entities, @Context Set<String> provided, @Context String scope) {
+  default List<ImmutableMaterialSampleDto> toDto(List<ImmutableMaterialSample> entities, @Context Set<String> provided,
+      @Context String scope) {
 
     if (CollectionUtils.isEmpty(entities)) {
       return null;
     }
     return entities.stream().map(this::toImmutableMaterialSampleDto)
-      .collect(Collectors.toList());
+        .collect(Collectors.toList());
   }
 
   // Relationships handling
@@ -158,6 +160,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "endEventDateTime", expression = "java(entity.supplyEndISOEventDateTime() != null ? entity.supplyEndISOEventDateTime().toString() : null)")
   @Mapping(target = "protocol.attachments", ignore = true)
   @Mapping(target = "expedition.participants", ignore = true)
+  @Mapping(target = "site.attachment", ignore = true)
   CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
@@ -177,7 +180,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   ProtocolDto toProtocolDto(Protocol entity, Set<String> provided, String scope);
 
   @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
-  AssemblageDto toAssemblageDto(Assemblage entity,  Set<String> provided, String scope);
+  AssemblageDto toAssemblageDto(Assemblage entity, Set<String> provided, String scope);
 
   OrganismDto toOrganismDto(Organism entity, Set<String> provided, String scope);
 
@@ -195,27 +198,27 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   default List<AssociationDto> associationToAssociationDto(List<Association> associations) {
     if (CollectionUtils.isNotEmpty(associations)) {
       return associations.stream()
-        .map(association -> AssociationDto.builder()
-          .associatedSample(association.getAssociatedSample().getUuid())
-          .associationType(association.getAssociationType())
-          .remarks(association.getRemarks())
-          .build())
-        .collect(Collectors.toList());
+          .map(association -> AssociationDto.builder()
+              .associatedSample(association.getAssociatedSample().getUuid())
+              .associationType(association.getAssociationType())
+              .remarks(association.getRemarks())
+              .build())
+          .collect(Collectors.toList());
     }
     return List.of();
   }
 
   @AfterMapping
   default void afterMaterialSampleMapping(@MappingTarget MaterialSample entity,
-                                               MaterialSampleDto dto) {
+      MaterialSampleDto dto) {
     if (CollectionUtils.isNotEmpty(dto.getAssociations())) {
       entity.setAssociations(dto.getAssociations().stream()
-        .map(association -> Association.builder()
-          .associatedSample(MaterialSample.builder().uuid(association.getAssociatedSample()).build())
-          .associationType(association.getAssociationType())
-          .remarks(association.getRemarks())
-          .build())
-        .collect(Collectors.toList()));
+          .map(association -> Association.builder()
+              .associatedSample(MaterialSample.builder().uuid(association.getAssociatedSample()).build())
+              .associationType(association.getAssociationType())
+              .remarks(association.getRemarks())
+              .build())
+          .collect(Collectors.toList()));
     }
   }
 }
