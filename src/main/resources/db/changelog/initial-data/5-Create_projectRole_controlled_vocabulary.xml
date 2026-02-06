@@ -9,8 +9,8 @@
       <column name="uuid" value="617cb134-250b-4543-91b7-e2a17a8d930a"/>
       <column name="name" value="Project Role"/>
       <column name="key" value="project_role"/>
-      <column name="type" value="PROJECT_ROLE"/>
-      <column name="vocab_class" value="CONTROLLED_TERM"/>
+      <column name="type" value="SYSTEM"/>
+      <column name="vocab_class" value="QUALIFIED_VALUE"/>
       <column name="version" value="1"/>
       <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Role"},{"lang":"fr","title":"Rôle de projet"}]}'/>
       <column name="multilingual_description" value='{
@@ -27,5 +27,60 @@
       }'/>
       <column name="created_by" value="system"/>
     </insert>
+
+    <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="01bfe1a3-b2c3-44f4-8e11-50158b5f761c"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="name" value="Project Leader"/>
+            <column name="term" value=""/>
+            <column name="key" value="project_leader"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Leader"},{"lang":"fr","title":"Chef de projet"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="f649c848-13b2-48f9-a7af-cb52b0259381"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="name" value="Project Member"/>
+            <column name="term" value=""/>
+            <column name="key" value="project_member"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Member"},{"lang":"fr","title":"Membre du projet"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="fccb54b0-64fc-4b11-a4b8-6f9f0ef8bd76"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="name" value="Data Curator"/>
+            <column name="term" value=""/>
+            <column name="key" value="data_curator"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Curator"},{"lang":"fr","title":"Conservateur de données"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="38a6df42-083b-42c5-b307-27d21a12a32a"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="name" value="Data Manager"/>
+            <column name="term" value=""/>
+            <column name="key" value="data_manager"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Manager"},{"lang":"fr","title":"Gestionnaire de données"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="cc65cd2d-26a1-46d0-aeb6-c3de556921bd"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='617cb134-250b-4543-91b7-e2a17a8d930a')"/>
+            <column name="name" value="Contact Person"/>
+            <column name="term" value=""/>
+            <column name="key" value="contact_person"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne-ressource"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
   </changeSet>
 </databaseChangeLog>
