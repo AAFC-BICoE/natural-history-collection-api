@@ -73,7 +73,7 @@ public class ExpeditionRepository extends DinaRepositoryV2<ExpeditionDto, Expedi
   @Override
   protected Link generateLinkToResource(ExpeditionDto dto) {
     try {
-      return linkTo(methodOn(CollectionMethodRepository.class).onFindOne(dto.getUuid(), null)).withSelfRel();
+      return linkTo(methodOn(ExpeditionRepository.class).onFindOne(dto.getUuid(), null)).withSelfRel();
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }

@@ -67,7 +67,7 @@ public class SiteRepository extends DinaRepositoryV2<SiteDto, Site> {
   @Override
   protected Link generateLinkToResource(SiteDto dto) {
     try {
-      return linkTo(methodOn(CollectionMethodRepository.class).onFindOne(dto.getUuid(), null)).withSelfRel();
+      return linkTo(methodOn(SiteRepository.class).onFindOne(dto.getUuid(), null)).withSelfRel();
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
