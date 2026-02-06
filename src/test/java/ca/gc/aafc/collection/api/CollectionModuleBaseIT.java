@@ -24,6 +24,7 @@ import ca.gc.aafc.collection.api.service.ProtocolService;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
+import ca.gc.aafc.collection.api.service.SiteService;
 import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 
@@ -88,6 +89,9 @@ public class CollectionModuleBaseIT {
   @Inject
   protected ExpeditionService expeditionService;
 
+  @Inject
+  protected SiteService siteService;
+
   @TestConfiguration
   public static class CollectionModuleTestConfiguration {
     @Bean
@@ -98,4 +102,3 @@ public class CollectionModuleBaseIT {
     }
   }
 }
-

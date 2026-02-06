@@ -158,6 +158,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "endEventDateTime", expression = "java(entity.supplyEndISOEventDateTime() != null ? entity.supplyEndISOEventDateTime().toString() : null)")
   @Mapping(target = "protocol.attachments", ignore = true)
   @Mapping(target = "expedition.participants", ignore = true)
+  @Mapping(target = "site.attachment", ignore = true)
   CollectingEventDto toCollectingEventDto(CollectingEvent entity, Set<String> provided, String scope);
 
   CollectionDto toCollectionDto(Collection entity, Set<String> provided, String scope);
