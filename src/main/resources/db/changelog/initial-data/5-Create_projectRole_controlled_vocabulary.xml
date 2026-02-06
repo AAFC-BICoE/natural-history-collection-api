@@ -17,11 +17,11 @@
       "descriptions": [
       {
       "lang": "en",
-      "desc": "Project roles that define the responsibilities and permissions of individuals within a project."
+      "desc": "Roles that define the responsibilities and permissions of individuals within a project."
       },
       {
       "lang": "fr",
-      "desc": "Les rôles de projet qui définissent les responsabilités et les permissions des individus au sein d’un projet."
+      "desc": "Rôles de projet qui définissent les responsabilités et les permissions des individus au sein d’un projet."
       }
       ]
       }'/>
@@ -79,7 +79,7 @@
             <column name="term" value=""/>
             <column name="key" value="contact_person"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne-ressource"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne ressource"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
   </changeSet>
