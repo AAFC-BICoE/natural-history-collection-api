@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,9 +26,6 @@ public class Site extends UserDescribedDinaEntity {
   @Size(max = 50)
   @Column(name = "_group")
   private String group;
-
-  private LocalDate startDate;
-  private LocalDate endDate;
 
   @Size(max = 50)
   private String code;

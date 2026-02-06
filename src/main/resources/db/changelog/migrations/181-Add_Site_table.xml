@@ -26,21 +26,9 @@
             <column name="_group" type="VARCHAR(50)">
               <constraints nullable="false"/>
             </column>
-
-            <column name="start_date" type="date" />
-            <column name="end_date" type="date" />
             <column name="code" type="VARCHAR(50)" />
             <column name="multilingual_description" type="jsonb"/>
             <column name="attachment" type="uuid[]"/>
         </createTable>
     </changeSet>
-
-    <changeSet id="181-Add_relationship_between_CollectingEvent_and_Site" context="schema-change" author="pyalamanchli">
-        <addColumn tableName="collecting_event">
-            <column name="site_id" type="integer">
-                <constraints foreignKeyName="fk_site_id" references="site(id)"/>
-            </column>
-        </addColumn>
-    </changeSet>
-
 </databaseChangeLog>
