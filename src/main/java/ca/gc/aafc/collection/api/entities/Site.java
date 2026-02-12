@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Polygon;
 import org.hibernate.annotations.Type;
 
 import lombok.Getter;
@@ -30,7 +32,10 @@ public class Site extends UserDescribedDinaEntity {
   @Size(max = 50)
   private String code;
 
+  private Polygon<G2D> siteGeom;
+
   @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = List.of();
+
 }
