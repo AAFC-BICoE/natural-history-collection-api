@@ -189,4 +189,6 @@
   <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/5-Create_projectRole_controlled_vocabulary.xml"/>
   <include file="db/changelog/migrations/181-Add_Site_table.xml"/>
+  <include file="db/changelog/migrations/182-Add_siteGeom_to_Site.xml"/>
+  
 </databaseChangeLog>
