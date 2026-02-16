@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.geolatte.geom.G2D;
-import org.geolatte.geom.Polygon;
+import org.geolatte.geom.Geometry;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.TypeName;
@@ -38,7 +38,7 @@ public class SiteDto implements JsonApiResource {
   private String group;
   private String name;
   private String code;
-  private Polygon<G2D> siteGeom;
+  private Geometry<G2D> siteGeom;
 
   @JsonApiExternalRelation(type = "metadata")
   @JsonIgnore

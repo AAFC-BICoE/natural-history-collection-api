@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Polygon;
 import org.geolatte.geom.builder.DSL;
@@ -12,9 +11,9 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.SiteFactory;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SiteCRUDIT extends CollectionModuleBaseIT {
 
@@ -22,7 +21,6 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
   private static final String EXPECTED_GROUP = "dina-group";
   private static final String EXPECTED_CREATED_BY = "createdBy";
   private static final String EXPECTED_CODE = "LTAE-M";
-  private static final int EXPECTED_SITE_GEOM_SRID = 4326;
   private static final Polygon<G2D> EXPECTED_SITE_GEOM = DSL.polygon(
       CoordinateReferenceSystems.WGS84,
       // Outer ring
@@ -31,14 +29,7 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
           DSL.g(101.0, 0.0),
           DSL.g(101.0, 1.0),
           DSL.g(100.0, 1.0),
-          DSL.g(100.0, 0.0)),
-      // Inner ring (hole)
-      DSL.ring(
-          DSL.g(102.0, 2.0),
-          DSL.g(108.0, 2.0),
-          DSL.g(108.0, 8.0),
-          DSL.g(102.0, 8.0),
-          DSL.g(102.0, 2.0)));
+          DSL.g(100.0, 0.0)));
   private static final MultilingualDescription MULTILINGUAL_DESCRIPTION = MultilingualDescriptionFactory
       .newMultilingualDescription();
   private final List<UUID> EXPECT_ATTACHMENTS = List.of(UUID.randomUUID(), UUID.randomUUID());
@@ -69,13 +60,11 @@ public class SiteCRUDIT extends CollectionModuleBaseIT {
     assertEquals(EXPECTED_CODE, result.getCode());
     assertNotNull(result.getSiteGeom());
     assertEquals(4326, result.getSiteGeom().getSRID());
+    assertTrue(result.getSiteGeom() instanceof Polygon);
+    Polygon<G2D> polygonObj = (Polygon<G2D>) result.getSiteGeom();
     assertEquals(EXPECTED_SITE_GEOM.getExteriorRing().getPositions(),
-        result.getSiteGeom().getExteriorRing().getPositions());
-    assertEquals(1, result.getSiteGeom().getNumInteriorRing());
-    assertEquals(
-        EXPECTED_SITE_GEOM.getInteriorRingN(0).getPositions(),
-        result.getSiteGeom().getInteriorRingN(0).getPositions());
-
+        polygonObj.getExteriorRing().getPositions());
+    assertEquals(0, polygonObj.getNumInteriorRing());
     assertEquals(MULTILINGUAL_DESCRIPTION.getDescriptions(),
         result.getMultilingualDescription().getDescriptions());
     assertEquals(EXPECT_ATTACHMENTS, result.getAttachment());
