@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.UUID;
 import javax.inject.Inject;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.GeometryType;
+import org.geolatte.geom.Polygon;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
@@ -61,5 +64,29 @@ public class SiteRepositoryIT extends BaseRepositoryIT {
         JsonAPITestHelper.toAttributeMap(retrievedSite));
 
     assertThrows(AccessDeniedException.class, () -> siteRepository.onUpdate(docToUpdate, docToUpdate.getId()));
+  }
+
+  @Test
+  @WithMockKeycloakUser(username = "dev", groupRole = { "aafc:user" })
+  void create_WithPolygonSiteGeom_PersistsGeometry() throws Exception {
+    Polygon<G2D> polygon = org.geolatte.geom.builder.DSL.polygon(
+        org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84,
+        org.geolatte.geom.builder.DSL.ring(
+            org.geolatte.geom.builder.DSL.g(100.0, 0.0),
+            org.geolatte.geom.builder.DSL.g(101.0, 0.0),
+            org.geolatte.geom.builder.DSL.g(101.0, 1.0),
+            org.geolatte.geom.builder.DSL.g(100.0, 1.0),
+            org.geolatte.geom.builder.DSL.g(100.0, 0.0)));
+
+    Site testSite = SiteFactory.newSite()
+        .group("preparation process definition")
+        .name("aafc")
+        .siteGeom(polygon)
+        .build();
+
+    serviceTransactionWrapper.execute(siteService::create, testSite);
+    SiteDto retrievedSite = siteRepository.getOne(testSite.getUuid(), "").getDto();
+    assertEquals(polygon, retrievedSite.getSiteGeom());
+    assertEquals(GeometryType.POLYGON, retrievedSite.getSiteGeom().getGeometryType());
   }
 }
