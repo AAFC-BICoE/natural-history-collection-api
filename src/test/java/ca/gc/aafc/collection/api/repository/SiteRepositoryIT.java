@@ -3,9 +3,16 @@ package ca.gc.aafc.collection.api.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
+import org.geolatte.geom.GeometryType;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.access.AccessDeniedException;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.SiteDto;
@@ -21,6 +28,7 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import ca.gc.aafc.collection.api.entities.Site;
 
+@Import(SiteRepositoryIT.GeoLatteJacksonTestConfig.class)
 public class SiteRepositoryIT extends BaseRepositoryIT {
   @Inject
   private SiteRepository siteRepository;
@@ -61,5 +69,41 @@ public class SiteRepositoryIT extends BaseRepositoryIT {
         JsonAPITestHelper.toAttributeMap(retrievedSite));
 
     assertThrows(AccessDeniedException.class, () -> siteRepository.onUpdate(docToUpdate, docToUpdate.getId()));
+  }
+
+  @Test
+  @WithMockKeycloakUser(username = "dev", groupRole = { "aafc:user" })
+  void create_WithPolygonSiteGeom_PersistsGeometry() throws Exception {
+    SiteDto siteDto = SiteTestFixture.newSite();
+    var attributes = JsonAPITestHelper.toAttributeMap(siteDto);
+    attributes.put("siteGeom", polygonGeoJson());
+    JsonApiDocument document = JsonApiDocuments.createJsonApiDocument(
+        null,
+        SiteDto.TYPENAME,
+        attributes);
+    UUID siteUUID = createWithRepository(document, siteRepository::onCreate);
+    SiteDto retrievedSite = siteRepository.getOne(siteUUID, "").getDto();
+    assertEquals(GeometryType.POLYGON, retrievedSite.getSiteGeom().getGeometryType());
+  }
+
+  private Map<String, Object> polygonGeoJson() {
+    return Map.of(
+        "type", "Polygon",
+        "coordinates", List.of(
+            List.of(
+                List.of(100.0, 0.0),
+                List.of(101.0, 0.0),
+                List.of(101.0, 1.0),
+                List.of(100.0, 1.0),
+                List.of(100.0, 0.0))));
+  }
+
+  @TestConfiguration
+  static class GeoLatteJacksonTestConfig {
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer geolatteCustomizer() {
+      return builder -> builder.modulesToInstall(
+          new org.geolatte.geom.json.GeolatteGeomModule());
+    }
   }
 }
