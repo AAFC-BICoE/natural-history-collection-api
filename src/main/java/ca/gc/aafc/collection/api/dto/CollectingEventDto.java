@@ -135,6 +135,10 @@ public class CollectingEventDto implements JsonApiResource {
   @JsonIgnore
   private List<ExternalRelationDto> attachment = List.of();
 
+  @ShallowReference
+  @JsonIgnore
+  private SiteDto site;
+
   @Override
   @JsonIgnore
   public String getJsonApiType() {
