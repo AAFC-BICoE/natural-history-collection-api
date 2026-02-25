@@ -203,8 +203,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     validateManagedAttribute(entity);
     validateAssociations(entity);
     validateExtensionValues(entity);
-
-    //applyBusinessRule(entity, identifierTypeValueValidator);
+    
     identifierTypeValueValidator.validate(entity, entity.getIdentifiers());
   }
 
