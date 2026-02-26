@@ -17,8 +17,8 @@ import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.util.ScientificNameUtils;
 import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
-import ca.gc.aafc.collection.api.validation.IdentifierTypeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
+import ca.gc.aafc.collection.api.validation.MaterialSampleIdentifierTypeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
 import ca.gc.aafc.collection.api.validation.RestrictionExtensionValueValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
@@ -52,7 +52,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
   private final OrganismService organismService;
 
-  private final IdentifierTypeValueValidator identifierTypeValueValidator;
+  private final MaterialSampleIdentifierTypeValueValidator identifierTypeValueValidator;
   private final MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator;
   private final RestrictionExtensionValueValidator restrictionExtensionValueValidator;
 
@@ -65,7 +65,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator,
     @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
-    IdentifierTypeValueValidator identifierTypeValueValidator,
+    MaterialSampleIdentifierTypeValueValidator identifierTypeValueValidator,
     OrganismService organismService,
     DinaEventPublisher<EntityChanged> eventPublisher
   ) {
@@ -203,8 +203,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     validateManagedAttribute(entity);
     validateAssociations(entity);
     validateExtensionValues(entity);
-
-    applyBusinessRule(entity, identifierTypeValueValidator);
+    
+    identifierTypeValueValidator.validate(entity, entity.getIdentifiers());
   }
 
   private void validateManagedAttribute(MaterialSample entity) {

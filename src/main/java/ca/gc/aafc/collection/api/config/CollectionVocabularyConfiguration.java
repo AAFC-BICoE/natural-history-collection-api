@@ -42,6 +42,7 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
 
   // Constant, by Liquibase migration
   public static final UUID MANAGED_ATTRIBUTE_VOCAB_UUID = UUID.fromString("01998155-a6f0-7c2f-9fcc-994d74222f9c");
+  public static final UUID IDENTIFIER_TYPE_VOCAB_UUID = UUID.fromString("019c961e-4c0d-7398-b4ae-73687826b3b5");
 
   public enum DinaComponent {
     COLLECTING_EVENT,

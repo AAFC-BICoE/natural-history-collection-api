@@ -42,7 +42,7 @@ class MaterialSampleValidatorTest extends CollectionModuleBaseIT {
     sampleValidator.validate(sample, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().getFirst().getDefaultMessage());
   }
 
   @Test
