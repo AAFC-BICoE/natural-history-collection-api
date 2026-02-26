@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+                   
+  <changeSet id="6-Create_material_sample_identifier_type_controlled_vocabulary" context="initial-data" author="cgendreau">
+    <insert tableName="controlled_vocabulary">
+      <column name="uuid" value="019c961e-4c0d-7398-b4ae-73687826b3b5"/>
+      <column name="name" value="Identifier Type"/>
+      <column name="key" value="identifier_type"/>
+      <column name="type" value="SYSTEM"/>
+      <column name="vocab_class" value="QUALIFIED_VALUE"/>
+      <column name="version" value="1"/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Identifier Type"},{"lang":"fr","title":"Type d’identifiant"}]}'/>
+      <column name="created_by" value="system"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

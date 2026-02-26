@@ -17,11 +17,11 @@
       "descriptions": [
       {
       "lang": "en",
-      "desc": "Roles that define the responsibilities and permissions of individuals within a project."
+      "desc": "Roles that define the responsibilities of individuals within a project."
       },
       {
       "lang": "fr",
-      "desc": "Rôles de projet qui définissent les responsabilités et les permissions des individus au sein d’un projet."
+      "desc": "Rôles de projet qui définissent les responsabilités des individus au sein d’un projet."
       }
       ]
       }'/>
