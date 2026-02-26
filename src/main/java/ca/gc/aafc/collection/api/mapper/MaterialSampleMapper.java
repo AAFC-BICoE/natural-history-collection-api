@@ -170,6 +170,7 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "storageUnitType", ignore = true)
   StorageUnitUsageDto toStorageUnitUsageDto(StorageUnitUsage entity, Set<String> provided, String scope);
 
+  @Mapping(target = "parentProject", ignore = true)
   @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   ProjectDto toProjectDto(Project entity, Set<String> provided, String scope);
 
