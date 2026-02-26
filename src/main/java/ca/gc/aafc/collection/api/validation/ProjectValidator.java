@@ -10,6 +10,7 @@ import ca.gc.aafc.dina.validation.DinaBaseValidator;
 @Component
 public class ProjectValidator extends DinaBaseValidator<Project> {
 
+  static final String VALID_PARENT_HAS_NO_PARENT = "validation.constraint.violation.parentHasNoParent";
   static final String VALID_EVENT_DATE_KEY = "validation.constraint.violation.validEventDateTime";
 
   public ProjectValidator(MessageSource messageSource) {
@@ -19,6 +20,7 @@ public class ProjectValidator extends DinaBaseValidator<Project> {
   @Override
   public void validateTarget(Project target, Errors errors) {
     validateStartEndDate(target, errors);
+    checkParentHasNoParent(target, errors);
   }
 
   private void validateStartEndDate(Project project, Errors errors) {
@@ -26,6 +28,13 @@ public class ProjectValidator extends DinaBaseValidator<Project> {
       project.getEndDate() != null && project.getStartDate()
         .isAfter(project.getEndDate())) {
       addError(errors, VALID_EVENT_DATE_KEY);
+    }
+  }
+
+  private void checkParentHasNoParent(Project project, Errors errors) {
+    if (project.getParentProject() != null && project.getParentProject().getParentProject() != null) {
+      String errorMessage = getMessage(VALID_PARENT_HAS_NO_PARENT, "project");
+      errors.rejectValue("parentProject", VALID_PARENT_HAS_NO_PARENT, errorMessage);
     }
   }
 

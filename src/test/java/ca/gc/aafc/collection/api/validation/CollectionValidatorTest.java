@@ -15,6 +15,8 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class CollectionValidatorTest extends CollectionModuleBaseIT {
   
   @Inject
@@ -44,8 +46,8 @@ public class CollectionValidatorTest extends CollectionModuleBaseIT {
 
     collectionValidator.validate(collection, errors);
     Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    assertEquals(1, errors.getAllErrors().size());
+    assertEquals(expectedErrorMessage, errors.getAllErrors().getFirst().getDefaultMessage());
   }
 
   private static Collection newCollection() {
@@ -57,6 +59,6 @@ public class CollectionValidatorTest extends CollectionModuleBaseIT {
   }
 
   private String getExpectedErrorMessage(String key) {
-    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+    return messageSource.getMessage(key, new String[]{"collection"}, LocaleContextHolder.getLocale());
   }
 }

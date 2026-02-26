@@ -19,8 +19,10 @@ import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 
@@ -66,5 +68,30 @@ public class ProjectRepositoryIT extends BaseRepositoryIT {
     );
 
     assertThrows(AccessDeniedException.class, () -> projectRepository.onUpdate(docToUpdate, docToUpdate.getId()));
+  }
+
+  @Test
+  @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:user"})
+  public void create_withParent_parentSet() throws ResourceGoneException, ResourceNotFoundException {
+    ProjectDto parentProjectDto = ProjectTestFixture.newProject();
+    UUID parentProjectDtoUUID = createWithRepository(parentProjectDto, projectRepository::onCreate);
+    ProjectDto projectDto = ProjectTestFixture.newProject();
+
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, ProjectDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(projectDto),
+      Map.of("parentProject", JsonApiDocument.ResourceIdentifier.builder()
+        .id(parentProjectDtoUUID)
+        .type(ProjectDto.TYPENAME).build())
+    );
+    UUID projectDtoUUID = createWithRepository(docToCreate, projectRepository::onCreate);
+
+    ProjectDto result = projectRepository.getOne(projectDtoUUID, "").getDto();
+    assertEquals(projectDto.getName(), result.getName());
+    assertEquals(projectDto.getGroup(), result.getGroup());
+
+    assertNull(result.getParentProject());
+    result = projectRepository.getOne(projectDtoUUID, "include=parentProject").getDto();
+    assertNotNull(result.getParentProject());
   }
 }
