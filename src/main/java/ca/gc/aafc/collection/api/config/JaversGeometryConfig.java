@@ -8,6 +8,7 @@ import org.javers.core.json.JsonTypeAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -31,7 +32,7 @@ public class JaversGeometryConfig {
         }
         try {
           return objectMapper.writeValueAsString(sourceValue);
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
           throw new RuntimeException("Error serializing Geometry", e);
         }
       }
@@ -43,7 +44,7 @@ public class JaversGeometryConfig {
         }
         try {
           return objectMapper.readValue(serializedValue, Geometry.class);
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
           throw new RuntimeException("Error deserializing Geometry", e);
         }
       }
