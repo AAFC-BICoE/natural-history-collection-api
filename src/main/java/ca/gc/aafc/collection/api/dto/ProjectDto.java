@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
 
 import ca.gc.aafc.collection.api.entities.Project;
@@ -50,13 +51,19 @@ public class ProjectDto implements JsonApiResource {
 
   private List<AgentRoles> contributors = List.of();
 
-  @JsonApiExternalRelation(type = "metadata")
-  @JsonIgnore
-  private List<ExternalRelationDto> attachment = new ArrayList<>();
-
   private MultilingualDescription multilingualDescription;
 
   private Map<String, Map<String, String>> extensionValues = Map.of();
+
+  // -- Relationships --
+  @JsonIgnore
+  @ShallowReference
+  private ProjectDto parentProject;
+
+  // -- External relationships --
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
+  private List<ExternalRelationDto> attachment = new ArrayList<>();
 
   @Override
   @JsonIgnore

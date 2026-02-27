@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
+import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
 import org.javers.core.metamodel.annotation.ShallowReference;
@@ -64,6 +65,7 @@ public class CollectingEventDto implements JsonApiResource {
 
   // Read-only field
   @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
+  @DiffIgnore
   private Point<G2D> eventGeom;
 
   private String dwcVerbatimCoordinates;

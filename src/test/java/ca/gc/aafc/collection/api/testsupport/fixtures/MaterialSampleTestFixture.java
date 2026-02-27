@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
@@ -71,7 +70,6 @@ public class MaterialSampleTestFixture {
     materialSampleDto.setAllowDuplicateName(ALLOW_DUPLICATE_NAME);
     materialSampleDto.setRestrictionFieldsExtension(ExtensionValueTestFixture.newExtensionValue(RESTRICTION_KEY, RESTRICTION_FIELD_KEY, RESTRICTION_VALUE));
     materialSampleDto.setRestrictionRemarks("abc");
-    materialSampleDto.setIdentifiers(Map.of("seqdb_id", "1"));
     return materialSampleDto;
   }
 }
