@@ -17,7 +17,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
   Purpose of this test is 
   Fail Fast if:
     Jackson config changes
-    GeolatteGeomModule is removed ex: GeoLatteJacksonConfig class
+    GeolatteGeomModule is removed ex: GeoLatteConfig class
     Geometry<G2D> cannot deserialize GeoJSON
     Introduces conflicting module
 */
