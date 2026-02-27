@@ -24,9 +24,11 @@ public interface ProjectMapper extends DinaMapperV2<ProjectDto, Project> {
   ProjectDto toDto(Project entity, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "parentProject", ignore = true)
   Project toEntity(ProjectDto dto, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "parentProject", ignore = true)
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
   void patchEntity(@MappingTarget Project entity, ProjectDto dto,
                    @Context Set<String> provided, @Context String scope);
