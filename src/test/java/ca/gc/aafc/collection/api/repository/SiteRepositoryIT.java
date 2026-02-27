@@ -76,7 +76,7 @@ public class SiteRepositoryIT extends BaseRepositoryIT {
   void create_WithPolygonSiteGeom_PersistsGeometry() throws Exception {
     SiteDto siteDto = SiteTestFixture.newSite();
     var attributes = JsonAPITestHelper.toAttributeMap(siteDto);
-    attributes.put("siteGeom", polygonGeoJson());
+    attributes.put("siteGeom", SiteTestFixture.polygonGeoJson());
     JsonApiDocument document = JsonApiDocuments.createJsonApiDocument(
         null,
         SiteDto.TYPENAME,
@@ -84,18 +84,6 @@ public class SiteRepositoryIT extends BaseRepositoryIT {
     UUID siteUUID = createWithRepository(document, siteRepository::onCreate);
     SiteDto retrievedSite = siteRepository.getOne(siteUUID, "").getDto();
     assertEquals(GeometryType.POLYGON, retrievedSite.getSiteGeom().getGeometryType());
-  }
-
-  private Map<String, Object> polygonGeoJson() {
-    return Map.of(
-        "type", "Polygon",
-        "coordinates", List.of(
-            List.of(
-                List.of(100.0, 0.0),
-                List.of(101.0, 0.0),
-                List.of(101.0, 1.0),
-                List.of(100.0, 1.0),
-                List.of(100.0, 0.0))));
   }
 
   @TestConfiguration
