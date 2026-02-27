@@ -191,10 +191,7 @@
   <include file="db/changelog/migrations/181-Add_Site_table.xml"/>
   <include file="db/changelog/migrations/182-Add_material_sample_name_index.xml"/>
   <include file="db/changelog/migrations/183-Add_siteGeom_to_Site.xml"/>
-<<<<<<< HEAD
-  <include file="db/changelog/migrations/184-Add_relationship_between_CollectingEvent_and_Site.xml"/>
-=======
   <include file="db/changelog/migrations/184-Add_parent_to_project.xml"/>
   <include file="db/changelog/initial-data/6-Create_material_sample_identifier_type_controlled_vocabulary.xml"/>
->>>>>>> dev
+  <include file="db/changelog/migrations/185-Add_relationship_between_CollectingEvent_and_Site.xml"/>
 </databaseChangeLog>
