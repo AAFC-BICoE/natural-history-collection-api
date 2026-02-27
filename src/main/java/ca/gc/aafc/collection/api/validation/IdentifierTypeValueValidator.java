@@ -1,89 +1,60 @@
 package ca.gc.aafc.collection.api.validation;
 
-import org.apache.commons.collections4.MapUtils;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-
-import ca.gc.aafc.collection.api.config.TypedVocabularyConfiguration;
-import ca.gc.aafc.collection.api.entities.MaterialSample;
-import ca.gc.aafc.dina.validation.TypedVocabularyElementValidator;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
-
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
+import javax.inject.Named;
+import lombok.NonNull;
+
+import org.springframework.context.MessageSource;
+import org.springframework.validation.Errors;
+
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
+
+import ca.gc.aafc.dina.entity.DinaEntity;
+import ca.gc.aafc.dina.service.ControlledVocabularyItemService;
+import ca.gc.aafc.dina.validation.BaseControlledVocabularyValueValidator;
+import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
+
+import static ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration.IDENTIFIER_TYPE_VOCAB_UUID;
 
 /**
- * Validates that the key(s) used in materialSample.identifier is valid and that the associated value
- * is also valid.
+ * Base class for identifier type validator. Concrete class mostly need to add the Component Spring annotation
+ * and specify the Dina Component.
  */
-@Component
-public class IdentifierTypeValueValidator implements Validator {
+public abstract class IdentifierTypeValueValidator extends BaseControlledVocabularyValueValidator<CollectionControlledVocabularyItem> {
 
-  private static final String FIELD_NAME = "identifiers";
-  private static final String INVALID_KEY_KEY = "validation.identifier.violation.invalidKey";
-  private static final String INVALID_VALUE_KEY = "validation.identifier.violation.invalidValue";
-
-  private final MessageSource messageSource;
-  private final List<? extends TypedVocabularyElement> identifierType;
-
-  public IdentifierTypeValueValidator(MessageSource messageSource, TypedVocabularyConfiguration typedVocabularyConfiguration) {
-    this.messageSource = messageSource;
-    identifierType = typedVocabularyConfiguration.getIdentifierType();
-  }
-
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return MaterialSample.class.isAssignableFrom(clazz);
-  }
-
-  @Override
-  public void validate(Object target, Errors errors) {
-    if (!supports(target.getClass())) {
-      throw new IllegalArgumentException(
-        "IdentifierTypeValueValidator not supported for class " + target.getClass());
-    }
-
-    validate((MaterialSample) target, errors);
-  }
-
-  public void validate(MaterialSample target, Errors errors) {
-
-    Map<String, String> identifier = target.getIdentifiers();
-    if (MapUtils.isEmpty(identifier)) {
-      return;
-    }
-
-    for (var entry : identifier.entrySet()) {
-      Optional<? extends TypedVocabularyElement> typedVocab = findInTypedVocabulary(entry.getKey());
-      if (typedVocab.isEmpty()) {
-        // error. key not found
-        String errorMessage = getMessageForKey(INVALID_KEY_KEY, entry.getKey());
-        errors.rejectValue(FIELD_NAME, INVALID_KEY_KEY, errorMessage);
-        return;
-      }
-
-      if (!TypedVocabularyElementValidator.isValidElement(typedVocab.get(), entry.getValue())) {
-        String errorMessage = getMessageForKey(INVALID_VALUE_KEY, entry.getValue(), entry.getKey());
-        errors.rejectValue(FIELD_NAME, INVALID_VALUE_KEY, errorMessage);
-        return;
-      }
-    }
+  public IdentifierTypeValueValidator(@Named("validationMessageSource") MessageSource messageSource,
+                                      @NonNull ControlledVocabularyItemService<CollectionControlledVocabularyItem> vocabItemService) {
+    super(messageSource, vocabItemService);
   }
 
   /**
-   * Finds the first TypedVocabularyElement where the key is matching the provided key.
-   * @param key
+   * dinaComponent restriction to scope ControlledVocabularyItem.
+   *
    * @return
    */
-  protected Optional<? extends TypedVocabularyElement> findInTypedVocabulary(String key) {
-    return identifierType.stream().filter(o -> o.getKey().equals(key)).findFirst();
+  public abstract String getDinaComponent();
+
+  public <D extends DinaEntity> void validate(D entity, Map<String, String> identifiers) {
+    validate(identifiers, ValidationErrorsHelper.newErrorsObject(entity));
   }
 
-  private String getMessageForKey(String key, Object... objects) {
-    return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
+  public void validate(String objIdentifier, Object target, Map<String, String> identifiers) {
+    Objects.requireNonNull(target);
+    validate(identifiers, ValidationErrorsHelper.newErrorsObject(objIdentifier, target));
+  }
+
+  /**
+   * Internal validate method that is throwing {@link javax.validation.ValidationException} if there is
+   * any errors
+   *
+   * @param identifiers
+   * @param errors
+   */
+  private void validate(Map<String, String> identifiers, Errors errors) {
+    validateItems(identifiers,
+      () -> vocabItemService.findAllByKeys(identifiers.keySet(), IDENTIFIER_TYPE_VOCAB_UUID,
+        getDinaComponent()), errors);
+    ValidationErrorsHelper.errorsToValidationException(errors);
   }
 }

@@ -5,6 +5,8 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
 import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
@@ -13,6 +15,7 @@ import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.DinaComponent;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
@@ -28,6 +31,8 @@ import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration.IDENTIFIER_TYPE_VOCAB_UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(
@@ -139,9 +145,13 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
                     null)
             ));
 
+    // Make sure the identifier type exists
+    createSeqDBIdentifier();
+
     // Step 3 - Create two child material samples, linked to the parent material sample.
     MaterialSampleDto child = newSample();
     child.setMaterialSampleName("child");
+    child.setIdentifiers(Map.of("seqdb_id", "1"));
 
     sendPost(MaterialSampleDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
       MaterialSampleDto.TYPENAME,
@@ -169,6 +179,23 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     findSample(parentId)
             .body("data.relationships.organism.data", Matchers.hasSize(3))
             .body("data.attributes.materialSampleChildren", Matchers.hasSize(2));
+  }
+
+  private void createSeqDBIdentifier() {
+    CollectionControlledVocabularyItemDto vocabItemDto = new CollectionControlledVocabularyItemDto();
+    vocabItemDto.setName("seqdb id");
+    vocabItemDto.setDinaComponent(DinaComponent.MATERIAL_SAMPLE.name());
+    vocabItemDto.setVocabularyElementType(
+      TypedVocabularyElement.VocabularyElementType.INTEGER);
+    vocabItemDto.setGroup("test");
+    vocabItemDto.setCreatedBy("test");
+
+    sendPost(CollectionControlledVocabularyItemDto.TYPENAME, JsonAPITestHelper.toJsonAPIMap(
+      CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(vocabItemDto),
+      JsonAPITestHelper.toRelationshipMap(JsonAPIRelationship.of("controlledVocabulary", CollectionControlledVocabularyDto.TYPENAME, IDENTIFIER_TYPE_VOCAB_UUID.toString())),
+      null)
+    );
   }
 
   @Test
