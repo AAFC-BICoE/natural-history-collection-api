@@ -63,11 +63,11 @@ public class CollectingEvent implements DinaEntity {
     OSM
   }
 
-  public static final List<ISODateTimeAttribute> ISO_DATETIME_ATTRIBUTES =
-    List.of(new ISODateTimeAttribute("startEventDateTime", "startEventDateTimeEnd",
-        "startEventDateTimePrecision"),
+  public static final List<ISODateTimeAttribute> ISO_DATETIME_ATTRIBUTES = List.of(
+      new ISODateTimeAttribute("startEventDateTime", "startEventDateTimeEnd",
+          "startEventDateTimePrecision"),
       new ISODateTimeAttribute("endEventDateTime", "endEventDateTimeEnd",
-        "endEventDateTimePrecision"));
+          "endEventDateTimePrecision"));
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,7 +96,7 @@ public class CollectingEvent implements DinaEntity {
 
   @Type(type = "jsonb")
   @Builder.Default
-  private List<GeoreferenceAssertionDto> geoReferenceAssertions =  new ArrayList<>();
+  private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
   private String dwcVerbatimCoordinates;
 
@@ -248,6 +248,9 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Site site;
+
   /**
    * Method used to set startEventDateTime and startEventDateTimePrecision to ensure the 2 fields are always
    * in sync.
@@ -272,9 +275,9 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(startEventDateTime)
-      .localEndDateTime(startEventDateTimeEnd)
-      .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
-      .build();
+        .localEndDateTime(startEventDateTimeEnd)
+        .format(ISODateTime.Format.fromPrecision(startEventDateTimePrecision).orElse(null))
+        .build();
   }
 
   /**
@@ -302,9 +305,9 @@ public class CollectingEvent implements DinaEntity {
     }
 
     return ISODateTime.builder().localDateTime(endEventDateTime)
-      .localEndDateTime(endEventDateTimeEnd)
-      .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
-      .build();
+        .localEndDateTime(endEventDateTimeEnd)
+        .format(ISODateTime.Format.fromPrecision(endEventDateTimePrecision).orElse(null))
+        .build();
   }
 
   public Optional<GeoreferenceAssertionDto> getPrimaryAssertion() {
@@ -312,13 +315,13 @@ public class CollectingEvent implements DinaEntity {
       return Optional.empty();
     }
     return this.getGeoReferenceAssertions()
-      .stream()
-      .filter(geo -> BooleanUtils.isTrue(geo.getIsPrimary()))
-      .findFirst();
+        .stream()
+        .filter(geo -> BooleanUtils.isTrue(geo.getIsPrimary()))
+        .findFirst();
   }
 
   public record ISODateTimeAttribute(String attribute, String endAttribute,
-                                     String precisionAttribute) {
+      String precisionAttribute) {
   }
 
 }
