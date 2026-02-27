@@ -14,8 +14,9 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.SiteTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Map;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
@@ -55,7 +56,6 @@ public class SiteRestIT extends BaseRestAssuredTest {
         JsonAPITestHelper.toJsonAPIMap(SiteDto.TYPENAME, attributesToUpdate, uuid), 200);
     assertEquals(siteDto.getSiteGeom(), receivedDto.getSiteGeom());
     assertNotNull(updateResponse);
-    assertEquals(HttpStatus.OK, updateResponse.extract().statusCode());
+    assertEquals(HttpStatus.OK.value(), updateResponse.extract().statusCode());
   }
-
 }
