@@ -8,6 +8,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+        with:
+         version: type=image,tag=29.1.5
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:

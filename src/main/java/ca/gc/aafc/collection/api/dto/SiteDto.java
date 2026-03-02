@@ -1,69 +1,50 @@
 package ca.gc.aafc.collection.api.dto;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Geometry;
 import org.javers.core.metamodel.annotation.Id;
 import org.javers.core.metamodel.annotation.PropertyName;
-import org.javers.core.metamodel.annotation.ShallowReference;
 import org.javers.core.metamodel.annotation.TypeName;
-
-import ca.gc.aafc.collection.api.entities.Project;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.toedter.spring.hateoas.jsonapi.JsonApiId;
+import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 import lombok.Data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.toedter.spring.hateoas.jsonapi.JsonApiId;
-import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
-
 @Data
-@RelatedEntity(Project.class)
-@JsonApiTypeForClass(ProjectDto.TYPENAME)
-@TypeName(ProjectDto.TYPENAME)
-public class ProjectDto implements JsonApiResource {
-  
-  public static final String TYPENAME = "project";
+@RelatedEntity(Site.class)
+@JsonApiTypeForClass(SiteDto.TYPENAME)
+@TypeName(SiteDto.TYPENAME)
+public class SiteDto implements JsonApiResource {
+  public static final String TYPENAME = "site";
 
   @JsonApiId
   @Id
   @PropertyName("id")
   private UUID uuid;
-  
+
   private OffsetDateTime createdOn;
   private String createdBy;
-  
   private String group;
-
   private String name;
+  private String code;
+  private Geometry<G2D> siteGeom;
 
-  private LocalDate startDate;
-  private LocalDate endDate;
-  private String status;
-
-  private List<AgentRoles> contributors = List.of();
-
-  private MultilingualDescription multilingualDescription;
-
-  private Map<String, Map<String, String>> extensionValues = Map.of();
-
-  // -- Relationships --
-  @JsonIgnore
-  @ShallowReference
-  private ProjectDto parentProject;
-
-  // -- External relationships --
   @JsonApiExternalRelation(type = "metadata")
   @JsonIgnore
   private List<ExternalRelationDto> attachment = new ArrayList<>();
+
+  private MultilingualDescription multilingualDescription;
 
   @Override
   @JsonIgnore

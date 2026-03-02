@@ -20,6 +20,7 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.ResourceNameIdentifierResponseDto;
+import ca.gc.aafc.collection.api.dto.SiteDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
 import ca.gc.aafc.collection.api.entities.Collection;
@@ -28,6 +29,7 @@ import ca.gc.aafc.collection.api.entities.PreparationMethod;
 import ca.gc.aafc.collection.api.entities.PreparationType;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
+import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.dina.repository.ResourceNameIdentifierBaseRepository;
 import ca.gc.aafc.dina.security.auth.GroupWithReadAuthorizationService;
@@ -62,7 +64,8 @@ public class ResourceNameIdentifierRepository extends ResourceNameIdentifierBase
         PreparationTypeDto.TYPENAME, PreparationType.class,
         PreparationMethodDto.TYPENAME, PreparationMethod.class,
         ProtocolDto.TYPENAME, Protocol.class,
-        AssemblageDto.TYPENAME, Assemblage.class));
+            AssemblageDto.TYPENAME, Assemblage.class,
+            SiteDto.TYPENAME, Site.class));
   }
 
   @GetMapping(ResourceNameIdentifierResponseDto.TYPE)

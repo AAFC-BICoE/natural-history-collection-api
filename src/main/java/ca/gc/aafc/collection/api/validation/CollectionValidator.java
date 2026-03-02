@@ -24,7 +24,7 @@ public class CollectionValidator extends DinaBaseValidator<Collection> {
   private void checkParentHasNoParent(Collection collection, Errors errors) {
     if (collection.getParentCollection() != null && 
       collection.getParentCollection().getParentCollection() != null) {
-      String errorMessage = getMessage(VALID_PARENT_HAS_NO_PARENT);
+      String errorMessage = getMessage(VALID_PARENT_HAS_NO_PARENT, "collection");
       errors.rejectValue("parentCollection", VALID_PARENT_HAS_NO_PARENT, errorMessage);
     }
   }

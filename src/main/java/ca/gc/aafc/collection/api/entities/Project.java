@@ -8,6 +8,9 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import ca.gc.aafc.dina.entity.AgentRoles;
@@ -52,5 +56,10 @@ public class Project extends UserDescribedDinaEntity {
   @Valid
   @Builder.Default
   private List<AgentRoles> contributors = List.of();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_project_id")
+  @ToString.Exclude
+  private Project parentProject;
 
 }
