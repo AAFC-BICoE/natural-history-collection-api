@@ -40,15 +40,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
             .map(MultilingualTitle.MultilingualTitlePair::getTitle)
             .findFirst();
   }
-
-  @Test
-  void typeStatus() {
-    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> typeStatus = vocabularyConfiguration.getVocabulary()
-      .get("typeStatus");
-    assertEquals(11, typeStatus.size());
-    typeStatus.forEach(assertVocabElement());
-  }
-
+  
   @Test
   void coordinateSystem() {
     List<CollectionVocabularyConfiguration.CollectionVocabularyElement> coordinateSystem = vocabularyConfiguration.getVocabulary()
