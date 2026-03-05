@@ -40,7 +40,7 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
             .map(MultilingualTitle.MultilingualTitlePair::getTitle)
             .findFirst();
   }
-  
+
   @Test
   void coordinateSystem() {
     List<CollectionVocabularyConfiguration.CollectionVocabularyElement> coordinateSystem = vocabularyConfiguration.getVocabulary()
