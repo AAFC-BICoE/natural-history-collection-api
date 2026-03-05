@@ -194,4 +194,5 @@
   <include file="db/changelog/migrations/184-Add_parent_to_project.xml"/>
   <include file="db/changelog/initial-data/6-Create_material_sample_identifier_type_controlled_vocabulary.xml"/>
   <include file="db/changelog/migrations/185-Add_relationship_between_CollectingEvent_and_Site.xml"/>
+  <include file="db/changelog/migrations/186-Add_uriTemplate_to_controlled_vocabulary_item.xml"/>
 </databaseChangeLog>
