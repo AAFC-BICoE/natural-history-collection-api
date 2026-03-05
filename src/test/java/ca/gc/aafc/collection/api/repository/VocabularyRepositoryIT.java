@@ -38,7 +38,6 @@ public class VocabularyRepositoryIT extends CollectionModuleBaseIT {
         vocabularyConfiguration.getVocabulary().get("degreeOfEstablishment"),
         vocabularyConfiguration.getVocabulary().get("srs"),
         vocabularyConfiguration.getVocabulary().get("coordinateSystem"),
-        vocabularyConfiguration.getVocabulary().get("typeStatus"),
         vocabularyConfiguration.getVocabulary().get("substrate"),
         vocabularyConfiguration.getVocabulary().get("materialSampleState"),
         vocabularyConfiguration.getVocabulary().get("materialSampleType"),
