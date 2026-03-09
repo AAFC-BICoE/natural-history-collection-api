@@ -9,9 +9,11 @@ import ca.gc.aafc.collection.api.validation.ExpeditionValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;
+import ca.gc.aafc.dina.messaging.message.DocumentOperationType;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
+import java.util.EnumSet;
 import lombok.NonNull;
 
 @Service
@@ -19,13 +21,13 @@ public class ExpeditionService extends MessageProducingService<Expedition> {
 
   private final ExpeditionValidator expeditionValidator;
 
-  public ExpeditionService(
-    @NonNull BaseDAO baseDAO,
-    @NonNull SmartValidator sv,
-    @NonNull ExpeditionValidator expeditionValidator,
-    DinaEventPublisher<EntityChanged> eventPublisher
+  public ExpeditionService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv,
+                           @NonNull ExpeditionValidator expeditionValidator,
+                           DinaEventPublisher<EntityChanged> eventPublisher
   ) {
-    super(baseDAO, sv, ExpeditionDto.TYPENAME, eventPublisher);
+    super(baseDAO, sv, ExpeditionDto.TYPENAME,
+      EnumSet.of(DocumentOperationType.UPDATE, DocumentOperationType.DELETE),
+      eventPublisher);
     this.expeditionValidator = expeditionValidator;
   }
 
