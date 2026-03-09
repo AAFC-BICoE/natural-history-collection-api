@@ -1,0 +1,152 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="7-Create_type_status_controlled_vocabulary" context="initial-data" author="cgendreau">
+        <insert tableName="controlled_vocabulary">
+            <column name="uuid" value="019cbf7f-b804-7aa5-b04d-b1deed0e7255"/>
+            <column name="name" value="Type Status"/>
+            <column name="key" value="type_status"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q3707858"/>
+            <column name="type" value="SYSTEM"/>
+            <column name="vocab_class" value="QUALIFIED_VALUE"/>
+            <column name="version" value="1"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Type Status"},{"lang":"fr","title":"Statut du type"}]}'/>
+            <column name="multilingual_description" value='{
+      "descriptions": [
+      {
+      "lang": "en",
+      "desc": "Nomenclatural type applied to the subject"
+      },
+      {
+      "lang": "fr",
+      "desc": "Type nomenclatural appliqué au sujet"
+      }
+      ]
+      }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf97-078d-71ab-af4f-41b75e45aaf3"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="None"/>
+            <column name="term" value=""/>
+            <column name="key" value="none"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"None"},{"lang":"fr","title":"Aucun"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbfaa-5ace-7fbf-97ae-1df58deb6e72"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Holotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q1061403"/>
+            <column name="key" value="holotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Holotype"},{"lang":"fr","title":"Holotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf97-e820-7384-b55e-5ef571154790"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Paratype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q926578"/>
+            <column name="key" value="paratype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Paratype"},{"lang":"fr","title":"Paratype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-10e2-74db-a265-c75c0830b473"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Allotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q19353437"/>
+            <column name="key" value="allotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Allotype"},{"lang":"fr","title":"Allotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-3778-78da-ae53-2c5b5f57e893"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Neotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q3874702"/>
+            <column name="key" value="neotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Neotype"},{"lang":"fr","title":"Neotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-5390-785b-aac1-55fc11412737"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Syntype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q719822"/>
+            <column name="key" value="syntype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Syntype"},{"lang":"fr","title":"Syntype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-6f88-7405-b147-f4ed0a24d39c"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Lectotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q2439719"/>
+            <column name="key" value="lectotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Lectotype"},{"lang":"fr","title":"Lectotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-8c24-7099-bd0f-d7c2e402f76b"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Paralectotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q19353473"/>
+            <column name="key" value="paralectotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Paralectotype"},{"lang":"fr","title":"Paralectotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-a1a5-77ee-a85c-ee1fc6235912"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Hapantotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q19353478"/>
+            <column name="key" value="hapantotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Hapantotype"},{"lang":"fr","title":"Hapantotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-b4fe-7f98-99fc-191b0977a413"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Iconotype"/>
+            <column name="key" value="iconotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Iconotype"},{"lang":"fr","title":"Iconotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-c783-74d8-b925-4f99fffbb4a8"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7255')"/>
+            <column name="name" value="Ergatotype"/>
+            <column name="term" value="http://www.wikidata.org/entity/Q19353481"/>
+            <column name="key" value="ergatotype"/>
+            <column name="_group" value="system"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Ergatotype"},{"lang":"fr","title":"Ergatotype"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
