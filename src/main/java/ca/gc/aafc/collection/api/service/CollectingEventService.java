@@ -22,12 +22,10 @@ import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;
-import ca.gc.aafc.dina.messaging.message.DocumentOperationType;
 import ca.gc.aafc.dina.service.MessageProducingService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.time.OffsetDateTime;
-import java.util.EnumSet;
 import lombok.NonNull;
 
 @Service
@@ -51,8 +49,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
     CollectingEventExtensionValueValidator extensionValueValidator,
     DinaEventPublisher<EntityChanged> eventPublisher
   ) {
-    super(baseDAO, sv, CollectingEventDto.TYPENAME,
-      EnumSet.of(DocumentOperationType.UPDATE, DocumentOperationType.DELETE), eventPublisher);
+    super(baseDAO, sv, CollectingEventDto.TYPENAME, eventPublisher);
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
