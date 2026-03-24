@@ -10,8 +10,7 @@
             <column name="geographic_place_name_source_details" type="jsonb"/>
             <column name="dwc_country" type="VARCHAR(100)"/>
             <column name="dwc_country_code" type="VARCHAR(2)"/>
-             <column name="dwc_state_province" type="VARCHAR(100)"/>
-             <column name="dwc_municipality" type="VARCHAR(100)"/>
+            <column name="dwc_state_province" type="VARCHAR(100)"/>
         </addColumn>
     </changeSet>
 

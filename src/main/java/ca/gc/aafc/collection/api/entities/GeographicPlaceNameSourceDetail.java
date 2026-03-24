@@ -2,13 +2,11 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-
 import org.hibernate.validator.constraints.URL;
-import org.javers.core.metamodel.annotation.Value;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,7 +14,8 @@ import javax.validation.constraints.Size;
 
 @Data
 @Builder
-@Value // This class is considered a "value" belonging to a CollectingEventDto.
+@NoArgsConstructor
+@AllArgsConstructor
 public class GeographicPlaceNameSourceDetail {
 
   @URL
@@ -48,7 +47,8 @@ public class GeographicPlaceNameSourceDetail {
    */
   @Data
   @Builder
-  @Value
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class SourceAdministrativeLevel {
     @NotBlank
     private String id;
@@ -62,7 +62,8 @@ public class GeographicPlaceNameSourceDetail {
 
   @Data
   @Builder
-  @Value
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Country {
     // ISO code for the country
     @Size(min = 2, max = 2)
