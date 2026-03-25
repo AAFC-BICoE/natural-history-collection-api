@@ -457,6 +457,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_design">Design</a>
+<ul class="sectlevel1">
+<li><a href="#_storage">Storage</a></li>
+</ul>
+</li>
+<li><a href="#_database">Database</a>
+<ul class="sectlevel1">
+<li><a href="#_triggers">Triggers</a>
+<ul class="sectlevel2">
+<li><a href="#_check_material_name_unique">check_material_name_unique</a></li>
+<li><a href="#_check_storage_hierarchy">check_storage_hierarchy</a></li>
+<li><a href="#_check_organism_is_target">check_organism_is_target</a></li>
+</ul>
+</li>
+<li><a href="#_functions">Functions</a>
+<ul class="sectlevel2">
+<li><a href="#_jsonb_path_exists_varchar">jsonb_path_exists_varchar</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -605,9 +626,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Content type, <code>application/vnd.api+json</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">POST, <code>/index-refresh</code></p>
-<p class="tableblock"><code><code>json
-{
+<td class="tableblock halign-left valign-top"><p class="tableblock">POST, <code>/index-refresh</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
   "data": {
     "type": "index-refresh",
     "id": "c9e66a08-8b59-4183-8346-e2298af32bfe",
@@ -615,45 +640,89 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
       "docType": "material-sample"
     }
   }
-}
-</code></code>
-= Design</p>
-<p class="tableblock">== Storage</p>
-<p class="tableblock">image::storage.drawio.png[]
-= Database</p>
-<p class="tableblock">== Triggers</p>
-<p class="tableblock">=== check_material_name_unique</p>
-<p class="tableblock">Make sure <code>material_sample_name</code> is unique within a collection unless <code>allow_duplicate_name</code> is set to true (for legacy data).</p>
-<p class="tableblock">=== check_storage_hierarchy</p>
-<p class="tableblock">Ensures <code>storage_unit</code> 's hierarchy is except of cycles.</p>
-<p class="tableblock">=== check_organism_is_target</p>
-<p class="tableblock">Ensures that <code>organism</code> attached to a <code>material_sample</code> are using the <code>is_target</code> concept or are not using it but never a mix of both.</p>
-<p class="tableblock">== Functions</p>
-<p class="tableblock">=== jsonb_path_exists_varchar
-<code>jsonb_path_exists_varchar(target jsonb, path varchar, vars varchar, caseSensitive boolean)</code>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_design" class="sect0">Design</h1>
+<div class="sect1">
+<h2 id="_storage">Storage</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="./images/storage.drawio.png" alt="storage.drawio">
+</div>
+</div>
+</div>
+</div>
+<h1 id="_database" class="sect0">Database</h1>
+<div class="sect1">
+<h2 id="_triggers">Triggers</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_check_material_name_unique">check_material_name_unique</h3>
+<div class="paragraph">
+<p>Make sure <code>material_sample_name</code> is unique within a collection unless <code>allow_duplicate_name</code> is set to true (for legacy data).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_check_storage_hierarchy">check_storage_hierarchy</h3>
+<div class="paragraph">
+<p>Ensures <code>storage_unit</code> 's hierarchy is except of cycles.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_check_organism_is_target">check_organism_is_target</h3>
+<div class="paragraph">
+<p>Ensures that <code>organism</code> attached to a <code>material_sample</code> are using the <code>is_target</code> concept or are not using it but never a mix of both.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_functions">Functions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_jsonb_path_exists_varchar">jsonb_path_exists_varchar</h3>
+<div class="paragraph">
+<p><code>jsonb_path_exists_varchar(target jsonb, path varchar, vars varchar, caseSensitive boolean)</code>
 = Managed Attributes</p>
-<p class="tableblock">Managed Attributes can be fetched either by UUID or by a "{component}.{key}" formatted url path.</p>
-<p class="tableblock">* component: The value of the ManagedAttribute&#8217;s managedAttributeComponent field.
-* key: The value of the ManagedAttribute&#8217;s unique "key" field.</p>
-<p class="tableblock">e.g.</p>
-<p class="tableblock">[source]
-----
-/managed-attribute/collecting_event.my_managed_attribute.
-----</p>
-<p class="tableblock">[source]
-----
-/managed-attribute/32746f92-0530-4913-b891-242b1ff629b6.
-----</p></td>
-</tr>
-</tbody>
-</table>
+</div>
+<div class="paragraph">
+<p>Managed Attributes can be fetched either by UUID or by a "{component}.{key}" formatted url path.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>component: The value of the ManagedAttribute&#8217;s managedAttributeComponent field.</p>
+</li>
+<li>
+<p>key: The value of the ManagedAttribute&#8217;s unique "key" field.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>/managed-attribute/collecting_event.my_managed_attribute.</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>/managed-attribute/32746f92-0530-4913-b891-242b1ff629b6.</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-25 16:53:48 UTC
+Last updated 2026-03-25 16:54:23 UTC
 </div>
 </div>
 </body>
