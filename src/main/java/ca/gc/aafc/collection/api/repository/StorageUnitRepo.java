@@ -98,6 +98,7 @@ public class StorageUnitRepo extends DinaRepositoryV2<StorageUnitDto, StorageUni
   }
 
   @GetMapping(StorageUnitDto.TYPENAME)
+  @Transactional(readOnly = true)
   public ResponseEntity<RepresentationModel<?>> onFindAll(HttpServletRequest req) {
     return handleFindAll(req);
   }

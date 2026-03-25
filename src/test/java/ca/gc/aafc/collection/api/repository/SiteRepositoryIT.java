@@ -3,8 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.geolatte.geom.GeometryType;
