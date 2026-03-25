@@ -77,8 +77,8 @@ Trigger a message to (re)index a resource. `DINA_ADMIN` role required. If `id` i
 
 [cols="1,1"]
 |===
-|Content type, `application/vnd.api+json`
-|POST, `/index-refresh`
+|Content type| `application/vnd.api+json`
+|POST| `/index-refresh`
 |===
 
 ```json
