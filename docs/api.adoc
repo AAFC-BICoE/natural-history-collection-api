@@ -1,5 +1,9 @@
 = API
 
+== Open API
+
+Collection Open API https://www.dina-project.net/collection-specs/[specifications].
+
 == Additional Endpoints
 
 === material-sample-summary
