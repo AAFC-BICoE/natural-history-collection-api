@@ -13,6 +13,8 @@ import org.javers.core.metamodel.annotation.TypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
+
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -47,7 +49,7 @@ public class SiteDto implements JsonApiResource {
 
   private MultilingualDescription multilingualDescription;
 
-  private Site.GeographicPlaceNameSource geographicPlaceNameSource;
+  private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
 
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 

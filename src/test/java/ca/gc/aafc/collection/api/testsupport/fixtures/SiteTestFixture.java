@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import ca.gc.aafc.collection.api.dto.SiteDto;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail.SourceAdministrativeLevel;
-import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import lombok.SneakyThrows;
 
@@ -42,7 +42,7 @@ public class SiteTestFixture {
     siteDto.setAttachment(List.of(
         ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("file").build()));
 
-    siteDto.setGeographicPlaceNameSource(Site.GeographicPlaceNameSource.OSM);
+    siteDto.setGeographicPlaceNameSource(CollectingEvent.GeographicPlaceNameSource.OSM);
     siteDto.setGeographicPlaceNameSourceDetail(newGeographicPlaceNameSourceDetail());
 
     siteDto.setDwcCountry("Canada");

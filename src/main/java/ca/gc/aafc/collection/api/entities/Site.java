@@ -27,10 +27,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class Site extends UserDescribedDinaEntity {
 
-  public enum GeographicPlaceNameSource {
-    OSM
-  }
-
   @NotBlank
   @Size(max = 50)
   @Column(name = "_group")
@@ -48,7 +44,7 @@ public class Site extends UserDescribedDinaEntity {
 
   @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
-  private GeographicPlaceNameSource geographicPlaceNameSource;
+  private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
 
   @Type(type = "jsonb")
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
