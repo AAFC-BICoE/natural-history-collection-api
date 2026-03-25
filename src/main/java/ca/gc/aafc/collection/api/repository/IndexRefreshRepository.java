@@ -33,7 +33,7 @@ public class IndexRefreshRepository {
     this.indexRefreshService = indexRefreshService;
   }
 
-  @PostMapping("/" + IndexRefreshDto.TYPE)
+  @PostMapping(value = "/" + IndexRefreshDto.TYPE,  consumes = JSON_API_VALUE)
   public ResponseEntity<?> handlePost(@RequestBody EntityModel<IndexRefreshDto> indexRefresh) {
     IndexRefreshDto indexRefreshDto = indexRefresh.getContent();
 

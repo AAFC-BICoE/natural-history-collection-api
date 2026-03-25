@@ -1,5 +1,9 @@
 = API
 
+== Open API
+
+Collection Open API https://www.dina-project.net/collection-specs/[specifications].
+
 == Additional Endpoints
 
 === material-sample-summary
@@ -72,7 +76,11 @@ Available for types :
 
 Trigger a message to (re)index a resource. `DINA_ADMIN` role required. If `id` is omitted, all records will be processed.
 
-POST `/index-refresh`
+[cols="1,1"]
+|===
+|Content type| `application/vnd.api+json`
+|POST| `/index-refresh`
+|===
 
 ```json
 {
