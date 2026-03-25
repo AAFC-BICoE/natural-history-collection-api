@@ -79,6 +79,7 @@ Trigger a message to (re)index a resource. `DINA_ADMIN` role required. If `id` i
 |===
 |Content type, `application/vnd.api+json`
 |POST, `/index-refresh`
+|===
 
 ```json
 {
