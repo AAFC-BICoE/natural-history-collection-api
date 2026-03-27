@@ -3,9 +3,8 @@ package ca.gc.aafc.collection.api.service;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 import ca.gc.aafc.collection.api.dto.SiteDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Site;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorSite;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
 import ca.gc.aafc.dina.messaging.EntityChanged;
@@ -18,20 +17,17 @@ import lombok.NonNull;
 
 @Service
 public class SiteService extends MessageProducingService<Site> {
-  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
+  private final CollectionManagedAttributeValueValidatorSite managedAttributeValueValidator;
 
   public SiteService(@NonNull BaseDAO baseDAO, @NonNull SmartValidator sv,
-      @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+      @NonNull CollectionManagedAttributeValueValidatorSite managedAttributeValueValidator,
       DinaEventPublisher<EntityChanged> eventPublisher) {
     super(baseDAO, sv, SiteDto.TYPENAME,
         EnumSet.of(DocumentOperationType.UPDATE, DocumentOperationType.DELETE),
         eventPublisher);
 
-    this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.managedAttributeValueValidator = managedAttributeValueValidator;
 
-    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-        .from(CollectionManagedAttribute.ManagedAttributeComponent.SITE);
   }
 
   @Override
@@ -52,10 +48,9 @@ public class SiteService extends MessageProducingService<Site> {
   }
 
   private void validateManagedAttribute(Site entity) {
-    collectionManagedAttributeValueValidator.validate(
+    managedAttributeValueValidator.validate(
         entity,
-        entity.getManagedAttributes(),
-        validationContext);
+        entity.getManagedAttributes());
   }
 
   private void cleanupManagedAttributes(Site entity) {
