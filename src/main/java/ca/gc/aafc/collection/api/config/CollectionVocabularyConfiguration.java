@@ -32,7 +32,8 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/projectRole.yml", factory = YamlPropertyLoaderFactory.class)
 @ConfigurationProperties
 @Validated
-public class CollectionVocabularyConfiguration extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
+public class CollectionVocabularyConfiguration
+    extends VocabularyConfiguration<CollectionVocabularyConfiguration.CollectionVocabularyElement> {
 
   public static final String PROTOCOL_DATA_VOCAB_KEY = "protocolData";
   public static final String PROTOCOL_TYPE_VOCAB_KEY = "protocolType";
@@ -49,10 +50,12 @@ public class CollectionVocabularyConfiguration extends VocabularyConfiguration<C
     ORGANISM,
     DETERMINATION,
     PREPARATION,
-    ASSEMBLAGE;
+    ASSEMBLAGE,
+    SITE;
 
     public static CollectionManagedAttribute.ManagedAttributeComponent fromString(String s) {
-      for (CollectionManagedAttribute.ManagedAttributeComponent source : CollectionManagedAttribute.ManagedAttributeComponent.values()) {
+      for (CollectionManagedAttribute.ManagedAttributeComponent source : CollectionManagedAttribute.ManagedAttributeComponent
+          .values()) {
         if (source.name().equalsIgnoreCase(s)) {
           return source;
         }
