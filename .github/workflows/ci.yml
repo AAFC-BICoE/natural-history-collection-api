@@ -13,16 +13,20 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
-          server-id: 'nvd'
+          distribution: "temurin"
+          java-version: "21"
+          cache: "maven"
+          server-id: "nvd"
           server-password: NVD_API_KEY
 
       - name: Build with Maven
         run: mvn -B -q verify
-      - name: Run Checkstyle
-        run: mvn -q checkstyle:check
+      # - name: Run Checkstyle
+      #   run: mvn -q checkstyle:check
+      - name: Fetch full git history
+        run: git fetch --unshallow
+      - name: Run Spotless
+        run: mvn -q spotless:check
       - name: Run SpotBugs
         run: mvn -q spotbugs:check
 
@@ -45,7 +49,7 @@ jobs:
             version.txt
             target/natural-history-collection-api-*.jar
             Dockerfile
-        
+
   push:
     name: Build Docker Image and Push to DockerHub
     needs: [build]
