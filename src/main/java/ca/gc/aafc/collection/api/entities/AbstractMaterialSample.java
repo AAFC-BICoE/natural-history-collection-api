@@ -24,6 +24,7 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
+import ca.gc.aafc.collection.api.dto.BibliographicReferenceDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 
 import lombok.Builder;
@@ -134,6 +135,10 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(type = "jsonb")
   @Valid
   private List<ScheduledActionDto> scheduledActions;
+
+  @Type(type = "jsonb")
+  @Valid
+  private List<BibliographicReferenceDto> bibliographicReferences;
 
   @Type(type = "jsonb")
   @Valid
