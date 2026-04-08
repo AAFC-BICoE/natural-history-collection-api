@@ -16,7 +16,7 @@ import lombok.Value;
 @org.javers.core.metamodel.annotation.Value
 public class BibliographicReferenceDto {
 
-  @Size(max = 200)
+  @Size(max = 400)
   private String title;
 
   private Integer year;
