@@ -1,17 +1,17 @@
 package ca.gc.aafc.collection.api.entities;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.hibernate.annotations.Type;
-
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -59,4 +59,9 @@ public class Site extends UserDescribedDinaEntity {
 
   @Size(max = 100)
   private String dwcStateProvince;
+
+  @Type(type = "jsonb")
+  @NotNull
+  @Builder.Default
+  private Map<String, String> managedAttributes = Map.of();
 }
