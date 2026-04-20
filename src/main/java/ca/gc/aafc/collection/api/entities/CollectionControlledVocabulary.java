@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 

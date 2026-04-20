@@ -8,11 +8,12 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Entity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
@@ -31,7 +32,7 @@ public class Institution extends UserDescribedDinaEntity {
   @Size(max = 1000)
   private String remarks;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private List<InstitutionIdentifier> identifiers = new ArrayList<>();
 }

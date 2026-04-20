@@ -1,19 +1,18 @@
 package ca.gc.aafc.collection.api.entities;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import ca.gc.aafc.dina.entity.ManagedAttribute;
 
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -60,18 +59,15 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
   private String key;
 
   @NotNull
-  @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   @Column(name = "type")
   private VocabularyElementType vocabularyElementType;
 
   @NotNull
-  @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   @Column(name = "component")
   private ManagedAttributeComponent managedAttributeComponent;
 
-  @Type(type = "string-array")
   @Column(columnDefinition = "text[]")
   private String[] acceptedValues;
 

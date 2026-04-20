@@ -2,8 +2,8 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import ca.gc.aafc.collection.api.service.CollectionSequenceMapper.CollectionSequenceReserved;
 import ca.gc.aafc.dina.entity.DinaEntity;

@@ -3,24 +3,25 @@ package ca.gc.aafc.collection.api.entities;
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -52,7 +53,7 @@ public abstract class UserDescribedDinaEntity implements DinaEntityIdentifiableB
   @NotBlank
   private String name;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "multilingual_description")
   @Valid
   private MultilingualDescription multilingualDescription;

@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.config;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.geolatte.geom.Geometry;
 import org.javers.core.json.BasicStringTypeAdapter;

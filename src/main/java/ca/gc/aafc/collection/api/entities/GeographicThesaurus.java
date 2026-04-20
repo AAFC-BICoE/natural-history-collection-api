@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.javers.core.metamodel.annotation.Value;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @Data

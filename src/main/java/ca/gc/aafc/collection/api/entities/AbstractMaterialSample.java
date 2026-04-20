@@ -5,23 +5,24 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -54,7 +55,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private MaterialSample.MaterialSampleType materialSampleType;
 
@@ -69,7 +69,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 25)
   private String dwcCatalogNumber;
 
-  @Type(type = "string-array")
   private String[] dwcOtherCatalogNumbers;
 
   // Represents the Primary ID
@@ -77,7 +76,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private String materialSampleName;
 
   // Represents the alternative identifiers
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> identifiers = Map.of();
@@ -102,17 +101,17 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 250)
   private String preparationSubstrate;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> preparationManagedAttributes = Map.of();
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
@@ -128,14 +127,13 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 500)
   private String notPubliclyReleasableReason;
 
-  @Type(type = "string-array")
   private String[] tags;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private List<ScheduledActionDto> scheduledActions;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private HostOrganism hostOrganism;
 
@@ -144,7 +142,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Builder.Default
   private Boolean allowDuplicateName = false;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   private Map<String, Map<String, String>> restrictionFieldsExtension;
 
   @Builder.Default

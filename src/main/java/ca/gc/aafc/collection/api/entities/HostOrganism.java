@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 import org.javers.core.metamodel.annotation.Value;
 

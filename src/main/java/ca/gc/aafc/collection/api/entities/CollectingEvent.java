@@ -4,8 +4,8 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,28 +18,29 @@ import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
-import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -87,14 +88,13 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 50)
   private String dwcRecordNumber;
 
-  @Type(type = "string-array")
   private String[] otherRecordNumbers;
 
   @NotBlank
   @Column(name = "_group")
   private String group;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Builder.Default
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
 
@@ -129,12 +129,10 @@ public class CollectingEvent implements DinaEntity {
   @Column(updatable = false)
   private String createdBy;
 
-  @Type(type = "list-array")
   @Column(name = "collectors", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> collectors = new ArrayList<>();
 
-  @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> attachment = new ArrayList<>();
@@ -201,21 +199,21 @@ public class CollectingEvent implements DinaEntity {
   private String remarks;
 
   /** Map of Managed attribute key to value object. */
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
-  @Type(type = "pgsql_enum")
+  //@Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private GeographicPlaceNameSource geographicPlaceNameSource;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "geographic_thesaurus", columnDefinition = "jsonb")
   @Valid
   private GeographicThesaurus geographicThesaurus;
@@ -238,13 +236,12 @@ public class CollectingEvent implements DinaEntity {
   @Size(max = 500)
   private String notPubliclyReleasableReason;
 
-  @Type(type = "string-array")
   private String[] tags;
 
   // Field calculated by CollectingEventService
   private Point<G2D> eventGeom;
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 

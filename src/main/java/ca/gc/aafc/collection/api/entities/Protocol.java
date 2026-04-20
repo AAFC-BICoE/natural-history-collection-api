@@ -3,20 +3,23 @@ package ca.gc.aafc.collection.api.entities;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.Type;
+
+import org.hibernate.annotations.JdbcTypeCode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.Value;
 
@@ -36,12 +39,11 @@ public class Protocol extends UserDescribedDinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @Type(type = "list-array")
   @Column(name = "attachments", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> attachments = List.of();
 
-  @Type(type = "jsonb")
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "protocol_data", columnDefinition = "jsonb")
   @Valid
   private List<ProtocolData> protocolData = List.of();
