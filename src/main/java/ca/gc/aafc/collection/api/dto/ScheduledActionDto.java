@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.dto;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;

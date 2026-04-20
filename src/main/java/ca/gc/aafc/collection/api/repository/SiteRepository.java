@@ -19,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.Optional;
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import ca.gc.aafc.collection.api.dto.SiteDto;
 import ca.gc.aafc.collection.api.entities.Site;
 import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;

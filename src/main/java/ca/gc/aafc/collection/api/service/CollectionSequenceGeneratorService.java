@@ -3,11 +3,11 @@ package ca.gc.aafc.collection.api.service;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
-import javax.inject.Inject;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.inject.Inject;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;

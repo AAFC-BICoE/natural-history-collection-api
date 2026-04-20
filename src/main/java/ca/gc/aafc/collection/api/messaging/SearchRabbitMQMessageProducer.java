@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.messaging;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.validation;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.validation.ValidationContext;

@@ -12,7 +12,7 @@ import ca.gc.aafc.dina.validation.VocabularyBasedValidator;
 
 import java.util.List;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 @Component
 public class ProtocolValidator extends VocabularyBasedValidator<Protocol> {

@@ -3,8 +3,8 @@ package ca.gc.aafc.collection.api.repository;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.info.BuildProperties;

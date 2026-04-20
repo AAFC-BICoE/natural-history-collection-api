@@ -6,7 +6,7 @@ import org.postgresql.util.ServerErrorMessage;
 
 import java.util.Objects;
 import java.util.function.Function;
-import javax.ws.rs.BadRequestException;
+import jakarta.ws.rs.BadRequestException;
 
 /**
  * Dina Hierarchy exception are thrown by the database with the SQLCode defined by {@link #SQL_STATE_CODE}.
