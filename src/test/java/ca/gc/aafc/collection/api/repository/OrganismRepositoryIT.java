@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class OrganismRepositoryIT extends BaseRepositoryIT {
 

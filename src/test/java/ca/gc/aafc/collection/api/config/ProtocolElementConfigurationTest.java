@@ -6,7 +6,7 @@ import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;

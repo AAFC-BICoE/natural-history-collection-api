@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class PreparationTypeRepositoryIT extends BaseRepositoryIT {
 

@@ -1,8 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
-import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
+import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -8,8 +8,8 @@ import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.PersistenceException;
-import javax.validation.ValidationException;
+import jakarta.persistence.PersistenceException;
+import jakarta.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

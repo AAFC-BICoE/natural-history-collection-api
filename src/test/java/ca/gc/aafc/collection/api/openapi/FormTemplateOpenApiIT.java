@@ -1,8 +1,7 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;

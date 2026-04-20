@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionSequenceGeneratorRepositoryIT extends CollectionModuleBaseIT {

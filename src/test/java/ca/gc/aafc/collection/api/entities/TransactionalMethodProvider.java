@@ -6,8 +6,8 @@ import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

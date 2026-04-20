@@ -8,7 +8,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

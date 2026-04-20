@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 
 public class ApiInfoRepositoryIT extends BaseRepositoryIT {

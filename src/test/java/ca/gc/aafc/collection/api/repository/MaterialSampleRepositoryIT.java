@@ -40,9 +40,9 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.validation.ValidationException;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 
 public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 

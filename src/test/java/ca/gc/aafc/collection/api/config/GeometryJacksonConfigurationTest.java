@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.geolatte.geom.GeometryType;

@@ -6,8 +6,8 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.InstitutionFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
+import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolationException;
 
 class InstitutionCRUDIT extends CollectionModuleBaseIT {
 

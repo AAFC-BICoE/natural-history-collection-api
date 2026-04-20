@@ -11,7 +11,7 @@ import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class StorageUnitRepositoryIT extends BaseRepositoryIT {
 

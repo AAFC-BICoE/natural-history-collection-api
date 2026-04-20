@@ -18,8 +18,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

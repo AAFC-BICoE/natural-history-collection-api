@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 
 public class CollectingEventRepositoryIT extends BaseRepositoryIT {
 

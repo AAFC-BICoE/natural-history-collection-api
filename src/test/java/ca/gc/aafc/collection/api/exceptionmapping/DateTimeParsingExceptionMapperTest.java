@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.Map;
 
 @SpringBootTest(

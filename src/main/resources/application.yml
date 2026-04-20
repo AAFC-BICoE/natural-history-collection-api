@@ -14,24 +14,17 @@ spring:
         properties:
           validation:
             mode: none
-    database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
   # Allow grace timeout period for 20 seconds
   lifecycle.timeout-per-shutdown-phase: 20s
+security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: https://keycloak-server/auth/realms/your-realm
 management:
   endpoints:
     web:
       exposure.include: "health,prometheus"
-crnk:
-  # enabled: false (needs to be removed from dina-base first)
-  pathPrefix: /api/v1
-  domainName: ""
-  defaultPageLimit: 20
-  maxPageLimit: 1000
-  allow-unknown-attributes: true
-  # The "include" query-string param is handled by our code and incorporated into the database
-  # query, so we don't let Crnk automatically call findOneTarget for each null relation.
-  config.lookup.behavior.default: NONE
-  jpa.enabled: false
 logging:
   level:
     Root: INFO

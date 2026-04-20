@@ -43,8 +43,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
+import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 
 
 public class MaterialSampleServiceIT extends CollectionModuleBaseIT {

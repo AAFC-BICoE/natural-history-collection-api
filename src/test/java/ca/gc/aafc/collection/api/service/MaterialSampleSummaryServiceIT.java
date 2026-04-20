@@ -13,7 +13,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class MaterialSampleSummaryServiceIT extends CollectionModuleBaseIT {
 

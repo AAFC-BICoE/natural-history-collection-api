@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.openapi;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

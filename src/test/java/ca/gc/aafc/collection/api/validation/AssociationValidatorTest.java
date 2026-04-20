@@ -11,7 +11,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.UUID;
 
 public class AssociationValidatorTest extends CollectionModuleBaseIT {

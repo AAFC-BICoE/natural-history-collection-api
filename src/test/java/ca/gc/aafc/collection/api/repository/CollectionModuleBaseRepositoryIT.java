@@ -29,8 +29,8 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.repository.MockMvcBasedRepository;
 
 import java.util.Properties;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

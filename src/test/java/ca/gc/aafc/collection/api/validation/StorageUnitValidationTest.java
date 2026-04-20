@@ -5,7 +5,7 @@ import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.testsupport.factories.StorageUnitFactory;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
