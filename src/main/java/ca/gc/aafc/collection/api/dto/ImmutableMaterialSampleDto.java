@@ -51,6 +51,9 @@ public class ImmutableMaterialSampleDto {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
 
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<BibliographicReferenceDto> bibliographicReferences;
+
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
 

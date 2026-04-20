@@ -68,7 +68,7 @@ public class MaterialSampleDto implements JsonApiResource {
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
   private String preparationRemarks;
-  
+
   private String dwcDegreeOfEstablishment;
 
   // calculated fields
@@ -97,7 +97,7 @@ public class MaterialSampleDto implements JsonApiResource {
   private String barcode;
 
   private Boolean publiclyReleasable;
-  
+
   private String notPubliclyReleasableReason;
   private String[] tags;
 
@@ -108,6 +108,9 @@ public class MaterialSampleDto implements JsonApiResource {
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private List<ScheduledActionDto> scheduledActions;
+
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private List<BibliographicReferenceDto> bibliographicReferences;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
