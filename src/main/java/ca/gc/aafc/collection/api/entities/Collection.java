@@ -1,14 +1,9 @@
 package ca.gc.aafc.collection.api.entities;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.URL;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,10 +12,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.hibernate.validator.constraints.URL;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
@@ -52,12 +50,12 @@ public class Collection extends UserDescribedDinaEntity {
   @Size(max = 1000)
   private String remarks;
 
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   @Column(columnDefinition = "jsonb")
   @Valid
   private List<CollectionIdentifier> identifiers = new ArrayList<>();
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_collection_id")
   @ToString.Exclude
   private Collection parentCollection;

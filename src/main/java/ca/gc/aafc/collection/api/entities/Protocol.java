@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.Value;
@@ -43,7 +45,7 @@ public class Protocol extends UserDescribedDinaEntity {
   @UniqueElements
   private List<UUID> attachments = List.of();
 
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   @Column(name = "protocol_data", columnDefinition = "jsonb")
   @Valid
   private List<ProtocolData> protocolData = List.of();
