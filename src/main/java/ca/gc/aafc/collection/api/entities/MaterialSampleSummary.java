@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.util.List;
 import java.util.UUID;
 import jakarta.persistence.Entity;
@@ -8,9 +9,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @Immutable
@@ -26,7 +25,7 @@ public class MaterialSampleSummary {
   /**
    * This is a list of determination to cover the case when there is no target organism (all primary determination will be returned).
    */
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   private List<Determination> effectiveDeterminations;
 
 }

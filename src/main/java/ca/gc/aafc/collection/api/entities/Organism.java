@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +12,9 @@ import lombok.Setter;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Type;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,12 +54,12 @@ public class Organism implements DinaEntity {
   // null allowed to represent that the concept of target is not used
   private Boolean isTarget;
 
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   @Valid
   private List<Determination> determination;
 

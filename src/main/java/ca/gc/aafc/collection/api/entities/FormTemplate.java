@@ -1,20 +1,14 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.entity.DinaEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Type;
 
+import ca.gc.aafc.dina.entity.DinaEntity;
+
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +22,13 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * FormTemplate is used to store client (e.g. ui) customizations.
@@ -71,11 +72,11 @@ public class FormTemplate implements DinaEntity {
   private String createdBy;
 
   @NotNull
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   private Map<String, Object> viewConfiguration;
 
   @Valid
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   private List<FormComponent> components;
 
   @Data

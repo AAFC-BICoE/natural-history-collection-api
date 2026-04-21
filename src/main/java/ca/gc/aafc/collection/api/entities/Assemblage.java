@@ -1,14 +1,15 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
+
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import jakarta.persistence.Column;
@@ -33,12 +34,12 @@ public class Assemblage extends UserDescribedDinaEntity {
   @Size(max = 250)
   private String group;
 
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   @Column(name = "multilingual_title")
   @Valid
   private MultilingualTitle multilingualTitle;
 
-  @JdbcTypeCode(SqlTypes.JSON)
+  @Type(JsonType.class)
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
