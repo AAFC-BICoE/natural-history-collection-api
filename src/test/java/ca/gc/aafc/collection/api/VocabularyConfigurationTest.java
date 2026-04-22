@@ -42,14 +42,6 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
   }
 
   @Test
-  void coordinateSystem() {
-    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> coordinateSystem = vocabularyConfiguration.getVocabulary()
-      .get("coordinateSystem");
-    assertEquals(4, coordinateSystem.size());
-    coordinateSystem.forEach(assertVocabElement());
-  }
-
-  @Test
   void srs() {
     List<CollectionVocabularyConfiguration.CollectionVocabularyElement> srs = vocabularyConfiguration.getVocabulary().get("srs");
     assertEquals(2, srs.size());
