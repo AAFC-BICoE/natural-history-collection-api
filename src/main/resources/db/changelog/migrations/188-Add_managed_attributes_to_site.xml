@@ -3,7 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-     <changeSet id="187-Add_managed_attributes_to_site" context="schema-change" author="pyalamanchli">
+     <changeSet id="188-Add_managed_attributes_to_site" context="schema-change" author="pyalamanchli">
         <addColumn tableName="site">
             <column name="managed_attributes" type="jsonb"/>
         </addColumn>
