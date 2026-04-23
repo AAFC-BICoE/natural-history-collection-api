@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import ca.gc.aafc.dina.entity.ManagedAttribute;
 
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -60,11 +62,13 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
 
   @NotNull
   @Enumerated(EnumType.STRING)
+  @Type(PostgreSQLEnumType.class)
   @Column(name = "type")
   private VocabularyElementType vocabularyElementType;
 
   @NotNull
   @Enumerated(EnumType.STRING)
+  @Type(PostgreSQLEnumType.class)
   @Column(name = "component")
   private ManagedAttributeComponent managedAttributeComponent;
 

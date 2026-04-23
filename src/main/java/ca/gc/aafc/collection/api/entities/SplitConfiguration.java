@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import io.hypersistence.utils.hibernate.type.array.EnumArrayType;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import jakarta.persistence.Column;
@@ -19,9 +20,9 @@ import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 
@@ -73,8 +74,14 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   @NotNull
   private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
 
-//  @Type(type = "material-sample-type-array")
-  @JdbcTypeCode(SqlTypes.ARRAY)
+  @Type(
+    value = EnumArrayType.class,
+    parameters = @Parameter(
+      name = EnumArrayType.SQL_ARRAY_TYPE,
+      value = "material_sample_type_enum"
+    )
+  )
+  @Column(columnDefinition = "material_sample_type_enum[]")
   private MaterialSample.MaterialSampleType[] conditionalOnMaterialSampleTypes;
 
   @NotNull

@@ -49,6 +49,7 @@ public class StorageUnitUsage implements DinaEntity {
 
   @NaturalId
   @NotNull
+  @Column(columnDefinition = "uuid", nullable = false, unique = true)
   private UUID uuid;
 
   @Transient

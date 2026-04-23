@@ -129,9 +129,9 @@ public class MaterialSample extends AbstractMaterialSample {
   @OrderColumn(name = "pos")
   private List<Organism> organism = List.of();
 
-  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
   @Valid
-  private List<Association> associations = new ArrayList<>();
+  private List<Association> associations = List.of();
 
   public void setAssociations(List<Association> associations) {
     if (associations == null) {
