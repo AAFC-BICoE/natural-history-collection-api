@@ -1,9 +1,11 @@
 package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(classes = CollectionModuleApiLauncher.class)
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @ContextConfiguration(initializers = { PostgresTestContainerInitializer.class })
+@Import(TestConfigProperties.class)
 public class OrganismAfterCommitCRUDIT {
 
   @Inject

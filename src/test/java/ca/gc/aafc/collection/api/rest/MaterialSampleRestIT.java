@@ -660,5 +660,4 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
         "&optfields[" + MaterialSampleDto.TYPENAME + "]=materialSampleChildren").then()
       .statusCode(200);
   }
-
 }
