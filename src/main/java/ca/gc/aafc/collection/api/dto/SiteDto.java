@@ -3,8 +3,8 @@ package ca.gc.aafc.collection.api.dto;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.javers.core.metamodel.annotation.Id;
@@ -13,7 +13,6 @@ import org.javers.core.metamodel.annotation.TypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
-
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.entities.Site;
@@ -58,6 +57,8 @@ public class SiteDto implements JsonApiResource {
   private String dwcCountryCode;
 
   private String dwcStateProvince;
+
+  private Map<String, String> managedAttributes = Map.of();
 
   @Override
   @JsonIgnore
