@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.118</version>
+  <version>0.119-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -32,7 +32,8 @@
     <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.166-SNAPSHOT</dina-base-api.version>
+    <!--    we need 166 once ready-->
+    <dina-base-api.version>0.165</dina-base-api.version>
 
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.11</geolatte-geom.version>
