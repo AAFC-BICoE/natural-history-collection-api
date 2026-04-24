@@ -1,5 +1,8 @@
 package ca.gc.aafc.collection.api.entities;
 
+import jakarta.persistence.Column;
+import java.time.OffsetDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +21,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.NaturalId;
+
+import ca.gc.aafc.dina.entity.DinaEntity;
+
 @Entity
 @AllArgsConstructor
 @Builder
@@ -25,11 +34,24 @@ import jakarta.validation.constraints.Size;
 @Getter
 @RequiredArgsConstructor
 @Table
-public class Association {
+public class Association implements DinaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
+  @NaturalId
+  @NotNull
+  @Column(name = "uuid", unique = true)
+  private UUID uuid;
+
+  @Column(name = "created_on", insertable = false, updatable = false)
+  @Generated(value = GenerationTime.INSERT)
+  private OffsetDateTime createdOn;
+
+  @NotBlank
+  @Column(name = "created_by", updatable = false)
+  private String createdBy;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "sample_id", nullable = false)
@@ -46,5 +68,4 @@ public class Association {
 
   @Size(max = 1000)
   private String remarks;
-
 }

@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.service.AssemblageService;
+import ca.gc.aafc.collection.api.service.AssociationService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
@@ -40,6 +41,9 @@ import jakarta.transaction.Transactional;
 public class CollectionModuleBaseIT {
   @Inject
   protected DatabaseSupportService service;
+
+  @Inject
+  protected AssociationService associationService;
 
   @Inject
   protected CollectingEventService collectingEventService;
