@@ -91,7 +91,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ScheduledActionDto scheduledAction = ScheduledActionDto.builder()
       .actionStatus("actionStatus")
       .date(LocalDate.now())
-      .actionType("actionType")
+      .actionType("actionTypeactionTypeactionType")
       .remarks("remarks")
       .assignedTo(ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("user").build())
       .build();
