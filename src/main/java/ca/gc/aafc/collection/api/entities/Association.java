@@ -68,4 +68,16 @@ public class Association implements DinaEntity {
 
   @Size(max = 1000)
   private String remarks;
+
+  /**
+   * Use the group of the sample "owning" the relationship
+   * @return
+   */
+  @Override
+  public String getGroup() {
+    if (sample != null) {
+      return sample.getGroup();
+    }
+    return null;
+  }
 }

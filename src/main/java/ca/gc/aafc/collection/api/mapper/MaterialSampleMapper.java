@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.mapper;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
@@ -11,29 +10,27 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
-import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
 import ca.gc.aafc.collection.api.dto.ImmutableMaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
+import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
+import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
-import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
-import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.entities.Assemblage;
-import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.entities.PreparationMethod;
+import ca.gc.aafc.collection.api.entities.PreparationType;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.entities.StorageUnitUsage;
-import ca.gc.aafc.collection.api.entities.PreparationType;
-import ca.gc.aafc.collection.api.entities.PreparationMethod;
 import ca.gc.aafc.dina.mapper.DinaMapperV2;
 import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
@@ -75,7 +72,6 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "assemblages", ignore = true)
   @Mapping(target = "preparedBy", ignore = true)
   @Mapping(target = "attachment", ignore = true)
-  @Mapping(target = "associations", ignore = true)
   MaterialSample toEntity(MaterialSampleDto dto, @Context Set<String> provided,
       @Context String scope);
 
@@ -95,7 +91,6 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
   @Mapping(target = "assemblages", ignore = true)
   @Mapping(target = "preparedBy", ignore = true)
   @Mapping(target = "attachment", ignore = true)
-  @Mapping(target = "associations", ignore = true)
   void patchEntity(@MappingTarget MaterialSample entity, MaterialSampleDto dto,
       @Context Set<String> provided, @Context String scope);
 
@@ -194,32 +189,4 @@ public interface MaterialSampleMapper extends DinaMapperV2<MaterialSampleDto, Ma
    */
   @Mapping(target = "id", source = "uuid")
   ImmutableMaterialSampleDto toImmutableMaterialSampleDto(ImmutableMaterialSample entity);
-
-  // Specific type mapping ---
-  default List<AssociationDto> associationToAssociationDto(List<Association> associations) {
-    if (CollectionUtils.isNotEmpty(associations)) {
-      return associations.stream()
-          .map(association -> AssociationDto.builder()
-              .associatedSample(association.getAssociatedSample().getUuid())
-              .associationType(association.getAssociationType())
-              .remarks(association.getRemarks())
-              .build())
-          .collect(Collectors.toList());
-    }
-    return List.of();
-  }
-
-  @AfterMapping
-  default void afterMaterialSampleMapping(@MappingTarget MaterialSample entity,
-      MaterialSampleDto dto) {
-    if (CollectionUtils.isNotEmpty(dto.getAssociations())) {
-      entity.setAssociations(dto.getAssociations().stream()
-          .map(association -> Association.builder()
-              .associatedSample(MaterialSample.builder().uuid(association.getAssociatedSample()).build())
-              .associationType(association.getAssociationType())
-              .remarks(association.getRemarks())
-              .build())
-          .collect(Collectors.toList()));
-    }
-  }
 }
