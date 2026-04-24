@@ -9,11 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,11 +24,9 @@ import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -128,25 +124,6 @@ public class MaterialSample extends AbstractMaterialSample {
   @JoinColumn(name = "material_sample_id")
   @OrderColumn(name = "pos")
   private List<Organism> organism = List.of();
-
-  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-  @Valid
-  private List<Association> associations = List.of();
-
-  public void setAssociations(List<Association> associations) {
-    if (associations == null) {
-      this.associations = null;
-      return;
-    }
-
-    if (this.associations == null) {
-      this.associations = new ArrayList<>();
-    }
-    this.associations.clear();
-    if (CollectionUtils.isNotEmpty(associations)) {
-      this.associations.addAll(associations);
-    }
-  }
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "storage_unit_usage_id")

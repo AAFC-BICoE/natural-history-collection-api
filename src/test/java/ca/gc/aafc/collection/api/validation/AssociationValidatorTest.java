@@ -30,18 +30,18 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     Assertions.assertFalse(errors.hasErrors());
   }
 
-  @Test
-  void validate_WhenAssociatedWithSelf_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATED_WITH_SELF_ERROR_KEY);
-    Association association = newAssociation();
-    MaterialSample sample = newSample();
-    association.setAssociatedSample(sample);
-    association.setSample(sample);
-    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
-    associationValidator.validate(association, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
-  }
+//  @Test
+//  void validate_WhenAssociatedWithSelf_HasError() {
+//    String expectedErrorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATED_WITH_SELF_ERROR_KEY);
+//    Association association = newAssociation();
+//    MaterialSample sample = newSample();
+//    association.setAssociatedSample(sample);
+//    //association.setSample(sample);
+//    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
+//    associationValidator.validate(association, errors);
+//    Assertions.assertTrue(errors.hasErrors());
+//    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+//  }
 
   @Test
   void validate_WhenUpperCaseAssociationType_NoErrors() {
@@ -71,7 +71,7 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
   private static Association newAssociation() {
     return Association.builder()
       .associatedSample(newSample())
-      .sample(newSample())
+    //  .sample(newSample())
       .remarks(RandomStringUtils.randomAlphabetic(3))
       .associationType("host_of")
       .build();

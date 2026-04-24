@@ -9,13 +9,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.util.ScientificNameUtils;
-import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleIdentifierTypeValueValidator;
@@ -32,7 +30,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
@@ -41,7 +38,6 @@ import lombok.extern.log4j.Log4j2;
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
-  private final AssociationValidator associationValidator;
   private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
 
   private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
@@ -61,7 +57,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull SmartValidator sv,
     @NonNull MaterialSampleValidator materialSampleValidator,
     @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
-    @NonNull AssociationValidator associationValidator,
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator,
     @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
@@ -72,7 +67,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
     this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
-    this.associationValidator = associationValidator;
 
     this.hierarchicalDataService = hierarchicalDataService;
     this.organismService = organismService;
@@ -178,30 +172,12 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   protected void preCreate(MaterialSample entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
     entity.setGroup(standardizeGroupName(entity));
-
-    linkAssociations(entity);
-  }
-
-  @Override
-  protected void preUpdate(MaterialSample entity) {
-    linkAssociations(entity);
-  }
-
-  private void linkAssociations(MaterialSample entity) {
-    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
-      entity.getAssociations().forEach(association -> {
-        UUID associatedUuid = association.getAssociatedSample().getUuid();
-        association.setSample(entity);
-        association.setAssociatedSample(this.findOne(associatedUuid, MaterialSample.class));
-      });
-    }
   }
 
   @Override
   public void validateBusinessRules(MaterialSample entity) {
     applyBusinessRule(entity, materialSampleValidator);
     validateManagedAttribute(entity);
-    validateAssociations(entity);
     validateExtensionValues(entity);
     
     identifierTypeValueValidator.validate(entity, entity.getIdentifiers());
@@ -213,16 +189,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
 
     collectionManagedAttributeValueValidator.validate(entity, entity.getPreparationManagedAttributes(),
       preparationValidationContext);
-  }
-
-  private void validateAssociations(MaterialSample entity) {
-    if (CollectionUtils.isNotEmpty(entity.getAssociations())) {
-      int associationIndex = 0;
-      for (Association association : entity.getAssociations()) {
-        applyBusinessRule(entity.getUuid().toString() + associationIndex, association, associationValidator);
-        associationIndex++;
-      }
-    }
   }
 
   private void validateExtensionValues(@NonNull MaterialSample entity) {

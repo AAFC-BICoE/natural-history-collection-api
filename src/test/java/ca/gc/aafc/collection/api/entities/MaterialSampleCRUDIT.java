@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.persistence.PersistenceException;
-import jakarta.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -418,19 +417,4 @@ public class MaterialSampleCRUDIT extends CollectionModuleBaseIT {
     materialSampleDuplicate2.setCollection(collection);
     assertThrows(PersistenceException.class, () -> materialSampleService.update(materialSampleDuplicate2));
   }
-
-  @Test
-  void updateMaterialSample_WhenAssociatedWithSelf_Exception() {
-
-    Association association = Association.builder()
-      .associationType(RandomStringUtils.randomAlphabetic(4))
-      .build();
-    association.setAssociatedSample(materialSample);
-    association.setSample(materialSample);
-
-    materialSample.setAssociations(List.of(association));
-
-    assertThrows(ValidationException.class, () -> materialSampleService.update(materialSample));
-  }
-
 }
