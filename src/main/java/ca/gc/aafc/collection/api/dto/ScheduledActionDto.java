@@ -19,7 +19,7 @@ import lombok.Value;
 @org.javers.core.metamodel.annotation.Value
 public class ScheduledActionDto {
 
-  @Size(max = 25)
+  @Size(max = 250)
   private String actionType;
 
   private LocalDate date;

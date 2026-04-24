@@ -38,7 +38,8 @@ public class CollectionManagedAttribute extends UserDescribedDinaEntity implemen
     ORGANISM,
     DETERMINATION,
     PREPARATION,
-    ASSEMBLAGE;
+    ASSEMBLAGE,
+    SITE;
 
     public static ManagedAttributeComponent fromString(String s) {
       for (ManagedAttributeComponent source : ManagedAttributeComponent.values()) {
