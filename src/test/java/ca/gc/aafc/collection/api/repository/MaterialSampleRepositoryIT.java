@@ -178,6 +178,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
   }
 
+
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
   @Transactional
