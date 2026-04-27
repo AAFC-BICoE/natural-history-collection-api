@@ -14,6 +14,7 @@ import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -65,7 +66,7 @@ public class AssociationRepositoryIT extends BaseRepositoryIT {
     materialSampleDto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
 
     MaterialSampleDto materialSample2Dto = MaterialSampleTestFixture.newMaterialSample();
-    materialSample2Dto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+    materialSample2Dto.setUuid(createWithRepository(materialSample2Dto, materialSampleRepository));
 
     JsonApiDocument associationToCreate = JsonApiDocuments.createJsonApiDocument(
       null, AssociationDto.TYPENAME,
@@ -79,38 +80,19 @@ public class AssociationRepositoryIT extends BaseRepositoryIT {
     assertNotNull(result);
 
     MaterialSampleDto materialSample3Dto = MaterialSampleTestFixture.newMaterialSample();
-    materialSample3Dto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+    materialSample3Dto.setUuid(createWithRepository(materialSample3Dto, materialSampleRepository));
 
     JsonApiDocument associationToUpdate = JsonApiDocuments.createJsonApiDocument(
       associationUUID, AssociationDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(AssociationTestFixture.newAssociation()),
+      null,
       Map.of("associatedSample", resourceIdentifierFromDto(materialSample3Dto))
     );
 
-
-
+    associationRepository.update(associationToUpdate);
+    AssociationDto resultAfterUpdate = associationRepository.getOne(associationUUID, "include=associatedSample,sample").getDto();
+    assertEquals(materialSample3Dto.getUuid(), resultAfterUpdate.getAssociatedSample().getUuid());
   }
 
-  //  @Test
-//  void patch_AddAssociation() {
-//    String ExpectedType = "host_of";
-//    MaterialSampleDto associatedWith = newSample();
-//    String associatedWithId = postSample(associatedWith);
-//
-//    MaterialSampleDto sample = newSample();
-//    String sampleID = postSample(sample);
-//
-//    sample.setAssociations(List.of(AssociationDto.builder()
-//      .associationType(ExpectedType)
-//      .associatedSample(UUID.fromString(associatedWithId))
-//      .build()));
-//
-//    sendPatch(sample, sampleID);
-//
-//    findSample(sampleID)
-//      .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
-//      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
-//  }
 
 //  @Test
 //  void patch_ChangAssociationType() {
@@ -135,31 +117,5 @@ public class AssociationRepositoryIT extends BaseRepositoryIT {
 //      .body("data.attributes.associations[0].associatedSample", Matchers.is(associatedWithId))
 //      .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
 //  }
-//
-//  @Test
-//  void patch_SwapAssociation() {
-//    String associatedWithId = postSample(newSample());
-//    MaterialSampleDto sample = newSample();
-//    String sampleID = postSample(sample);
-//
-//    sample.setAssociations(List.of(AssociationDto.builder()
-//      .associationType("host_of")
-//      .associatedSample(UUID.fromString(associatedWithId))
-//      .build()));
-//    sendPatch(sample, sampleID);
-//
-//    String updatedAssociationId = postSample(newSample());
-//    String newType = "has_host";
-//
-//    sample.setAssociations(List.of(AssociationDto.builder()
-//      .associationType(newType)
-//      .associatedSample(UUID.fromString(updatedAssociationId))
-//      .build()));
-//    sendPatch(sample, sampleID);
-//
-//    findSample(sampleID)
-//      .body("data.attributes.associations", Matchers.hasSize(1))
-//      .body("data.attributes.associations[0].associationType", Matchers.is(newType))
-//      .body("data.attributes.associations[0].associatedSample", Matchers.is(updatedAssociationId));
-//  }
+
 }

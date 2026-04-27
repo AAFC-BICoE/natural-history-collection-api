@@ -35,6 +35,12 @@ public class AssociationValidator extends DinaBaseValidator<Association> {
   }
 
   private void validateAssociationNotSelf(Association association, Errors errors) {
+
+    // out of scope for this validation method
+    if (association.getAssociatedSample() == null || association.getSample() == null) {
+      return;
+    }
+
     if (Objects.equals(association.getAssociatedSample().getUuid(), association.getSample().getUuid())) {
       String errorMessage = getMessage(ASSOCIATED_WITH_SELF_ERROR_KEY);
       errors.rejectValue("associationType", ASSOCIATED_WITH_SELF_ERROR_KEY, errorMessage);

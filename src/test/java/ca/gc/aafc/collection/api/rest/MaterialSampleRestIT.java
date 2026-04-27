@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.rest;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
-import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
@@ -35,7 +34,6 @@ import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -77,28 +75,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
     String parentId = postSample(parent);
 
     findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
-  }
-
-  @Test
-  void post_withAssociation() {
-    String ExpectedType = "host_of";
-    String expectedRemarks = RandomStringUtils.randomAlphabetic(13);
-
-    MaterialSampleDto associatedWith = newSample();
-    String associatedWithId = postSample(associatedWith);
-
-    MaterialSampleDto sample = newSample();
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .remarks(expectedRemarks)
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-
-    String sampleID = postSample(sample);
-    findSample(sampleID)
-      .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
-      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType))
-      .body("data.attributes.associations.remarks", Matchers.contains(expectedRemarks));
   }
 
   @Test
@@ -199,78 +175,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void patch_AddAssociation() {
-    String ExpectedType = "host_of";
-    MaterialSampleDto associatedWith = newSample();
-    String associatedWithId = postSample(associatedWith);
-
-    MaterialSampleDto sample = newSample();
-    String sampleID = postSample(sample);
-
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-
-    sendPatch(sample, sampleID);
-
-    findSample(sampleID)
-      .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
-      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
-  }
-
-  @Test
-  void patch_ChangAssociationType() {
-    String associatedWithId = postSample(newSample());
-
-    MaterialSampleDto sample = newSample();
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType("host_of")
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-    String sampleID = postSample(sample);
-
-    String ExpectedType = "parasite_of";
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-
-    sendPatch(sample, sampleID);
-    findSample(sampleID)
-      .body("data.attributes.associations", Matchers.hasSize(1))
-      .body("data.attributes.associations[0].associatedSample", Matchers.is(associatedWithId))
-      .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
-  }
-
-  @Test
-  void patch_SwapAssociation() {
-    String associatedWithId = postSample(newSample());
-    MaterialSampleDto sample = newSample();
-    String sampleID = postSample(sample);
-
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType("host_of")
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-    sendPatch(sample, sampleID);
-
-    String updatedAssociationId = postSample(newSample());
-    String newType = "has_host";
-
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(newType)
-      .associatedSample(UUID.fromString(updatedAssociationId))
-      .build()));
-    sendPatch(sample, sampleID);
-
-    findSample(sampleID)
-      .body("data.attributes.associations", Matchers.hasSize(1))
-      .body("data.attributes.associations[0].associationType", Matchers.is(newType))
-      .body("data.attributes.associations[0].associatedSample", Matchers.is(updatedAssociationId));
-  }
-
-  @Test
   @Disabled
   void patch_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();
@@ -282,22 +186,6 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
 
     sendPatch(parent, parentId);
     findSample(parentId).body("data.attributes.materialSampleChildren", Matchers.empty());
-  }
-
-  @Test
-  void delete_withAssociation() {
-    String ExpectedType = "host_of";
-    MaterialSampleDto associatedWith = newSample();
-    String associatedWithId = postSample(associatedWith);
-
-    MaterialSampleDto sample = newSample();
-    sample.setAssociations(List.of(AssociationDto.builder()
-      .associationType(ExpectedType)
-      .associatedSample(UUID.fromString(associatedWithId))
-      .build()));
-
-    String sampleID = postSample(sample);
-    sendDelete(MaterialSampleDto.TYPENAME, sampleID);
   }
 
   @Test

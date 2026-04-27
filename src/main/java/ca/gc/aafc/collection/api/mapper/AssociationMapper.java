@@ -36,6 +36,8 @@ public interface AssociationMapper extends DinaMapperV2<AssociationDto, Associat
   void patchEntity(@MappingTarget Association entity, AssociationDto dto,
                    @Context Set<String> provided, @Context String scope);
 
+  // WARNING here since we can only have 1 method per type is also means sample needs to be provided
+  // to get associatedSample
   default MaterialSampleDto toDto(MaterialSample entity, @Context Set<String> provided, @Context String scope) {
     return entity == null ? null : toMaterialSampleDto(entity, provided, "sample");
   }
