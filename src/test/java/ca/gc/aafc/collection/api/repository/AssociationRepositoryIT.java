@@ -1,0 +1,165 @@
+package ca.gc.aafc.collection.api.repository;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
+
+import ca.gc.aafc.collection.api.dto.AssociationDto;
+import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssociationTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import jakarta.inject.Inject;
+import java.util.Map;
+import java.util.UUID;
+
+public class AssociationRepositoryIT extends BaseRepositoryIT {
+
+  @Inject
+  private MaterialSampleRepository materialSampleRepository;
+
+  @Inject
+  private AssociationRepository associationRepository;
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
+  void createDeleteAssociation() throws ResourceGoneException, ResourceNotFoundException {
+
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+
+    MaterialSampleDto materialSample2Dto = MaterialSampleTestFixture.newMaterialSample();
+    materialSample2Dto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+
+    JsonApiDocument associationToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, AssociationDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(AssociationTestFixture.newAssociation()),
+      Map.of("sample", resourceIdentifierFromDto(materialSampleDto),
+        "associatedSample", resourceIdentifierFromDto(materialSample2Dto))
+    );
+
+    UUID associationUUID = createWithRepository(associationToCreate, associationRepository::onCreate);
+    AssociationDto result = associationRepository.getOne(associationUUID, "").getDto();
+    assertNotNull(result);
+
+
+    associationRepository.onDelete(result.getJsonApiId());
+    assertThrows(ResourceGoneException.class, () -> associationRepository.getOne(associationUUID, ""));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
+  void updateAssociation() throws ResourceGoneException, ResourceNotFoundException {
+
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    materialSampleDto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+
+    MaterialSampleDto materialSample2Dto = MaterialSampleTestFixture.newMaterialSample();
+    materialSample2Dto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+
+    JsonApiDocument associationToCreate = JsonApiDocuments.createJsonApiDocument(
+      null, AssociationDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(AssociationTestFixture.newAssociation()),
+      Map.of("sample", resourceIdentifierFromDto(materialSampleDto),
+        "associatedSample", resourceIdentifierFromDto(materialSample2Dto))
+    );
+
+    UUID associationUUID = createWithRepository(associationToCreate, associationRepository::onCreate);
+    AssociationDto result = associationRepository.getOne(associationUUID, "").getDto();
+    assertNotNull(result);
+
+    MaterialSampleDto materialSample3Dto = MaterialSampleTestFixture.newMaterialSample();
+    materialSample3Dto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));
+
+    JsonApiDocument associationToUpdate = JsonApiDocuments.createJsonApiDocument(
+      associationUUID, AssociationDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(AssociationTestFixture.newAssociation()),
+      Map.of("associatedSample", resourceIdentifierFromDto(materialSample3Dto))
+    );
+
+
+
+  }
+
+  //  @Test
+//  void patch_AddAssociation() {
+//    String ExpectedType = "host_of";
+//    MaterialSampleDto associatedWith = newSample();
+//    String associatedWithId = postSample(associatedWith);
+//
+//    MaterialSampleDto sample = newSample();
+//    String sampleID = postSample(sample);
+//
+//    sample.setAssociations(List.of(AssociationDto.builder()
+//      .associationType(ExpectedType)
+//      .associatedSample(UUID.fromString(associatedWithId))
+//      .build()));
+//
+//    sendPatch(sample, sampleID);
+//
+//    findSample(sampleID)
+//      .body("data.attributes.associations.associatedSample", Matchers.contains(associatedWithId))
+//      .body("data.attributes.associations.associationType", Matchers.contains(ExpectedType));
+//  }
+
+//  @Test
+//  void patch_ChangAssociationType() {
+//    String associatedWithId = postSample(newSample());
+//
+//    MaterialSampleDto sample = newSample();
+//    sample.setAssociations(List.of(AssociationDto.builder()
+//      .associationType("host_of")
+//      .associatedSample(UUID.fromString(associatedWithId))
+//      .build()));
+//    String sampleID = postSample(sample);
+//
+//    String ExpectedType = "parasite_of";
+//    sample.setAssociations(List.of(AssociationDto.builder()
+//      .associationType(ExpectedType)
+//      .associatedSample(UUID.fromString(associatedWithId))
+//      .build()));
+//
+//    sendPatch(sample, sampleID);
+//    findSample(sampleID)
+//      .body("data.attributes.associations", Matchers.hasSize(1))
+//      .body("data.attributes.associations[0].associatedSample", Matchers.is(associatedWithId))
+//      .body("data.attributes.associations[0].associationType", Matchers.is(ExpectedType));
+//  }
+//
+//  @Test
+//  void patch_SwapAssociation() {
+//    String associatedWithId = postSample(newSample());
+//    MaterialSampleDto sample = newSample();
+//    String sampleID = postSample(sample);
+//
+//    sample.setAssociations(List.of(AssociationDto.builder()
+//      .associationType("host_of")
+//      .associatedSample(UUID.fromString(associatedWithId))
+//      .build()));
+//    sendPatch(sample, sampleID);
+//
+//    String updatedAssociationId = postSample(newSample());
+//    String newType = "has_host";
+//
+//    sample.setAssociations(List.of(AssociationDto.builder()
+//      .associationType(newType)
+//      .associatedSample(UUID.fromString(updatedAssociationId))
+//      .build()));
+//    sendPatch(sample, sampleID);
+//
+//    findSample(sampleID)
+//      .body("data.attributes.associations", Matchers.hasSize(1))
+//      .body("data.attributes.associations[0].associationType", Matchers.is(newType))
+//      .body("data.attributes.associations[0].associatedSample", Matchers.is(updatedAssociationId));
+//  }
+}

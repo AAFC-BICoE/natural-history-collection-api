@@ -72,16 +72,9 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   @Transactional
   public void create_WithAuthenticatedUser_SetsCreatedBy()
       throws ResourceGoneException, ResourceNotFoundException {
+
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-
-    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
-      null, MaterialSampleDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(materialSampleDto)
-    );
-
-    UUID matSampleId =
-      JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
-        .onCreate(materialSampleToCreate));
+    UUID matSampleId = createWithRepository(materialSampleDto, materialSampleRepository);
 
     MaterialSampleDto result = materialSampleRepository.getOne(matSampleId,
         "optfields[" + "material-sample" + "]=" + MaterialSample.HIERARCHY_PROP_NAME)

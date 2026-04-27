@@ -54,11 +54,13 @@ public class AssociationDto implements JsonApiResource {
   private String remarks;
 
   @Override
+  @JsonIgnore
   public String getJsonApiType() {
     return TYPENAME;
   }
 
   @Override
+  @JsonIgnore
   public UUID getJsonApiId() {
     return uuid;
   }
