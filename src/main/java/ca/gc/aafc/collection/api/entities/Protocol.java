@@ -13,15 +13,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
-import org.hibernate.annotations.JdbcTypeCode;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.Value;
 
