@@ -15,7 +15,7 @@ import ca.gc.aafc.collection.api.entities.DinaComponent;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class BaseExtensionValueValidatorTest extends CollectionModuleBaseIT {
   

@@ -43,7 +43,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 
 @RestController

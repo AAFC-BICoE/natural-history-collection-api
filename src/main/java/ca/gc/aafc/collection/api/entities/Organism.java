@@ -2,6 +2,7 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,15 +16,15 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -53,12 +54,12 @@ public class Organism implements DinaEntity {
   // null allowed to represent that the concept of target is not used
   private Boolean isTarget;
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @Valid
   private List<Determination> determination;
 

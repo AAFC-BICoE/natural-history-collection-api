@@ -18,7 +18,7 @@ import ca.gc.aafc.dina.service.AuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.hateoas.Link;

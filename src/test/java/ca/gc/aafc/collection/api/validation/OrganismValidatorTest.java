@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.validation;
 
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

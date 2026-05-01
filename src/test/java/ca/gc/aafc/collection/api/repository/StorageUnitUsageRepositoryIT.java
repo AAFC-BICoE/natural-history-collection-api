@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 import java.util.UUID;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
+import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 
 public class StorageUnitUsageRepositoryIT extends BaseRepositoryIT {
 

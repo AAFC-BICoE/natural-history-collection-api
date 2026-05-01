@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Predicate;
 
 /**
  * Responsible to generate a material-sample name based on the hierarchy and a strategy.

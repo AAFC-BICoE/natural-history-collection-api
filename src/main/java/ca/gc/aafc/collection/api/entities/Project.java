@@ -1,30 +1,29 @@
 package ca.gc.aafc.collection.api.entities;
 
+import org.hibernate.annotations.Type;
+
+import ca.gc.aafc.dina.entity.AgentRoles;
+
+import io.hypersistence.utils.hibernate.type.json.JsonType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Type;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import ca.gc.aafc.dina.entity.AgentRoles;
 
 @Entity
 @SuperBuilder
@@ -44,15 +43,14 @@ public class Project extends UserDescribedDinaEntity {
   @Size(max = 50)
   private String status;
 
-  @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = new ArrayList<>();
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @Valid
   @Builder.Default
   private List<AgentRoles> contributors = List.of();

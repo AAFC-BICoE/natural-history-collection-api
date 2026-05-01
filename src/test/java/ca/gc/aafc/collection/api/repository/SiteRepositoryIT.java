@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.geolatte.geom.GeometryType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;

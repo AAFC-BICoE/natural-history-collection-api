@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.service.AssemblageService;
+import ca.gc.aafc.collection.api.service.AssociationService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
@@ -29,8 +30,8 @@ import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 
 import java.util.Properties;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 @SpringBootTest(classes = CollectionModuleApiLauncher.class)
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
@@ -40,6 +41,9 @@ import javax.transaction.Transactional;
 public class CollectionModuleBaseIT {
   @Inject
   protected DatabaseSupportService service;
+
+  @Inject
+  protected AssociationService associationService;
 
   @Inject
   protected CollectingEventService collectingEventService;

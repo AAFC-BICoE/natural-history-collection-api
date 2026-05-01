@@ -1,7 +1,5 @@
 package ca.gc.aafc.collection.api.testsupport.factories;
 
-import java.util.ArrayList;
-
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.testsupport.factories.TestableEntityFactory;
 import ca.gc.aafc.dina.util.UUIDHelper;
@@ -28,7 +26,6 @@ public class MaterialSampleFactory implements TestableEntityFactory<MaterialSamp
             .barcode(RandomStringUtils.randomAlphabetic(5))
             .uuid(UUIDHelper.generateUUIDv7())
             .materialSampleName("soil sample")
-            .associations(new ArrayList<>())
             .createdBy("test user")
             .group("aafc")
             .allowDuplicateName(true);

@@ -2,15 +2,11 @@ package ca.gc.aafc.collection.api.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.Association;
 import ca.gc.aafc.collection.api.entities.Collection;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
@@ -25,7 +21,6 @@ import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
-import ca.gc.aafc.collection.api.validation.AssociationValidator;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
@@ -37,28 +32,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
+import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
 
 
 public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
-
-  @Inject
-  private MessageSource messageSource;
 
   @Inject
   private BaseDAO baseDAO;
 
   @Inject
   private TransactionTestingHelper transactionTestingHelper;
-
-  private static final String INVALID_TYPE = "not a real type";
 
   @Test
   void onFindOne_lazyLoadedRelationship() {
@@ -77,26 +66,6 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     MaterialSample freshMs = materialSampleService.findOne(ms.getUuid(), MaterialSample.class);
 
     assertFalse(baseDAO.isLoaded(freshMs, "collection"));
-  }
-
-  @Test
-  void create_invalidAssociationType_exception() {
-    // Create association with invalid type.
-    List<Association> associations = new ArrayList<>();
-    associations.add(Association.builder()
-      .associatedSample(persistMaterialSample())
-      .associationType(INVALID_TYPE)
-      .build()
-    );
-
-    MaterialSample sample = MaterialSampleFactory.newMaterialSample()
-      .associations(associations)
-      .build();
-
-    // Expecting a validation exception with the ASSOCIATION_TYPE_NOT_IN_VOCABULARY message.
-    String errorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
-    ValidationException exception = Assertions.assertThrows(ValidationException.class, () -> materialSampleService.create(sample));
-    assertEquals(errorMessage, exception.getMessage());
   }
 
   @Test
@@ -365,15 +334,5 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
     assertThrows(ValidationException.class,
       () -> materialSampleService.update(materialSample));
-  }
-
-
-  private MaterialSample persistMaterialSample() {
-    MaterialSample persistMaterialSample = MaterialSampleFactory.newMaterialSample().build();
-    return materialSampleService.create(persistMaterialSample);
-  }
-
-  private String getExpectedErrorMessage(String key) {
-    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
   }
 }

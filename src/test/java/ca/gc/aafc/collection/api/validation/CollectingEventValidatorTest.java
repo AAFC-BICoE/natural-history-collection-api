@@ -14,7 +14,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

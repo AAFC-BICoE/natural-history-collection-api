@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Map;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.springframework.http.HttpStatus;
 
 @SpringBootTest(classes = CollectionModuleApiLauncher.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "dev-user.enabled=true")

@@ -15,7 +15,7 @@ import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class StorageUnitUsageValidatorTest extends CollectionModuleBaseIT {
 

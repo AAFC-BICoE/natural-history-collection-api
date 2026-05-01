@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.validation;
 
 import java.util.Map;
 import java.util.Objects;
-import javax.inject.Named;
+import jakarta.inject.Named;
 import lombok.NonNull;
 
 import org.springframework.context.MessageSource;

@@ -11,7 +11,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.UUID;
 
 public class AssociationValidatorTest extends CollectionModuleBaseIT {
@@ -40,7 +40,7 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
     associationValidator.validate(association, errors);
     Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().getFirst().getDefaultMessage());
   }
 
   @Test
@@ -65,7 +65,7 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     associationValidator.validate(association, errors);
     Assertions.assertTrue(errors.hasErrors());
     Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().get(0).getDefaultMessage());
+    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().getFirst().getDefaultMessage());
   }
 
   private static Association newAssociation() {

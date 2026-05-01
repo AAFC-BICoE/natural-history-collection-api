@@ -1,16 +1,15 @@
 package ca.gc.aafc.collection.api.entities;
 
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -34,7 +33,6 @@ public class Expedition extends UserDescribedDinaEntity {
   @Size(max = 250)
   private String geographicContext;
 
-  @Type(type = "list-array")
   @Column(name = "participants", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> participants = new ArrayList<>();

@@ -1,12 +1,14 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Assertions;
+import jakarta.validation.ValidationException;
+
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AssociationCRUDIT extends CollectionModuleBaseIT {
 
@@ -18,21 +20,36 @@ class AssociationCRUDIT extends CollectionModuleBaseIT {
     materialSampleService.create(associated);
 
     Association association = Association.builder()
+      .createdBy("test user")
       .sample(materialSample)
       .associatedSample(associated)
-      .associationType(RandomStringUtils.randomAlphabetic(4))
+      .associationType("parasite_of")
       .build();
 
-    materialSample.setAssociations(List.of(association));
+    associationService.create(association);
+    Association result = associationService.findOne(association.getUuid(), Association.class);
 
-    MaterialSample result = materialSampleService.findOne(materialSample.getUuid(), MaterialSample.class);
-    Assertions.assertEquals(materialSample.getUuid(), result.getAssociations().get(0).getSample().getUuid());
-    Assertions.assertEquals(
+    assertEquals(
+      materialSample.getUuid(),
+      result.getSample().getUuid());
+    assertEquals(
       associated.getUuid(),
-      result.getAssociations().get(0).getAssociatedSample().getUuid());
-    Assertions.assertEquals(
-      association.getAssociationType(),
-      result.getAssociations().get(0).getAssociationType());
+      result.getAssociatedSample().getUuid());
   }
 
+    @Test
+  void updateMaterialSample_WhenAssociatedWithSelf_Exception() {
+
+      MaterialSample materialSample = MaterialSampleFactory.newMaterialSample().build();
+      materialSampleService.create(materialSample);
+
+      Association association = Association.builder()
+        .createdBy("test user")
+        .sample(materialSample)
+        .associatedSample(materialSample)
+        .associationType("parasite_of")
+        .build();
+
+    assertThrows(ValidationException.class, () -> associationService.update(association));
+  }
 }

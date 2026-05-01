@@ -4,7 +4,7 @@ import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.ProtocolElementDto;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

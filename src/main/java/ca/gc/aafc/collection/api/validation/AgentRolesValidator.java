@@ -2,7 +2,7 @@ package ca.gc.aafc.collection.api.validation;
 
 import java.util.List;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.MessageSource;

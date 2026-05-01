@@ -24,7 +24,7 @@ import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
 import java.util.Map;
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionControlledVocabularyItemRepositoryIT extends CollectionModuleBaseRepositoryIT {

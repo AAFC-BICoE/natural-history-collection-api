@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.inject.Inject;
-import javax.validation.ValidationException;
+import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;

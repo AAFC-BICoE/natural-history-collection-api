@@ -40,9 +40,9 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.validation.ValidationException;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 
 public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
@@ -72,16 +72,9 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   @Transactional
   public void create_WithAuthenticatedUser_SetsCreatedBy()
       throws ResourceGoneException, ResourceNotFoundException {
+
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-
-    JsonApiDocument materialSampleToCreate = JsonApiDocuments.createJsonApiDocument(
-      null, MaterialSampleDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(materialSampleDto)
-    );
-
-    UUID matSampleId =
-      JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(materialSampleRepository
-        .onCreate(materialSampleToCreate));
+    UUID matSampleId = createWithRepository(materialSampleDto, materialSampleRepository);
 
     MaterialSampleDto result = materialSampleRepository.getOne(matSampleId,
         "optfields[" + "material-sample" + "]=" + MaterialSample.HIERARCHY_PROP_NAME)
@@ -177,6 +170,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
     assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getFirst().getId());
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
   }
+
 
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })

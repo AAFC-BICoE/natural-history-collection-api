@@ -2,16 +2,16 @@ package ca.gc.aafc.collection.api.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
@@ -23,8 +23,8 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(TestConfigProperties.class)
 public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
   private static final String TYPE_NAME = "preparation-type";

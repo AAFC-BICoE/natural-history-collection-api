@@ -2,10 +2,12 @@ package ca.gc.aafc.collection.api.openapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
@@ -29,6 +31,7 @@ import lombok.SneakyThrows;
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(TestConfigProperties.class)
 public class StorageUnitUsageOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = StorageUnitUsageDto.TYPENAME;

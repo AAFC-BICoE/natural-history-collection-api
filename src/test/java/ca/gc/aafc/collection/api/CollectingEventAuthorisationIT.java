@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {

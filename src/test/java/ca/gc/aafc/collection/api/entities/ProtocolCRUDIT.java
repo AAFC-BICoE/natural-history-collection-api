@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 
 import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
 import org.junit.jupiter.api.Assertions;

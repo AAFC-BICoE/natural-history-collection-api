@@ -1,19 +1,22 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.StorageUnitTypeDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTypeTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+
 import lombok.SneakyThrows;
 
 @SpringBootTest(
@@ -21,8 +24,8 @@ import lombok.SneakyThrows;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(TestConfigProperties.class)
 public class StorageUnitTypeOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = StorageUnitTypeDto.TYPENAME;

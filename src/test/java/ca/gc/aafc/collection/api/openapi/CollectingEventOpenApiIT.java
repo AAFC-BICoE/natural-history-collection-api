@@ -3,14 +3,14 @@ package ca.gc.aafc.collection.api.openapi;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
@@ -30,9 +30,8 @@ import lombok.SneakyThrows;
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
-@Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
-
+@Import(TestConfigProperties.class)
 public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "collecting-event";
@@ -42,7 +41,6 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   protected CollectingEventOpenApiIT() {
     super("/api/v1/");
   }
-
 
   @SneakyThrows
   @Test

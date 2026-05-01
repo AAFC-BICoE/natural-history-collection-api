@@ -50,4 +50,9 @@ public class BaseRepositoryIT {
   protected UUID createWithRepository(JsonApiDocument jsonApiDocument, Function<JsonApiDocument, ResponseEntity<RepresentationModel<?>>> onCreateMethod) {
     return JsonApiModelAssistant.extractUUIDFromRepresentationModelLink(onCreateMethod.apply(jsonApiDocument));
   }
+
+  protected JsonApiDocument.ResourceIdentifier resourceIdentifierFromDto(JsonApiResource dto) {
+    return JsonApiDocument.ResourceIdentifier.builder()
+      .id(dto.getJsonApiId()).type(dto.getJsonApiType()).build();
+  }
 }

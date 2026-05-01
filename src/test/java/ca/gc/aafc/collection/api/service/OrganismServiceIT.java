@@ -19,7 +19,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import javax.validation.ValidationException;
+import jakarta.validation.ValidationException;
 
 public class OrganismServiceIT extends CollectionModuleBaseIT {
 

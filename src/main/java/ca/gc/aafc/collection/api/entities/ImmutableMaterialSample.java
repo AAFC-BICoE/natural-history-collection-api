@@ -5,9 +5,9 @@ import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Immutable

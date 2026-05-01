@@ -3,16 +3,16 @@ package ca.gc.aafc.collection.api.entities;
 import io.hypersistence.utils.hibernate.type.array.EnumArrayType;
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,7 +23,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 
@@ -32,9 +31,6 @@ import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 @Setter
 @Getter
 @RequiredArgsConstructor
-@TypeDef(name = "material-sample-type-array", typeClass = EnumArrayType.class,
-  defaultForType = MaterialSample.MaterialSampleType[].class,
-  parameters = {@Parameter(name = EnumArrayType.SQL_ARRAY_TYPE, value = "material_sample_type_enum")})
 public class SplitConfiguration implements DinaEntityIdentifiableByName {
 
   public enum Separator {
@@ -78,7 +74,14 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   @NotNull
   private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
 
-  @Type(type = "material-sample-type-array")
+  @Type(
+    value = EnumArrayType.class,
+    parameters = @Parameter(
+      name = EnumArrayType.SQL_ARRAY_TYPE,
+      value = "material_sample_type_enum"
+    )
+  )
+  @Column(columnDefinition = "material_sample_type_enum[]")
   private MaterialSample.MaterialSampleType[] conditionalOnMaterialSampleTypes;
 
   @NotNull
@@ -89,7 +92,6 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   @Enumerated(EnumType.STRING)
   private Separator separator;
 
-  @Type(type = "pgsql_enum")
   @Enumerated(EnumType.STRING)
   private MaterialSample.MaterialSampleType materialSampleTypeCreatedBySplit;
 

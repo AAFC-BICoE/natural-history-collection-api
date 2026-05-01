@@ -1,24 +1,27 @@
 package ca.gc.aafc.collection.api.entities;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.hibernate.annotations.Type;
+
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.Valid;
 
 @Entity
 @SuperBuilder
@@ -38,15 +41,14 @@ public class Site extends UserDescribedDinaEntity {
   @Column(name = "site_geom")
   private Geometry<G2D> siteGeom;
 
-  @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = List.of();
 
-  @Type(type = "pgsql_enum")
+  @Type(PostgreSQLEnumType.class)
   @Enumerated(EnumType.STRING)
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
@@ -60,7 +62,8 @@ public class Site extends UserDescribedDinaEntity {
   @Size(max = 100)
   private String dwcStateProvince;
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
+  @Column(columnDefinition = "jsonb")
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();

@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.rest;
 import java.util.UUID;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.MaterialSampleNameGeneration;
@@ -12,6 +13,7 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 )
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(TestConfigProperties.class)
 public class MaterialSampleIdentifierGeneratorRestIT extends BaseRestAssuredTest {
 
   protected MaterialSampleIdentifierGeneratorRestIT() {

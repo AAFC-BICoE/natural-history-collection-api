@@ -51,7 +51,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 
 @RestController

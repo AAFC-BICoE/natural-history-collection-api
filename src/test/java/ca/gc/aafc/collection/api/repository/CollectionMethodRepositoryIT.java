@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.UUID;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 class CollectionMethodRepositoryIT extends BaseRepositoryIT {
 

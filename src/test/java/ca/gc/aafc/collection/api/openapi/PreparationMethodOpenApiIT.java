@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.openapi;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationMethodTestFixture;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
@@ -10,10 +11,11 @@ import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -22,6 +24,7 @@ import javax.transaction.Transactional;
 @TestPropertySource(properties = "spring.config.additional-location=classpath:application-test.yml")
 @Transactional
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
+@Import(TestConfigProperties.class)
 public class PreparationMethodOpenApiIT extends BaseRestAssuredTest {
 
   public static final String TYPE_NAME = "preparation-method";

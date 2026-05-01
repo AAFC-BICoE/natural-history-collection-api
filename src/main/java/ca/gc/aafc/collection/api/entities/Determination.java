@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.persistence.Transient;
-import javax.validation.Valid;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Transient;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;

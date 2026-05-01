@@ -35,7 +35,7 @@ import ca.gc.aafc.collection.api.service.CollectionService;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
 
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 
 import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;

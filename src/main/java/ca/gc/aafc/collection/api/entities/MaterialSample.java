@@ -9,29 +9,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Version;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -130,25 +125,6 @@ public class MaterialSample extends AbstractMaterialSample {
   @OrderColumn(name = "pos")
   private List<Organism> organism = List.of();
 
-  @OneToMany(mappedBy = "sample", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-  @Valid
-  private List<Association> associations = new ArrayList<>();
-
-  public void setAssociations(List<Association> associations) {
-    if (associations == null) {
-      this.associations = null;
-      return;
-    }
-
-    if (this.associations == null) {
-      this.associations = new ArrayList<>();
-    }
-    this.associations.clear();
-    if (CollectionUtils.isNotEmpty(associations)) {
-      this.associations.addAll(associations);
-    }
-  }
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "storage_unit_usage_id")
   private StorageUnitUsage storageUnitUsage;
@@ -180,12 +156,10 @@ public class MaterialSample extends AbstractMaterialSample {
   @Size(max = 50)
   private String sourceSet;
 
-  @Type(type = "list-array")
   @Column(name = "prepared_by", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> preparedBy = List.of();
 
-  @Type(type = "list-array")
   @Column(name = "attachment", columnDefinition = "uuid[]")
   @UniqueElements
   private List<UUID> attachment = List.of();

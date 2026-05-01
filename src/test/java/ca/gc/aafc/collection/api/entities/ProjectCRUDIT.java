@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import javax.validation.ValidationException;
+import jakarta.validation.ValidationException;
 
 import ca.gc.aafc.collection.api.testsupport.factories.MultilingualDescriptionFactory;
 import org.junit.jupiter.api.Assertions;

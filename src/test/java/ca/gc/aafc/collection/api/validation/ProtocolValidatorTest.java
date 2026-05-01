@@ -11,7 +11,7 @@ import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.testsupport.factories.ProtocolFactory;
 
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class ProtocolValidatorTest extends CollectionModuleBaseIT {
 

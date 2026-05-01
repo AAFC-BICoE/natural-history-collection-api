@@ -1,28 +1,29 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
-import ca.gc.aafc.dina.i18n.MultilingualDescription;
-
-import javax.validation.Valid;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
+import ca.gc.aafc.dina.i18n.MultilingualDescription;
+
+import io.hypersistence.utils.hibernate.type.json.JsonType;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -52,7 +53,7 @@ public abstract class UserDescribedDinaEntity implements DinaEntityIdentifiableB
   @NotBlank
   private String name;
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @Column(name = "multilingual_description")
   @Valid
   private MultilingualDescription multilingualDescription;

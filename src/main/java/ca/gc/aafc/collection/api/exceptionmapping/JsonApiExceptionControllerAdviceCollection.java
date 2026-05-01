@@ -1,7 +1,7 @@
 package ca.gc.aafc.collection.api.exceptionmapping;
 
 import java.time.format.DateTimeParseException;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PSQLException;
