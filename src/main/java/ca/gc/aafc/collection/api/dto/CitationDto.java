@@ -14,7 +14,7 @@ import lombok.Value;
 @Value
 // This class is considered a "value" belonging to a MaterialSample:
 @org.javers.core.metamodel.annotation.Value
-public class BibliographicReferenceDto {
+public class CitationDto {
 
   @Size(max = 400)
   private String title;
@@ -41,5 +41,5 @@ public class BibliographicReferenceDto {
   private String journal;
 
   @Size(max = 1000)
-  private String referenceRemarks;
+  private String citationRemarks;
 }

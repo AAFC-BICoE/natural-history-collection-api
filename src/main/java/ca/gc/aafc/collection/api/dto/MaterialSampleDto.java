@@ -110,7 +110,7 @@ public class MaterialSampleDto implements JsonApiResource {
   private List<ScheduledActionDto> scheduledActions;
 
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private List<BibliographicReferenceDto> bibliographicReferences;
+  private List<CitationDto> citations;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private HostOrganism hostOrganism;
