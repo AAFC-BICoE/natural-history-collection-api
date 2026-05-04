@@ -24,9 +24,6 @@ public class CitationDto {
   @Size(max = 200)
   private String doi;
 
-  @Size(max = 1000)
-  private String bibliographicCitation;
-
   private List<String> author;
 
   private List<String> authorID;

@@ -106,7 +106,6 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .journal("Molecular Phylogenetics and Evolution")
       .volume("Volume 56, Issue 3")
       .pages("1105-1114")
-      .bibliographicCitation("Heinrichs, J., Hentschel, J., Bombosch, A., Fiebig, A., Reise, J., Edelmann, M., Kreier, H.-P., Schäfer-Verwimp, A., Caspari, S., Schmidt, A. R., Zhu, R.-L., von Konrat, M., Shaw, B., & Shaw, A. J. (2010). One species or at least eight? Delimitation and distribution of Frullania tamarisci (L.) Dumort. s. l. (Jungermanniopsida, Porellales) inferred from nuclear and chloroplast DNA markers. Molecular Phylogenetics and Evolution, 56(3), 1105–1114. https://doi.org/10.1016/j.ympev.2010.05.004")
       .citationRemarks("Material sample used as voucher")
       .build();
 
