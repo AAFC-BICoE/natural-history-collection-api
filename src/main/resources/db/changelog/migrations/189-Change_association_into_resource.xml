@@ -6,7 +6,7 @@
      <changeSet id="189-Change_association_into_resource" context="schema-change" author="cgendreau">
         <addColumn tableName="association">
             <column name="uuid" type="uuid">
-                <constraints nullable="false" unique="true"/>
+                <constraints unique="true"/>
             </column>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
             <column name="created_by" type="VARCHAR(250)">
