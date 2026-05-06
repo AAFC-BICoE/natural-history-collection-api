@@ -24,9 +24,7 @@ public class CitationDto {
   @Size(max = 200)
   private String doi;
 
-  private List<String> author;
-
-  private List<String> authorID;
+  private List<CitationAuthorDto> authors;
 
   @Size(max = 50)
   private String volume;
