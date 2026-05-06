@@ -21,3 +21,6 @@ ALTER DEFAULT PRIVILEGES FOR USER migration_user IN SCHEMA collection GRANT SELE
 -- By default the PostGIS image will use the public schema so we need to change it
 UPDATE pg_extension SET extrelocatable = TRUE WHERE extname = 'postgis';
 ALTER EXTENSION postgis SET SCHEMA collection;
+
+-- Install pgcrypto to allow uuid generation
+CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA collection;

@@ -5,11 +5,11 @@
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
      <changeSet id="189-Change_association_into_resource" context="schema-change" author="cgendreau">
         <addColumn tableName="association">
-            <column name="uuid" type="uuid">
-                <constraints unique="true"/>
+            <column name="uuid" type="uuid" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
-            <column name="created_by" type="VARCHAR(250)">
+            <column name="created_by" type="VARCHAR(250)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
