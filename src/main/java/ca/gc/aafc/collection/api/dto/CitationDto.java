@@ -1,6 +1,8 @@
 package ca.gc.aafc.collection.api.dto;
 
 import java.util.List;
+
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import lombok.Builder;
@@ -22,6 +24,7 @@ public class CitationDto {
   private Integer year;
 
   @Size(max = 200)
+  @Pattern(regexp = "(?i)^https:\\/\\/doi.org\\/10\\.\\d{4,9}\\/.+$")
   private String doi;
 
   private List<CitationAuthorDto> authors;
