@@ -199,4 +199,5 @@
   <include file="db/changelog/migrations/187-Add_geographic_name_info_to_site.xml"/> 
   <include file="db/changelog/migrations/188-Add_managed_attributes_to_site.xml"/>
   <include file="db/changelog/migrations/189-Change_association_into_resource.xml"/>
+  <include file="db/changelog/initial-data/8-Create_association_type_controlled_vocabulary.xml"/>
   </databaseChangeLog>
