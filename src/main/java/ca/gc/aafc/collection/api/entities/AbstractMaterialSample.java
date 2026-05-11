@@ -7,6 +7,7 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
 
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
+import ca.gc.aafc.collection.api.dto.CitationDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 
 import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
@@ -133,6 +134,10 @@ public class AbstractMaterialSample implements DinaEntity {
   @Type(JsonType.class)
   @Valid
   private List<ScheduledActionDto> scheduledActions;
+
+  @Type(JsonType.class)
+  @Valid
+  private List<CitationDto> citations;
 
   @Type(JsonType.class)
   @Valid
