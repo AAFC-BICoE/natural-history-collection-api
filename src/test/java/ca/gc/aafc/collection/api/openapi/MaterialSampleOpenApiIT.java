@@ -17,6 +17,8 @@ import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
+import ca.gc.aafc.collection.api.dto.CitationAuthorDto;
+import ca.gc.aafc.collection.api.dto.CitationDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
@@ -94,6 +96,23 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       .actionType("actionTypeactionTypeactionType")
       .remarks("remarks")
       .assignedTo(ExternalRelationDto.builder().id(UUID.randomUUID().toString()).type("user").build())
+      .build();
+
+    CitationDto citations = CitationDto.builder()
+      .title("Delimitation and distribution of Frullania tamarisci (L.) Dumort. s. l. (Jungermanniopsida, Porellales) inferred from nuclear and chloroplast DNA markers")
+      .year(2010)
+      .doi("10.1016/j.ympev.2010.05.004")
+      .authors(List.of(
+        CitationAuthorDto.builder()
+          .givenNames("Jochen")
+          .familyNames("Heinrichs")
+          .id("https://orcid.org/0000-0001-8836-2759")
+          .build()
+      ))
+      .journal("Molecular Phylogenetics and Evolution")
+      .volume("Volume 56, Issue 3")
+      .pages("1105-1114")
+      .citationRemarks("Material sample used as voucher")
       .build();
 
     Determination determination = DeterminationFactory.newDetermination()
