@@ -185,7 +185,6 @@
   <include file="db/changelog/migrations/178-Add_Expedition_table.xml"/>
   <include file="db/changelog/migrations/179-Add_organism_material_sample_index.xml"/>
   <include file="db/changelog/migrations/180-Add_controlled_vocabulary.xml"/>
-  <include file="db/changelog/migrations/190-Add_citations.xml"/>
   <include file="db/changelog/initial-data/3-Create_managed_attribute_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/4-Create_coordinate_format_controlled_vocabulary.xml"/>
   <include file="db/changelog/initial-data/5-Create_projectRole_controlled_vocabulary.xml"/>
@@ -200,5 +199,6 @@
   <include file="db/changelog/migrations/187-Add_geographic_name_info_to_site.xml"/> 
   <include file="db/changelog/migrations/188-Add_managed_attributes_to_site.xml"/>
   <include file="db/changelog/migrations/189-Change_association_into_resource.xml"/>
+  <include file="db/changelog/migrations/190-Add_citations.xml"/>
   <include file="db/changelog/initial-data/8-Create_association_type_controlled_vocabulary.xml"/>
   </databaseChangeLog>
