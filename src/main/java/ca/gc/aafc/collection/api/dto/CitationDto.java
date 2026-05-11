@@ -2,8 +2,8 @@ package ca.gc.aafc.collection.api.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import lombok.Builder;
 import lombok.Data;

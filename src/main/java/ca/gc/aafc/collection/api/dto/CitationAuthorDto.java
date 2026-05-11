@@ -1,6 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

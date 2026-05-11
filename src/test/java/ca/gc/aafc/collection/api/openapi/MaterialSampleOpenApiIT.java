@@ -101,7 +101,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     CitationDto citations = CitationDto.builder()
       .title("Delimitation and distribution of Frullania tamarisci (L.) Dumort. s. l. (Jungermanniopsida, Porellales) inferred from nuclear and chloroplast DNA markers")
       .year(2010)
-      .doi("10.1016/j.ympev.2010.05.004")
+      .doi("https://doi.org/10.1016/j.ympev.2010.05.004")
       .authors(List.of(
         CitationAuthorDto.builder()
           .givenNames("Jochen")
@@ -128,6 +128,7 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
     ms.setManagedAttributes(Map.of("name", "anything"));
     ms.setScheduledActions(List.of(scheduledAction));
     ms.setHostOrganism(hostOrganism);
+    ms.setCitations(List.of(citations));
     setRelationshipsToNull(ms);
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();

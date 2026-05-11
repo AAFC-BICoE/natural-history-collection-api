@@ -139,7 +139,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Valid
   private List<CitationDto> citations;
 
-  @Type(type = "jsonb")
+  @Type(JsonType.class)
   @Valid
   private HostOrganism hostOrganism;
 
