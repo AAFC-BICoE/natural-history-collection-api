@@ -23,7 +23,16 @@
             <column name="name" value="Has host"/>
             <column name="key" value="has_host"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002454"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has host"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "X has host y if and only if: x is an organism, y is an organism, and x can live on the surface of or within the body of y."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -33,7 +42,16 @@
             <column name="name" value="Host of"/>
             <column name="key" value="host_of"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002453"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Host of"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of has host."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -43,7 +61,16 @@
             <column name="name" value="Parasite of"/>
             <column name="key" value="parasite_of"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002444"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasite of"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "A parasite-host relationship where an organism benefits at the expense of another."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -53,7 +80,16 @@
             <column name="name" value="Parasitized by"/>
             <column name="key" value="parasitized_by"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002445"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasitized by"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of parasite of."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -63,7 +99,16 @@
             <column name="name" value="Pollinates"/>
             <column name="key" value="pollinates"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002455"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinates"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of pollinated by."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -73,7 +118,16 @@
             <column name="name" value="Pollinated by"/>
             <column name="key" value="pollinated_by"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002456"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinated by"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of pollinates."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -83,7 +137,16 @@
             <column name="name" value="Has vector"/>
             <column name="key" value="has_vector"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002460"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has vector"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of is vector for."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -93,7 +156,16 @@
             <column name="name" value="Vector for"/>
             <column name="key" value="vector_for"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002459"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Vector for"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of has vector."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -103,7 +175,16 @@
             <column name="name" value="Has pathogen"/>
             <column name="key" value="has_pathogen"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002557"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has pathogen"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "A host interaction where the smaller of the two members of a symbiosis causes a disease in the larger member."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -113,7 +194,16 @@
             <column name="name" value="Pathogen of"/>            
             <column name="key" value="pathogen_of"/>
             <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002556"/>
             <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pathogen of"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of has pathogen."
+                }
+                ]
+                }'/>
             <column name="created_by" value="system"/>
         </insert>
     </changeSet>
