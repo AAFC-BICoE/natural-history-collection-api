@@ -12,12 +12,12 @@ public class CitationAuthorDto {
 
   @Size(max = 200)
   @JsonProperty("given_names")
-  String givenNames;
+  private String givenNames;
 
   @Size(max = 200)
   @JsonProperty("family_names")
-  String familyNames;
+  private String familyNames;
 
   @Size(max = 200)
-  String id;
+  private String id;
 }
