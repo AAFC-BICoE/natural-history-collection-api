@@ -30,11 +30,12 @@ public class AssociationValidator extends BaseControlledVocabularyValueValidator
     this.collMessageSource = messageSource;
   }
 
-  public void validate(Association entity, String associationType) {
+  public void validate(Association entity) {
     Errors errors = ValidationErrorsHelper.newErrorsObject(entity);
     validateAssociationNotSelf(entity, errors);
-    validateKey(associationType, () -> vocabItemService
-        .findOneByKey(associationType, ASSOCIATION_TYPE_VOCAB_UUID), errors);
+    // make sure the key is a known key for association type
+    validateKey(entity.getAssociationType(), () -> vocabItemService
+      .findOneByKey(entity.getAssociationType(), ASSOCIATION_TYPE_VOCAB_UUID), errors);
   }
 
   private void validateAssociationNotSelf(Association association, Errors errors) {

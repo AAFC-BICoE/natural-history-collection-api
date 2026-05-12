@@ -32,6 +32,6 @@ public class AssociationService extends DefaultDinaService<Association> {
 
   @Override
   public void validateBusinessRules(Association entity) {
-    associationValidator.validate(entity, entity.getAssociationType());
+    associationValidator.validate(entity);
   }
 }
