@@ -6,8 +6,6 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -22,14 +20,11 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
   @Inject
   private AssociationValidator associationValidator;
 
-  @Inject
-  private MessageSource messageSource;
-
   @Test
   void validate_WhenValid_NoErrors() {
     Association association = newAssociation();
     Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
-    associationValidator.validate(association, association.getAssociationType());
+    associationValidator.validate(association);
     Assertions.assertFalse(errors.hasErrors());
   }
 
@@ -40,7 +35,7 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     association.setAssociatedSample(sample);
     association.setSample(sample);
 
-    ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association, association.getAssociationType()));
+    ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association));
     Assertions.assertTrue(ex.getMessage().contains("between the same sample"));
   }
 
@@ -49,7 +44,7 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     Association association = newAssociation();
     association.setAssociationType("invalid_associationType");
 
-    ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association, association.getAssociationType()));
+    ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association));
     Assertions.assertTrue(ex.getMessage().contains("unknown controlled vocabulary key"));
   }
 
@@ -69,9 +64,4 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
       .createdBy(RandomStringUtils.randomAlphabetic(3))
       .build();
   }
-
-  private String getExpectedErrorMessage(String key) {
-    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
-  }
-
 }
