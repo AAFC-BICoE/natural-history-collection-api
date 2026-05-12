@@ -13,7 +13,7 @@
             <column name="type" value="SYSTEM"/>
             <column name="vocab_class" value="QUALIFIED_VALUE"/>
             <column name="version" value="1"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Associated Type"},{"lang":"fr","title":"Type associé"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Association Type"},{"lang":"fr","title":"Type d&apos;association"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
