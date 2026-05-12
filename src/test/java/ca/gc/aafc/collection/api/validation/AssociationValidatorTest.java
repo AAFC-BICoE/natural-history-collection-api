@@ -6,66 +6,46 @@ import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.validation.ValidationErrorsHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AssociationValidatorTest extends CollectionModuleBaseIT {
   
   @Inject
   private AssociationValidator associationValidator;
 
-  @Inject
-  private MessageSource messageSource;
-
   @Test
   void validate_WhenValid_NoErrors() {
     Association association = newAssociation();
     Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
-    associationValidator.validate(association, errors);
+    associationValidator.validate(association);
     Assertions.assertFalse(errors.hasErrors());
   }
 
   @Test
   void validate_WhenAssociatedWithSelf_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATED_WITH_SELF_ERROR_KEY);
     Association association = newAssociation();
     MaterialSample sample = newSample();
     association.setAssociatedSample(sample);
     association.setSample(sample);
-    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
-    associationValidator.validate(association, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().getFirst().getDefaultMessage());
-  }
 
-  @Test
-  void validate_WhenUpperCaseAssociationType_NoErrors() {
-    Association association = newAssociation();
-    association.setAssociationType("HAS_HOST");
-    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
-    associationValidator.validate(association, errors);
-    Assertions.assertFalse(errors.hasErrors());
-    Assertions.assertEquals("has_host", association.getAssociationType());
+    ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association));
+    Assertions.assertTrue(ex.getMessage().contains("between the same sample"));
   }
 
   @Test
   void validate_WhenAssociationTypeNotValid_HasError() {
-    String expectedErrorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
-
     Association association = newAssociation();
     association.setAssociationType("invalid_associationType");
 
-    Errors errors = ValidationErrorsHelper.newErrorsObject(association.getAssociationType(), association);
-
-    associationValidator.validate(association, errors);
-    Assertions.assertTrue(errors.hasErrors());
-    Assertions.assertEquals(1, errors.getAllErrors().size());
-    Assertions.assertEquals(expectedErrorMessage, errors.getAllErrors().getFirst().getDefaultMessage());
+    ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association));
+    Assertions.assertTrue(ex.getMessage().contains("unknown controlled vocabulary key"));
   }
 
   private static Association newAssociation() {
@@ -84,9 +64,4 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
       .createdBy(RandomStringUtils.randomAlphabetic(3))
       .build();
   }
-
-  private String getExpectedErrorMessage(String key) {
-    return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
-  }
-
 }

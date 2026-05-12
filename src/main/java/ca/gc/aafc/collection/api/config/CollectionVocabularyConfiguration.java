@@ -23,7 +23,6 @@ import ca.gc.aafc.dina.vocabulary.VocabularyConfiguration;
 @PropertySource(value = "classpath:vocabulary/srs.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/substrate.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/materialSampleState.yml", factory = YamlPropertyLoaderFactory.class)
-@PropertySource(value = "classpath:vocabulary/associationType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/materialSampleType.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/unitsOfMeasurement.yml", factory = YamlPropertyLoaderFactory.class)
 @PropertySource(value = "classpath:vocabulary/protocolVocabulary.yml", factory = YamlPropertyLoaderFactory.class)
@@ -42,6 +41,7 @@ public class CollectionVocabularyConfiguration
   // Constant, by Liquibase migration
   public static final UUID MANAGED_ATTRIBUTE_VOCAB_UUID = UUID.fromString("01998155-a6f0-7c2f-9fcc-994d74222f9c");
   public static final UUID IDENTIFIER_TYPE_VOCAB_UUID = UUID.fromString("019c961e-4c0d-7398-b4ae-73687826b3b5");
+  public static final UUID ASSOCIATION_TYPE_VOCAB_UUID = UUID.fromString("019cbf7f-b804-7aa5-b04d-b1deed0e7256");
 
   public enum DinaComponent {
     COLLECTING_EVENT,

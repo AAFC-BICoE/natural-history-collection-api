@@ -15,6 +15,7 @@ import ca.gc.aafc.collection.api.validation.AssociationValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AssociationServiceIT extends CollectionModuleBaseIT {
 
@@ -44,9 +45,8 @@ public class AssociationServiceIT extends CollectionModuleBaseIT {
       .build();
 
     // Expecting a validation exception with the ASSOCIATION_TYPE_NOT_IN_VOCABULARY message.
-    String errorMessage = getExpectedErrorMessage(AssociationValidator.ASSOCIATION_TYPE_NOT_IN_VOCABULARY);
     ValidationException exception = assertThrows(ValidationException.class, () -> associationService.create(association));
-    assertEquals(errorMessage, exception.getMessage());
+    assertTrue(exception.getMessage().contains("unknown controlled vocabulary key"));
   }
 
   private String getExpectedErrorMessage(String key) {

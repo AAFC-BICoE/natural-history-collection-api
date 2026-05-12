@@ -1,0 +1,210 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="8-Create_associated_type_controlled_vocabulary" context="initial-data" author="cgendreau">
+        <insert tableName="controlled_vocabulary">
+            <column name="uuid" value="019cbf7f-b804-7aa5-b04d-b1deed0e7256"/>
+            <column name="name" value="Association Type"/>
+            <column name="key" value="association_type"/>
+            <column name="term" value=""/>
+            <column name="type" value="SYSTEM"/>
+            <column name="vocab_class" value="QUALIFIED_VALUE"/>
+            <column name="version" value="1"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Association Type"},{"lang":"fr","title":"Type d&apos;association"}]}'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf97-078d-71ab-af4f-41b75e45aaf4"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Has host"/>
+            <column name="key" value="has_host"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002454"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has host"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "X has host y if and only if: x is an organism, y is an organism, and x can live on the surface of or within the body of y."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbfaa-5ace-7fbf-97ae-1df58deb6e73"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Host of"/>
+            <column name="key" value="host_of"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002453"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Host of"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of has host."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf97-e820-7384-b55e-5ef571154791"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Parasite of"/>
+            <column name="key" value="parasite_of"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002444"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasite of"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "A parasite-host relationship where an organism benefits at the expense of another."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-10e2-74db-a265-c75c0830b474"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Parasitized by"/>
+            <column name="key" value="parasitized_by"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002445"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasitized by"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of parasite of."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-3778-78da-ae53-2c5b5f57e894"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Pollinates"/>
+            <column name="key" value="pollinates"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002455"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinates"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of pollinated by."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-5390-785b-aac1-55fc11412738"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Pollinated by"/>
+            <column name="key" value="pollinated_by"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002456"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinated by"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of pollinates."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-6f88-7405-b147-f4ed0a24d39d"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Has vector"/>
+            <column name="key" value="has_vector"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002460"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has vector"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of is vector for."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-8c24-7099-bd0f-d7c2e402f76c"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Vector for"/>
+            <column name="key" value="vector_for"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002459"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Vector for"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of has vector."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-a1a5-77ee-a85c-ee1fc6235913"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Has pathogen"/>
+            <column name="key" value="has_pathogen"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002557"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has pathogen"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "A host interaction where the smaller of the two members of a symbiosis causes a disease in the larger member."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="019cbf98-b4fe-7f98-99fc-191b0977a414"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019cbf7f-b804-7aa5-b04d-b1deed0e7256')"/>
+            <column name="name" value="Pathogen of"/>            
+            <column name="key" value="pathogen_of"/>
+            <column name="_group" value="system"/>
+            <column name="term" value="http://purl.obolibrary.org/obo/RO_0002556"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pathogen of"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Inverse of has pathogen."
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
