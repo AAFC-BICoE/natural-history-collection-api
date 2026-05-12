@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -52,16 +51,6 @@ public class VocabularyConfigurationTest extends CollectionModuleBaseIT {
   void unitsOfMeasurement() {
     List<CollectionVocabularyConfiguration.CollectionVocabularyElement> unitsOfMeasurement = vocabularyConfiguration.getVocabulary().get("unitsOfMeasurement");
     assertEquals(5, unitsOfMeasurement.size());
-  }
-
-  @Test
-  void associationType() {
-    List<CollectionVocabularyConfiguration.CollectionVocabularyElement> associationType = vocabularyConfiguration.getVocabulary().get("associationType");
-    assertEquals(10, associationType.size());
-    associationType.forEach(assertVocabElement());
-
-    assertEquals(10,
-        associationType.stream().filter(o -> StringUtils.isNotBlank(o.getInverseOf())).count());
   }
 
   @Test

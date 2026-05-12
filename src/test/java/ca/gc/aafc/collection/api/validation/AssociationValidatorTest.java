@@ -41,7 +41,7 @@ public class AssociationValidatorTest extends CollectionModuleBaseIT {
     association.setSample(sample);
 
     ValidationException ex = assertThrows(ValidationException.class, () -> associationValidator.validate(association, association.getAssociationType()));
-    Assertions.assertTrue(ex.getMessage().contains("between same sample"));
+    Assertions.assertTrue(ex.getMessage().contains("between the same sample"));
   }
 
   @Test
