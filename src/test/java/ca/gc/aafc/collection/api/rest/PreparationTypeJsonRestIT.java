@@ -36,7 +36,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
   @Test
   void preparationType_filterByGroupWithOperator() {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();
-    preparationTypeDto.setCreatedBy("test user");
+    preparationTypeDto.setCreatedBy("PreparationTypeJsonRestIT");
 
     String uuid = JsonAPITestHelper.extractId(
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(
@@ -44,16 +44,12 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
     assertNotNull(uuid);
 
     PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
-    preparationTypeDto_differentGroup.setCreatedBy("nottest user");
+    preparationTypeDto_differentGroup.setCreatedBy("PreparationTypeJsonRestIT");
     preparationTypeDto_differentGroup.setGroup("NOTaafc");
     preparationTypeDto_differentGroup.setName("NOT" + preparationTypeDto.getName());  
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
-    String actualUuid = sendGet(TYPE_NAME+"?filter[group][EQ]=aafc", "").extract().response().body().path("data[0].id");
-
-    if(!uuid.equals(actualUuid)) {
-      System.out.println("-->" + sendGet(TYPE_NAME+"?filter[group][EQ]=aafc", "").extract().response().body().prettyPrint());
-    }
-
+    String actualUuid = sendGet(TYPE_NAME+"?filter[group][EQ]=aafc&filter[createdBy][EQ]=PreparationTypeJsonRestIT", "")
+      .extract().response().body().path("data[0].id");
     assertEquals(uuid, actualUuid);
   }
 
