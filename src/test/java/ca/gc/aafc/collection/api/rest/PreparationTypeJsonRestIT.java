@@ -1,8 +1,5 @@
 package ca.gc.aafc.collection.api.rest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -17,6 +14,8 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -37,7 +36,10 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
   void preparationType_filterByGroupWithOperator() {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();
     preparationTypeDto.setCreatedBy("test user");
-    String uuid = sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto))).extract().response().body().path("data[0].id");
+
+    String uuid = JsonAPITestHelper.extractId(
+      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(
+        TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto), null)));
 
     PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
     preparationTypeDto_differentGroup.setCreatedBy("nottest user");

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,9 +31,6 @@ import java.util.Properties;
 @Import(ResourceNameIdentifierRepositoryIT.ResourceNameIdentifierRepositoryTestConfiguration.class)
 public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
 
-  @LocalServerPort
-  protected int testPort;
-
   protected ResourceNameIdentifierRepositoryIT() {
     super("/api/v1/");
   }
@@ -53,7 +49,7 @@ public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
       null)
     ).extract().body().jsonPath().getString("data.id");
     
-    String uuid = newRequest().get("api/v1/" + ResourceNameIdentifierResponseDto.TYPE +
+    String uuid = newRequest().get(ResourceNameIdentifierResponseDto.TYPE +
         "?filter[type][EQ]=collection&filter[name][EQ]=aaaeeee&filter[group][EQ]=aafc")
       .then().extract().body().jsonPath().getString("data.id[0]");
 
@@ -63,7 +59,7 @@ public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
   @Test
   public void resourceNameIdentifierRepository_onBadRequest_responseCodeReturned() {
 
-    int returnedCode = newRequest().get("api/v1/" + ResourceNameIdentifierResponseDto.TYPE +
+    int returnedCode = newRequest().get(ResourceNameIdentifierResponseDto.TYPE +
         "?filter[type][EQ]=collection&filter[name][EQ]=aaaeeee")
       .then().extract().response()
       .getStatusCode();
