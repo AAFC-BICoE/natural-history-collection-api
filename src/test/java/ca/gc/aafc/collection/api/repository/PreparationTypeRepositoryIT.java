@@ -6,13 +6,13 @@ import org.springframework.security.access.AccessDeniedException;
 import ca.gc.aafc.collection.api.dto.PreparationTypeDto;
 import ca.gc.aafc.collection.api.entities.PreparationType;
 import ca.gc.aafc.collection.api.service.PreparationTypeService;
-import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.factories.PreparationTypeFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.PreparationTypeTestFixture;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
+import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
@@ -32,7 +32,7 @@ public class PreparationTypeRepositoryIT extends BaseRepositoryIT {
   private PreparationTypeService preparationTypeService;
 
   @Inject
-  protected ServiceTransactionWrapper serviceTransactionWrapper;
+  protected TransactionTestingHelper serviceTransactionWrapper;
 
   @Test
   @WithMockKeycloakUser(username = "dev", groupRole = {"aafc:DINA_ADMIN"})
@@ -57,7 +57,8 @@ public class PreparationTypeRepositoryIT extends BaseRepositoryIT {
       .name("aafc")
       .build();
 
-    serviceTransactionWrapper.execute(preparationTypeService::create, testPreparationType);
+    serviceTransactionWrapper.doInTransaction(
+      () -> preparationTypeService.create(testPreparationType));
 
     PreparationTypeDto retrievedPreparationType = preparationTypeRepository.getOne(testPreparationType.getUuid(), "").getDto();
     JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
@@ -65,5 +66,9 @@ public class PreparationTypeRepositoryIT extends BaseRepositoryIT {
       JsonAPITestHelper.toAttributeMap(retrievedPreparationType)
     );
     assertThrows(AccessDeniedException.class, () -> preparationTypeRepository.onUpdate(docToUpdate, docToUpdate.getId()));
+
+    //cleanup
+    serviceTransactionWrapper.doInTransactionWithoutResult((e) -> preparationTypeService.delete(
+      preparationTypeService.findOne(testPreparationType.getUuid(), PreparationType.class)));
   }
 }
