@@ -18,12 +18,8 @@ import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.restassured.RestAssured;
-import io.restassured.config.EncoderConfig;
-import io.restassured.specification.RequestSpecification;
 import java.util.Properties;
 
 @SpringBootTest(
@@ -73,15 +69,6 @@ public class ResourceNameIdentifierRepositoryIT extends BaseRestAssuredTest {
       .getStatusCode();
 
     assertEquals(400, returnedCode);
-  }
-
-  private RequestSpecification newRequest() {
-    return given()
-      .config(RestAssured.config()
-        .encoderConfig(EncoderConfig.encoderConfig()
-          .defaultCharsetForContentType("UTF-8", JSON_API_CONTENT_TYPE)
-          .defaultCharsetForContentType("UTF-8", JSON_PATCH_CONTENT_TYPE)))
-      .port(testPort);
   }
 
   private static CollectionDto newCollection() {
