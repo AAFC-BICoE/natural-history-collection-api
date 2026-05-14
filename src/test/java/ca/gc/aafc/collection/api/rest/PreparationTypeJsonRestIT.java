@@ -16,6 +16,7 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Import(TestConfigProperties.class)
 public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
 
-  private static final String TYPE_NAME = "preparation-type";
+  private static final String TYPE_NAME = PreparationTypeDto.TYPENAME;
 
   protected PreparationTypeJsonRestIT() {
     super("/api/v1/");
@@ -40,6 +41,7 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
     String uuid = JsonAPITestHelper.extractId(
       sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(
         TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto), null)));
+    assertNotNull(uuid);
 
     PreparationTypeDto preparationTypeDto_differentGroup = new PreparationTypeDto();
     preparationTypeDto_differentGroup.setCreatedBy("nottest user");
@@ -48,11 +50,15 @@ public class PreparationTypeJsonRestIT extends BaseRestAssuredTest {
     sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(preparationTypeDto_differentGroup)));
     String actualUuid = sendGet(TYPE_NAME+"?filter[group][EQ]=aafc", "").extract().response().body().path("data[0].id");
 
+    if(!uuid.equals(actualUuid)) {
+      System.out.println("-->" + sendGet(TYPE_NAME+"?filter[group][EQ]=aafc", "").extract().response().body().prettyPrint());
+    }
+
     assertEquals(uuid, actualUuid);
   }
 
   @Test
-  void preparationType_filterByGroupWithoutOperator_BadRequest() {
+  void preparationType_filterByGroupWithoutOperator() {
     PreparationTypeDto preparationTypeDto = PreparationTypeTestFixture.newPreparationType();
     preparationTypeDto.setCreatedBy("test user");
 
