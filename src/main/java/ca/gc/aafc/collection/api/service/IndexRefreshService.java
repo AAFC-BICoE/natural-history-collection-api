@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.dina.jpa.BaseDAO;
@@ -25,6 +26,7 @@ public class IndexRefreshService {
 
   private static final String MAT_SAMPLE_SQL = "SELECT uuid FROM MaterialSample t ORDER BY id";
   private static final String STORAGE_SQL = "SELECT uuid FROM StorageUnit t ORDER BY id";
+  private static final String COLLECTING_EVENT_HQL = "SELECT uuid FROM CollectingEvent t ORDER BY id";
 
   private final DocumentOperationNotificationMessageProducer searchRabbitMQMessageProducer;
   private final Set<String> supportedDocumentTypes;
@@ -40,7 +42,8 @@ public class IndexRefreshService {
     supportedDocumentTypes = Set.of(MaterialSampleDto.TYPENAME, StorageUnitDto.TYPENAME);
     queryAllByDocumentTypes = Map.of(
       MaterialSampleDto.TYPENAME, MAT_SAMPLE_SQL,
-      StorageUnitDto.TYPENAME, STORAGE_SQL
+      StorageUnitDto.TYPENAME, STORAGE_SQL,
+      CollectingEventDto.TYPENAME, COLLECTING_EVENT_HQL
     );
   }
 

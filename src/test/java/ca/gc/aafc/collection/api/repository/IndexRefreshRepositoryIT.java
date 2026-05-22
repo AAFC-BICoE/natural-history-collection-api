@@ -9,10 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.IndexRefreshDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.service.IndexRefreshService;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.message.DocumentOperationNotification;
@@ -39,6 +42,7 @@ public class IndexRefreshRepositoryIT extends CollectionModuleBaseIT {
     IndexRefreshService service = new IndexRefreshService(messageProducer, baseDAO);
     IndexRefreshRepository repo = new IndexRefreshRepository(dinaAdminCUDAuthorizationService, service);
 
+    // --- Test material-sample ---
     MaterialSample
       ms = materialSampleService.create(MaterialSampleFactory.newMaterialSampleNoRelationships().build());
 
@@ -49,6 +53,17 @@ public class IndexRefreshRepositoryIT extends CollectionModuleBaseIT {
     assertFalse(messages.isEmpty());
     // the database could have more records from other tests
     assertTrue(messages.stream().anyMatch(doc -> Objects.equals(doc.getDocumentId(), ms.getUuid().toString())));
+    messages.clear();
+
+    // --- Test collecting-event ---
+    CollectingEvent ce = collectingEventService.create(CollectingEventFactory.newCollectingEvent().build());
+    dto = new IndexRefreshDto();
+    dto.setDocType(CollectingEventDto.TYPENAME);
+    repo.handlePost(EntityModel.of(dto));
+
+    assertFalse(messages.isEmpty());
+    // the database could have more records from other tests
+    assertTrue(messages.stream().anyMatch(doc -> Objects.equals(doc.getDocumentId(), ce.getUuid().toString())));
   }
 
 }
