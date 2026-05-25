@@ -73,4 +73,12 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
           .contentType("application/vnd.api+json"))
       .andExpect(status().isOk());
   }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  void filterByType_whenSimpleFilterWithEnumValuesProvided_correctCountReturned() {
+    assertEquals(6, repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE,SYSTEM").totalCount());
+    assertEquals(1, repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE").totalCount());
+    assertEquals(5, repo.getAll("filter[type][EQ]=SYSTEM").totalCount());
+  }
 }
