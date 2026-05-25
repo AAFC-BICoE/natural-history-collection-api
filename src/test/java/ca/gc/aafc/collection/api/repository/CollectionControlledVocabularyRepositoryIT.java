@@ -16,9 +16,11 @@ import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
 import jakarta.inject.Inject;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionControlledVocabularyRepositoryIT extends CollectionModuleBaseRepositoryIT {
@@ -60,5 +62,23 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
 
     // try by uuid
     sendGet(MANAGED_ATTRIBUTE_UUID.toString());
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  void filterByType_whenFiqlOrQueryProvided_returnsOk() throws Exception {
+    mockMvc.perform(
+        MockMvcRequestBuilders.get(BASE_URL)
+          .queryParam("fiql", "type==MANAGED_ATTRIBUTE,type==SYSTEM")
+          .contentType("application/vnd.api+json"))
+      .andExpect(status().isOk());
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  void filterByType_whenSimpleFilterWithEnumValuesProvided_correctCountReturned() {
+    assertEquals(6, repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE,SYSTEM").totalCount());
+    assertEquals(1, repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE").totalCount());
+    assertEquals(5, repo.getAll("filter[type][EQ]=SYSTEM").totalCount());
   }
 }
