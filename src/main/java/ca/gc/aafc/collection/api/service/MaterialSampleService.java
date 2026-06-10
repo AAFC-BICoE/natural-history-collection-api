@@ -9,12 +9,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.util.ScientificNameUtils;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorMaterialSample;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorPreparation;
 import ca.gc.aafc.collection.api.validation.MaterialSampleExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleIdentifierTypeValueValidator;
 import ca.gc.aafc.collection.api.validation.MaterialSampleValidator;
@@ -38,12 +38,12 @@ import lombok.extern.log4j.Log4j2;
 public class MaterialSampleService extends MessageProducingService<MaterialSample> {
 
   private final MaterialSampleValidator materialSampleValidator;
-  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
 
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-    materialSampleValidationContext;
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-    preparationValidationContext;
+  private final CollectionManagedAttributeValueValidatorMaterialSample
+    managedAttributeValueValidatorMaterialSample;
+
+  private final CollectionManagedAttributeValueValidatorPreparation
+    managedAttributeValueValidatorPreparation;
 
   private final CollectionHierarchicalDataDAO hierarchicalDataService;
   private final OrganismService organismService;
@@ -56,7 +56,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull MaterialSampleValidator materialSampleValidator,
-    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+    @NonNull CollectionManagedAttributeValueValidatorMaterialSample managedAttributeValueValidatorMaterialSample,
+    CollectionManagedAttributeValueValidatorPreparation managedAttributeValueValidatorPreparation,
     @NonNull CollectionHierarchicalDataDAO hierarchicalDataService,
     @NonNull MaterialSampleExtensionValueValidator materialSampleExtensionValueValidator,
     @NonNull RestrictionExtensionValueValidator restrictionExtensionValueValidator,
@@ -66,7 +67,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   ) {
     super(baseDAO, sv, MaterialSampleDto.TYPENAME, eventPublisher);
     this.materialSampleValidator = materialSampleValidator;
-    this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.managedAttributeValueValidatorMaterialSample = managedAttributeValueValidatorMaterialSample;
+    this.managedAttributeValueValidatorPreparation = managedAttributeValueValidatorPreparation;
 
     this.hierarchicalDataService = hierarchicalDataService;
     this.organismService = organismService;
@@ -74,11 +76,6 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     this.materialSampleExtensionValueValidator = materialSampleExtensionValueValidator;
     this.restrictionExtensionValueValidator = restrictionExtensionValueValidator;
     this.identifierTypeValueValidator = identifierTypeValueValidator;
-
-    this.materialSampleValidationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-            .from(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
-    this.preparationValidationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-      .from(CollectionManagedAttribute.ManagedAttributeComponent.PREPARATION);
   }
 
   @Override
@@ -184,11 +181,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   }
 
   private void validateManagedAttribute(MaterialSample entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(),
-      materialSampleValidationContext);
-
-    collectionManagedAttributeValueValidator.validate(entity, entity.getPreparationManagedAttributes(),
-      preparationValidationContext);
+    managedAttributeValueValidatorMaterialSample.validate(entity, entity.getManagedAttributes());
+    managedAttributeValueValidatorPreparation.validate(entity, entity.getPreparationManagedAttributes());
   }
 
   private void validateExtensionValues(@NonNull MaterialSample entity) {

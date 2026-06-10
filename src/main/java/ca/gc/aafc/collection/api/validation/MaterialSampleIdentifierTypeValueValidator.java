@@ -6,8 +6,8 @@ import lombok.NonNull;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
-import ca.gc.aafc.collection.api.entities.DinaComponent;
 import ca.gc.aafc.dina.service.ControlledVocabularyItemService;
 
 /**
@@ -24,6 +24,6 @@ public class MaterialSampleIdentifierTypeValueValidator extends IdentifierTypeVa
 
   @Override
   public String getDinaComponent() {
-    return DinaComponent.MATERIAL_SAMPLE.name();
+    return CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name();
   }
 }
