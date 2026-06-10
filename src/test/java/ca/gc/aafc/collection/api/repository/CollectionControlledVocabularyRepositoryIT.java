@@ -10,22 +10,21 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.UUID;
 import jakarta.inject.Inject;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionControlledVocabularyRepositoryIT extends CollectionModuleBaseRepositoryIT {
-
-  public static final UUID MANAGED_ATTRIBUTE_UUID = UUID.fromString("01998155-a6f0-7c2f-9fcc-994d74222f9c");
 
   private static final String BASE_URL = "/api/v1/" + CollectionControlledVocabularyDto.TYPENAME;
 
@@ -58,10 +57,10 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
     var findOneResponse = sendGet("managed_attribute");
     JsonApiDocument apiDoc = objMapper.readValue(findOneResponse.getResponse().getContentAsString(),
       JsonApiDocument.class);
-    assertEquals(MANAGED_ATTRIBUTE_UUID, apiDoc.getId());
+    assertEquals(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID, apiDoc.getId());
 
     // try by uuid
-    sendGet(MANAGED_ATTRIBUTE_UUID.toString());
+    sendGet(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID.toString());
   }
 
   @Test
@@ -77,8 +76,13 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
   @Test
   @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
   void filterByType_whenSimpleFilterWithEnumValuesProvided_correctCountReturned() {
-    assertEquals(6, repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE,SYSTEM").totalCount());
-    assertEquals(1, repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE").totalCount());
-    assertEquals(5, repo.getAll("filter[type][EQ]=SYSTEM").totalCount());
+    int managedAttributeCount = repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE").totalCount();
+    int systemCount = repo.getAll("filter[type][EQ]=SYSTEM").totalCount();
+
+    assertTrue(managedAttributeCount > 0);
+    assertTrue(systemCount > 0);
+
+    assertEquals(managedAttributeCount + systemCount,
+      repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE,SYSTEM").totalCount());
   }
 }

@@ -113,7 +113,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
       JsonAPITestHelper.toAttributeMap(dto),
       Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
         .type(CollectionControlledVocabularyDto.TYPENAME)
-        .id(CollectionControlledVocabularyRepositoryIT.MANAGED_ATTRIBUTE_UUID).build()
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
       )
     );
 
