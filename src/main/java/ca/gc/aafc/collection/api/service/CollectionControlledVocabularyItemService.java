@@ -12,6 +12,10 @@ import ca.gc.aafc.dina.validation.ControlledVocabularyItemValidator;
 
 import java.util.Objects;
 
+/**
+ * This class is responsible to check if a vocabulary item is used before deletion.
+ * Deletion is still a risky operation since it is impossible to be 100% sure it is not used
+ */
 @Service
 public class CollectionControlledVocabularyItemService extends ControlledVocabularyItemService<CollectionControlledVocabularyItem> {
 
