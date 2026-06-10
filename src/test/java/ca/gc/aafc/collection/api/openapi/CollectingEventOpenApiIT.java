@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.openapi;
 
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +11,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.config.TestConfigProperties;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyItemRepository;
+import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyRepositoryIT;
+import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
@@ -34,8 +42,13 @@ import lombok.SneakyThrows;
 @Import(TestConfigProperties.class)
 public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
 
-  public static final String TYPE_NAME = "collecting-event";
+  @Inject
+  private ServiceTransactionWrapper serviceTransactionWrapper;
 
+  @Inject
+  private CollectionControlledVocabularyItemRepository controlledVocabularyItemRepository;
+
+  public static final String TYPE_NAME = "collecting-event";
   private static final String CREATED_BY = "test user";
 
   protected CollectingEventOpenApiIT() {
@@ -45,15 +58,7 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void collectingEvent_SpecValid() {
-    CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
-    collectionManagedAttributeDto.setName("key");
-    collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
-    collectionManagedAttributeDto.setAcceptedValues(null);
-    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
-    collectionManagedAttributeDto.setCreatedBy(CREATED_BY);
-
-    sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
+    createManagedAttribute();
 
     ProtocolDto protocolDto = ProtocolTestFixture.newProtocol();
     protocolDto.setProtocolType("collection_method");
@@ -89,6 +94,31 @@ public class CollectingEventOpenApiIT extends BaseRestAssuredTest {
         resourceType,
         JsonAPITestHelper.toAttributeMap(dto))
     ));
+  }
+
+  private void createManagedAttribute() {
+
+    CollectionControlledVocabularyItemDto dto =
+      CollectionControlledVocabularyItemTestFixture.newCollectionControlledVocabularyItem();
+
+    dto.setName("key");
+    dto.setGroup("group");
+    dto.setVocabularyElementType(VocabularyElementType.STRING);
+    dto.setAcceptedValues(null);
+    dto.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name());
+    dto.setCreatedBy(CREATED_BY);
+
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(dto),
+      Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectionControlledVocabularyDto.TYPENAME)
+        .id(CollectionControlledVocabularyRepositoryIT.MANAGED_ATTRIBUTE_UUID).build()
+      )
+    );
+
+    serviceTransactionWrapper.executeWithParam( (p) ->
+      controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
   }
 
 }
