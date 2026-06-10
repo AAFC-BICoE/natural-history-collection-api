@@ -7,34 +7,32 @@
     <changeSet id="191-Migrate_managed_attribute_to_controlled_vocabulary_item" context="data-migration" author="cgendreau">
         <sql>
             INSERT INTO controlled_vocabulary_item (
-            controlled_vocabulary_id,
-            uuid,
-            name,
-            _group,
-            key,
-            accepted_values,
-            vocabulary_element_type,
-            unit,
-            dina_component,
-            multilingual_title,
-            multilingual_description,
-            created_by,
-            created_on
+                controlled_vocabulary_id,
+                uuid,
+                name,
+                _group,
+                key,
+                accepted_values,
+                vocabulary_element_type,
+                unit,
+                dina_component,
+                multilingual_description,
+                created_by,
+                created_on
             )
             SELECT
-            (SELECT id FROM controlled_vocabulary WHERE uuid='01998155-a6f0-7c2f-9fcc-994d74222f9c'),
-            ma.uuid,
-            ma.name,
-            ma.component::text,
-            ma.key,
-            ma.accepted_values,
-            ma.type::text,
-            ma.unit,
-            ma.component::text,
-            ma.multilingual_title,
-            ma.multilingual_description,
-            ma.created_by,
-            ma.created_on
+                (SELECT id FROM controlled_vocabulary WHERE uuid='01998155-a6f0-7c2f-9fcc-994d74222f9c'),
+                ma.uuid,
+                ma.name,
+                ma._group,
+                ma.key,
+                ma.accepted_values,
+                ma.type::text,
+                ma.unit,
+                ma.component::text,
+                ma.multilingual_description,
+                ma.created_by,
+                ma.created_on
             FROM managed_attribute ma;
         </sql>
     </changeSet>
