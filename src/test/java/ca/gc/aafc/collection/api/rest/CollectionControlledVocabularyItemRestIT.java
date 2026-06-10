@@ -5,7 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.annotation.DirtiesContext;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.config.TestConfigProperties;
@@ -26,7 +25,6 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 @TestPropertySource(properties = {"spring.config.additional-location=classpath:application-test.yml"})
 @ContextConfiguration(initializers = {PostgresTestContainerInitializer.class})
 @Import(TestConfigProperties.class)
-@DirtiesContext
 public class CollectionControlledVocabularyItemRestIT extends BaseRestAssuredTest {
 
   protected CollectionControlledVocabularyItemRestIT() {
