@@ -201,4 +201,5 @@
   <include file="db/changelog/migrations/189-Change_association_into_resource.xml"/>
   <include file="db/changelog/migrations/190-Add_citations.xml"/>
   <include file="db/changelog/initial-data/8-Create_association_type_controlled_vocabulary.xml"/>
+  <include file="db/changelog/migrations/191-Migrate_managed_attribute_to_controlled_vocabulary_item.xml"/>
   </databaseChangeLog>

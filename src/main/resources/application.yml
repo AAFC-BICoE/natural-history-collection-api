@@ -5,7 +5,7 @@ spring:
   #   password: postgres
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
-    contexts: schema-change, initial-data
+    contexts: schema-change, initial-data, data-migration
     liquibase-schema: collection
   jpa:
     open-in-view: false
