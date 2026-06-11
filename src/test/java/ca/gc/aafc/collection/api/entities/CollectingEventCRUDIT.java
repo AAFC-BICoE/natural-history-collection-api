@@ -1,13 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
-import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
-import lombok.SneakyThrows;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.geolatte.geom.Point;
 import org.geolatte.geom.crs.CoordinateSystemAxis;
 import org.hamcrest.MatcherAssert;
@@ -16,22 +9,31 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.apache.commons.lang3.RandomStringUtils;
+
+import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
+
+import static ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory.TEST_COUNTRY;
+import static ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory.TEST_PROVINCE;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory.TEST_COUNTRY;
-import static ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory.TEST_PROVINCE;
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.SneakyThrows;
 
 public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
 
@@ -376,67 +378,6 @@ public class CollectingEventCRUDIT extends CollectionModuleBaseIT {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
-  }
-
-  @Test
-  void validate_WhenValidStringType() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(null)
-      .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Map<String, String> maMap = new HashMap<>();
-    maMap.put(testManagedAttribute.getKey(), "anything");
-
-    collectingEvent.setManagedAttributes(maMap);
-    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
-  }
-
-  @Test
-  void validate_WhenInvalidIntegerTypeExceptionThrown() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(null)
-      .vocabularyElementType(VocabularyElementType.INTEGER)
-      .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Map<String, String> maMap = new HashMap<>();
-    maMap.put(testManagedAttribute.getKey(), "1.2");
-
-    collectingEvent.setManagedAttributes(maMap);
-    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
-  }
-
-  @Test
-  void assignedValueContainedInAcceptedValues_validationPasses() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{"val1", "val2"})
-      .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Map<String, String> maMap = new HashMap<>();
-    maMap.put(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]);
-
-    collectingEvent.setManagedAttributes(maMap);
-    assertDoesNotThrow(() -> collectingEventService.update(collectingEvent));
-  }
-
-  @Test
-  void assignedValueNotContainedInAcceptedValues_validationPasses() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{"val1", "val2"})
-      .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
-
-    Map<String, String> maMap = new HashMap<>();
-    maMap.put(testManagedAttribute.getKey(), "val3");
-    
-    collectingEvent.setManagedAttributes(maMap);
-    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 
   @Test

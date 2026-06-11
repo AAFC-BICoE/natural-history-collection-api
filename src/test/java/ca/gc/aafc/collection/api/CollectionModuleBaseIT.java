@@ -11,6 +11,8 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.service.AssemblageService;
 import ca.gc.aafc.collection.api.service.AssociationService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
+import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyItemService;
+import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyService;
 import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
 import ca.gc.aafc.collection.api.service.CollectionService;
@@ -50,6 +52,12 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected CollectionManagedAttributeService collectionManagedAttributeService;
+
+  @Inject
+  protected CollectionControlledVocabularyService collectionControlledVocabularyService;
+
+  @Inject
+  protected CollectionControlledVocabularyItemService collectionControlledVocabularyItemService;
 
   @Inject
   protected MaterialSampleService materialSampleService;

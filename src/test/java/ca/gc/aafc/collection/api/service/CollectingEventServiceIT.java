@@ -3,13 +3,31 @@ package ca.gc.aafc.collection.api.service;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionControlledVocabularyItemFactory;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import jakarta.validation.ValidationException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CollectingEventServiceIT extends CollectionModuleBaseIT {
+
+  private CollectionControlledVocabulary getManagedAttributeControlledVocabularyRef() {
+    return collectionControlledVocabularyService.getReferenceByNaturalId(
+      CollectionControlledVocabulary.class,
+      CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
+    );
+  }
 
   @Test
   public void geographicData_onNoneProvided_valuesFromGeographicPlaceNameSourceDetail() {
@@ -49,5 +67,86 @@ public class CollectingEventServiceIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventFactory.TEST_COUNTRY.getCode(), collectingEventReloaded.getDwcCountryCode());
     assertEquals(CollectingEventFactory.TEST_COUNTRY.getName(), collectingEventReloaded.getDwcCountry());
     assertEquals(CollectingEventFactory.TEST_PROVINCE.getName(), collectingEventReloaded.getDwcStateProvince());
+  }
+
+  @Test
+  void validate_WhenValidStringType() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "anything");
+
+    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
+        .managedAttributes(maMap)
+      .build();
+    assertDoesNotThrow(() -> collectingEventService.create(collectingEvent));
+  }
+
+  @Test
+  void validate_WhenInvalidIntegerTypeExceptionThrown() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "1.2");
+
+    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .managedAttributes(maMap)
+      .build();
+    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
+  }
+
+  @Test
+  void assignedValueContainedInAcceptedValues_validationPasses() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[] {"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]);
+
+    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .managedAttributes(maMap)
+      .build();
+    assertDoesNotThrow(() -> collectingEventService.create(collectingEvent));
+  }
+
+  @Test
+  void assignedValueNotContainedInAcceptedValues_validationPasses() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[] {"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Map<String, String> maMap = new HashMap<>();
+    maMap.put(testManagedAttribute.getKey(), "val3");
+
+    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .managedAttributes(maMap)
+      .build();
+    assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
   }
 }

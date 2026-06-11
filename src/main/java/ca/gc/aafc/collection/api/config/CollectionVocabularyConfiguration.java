@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.config;
 import java.util.List;
 import java.util.Map;
 
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.dina.vocabulary.VocabularyElementConfiguration;
 
 import java.util.UUID;
@@ -52,9 +51,8 @@ public class CollectionVocabularyConfiguration
     ASSEMBLAGE,
     SITE;
 
-    public static CollectionManagedAttribute.ManagedAttributeComponent fromString(String s) {
-      for (CollectionManagedAttribute.ManagedAttributeComponent source : CollectionManagedAttribute.ManagedAttributeComponent
-          .values()) {
+    public static DinaComponent fromString(String s) {
+      for (DinaComponent source : DinaComponent.values()) {
         if (source.name().equalsIgnoreCase(s)) {
           return source;
         }
