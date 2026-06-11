@@ -1,24 +1,33 @@
 package ca.gc.aafc.collection.api.openapi;
 
-import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
-import ca.gc.aafc.collection.api.config.TestConfigProperties;
-import ca.gc.aafc.collection.api.dto.AssemblageDto;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
-import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
-import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
-import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
-import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.config.TestConfigProperties;
+import ca.gc.aafc.collection.api.dto.AssemblageDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
+import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyItemRepository;
+import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyRepositoryIT;
+import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
+import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
+import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
+import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
+import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
+import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
+import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
+
+import jakarta.inject.Inject;
 import java.util.Map;
+import lombok.SneakyThrows;
 
 @SpringBootTest(
         classes = CollectionModuleApiLauncher.class,
@@ -28,6 +37,12 @@ import java.util.Map;
 @ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
 @Import(TestConfigProperties.class)
 public class AssemblageOpenApiIT extends BaseRestAssuredTest {
+
+  @Inject
+  private ServiceTransactionWrapper serviceTransactionWrapper;
+
+  @Inject
+  private CollectionControlledVocabularyItemRepository controlledVocabularyItemRepository;
 
   public static final String TYPE_NAME = AssemblageDto.TYPENAME;
 
@@ -58,15 +73,27 @@ public class AssemblageOpenApiIT extends BaseRestAssuredTest {
   }
 
   private void createManagedAttribute(String key) {
-    CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
-    collectionManagedAttributeDto.setName(key);
-    collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
-    collectionManagedAttributeDto.setAcceptedValues(null);
-    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.ASSEMBLAGE);
-    collectionManagedAttributeDto.setCreatedBy("dina");
 
-    sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
+    CollectionControlledVocabularyItemDto dto =
+      CollectionControlledVocabularyItemTestFixture.newCollectionControlledVocabularyItem();
+
+    dto.setName(key);
+    dto.setGroup("group");
+    dto.setVocabularyElementType(VocabularyElementType.STRING);
+    dto.setAcceptedValues(null);
+    dto.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.ASSEMBLAGE.name());
+    dto.setCreatedBy("dina");
+
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(dto),
+      Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectionControlledVocabularyDto.TYPENAME)
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
+      )
+    );
+
+    serviceTransactionWrapper.executeWithParam( (p) ->
+      controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
   }
-
 }

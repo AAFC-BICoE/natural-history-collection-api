@@ -3,10 +3,12 @@ package ca.gc.aafc.collection.api.service;
 import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionControlledVocabularyItemFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
@@ -15,14 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import jakarta.validation.ValidationException;
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import jakarta.validation.ValidationException;
 
 public class OrganismServiceIT extends CollectionModuleBaseIT {
 
+  private CollectionControlledVocabulary getManagedAttributeControlledVocabularyRef() {
+    return collectionControlledVocabularyService.getReferenceByNaturalId(
+      CollectionControlledVocabulary.class,
+      CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
+    );
+  }
 
   @Test
   void organismDetermination_onNullIsPrimary_isPrimarySet() {
@@ -35,7 +44,7 @@ public class OrganismServiceIT extends CollectionModuleBaseIT {
         .build();
     organismService.create(organism);
 
-    assertTrue(organism.getDetermination().get(0).getIsPrimary());
+    assertTrue(organism.getDetermination().getFirst().getIsPrimary());
   }
 
   @Test
@@ -57,12 +66,14 @@ public class OrganismServiceIT extends CollectionModuleBaseIT {
 
   @Test
   void assignedValueContainedInAcceptedValues_validationPasses() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{"val1", "val2"})
-      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.ORGANISM)
-      .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[] {"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.ORGANISM.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
 
     Organism organism = OrganismEntityFactory.newOrganism()
       .managedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]))
@@ -73,13 +84,16 @@ public class OrganismServiceIT extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenInvalidIntegerTypeExceptionThrown() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(null)
-      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.ORGANISM)
-      .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
-      .build();
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.ORGANISM.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
 
-    collectionManagedAttributeService.create(testManagedAttribute);
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
 
     Organism organism = OrganismEntityFactory.newOrganism()
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"))
@@ -88,4 +102,100 @@ public class OrganismServiceIT extends CollectionModuleBaseIT {
     assertThrows(ValidationException.class, () ->  organismService.create(organism));
   }
 
+  @Test
+  void validateDetermination_AssignedValueNotContainedInAcceptedValues_validationPasses() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[] {"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.DETERMINATION.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val3"))
+      .build();
+
+    Organism organism = OrganismEntityFactory.newOrganism()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build();
+    assertThrows(ValidationException.class, () ->  organismService.createAndFlush(organism));
+  }
+
+  @Test
+  void validateDetermination_AssignManagedAttribute_onWronDinaComponent_Exception() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[] {"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "val1"))
+      .build();
+
+    Organism organism = OrganismEntityFactory.newOrganism()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build();
+
+    assertThrows(ValidationException.class, () -> organismService.update(organism));
+  }
+
+
+  @Test
+  void validateDetermination_WhenValidStringType() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.DETERMINATION.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), "anything"))
+      .build();
+
+    Organism organism = OrganismEntityFactory.newOrganism()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build();
+
+    assertDoesNotThrow(() -> organismService.create(organism));
+
+    // Clean up
+    organismService.delete(organism);
+  }
+
+  @Test
+  void validateDetermination_AssignedValueContainedInAcceptedValues_validationPasses() {
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[] {"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.DETERMINATION.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .isPrimary(true)
+      .managedAttributes(Map.of(testManagedAttribute.getKey(), testManagedAttribute.getAcceptedValues()[0]))
+      .build();
+
+    Organism organism = OrganismEntityFactory.newOrganism()
+      .determination(new ArrayList<>(List.of(determination)))
+      .build();
+
+    assertDoesNotThrow(() -> organismService.create(organism));
+
+    // Clean up
+    organismService.delete(organism);
+  }
 }

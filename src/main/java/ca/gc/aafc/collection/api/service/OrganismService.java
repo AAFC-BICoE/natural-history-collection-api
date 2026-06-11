@@ -1,21 +1,5 @@
 package ca.gc.aafc.collection.api.service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import lombok.extern.log4j.Log4j2;
-
-import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.Determination;
-import ca.gc.aafc.collection.api.entities.Organism;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
-import ca.gc.aafc.collection.api.validation.OrganismValidator;
-import ca.gc.aafc.dina.jpa.BaseDAO;
-import ca.gc.aafc.dina.service.DefaultDinaService;
-import ca.gc.aafc.dina.util.UUIDHelper;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -23,32 +7,44 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.Organism;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorDetermination;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorOrganism;
+import ca.gc.aafc.collection.api.validation.OrganismValidator;
+import ca.gc.aafc.dina.jpa.BaseDAO;
+import ca.gc.aafc.dina.service.DefaultDinaService;
+import ca.gc.aafc.dina.util.UUIDHelper;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
+
 @Log4j2
 @Service
 public class OrganismService extends DefaultDinaService<Organism> {
 
   private final OrganismValidator organismValidator;
-  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
+  private final CollectionManagedAttributeValueValidatorOrganism
+    managedAttributeValueValidatorOrganism;
+  private final CollectionManagedAttributeValueValidatorDetermination
+    managedAttributeValueValidatorDetermination;
+
   private final Set<String> knownTaxonomicRanks;
-
-  private static final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-    ORGANISM_VALIDATION_CONTEXT =
-    CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-      .from(CollectionManagedAttribute.ManagedAttributeComponent.ORGANISM);
-
-  private static final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-    DETERMINATION_VALIDATION_CONTEXT =
-    CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-      .from(CollectionManagedAttribute.ManagedAttributeComponent.DETERMINATION);
 
   public OrganismService(BaseDAO baseDAO,
                          SmartValidator sv,
                          OrganismValidator organismValidator,
-                         CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+                         CollectionManagedAttributeValueValidatorOrganism managedAttributeValueValidatorOrganism,
+                         CollectionManagedAttributeValueValidatorDetermination managedAttributeValueValidatorDetermination,
                          CollectionVocabularyConfiguration collectionVocabularyConfiguration) {
     super(baseDAO, sv);
     this.organismValidator = organismValidator;
-    this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
+    this.managedAttributeValueValidatorOrganism = managedAttributeValueValidatorOrganism;
+    this.managedAttributeValueValidatorDetermination = managedAttributeValueValidatorDetermination;
 
     knownTaxonomicRanks = collectionVocabularyConfiguration
       .getVocabularyByKey(CollectionVocabularyConfiguration.TAXONOMIC_RANK_KEY)
@@ -131,8 +127,7 @@ public class OrganismService extends DefaultDinaService<Organism> {
 
   private void validateOrganismManagedAttribute(Organism organism) {
     if (MapUtils.isNotEmpty(organism.getManagedAttributes())) {
-      collectionManagedAttributeValueValidator.validate(organism, organism.getManagedAttributes(),
-        ORGANISM_VALIDATION_CONTEXT);
+      managedAttributeValueValidatorOrganism.validate(organism, organism.getManagedAttributes());
     }
   }
 
@@ -141,10 +136,10 @@ public class OrganismService extends DefaultDinaService<Organism> {
     if (CollectionUtils.isNotEmpty(organism.getDetermination())) {
       organism.getDetermination().forEach(determination -> {
         if (determination.getManagedAttributes() != null) {
-          collectionManagedAttributeValueValidator.validate(
+          managedAttributeValueValidatorDetermination.validate(
               organism.getUuid().toString() + StringUtils.defaultString(determination.getScientificName()),
               determination,
-              determination.getManagedAttributes(), DETERMINATION_VALIDATION_CONTEXT);
+              determination.getManagedAttributes());
         }
       });
     }

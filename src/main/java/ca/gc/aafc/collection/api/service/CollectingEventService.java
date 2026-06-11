@@ -13,10 +13,9 @@ import org.springframework.validation.SmartValidator;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.validation.CollectingEventExtensionValueValidator;
 import ca.gc.aafc.collection.api.validation.CollectingEventValidator;
-import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidator;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorCollectingEvent;
 import ca.gc.aafc.collection.api.validation.GeoreferenceAssertionValidator;
 import ca.gc.aafc.dina.extension.FieldExtensionValue;
 import ca.gc.aafc.dina.jpa.BaseDAO;
@@ -34,27 +33,23 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   private final CollectingEventValidator collectingEventValidator;
   private final GeoreferenceAssertionValidator georeferenceAssertionValidator;
 
-  private final CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator;
-  private final CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext validationContext;
+  private final CollectionManagedAttributeValueValidatorCollectingEvent
+    managedAttributeValueValidator;
   private final CollectingEventExtensionValueValidator extensionValueValidator;
-
-  //  private final CollectionManagedAttributeValueValidatorCollectingEvent collectionManagedAttributeValueValidator;
 
   public CollectingEventService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull CollectingEventValidator collectingEventValidator,
     @NonNull GeoreferenceAssertionValidator georeferenceAssertionValidator,
-    @NonNull CollectionManagedAttributeValueValidator collectionManagedAttributeValueValidator,
+    @NonNull CollectionManagedAttributeValueValidatorCollectingEvent managedAttributeValueValidator,
     CollectingEventExtensionValueValidator extensionValueValidator,
     DinaEventPublisher<EntityChanged> eventPublisher
   ) {
     super(baseDAO, sv, CollectingEventDto.TYPENAME, eventPublisher);
     this.collectingEventValidator = collectingEventValidator;
     this.georeferenceAssertionValidator = georeferenceAssertionValidator;
-    this.collectionManagedAttributeValueValidator = collectionManagedAttributeValueValidator;
-    this.validationContext = CollectionManagedAttributeValueValidator.CollectionManagedAttributeValidationContext
-      .from(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    this.managedAttributeValueValidator = managedAttributeValueValidator;
     this.extensionValueValidator = extensionValueValidator;
   }
 
@@ -125,7 +120,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   }
 
   private void validateManagedAttribute(CollectingEvent entity) {
-    collectionManagedAttributeValueValidator.validate(entity, entity.getManagedAttributes(), validationContext);
+    managedAttributeValueValidator.validate(entity, entity.getManagedAttributes());
   }
 
   private void cleanupManagedAttributes(CollectingEvent entity) {

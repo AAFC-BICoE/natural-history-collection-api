@@ -7,9 +7,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.AssemblageDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
 import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
@@ -21,14 +23,17 @@ import ca.gc.aafc.collection.api.dto.CitationAuthorDto;
 import ca.gc.aafc.collection.api.dto.CitationDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitUsageDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
+import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyItemRepository;
+import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyRepositoryIT;
 import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
+import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssemblageTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
@@ -39,6 +44,8 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.StorageUnitUsageTestFixture;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.testsupport.BaseRestAssuredTest;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPIRelationship;
@@ -48,6 +55,7 @@ import ca.gc.aafc.dina.testsupport.specs.ValidationRestrictionOptions;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement.VocabularyElementType;
 
 import io.restassured.RestAssured;
+import jakarta.inject.Inject;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +74,12 @@ import lombok.SneakyThrows;
 @Import(CollectionModuleBaseRepositoryIT.CollectionModuleTestConfiguration.class)
 public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
+  @Inject
+  private ServiceTransactionWrapper serviceTransactionWrapper;
+
+  @Inject
+  private CollectionControlledVocabularyItemRepository controlledVocabularyItemRepository;
+
   protected MaterialSampleOpenApiIT() {
     super("/api/v1/");
   }
@@ -75,15 +89,8 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
   @SneakyThrows
   @Test
   void materialSample_SpecValid() {
-    CollectionManagedAttributeDto collectionManagedAttributeDto = new CollectionManagedAttributeDto();
-    collectionManagedAttributeDto.setName("name");
-    collectionManagedAttributeDto.setGroup("group");
-    collectionManagedAttributeDto.setVocabularyElementType(VocabularyElementType.STRING);
-    collectionManagedAttributeDto.setAcceptedValues(null);
-    collectionManagedAttributeDto.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
-    collectionManagedAttributeDto.setCreatedBy(CREATED_BY);
 
-    sendPost("managed-attribute", JsonAPITestHelper.toJsonAPIMap("managed-attribute", JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto)));
+    createManagedAttribute();
 
     HostOrganism hostOrganism = HostOrganism.builder()
       .name("host name")
@@ -296,4 +303,28 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
       "type", type)));
   }
 
+
+  private void createManagedAttribute() {
+    CollectionControlledVocabularyItemDto dto =
+      CollectionControlledVocabularyItemTestFixture.newCollectionControlledVocabularyItem();
+
+    dto.setName("name");
+    dto.setGroup("group");
+    dto.setVocabularyElementType(VocabularyElementType.STRING);
+    dto.setAcceptedValues(null);
+    dto.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name());
+    dto.setCreatedBy(CREATED_BY);
+
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(dto),
+      Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectionControlledVocabularyDto.TYPENAME)
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
+      )
+    );
+
+    serviceTransactionWrapper.executeWithParam( (p) ->
+      controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
+  }
 }

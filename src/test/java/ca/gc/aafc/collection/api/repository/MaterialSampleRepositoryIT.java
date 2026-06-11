@@ -3,12 +3,13 @@ package ca.gc.aafc.collection.api.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
+import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.dto.CollectionDto;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.OrganismDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
@@ -62,7 +63,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   private CollectionRepository collectionRepository;
 
   @Inject
-  private CollectionManagedAttributeRepo collManagedAttributeRepo;
+  private CollectionControlledVocabularyItemRepository controlledVocabularyItemRepository;
 
   @Inject
   protected ServiceTransactionWrapper serviceTransactionWrapper;
@@ -281,17 +282,21 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   public void create_onManagedAttributeValue_validationOccur()
     throws ResourceGoneException, ResourceNotFoundException {
 
-    CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    CollectionControlledVocabularyItemDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
     newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
-    newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
+    newAttribute.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name());
 
-    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
-      null, CollectionManagedAttributeDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(newAttribute)
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(newAttribute),
+      Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectionControlledVocabularyDto.TYPENAME)
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
+      )
     );
     newAttribute = serviceTransactionWrapper.executeWithParam( (p) ->
-      collManagedAttributeRepo.create(p, null).getDto(), docToCreate);
+      controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
@@ -326,30 +331,39 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   public void create_onManagedAttributeValue_canUseKeyEvenIfUsedByAnotherComponent()
     throws ResourceGoneException, ResourceNotFoundException {
 
-    CollectionManagedAttributeDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    CollectionControlledVocabularyItemDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
     newAttributeCE.setName("test");
     newAttributeCE.setVocabularyElementType(VocabularyElementType.DATE);
     newAttributeCE.setAcceptedValues(null);
-    newAttributeCE.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT);
+    newAttributeCE.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name());
 
-    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
-      null, CollectionManagedAttributeDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(newAttributeCE)
+    JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(newAttributeCE),
+      Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectionControlledVocabularyDto.TYPENAME)
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
+      )
     );
-    collManagedAttributeRepo.onCreate(docToCreate);
+    controlledVocabularyItemRepository.onCreate(docToCreate);
 
-    CollectionManagedAttributeDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute();
+    CollectionControlledVocabularyItemDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
     newAttribute.setName("test");
     newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
-    newAttribute.setManagedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE);
+    newAttribute.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name());
 
-    docToCreate = JsonApiDocuments.createJsonApiDocument(
-      null, CollectionManagedAttributeDto.TYPENAME,
-      JsonAPITestHelper.toAttributeMap(newAttribute)
+    docToCreate = JsonApiDocuments.createJsonApiDocumentWithRelToOne(
+      null, CollectionControlledVocabularyItemDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(newAttribute),
+      Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
+        .type(CollectionControlledVocabularyDto.TYPENAME)
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
+      )
     );
+
     newAttribute = serviceTransactionWrapper.executeWithParam( (p) ->
-      collManagedAttributeRepo.create(p, null).getDto(), docToCreate);
+      controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);

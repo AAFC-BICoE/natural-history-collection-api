@@ -10,6 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
@@ -83,7 +84,7 @@ public class CollectionControlledVocabularyItemRepositoryIT extends CollectionMo
       JsonAPITestHelper.toAttributeMap(dto),
       Map.of("controlledVocabulary", JsonApiDocument.ResourceIdentifier.builder()
         .type(CollectionControlledVocabularyDto.TYPENAME)
-        .id(CollectionControlledVocabularyRepositoryIT.MANAGED_ATTRIBUTE_UUID).build()
+        .id(CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID).build()
       )
     );
 
