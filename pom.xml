@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.13</version>
+    <version>3.1.12</version>
   </parent>
 
   <properties>
@@ -32,7 +32,7 @@
     <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.168</dina-base-api.version>
+    <dina-base-api.version>0.170-SNAPSHOT</dina-base-api.version>
 
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.11</geolatte-geom.version>
@@ -41,9 +41,7 @@
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
     <!-- versions override-->
-    <spring-framework.version>6.0.18</spring-framework.version>
     <tomcat.version>10.1.55</tomcat.version>
-    <jackson-bom.version>2.15.4</jackson-bom.version>
     <postgresql.version>42.4.4</postgresql.version>
   </properties>
 
