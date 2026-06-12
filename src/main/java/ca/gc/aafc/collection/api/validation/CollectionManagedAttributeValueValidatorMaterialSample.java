@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.dina.service.ControlledVocabularyItemService;
+import ca.gc.aafc.dina.service.PostgresJsonbService;
 import ca.gc.aafc.dina.validation.ManagedAttributeValueValidatorV2;
 
 import static ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID;
@@ -20,9 +21,16 @@ import lombok.NonNull;
 @Component
 public class CollectionManagedAttributeValueValidatorMaterialSample extends ManagedAttributeValueValidatorV2<CollectionControlledVocabularyItem> {
 
+  public static final String MATERIAL_SAMPLE_TABLE_NAME = "material_sample";
+  public static final String MANAGED_ATTRIBUTES_COL_NAME = "managed_attributes";
+
+  private final PostgresJsonbService jsonbService;
+
   public CollectionManagedAttributeValueValidatorMaterialSample(@Named("validationMessageSource")MessageSource messageSource,
-                                                                @NonNull ControlledVocabularyItemService<CollectionControlledVocabularyItem> vocabItemService) {
+                                                                @NonNull ControlledVocabularyItemService<CollectionControlledVocabularyItem> vocabItemService,
+                                                                PostgresJsonbService jsonbService) {
     super(messageSource, vocabItemService);
+    this.jsonbService = jsonbService;
   }
 
   @Override
@@ -33,5 +41,12 @@ public class CollectionManagedAttributeValueValidatorMaterialSample extends Mana
   @Override
   public String getDinaComponent() {
     return CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name();
+  }
+
+  @Override
+  public boolean canBeDeleted(CollectionControlledVocabularyItem controlledVocabularyItem) {
+    return jsonbService.countFirstLevelKeys(
+      MATERIAL_SAMPLE_TABLE_NAME, MANAGED_ATTRIBUTES_COL_NAME, controlledVocabularyItem.getKey()) ==
+      0;
   }
 }

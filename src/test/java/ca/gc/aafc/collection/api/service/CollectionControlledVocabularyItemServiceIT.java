@@ -24,6 +24,17 @@ public class CollectionControlledVocabularyItemServiceIT extends CollectionModul
   private static final String GROUP = "grp";
 
   @Test
+  void onUpdate_lastUpdatedOnUpdated() {
+    CollectionControlledVocabularyItem attribute = newAttribute(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT);
+    collectionControlledVocabularyItemService.create(attribute);
+    collectionControlledVocabularyItemService.update(attribute);
+
+    collectionControlledVocabularyItemService.detach(attribute);
+    assertNotNull(collectionControlledVocabularyItemService.findOne(attribute.getUuid(),
+      CollectionControlledVocabularyItem.class).getLastUpdatedOn());
+  }
+
+  @Test
   void delete_WhenNotInUse_DeleteAccepted() {
     CollectionControlledVocabularyItem attribute = newAttribute(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT);
     collectionControlledVocabularyItemService.create(attribute);
