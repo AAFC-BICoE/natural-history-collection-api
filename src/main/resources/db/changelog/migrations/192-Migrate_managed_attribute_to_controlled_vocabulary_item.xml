@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="191-Migrate_managed_attribute_to_controlled_vocabulary_item" context="data-migration" author="cgendreau">
+    <changeSet id="192-Migrate_managed_attribute_to_controlled_vocabulary_item" context="data-migration" author="cgendreau">
         <sql>
             INSERT INTO controlled_vocabulary_item (
                 controlled_vocabulary_id,
