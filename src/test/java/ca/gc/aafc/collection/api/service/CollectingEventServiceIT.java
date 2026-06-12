@@ -70,7 +70,7 @@ public class CollectingEventServiceIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  void validate_WhenValidStringType() {
+  void validate_managedAttribute_WhenValidStringType() {
     CollectionControlledVocabularyItem testManagedAttribute =
       CollectionControlledVocabularyItemFactory
         .newCollectionManagedAttribute()
@@ -87,6 +87,9 @@ public class CollectingEventServiceIT extends CollectionModuleBaseIT {
         .managedAttributes(maMap)
       .build();
     assertDoesNotThrow(() -> collectingEventService.create(collectingEvent));
+
+    assertThrows(IllegalStateException.class,
+      () -> collectionControlledVocabularyItemService.delete(testManagedAttribute));
   }
 
   @Test
@@ -108,6 +111,7 @@ public class CollectingEventServiceIT extends CollectionModuleBaseIT {
       .managedAttributes(maMap)
       .build();
     assertThrows(ValidationException.class, () ->  collectingEventService.update(collectingEvent));
+    collectionControlledVocabularyItemService.delete(testManagedAttribute);
   }
 
   @Test

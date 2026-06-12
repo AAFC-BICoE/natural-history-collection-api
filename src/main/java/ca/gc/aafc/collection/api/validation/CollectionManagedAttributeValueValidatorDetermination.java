@@ -34,4 +34,10 @@ public class CollectionManagedAttributeValueValidatorDetermination extends Manag
   public String getDinaComponent() {
     return CollectionVocabularyConfiguration.DinaComponent.DETERMINATION.name();
   }
+
+  @Override
+  public boolean canBeDeleted(CollectionControlledVocabularyItem controlledVocabularyItem) {
+    //will be fixed in another ticket, it is just to mimic the previous behavior
+    return true;
+  }
 }

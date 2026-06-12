@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
       - name: Set up JDK 21
@@ -25,6 +25,19 @@ jobs:
         run: mvn -q checkstyle:check
       - name: Run SpotBugs
         run: mvn -q spotbugs:check
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Cache NVD Database (valid for 1 day)
+        if: ${{ github.ref == 'refs/heads/dev' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: ${{ runner.os }}-nvd-cache-${{ steps.date.outputs.date }}
+          restore-keys: |
+            ${{ runner.os }}-nvd-cache-
 
       - name: Run OWASP dependency-check (only on dev)
         run: mvn org.owasp:dependency-check-maven:check
