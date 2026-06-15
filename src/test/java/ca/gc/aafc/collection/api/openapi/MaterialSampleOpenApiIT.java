@@ -28,7 +28,6 @@ import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyItemRepository;
-import ca.gc.aafc.collection.api.repository.CollectionControlledVocabularyRepositoryIT;
 import ca.gc.aafc.collection.api.repository.CollectionModuleBaseRepositoryIT;
 import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;

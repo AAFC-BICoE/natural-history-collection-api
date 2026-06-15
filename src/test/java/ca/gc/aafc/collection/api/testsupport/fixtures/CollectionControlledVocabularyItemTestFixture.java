@@ -15,6 +15,7 @@ public class CollectionControlledVocabularyItemTestFixture {
     collectionControlledVocabularyItemDto.setAcceptedValues(new String[]{"1", "2"});
     collectionControlledVocabularyItemDto.setUnit("cm");
     collectionControlledVocabularyItemDto.setCreatedBy("created by");
+    collectionControlledVocabularyItemDto.setGroup("test");
     collectionControlledVocabularyItemDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     return collectionControlledVocabularyItemDto;
   }

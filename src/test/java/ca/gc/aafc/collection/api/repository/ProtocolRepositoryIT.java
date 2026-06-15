@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
 
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.entities.Protocol;
 import ca.gc.aafc.collection.api.service.ProtocolService;
@@ -62,7 +61,7 @@ public class ProtocolRepositoryIT extends BaseRepositoryIT {
 
     ProtocolDto retrievedProtocol = protocolRepository.getOne(testProtocol.getUuid(), "").getDto();
     JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
-      retrievedProtocol.getUuid(), CollectionManagedAttributeDto.TYPENAME,
+      retrievedProtocol.getUuid(), ProtocolDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(retrievedProtocol)
     );
 

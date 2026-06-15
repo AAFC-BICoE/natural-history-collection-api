@@ -16,6 +16,7 @@ import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
 import ca.gc.aafc.dina.repository.JsonApiModelAssistant;
@@ -26,6 +27,9 @@ import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 import java.util.Map;
 import java.util.UUID;
 import jakarta.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(properties = "keycloak.enabled=true")
 public class CollectionControlledVocabularyItemRepositoryIT extends CollectionModuleBaseRepositoryIT {
@@ -53,12 +57,6 @@ public class CollectionControlledVocabularyItemRepositoryIT extends CollectionMo
   @BeforeEach
   public void setup() {
     this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-  }
-
-  @Test
-  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
-  void findOneByKey_whenKeyProvided_managedAttributeFetched() throws Exception {
-
   }
 
   @Test
@@ -96,5 +94,14 @@ public class CollectionControlledVocabularyItemRepositoryIT extends CollectionMo
 
     // try get be key
     sendGet("managed_attribute.dina_attribute_12.COLLECTING_EVENT");
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  void findOneByKey_whenBadKeyProvided_responseSanitized() throws Exception {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+      () -> repo.onFindOne("managed_attribute.attr_1<iframe src=javascript:alert(24109)", null));
+
+    assertFalse(exception.getMessage().contains("alert(24109)"));
   }
 }

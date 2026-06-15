@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
 
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ExpeditionDto;
 import ca.gc.aafc.collection.api.entities.Expedition;
 import ca.gc.aafc.collection.api.service.ExpeditionService;
@@ -61,7 +60,7 @@ public class ExpeditionRepositoryIT extends BaseRepositoryIT {
 
     ExpeditionDto retrievedExpedition = expeditionRepository.getOne(testExpedition.getUuid(), "").getDto();
     JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
-      retrievedExpedition.getUuid(), CollectionManagedAttributeDto.TYPENAME,
+      retrievedExpedition.getUuid(), ExpeditionDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(retrievedExpedition)
     );
 
