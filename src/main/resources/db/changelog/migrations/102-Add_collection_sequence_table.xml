@@ -39,7 +39,7 @@
       SELECT c.id, 0
       FROM collection c
       WHERE NOT EXISTS (
-      SELECT 1 FROM collection_sequence cs WHERE cs.id = c.id
+      SELECT 1 FROM collection_sequence cs WHERE cs.collection_id = c.id
       );
     </sql>
   </changeSet>
