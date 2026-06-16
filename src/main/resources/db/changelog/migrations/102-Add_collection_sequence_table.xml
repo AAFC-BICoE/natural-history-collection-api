@@ -33,9 +33,14 @@
     </sql>
   </changeSet>
 
-  <changeSet id="102-Add_collection_sequence_table_insert_data" context="data-migration" author="cgendreau">
+  <changeSet id="102-Add_collection_sequence_table_insert_data" context="data-migration" author="cgendreau" runOnChange="true">
     <sql>
-      INSERT INTO collection_sequence SELECT id, 0 FROM collection;
+      INSERT INTO collection_sequence
+      SELECT c.id, 0
+      FROM collection c
+      WHERE NOT EXISTS (
+      SELECT 1 FROM collection_sequence cs WHERE cs.collection_id = c.id
+      );
     </sql>
   </changeSet>
 </databaseChangeLog>
