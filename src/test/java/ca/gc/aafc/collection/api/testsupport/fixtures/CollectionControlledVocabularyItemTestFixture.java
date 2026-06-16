@@ -2,10 +2,13 @@ package ca.gc.aafc.collection.api.testsupport.fixtures;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
 public class CollectionControlledVocabularyItemTestFixture {
+
+  public static final String GROUP = "dina";
 
   public static CollectionControlledVocabularyItemDto newCollectionControlledVocabularyItem() {
     CollectionControlledVocabularyItemDto collectionControlledVocabularyItemDto = new CollectionControlledVocabularyItemDto();
@@ -20,4 +23,17 @@ public class CollectionControlledVocabularyItemTestFixture {
     return collectionControlledVocabularyItemDto;
   }
 
+  public static CollectionControlledVocabularyItemDto newCollectionManagedAttribute2() {
+    CollectionControlledVocabularyItemDto collectionManagedAttributeDto = new CollectionControlledVocabularyItemDto();
+    collectionManagedAttributeDto.setName(RandomStringUtils.randomAlphabetic(5));
+    collectionManagedAttributeDto.setGroup(GROUP);
+    collectionManagedAttributeDto.setVocabularyElementType(
+      TypedVocabularyElement.VocabularyElementType.INTEGER);
+    collectionManagedAttributeDto.setAcceptedValues(new String[]{"1", "2"});
+    collectionManagedAttributeDto.setUnit("cm");
+    collectionManagedAttributeDto.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name());
+    collectionManagedAttributeDto.setCreatedBy("created by");
+    collectionManagedAttributeDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
+    return collectionManagedAttributeDto;
+  }
 }

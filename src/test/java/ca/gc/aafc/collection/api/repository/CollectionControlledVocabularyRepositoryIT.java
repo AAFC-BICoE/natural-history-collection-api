@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 
@@ -52,7 +52,7 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  @WithMockKeycloakUser(groupRole = CollectionControlledVocabularyItemTestFixture.GROUP + ":SUPER_USER")
   void findOneByKey_whenKeyProvided_managedAttributeFetched() throws Exception {
     var findOneResponse = sendGet("managed_attribute");
     JsonApiDocument apiDoc = objMapper.readValue(findOneResponse.getResponse().getContentAsString(),
@@ -64,7 +64,7 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  @WithMockKeycloakUser(groupRole = CollectionControlledVocabularyItemTestFixture.GROUP + ":SUPER_USER")
   void filterByType_whenFiqlOrQueryProvided_returnsOk() throws Exception {
     mockMvc.perform(
         MockMvcRequestBuilders.get(BASE_URL)
@@ -74,7 +74,7 @@ public class CollectionControlledVocabularyRepositoryIT extends CollectionModule
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  @WithMockKeycloakUser(groupRole = CollectionControlledVocabularyItemTestFixture.GROUP + ":SUPER_USER")
   void filterByType_whenSimpleFilterWithEnumValuesProvided_correctCountReturned() {
     int managedAttributeCount = repo.getAll("filter[type][EQ]=MANAGED_ATTRIBUTE").totalCount();
     int systemCount = repo.getAll("filter[type][EQ]=SYSTEM").totalCount();

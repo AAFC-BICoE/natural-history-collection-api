@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.collection.api.entities.GeographicPlaceNameSourceDetail;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
@@ -21,13 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CollectingEventServiceIT extends CollectionModuleBaseIT {
-
-  private CollectionControlledVocabulary getManagedAttributeControlledVocabularyRef() {
-    return collectionControlledVocabularyService.getReferenceByNaturalId(
-      CollectionControlledVocabulary.class,
-      CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
-    );
-  }
 
   @Test
   public void geographicData_onNoneProvided_valuesFromGeographicPlaceNameSourceDetail() {

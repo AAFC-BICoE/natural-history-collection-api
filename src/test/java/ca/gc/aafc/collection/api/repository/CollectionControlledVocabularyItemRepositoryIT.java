@@ -13,9 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyDto;
 import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
@@ -73,7 +71,7 @@ public class CollectionControlledVocabularyItemRepositoryIT extends CollectionMo
     dto.setName(expectedName);
     dto.setVocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER);
     dto.setAcceptedValues(new String[]{expectedValue});
-    dto.setDinaComponent(CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT.name());
+    dto.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name());
     dto.setCreatedBy(expectedCreatedBy);
     dto.setGroup(expectedGroup);
 
@@ -97,7 +95,7 @@ public class CollectionControlledVocabularyItemRepositoryIT extends CollectionMo
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER")
+  @WithMockKeycloakUser(groupRole = CollectionControlledVocabularyItemTestFixture.GROUP + ":SUPER_USER")
   void findOneByKey_whenBadKeyProvided_responseSanitized() throws Exception {
     ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
       () -> repo.onFindOne("managed_attribute.attr_1<iframe src=javascript:alert(24109)", null));

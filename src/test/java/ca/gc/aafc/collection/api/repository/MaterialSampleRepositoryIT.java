@@ -15,8 +15,8 @@ import ca.gc.aafc.collection.api.service.MaterialSampleService;
 import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
@@ -278,11 +278,11 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
+  @WithMockKeycloakUser(groupRole = {CollectionControlledVocabularyItemTestFixture.GROUP + ":SUPER_USER"})
   public void create_onManagedAttributeValue_validationOccur()
     throws ResourceGoneException, ResourceNotFoundException {
 
-    CollectionControlledVocabularyItemDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
+    CollectionControlledVocabularyItemDto newAttribute = CollectionControlledVocabularyItemTestFixture.newCollectionManagedAttribute2();
     newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
     newAttribute.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name());
@@ -299,7 +299,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
       controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-    materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
+    materialSampleDto.setGroup(CollectionControlledVocabularyItemTestFixture.GROUP);
 
     // Put an invalid value for Date
     materialSampleDto.setManagedAttributes(Map.of(newAttribute.getKey(), "zxy"));
@@ -327,11 +327,11 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   }
 
   @Test
-  @WithMockKeycloakUser(groupRole = {CollectionManagedAttributeTestFixture.GROUP + ":SUPER_USER"})
+  @WithMockKeycloakUser(groupRole = {CollectionControlledVocabularyItemTestFixture.GROUP + ":SUPER_USER"})
   public void create_onManagedAttributeValue_canUseKeyEvenIfUsedByAnotherComponent()
     throws ResourceGoneException, ResourceNotFoundException {
 
-    CollectionControlledVocabularyItemDto newAttributeCE = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
+    CollectionControlledVocabularyItemDto newAttributeCE = CollectionControlledVocabularyItemTestFixture.newCollectionManagedAttribute2();
     newAttributeCE.setName("test");
     newAttributeCE.setVocabularyElementType(VocabularyElementType.DATE);
     newAttributeCE.setAcceptedValues(null);
@@ -347,7 +347,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
     );
     controlledVocabularyItemRepository.onCreate(docToCreate);
 
-    CollectionControlledVocabularyItemDto newAttribute = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
+    CollectionControlledVocabularyItemDto newAttribute = CollectionControlledVocabularyItemTestFixture.newCollectionManagedAttribute2();
     newAttribute.setName("test");
     newAttribute.setVocabularyElementType(VocabularyElementType.DATE);
     newAttribute.setAcceptedValues(null);
@@ -366,7 +366,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
       controlledVocabularyItemRepository.create(p, null).getDto(), docToCreate);
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
-    materialSampleDto.setGroup(CollectionManagedAttributeTestFixture.GROUP);
+    materialSampleDto.setGroup(CollectionControlledVocabularyItemTestFixture.GROUP);
 
     materialSampleDto.setManagedAttributes(Map.of(newAttribute.getKey(), "2022-02-02"));
 

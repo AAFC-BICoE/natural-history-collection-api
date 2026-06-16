@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
-import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.Organism;
@@ -25,13 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 public class OrganismServiceIT extends CollectionModuleBaseIT {
-
-  private CollectionControlledVocabulary getManagedAttributeControlledVocabularyRef() {
-    return collectionControlledVocabularyService.getReferenceByNaturalId(
-      CollectionControlledVocabulary.class,
-      CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
-    );
-  }
 
   @Test
   void organismDetermination_onNullIsPrimary_isPrimarySet() {

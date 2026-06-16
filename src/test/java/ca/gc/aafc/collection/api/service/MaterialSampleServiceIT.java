@@ -8,29 +8,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
-import ca.gc.aafc.collection.api.entities.Collection;
-import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
-import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
-import ca.gc.aafc.collection.api.entities.CollectionManagedAttribute;
-import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration.DinaComponent;
+import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
+import ca.gc.aafc.collection.api.entities.Determination;
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample.MaterialSampleType;
 import ca.gc.aafc.collection.api.entities.Organism;
 import ca.gc.aafc.collection.api.entities.Project;
+import ca.gc.aafc.collection.api.testsupport.factories.CollectionControlledVocabularyItemFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionFactory;
-import ca.gc.aafc.collection.api.testsupport.factories.CollectionManagedAttributeFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.DeterminationFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.MaterialSampleFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.OrganismEntityFactory;
 import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
-import ca.gc.aafc.dina.entity.ControlledVocabularyItem;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.testsupport.TransactionTestingHelper;
 import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
-
-import ca.gc.aafc.collection.api.testsupport.factories.CollectionControlledVocabularyItemFactory;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -232,13 +227,9 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
         .newCollectionManagedAttribute()
         .acceptedValues(null)
         .dinaComponent(DinaComponent.MATERIAL_SAMPLE.name())
-        .controlledVocabulary(collectionControlledVocabularyService.getReferenceByNaturalId(
-          CollectionControlledVocabulary.class,
-          CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
-        ))
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
         .build();
     collectionControlledVocabularyItemService.create(testManagedAttribute);
-
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "anything"))
@@ -249,13 +240,15 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
   @Test
   void validate_WhenInvalidIntegerTypeExceptionThrown() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(null)
-      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-      .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
-      .build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(null)
+        .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
+        .dinaComponent(DinaComponent.MATERIAL_SAMPLE.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "1.2"))
@@ -271,10 +264,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
         .newCollectionManagedAttribute()
         .acceptedValues(new String[] {"val1", "val2"})
         .dinaComponent(DinaComponent.MATERIAL_SAMPLE.name())
-        .controlledVocabulary(collectionControlledVocabularyService.getReferenceByNaturalId(
-          CollectionControlledVocabulary.class,
-          CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
-        ))
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
         .build();
 
     collectionControlledVocabularyItemService.create(testManagedAttribute);
@@ -294,10 +284,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
         .acceptedValues(null)
         .vocabularyElementType(TypedVocabularyElement.VocabularyElementType.INTEGER)
         .dinaComponent(DinaComponent.PREPARATION.name())
-        .controlledVocabulary(collectionControlledVocabularyService.getReferenceByNaturalId(
-          CollectionControlledVocabulary.class,
-          CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
-        ))
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
         .build();
 
     collectionControlledVocabularyItemService.create(testManagedAttribute);
@@ -314,12 +301,16 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
   @Test
   void assignedValueNotContainedInAcceptedValues_Exception() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory.newCollectionManagedAttribute()
-      .acceptedValues(new String[]{"val1", "val2"})
-      .managedAttributeComponent(CollectionManagedAttribute.ManagedAttributeComponent.MATERIAL_SAMPLE)
-      .build();
 
-    collectionManagedAttributeService.create(testManagedAttribute);
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[]{"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "val3"))
@@ -330,12 +321,14 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
   @Test
   void assignManagedAttribute_onCollectingEventAttribute_Exception() {
-    CollectionManagedAttribute testManagedAttribute = CollectionManagedAttributeFactory
-      .newCollectionManagedAttribute().acceptedValues(new String[] { "val1", "val2" })
-      .managedAttributeComponent(
-        CollectionManagedAttribute.ManagedAttributeComponent.COLLECTING_EVENT).build();
-
-    collectionManagedAttributeService.create(testManagedAttribute);
+    CollectionControlledVocabularyItem testManagedAttribute =
+      CollectionControlledVocabularyItemFactory
+        .newCollectionManagedAttribute()
+        .acceptedValues(new String[]{"val1", "val2"})
+        .dinaComponent(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT.name())
+        .controlledVocabulary(getManagedAttributeControlledVocabularyRef())
+        .build();
+    collectionControlledVocabularyItemService.create(testManagedAttribute);
 
     MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
       .managedAttributes(Map.of(testManagedAttribute.getKey(), "val1"))
