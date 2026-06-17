@@ -13,9 +13,9 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 import ca.gc.aafc.collection.api.entities.HostOrganism;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
+import ca.gc.aafc.dina.dto.DinaDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.dto.JsonApiCalculatedAttribute;
-import ca.gc.aafc.dina.dto.JsonApiResource;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
@@ -31,7 +31,7 @@ import lombok.Data;
 @Data
 @TypeName(MaterialSampleDto.TYPENAME)
 @JsonApiTypeForClass(MaterialSampleDto.TYPENAME)
-public class MaterialSampleDto implements JsonApiResource {
+public class MaterialSampleDto implements DinaDto {
 
   public static final String TYPENAME = "material-sample";
 
@@ -41,7 +41,7 @@ public class MaterialSampleDto implements JsonApiResource {
   private UUID uuid;
 
   @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
-  private int version;
+  private Long resourceVersion;
 
   private String group;
 

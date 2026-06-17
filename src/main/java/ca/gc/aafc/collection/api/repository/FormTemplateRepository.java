@@ -20,6 +20,7 @@ import ca.gc.aafc.collection.api.dto.FormTemplateDto;
 import ca.gc.aafc.collection.api.entities.FormTemplate;
 import ca.gc.aafc.collection.api.mapper.FormTemplateMapper;
 import ca.gc.aafc.collection.api.service.FormTemplateService;
+import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.exception.ResourcesGoneException;
@@ -103,7 +104,8 @@ public class FormTemplateRepository extends DinaRepositoryV2<FormTemplateDto, Fo
   @PatchMapping(FormTemplateDto.TYPENAME + "/{id}")
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onUpdate(@RequestBody JsonApiDocument partialPatchDto,
-                                                         @PathVariable UUID id) throws ResourceNotFoundException, ResourceGoneException {
+                                                         @PathVariable UUID id)
+      throws ResourceNotFoundException, ResourceGoneException, ConflictException {
     return handleUpdate(partialPatchDto, id);
   }
 

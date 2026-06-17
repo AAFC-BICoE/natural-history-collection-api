@@ -7,6 +7,7 @@ import ca.gc.aafc.collection.api.dto.AssociationDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.AssociationTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
+import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -60,7 +61,8 @@ public class AssociationRepositoryIT extends BaseRepositoryIT {
   @Test
   @WithMockKeycloakUser(groupRole = {"aafc:user"})
   @Transactional
-  void updateAssociation() throws ResourceGoneException, ResourceNotFoundException {
+  void updateAssociation()
+      throws ResourceGoneException, ResourceNotFoundException, ConflictException {
 
     MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
     materialSampleDto.setUuid(createWithRepository(materialSampleDto, materialSampleRepository));

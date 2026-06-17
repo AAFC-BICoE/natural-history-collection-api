@@ -21,6 +21,7 @@ import ca.gc.aafc.collection.api.testsupport.fixtures.DeterminationFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ExtensionValueTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.MaterialSampleTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.OrganismTestFixture;
+import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -36,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -172,7 +174,6 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
   }
 
-
   @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
   @Transactional
@@ -240,7 +241,8 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   @WithMockKeycloakUser(groupRole = { OrganismTestFixture.GROUP + ":user" })
   @Transactional
   public void updateMaterialSample_WithOrganism_accepted()
-      throws MalformedURLException, ResourceGoneException, ResourceNotFoundException {
+      throws MalformedURLException, ResourceGoneException, ResourceNotFoundException,
+    ConflictException {
 
     OrganismDto organismDto = OrganismTestFixture.newOrganism(DeterminationFixture.newDetermination());
     UUID organismUUID = createWithRepository(organismDto, organismRepository::onCreate);
@@ -272,6 +274,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
 
     result = materialSampleRepository.getOne(matSampleUuid, "include=organism").getDto();
     assertEquals(organism2UUID, result.getOrganism().getFirst().getUuid());
+    assertTrue(result.getResourceVersion() > 0);
 
     // we should be able to delete the first one since it's not used anymore
     organismRepository.onDelete(organismUUID);
