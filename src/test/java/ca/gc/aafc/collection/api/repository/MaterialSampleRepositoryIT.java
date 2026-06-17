@@ -175,6 +175,31 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
   }
 
   @Test
+  @WithMockKeycloakUser(groupRole = {"aafc:user"})
+  @Transactional
+  public void update_recordUpdated()
+      throws ResourceGoneException, ResourceNotFoundException, ConflictException {
+
+    MaterialSampleDto materialSampleDto = MaterialSampleTestFixture.newMaterialSample();
+    UUID matSampleId = createWithRepository(materialSampleDto, materialSampleRepository);
+    MaterialSampleDto result = materialSampleRepository.getOne(matSampleId, null).getDto();
+    assertEquals(0, result.getResourceVersion());
+
+    result.setDwcCatalogNumber("abc");
+    JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
+      matSampleId, MaterialSampleDto.TYPENAME,
+      JsonAPITestHelper.toAttributeMap(result)
+    );
+
+    materialSampleRepository.update(docToUpdate);
+    result = materialSampleRepository.getOne(matSampleId, null).getDto();
+    assertEquals(1, result.getResourceVersion());
+
+    // send the same document with version 0 (stale)
+    assertThrows(ConflictException.class, () -> materialSampleRepository.update(docToUpdate));
+  }
+
+  @Test
   @WithMockKeycloakUser(username = "other user", groupRole = { "notAAFC:user" })
   @Transactional
   public void updateFromDifferentGroup_throwAccessDenied()
