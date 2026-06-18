@@ -8,6 +8,7 @@ import ca.gc.aafc.collection.api.entities.FormTemplate;
 import ca.gc.aafc.collection.api.service.FormTemplateService;
 import ca.gc.aafc.collection.api.testsupport.factories.FormTemplateFactory;
 import ca.gc.aafc.collection.api.testsupport.fixtures.FormTemplateFixture;
+import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -56,7 +57,7 @@ public class FormTemplateRepositoryIT extends BaseRepositoryIT {
   @Test
   @WithMockKeycloakUser(groupRole = FormTemplateFixture.GROUP + ":user")
   public void update_OnNameUpdate_NameUpdated()
-      throws ResourceGoneException, ResourceNotFoundException {
+      throws ResourceGoneException, ResourceNotFoundException, ConflictException {
 
     FormTemplateDto dto = FormTemplateFixture.newFormTemplate().name(NAME).build();
     UUID createResourceUUID = createWithRepository(dto, formTemplateRepository::onCreate);

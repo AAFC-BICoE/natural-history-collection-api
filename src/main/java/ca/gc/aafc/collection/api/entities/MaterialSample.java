@@ -84,7 +84,8 @@ public class MaterialSample extends AbstractMaterialSample {
   public static final String PREPARATION_METHOD_PROP_NAME = "preparationMethod";
 
   @Version
-  private int version;
+  @Column(name = "version")
+  private Long resourceVersion;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Collection collection;
