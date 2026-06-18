@@ -37,7 +37,7 @@ import lombok.SneakyThrows;
 @Import(TestConfigProperties.class)
 public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
 
-  public static final String TYPE_NAME = "managed-attribute";
+  public static final String TYPE_NAME = CollectionControlledVocabularyItemDto.TYPENAME;
 
   protected CollectionManagedAttributeOpenApiIT() {
     super("/api/v1/");
@@ -50,23 +50,21 @@ public class CollectionManagedAttributeOpenApiIT extends BaseRestAssuredTest {
     CollectionControlledVocabularyItemDto dto =
       CollectionControlledVocabularyItemTestFixture.newCollectionControlledVocabularyItem();
 
-    String uuid = JsonAPITestHelper.extractId(sendPost(
-      CollectionControlledVocabularyItemDto.TYPENAME,
-      JsonAPITestHelper.toJsonAPIMap(
-        CollectionControlledVocabularyItemDto.TYPENAME,
-        JsonAPITestHelper.toAttributeMap(dto),
-        JsonAPITestHelper.toRelationshipMap(
-          JsonAPIRelationship.of("controlledVocabulary", CollectionControlledVocabularyDto.TYPENAME,
-            CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID.toString())),
-        null
-      )
-    ));
-
-//    OpenAPI3Assertions
-//        .assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "CollectionManagedAttribute",
-//            sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME,
-//                JsonAPITestHelper.toAttributeMap(collectionManagedAttributeDto))).extract()
-//                .asString());
+    OpenAPI3Assertions
+      .assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "ControlledVocabularyItem",
+        sendPost(
+          CollectionControlledVocabularyItemDto.TYPENAME,
+          JsonAPITestHelper.toJsonAPIMap(
+            CollectionControlledVocabularyItemDto.TYPENAME,
+            JsonAPITestHelper.toAttributeMap(dto),
+            JsonAPITestHelper.toRelationshipMap(
+              JsonAPIRelationship.of("controlledVocabulary",
+                CollectionControlledVocabularyDto.TYPENAME,
+                CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID.toString())),
+            null
+          )
+        ).extract()
+          .asString());
   }
 
 }

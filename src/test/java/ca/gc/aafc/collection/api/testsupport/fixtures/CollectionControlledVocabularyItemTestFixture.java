@@ -16,9 +16,13 @@ public class CollectionControlledVocabularyItemTestFixture {
     collectionControlledVocabularyItemDto.setVocabularyElementType(
       TypedVocabularyElement.VocabularyElementType.INTEGER);
     collectionControlledVocabularyItemDto.setAcceptedValues(new String[]{"1", "2"});
+    collectionControlledVocabularyItemDto.setTerm("the-term");
     collectionControlledVocabularyItemDto.setUnit("cm");
     collectionControlledVocabularyItemDto.setCreatedBy("created by");
     collectionControlledVocabularyItemDto.setGroup("test");
+    collectionControlledVocabularyItemDto.setUriTemplate("http://test.org/$1");
+    collectionControlledVocabularyItemDto.setDinaComponent(CollectionVocabularyConfiguration.DinaComponent.MATERIAL_SAMPLE.name());
+    collectionControlledVocabularyItemDto.setMultilingualTitle(MultilingualTestFixture.newMultilingualTitle());
     collectionControlledVocabularyItemDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
     return collectionControlledVocabularyItemDto;
   }
