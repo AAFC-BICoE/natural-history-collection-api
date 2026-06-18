@@ -10,6 +10,7 @@ import ca.gc.aafc.collection.api.entities.CollectingEvent;
 import ca.gc.aafc.collection.api.repository.CollectingEventRepository;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectingEventFactory;
 import ca.gc.aafc.dina.datetime.ISODateTime;
+import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
@@ -79,7 +80,7 @@ public class CollectingEventAuthorisationIT extends CollectionModuleBaseIT {
   @WithMockKeycloakUser(groupRole = { "amf:USER" })
   @Test
   public void when_UpdatingAsUserFromEventGroup_EventUpdated()
-      throws ResourceGoneException, ResourceNotFoundException {
+      throws ResourceGoneException, ResourceNotFoundException, ConflictException {
     CollectingEventDto retrievedEventDto = collectingEventRepository.getOne(testCollectingEvent.getUuid(), "").getDto();
     retrievedEventDto.setDwcVerbatimDepth("10-20m");
 

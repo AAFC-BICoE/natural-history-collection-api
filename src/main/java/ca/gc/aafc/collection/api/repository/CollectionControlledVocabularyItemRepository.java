@@ -24,6 +24,7 @@ import ca.gc.aafc.collection.api.mapper.CollectionControlledVocabularyItemMapper
 import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyItemService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyService;
+import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
 import ca.gc.aafc.dina.exception.ResourcesGoneException;
@@ -157,14 +158,15 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
   @PatchMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkUpdate(@RequestBody JsonApiBulkDocument jsonApiBulkDocument)
-      throws ResourceNotFoundException, ResourceGoneException {
+      throws ResourceNotFoundException, ResourceGoneException, ConflictException {
     return handleBulkUpdate(jsonApiBulkDocument);
   }
 
   @PatchMapping(CollectionControlledVocabularyItemDto.TYPENAME + "/{id}")
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onUpdate(@RequestBody JsonApiDocument partialPatchDto,
-                                                         @PathVariable UUID id) throws ResourceNotFoundException, ResourceGoneException {
+                                                         @PathVariable UUID id)
+      throws ResourceNotFoundException, ResourceGoneException, ConflictException {
     return handleUpdate(partialPatchDto, id);
   }
 
