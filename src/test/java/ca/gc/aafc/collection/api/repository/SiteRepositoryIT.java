@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.AccessDeniedException;
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.SiteDto;
 import ca.gc.aafc.collection.api.service.SiteService;
 import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
@@ -63,7 +62,7 @@ public class SiteRepositoryIT extends BaseRepositoryIT {
 
     SiteDto retrievedSite = siteRepository.getOne(testSite.getUuid(), "").getDto();
     JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
-        retrievedSite.getUuid(), CollectionManagedAttributeDto.TYPENAME,
+        retrievedSite.getUuid(), SiteDto.TYPENAME,
         JsonAPITestHelper.toAttributeMap(retrievedSite));
 
     assertThrows(AccessDeniedException.class, () -> siteRepository.onUpdate(docToUpdate, docToUpdate.getId()));

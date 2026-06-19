@@ -15,7 +15,7 @@ import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 
 import ca.gc.aafc.collection.api.dto.ProtocolDto;
 import ca.gc.aafc.collection.api.testsupport.fixtures.CollectingEventTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionManagedAttributeTestFixture;
+import ca.gc.aafc.collection.api.testsupport.fixtures.CollectionControlledVocabularyItemTestFixture;
 import ca.gc.aafc.collection.api.testsupport.fixtures.ProtocolTestFixture;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
@@ -57,7 +57,7 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
     protocol.setAttachments(null);
     String protocolUuid = postProtocol(protocol);
 
-    CollectionControlledVocabularyItemDto ceMa = CollectionManagedAttributeTestFixture.newCollectionManagedAttribute2();
+    CollectionControlledVocabularyItemDto ceMa = CollectionControlledVocabularyItemTestFixture.newCollectionManagedAttribute2();
     ceMa.setAcceptedValues(null);
 
     String managedAttributeItemUuid = JsonAPITestHelper.extractId(

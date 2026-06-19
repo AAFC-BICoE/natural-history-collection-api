@@ -34,6 +34,7 @@ import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.TextHtmlSanitizer;
 import ca.gc.aafc.dina.service.AuditService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
@@ -100,6 +101,7 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
       return handleFindOne(id.get(), req);
     }
 
+
     // key is always a compound key vocabKey.itemKey[.dinaComponent]
     String[] keyParts = StringUtils.split(idOrKey, ".");
 
@@ -108,10 +110,13 @@ public class CollectionControlledVocabularyItemRepository extends DinaRepository
       if (vocab != null) {
         CollectionControlledVocabularyItem item = collectionControlledVocabularyItemService.findOneByKey(keyParts[1], vocab.getUuid(),
           keyParts.length == 3 ? keyParts[2] : null);
-        return handleFindOne(item.getUuid(), req);
+        if (item != null) {
+          return handleFindOne(item.getUuid(), req);
+        }
       }
     }
-    throw ResourceNotFoundException.create(CollectionControlledVocabularyDto.TYPENAME, idOrKey);
+    throw ResourceNotFoundException.create(CollectionControlledVocabularyDto.TYPENAME,
+      TextHtmlSanitizer.sanitizeText(idOrKey));
   }
 
   @PostMapping(path = CollectionControlledVocabularyItemDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH,

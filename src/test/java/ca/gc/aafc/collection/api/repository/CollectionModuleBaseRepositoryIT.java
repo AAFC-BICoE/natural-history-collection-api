@@ -11,7 +11,6 @@ import org.springframework.test.context.TestPropertySource;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.service.AssemblageService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
-import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
 import ca.gc.aafc.collection.api.service.CollectionService;
 import ca.gc.aafc.collection.api.service.FormTemplateService;
@@ -24,7 +23,6 @@ import ca.gc.aafc.collection.api.service.ProtocolService;
 import ca.gc.aafc.collection.api.service.StorageUnitService;
 import ca.gc.aafc.collection.api.service.StorageUnitTypeService;
 import ca.gc.aafc.collection.api.service.StorageUnitUsageService;
-import ca.gc.aafc.dina.testsupport.DatabaseSupportService;
 import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import ca.gc.aafc.dina.testsupport.repository.MockMvcBasedRepository;
 
@@ -46,9 +44,6 @@ public abstract class CollectionModuleBaseRepositoryIT extends MockMvcBasedRepos
 
   @Inject
   protected CollectingEventService collectingEventService;
-
-  @Inject
-  protected CollectionManagedAttributeService collectionManagedAttributeService;
 
   @Inject
   protected MaterialSampleService materialSampleService;

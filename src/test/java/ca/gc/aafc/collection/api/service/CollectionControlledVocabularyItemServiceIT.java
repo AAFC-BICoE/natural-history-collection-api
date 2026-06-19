@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
 import ca.gc.aafc.collection.api.entities.CollectingEvent;
-import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.testsupport.factories.CollectionControlledVocabularyItemFactory;
@@ -44,7 +43,7 @@ public class CollectionControlledVocabularyItemServiceIT extends CollectionModul
     collectionControlledVocabularyItemService.delete(attribute);
 
     assertNull(
-      collectionManagedAttributeService.findOne(attribute.getUuid(), CollectionControlledVocabularyItem.class));
+      collectionControlledVocabularyItemService.findOne(attribute.getUuid(), CollectionControlledVocabularyItem.class));
   }
 
   @Test
@@ -92,13 +91,6 @@ public class CollectionControlledVocabularyItemServiceIT extends CollectionModul
 
     assertNull(
       collectionControlledVocabularyItemService.findOne(attribute.getUuid(), CollectionControlledVocabularyItem.class));
-  }
-
-  private CollectionControlledVocabulary getManagedAttributeControlledVocabularyRef() {
-    return collectionControlledVocabularyService.getReferenceByNaturalId(
-      CollectionControlledVocabulary.class,
-      CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
-    );
   }
 
   private CollectionControlledVocabularyItem newAttribute(CollectionVocabularyConfiguration.DinaComponent component) {

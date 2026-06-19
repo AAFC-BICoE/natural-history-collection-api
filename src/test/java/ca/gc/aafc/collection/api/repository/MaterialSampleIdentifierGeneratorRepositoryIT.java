@@ -9,7 +9,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleIdentifierGeneratorDto;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
@@ -112,7 +111,7 @@ public class MaterialSampleIdentifierGeneratorRepositoryIT extends CollectionMod
   private MaterialSampleIdentifierGeneratorDto postAndReturnResult(MaterialSampleIdentifierGeneratorDto toPost)
     throws Exception {
     JsonApiDocument docToCreate = JsonApiDocuments.createJsonApiDocument(
-      null, CollectionManagedAttributeDto.TYPENAME,
+      null, MaterialSampleIdentifierGeneratorDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(toPost)
     );
 

@@ -3,7 +3,6 @@ package ca.gc.aafc.collection.api.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
 
-import ca.gc.aafc.collection.api.dto.CollectionManagedAttributeDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.entities.Project;
 import ca.gc.aafc.collection.api.service.ProjectService;
@@ -63,7 +62,7 @@ public class ProjectRepositoryIT extends BaseRepositoryIT {
 
     ProjectDto retrievedProject = projectRepository.getOne(testProject.getUuid(), "").getDto();
     JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
-      retrievedProject.getUuid(), CollectionManagedAttributeDto.TYPENAME,
+      retrievedProject.getUuid(), ProjectDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(retrievedProject)
     );
 

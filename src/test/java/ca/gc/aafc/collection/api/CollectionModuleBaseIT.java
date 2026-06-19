@@ -8,12 +8,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
+import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
 import ca.gc.aafc.collection.api.service.AssemblageService;
 import ca.gc.aafc.collection.api.service.AssociationService;
 import ca.gc.aafc.collection.api.service.CollectingEventService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyItemService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyService;
-import ca.gc.aafc.collection.api.service.CollectionManagedAttributeService;
 import ca.gc.aafc.collection.api.service.CollectionSequenceService;
 import ca.gc.aafc.collection.api.service.CollectionService;
 import ca.gc.aafc.collection.api.service.ExpeditionService;
@@ -49,9 +50,6 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected CollectingEventService collectingEventService;
-
-  @Inject
-  protected CollectionManagedAttributeService collectionManagedAttributeService;
 
   @Inject
   protected CollectionControlledVocabularyService collectionControlledVocabularyService;
@@ -103,6 +101,13 @@ public class CollectionModuleBaseIT {
 
   @Inject
   protected SiteService siteService;
+
+  protected CollectionControlledVocabulary getManagedAttributeControlledVocabularyRef() {
+    return collectionControlledVocabularyService.getReferenceByNaturalId(
+      CollectionControlledVocabulary.class,
+      CollectionVocabularyConfiguration.MANAGED_ATTRIBUTE_VOCAB_UUID
+    );
+  }
 
   @TestConfiguration
   public static class CollectionModuleTestConfiguration {
