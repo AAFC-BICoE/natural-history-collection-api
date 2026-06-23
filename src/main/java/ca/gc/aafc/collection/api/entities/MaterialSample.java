@@ -138,6 +138,9 @@ public class MaterialSample extends AbstractMaterialSample {
   private String targetOrganismPrimaryScientificName;
 
   @Transient
+  private String targetOrganismPrimaryTypeStatus;
+  
+  @Transient
   private Map<String, String> targetOrganismPrimaryClassification;
 
   @Transient
