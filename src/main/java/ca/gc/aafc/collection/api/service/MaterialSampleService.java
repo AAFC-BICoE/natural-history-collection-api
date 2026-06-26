@@ -106,6 +106,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   public void augmentEntity(MaterialSample ms, Set<String> relationships) {
     if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
       setTargetOrganismPrimaryScientificName(ms);
+      setTargetOrganismPrimaryTypeStatus(ms);
       setEffectiveScientificName(ms);
       setOrganismClassification(ms);
     }
@@ -135,6 +136,20 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     }
     String s = ScientificNameUtils.extractTargetOrganismPrimaryScientificName(sample.getOrganism());
     sample.setTargetOrganismPrimaryScientificName(s);
+  }
+
+  public void setTargetOrganismPrimaryTypeStatus(MaterialSample sample) {
+    if (CollectionUtils.isEmpty(sample.getOrganism())) {
+      return;
+    }
+
+    List<Organism> targetOrganisms = ScientificNameUtils.extractTargetOrganisms(sample.getOrganism());
+
+    if (targetOrganisms.size() == 1) {
+      sample.setTargetOrganismPrimaryTypeStatus(targetOrganisms.getFirst().getPrimaryDetermination().getTypeStatus());
+    } else {
+      log.debug("Multiple target organisms found, targetOrganismPrimaryTypeStatus won't be set");
+    }
   }
 
   public void setOrganismClassification(MaterialSample sample) {

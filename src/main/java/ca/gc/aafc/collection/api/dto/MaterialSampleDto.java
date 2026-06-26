@@ -88,6 +88,10 @@ public class MaterialSampleDto implements DinaDto {
 
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  private String targetOrganismPrimaryTypeStatus;
+
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Map<String, String> targetOrganismPrimaryClassification;
 
   @DiffIgnore

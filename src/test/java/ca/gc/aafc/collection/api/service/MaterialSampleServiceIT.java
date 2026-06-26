@@ -93,6 +93,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
     Determination determination = DeterminationFactory.newDetermination()
             .verbatimScientificName("verbatimScientificName")
+            .typeStatus("typeStatus")
             .isPrimary(false)
             .build();
     Organism organism = OrganismEntityFactory.newOrganism()
@@ -122,6 +123,9 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
 
     materialSampleService.setTargetOrganismPrimaryScientificName(parentMaterialSample);
     assertEquals("verbatimScientificName", parentMaterialSample.getTargetOrganismPrimaryScientificName());
+
+    materialSampleService.setTargetOrganismPrimaryTypeStatus(parentMaterialSample);
+    assertEquals("typeStatus", parentMaterialSample.getTargetOrganismPrimaryTypeStatus());
 
     //cleanup
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
