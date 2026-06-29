@@ -1,7 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.message.DocumentOperationNotification;
@@ -27,10 +27,10 @@ public class IndexRefreshService {
   private static final String MAT_SAMPLE_SQL = "SELECT uuid FROM MaterialSample t ORDER BY id";
   private static final String STORAGE_SQL = "SELECT uuid FROM StorageUnit t ORDER BY id";
   private static final String COLLECTING_EVENT_HQL = "SELECT uuid FROM CollectingEvent t ORDER BY id";
+  private static final String PROJECT_HQL = "SELECT uuid FROM Project t ORDER BY id";
 
   private final DocumentOperationNotificationMessageProducer searchRabbitMQMessageProducer;
-  private final Set<String> supportedDocumentTypes;
-  private final Map<String, String> queryAllByDocumentTypes;
+  private final Map<String, String> supportedDocumentTypes;
   private final BaseDAO baseDAO;
 
   public IndexRefreshService(DocumentOperationNotificationMessageProducer searchRabbitMQMessageProducer,
@@ -39,16 +39,16 @@ public class IndexRefreshService {
     this.baseDAO = baseDAO;
 
     // supported document types
-    supportedDocumentTypes = Set.of(MaterialSampleDto.TYPENAME, StorageUnitDto.TYPENAME);
-    queryAllByDocumentTypes = Map.of(
+    supportedDocumentTypes = Map.of(
       MaterialSampleDto.TYPENAME, MAT_SAMPLE_SQL,
       StorageUnitDto.TYPENAME, STORAGE_SQL,
-      CollectingEventDto.TYPENAME, COLLECTING_EVENT_HQL
+      CollectingEventDto.TYPENAME, COLLECTING_EVENT_HQL,
+      ProjectDto.TYPENAME, PROJECT_HQL
     );
   }
 
   public void reindexDocument(String docId, String type) {
-    if (!supportedDocumentTypes.contains(type)) {
+    if (!supportedDocumentTypes.containsKey(type)) {
       throw new IllegalStateException("Unsupported document type");
     }
 
@@ -67,12 +67,12 @@ public class IndexRefreshService {
   @Transactional(readOnly = true)
   public void reindexAll(String type) {
 
-    if (!queryAllByDocumentTypes.containsKey(type)) {
+    if (!supportedDocumentTypes.containsKey(type)) {
       throw new IllegalStateException("Unsupported document type");
     }
 
     Stream<UUID> objStream =
-      baseDAO.streamAllByQuery(UUID.class, queryAllByDocumentTypes.get(type), null);
+      baseDAO.streamAllByQuery(UUID.class, supportedDocumentTypes.get(type), null);
 
     objStream.forEach(uuid -> {
       DocumentOperationNotification don = DocumentOperationNotification.builder()
