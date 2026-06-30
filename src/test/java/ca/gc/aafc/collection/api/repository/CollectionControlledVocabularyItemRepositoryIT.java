@@ -91,7 +91,7 @@ public class CollectionControlledVocabularyItemRepositoryIT extends CollectionMo
     sendGet(uuid.toString());
 
     // try get be key
-    sendGet("managed_attribute.dina_attribute_12.COLLECTING_EVENT");
+    sendGet("managed_attribute.dina_attribute_12_integer.COLLECTING_EVENT");
   }
 
   @Test
