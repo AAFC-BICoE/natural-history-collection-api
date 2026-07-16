@@ -33,7 +33,9 @@ jobs:
       - name: Run OWASP dependency-check (only on dev)
         if: ${{ github.ref == 'refs/heads/dev' }}
         uses: dependency-check/Dependency-Check_Action@main
-        id: dependency-check
+        id: natural-history-collection-api-dependency-check
+        env:
+          JAVA_HOME: /opt/jdk
         with:
           project: 'test'
           path: '.'
@@ -41,7 +43,7 @@ jobs:
           args: >
             --failOnCVSS 8
             --suppression owasp-suppression.xml
-      - name: Upload Test results
+      - name: Upload Test results (only on dev)
         if: ${{ github.ref == 'refs/heads/dev' }}
         uses: actions/upload-artifact@v7
         with:
