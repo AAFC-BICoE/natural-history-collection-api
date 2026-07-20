@@ -23,7 +23,7 @@ Configuration:
       Logger:
         - name: ca.gc.aafc
           additivity: false
-          level: DEBUG
+          level: INFO
           AppenderRef:
             - ref: LogToConsole
 #            - ref: LogToFile
