@@ -162,11 +162,11 @@ public class MaterialSample extends AbstractMaterialSample {
 
   @Column(name = "prepared_by", columnDefinition = "uuid[]")
   @UniqueElements
-  private List<UUID> preparedBy = List.of();
+  private List<UUID> preparedBy;
 
   @Column(name = "attachment", columnDefinition = "uuid[]")
   @UniqueElements
-  private List<UUID> attachment = List.of();
+  private List<UUID> attachment;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private PreparationType preparationType;

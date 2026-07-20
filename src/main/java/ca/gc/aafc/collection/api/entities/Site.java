@@ -2,9 +2,10 @@ package ca.gc.aafc.collection.api.entities;
 
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,7 +45,7 @@ public class Site extends UserDescribedDinaEntity {
   @Column(name = "attachment", columnDefinition = "uuid[]")
   private List<UUID> attachment = List.of();
 
-  @Type(PostgreSQLEnumType.class)
+  @JdbcTypeCode(SqlTypes.NAMED_ENUM)
   @Enumerated(EnumType.STRING)
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
 

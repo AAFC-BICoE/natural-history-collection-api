@@ -6,7 +6,7 @@ import ca.gc.aafc.dina.testsupport.PostgresTestContainerInitializer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -28,7 +28,7 @@ public class OrganismAfterCommitCRUDIT {
 
   @Test
   void targetOrganism_MixedTargetOrganism_Exception() {
-    assertThrows(JpaSystemException.class, ()-> transactionalMethodProvider.runTransactionFor_TargetOrganism_MixedTargetOrganism_Exception());
+    assertThrows(DataIntegrityViolationException.class,
+      ()-> transactionalMethodProvider.runTransactionFor_TargetOrganism_MixedTargetOrganism_Exception());
   }
-
 }

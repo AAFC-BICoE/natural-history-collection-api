@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,7 @@ public class FormTemplate implements DinaEntity {
   @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  public static class FormComponent {
+  public static class FormComponent implements Serializable {
 
     private String name;
     private Integer order;
@@ -98,7 +99,7 @@ public class FormTemplate implements DinaEntity {
   @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  public static class FormSection {
+  public static class FormSection implements Serializable {
     private String name;
     private Boolean visible;
     private Integer gridPositionX;
@@ -112,7 +113,7 @@ public class FormTemplate implements DinaEntity {
   @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  public static class SectionItem {
+  public static class SectionItem implements Serializable {
     private String name;
     private Boolean visible;
     private Integer gridPositionX;
