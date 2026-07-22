@@ -1,6 +1,7 @@
 package ca.gc.aafc.collection.api.entities;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +51,7 @@ public class Protocol extends UserDescribedDinaEntity {
   @Data
   @Builder
   @Value
-  public static class ProtocolData {
+  public static class ProtocolData implements Serializable {
 
     @NotBlank
     @Size(max = 50)
@@ -64,7 +65,7 @@ public class Protocol extends UserDescribedDinaEntity {
   @Data
   @Builder
   @Value
-  public static class ProtocolDataElement {
+  public static class ProtocolDataElement implements Serializable {
 
     private boolean vocabularyBased;
 

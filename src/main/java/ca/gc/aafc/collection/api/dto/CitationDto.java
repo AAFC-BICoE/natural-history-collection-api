@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.validation.constraints.Pattern;
@@ -16,7 +17,7 @@ import lombok.Value;
 @Value
 // This class is considered a "value" belonging to a MaterialSample:
 @org.javers.core.metamodel.annotation.Value
-public class CitationDto {
+public class CitationDto implements Serializable {
 
   @Size(max = 400)
   private String title;

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import jakarta.validation.constraints.Size;
@@ -17,7 +18,7 @@ import lombok.Value;
 @Value
 // This class is considered a "value" belonging to a MaterialSample:
 @org.javers.core.metamodel.annotation.Value
-public class ScheduledActionDto {
+public class ScheduledActionDto implements Serializable {
 
   @Size(max = 250)
   private String actionType;

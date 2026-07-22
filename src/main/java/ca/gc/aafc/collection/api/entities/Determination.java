@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Builder
 @Value // This class is considered a "value" belonging to a Organism:
-public class Determination {
+public class Determination implements Serializable {
 
   public enum ScientificNameSource {
     CUSTOM, COLPLUS, GNA;
@@ -131,7 +132,7 @@ public class Determination {
   @Getter
   @Builder
   @RequiredArgsConstructor
-  public static class ScientificNameSourceDetails {
+  public static class ScientificNameSourceDetails implements Serializable {
     @Size(max = 255)
     private final String labelHtml;
     @Size(max = 1000)
