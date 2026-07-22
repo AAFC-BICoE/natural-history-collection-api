@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import ca.gc.aafc.dina.dto.HierarchicalObject;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class StorageHierarchicalObject {
+public class StorageHierarchicalObject implements Serializable {
 
   @JsonUnwrapped
   private HierarchicalObject hierarchicalObject;
