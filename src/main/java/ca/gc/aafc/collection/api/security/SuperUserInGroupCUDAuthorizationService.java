@@ -1,5 +1,7 @@
 package ca.gc.aafc.collection.api.security;
 
+import java.util.Set;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +29,14 @@ public class SuperUserInGroupCUDAuthorizationService extends PermissionAuthoriza
   public void authorizeDelete(Object entity) {
   }
 
-  // Do nothing for now
   @Override
+  @PreAuthorize("allow()")
   public void authorizeRead(Object entity) {
+  }
+
+  @Override
+  public Set<String> evaluatedAttributes() {
+    return Set.of("group");
   }
 
   @Override
