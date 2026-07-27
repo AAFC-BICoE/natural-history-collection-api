@@ -144,6 +144,9 @@ public class MaterialSample extends AbstractMaterialSample {
   private Map<String, String> targetOrganismPrimaryClassification;
 
   @Transient
+  private IdentifiableEntitySummary targetIdentifiableEntitySummary;
+
+  @Transient
   private String effectiveScientificName;
 
   @Size(max = 50)

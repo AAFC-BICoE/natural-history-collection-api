@@ -300,6 +300,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
     result = materialSampleRepository.getOne(matSampleUuid, "include=organism").getDto();
     assertEquals(organism2UUID, result.getOrganism().getFirst().getUuid());
     assertTrue(result.getResourceVersion() > 0);
+    assertNotNull(result.getTargetIdentifiableEntitySummary());
 
     // we should be able to delete the first one since it's not used anymore
     organismRepository.onDelete(organismUUID);
