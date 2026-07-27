@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.IdentifiableEntitySummary;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
@@ -109,6 +110,8 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
       setTargetOrganismPrimaryTypeStatus(ms);
       setEffectiveScientificName(ms);
       setOrganismClassification(ms);
+
+      setTargetIdentifiableEntitySummary(ms);
     }
   }
 
@@ -136,6 +139,28 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     }
     String s = ScientificNameUtils.extractTargetOrganismPrimaryScientificName(sample.getOrganism());
     sample.setTargetOrganismPrimaryScientificName(s);
+  }
+
+  public void setTargetIdentifiableEntitySummary(MaterialSample sample) {
+    if (CollectionUtils.isEmpty(sample.getOrganism())) {
+      return;
+    }
+
+    List<Organism> targetOrganisms = ScientificNameUtils.extractTargetOrganisms(sample.getOrganism());
+
+    if (targetOrganisms.size() == 1) {
+      Organism targetOrganism = targetOrganisms.getFirst();
+      IdentifiableEntitySummary identifiableEntitySummary = IdentifiableEntitySummary.builder()
+        .lifeStage(targetOrganism.getLifeStage())
+        .sex(targetOrganism.getSex())
+        .managedAttributes(targetOrganism.getManagedAttributes())
+        .dwcVernacularName(targetOrganism.getDwcVernacularName())
+        .primaryDetermination(targetOrganism.getPrimaryDetermination())
+        .build();
+      sample.setTargetIdentifiableEntitySummary(identifiableEntitySummary);
+    } else {
+      log.debug("Multiple target organisms found, identifiableEntitySummary won't be set");
+    }
   }
 
   public void setTargetOrganismPrimaryTypeStatus(MaterialSample sample) {
