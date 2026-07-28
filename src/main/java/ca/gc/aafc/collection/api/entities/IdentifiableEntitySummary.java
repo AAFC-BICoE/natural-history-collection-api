@@ -1,13 +1,16 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.io.Serializable;
 import java.util.Map;
 import lombok.Builder;
+import lombok.Getter;
 
 /**
  * IdentifiableEntity is the future name of Organism
  */
 @Builder
-public class IdentifiableEntitySummary {
+@Getter
+public class IdentifiableEntitySummary implements Serializable {
 
   private Map<String, String> managedAttributes;
 
@@ -16,6 +19,6 @@ public class IdentifiableEntitySummary {
 
   private String dwcVernacularName;
 
-  private Determination primaryDetermination;
+  private DeterminationSummary primaryDetermination;
 
 }
