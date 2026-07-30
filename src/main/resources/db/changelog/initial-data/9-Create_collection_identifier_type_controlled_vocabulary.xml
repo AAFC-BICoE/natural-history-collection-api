@@ -1,0 +1,48 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="9-Create_collection_identifier_type_controlled_vocabulary" context="initial-data" author="cgendreau">
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="7e8472df-d6c6-48b9-a9ae-ca47648ba70f"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c961e-4c0d-7398-b4ae-73687826b3b5')"/>
+            <column name="name" value="grscicoll"/>
+            <column name="key" value="grscicoll"/>
+            <column name="_group" value="system"/>
+            <column name="dina_component" value="COLLECTION"/>
+            <column name="vocabulary_element_type" value="STRING"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"GRSciColl"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Global Registry of Scientific Collections. https://scientific-collections.gbif.org/"
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="controlled_vocabulary_item">
+            <column name="uuid" value="a8a9d425-c4ef-42e4-8d4f-0bd90e1b2e00"/>
+            <column name="controlled_vocabulary_id" valueComputed="(SELECT id FROM controlled_vocabulary WHERE uuid='019c961e-4c0d-7398-b4ae-73687826b3b5')"/>
+            <column name="name" value="index_herbariorum"/>
+            <column name="key" value="index_herbariorum"/>
+            <column name="_group" value="system"/>
+            <column name="dina_component" value="COLLECTION"/>
+            <column name="vocabulary_element_type" value="STRING"/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Index Herbariorum"}]}'/>
+            <column name="multilingual_description" value='{
+                "descriptions": [
+                {
+                "lang": "en",
+                "desc": "Index Herbariorum. https://sweetgum.nybg.org/science/ih/"
+                }
+                ]
+                }'/>
+            <column name="created_by" value="system"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
