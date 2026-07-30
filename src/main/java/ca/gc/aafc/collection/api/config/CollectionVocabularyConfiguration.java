@@ -49,7 +49,9 @@ public class CollectionVocabularyConfiguration
     DETERMINATION,
     PREPARATION,
     ASSEMBLAGE,
-    SITE;
+    SITE,
+    COLLECTION,
+    PROJECT;
 
     public static DinaComponent fromString(String s) {
       for (DinaComponent source : DinaComponent.values()) {
