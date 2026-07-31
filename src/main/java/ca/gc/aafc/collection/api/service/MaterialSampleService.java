@@ -9,6 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
+import ca.gc.aafc.collection.api.entities.Determination;
+import ca.gc.aafc.collection.api.entities.DeterminationSummary;
+import ca.gc.aafc.collection.api.entities.IdentifiableEntitySummary;
 import ca.gc.aafc.collection.api.entities.ImmutableMaterialSample;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.collection.api.entities.Organism;
@@ -106,9 +109,9 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
   public void augmentEntity(MaterialSample ms, Set<String> relationships) {
     if (relationships.contains(MaterialSample.ORGANISM_PROP_NAME)) {
       setTargetOrganismPrimaryScientificName(ms);
-      setTargetOrganismPrimaryTypeStatus(ms);
       setEffectiveScientificName(ms);
-      setOrganismClassification(ms);
+
+      setTargetIdentifiableEntitySummary(ms);
     }
   }
 
@@ -138,7 +141,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     sample.setTargetOrganismPrimaryScientificName(s);
   }
 
-  public void setTargetOrganismPrimaryTypeStatus(MaterialSample sample) {
+  public void setTargetIdentifiableEntitySummary(MaterialSample sample) {
     if (CollectionUtils.isEmpty(sample.getOrganism())) {
       return;
     }
@@ -146,26 +149,24 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     List<Organism> targetOrganisms = ScientificNameUtils.extractTargetOrganisms(sample.getOrganism());
 
     if (targetOrganisms.size() == 1) {
-      sample.setTargetOrganismPrimaryTypeStatus(targetOrganisms.getFirst().getPrimaryDetermination().getTypeStatus());
+      Organism targetOrganism = targetOrganisms.getFirst();
+      Determination primaryDetermination = targetOrganism.getPrimaryDetermination();
+      Map<String, String> classification = organismService.extractClassification(primaryDetermination);
+
+      IdentifiableEntitySummary identifiableEntitySummary = IdentifiableEntitySummary.builder()
+        .lifeStage(targetOrganism.getLifeStage())
+        .sex(targetOrganism.getSex())
+        .managedAttributes(targetOrganism.getManagedAttributes())
+        .dwcVernacularName(targetOrganism.getDwcVernacularName())
+        .primaryDetermination(DeterminationSummary.builder()
+          .classification(classification)
+          .typeStatus(primaryDetermination != null ? primaryDetermination.getTypeStatus() : null)
+          .managedAttributes(primaryDetermination != null ? primaryDetermination.getManagedAttributes() : null)
+          .build())
+        .build();
+      sample.setTargetIdentifiableEntitySummary(identifiableEntitySummary);
     } else {
-      log.debug("Multiple target organisms found, targetOrganismPrimaryTypeStatus won't be set");
-    }
-  }
-
-  public void setOrganismClassification(MaterialSample sample) {
-
-    if (CollectionUtils.isEmpty(sample.getOrganism())) {
-      return;
-    }
-
-    List<Organism> targetOrganisms = ScientificNameUtils.extractTargetOrganisms(sample.getOrganism());
-
-    if (targetOrganisms.size() == 1) {
-      sample.setTargetOrganismPrimaryClassification(
-        organismService.extractClassification(targetOrganisms.getFirst()
-          .getPrimaryDetermination()));
-    } else {
-      log.debug("Multiple target organisms found, targetOrganismPrimaryClassification won't be set");
+      log.debug("Multiple target organisms found, identifiableEntitySummary won't be set");
     }
   }
 
