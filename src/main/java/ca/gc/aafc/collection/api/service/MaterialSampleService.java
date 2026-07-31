@@ -161,6 +161,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
         .primaryDetermination(DeterminationSummary.builder()
           .classification(classification)
           .typeStatus(primaryDetermination != null ? primaryDetermination.getTypeStatus() : null)
+          .managedAttributes(primaryDetermination != null ? primaryDetermination.getManagedAttributes() : null)
           .build())
         .build();
       sample.setTargetIdentifiableEntitySummary(identifiableEntitySummary);

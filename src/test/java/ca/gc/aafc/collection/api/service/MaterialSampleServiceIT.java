@@ -2,7 +2,9 @@ package ca.gc.aafc.collection.api.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.org.checkerframework.framework.qual.DefaultQualifier;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -36,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.inject.Inject;
 import jakarta.validation.ValidationException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -124,14 +127,43 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     materialSampleService.setTargetOrganismPrimaryScientificName(parentMaterialSample);
     assertEquals("verbatimScientificName", parentMaterialSample.getTargetOrganismPrimaryScientificName());
 
-    materialSampleService.setTargetIdentifiableEntitySummary(parentMaterialSample);
-    assertEquals("typeStatus", parentMaterialSample.getTargetIdentifiableEntitySummary()
-      .getPrimaryDetermination().getTypeStatus());
-
     //cleanup
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
+  }
+
+  @Test
+  public void targetIdentifiableEntitySummary_OnRequest_loaded() throws JsonProcessingException {
+    Organism organism = OrganismEntityFactory.newOrganism()
+      .isTarget(true)
+      .build();
+
+    transactionTestingHelper.doInTransaction(() -> organismService.createAndFlush(organism));
+    assertNotNull(organism.getUuid());
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .organism(List.of(organism))
+      .build();
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(materialSample));
+
+    materialSampleService.setTargetIdentifiableEntitySummary(materialSample);
+    assertNotNull(materialSample.getTargetIdentifiableEntitySummary());
+
+    Determination determination = DeterminationFactory.newDetermination()
+      .verbatimScientificName("verbatimScientificName")
+      .typeStatus("typeStatus")
+      .isPrimary(false)
+      .build();
+
+    List<Determination> d = new ArrayList<>();
+    d.add(determination);
+    organism.setDetermination(d);
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.update(materialSample));
+
+    materialSampleService.setTargetIdentifiableEntitySummary(materialSample);
+    assertEquals("typeStatus", materialSample.getTargetIdentifiableEntitySummary()
+      .getPrimaryDetermination().getTypeStatus());
   }
 
   @Test

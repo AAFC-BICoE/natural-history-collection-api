@@ -10,4 +10,5 @@ import lombok.Getter;
 public class DeterminationSummary implements Serializable {
   private Map<String, String> classification;
   private String typeStatus;
+  private Map<String, String> managedAttributes;
 }
