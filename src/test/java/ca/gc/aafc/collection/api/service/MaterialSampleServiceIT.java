@@ -2,9 +2,7 @@ package ca.gc.aafc.collection.api.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.checkerframework.framework.qual.DefaultQualifier;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -150,16 +148,19 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     materialSampleService.setTargetIdentifiableEntitySummary(materialSample);
     assertNotNull(materialSample.getTargetIdentifiableEntitySummary());
 
-    Determination determination = DeterminationFactory.newDetermination()
+    final Determination determination = DeterminationFactory.newDetermination()
       .verbatimScientificName("verbatimScientificName")
       .typeStatus("typeStatus")
       .isPrimary(false)
       .build();
 
-    List<Determination> d = new ArrayList<>();
-    d.add(determination);
-    organism.setDetermination(d);
-    transactionTestingHelper.doInTransaction(() -> materialSampleService.update(materialSample));
+    transactionTestingHelper.doInTransaction(() -> {
+      List<Determination> dets = new ArrayList<>();
+      dets.add(determination);
+      organism.setDetermination(dets);
+      organismService.createAndFlush(organism);
+      return organism;
+    });
 
     materialSampleService.setTargetIdentifiableEntitySummary(materialSample);
     assertEquals("typeStatus", materialSample.getTargetIdentifiableEntitySummary()
