@@ -12,6 +12,7 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 import ca.gc.aafc.collection.api.entities.HostOrganism;
+import ca.gc.aafc.collection.api.entities.IdentifiableEntitySummary;
 import ca.gc.aafc.collection.api.entities.MaterialSample;
 import ca.gc.aafc.dina.dto.DinaDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -93,6 +94,10 @@ public class MaterialSampleDto implements DinaDto {
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private Map<String, String> targetOrganismPrimaryClassification;
+
+  @DiffIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private IdentifiableEntitySummary targetIdentifiableEntitySummary;
 
   @DiffIgnore
   @JsonInclude(JsonInclude.Include.NON_NULL)

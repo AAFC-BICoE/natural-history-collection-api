@@ -2,7 +2,6 @@ package ca.gc.aafc.collection.api.entities;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -138,10 +137,7 @@ public class MaterialSample extends AbstractMaterialSample {
   private String targetOrganismPrimaryScientificName;
 
   @Transient
-  private String targetOrganismPrimaryTypeStatus;
-  
-  @Transient
-  private Map<String, String> targetOrganismPrimaryClassification;
+  private IdentifiableEntitySummary targetIdentifiableEntitySummary;
 
   @Transient
   private String effectiveScientificName;
