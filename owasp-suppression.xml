@@ -4,10 +4,6 @@
         <cpe>cpe:/a:pivotal_software:spring_security:5.4.5</cpe>
     </suppress>
     <suppress>
-        <notes>CVE about Keycloak Server</notes>
-        <cve>CVE-2022-1245</cve>
-    </suppress>
-    <suppress>
         <notes>no UriComponentsBuilder</notes>
         <cve>CVE-2024-22243</cve>
     </suppress>
@@ -55,5 +51,17 @@
         <notes>not valid for api</notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework/spring.*$</packageUrl>
         <cve>CVE-2016-1000027</cve>
+    </suppress>
+    <suppress>
+        <notes>Spring Security 5</notes>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes>Eclipse GlassFish related. Not jaxb-core</notes>
+        <cve>CVE-2026-2587</cve>
+    </suppress>
+    <suppress>
+        <notes>Eclipse GlassFish related. Not jaxb-core</notes>
+        <cve>CVE-2026-2586</cve>
     </suppress>
 </suppressions>
