@@ -26,8 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.UUID;
 import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
+import java.util.Map;
+import java.util.UUID;
 
 public class CollectionRepositoryIT extends BaseRepositoryIT {
 
@@ -61,6 +63,7 @@ public class CollectionRepositoryIT extends BaseRepositoryIT {
     assertEquals(collectionDto.getCode(), result.getCode());
     assertEquals(collectionDto.getMultilingualDescription().getDescriptions().getFirst().getLang(),
       result.getMultilingualDescription().getDescriptions().getFirst().getLang());
+
   }
 
   @Test
@@ -68,6 +71,15 @@ public class CollectionRepositoryIT extends BaseRepositoryIT {
   public void create_WhenDifferentGroup_AccessDeniedException() {
     CollectionDto collectionDto = newCollectionDto();
     assertThrows(AccessDeniedException.class, () -> createWithRepository(collectionDto, collectionRepository));
+  }
+
+  @Test
+  @WithMockKeycloakUser(groupRole = {"CNC:SUPER_USER"})
+  public void create_whenInvalidIdentifierKey_ValidationException() {
+    CollectionDto collectionDto = newCollectionDto();
+    collectionDto.setIdentifiers(Map.of("key", "http:///abc.com"));
+    assertThrows(
+      ValidationException.class, () -> createWithRepository(collectionDto, collectionRepository));
   }
 
   @Test
@@ -124,6 +136,7 @@ public class CollectionRepositoryIT extends BaseRepositoryIT {
     return CollectionFixture.newCollection()
       .group(group)
       .code(code)
+      .identifiers(Map.of("grscicoll", "http:///abc.com"))
       .multilingualDescription(MultilingualTestFixture.newMultilingualDescription())
       .build();
   }

@@ -9,11 +9,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -52,8 +52,9 @@ public class Collection extends UserDescribedDinaEntity {
 
   @Type(JsonType.class)
   @Column(columnDefinition = "jsonb")
-  @Valid
-  private List<CollectionIdentifier> identifiers = new ArrayList<>();
+  @NotNull
+  @Builder.Default
+  private Map<String, String> identifiers = Map.of();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_collection_id")

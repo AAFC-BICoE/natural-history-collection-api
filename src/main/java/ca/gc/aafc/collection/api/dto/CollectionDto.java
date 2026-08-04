@@ -1,30 +1,28 @@
 package ca.gc.aafc.collection.api.dto;
 
-import ca.gc.aafc.collection.api.entities.Collection;
-import ca.gc.aafc.collection.api.entities.CollectionIdentifier;
-import ca.gc.aafc.dina.dto.JsonApiResource;
-import ca.gc.aafc.dina.dto.RelatedEntity;
-import ca.gc.aafc.dina.i18n.MultilingualDescription;
+import org.javers.core.metamodel.annotation.Id;
+import org.javers.core.metamodel.annotation.PropertyName;
+import org.javers.core.metamodel.annotation.ShallowReference;
+import org.javers.core.metamodel.annotation.TypeName;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
+import ca.gc.aafc.collection.api.entities.Collection;
+import ca.gc.aafc.dina.dto.JsonApiResource;
+import ca.gc.aafc.dina.dto.RelatedEntity;
+import ca.gc.aafc.dina.i18n.MultilingualDescription;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.javers.core.metamodel.annotation.Id;
-import org.javers.core.metamodel.annotation.PropertyName;
-import org.javers.core.metamodel.annotation.ShallowReference;
-import org.javers.core.metamodel.annotation.TypeName;
-
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -60,9 +58,8 @@ public class CollectionDto implements JsonApiResource {
   private String address;
   private String remarks;
 
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
   @Builder.Default
-  private List<CollectionIdentifier> identifiers = new ArrayList<>();
+  private Map<String, String> identifiers = Map.of();
 
   // -- Relationships --
   @JsonIgnore
