@@ -12,7 +12,7 @@
       <column name="type" value="SYSTEM"/>
       <column name="vocab_class" value="QUALIFIED_VALUE"/>
       <column name="version" value="1"/>
-      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Identifier Type"},{"lang":"fr","title":"Type d’identifiant"}]}'/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Identifier Type"},{"lang":"fr","title":"Type d’identifiant"},{"lang":"de","title":"Identifier-Typ"}]}'/>
       <column name="created_by" value="system"/>
     </insert>
   </changeSet>

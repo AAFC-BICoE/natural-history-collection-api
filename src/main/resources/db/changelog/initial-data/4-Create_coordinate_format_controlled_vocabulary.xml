@@ -12,7 +12,7 @@
             <column name="type" value="SYSTEM"/>
             <column name="vocab_class" value="CONTROLLED_TERM"/>
             <column name="version" value="1"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Coordinate Format"},{"lang":"fr","title":"Format de coordonnées"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Coordinate Format"},{"lang":"fr","title":"Format de coordonnées"},{"lang":"de","title":"Koordinatenformat"}]}'/>
             <column name="multilingual_description" value='{
       "descriptions": [
       {
@@ -22,6 +22,10 @@
       {
       "lang": "fr",
       "desc": " Manière d’écrire ou de représenter des positions géographiques sous forme textuelle, indépendamment du système de référence de coordonnées (SRC/CRS) ou du datum. Le format définit la structure, les unités et les symboles utilisés pour exprimer les coordonnées."
+      },
+      {
+      "lang": "de",
+      "desc": "Die Art, geografische Positionen als Text darzustellen, unabhängig vom Koordinatenreferenzsystem (CRS) oder Datum. Das Format definiert die Struktur, Einheiten und Symbole zur Darstellung von Koordinaten."
       }
       ]
       }'/>
@@ -35,7 +39,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q1798227"/>
             <column name="key" value="decimal_degrees"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"decimal degrees"},{"lang":"fr","title":"degrés décimaux"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"decimal degrees"},{"lang":"fr","title":"degrés décimaux"},{"lang":"de","title":"Dezimalgrad"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
         <insert tableName="controlled_vocabulary_item">
@@ -44,7 +48,7 @@
             <column name="name" value="degrees decimal minutes"/>
             <column name="key" value="degrees_decimal_minutes"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"degrees decimal minutes"},{"lang":"fr","title":"degrés décimales minutes"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"degrees decimal minutes"},{"lang":"fr","title":"degrés décimales minutes"},{"lang":"de","title":"Grad Dezimalminuten"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
         <insert tableName="controlled_vocabulary_item">
@@ -53,7 +57,7 @@
             <column name="name" value="degrees minutes seconds"/>
             <column name="key" value="degrees_minutes_seconds"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"degrees minutes seconds"},{"lang":"fr","title":"degrés minutes secondes"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"degrees minutes seconds"},{"lang":"fr","title":"degrés minutes secondes"},{"lang":"de","title":"Grad Minuten Sekunden"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
         <insert tableName="controlled_vocabulary_item">
@@ -63,7 +67,7 @@
             <column name="term" value="http://www.wikidata.org/wiki/Q588975"/>
             <column name="key" value="utm"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Universal Transverse Mercator"},{"lang":"fr","title":"Transverse Universelle de Mercator"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Universal Transverse Mercator"},{"lang":"fr","title":"Transverse Universelle de Mercator"},{"lang":"de","title":"Universale Transversale Mercator"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
     </changeSet>
