@@ -6,9 +6,14 @@
 
     <changeSet id="194-Migrate_collection_identifier" context="data-migration" author="cgendreau">
         <sql>
-            UPDATE collection SET identifiers = jsonb_build_object(
-              lower(identifiers->>'type'), identifiers->>'uri')
-            WHERE identifiers->>'type' IS NOT NULL AND identifiers->>'uri' IS NOT NULL;
+          UPDATE collection
+          SET identifiers = (
+              SELECT jsonb_object_agg(
+                  lower(elem->>'type'),
+                  elem->>'uri'
+              )
+              FROM jsonb_array_elements(identifiers) AS elem
+          );
         </sql>
     </changeSet>
 </databaseChangeLog>
