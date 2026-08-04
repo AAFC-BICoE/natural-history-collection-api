@@ -97,3 +97,5 @@ jobs:
           push: true
           tags: aafcbicoe/natural-history-collection-api:${{ env.VERSION_TAG }}
           provenance: false
+           # Force the builder engine to output standard Docker mediatypes for OKD
+          outputs: type=image,oci-mediatypes=false
