@@ -13,7 +13,7 @@
             <column name="type" value="SYSTEM"/>
             <column name="vocab_class" value="QUALIFIED_VALUE"/>
             <column name="version" value="1"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Type Status"},{"lang":"fr","title":"Statut du type"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Type Status"},{"lang":"fr","title":"Statut du type"},{"lang":"de","title":"Typstatus"}]}'/>
             <column name="multilingual_description" value='{
       "descriptions": [
       {
@@ -23,6 +23,10 @@
       {
       "lang": "fr",
       "desc": "Type nomenclatural appliqué au sujet"
+      },
+      {
+      "lang": "de",
+      "desc": "Nomenklaturlicher Typ, der auf das Objekt angewendet wird"
       }
       ]
       }'/>
@@ -36,7 +40,7 @@
             <column name="term" value=""/>
             <column name="key" value="none"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"None"},{"lang":"fr","title":"Aucun"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"None"},{"lang":"fr","title":"Aucun"},{"lang":"de","title":"Keine"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -47,7 +51,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q1061403"/>
             <column name="key" value="holotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Holotype"},{"lang":"fr","title":"Holotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Holotype"},{"lang":"fr","title":"Holotype"},{"lang":"de","title":"Holotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -58,7 +62,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q926578"/>
             <column name="key" value="paratype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Paratype"},{"lang":"fr","title":"Paratype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Paratype"},{"lang":"fr","title":"Paratype"},{"lang":"de","title":"Paratyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -69,7 +73,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q19353437"/>
             <column name="key" value="allotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Allotype"},{"lang":"fr","title":"Allotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Allotype"},{"lang":"fr","title":"Allotype"},{"lang":"de","title":"Allotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -80,7 +84,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q3874702"/>
             <column name="key" value="neotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Neotype"},{"lang":"fr","title":"Neotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Neotype"},{"lang":"fr","title":"Neotype"},{"lang":"de","title":"Neotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -91,7 +95,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q719822"/>
             <column name="key" value="syntype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Syntype"},{"lang":"fr","title":"Syntype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Syntype"},{"lang":"fr","title":"Syntype"},{"lang":"de","title":"Syntyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -102,7 +106,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q2439719"/>
             <column name="key" value="lectotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Lectotype"},{"lang":"fr","title":"Lectotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Lectotype"},{"lang":"fr","title":"Lectotype"},{"lang":"de","title":"Lectotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -113,7 +117,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q19353473"/>
             <column name="key" value="paralectotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Paralectotype"},{"lang":"fr","title":"Paralectotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Paralectotype"},{"lang":"fr","title":"Paralectotype"},{"lang":"de","title":"Paralectotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -124,7 +128,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q19353478"/>
             <column name="key" value="hapantotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Hapantotype"},{"lang":"fr","title":"Hapantotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Hapantotype"},{"lang":"fr","title":"Hapantotype"},{"lang":"de","title":"Hapantyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -134,7 +138,7 @@
             <column name="name" value="Iconotype"/>
             <column name="key" value="iconotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Iconotype"},{"lang":"fr","title":"Iconotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Iconotype"},{"lang":"fr","title":"Iconotype"},{"lang":"de","title":"Iconotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -145,7 +149,7 @@
             <column name="term" value="http://www.wikidata.org/entity/Q19353481"/>
             <column name="key" value="ergatotype"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Ergatotype"},{"lang":"fr","title":"Ergatotype"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Ergatotype"},{"lang":"fr","title":"Ergatotype"},{"lang":"de","title":"Ergatotyp"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
     </changeSet>

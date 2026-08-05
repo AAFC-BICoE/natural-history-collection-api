@@ -12,7 +12,7 @@
       <column name="type" value="SYSTEM"/>
       <column name="vocab_class" value="QUALIFIED_VALUE"/>
       <column name="version" value="1"/>
-      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Role"},{"lang":"fr","title":"Rôle de projet"}]}'/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Role"},{"lang":"fr","title":"Rôle de projet"},{"lang":"de","title":"Projektrolle"}]}'/>
       <column name="multilingual_description" value='{
       "descriptions": [
       {
@@ -22,6 +22,10 @@
       {
       "lang": "fr",
       "desc": "Rôles de projet qui définissent les responsabilités des individus au sein d’un projet."
+      },
+      {
+      "lang": "de",
+      "desc": "Rollen, die die Verantwortlichkeiten von Personen innerhalb eines Projekts definieren."
       }
       ]
       }'/>
@@ -35,7 +39,7 @@
             <column name="term" value=""/>
             <column name="key" value="project_leader"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Leader"},{"lang":"fr","title":"Chef de projet"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Leader"},{"lang":"fr","title":"Chef de projet"},{"lang":"de","title":"Projektleiter"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -46,7 +50,7 @@
             <column name="term" value=""/>
             <column name="key" value="project_member"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Member"},{"lang":"fr","title":"Membre du projet"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Project Member"},{"lang":"fr","title":"Membre du projet"},{"lang":"de","title":"Projektmitglied"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -57,7 +61,7 @@
             <column name="term" value=""/>
             <column name="key" value="data_curator"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Curator"},{"lang":"fr","title":"Conservateur de données"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Curator"},{"lang":"fr","title":"Conservateur de données"},{"lang":"de","title":"Datenkurator"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -68,7 +72,7 @@
             <column name="term" value=""/>
             <column name="key" value="data_manager"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Manager"},{"lang":"fr","title":"Gestionnaire de données"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Data Manager"},{"lang":"fr","title":"Gestionnaire de données"},{"lang":"de","title":"Datenmanager"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -79,7 +83,7 @@
             <column name="term" value=""/>
             <column name="key" value="contact_person"/>
             <column name="_group" value="system"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne ressource"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne ressource"},{"lang":"de","title":"Ansprechpartner"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
   </changeSet>

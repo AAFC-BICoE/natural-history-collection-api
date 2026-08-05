@@ -13,7 +13,7 @@
             <column name="type" value="SYSTEM"/>
             <column name="vocab_class" value="QUALIFIED_VALUE"/>
             <column name="version" value="1"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Association Type"},{"lang":"fr","title":"Type d&apos;association"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Association Type"},{"lang":"fr","title":"Type d&apos;association"},{"lang":"de","title":"Beziehungsart"}]}'/>
             <column name="created_by" value="system"/>
         </insert>
 
@@ -24,12 +24,16 @@
             <column name="key" value="has_host"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002454"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has host"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has host"},{"lang":"de","title":"Hat Wirt"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "X has host y if and only if: x is an organism, y is an organism, and x can live on the surface of or within the body of y."
+                },
+                {
+                "lang": "de",
+                "desc": "X hat Wirt y genau dann, wenn: x ein Organismus ist, y ein Organismus ist und x auf der Oberfläche oder im Körper von y leben kann."
                 }
                 ]
                 }'/>
@@ -43,12 +47,16 @@
             <column name="key" value="host_of"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002453"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Host of"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Host of"},{"lang":"de","title":"Wirt von"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of has host."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von hat Wirt."
                 }
                 ]
                 }'/>
@@ -62,12 +70,16 @@
             <column name="key" value="parasite_of"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002444"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasite of"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasite of"},{"lang":"de","title":"Parasit von"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "A parasite-host relationship where an organism benefits at the expense of another."
+                },
+                {
+                "lang": "de",
+                "desc": "Eine Parasiten-Wirt-Beziehung, bei der ein Organismus auf Kosten eines anderen profitiert."
                 }
                 ]
                 }'/>
@@ -81,12 +93,16 @@
             <column name="key" value="parasitized_by"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002445"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasitized by"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Parasitized by"},{"lang":"de","title":"Parasitisiert von"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of parasite of."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von Parasit von."
                 }
                 ]
                 }'/>
@@ -100,12 +116,16 @@
             <column name="key" value="pollinates"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002455"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinates"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinates"},{"lang":"de","title":"Bestäubt"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of pollinated by."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von bestäubt durch."
                 }
                 ]
                 }'/>
@@ -119,12 +139,16 @@
             <column name="key" value="pollinated_by"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002456"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinated by"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pollinated by"},{"lang":"de","title":"Bestäubt durch"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of pollinates."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von bestäubt."
                 }
                 ]
                 }'/>
@@ -138,12 +162,16 @@
             <column name="key" value="has_vector"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002460"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has vector"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has vector"},{"lang":"de","title":"Hat Vektor"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of is vector for."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von ist Vektor für."
                 }
                 ]
                 }'/>
@@ -157,12 +185,16 @@
             <column name="key" value="vector_for"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002459"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Vector for"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Vector for"},{"lang":"de","title":"Vektor für"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of has vector."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von hat Vektor."
                 }
                 ]
                 }'/>
@@ -176,12 +208,16 @@
             <column name="key" value="has_pathogen"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002557"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has pathogen"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Has pathogen"},{"lang":"de","title":"Hat Pathogen"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "A host interaction where the smaller of the two members of a symbiosis causes a disease in the larger member."
+                },
+                {
+                "lang": "de",
+                "desc": "Eine Wirtsinteraktion, bei der das kleinere der beiden Mitglieder einer Symbiose eine Krankheit beim größeren Mitglied verursacht."
                 }
                 ]
                 }'/>
@@ -195,12 +231,16 @@
             <column name="key" value="pathogen_of"/>
             <column name="_group" value="system"/>
             <column name="term" value="http://purl.obolibrary.org/obo/RO_0002556"/>
-            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pathogen of"}]}'/>
+            <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Pathogen of"},{"lang":"de","title":"Pathogen von"}]}'/>
             <column name="multilingual_description" value='{
                 "descriptions": [
                 {
                 "lang": "en",
                 "desc": "Inverse of has pathogen."
+                },
+                {
+                "lang": "de",
+                "desc": "Umkehrung von hat Pathogen."
                 }
                 ]
                 }'/>

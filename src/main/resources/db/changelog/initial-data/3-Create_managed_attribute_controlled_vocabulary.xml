@@ -12,7 +12,7 @@
       <column name="type" value="MANAGED_ATTRIBUTE"/>
       <column name="vocab_class" value="QUALIFIED_VALUE"/>
       <column name="version" value="1"/>
-      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Managed Attribute"},{"lang":"fr","title":"Attribut géré"}]}'/>
+      <column name="multilingual_title" value='{"titles":[{"lang":"en","title":"Managed Attribute"},{"lang":"fr","title":"Attribut géré"},{"lang":"de","title":"Regelattribut"}]}'/>
       <column name="multilingual_description" value='{
       "descriptions": [
       {
@@ -22,6 +22,10 @@
       {
       "lang": "fr",
       "desc": "Attributs pouvant être créés et utilisés sur demande par les utilisateurs. Ils sont généralement utilisés pour saisir des données qui ne sont pas suffisamment courantes pour être saisies dans un champ standard."
+      },
+      {
+      "lang": "de",
+      "desc": "Attribute, die von Benutzer:innen nach Bedarf erstellt und verwendet werden können. Sie werden normalerweise verwendet, um Daten zu erfassen, die nicht häufig genug sind, um in ein reguläres Feld aufgenommen zu werden."
       }
       ]
       }'/>
