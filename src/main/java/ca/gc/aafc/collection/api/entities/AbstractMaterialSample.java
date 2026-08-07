@@ -76,6 +76,7 @@ public class AbstractMaterialSample implements DinaEntity {
 
   // Represents the Primary ID
   @Column(name = "material_sample_name")
+  @Size(max = 100)
   private String materialSampleName;
 
   // Represents the alternative identifiers

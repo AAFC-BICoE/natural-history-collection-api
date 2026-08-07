@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="195-Increase_material_sample_name_limit" context="data-migration" author="cgendreau">
+        <dropView viewName="material_sample_summary"/>
+        <modifyDataType tableName="material_sample" columnName="material_sample_name" newDataType="varchar(100)" />
+        <createView viewName="material_sample_summary">
+            SELECT ms.uuid, ms.material_sample_name, find_determination(ms.id) as effective_determinations FROM material_sample ms;
+        </createView>
+    </changeSet>
+</databaseChangeLog>
