@@ -1,0 +1,293 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
+                   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+  <changeSet id="9-Add_translations_de_to_controlled_vocabularies" context="initial-data" author="jgrieb">
+
+    <!-- Managed Attribute -->
+    <update tableName="controlled_vocabulary">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Managed Attribute"},{"lang":"fr","title":"Attribut géré"},{"lang":"de","title":"Zusatzfeld"}]}'/>
+      <column name="multilingual_description"
+              value='{"descriptions":[{"lang":"en","desc":"Attributes that can be created and used by users on-demand. They are usually used to capture data that is not common enough to be captured in a regular field."},{"lang":"fr","desc":"Attributs pouvant être créés et utilisés sur demande par les utilisateurs. Ils sont généralement utilisés pour saisir des données qui ne sont pas suffisamment courantes pour être saisies dans un champ standard."},{"lang":"de","desc":"Attribute, die von Benutzer:innen nach Bedarf erstellt und verwendet werden können. Sie werden normalerweise verwendet, um Daten zu erfassen, die nicht häufig genug sind, um in ein reguläres Feld aufgenommen zu werden."}]}'/>
+      <where>uuid = '01998155-a6f0-7c2f-9fcc-994d74222f9c'</where>
+    </update>
+
+
+    <!-- Coordinate Format -->
+    <update tableName="controlled_vocabulary">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Coordinate Format"},{"lang":"fr","title":"Format de coordonnées"},{"lang":"de","title":"Koordinatenformat"}]}'/>
+      <column name="multilingual_description"
+              value='{"descriptions":[{"lang":"en","desc":"The way of writing or representing geographic positions as text, independent of the coordinate reference system (CRS) or datum. The format defines the structure, units, and symbols used to express coordinates."},{"lang":"fr","desc":" Manière d’écrire ou de représenter des positions géographiques sous forme textuelle, indépendamment du système de référence de coordonnées (SRC/CRS) ou du datum. Le format définit la structure, les unités et les symboles utilisés pour exprimer les coordonnées."},{"lang":"de","desc":"Die Art, geografische Positionen als Text darzustellen, unabhängig vom Koordinatenreferenzsystem (CRS) oder Datum. Das Format definiert die Struktur, Einheiten und Symbole zur Darstellung von Koordinaten."}]}'/>
+      <where>uuid = '0199874f-a9bd-71c9-aec1-56b529471d0e'</where>
+    </update>
+
+    <!-- decimal degrees -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"decimal degrees"},{"lang":"fr","title":"degrés décimaux"},{"lang":"de","title":"Dezimalgrad"}]}'/>
+      <where>uuid = '01998774-08e4-77ed-8b58-edecef4c994d'</where>
+    </update>
+
+    <!-- degrees decimal minutes -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"degrees decimal minutes"},{"lang":"fr","title":"degrés décimales minutes"},{"lang":"de","title":"Grad Dezimalminuten"}]}'/>
+      <where>uuid = '01998778-9922-7e4d-8664-57b2be04a395'</where>
+    </update>
+
+    <!-- degrees minutes seconds -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"degrees minutes seconds"},{"lang":"fr","title":"degrés minutes secondes"},{"lang":"de","title":"Grad Minuten Sekunden"}]}'/>
+      <where>uuid = '0199877f-a0f7-7b85-af36-63914c49b073'</where>
+    </update>
+
+    <!-- Universal Transverse Mercator -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Universal Transverse Mercator"},{"lang":"fr","title":"Transverse Universelle de Mercator"},{"lang":"de","title":"Universale Transversale Mercator"}]}'/>
+      <where>uuid = '0199877f-f27f-795c-8137-c5a71689fccc'</where>
+    </update>
+
+
+    <!-- Project Role -->
+    <update tableName="controlled_vocabulary">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Project Role"},{"lang":"fr","title":"Rôle de projet"},{"lang":"de","title":"Projektrolle"}]}'/>
+      <column name="multilingual_description"
+              value='{"descriptions":[{"lang":"en","desc":"Roles that define the responsibilities of individuals within a project."},{"lang":"fr","desc":"Rôles de projet qui définissent les responsabilités des individus au sein d’un projet."},{"lang":"de","desc":"Rollen, die die Verantwortlichkeiten von Personen innerhalb eines Projekts definieren."}]}'/>
+      <where>uuid = '019c33cb-9be2-79aa-9932-9248b05e5c97'</where>
+    </update>
+
+    <!-- Project Leader -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Project Leader"},{"lang":"fr","title":"Chef de projet"},{"lang":"de","title":"Projektleiter"}]}'/>
+      <where>uuid = '019c33cb-9be2-76d9-95cd-7ff8b48ade68'</where>
+    </update>
+
+    <!-- Project Member -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Project Member"},{"lang":"fr","title":"Membre du projet"},{"lang":"de","title":"Projektmitglied"}]}'/>
+      <where>uuid = '019c33cb-9be2-7c9d-bdef-58ed8c3a8c30'</where>
+    </update>
+
+    <!-- Data Curator -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Data Curator"},{"lang":"fr","title":"Conservateur de données"},{"lang":"de","title":"Datenkurator"}]}'/>
+      <where>uuid = '019c33cb-9be2-7161-bd4e-9968eb8139c5'</where>
+    </update>
+
+    <!-- Data Manager -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Data Manager"},{"lang":"fr","title":"Gestionnaire de données"},{"lang":"de","title":"Datenmanager"}]}'/>
+      <where>uuid = '019c33cb-9be2-7962-9f60-9ba1f61dc578'</where>
+    </update>
+
+    <!-- Contact Person -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Contact Person"},{"lang":"fr","title":"Personne ressource"},{"lang":"de","title":"Ansprechpartner"}]}'/>
+      <where>uuid = '019c33cb-9be2-731d-998a-1b6cd75900f8'</where>
+    </update>
+
+
+    <!-- Identifier Type -->
+    <update tableName="controlled_vocabulary">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Identifier Type"},{"lang":"fr","title":"Type d’identifiant"},{"lang":"de","title":"Identifier-Typ"}]}'/>
+      <where>uuid = '019c961e-4c0d-7398-b4ae-73687826b3b5'</where>
+    </update>
+
+
+    <!-- Type Status -->
+    <update tableName="controlled_vocabulary">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Type Status"},{"lang":"fr","title":"Statut du type"},{"lang":"de","title":"Typstatus"}]}'/>
+      <column name="multilingual_description"
+              value='{"descriptions":[{"lang":"en","desc":"Nomenclatural type applied to the subject"},{"lang":"fr","desc":"Type nomenclatural appliqué au sujet"},{"lang":"de","desc":"Nomenklaturlicher Typ, der auf das Objekt angewendet wird"}]}'/>
+      <where>uuid = '019cbf7f-b804-7aa5-b04d-b1deed0e7255'</where>
+    </update>
+
+    <!-- None -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"None"},{"lang":"fr","title":"Aucun"},{"lang":"de","title":"Keine"}]}'/>
+      <where>uuid = '019cbf97-078d-71ab-af4f-41b75e45aaf3'</where>
+    </update>
+
+    <!-- Holotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Holotype"},{"lang":"fr","title":"Holotype"},{"lang":"de","title":"Holotyp"}]}'/>
+      <where>uuid = '019cbfaa-5ace-7fbf-97ae-1df58deb6e72'</where>
+    </update>
+
+    <!-- Paratype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Paratype"},{"lang":"fr","title":"Paratype"},{"lang":"de","title":"Paratyp"}]}'/>
+      <where>uuid = '019cbf97-e820-7384-b55e-5ef571154790'</where>
+    </update>
+
+    <!-- Allotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Allotype"},{"lang":"fr","title":"Allotype"},{"lang":"de","title":"Allotyp"}]}'/>
+      <where>uuid = '019cbf98-10e2-74db-a265-c75c0830b473'</where>
+    </update>
+
+    <!-- Neotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Neotype"},{"lang":"fr","title":"Neotype"},{"lang":"de","title":"Neotyp"}]}'/>
+      <where>uuid = '019cbf98-3778-78da-ae53-2c5b5f57e893'</where>
+    </update>
+
+    <!-- Syntype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Syntype"},{"lang":"fr","title":"Syntype"},{"lang":"de","title":"Syntyp"}]}'/>
+      <where>uuid = '019cbf98-5390-785b-aac1-55fc11412737'</where>
+    </update>
+
+    <!-- Lectotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Lectotype"},{"lang":"fr","title":"Lectotype"},{"lang":"de","title":"Lectotyp"}]}'/>
+      <where>uuid = '019cbf98-6f88-7405-b147-f4ed0a24d39c'</where>
+    </update>
+
+    <!-- Paralectotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Paralectotype"},{"lang":"fr","title":"Paralectotype"},{"lang":"de","title":"Paralectotyp"}]}'/>
+      <where>uuid = '019cbf98-8c24-7099-bd0f-d7c2e402f76b'</where>
+    </update>
+
+    <!-- Hapantotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Hapantotype"},{"lang":"fr","title":"Hapantotype"},{"lang":"de","title":"Hapantyp"}]}'/>
+      <where>uuid = '019cbf98-a1a5-77ee-a85c-ee1fc6235912'</where>
+    </update>
+
+    <!-- Iconotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Iconotype"},{"lang":"fr","title":"Iconotype"},{"lang":"de","title":"Iconotyp"}]}'/>
+      <where>uuid = '019cbf98-b4fe-7f98-99fc-191b0977a413'</where>
+    </update>
+
+    <!-- Ergatotype -->
+    <update tableName="controlled_vocabulary_item">
+      <column name="multilingual_title"
+              value='{"titles":[{"lang":"en","title":"Ergatotype"},{"lang":"fr","title":"Ergatotype"},{"lang":"de","title":"Ergatotyp"}]}'/>
+      <where>uuid = '019cbf98-c783-74d8-b925-4f99fffbb4a8'</where>
+    </update>
+
+    <update tableName="controlled_vocabulary">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Association Type"},{"lang":"fr","title":"Type d&apos;association"},{"lang":"de","title":"Assoziationstyp"}]}'/>
+        <where>uuid = '019cbf7f-b804-7aa5-b04d-b1deed0e7256'</where>
+    </update>
+
+    <!-- Has host -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Has host"},{"lang":"de","title":"Hat einen Wirt"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"X has host y if and only if: x is an organism, y is an organism, and x can live on the surface of or within the body of y."},{"lang":"de","desc":"X hat y als Wirt genau dann, wenn x ein Organismus ist, y ein Organismus ist und x auf der Oberfläche oder im Körper von y leben kann."}]}'/>
+        <where>uuid = '019cbf97-078d-71ab-af4f-41b75e45aaf4'</where>
+    </update>
+
+    <!-- Host of -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Host of"},{"lang":"de","title":"Wirt von"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of has host."},{"lang":"de","desc":"Umkehrung von „Hat einen Wirt“."}]}'/>
+        <where>uuid = '019cbfaa-5ace-7fbf-97ae-1df58deb6e73'</where>
+    </update>
+
+    <!-- Parasite of -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Parasite of"},{"lang":"de","title":"Parasit von"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"A parasite-host relationship where an organism benefits at the expense of another."},{"lang":"de","desc":"Eine Parasit-Wirt-Beziehung, bei der ein Organismus auf Kosten eines anderen profitiert."}]}'/>
+        <where>uuid = '019cbf97-e820-7384-b55e-5ef571154791'</where>
+    </update>
+
+    <!-- Parasitized by -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Parasitized by"},{"lang":"de","title":"Wird parasitiert von"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of parasite of."},{"lang":"de","desc":"Umkehrung von „Parasit von“."}]}'/>
+        <where>uuid = '019cbf98-10e2-74db-a265-c75c0830b474'</where>
+    </update>
+
+    <!-- Pollinates -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Pollinates"},{"lang":"de","title":"Bestäubt"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of pollinated by."},{"lang":"de","desc":"Umkehrung von „Wird bestäubt von“."}]}'/>
+        <where>uuid = '019cbf98-3778-78da-ae53-2c5b5f57e894'</where>
+    </update>
+
+    <!-- Pollinated by -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Pollinated by"},{"lang":"de","title":"Wird bestäubt von"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of pollinates."},{"lang":"de","desc":"Umkehrung von „Bestäubt“."}]}'/>
+        <where>uuid = '019cbf98-5390-785b-aac1-55fc11412738'</where>
+    </update>
+
+    <!-- Has vector -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Has vector"},{"lang":"de","title":"Hat einen Vektor"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of is vector for."},{"lang":"de","desc":"Umkehrung von „Vektor für“."}]}'/>
+        <where>uuid = '019cbf98-6f88-7405-b147-f4ed0a24d39d'</where>
+    </update>
+
+    <!-- Vector for -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Vector for"},{"lang":"de","title":"Vektor für"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of has vector."},{"lang":"de","desc":"Umkehrung von „Hat einen Vektor“."}]}'/>
+        <where>uuid = '019cbf98-8c24-7099-bd0f-d7c2e402f76c'</where>
+    </update>
+
+    <!-- Has pathogen -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Has pathogen"},{"lang":"de","title":"Hat einen Krankheitserreger"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"A host interaction where the smaller of the two members of a symbiosis causes a disease in the larger member."},{"lang":"de","desc":"Eine Wirt-Interaktion, bei der das kleinere der beiden Mitglieder einer Symbiose beim größeren Mitglied eine Krankheit verursacht."}]}'/>
+        <where>uuid = '019cbf98-a1a5-77ee-a85c-ee1fc6235913'</where>
+    </update>
+
+    <!-- Pathogen of -->
+    <update tableName="controlled_vocabulary_item">
+        <column name="multilingual_title"
+                value='{"titles":[{"lang":"en","title":"Pathogen of"},{"lang":"de","title":"Krankheitserreger von"}]}'/>
+        <column name="multilingual_description"
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of has pathogen."},{"lang":"de","desc":"Umkehrung von „Hat einen Krankheitserreger“."}]}'/>
+        <where>uuid = '019cbf98-b4fe-7f98-99fc-191b0977a414'</where>
+    </update>
+
+  </changeSet>
+</databaseChangeLog>
