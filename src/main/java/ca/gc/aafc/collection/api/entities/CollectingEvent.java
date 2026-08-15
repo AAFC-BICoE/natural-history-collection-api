@@ -4,7 +4,6 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -20,9 +19,11 @@ import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import jakarta.persistence.Column;
@@ -207,7 +208,7 @@ public class CollectingEvent implements DinaEntity {
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
-  @Type(PostgreSQLEnumType.class)
+  @JdbcTypeCode(SqlTypes.NAMED_ENUM)
   @Enumerated(EnumType.STRING)
   private GeographicPlaceNameSource geographicPlaceNameSource;
 

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.dto;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,7 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Value
-public class GeoreferenceAssertionDto {
+public class GeoreferenceAssertionDto implements Serializable {
   private Double dwcDecimalLatitude;
   private Double dwcDecimalLongitude;
   private Integer dwcCoordinateUncertaintyInMeters;

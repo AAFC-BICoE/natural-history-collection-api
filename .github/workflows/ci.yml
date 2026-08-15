@@ -30,20 +30,25 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-      - name: Cache NVD Database (valid for 1 day)
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: ${{ runner.os }}-nvd-cache-${{ steps.date.outputs.date }}
-          restore-keys: |
-            ${{ runner.os }}-nvd-cache-
-
       - name: Run OWASP dependency-check (only on dev)
-        run: mvn org.owasp:dependency-check-maven:check
         if: ${{ github.ref == 'refs/heads/dev' }}
+        uses: dependency-check/Dependency-Check_Action@main
+        id: natural-history-collection-api-dependency-check
         env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+          JAVA_HOME: /opt/jdk
+        with:
+          project: 'test'
+          path: '.'
+          format: 'HTML'
+          args: >
+            --failOnCVSS 8
+            --suppression owasp-suppression.xml
+      - name: Upload Test results (only on dev)
+        if: ${{ github.ref == 'refs/heads/dev' }}
+        uses: actions/upload-artifact@v7
+        with:
+           name: Depcheck report
+           path: ${{github.workspace}}/reports
 
       - name: Extract Version
         if: ${{ github.ref == 'refs/heads/master' }}
@@ -58,7 +63,6 @@ jobs:
             version.txt
             target/natural-history-collection-api-*.jar
             Dockerfile
-        
   push:
     name: Build Docker Image and Push to DockerHub
     needs: [build]
@@ -93,3 +97,5 @@ jobs:
           push: true
           tags: aafcbicoe/natural-history-collection-api:${{ env.VERSION_TAG }}
           provenance: false
+           # Force the builder engine to output standard Docker mediatypes for OKD
+          outputs: type=image,oci-mediatypes=false

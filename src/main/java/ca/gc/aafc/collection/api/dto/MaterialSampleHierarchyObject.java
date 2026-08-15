@@ -2,6 +2,8 @@ package ca.gc.aafc.collection.api.dto;
 
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MaterialSampleHierarchyObject extends HierarchicalObject {
+public class MaterialSampleHierarchyObject extends HierarchicalObject implements Serializable {
 
   private List<DeterminationSummary> organismPrimaryDetermination;
 
@@ -19,7 +21,7 @@ public class MaterialSampleHierarchyObject extends HierarchicalObject {
   @Getter
   @Setter
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public static class DeterminationSummary {
+  public static class DeterminationSummary implements Serializable {
     private String verbatimScientificName;
     private String scientificName;
     private ScientificNameSourceDetailsSummary scientificNameDetails;
@@ -31,7 +33,7 @@ public class MaterialSampleHierarchyObject extends HierarchicalObject {
   @Getter
   @Setter
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public static class ScientificNameSourceDetailsSummary {
+  public static class ScientificNameSourceDetailsSummary implements Serializable {
     private String currentName;
     private Boolean isSynonym = false;
   }

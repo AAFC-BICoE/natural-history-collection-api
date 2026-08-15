@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.service;
 
+import java.io.Serializable;
 import lombok.Data;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -42,7 +43,7 @@ public interface CollectionSequenceMapper {
 
 
   @Data
-  class CollectionSequenceReserved {
+  class CollectionSequenceReserved implements Serializable {
     /**
      * Lowest reserved ID in the range.
      */

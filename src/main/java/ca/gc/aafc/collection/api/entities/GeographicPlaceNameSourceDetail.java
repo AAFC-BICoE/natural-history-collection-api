@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.hibernate.validator.constraints.URL;
@@ -16,7 +17,7 @@ import jakarta.validation.constraints.Size;
 @Builder
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
 @Jacksonized
-public class GeographicPlaceNameSourceDetail {
+public class GeographicPlaceNameSourceDetail implements Serializable {
 
   @URL
   private String sourceUrl;
@@ -49,7 +50,7 @@ public class GeographicPlaceNameSourceDetail {
   @Builder
   @Value
   @Jacksonized
-  public static class SourceAdministrativeLevel {
+  public static class SourceAdministrativeLevel implements Serializable {
     @NotBlank
     private String id;
     @NotBlank
@@ -64,7 +65,7 @@ public class GeographicPlaceNameSourceDetail {
   @Builder
   @Value
   @Jacksonized
-  public static class Country {
+  public static class Country implements Serializable {
     // ISO code for the country
     @Size(min = 2, max = 2)
     private String code;

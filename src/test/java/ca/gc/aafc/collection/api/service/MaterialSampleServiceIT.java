@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.inject.Inject;
 import jakarta.validation.ValidationException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -124,13 +125,46 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
     materialSampleService.setTargetOrganismPrimaryScientificName(parentMaterialSample);
     assertEquals("verbatimScientificName", parentMaterialSample.getTargetOrganismPrimaryScientificName());
 
-    materialSampleService.setTargetOrganismPrimaryTypeStatus(parentMaterialSample);
-    assertEquals("typeStatus", parentMaterialSample.getTargetOrganismPrimaryTypeStatus());
-
     //cleanup
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(materialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> materialSampleService.delete(parentMaterialSample));
     transactionTestingHelper.doInTransactionWithoutResult((s) -> organismService.delete(organism));
+  }
+
+  @Test
+  public void targetIdentifiableEntitySummary_OnRequest_loaded() throws JsonProcessingException {
+    Organism organism = OrganismEntityFactory.newOrganism()
+      .isTarget(true)
+      .build();
+
+    transactionTestingHelper.doInTransaction(() -> organismService.createAndFlush(organism));
+    assertNotNull(organism.getUuid());
+
+    MaterialSample materialSample = MaterialSampleFactory.newMaterialSample()
+      .organism(List.of(organism))
+      .build();
+    transactionTestingHelper.doInTransaction(() -> materialSampleService.createAndFlush(materialSample));
+
+    materialSampleService.setTargetIdentifiableEntitySummary(materialSample);
+    assertNotNull(materialSample.getTargetIdentifiableEntitySummary());
+
+    final Determination determination = DeterminationFactory.newDetermination()
+      .verbatimScientificName("verbatimScientificName")
+      .typeStatus("typeStatus")
+      .isPrimary(false)
+      .build();
+
+    transactionTestingHelper.doInTransaction(() -> {
+      List<Determination> dets = new ArrayList<>();
+      dets.add(determination);
+      organism.setDetermination(dets);
+      organismService.createAndFlush(organism);
+      return organism;
+    });
+
+    materialSampleService.setTargetIdentifiableEntitySummary(materialSample);
+    assertEquals("typeStatus", materialSample.getTargetIdentifiableEntitySummary()
+      .getPrimaryDetermination().getTypeStatus());
   }
 
   @Test

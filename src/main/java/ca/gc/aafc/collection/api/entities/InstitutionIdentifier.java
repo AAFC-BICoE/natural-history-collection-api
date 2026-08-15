@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import org.javers.core.metamodel.annotation.Value;
@@ -12,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @RequiredArgsConstructor
 @SuperBuilder
 @Value
-public class InstitutionIdentifier {
+public class InstitutionIdentifier implements Serializable {
   
   public enum IdentifierType {
     GRSCICOLL

@@ -1,5 +1,6 @@
 package ca.gc.aafc.collection.api.entities;
 
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
 import org.javers.core.metamodel.annotation.Value;
@@ -10,7 +11,7 @@ import java.util.List;
 @Data
 @Builder
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
-public class GeographicThesaurus {
+public class GeographicThesaurus implements Serializable {
 
   public enum GeographicThesaurusSource {
     TGN

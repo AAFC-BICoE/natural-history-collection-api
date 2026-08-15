@@ -10,7 +10,7 @@ spring:
     password: test
 embedded.postgresql:
   enabled: true
-  image: "postgis/postgis:12-3.1-alpine"
+  image: "postgis/postgis:17-3.5-alpine"
   init-script-file: init-collection-module.sql
   database: collection_test
   schema: collection
