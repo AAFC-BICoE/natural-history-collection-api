@@ -11,7 +11,7 @@
       <column name="multilingual_title"
               value='{"titles":[{"lang":"en","title":"Managed Attribute"},{"lang":"fr","title":"Attribut géré"},{"lang":"de","title":"Zusatzfeld"}]}'/>
       <column name="multilingual_description"
-              value='{"descriptions":[{"lang":"en","desc":"Attributes that can be created and used by users on-demand. They are usually used to capture data that is not common enough to be captured in a regular field."},{"lang":"fr","desc":"Attributs pouvant être créés et utilisés sur demande par les utilisateurs. Ils sont généralement utilisés pour saisir des données qui ne sont pas suffisamment courantes pour être saisies dans un champ standard."},{"lang":"de","desc":"Attribute, die von Benutzer:innen nach Bedarf erstellt und verwendet werden können. Sie werden normalerweise verwendet, um Daten zu erfassen, die nicht häufig genug sind, um in ein reguläres Feld aufgenommen zu werden."}]}'/>
+              value='{"descriptions":[{"lang":"en","desc":"Attributes that can be created and used by users on-demand. They are usually used to capture data that is not common enough to be captured in a regular field."},{"lang":"fr","desc":"Attributs pouvant être créés et utilisés sur demande par les utilisateurs. Ils sont généralement utilisés pour saisir des données qui ne sont pas suffisamment courantes pour être saisies dans un champ standard."},{"lang":"de","desc":"Felder, die von Benutzer:innen nach Bedarf erstellt und verwendet werden können. Sie werden normalerweise verwendet, um Daten zu erfassen, die nicht häufig genug sind, um in ein reguläres Feld aufgenommen zu werden."}]}'/>
       <where>uuid = '01998155-a6f0-7c2f-9fcc-994d74222f9c'</where>
     </update>
 
@@ -213,7 +213,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Host of"},{"lang":"de","title":"Wirt von"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of has host."},{"lang":"de","desc":"Umkehrung von „Hat einen Wirt“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of has host."},{"lang":"de","desc":" von „Hat einen Wirt“."}]}'/>
         <where>uuid = '019cbfaa-5ace-7fbf-97ae-1df58deb6e73'</where>
     </update>
 
@@ -231,7 +231,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Parasitized by"},{"lang":"de","title":"Wird parasitiert von"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of parasite of."},{"lang":"de","desc":"Umkehrung von „Parasit von“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of parasite of."},{"lang":"de","desc":"Gegenteil von „Parasit von“."}]}'/>
         <where>uuid = '019cbf98-10e2-74db-a265-c75c0830b474'</where>
     </update>
 
@@ -240,7 +240,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Pollinates"},{"lang":"de","title":"Bestäubt"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of pollinated by."},{"lang":"de","desc":"Umkehrung von „Wird bestäubt von“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of pollinated by."},{"lang":"de","desc":"Gegenteil von „Wird bestäubt von“."}]}'/>
         <where>uuid = '019cbf98-3778-78da-ae53-2c5b5f57e894'</where>
     </update>
 
@@ -249,7 +249,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Pollinated by"},{"lang":"de","title":"Wird bestäubt von"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of pollinates."},{"lang":"de","desc":"Umkehrung von „Bestäubt“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of pollinates."},{"lang":"de","desc":"Gegenteil von „Bestäubt“."}]}'/>
         <where>uuid = '019cbf98-5390-785b-aac1-55fc11412738'</where>
     </update>
 
@@ -258,7 +258,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Has vector"},{"lang":"de","title":"Hat einen Vektor"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of is vector for."},{"lang":"de","desc":"Umkehrung von „Vektor für“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of is vector for."},{"lang":"de","desc":"Gegenteil von „Vektor für“."}]}'/>
         <where>uuid = '019cbf98-6f88-7405-b147-f4ed0a24d39d'</where>
     </update>
 
@@ -267,7 +267,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Vector for"},{"lang":"de","title":"Vektor für"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of has vector."},{"lang":"de","desc":"Umkehrung von „Hat einen Vektor“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of has vector."},{"lang":"de","desc":"Gegenteil von „Hat einen Vektor“."}]}'/>
         <where>uuid = '019cbf98-8c24-7099-bd0f-d7c2e402f76c'</where>
     </update>
 
@@ -285,7 +285,7 @@
         <column name="multilingual_title"
                 value='{"titles":[{"lang":"en","title":"Pathogen of"},{"lang":"de","title":"Krankheitserreger von"}]}'/>
         <column name="multilingual_description"
-                value='{"descriptions":[{"lang":"en","desc":"Inverse of has pathogen."},{"lang":"de","desc":"Umkehrung von „Hat einen Krankheitserreger“."}]}'/>
+                value='{"descriptions":[{"lang":"en","desc":"Inverse of has pathogen."},{"lang":"de","desc":"Gegenteil von „Hat einen Krankheitserreger“."}]}'/>
         <where>uuid = '019cbf98-b4fe-7f98-99fc-191b0977a414'</where>
     </update>
 
