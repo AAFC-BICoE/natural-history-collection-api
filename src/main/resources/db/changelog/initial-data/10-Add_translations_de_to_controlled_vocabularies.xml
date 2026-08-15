@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-  <changeSet id="9-Add_translations_de_to_controlled_vocabularies" context="initial-data" author="jgrieb">
+  <changeSet id="10-Add_translations_de_to_controlled_vocabularies" context="initial-data" author="jgrieb">
 
     <!-- Managed Attribute -->
     <update tableName="controlled_vocabulary">
