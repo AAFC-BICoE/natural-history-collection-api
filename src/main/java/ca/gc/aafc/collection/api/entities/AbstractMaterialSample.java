@@ -69,9 +69,6 @@ public class AbstractMaterialSample implements DinaEntity {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
 
-  @Size(max = 25)
-  private String dwcCatalogNumber;
-
   private String[] dwcOtherCatalogNumbers;
 
   // Represents the Primary ID

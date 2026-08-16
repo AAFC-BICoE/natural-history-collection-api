@@ -31,7 +31,6 @@ public class ImmutableMaterialSampleDto {
   private OffsetDateTime createdOn;
   private String createdBy;
 
-  private String dwcCatalogNumber;
   private String[] dwcOtherCatalogNumbers;
 
   private String materialSampleName;
