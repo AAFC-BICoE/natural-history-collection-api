@@ -207,4 +207,5 @@
   <include file="db/changelog/initial-data/9-Create_collection_identifier_type_controlled_vocabulary.xml"/>
   <include file="db/changelog/migrations/194-Migrate_collection_identifier.xml"/>
   <include file="db/changelog/migrations/195-Increase_material_sample_name_limit.xml"/>
+  <include file="db/changelog/migrations/196-Add_Dataset_table.xml"/>
 </databaseChangeLog>
