@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
 import ca.gc.aafc.collection.api.entities.PreparationMethod;
 import ca.gc.aafc.collection.api.mapper.PreparationMethodMapper;
-import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
+import ca.gc.aafc.dina.security.auth.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.collection.api.service.PreparationMethodService;
 import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
