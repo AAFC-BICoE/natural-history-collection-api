@@ -3,7 +3,7 @@ package ca.gc.aafc.collection.api.repository;
 import java.util.Optional;
 
 import ca.gc.aafc.collection.api.mapper.CollectionMapper;
-import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
+import ca.gc.aafc.dina.security.auth.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;

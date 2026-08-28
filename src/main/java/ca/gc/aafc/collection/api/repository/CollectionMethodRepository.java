@@ -3,7 +3,8 @@ package ca.gc.aafc.collection.api.repository;
 import ca.gc.aafc.collection.api.dto.CollectionMethodDto;
 import ca.gc.aafc.collection.api.entities.CollectionMethod;
 import ca.gc.aafc.collection.api.mapper.CollectionMethodMapper;
-import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
+import ca.gc.aafc.dina.security.auth.SuperUserInGroupCUDAuthorizationService;
+
 import ca.gc.aafc.collection.api.service.CollectionMethodService;
 import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;

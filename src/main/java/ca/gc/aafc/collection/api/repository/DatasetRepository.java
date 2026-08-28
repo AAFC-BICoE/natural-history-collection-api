@@ -1,5 +1,12 @@
 package ca.gc.aafc.collection.api.repository;
 
+import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
@@ -16,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.gc.aafc.collection.api.dto.PreparationMethodDto;
-import ca.gc.aafc.collection.api.entities.PreparationMethod;
-import ca.gc.aafc.collection.api.mapper.PreparationMethodMapper;
-import ca.gc.aafc.dina.security.auth.SuperUserInGroupCUDAuthorizationService;
-import ca.gc.aafc.collection.api.service.PreparationMethodService;
+import ca.gc.aafc.collection.api.dto.DatasetDto;
+import ca.gc.aafc.collection.api.entities.Dataset;
+import ca.gc.aafc.collection.api.mapper.DatasetMapper;
+import ca.gc.aafc.collection.api.mapper.ExternalRelationshipMapper;
+import ca.gc.aafc.collection.api.service.DatasetService;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.dto.JsonApiExternalResource;
 import ca.gc.aafc.dina.exception.ConflictException;
 import ca.gc.aafc.dina.exception.ResourceGoneException;
 import ca.gc.aafc.dina.exception.ResourceNotFoundException;
@@ -29,76 +38,74 @@ import ca.gc.aafc.dina.exception.ResourcesNotFoundException;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiBulkResourceIdentifierDocument;
 import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
+import ca.gc.aafc.dina.mapper.DinaMappingRegistry;
 import ca.gc.aafc.dina.repository.DinaRepositoryV2;
 import ca.gc.aafc.dina.security.DinaAuthenticatedUser;
+import ca.gc.aafc.dina.security.auth.DinaAuthorizationService;
 import ca.gc.aafc.dina.service.AuditService;
-
-import static com.toedter.spring.hateoas.jsonapi.MediaTypes.JSON_API_VALUE;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import java.util.Optional;
-import java.util.UUID;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 
 @RestController
 @RequestMapping(value = "${dina.apiPrefix:}", produces = JSON_API_VALUE)
-public class PreparationMethodRepository extends DinaRepositoryV2<PreparationMethodDto, PreparationMethod> {
-
+public class DatasetRepository extends DinaRepositoryV2<DatasetDto, Dataset> {
   private final DinaAuthenticatedUser dinaAuthenticatedUser;
 
-  public PreparationMethodRepository(
-    @NonNull PreparationMethodService dinaService,
-    @NonNull AuditService auditService,
-    SuperUserInGroupCUDAuthorizationService authorizationService,
-    @NonNull BuildProperties buildProperties,
-    Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
-    ObjectMapper objectMapper
-  ) {
+  public DatasetRepository(
+      @NonNull DatasetService dinaService,
+      @NonNull AuditService auditService,
+      DinaAuthorizationService groupAuthorizationService,
+      @NonNull BuildProperties buildProperties,
+      Optional<DinaAuthenticatedUser> dinaAuthenticatedUser,
+      ObjectMapper objectMapper) {
     super(
-      dinaService,
-      authorizationService,
-      Optional.of(auditService),
-      PreparationMethodMapper.INSTANCE,
-      PreparationMethodDto.class,
-      PreparationMethod.class,
-      buildProperties, objectMapper);
+        dinaService,
+        groupAuthorizationService,
+        Optional.of(auditService),
+        DatasetMapper.INSTANCE,
+        DatasetDto.class,
+        Dataset.class,
+        buildProperties, objectMapper, new DinaMappingRegistry(DatasetDto.class, true));
     this.dinaAuthenticatedUser = dinaAuthenticatedUser.orElse(null);
   }
 
   @Override
-  protected Link generateLinkToResource(PreparationMethodDto dto) {
+  protected Link generateLinkToResource(DatasetDto dto) {
     try {
-      return linkTo(methodOn(PreparationMethodRepository.class).onFindOne(dto.getUuid(), null)).withSelfRel();
+      return linkTo(methodOn(DatasetRepository.class).onFindOne(dto.getUuid(), null)).withSelfRel();
     } catch (ResourceNotFoundException | ResourceGoneException e) {
       throw new RuntimeException(e);
     }
   }
 
-  @PostMapping(path = PreparationMethodDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)
-  public ResponseEntity<RepresentationModel<?>> onBulkLoad(@RequestBody
-                                                           JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument,
-                                                           HttpServletRequest req)
+  @Override
+  protected JsonApiExternalResource externalRelationDtoToJsonApiExternalResource(
+      ExternalRelationDto externalRelationDto) {
+    return ExternalRelationshipMapper.externalRelationDtoToJsonApiExternalResource(externalRelationDto);
+  }
+
+  @PostMapping(path = DatasetDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_LOAD_PATH, consumes = JSON_API_BULK)
+  public ResponseEntity<RepresentationModel<?>> onBulkLoad(
+      @RequestBody JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument,
+      HttpServletRequest req)
       throws ResourcesNotFoundException, ResourcesGoneException {
     return handleBulkLoad(jsonApiBulkDocument, req);
   }
 
-  @GetMapping(PreparationMethodDto.TYPENAME + "/{id}")
+  @GetMapping(DatasetDto.TYPENAME + "/{id}")
   public ResponseEntity<RepresentationModel<?>> onFindOne(@PathVariable UUID id, HttpServletRequest req)
       throws ResourceNotFoundException, ResourceGoneException {
     return handleFindOne(id, req);
   }
 
-  @GetMapping(PreparationMethodDto.TYPENAME)
+  @GetMapping(DatasetDto.TYPENAME)
   public ResponseEntity<RepresentationModel<?>> onFindAll(HttpServletRequest req) {
     return handleFindAll(req);
   }
 
-  @PostMapping(path = PreparationMethodDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
+  @PostMapping(path = DatasetDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
-  public ResponseEntity<RepresentationModel<?>> onBulkCreate(@RequestBody
-                                                             JsonApiBulkDocument jsonApiBulkDocument) {
+  public ResponseEntity<RepresentationModel<?>> onBulkCreate(@RequestBody JsonApiBulkDocument jsonApiBulkDocument) {
     return handleBulkCreate(jsonApiBulkDocument, dto -> {
       if (dinaAuthenticatedUser != null) {
         dto.setCreatedBy(dinaAuthenticatedUser.getUsername());
@@ -106,7 +113,7 @@ public class PreparationMethodRepository extends DinaRepositoryV2<PreparationMet
     });
   }
 
-  @PostMapping(PreparationMethodDto.TYPENAME)
+  @PostMapping(DatasetDto.TYPENAME)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onCreate(@RequestBody JsonApiDocument postedDocument) {
     return handleCreate(postedDocument, dto -> {
@@ -116,32 +123,33 @@ public class PreparationMethodRepository extends DinaRepositoryV2<PreparationMet
     });
   }
 
-  @PatchMapping(PreparationMethodDto.TYPENAME + "/{id}")
+  @PatchMapping(DatasetDto.TYPENAME + "/{id}")
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onUpdate(@RequestBody JsonApiDocument partialPatchDto,
-                                                         @PathVariable UUID id)
+      @PathVariable UUID id)
       throws ResourceNotFoundException, ResourceGoneException, ConflictException {
     return handleUpdate(partialPatchDto, id);
   }
 
-  @PatchMapping(path = PreparationMethodDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
+  @PatchMapping(path = DatasetDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
   public ResponseEntity<RepresentationModel<?>> onBulkUpdate(@RequestBody JsonApiBulkDocument jsonApiBulkDocument)
       throws ResourceNotFoundException, ResourceGoneException, ConflictException {
     return handleBulkUpdate(jsonApiBulkDocument);
   }
 
-  @DeleteMapping(path = PreparationMethodDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
+  @DeleteMapping(path = DatasetDto.TYPENAME + "/" + DinaRepositoryV2.JSON_API_BULK_PATH, consumes = JSON_API_BULK)
   @Transactional
-  public ResponseEntity<RepresentationModel<?>> onBulkDelete(@RequestBody
-                                                             JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument)
+  public ResponseEntity<RepresentationModel<?>> onBulkDelete(
+      @RequestBody JsonApiBulkResourceIdentifierDocument jsonApiBulkDocument)
       throws ResourceNotFoundException, ResourceGoneException {
     return handleBulkDelete(jsonApiBulkDocument);
   }
 
-  @DeleteMapping(PreparationMethodDto.TYPENAME + "/{id}")
+  @DeleteMapping(DatasetDto.TYPENAME + "/{id}")
   @Transactional
-  public ResponseEntity<RepresentationModel<?>> onDelete(@PathVariable UUID id) throws ResourceNotFoundException, ResourceGoneException {
+  public ResponseEntity<RepresentationModel<?>> onDelete(@PathVariable UUID id)
+      throws ResourceNotFoundException, ResourceGoneException {
     return handleDelete(id);
   }
 }
