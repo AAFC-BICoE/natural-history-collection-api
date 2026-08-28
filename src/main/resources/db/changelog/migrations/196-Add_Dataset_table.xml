@@ -16,6 +16,9 @@
             <column name="_group" type="VARCHAR(50)">
               <constraints nullable="false"/>
             </column>
+             <column name="resource_version" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
             <column name="multilingual_description" type="jsonb"/>
 
             <column name="last_updated_on" type="timestamptz"/>

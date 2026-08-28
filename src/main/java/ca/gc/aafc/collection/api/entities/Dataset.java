@@ -52,7 +52,6 @@ public class Dataset implements DinaEntity {
   private String group;
 
   @Version
-  @Column(name = "version")
   private Long resourceVersion;
 
   @Type(JsonType.class)
