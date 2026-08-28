@@ -21,7 +21,7 @@ import ca.gc.aafc.collection.api.dto.CollectionControlledVocabularyItemDto;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabulary;
 import ca.gc.aafc.collection.api.entities.CollectionControlledVocabularyItem;
 import ca.gc.aafc.collection.api.mapper.CollectionControlledVocabularyItemMapper;
-import ca.gc.aafc.collection.api.security.SuperUserInGroupCUDAuthorizationService;
+import  ca.gc.aafc.dina.security.auth.SuperUserInGroupCUDAuthorizationService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyItemService;
 import ca.gc.aafc.collection.api.service.CollectionControlledVocabularyService;
 import ca.gc.aafc.dina.exception.ConflictException;

@@ -2,11 +2,13 @@ package ca.gc.aafc.collection.api.entities;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import java.time.Instant;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.generator.EventType;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -17,6 +19,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -48,10 +51,18 @@ public class Dataset implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
+  @Version
+  @Column(name = "version")
+  private Long resourceVersion;
+
   @Type(JsonType.class)
   @Column(name = "multilingual_description")
   @Valid
   private MultilingualDescription multilingualDescription;
+
+  @UpdateTimestamp
+  @Column(name = "last_updated_on")
+  private Instant lastUpdatedOn;
 
   @Column(insertable = false, updatable = false)
   @Generated(event = EventType.INSERT)
