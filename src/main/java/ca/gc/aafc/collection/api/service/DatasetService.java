@@ -13,15 +13,15 @@ import lombok.NonNull;
 @Service
 public class DatasetService extends DefaultDinaService<Dataset> {
 
-    public DatasetService(
-            @NonNull BaseDAO baseDAO,
-            @NonNull SmartValidator validator) {
-        super(baseDAO, validator);
-    }
+  public DatasetService(
+      @NonNull BaseDAO baseDAO,
+      @NonNull SmartValidator validator) {
+    super(baseDAO, validator);
+  }
 
-    @Override
-    protected void preCreate(Dataset entity) {
-        entity.setUuid(UUID.randomUUID());
-    }
+  @Override
+  protected void preCreate(Dataset entity) {
+    entity.setUuid(UUID.randomUUID());
+  }
 
 }

@@ -31,7 +31,9 @@ public class DatasetDto extends ca.gc.aafc.dina.dto.DatasetDto implements DinaDt
   @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private Long resourceVersion;
 
+  @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private Instant lastUpdatedOn;
+  
   private OffsetDateTime createdOn;
   private String createdBy;
 
