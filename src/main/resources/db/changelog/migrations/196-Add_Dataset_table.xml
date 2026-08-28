@@ -23,6 +23,9 @@
             <column name="multilingual_title" type="jsonb"/>
             <column name="multilingual_description" type="jsonb"/>
             <column name="agent_roles" type="jsonb"/>
+            <column name="usage_rights" type="jsonb"/>
+            <column name="keyword_sets" type="jsonb"/>
+            <column name="coverage" type="jsonb"/>
 
             <column name="last_updated_on" type="timestamptz"/>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>

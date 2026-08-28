@@ -12,7 +12,10 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.generator.EventType;
 
+import ca.gc.aafc.dina.dto.DatasetDto.Coverage;
 import ca.gc.aafc.dina.dto.DatasetDto.DatasetType;
+import ca.gc.aafc.dina.dto.DatasetDto.KeywordSet;
+import ca.gc.aafc.dina.dto.DatasetDto.UsageRights;
 import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
@@ -79,6 +82,16 @@ public class Dataset implements DinaEntity {
   @Column(name = "multilingual_description")
   @Valid
   private MultilingualDescription multilingualDescription;
+  
+  @Type(JsonType.class)
+  private UsageRights usageRights;
+
+  @Type(JsonType.class)
+  @Builder.Default
+  private List<KeywordSet> keywordSets = List.of();
+
+  @Type(JsonType.class)
+  private Coverage coverage;
 
   @UpdateTimestamp
   @Column(name = "last_updated_on")

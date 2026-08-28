@@ -35,5 +35,7 @@ public class DatasetRepositoryIT extends BaseRepositoryIT {
     assertNotNull(result.getCreatedBy());
     assertEquals(datasetDto.getGroup(), result.getGroup());
     assertEquals(datasetDto.getDatasetType(), result.getDatasetType());
+    assertNotNull(datasetDto.getUsageRights().licenseName());
+    assertEquals(datasetDto.getUsageRights().licenseName(), result.getUsageRights().licenseName());
   }
 }
