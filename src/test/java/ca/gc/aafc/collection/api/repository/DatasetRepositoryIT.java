@@ -1,39 +1,24 @@
 package ca.gc.aafc.collection.api.repository;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.security.access.AccessDeniedException;
-
-import ca.gc.aafc.collection.api.dto.DatasetDto;
-import ca.gc.aafc.collection.api.dto.ProjectDto;
-import ca.gc.aafc.collection.api.entities.Project;
-import ca.gc.aafc.collection.api.service.ProjectService;
-import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
-import ca.gc.aafc.collection.api.testsupport.factories.ProjectFactory;
-import ca.gc.aafc.collection.api.testsupport.fixtures.DatasetTestFixture;
-import ca.gc.aafc.collection.api.testsupport.fixtures.ProjectTestFixture;
-import ca.gc.aafc.dina.exception.ResourceGoneException;
-import ca.gc.aafc.dina.exception.ResourceNotFoundException;
-import ca.gc.aafc.dina.jsonapi.JsonApiDocument;
-import ca.gc.aafc.dina.jsonapi.JsonApiDocuments;
-import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
-import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Map;
 import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+
+import ca.gc.aafc.collection.api.dto.DatasetDto;
+import ca.gc.aafc.collection.api.testsupport.ServiceTransactionWrapper;
+import ca.gc.aafc.collection.api.testsupport.fixtures.DatasetTestFixture;
+import ca.gc.aafc.dina.exception.ResourceGoneException;
+import ca.gc.aafc.dina.exception.ResourceNotFoundException;
+import ca.gc.aafc.dina.testsupport.security.WithMockKeycloakUser;
 import jakarta.inject.Inject;
 
 public class DatasetRepositoryIT extends BaseRepositoryIT {
   
   @Inject 
   private DatasetRepository datasetRepository;
-
-  @Inject
-  private ProjectService projectService;
 
   @Inject
   protected ServiceTransactionWrapper serviceTransactionWrapper;
@@ -49,25 +34,6 @@ public class DatasetRepositoryIT extends BaseRepositoryIT {
 
     assertNotNull(result.getCreatedBy());
     assertEquals(datasetDto.getGroup(), result.getGroup());
+    assertEquals(datasetDto.getDatasetType(), result.getDatasetType());
   }
-
-  // @Test
-  // @WithMockKeycloakUser(username = "other user", groupRole = {"notAAFC:user"})
-  // public void updateFromDifferentGroup_throwAccessDenied()
-  //     throws ResourceGoneException, ResourceNotFoundException {
-  //   Project testProject = ProjectFactory.newProject()
-  //     .group("preparation process definition")
-  //     .name("aafc")
-  //     .build();
-  //   serviceTransactionWrapper.execute( projectService::create, testProject);
-
-  //   ProjectDto retrievedProject = projectRepository.getOne(testProject.getUuid(), "").getDto();
-  //   JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
-  //     retrievedProject.getUuid(), ProjectDto.TYPENAME,
-  //     JsonAPITestHelper.toAttributeMap(retrievedProject)
-  //   );
-
-  //   assertThrows(AccessDeniedException.class, () -> projectRepository.onUpdate(docToUpdate, docToUpdate.getId()));
-  // }
-
 }

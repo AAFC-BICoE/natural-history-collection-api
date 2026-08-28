@@ -1,7 +1,11 @@
 package ca.gc.aafc.collection.api.testsupport.fixtures;
 
+import java.util.List;
+import java.util.UUID;
+
 import ca.gc.aafc.collection.api.dto.DatasetDto;
 import ca.gc.aafc.dina.dto.DatasetDto.DatasetType;
+import ca.gc.aafc.dina.entity.AgentRoles;
 
 public class DatasetTestFixture {
 
@@ -12,6 +16,7 @@ public class DatasetTestFixture {
     datasetDto.setGroup(GROUP);
     datasetDto.setDatasetType(DatasetType.DWCA);
     datasetDto.setMultilingualDescription(MultilingualTestFixture.newMultilingualDescription());
+    datasetDto.setAgentRoles(List.of(AgentRoles.builder().agent(UUID.randomUUID()).roles(List.of("creator")).build()));
 
     return datasetDto;
   }

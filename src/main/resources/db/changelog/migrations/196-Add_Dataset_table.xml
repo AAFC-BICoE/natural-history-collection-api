@@ -19,7 +19,10 @@
              <column name="resource_version" type="BIGINT" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
+            <column name="dataset_type" type="varchar(50)"/>
+            <column name="multilingual_title" type="jsonb"/>
             <column name="multilingual_description" type="jsonb"/>
+            <column name="agent_roles" type="jsonb"/>
 
             <column name="last_updated_on" type="timestamptz"/>
             <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
