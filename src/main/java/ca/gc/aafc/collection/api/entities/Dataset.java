@@ -12,10 +12,10 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.generator.EventType;
 
-import ca.gc.aafc.dina.dto.DatasetDto.Coverage;
-import ca.gc.aafc.dina.dto.DatasetDto.DatasetType;
-import ca.gc.aafc.dina.dto.DatasetDto.KeywordSet;
-import ca.gc.aafc.dina.dto.DatasetDto.UsageRights;
+import ca.gc.aafc.dina.dto.BaseDatasetDto.Coverage;
+import ca.gc.aafc.dina.dto.BaseDatasetDto.DatasetType;
+import ca.gc.aafc.dina.dto.BaseDatasetDto.KeywordSet;
+import ca.gc.aafc.dina.dto.BaseDatasetDto.UsageRights;
 import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
