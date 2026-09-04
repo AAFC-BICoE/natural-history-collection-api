@@ -13,10 +13,10 @@ import com.toedter.spring.hateoas.jsonapi.JsonApiId;
 import com.toedter.spring.hateoas.jsonapi.JsonApiTypeForClass;
 
 import ca.gc.aafc.collection.api.entities.Dataset;
+import ca.gc.aafc.dina.dto.BaseDatasetDto;
 import ca.gc.aafc.dina.dto.DinaDto;
 import ca.gc.aafc.dina.dto.RelatedEntity;
 import ca.gc.aafc.dina.jsonapi.JsonApiImmutable;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,9 +25,7 @@ import lombok.EqualsAndHashCode;
 @RelatedEntity(Dataset.class)
 @JsonApiTypeForClass(DatasetDto.TYPENAME)
 @TypeName(ExpeditionDto.TYPENAME)
-// requires dina-base 0.178
-@SuppressFBWarnings("NM_SAME_SIMPLE_NAME_AS_SUPERCLASS")
-public class DatasetDto extends ca.gc.aafc.dina.dto.DatasetDto implements DinaDto {
+public class DatasetDto extends BaseDatasetDto implements DinaDto {
 
   public static final String TYPENAME = "dataset";
 
