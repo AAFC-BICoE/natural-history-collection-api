@@ -27,7 +27,7 @@ public interface DatasetMapper extends DinaMapperV2<DatasetDto, Dataset> {
 
   DatasetMapper INSTANCE = Mappers.getMapper(DatasetMapper.class);
   ObjectMapper OBJ_MAPPER = new ObjectMapper();
-  static final TypeReference<Map<String, Object>> MAP_TYPEREF =
+  TypeReference<Map<String, Object>> MAP_TYPEREF =
     new TypeReference<>() {
     };
 
