@@ -1,8 +1,10 @@
 package ca.gc.aafc.collection.api.entities;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.annotations.Generated;
@@ -14,7 +16,9 @@ import org.hibernate.generator.EventType;
 
 import ca.gc.aafc.dina.dto.BaseDatasetDto.Coverage;
 import ca.gc.aafc.dina.dto.BaseDatasetDto.DatasetType;
+import ca.gc.aafc.dina.dto.BaseDatasetDto.Project;
 import ca.gc.aafc.dina.dto.BaseDatasetDto.KeywordSet;
+import ca.gc.aafc.dina.dto.BaseDatasetDto.Methods;
 import ca.gc.aafc.dina.dto.BaseDatasetDto.UsageRights;
 import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -32,6 +36,7 @@ import jakarta.persistence.Version;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,6 +61,11 @@ public class Dataset implements DinaEntity {
   @Column(unique = true)
   private UUID uuid;
 
+  @Size(max = 100)
+  private String datasetVersion;
+
+  private LocalDate publicationDate;
+
   @NotBlank
   @Column(name = "_group")
   private String group;
@@ -66,6 +76,10 @@ public class Dataset implements DinaEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   private DatasetType datasetType;
+
+  @Type(JsonType.class)
+  @Column(columnDefinition = "jsonb")
+  private Map<String, Object> query;
 
   @Type(JsonType.class)
   @Column(columnDefinition = "jsonb")
@@ -92,6 +106,14 @@ public class Dataset implements DinaEntity {
 
   @Type(JsonType.class)
   private Coverage coverage;
+
+  @Type(JsonType.class)
+  @Column(columnDefinition = "jsonb")
+  private Methods methods;
+
+  @Type(JsonType.class)
+  @Column(columnDefinition = "jsonb")
+  private Project project;
 
   @UpdateTimestamp
   @Column(name = "last_updated_on")
