@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.annotations.Generated;
@@ -75,6 +76,10 @@ public class Dataset implements DinaEntity {
   @NotNull
   @Enumerated(EnumType.STRING)
   private DatasetType datasetType;
+
+  @Type(JsonType.class)
+  @Column(columnDefinition = "jsonb")
+  private Map<String, Object> query;
 
   @Type(JsonType.class)
   @Column(columnDefinition = "jsonb")

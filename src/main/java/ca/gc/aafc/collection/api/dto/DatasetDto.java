@@ -32,6 +32,9 @@ public class DatasetDto extends BaseDatasetDto implements DinaDto {
   @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private Long resourceVersion;
 
+  // to be moved to dina-base BaseDatasetDto
+  private String query;
+
   @JsonApiImmutable(JsonApiImmutable.ImmutableOn.UPDATE)
   private Instant lastUpdatedOn;
 

@@ -10,6 +10,7 @@
             <column name="publication_date" type="DATE"/>
             <column name="methods" type="jsonb"/>
             <column name="project" type="jsonb"/>
+            <column name="query" type="jsonb"/>
         </addColumn>
     </changeSet>
 </databaseChangeLog>
