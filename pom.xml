@@ -16,7 +16,7 @@
   </parent>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>25</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <javax.interceptor-api>1.2.2</javax.interceptor-api>
@@ -26,13 +26,13 @@
     <spotbugs.version>4.9.8</spotbugs.version>
 
     <dependency.check.version>12.2.2</dependency.check.version>
-    <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
 
     <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
     <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.180</dina-base-api.version>
+    <dina-base-api.version>0.181-SNAPSHOT</dina-base-api.version>
 
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geom.version>1.11</geolatte-geom.version>
@@ -41,8 +41,7 @@
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
     <!-- versions override-->
-    <tomcat.version>10.1.57</tomcat.version>
-    <postgresql.version>42.4.4</postgresql.version>
+    <tomcat.version>10.1.59</tomcat.version>
   </properties>
 
   <dependencies>
