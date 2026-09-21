@@ -13,9 +13,12 @@ import ca.gc.aafc.dina.vocabulary.TypedVocabularyElement;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import jakarta.validation.ValidationException;
+
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +42,32 @@ public class CollectingEventServiceIT extends CollectionModuleBaseIT {
     assertEquals(CollectingEventFactory.TEST_COUNTRY.getCode(), collectingEventReloaded.getDwcCountryCode());
     assertEquals(CollectingEventFactory.TEST_COUNTRY.getName(), collectingEventReloaded.getDwcCountry());
     assertEquals(CollectingEventFactory.TEST_PROVINCE.getName(), collectingEventReloaded.getDwcStateProvince());
+  }
+
+    @Test
+  public void geographicData_onUpdateCReatedOnDoesNotChange() {
+    GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail = CollectingEventFactory.newGeographicPlaceNameSourceDetail();
+
+    CollectingEvent collectingEvent = CollectingEventFactory.newCollectingEvent()
+      .dwcCountry(null)
+      .dwcCountryCode(null)
+      .dwcStateProvince(null)
+      .geographicPlaceNameSource(CollectingEventFactory.GEOGRAPHIC_PLACE_NAME_SOURCE)
+      .geographicPlaceNameSourceDetail(geographicPlaceNameSourceDetail)
+      .build();
+    collectingEventService.createAndFlush(collectingEvent);
+
+    CollectingEvent collectingEventReloaded = collectingEventService.findOne(collectingEvent.getUuid(), CollectingEvent.class);
+
+    OffsetDateTime recordedOn = collectingEventReloaded.getGeographicPlaceNameSourceDetail().getRecordedOn();
+    assertNotNull(recordedOn);
+
+    // save again
+    collectingEventService.update(collectingEvent);
+
+    CollectingEvent collectingEventReloaded2 = collectingEventService.findOne(collectingEvent.getUuid(), CollectingEvent.class);
+    assertEquals(recordedOn, collectingEventReloaded2.getGeographicPlaceNameSourceDetail().getRecordedOn());
+
   }
 
   @Test
