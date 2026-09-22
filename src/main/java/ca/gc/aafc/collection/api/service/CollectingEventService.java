@@ -82,7 +82,7 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
 
   private static void assignAutomaticValues(CollectingEvent entity) {
     if (entity.getGeographicPlaceNameSourceDetail() != null
-        && (entity.getGeographicPlaceNameSourceDetail().getRecordedOn() == null)) {
+        && entity.getGeographicPlaceNameSourceDetail().getRecordedOn() == null) {
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
 
