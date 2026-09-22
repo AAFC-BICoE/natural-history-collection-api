@@ -81,12 +81,18 @@ public class CollectingEventService extends MessageProducingService<CollectingEv
   }
 
   private static void assignAutomaticValues(CollectingEvent entity) {
-    if (entity.getGeographicPlaceNameSourceDetail() != null) {
+    if (entity.getGeographicPlaceNameSourceDetail() != null
+        && entity.getGeographicPlaceNameSourceDetail().getRecordedOn() == null) {
       entity.getGeographicPlaceNameSourceDetail().setRecordedOn(OffsetDateTime.now());
     }
 
     if (CollectionUtils.isNotEmpty(entity.getGeoReferenceAssertions())) {
-      entity.getGeoReferenceAssertions().forEach(geo -> geo.setCreatedOn(OffsetDateTime.now()));
+      entity.getGeoReferenceAssertions().forEach(
+          geo -> {
+            if (geo.getCreatedOn() == null) {
+              geo.setCreatedOn(OffsetDateTime.now());
+            }
+          });
     }
 
     mapGeographicPlaceNameFromSource(entity);

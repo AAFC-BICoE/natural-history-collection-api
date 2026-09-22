@@ -88,7 +88,6 @@ public class CollectingEventRepositoryIT extends BaseRepositoryIT {
       collectingEventDto.getGeographicPlaceNameSourceDetail().getCountry());
     // assigned server-side
     assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn());
-    assertNotEquals(2000, collectingEventDto.getGeographicPlaceNameSourceDetail().getRecordedOn().getYear());
     assertNotNull(collectingEventDto.getGeographicPlaceNameSourceDetail().getSourceUrl());
     assertEquals(
       CollectingEventTestFixture.TEST_PROVINCE,
