@@ -209,4 +209,7 @@
   <include file="db/changelog/migrations/195-Increase_material_sample_name_limit.xml"/>
   <include file="db/changelog/migrations/196-Add_Dataset_table.xml"/>
   <include file="db/changelog/migrations/197-Add_more_fields_to_dataset.xml"/>
+  <include file="db/changelog/migrations/198-Add_transaction_table.xml"/>
+  <include file="db/changelog/migrations/199-Add_loan_transaction_import_tables.xml"/>
+  <include file="db/changelog/migrations/200-Migrate_loan_transaction_data.xml"/>
 </databaseChangeLog>
