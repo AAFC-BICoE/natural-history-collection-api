@@ -12,6 +12,7 @@ import ca.gc.aafc.collection.api.dto.CollectingEventDto;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
 import ca.gc.aafc.collection.api.dto.ProjectDto;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
+import ca.gc.aafc.collection.api.dto.TransactionDto;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.message.DocumentOperationNotification;
 import ca.gc.aafc.dina.messaging.message.DocumentOperationType;
@@ -28,6 +29,7 @@ public class IndexRefreshService {
   private static final String STORAGE_SQL = "SELECT uuid FROM StorageUnit t ORDER BY id";
   private static final String COLLECTING_EVENT_HQL = "SELECT uuid FROM CollectingEvent t ORDER BY id";
   private static final String PROJECT_HQL = "SELECT uuid FROM Project t ORDER BY id";
+  private static final String TRANSACTION_HQL = "SELECT uuid FROM Transaction ORDER BY id";
 
   private final DocumentOperationNotificationMessageProducer searchRabbitMQMessageProducer;
   private final Map<String, String> supportedDocumentTypes;
@@ -43,7 +45,8 @@ public class IndexRefreshService {
       MaterialSampleDto.TYPENAME, MAT_SAMPLE_SQL,
       StorageUnitDto.TYPENAME, STORAGE_SQL,
       CollectingEventDto.TYPENAME, COLLECTING_EVENT_HQL,
-      ProjectDto.TYPENAME, PROJECT_HQL
+      ProjectDto.TYPENAME, PROJECT_HQL,
+      TransactionDto.TYPENAME, TRANSACTION_HQL
     );
   }
 
