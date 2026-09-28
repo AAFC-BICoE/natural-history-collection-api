@@ -21,7 +21,7 @@ public interface TransactionMapper extends DinaMapperV2<TransactionDto, Transact
   TransactionMapper INSTANCE = Mappers.getMapper(TransactionMapper.class);
 
   @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
-  @Mapping(target = "materialSamples", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getMaterialSamples(), \"material-sample\"))")
+  @Mapping(target = "materialSamples", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getMaterialSamples(), \"external-material-sample\"))")
   TransactionDto toDto(Transaction entity, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)

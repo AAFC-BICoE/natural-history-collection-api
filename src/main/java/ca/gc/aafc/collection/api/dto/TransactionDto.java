@@ -73,7 +73,7 @@ public class TransactionDto implements JsonApiResource {
   private List<PersonExternalDto> involvedAgents;
 
   @JsonIgnore
-  @JsonApiExternalRelation(type = "material-sample")
+  @JsonApiExternalRelation(type = "external-material-sample")
   private List<ExternalRelationDto> materialSamples = List.of();
 
   @Builder.Default
