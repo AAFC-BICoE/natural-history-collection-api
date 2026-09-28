@@ -4,7 +4,10 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <!-- Same structure as the transaction table of the loan-transaction-api (merged into collection-api) -->
+    <!--
+      Same structure (columns and order) as the transaction table of the loan-transaction-api (merged into collection-api)
+      since the data is copied as is by the dina-db-init-container (see changeset 199).
+    -->
     <changeSet id="198-Add_transaction_table" context="schema-change" author="Brandon Andre">
         <sql>
             CREATE TYPE material_direction AS ENUM ('IN', 'OUT');
@@ -33,13 +36,13 @@
             <column name="closed_date" type="date"/>
             <column name="due_date" type="date"/>
             <column name="remarks" type="text"/>
+            <column name="created_by" type="varchar(255)"/>
+            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
             <column name="shipment" type="jsonb"/>
             <column name="managed_attributes" type="jsonb" defaultValue="{}"/>
             <column name="agent_roles" type="jsonb"/>
             <column name="attachment" type="uuid[]"/>
             <column name="material_samples" type="uuid[]"/>
-            <column name="created_by" type="varchar(255)"/>
-            <column name="created_on" type="timestamptz" defaultValueComputed="current_timestamp"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
