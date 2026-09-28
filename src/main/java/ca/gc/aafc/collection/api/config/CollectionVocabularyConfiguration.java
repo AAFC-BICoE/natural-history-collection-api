@@ -51,7 +51,8 @@ public class CollectionVocabularyConfiguration
     ASSEMBLAGE,
     SITE,
     COLLECTION,
-    PROJECT;
+    PROJECT,
+    TRANSACTION;
 
     public static DinaComponent fromString(String s) {
       for (DinaComponent source : DinaComponent.values()) {
