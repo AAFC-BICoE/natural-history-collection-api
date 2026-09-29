@@ -67,8 +67,6 @@ public class TransactionOpenApiIT extends BaseRestAssuredTest {
         )
     );
 
-    System.out.println(response.extract().asPrettyString());
-
     // Validate the response against the specs.
     response.body("data.id", Matchers.notNullValue());
     OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, SCHEMA_NAME,
