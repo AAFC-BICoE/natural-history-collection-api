@@ -35,6 +35,7 @@ public class TransactionFixture {
             .id(UUID.randomUUID().toString())
             .type("metadata")
             .build()))
-        .group(GROUP);
+        .group(GROUP)
+        .createdBy("TransactionFixture");
   }
 }

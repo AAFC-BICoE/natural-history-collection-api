@@ -70,7 +70,7 @@ public class TransactionDto implements JsonApiResource {
   private List<AgentRolesWithDate> agentRoles = List.of();
 
   // Calculated field see getInvolvedAgents
-  private List<PersonExternalDto> involvedAgents;
+  private List<ExternalRelationDto> involvedAgents;
 
   @JsonIgnore
   @JsonApiExternalRelation(type = "external-material-sample")
@@ -87,11 +87,12 @@ public class TransactionDto implements JsonApiResource {
   private String createdBy;
   private OffsetDateTime createdOn;
 
-  public List<PersonExternalDto> getInvolvedAgents() {
+  public List<ExternalRelationDto> getInvolvedAgents() {
     if (CollectionUtils.isNotEmpty(agentRoles)) {
       return agentRoles.stream()
-        .map(agent -> PersonExternalDto.builder()
-          .uuid(agent.getAgent())
+        .map(agent -> ExternalRelationDto.builder()
+          .id(agent.getAgent().toString())
+          .type(PersonExternalDto.EXTERNAL_TYPENAME)
           .build()
         ).collect(Collectors.toList());
     }

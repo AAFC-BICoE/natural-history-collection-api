@@ -139,13 +139,11 @@ public class MaterialSampleOpenApiIT extends BaseRestAssuredTest {
 
     MaterialSampleDto parent = MaterialSampleTestFixture.newMaterialSample();
     parent.setMaterialSampleType(MaterialSampleType.MOLECULAR_SAMPLE);
-    parent.setDwcCatalogNumber("parent" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     parent.setMaterialSampleName("parent" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
     setRelationshipsToNull(parent);
 
     MaterialSampleDto child = MaterialSampleTestFixture.newMaterialSample();
     child.setMaterialSampleType(MaterialSampleType.WHOLE_ORGANISM);
-    child.setDwcCatalogNumber("child" + MaterialSampleTestFixture.DWC_CATALOG_NUMBER);
     child.setMaterialSampleName("child" + MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME);
     setRelationshipsToNull(child);
 
