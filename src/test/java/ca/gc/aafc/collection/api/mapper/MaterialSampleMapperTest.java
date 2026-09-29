@@ -39,7 +39,6 @@ public class MaterialSampleMapperTest {
   public void testToEntity() {
     MaterialSampleDto dto = MaterialSampleTestFixture.newMaterialSample();
     // Set specific values instead of relying on the fixture
-    dto.setDwcCatalogNumber("CAT-123");
     dto.setMaterialSampleName("Sample A");
     dto.setMaterialSampleState("Preserved");
     dto.setMaterialSampleRemarks("Test remarks");
@@ -58,7 +57,6 @@ public class MaterialSampleMapperTest {
 
     MaterialSample entity = MAPPER.toEntity(dto, attributesName, null);
 
-    assertEquals(dto.getDwcCatalogNumber(), entity.getDwcCatalogNumber());
     assertEquals(dto.getMaterialSampleName(), entity.getMaterialSampleName());
     assertEquals(dto.getMaterialSampleState(), entity.getMaterialSampleState());
     assertEquals(dto.getMaterialSampleRemarks(), entity.getMaterialSampleRemarks());
@@ -100,7 +98,6 @@ public class MaterialSampleMapperTest {
 
     MaterialSampleDto dto = MAPPER.toDto(entity, attributesName, null);
 
-    assertEquals(entity.getDwcCatalogNumber(), dto.getDwcCatalogNumber());
     assertEquals(entity.getMaterialSampleName(), dto.getMaterialSampleName());
     assertEquals(entity.getMaterialSampleState(), dto.getMaterialSampleState());
     assertEquals(entity.getMaterialSampleRemarks(), dto.getMaterialSampleRemarks());

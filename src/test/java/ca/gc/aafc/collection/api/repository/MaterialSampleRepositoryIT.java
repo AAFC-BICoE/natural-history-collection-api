@@ -84,7 +84,6 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
       .getDto();
 
     assertNotNull(result.getCreatedBy());
-    assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
     assertArrayEquals(MaterialSampleTestFixture.DWC_OTHER_CATALOG_NUMBERS, result.getDwcOtherCatalogNumbers());
     assertEquals(MaterialSampleTestFixture.GROUP, result.getGroup());
     assertEquals(MaterialSampleTestFixture.MATERIAL_SAMPLE_NAME, result.getMaterialSampleName());
@@ -168,7 +167,6 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
       .onCreate(materialSampleToCreate));
     MaterialSampleDto result = materialSampleRepository.getOne(matSampleUuid, "include=collectingEvent,preparedBy").getDto();
 
-    assertEquals(MaterialSampleTestFixture.DWC_CATALOG_NUMBER, result.getDwcCatalogNumber());
     assertEquals(collEventUUID, result.getCollectingEvent().getUuid());
     assertEquals(MaterialSampleTestFixture.PREPARED_BY.toString(), result.getPreparedBy().getFirst().getId());
     assertEquals(MaterialSampleTestFixture.PREPARATION_DATE, result.getPreparationDate());
@@ -185,7 +183,7 @@ public class MaterialSampleRepositoryIT extends BaseRepositoryIT {
     MaterialSampleDto result = materialSampleRepository.getOne(matSampleId, null).getDto();
     assertEquals(0, result.getResourceVersion());
 
-    result.setDwcCatalogNumber("abc");
+    result.setMaterialSampleRemarks("abc");
     JsonApiDocument docToUpdate = JsonApiDocuments.createJsonApiDocument(
       matSampleId, MaterialSampleDto.TYPENAME,
       JsonAPITestHelper.toAttributeMap(result)

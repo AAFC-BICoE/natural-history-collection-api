@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.mapper;
 
 import java.util.UUID;
 
+import ca.gc.aafc.collection.api.dto.external.MaterialSampleExternalDto;
 import ca.gc.aafc.collection.api.dto.external.MetadataExternalDto;
 import ca.gc.aafc.collection.api.dto.external.PersonExternalDto;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
@@ -27,6 +28,8 @@ public final class ExternalRelationshipMapper {
     return switch (externalRelationDto.getType()) {
       case PersonExternalDto.EXTERNAL_TYPENAME -> PersonExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
       case MetadataExternalDto.EXTERNAL_TYPENAME -> MetadataExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
+      // transaction is using material-sample as external relationships since it was in its own module before
+      case MaterialSampleExternalDto.EXTERNAL_TYPENAME -> MaterialSampleExternalDto.builder().uuid(UUID.fromString(externalRelationDto.getId())).build();
       default -> throw new IllegalStateException("Unsupported type for JsonApiExternalResource: " + externalRelationDto.getType());
     };
   }
