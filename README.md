@@ -16,7 +16,7 @@ See [documentation](https://aafc-bicoe.github.io/natural-history-collection-api/
 
 ## Required
 
-* Java 21
+* Java 25
 * Maven 3.8 (tested)
 * Docker 20+ (for running integration tests)
 
