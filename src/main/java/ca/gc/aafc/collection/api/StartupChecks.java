@@ -21,6 +21,8 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class StartupChecks implements SmartInitializingSingleton {
 
+  public final String PENDING_IMPORT_KEY = "pendingDataImports";
+
   private final DatabaseDataImportService databaseDataImportService;
   private final ApiInfoConfiguration apiInfoConfiguration;
 
@@ -39,11 +41,16 @@ public class StartupChecks implements SmartInitializingSingleton {
     checkPendingDataImport();
   }
 
+
   private void checkPendingDataImport() {
     List<DinaDataImport> pendingImports = databaseDataImportService.findPendingImports();
 
     if (!pendingImports.isEmpty()) {
       apiInfoConfiguration.setAttentionRequired(true);
+
+      pendingImports.forEach(dataImportItem -> 
+        apiInfoConfiguration.addModuleInfo(PENDING_IMPORT_KEY, dataImportItem.toString())
+      );
     }
   }
 }
