@@ -49,7 +49,8 @@ public class StartupChecks implements SmartInitializingSingleton {
       apiInfoConfiguration.setAttentionRequired(true);
 
       pendingImports.forEach(dataImportItem -> 
-        apiInfoConfiguration.addModuleInfo(PENDING_IMPORT_KEY, dataImportItem.toString())
+        apiInfoConfiguration.addModuleInfo(PENDING_IMPORT_KEY, 
+          dataImportItem.getSourceSchema() + "." + dataImportItem.getSourceTable())
       );
     }
   }
