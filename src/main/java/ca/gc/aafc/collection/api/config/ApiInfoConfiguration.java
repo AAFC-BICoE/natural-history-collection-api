@@ -45,7 +45,7 @@ public class ApiInfoConfiguration {
     infoDto.setModuleVersion(apiVersion);
     infoDto.setAttentionRequired(attentionRequired.get());
 
-    if(!moduleInfo.isEmpty()) {
+    if (!moduleInfo.isEmpty()) {
       infoDto.setModuleInfo(new HashMap<>(moduleInfo));
     }
 

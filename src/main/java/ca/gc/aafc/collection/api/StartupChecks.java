@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class StartupChecks implements SmartInitializingSingleton {
 
-  public final String PENDING_IMPORT_KEY = "pendingDataImports";
+  public static final String PENDING_IMPORT_KEY = "pendingDataImports";
 
   private final DatabaseDataImportService databaseDataImportService;
   private final ApiInfoConfiguration apiInfoConfiguration;
