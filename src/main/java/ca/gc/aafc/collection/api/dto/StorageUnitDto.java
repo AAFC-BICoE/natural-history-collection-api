@@ -22,6 +22,8 @@ import org.javers.core.metamodel.annotation.TypeName;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import ca.gc.aafc.dina.dto.ExternalRelationDto;
+import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
 
 @Data
 @RelatedEntity(StorageUnit.class)
@@ -67,6 +69,9 @@ public class StorageUnitDto implements JsonApiResource {
   @JsonIgnore
   private StorageUnitTypeDto storageUnitType;
 
+  @JsonApiExternalRelation(type = "metadata")
+  @JsonIgnore
+  private List<ExternalRelationDto> attachment = List.of();
 
   @Override
   @JsonIgnore

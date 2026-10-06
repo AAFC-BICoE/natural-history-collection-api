@@ -53,6 +53,7 @@ public interface StorageUnitUsageMapper extends DinaMapperV2<StorageUnitUsageDto
 
   @Mapping(target = "storageUnitChildren", ignore = true)
   @Mapping(target = "parentStorageUnit", ignore = true)
+  @Mapping(target = "attachment", ignore = true)
   StorageUnitDto toStorageUnitDto(StorageUnit entity, Set<String> provided, String scope);
 
 }

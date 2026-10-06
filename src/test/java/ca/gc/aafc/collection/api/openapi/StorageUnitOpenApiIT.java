@@ -16,6 +16,7 @@ import ca.gc.aafc.dina.testsupport.jsonapi.JsonAPITestHelper;
 import ca.gc.aafc.dina.testsupport.specs.OpenAPI3Assertions;
 import lombok.SneakyThrows;
 
+import java.util.Map;
 @SpringBootTest(
   classes = CollectionModuleApiLauncher.class,
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -40,9 +41,20 @@ public class StorageUnitOpenApiIT extends BaseRestAssuredTest {
     storageUnitDto.setParentStorageUnit(null);
     storageUnitDto.setStorageUnitType(null);
     storageUnitDto.setStorageUnitChildren(null);
+    storageUnitDto.setAttachment(null);
 
-    OpenAPI3Assertions.assertRemoteSchema(OpenAPIConstants.COLLECTION_API_SPECS_URL, "StorageUnit",
-      sendPost(TYPE_NAME, JsonAPITestHelper.toJsonAPIMap(TYPE_NAME, JsonAPITestHelper.toAttributeMap(storageUnitDto))
-      ).extract().asString());
+    OpenAPI3Assertions.assertRemoteSchema(
+      OpenAPIConstants.COLLECTION_API_SPECS_URL,
+      "StorageUnit",
+      sendPost(
+        TYPE_NAME,
+        JsonAPITestHelper.toJsonAPIMap(
+          TYPE_NAME,
+          JsonAPITestHelper.toAttributeMap(storageUnitDto),
+          Map.of(
+            "attachment",
+            JsonAPITestHelper.generateExternalRelationList("metadata", 1)),
+          null))
+        .extract().asString());
   }
 }
