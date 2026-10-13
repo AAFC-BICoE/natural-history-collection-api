@@ -16,6 +16,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import java.util.List;
+import jakarta.persistence.Column;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -37,6 +39,9 @@ public class StorageUnit extends AbstractStorageUnit {
 
   @NotNull
   private Boolean isGeneric = false;
+
+  @Column(name = "attachment", columnDefinition = "uuid[]")
+  private List<UUID> attachment = List.of();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = PARENT_ID_COLUMN_NAME)

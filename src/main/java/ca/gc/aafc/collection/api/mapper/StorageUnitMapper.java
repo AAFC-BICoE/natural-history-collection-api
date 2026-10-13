@@ -20,12 +20,14 @@ import ca.gc.aafc.dina.mapper.DinaMapperV2;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import ca.gc.aafc.dina.mapper.MapperStaticConverter;
 
-@Mapper
+@Mapper(imports = MapperStaticConverter.class)
 public interface StorageUnitMapper extends DinaMapperV2<StorageUnitDto, StorageUnit> {
 
   StorageUnitMapper INSTANCE = Mappers.getMapper(StorageUnitMapper.class);
 
+  @Mapping(target = "attachment", expression = "java(MapperStaticConverter.uuidListToExternalRelationsList(entity.getAttachment(), \"metadata\"))")
   StorageUnitDto toDto(StorageUnit entity, @Context Set<String> provided, @Context String scope);
 
   @Mapping(target = "id", ignore = true)
