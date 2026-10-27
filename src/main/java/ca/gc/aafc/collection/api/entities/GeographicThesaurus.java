@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 import org.javers.core.metamodel.annotation.Value;
 
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
+@Jacksonized
 @Value // This class is considered a "value" belonging to a CollectingEventDto.
 public class GeographicThesaurus implements Serializable {
 

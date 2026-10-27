@@ -5,8 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.dto.SiteDto;
@@ -35,7 +35,7 @@ public class SiteRestIT extends BaseRestAssuredTest {
   }
 
   @Test
-  void site_onCreate_serializationSuccessful() throws JsonProcessingException {
+  void site_onCreate_serializationSuccessful() throws JacksonException {
     SiteDto siteDto = SiteTestFixture.newSite();
 
     var attributes = JsonAPITestHelper.toAttributeMap(siteDto);

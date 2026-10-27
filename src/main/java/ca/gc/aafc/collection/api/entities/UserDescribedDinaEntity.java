@@ -1,15 +1,15 @@
 package ca.gc.aafc.collection.api.entities;
 
+import org.hibernate.generator.EventType;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,7 +43,7 @@ public abstract class UserDescribedDinaEntity implements DinaEntityIdentifiableB
   private UUID uuid;
 
   @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -53,7 +53,7 @@ public abstract class UserDescribedDinaEntity implements DinaEntityIdentifiableB
   @NotBlank
   private String name;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "multilingual_description")
   @Valid
   private MultilingualDescription multilingualDescription;
