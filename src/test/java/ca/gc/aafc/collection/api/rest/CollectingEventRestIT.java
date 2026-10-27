@@ -51,6 +51,19 @@ public class CollectingEventRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void create_withoutOptionalAttributes_defaultsApplied() {
+    // only send a minimal set of attributes, DTO defaults should be applied to the rest
+    Map<String, Object> attributes = Map.of("group", "aafc", "dwcVerbatimLocality", "minimal event");
+
+    String uuid = JsonAPITestHelper.extractId(sendPost(CollectingEventDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(CollectingEventDto.TYPENAME, attributes, null, null)));
+
+    findCollectingEvent(uuid)
+      .body("data.attributes.managedAttributes", Matchers.anEmptyMap())
+      .body("data.attributes.geoReferenceAssertions", Matchers.empty());
+  }
+
+  @Test
   void extension_onUpdate_updatePersisted() {
 
     ProtocolDto protocol = ProtocolTestFixture.newProtocol();
