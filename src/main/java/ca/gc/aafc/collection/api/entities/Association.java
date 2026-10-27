@@ -21,8 +21,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import org.hibernate.generator.EventType;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -46,7 +46,7 @@ public class Association implements DinaEntity {
   private UUID uuid;
 
   @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank

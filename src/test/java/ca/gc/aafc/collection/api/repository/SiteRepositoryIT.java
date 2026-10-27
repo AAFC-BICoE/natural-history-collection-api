@@ -6,8 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.UUID;
 import jakarta.inject.Inject;
 import org.geolatte.geom.GeometryType;
+import org.geolatte.geom.json.jackson3.GeolatteGeomModule;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -86,9 +87,9 @@ public class SiteRepositoryIT extends BaseRepositoryIT {
   @TestConfiguration
   static class GeoLatteJacksonTestConfig {
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer geolatteCustomizer() {
-      return builder -> builder.modulesToInstall(
-          new org.geolatte.geom.json.GeolatteGeomModule());
+    public JsonMapperBuilderCustomizer geolatteCustomizer() {
+      return builder -> builder.addModule(
+          new GeolatteGeomModule());
     }
   }
 }

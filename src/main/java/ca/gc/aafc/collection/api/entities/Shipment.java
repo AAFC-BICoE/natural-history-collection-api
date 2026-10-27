@@ -3,6 +3,7 @@ package ca.gc.aafc.collection.api.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
+@Jacksonized
 public class Shipment implements Serializable {
 
   @Size(max = 1000)
@@ -49,6 +51,7 @@ public class Shipment implements Serializable {
 
   @Data
   @Builder
+  @Jacksonized
   public static class Address implements Serializable {
     @Size (max = 150)
     private String receiverName;

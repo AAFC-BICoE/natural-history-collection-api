@@ -1,15 +1,19 @@
 package ca.gc.aafc.collection.api.config;
 
-import org.geolatte.geom.json.GeolatteGeomModule;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.geolatte.geom.json.jackson3.GeolatteGeomModule;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import tools.jackson.databind.DeserializationFeature;
 
 @Configuration
 public class GeoLatteConfig {
   @Bean
-  public Jackson2ObjectMapperBuilderCustomizer customizer() {
-    // make sure to add the module and not replace the existing list
-    return builder -> builder.modulesToInstall(c -> c.add(new GeolatteGeomModule()));
+  public JsonMapperBuilderCustomizer customizer() {
+    return builder -> {
+      builder.addModule(new GeolatteGeomModule());
+      builder.disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
+    };
   }
 }

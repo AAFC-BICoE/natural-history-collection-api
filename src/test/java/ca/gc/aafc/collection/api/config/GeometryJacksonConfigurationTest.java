@@ -8,7 +8,7 @@ import org.geolatte.geom.Geometry;
 import org.geolatte.geom.GeometryType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import ca.gc.aafc.collection.api.CollectionModuleApiLauncher;
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 
@@ -37,7 +37,7 @@ public class GeometryJacksonConfigurationTest extends CollectionModuleBaseIT {
         }
         """;
     Geometry<G2D> geometry = objectMapper.readValue(geoJson,
-        new com.fasterxml.jackson.core.type.TypeReference<Geometry<G2D>>() {
+        new tools.jackson.core.type.TypeReference<Geometry<G2D>>() {
         });
     assertNotNull(geometry);
     assertEquals(GeometryType.POLYGON, geometry.getGeometryType());
