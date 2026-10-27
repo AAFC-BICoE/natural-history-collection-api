@@ -4,7 +4,6 @@ import ca.gc.aafc.collection.api.dto.GeoreferenceAssertionDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.datetime.ISODateTime;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import lombok.AccessLevel;
@@ -17,12 +16,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
+import org.hibernate.generator.EventType;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.UniqueElements;
 
@@ -96,7 +94,7 @@ public class CollectingEvent implements DinaEntity {
   @Column(name = "_group")
   private String group;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @Builder.Default
   private List<GeoreferenceAssertionDto> geoReferenceAssertions = new ArrayList<>();
@@ -125,7 +123,7 @@ public class CollectingEvent implements DinaEntity {
   private String verbatimEventDateTime;
 
   @Column(insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -202,7 +200,7 @@ public class CollectingEvent implements DinaEntity {
   private String remarks;
 
   /** Map of Managed attribute key to value object. */
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @NotNull
   @Builder.Default
@@ -212,12 +210,12 @@ public class CollectingEvent implements DinaEntity {
   @Enumerated(EnumType.STRING)
   private GeographicPlaceNameSource geographicPlaceNameSource;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "geographic_thesaurus", columnDefinition = "jsonb")
   @Valid
   private GeographicThesaurus geographicThesaurus;
@@ -245,7 +243,7 @@ public class CollectingEvent implements DinaEntity {
   // Field calculated by CollectingEventService
   private Point<G2D> eventGeom;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 

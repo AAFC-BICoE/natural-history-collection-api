@@ -8,8 +8,8 @@ import org.javers.core.json.JsonTypeAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Allows Javers to serialize/deserialize Geometry as geojson.
@@ -32,7 +32,7 @@ public class JaversGeometryConfig {
         }
         try {
           return objectMapper.writeValueAsString(sourceValue);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
           throw new RuntimeException("Error serializing Geometry", e);
         }
       }
@@ -44,7 +44,7 @@ public class JaversGeometryConfig {
         }
         try {
           return objectMapper.readValue(serializedValue, Geometry.class);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
           throw new RuntimeException("Error deserializing Geometry", e);
         }
       }

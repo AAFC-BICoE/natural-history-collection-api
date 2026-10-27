@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +17,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.javers.core.metamodel.annotation.Value;
 
@@ -43,13 +44,14 @@ public class Protocol extends UserDescribedDinaEntity {
   @UniqueElements
   private List<UUID> attachments = List.of();
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "protocol_data", columnDefinition = "jsonb")
   @Valid
   private List<ProtocolData> protocolData = List.of();
 
   @Data
   @Builder
+  @Jacksonized
   @Value
   public static class ProtocolData implements Serializable {
 
@@ -64,6 +66,7 @@ public class Protocol extends UserDescribedDinaEntity {
 
   @Data
   @Builder
+  @Jacksonized
   @Value
   public static class ProtocolDataElement implements Serializable {
 
