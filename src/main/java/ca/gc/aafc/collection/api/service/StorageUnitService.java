@@ -6,6 +6,7 @@ import org.springframework.validation.SmartValidator;
 import ca.gc.aafc.collection.api.dto.StorageUnitDto;
 import ca.gc.aafc.collection.api.entities.StorageUnit;
 import ca.gc.aafc.collection.api.entities.StorageUnitType;
+import ca.gc.aafc.collection.api.validation.CollectionManagedAttributeValueValidatorStorageUnit;
 import ca.gc.aafc.dina.dto.HierarchicalObject;
 import ca.gc.aafc.dina.jpa.BaseDAO;
 import ca.gc.aafc.dina.messaging.DinaEventPublisher;
@@ -15,6 +16,7 @@ import ca.gc.aafc.dina.service.PostgresHierarchicalDataService;
 import ca.gc.aafc.dina.util.UUIDHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NonNull;
@@ -24,23 +26,37 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
 
   private final StorageUnitTypeService storageUnitTypeService;
   private final PostgresHierarchicalDataService postgresHierarchicalDataService;
+  private final CollectionManagedAttributeValueValidatorStorageUnit managedAttributeValueValidator;
 
   public StorageUnitService(
     @NonNull BaseDAO baseDAO,
     @NonNull SmartValidator sv,
     @NonNull PostgresHierarchicalDataService postgresHierarchicalDataService,
     @NonNull StorageUnitTypeService storageUnitTypeService,
+    @NonNull CollectionManagedAttributeValueValidatorStorageUnit managedAttributeValueValidator,
     DinaEventPublisher<EntityChanged> eventPublisher
   ) {
     super(baseDAO, sv, StorageUnitDto.TYPENAME, eventPublisher);
     this.postgresHierarchicalDataService = postgresHierarchicalDataService;
     this.storageUnitTypeService = storageUnitTypeService;
+    this.managedAttributeValueValidator = managedAttributeValueValidator;
   }
 
   @Override
   protected void preCreate(StorageUnit entity) {
     entity.setUuid(UUIDHelper.generateUUIDv7());
     entity.setGroup(standardizeGroupName(entity));
+    cleanupManagedAttributes(entity);
+  }
+
+  @Override
+  public void preUpdate(StorageUnit entity) {
+    cleanupManagedAttributes(entity);
+  }
+
+  @Override
+  public void validateBusinessRules(StorageUnit entity) {
+    managedAttributeValueValidator.validate(entity, entity.getManagedAttributes());
   }
 
   @Override
@@ -86,5 +102,16 @@ public class StorageUnitService extends MessageProducingService<StorageUnit> {
       storageHierarchicalObjects.add(storageHierarchicalObject);
     }
     unit.setHierarchy(storageHierarchicalObjects);
+  }
+
+  private void cleanupManagedAttributes(StorageUnit entity) {
+    Map<String, String> values = entity.getManagedAttributes();
+    if (values == null) {
+      entity.setManagedAttributes(Map.of());
+      return;
+    }
+    Map<String, String> cleanedValues = new HashMap<>(values);
+    cleanedValues.entrySet().removeIf(entry -> entry.getValue() == null || entry.getValue().isBlank());
+    entity.setManagedAttributes(cleanedValues);
   }
 }
