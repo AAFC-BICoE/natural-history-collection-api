@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import org.javers.core.metamodel.annotation.Value;
 
 import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @RequiredArgsConstructor
 @SuperBuilder
+@EqualsAndHashCode
 @Value // This class is considered a "value" belonging to a MaterialSample.
 public class HostOrganism implements Serializable {
   
