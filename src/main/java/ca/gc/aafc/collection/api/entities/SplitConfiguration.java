@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import io.hypersistence.utils.hibernate.type.array.EnumArrayType;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import jakarta.persistence.Column;
@@ -19,10 +18,10 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
+import org.hibernate.type.SqlTypes;
 
 import ca.gc.aafc.dina.entity.DinaEntityIdentifiableByName;
 
@@ -56,7 +55,7 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   private UUID uuid;
 
   @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -74,13 +73,8 @@ public class SplitConfiguration implements DinaEntityIdentifiableByName {
   @NotNull
   private MaterialSampleNameGeneration.IdentifierGenerationStrategy strategy;
 
-  @Type(
-    value = EnumArrayType.class,
-    parameters = @Parameter(
-      name = EnumArrayType.SQL_ARRAY_TYPE,
-      value = "material_sample_type_enum"
-    )
-  )
+  @JdbcTypeCode(SqlTypes.ARRAY)
+  @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "material_sample_type_enum[]")
   private MaterialSample.MaterialSampleType[] conditionalOnMaterialSampleTypes;
 

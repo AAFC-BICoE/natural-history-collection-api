@@ -4,7 +4,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ca.gc.aafc.collection.api.dto.MaterialSampleHierarchyObject;
 import ca.gc.aafc.collection.api.entities.AbstractMaterialSample;
@@ -70,7 +70,7 @@ public class MaterialSampleIdentifierGenerator {
     MaterialSample ms = materialSampleService.findOne(currentParentUUID, MaterialSample.class);
     try {
       materialSampleService.setHierarchy(ms);
-    } catch (JsonProcessingException e) {
+    } catch (JacksonException e) {
       throw new RuntimeException(e);
     }
 

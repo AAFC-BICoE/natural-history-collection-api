@@ -1,14 +1,14 @@
 package ca.gc.aafc.collection.api.entities;
 
+import org.hibernate.generator.EventType;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import ca.gc.aafc.dina.entity.DinaEntity;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -65,7 +65,7 @@ public class FormTemplate implements DinaEntity {
   private Boolean restrictToCreatedBy = false;
 
   @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -73,11 +73,11 @@ public class FormTemplate implements DinaEntity {
   private String createdBy;
 
   @NotNull
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   private Map<String, Object> viewConfiguration;
 
   @Valid
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   private List<FormComponent> components;
 
   @Data

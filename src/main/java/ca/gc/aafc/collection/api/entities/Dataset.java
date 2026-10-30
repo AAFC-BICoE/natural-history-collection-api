@@ -10,10 +10,11 @@ import java.util.UUID;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.generator.EventType;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import ca.gc.aafc.dina.dto.BaseDatasetDto.Coverage;
 import ca.gc.aafc.dina.dto.BaseDatasetDto.DatasetType;
 import ca.gc.aafc.dina.dto.BaseDatasetDto.Project;
@@ -24,7 +25,6 @@ import ca.gc.aafc.dina.entity.AgentRoles;
 import ca.gc.aafc.dina.entity.DinaEntity;
 import ca.gc.aafc.dina.i18n.MultilingualDescription;
 import ca.gc.aafc.dina.i18n.MultilingualTitle;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -77,41 +77,41 @@ public class Dataset implements DinaEntity {
   @Enumerated(EnumType.STRING)
   private DatasetType datasetType;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   private Map<String, Object> query;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @Valid
   @Builder.Default
   private List<AgentRoles> agentRoles = List.of();
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "multilingual_title")
   @Valid
   protected MultilingualTitle multilingualTitle;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "multilingual_description")
   @Valid
   private MultilingualDescription multilingualDescription;
   
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   private UsageRights usageRights;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Builder.Default
   private List<KeywordSet> keywordSets = List.of();
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   private Coverage coverage;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   private Methods methods;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   private Project project;
 

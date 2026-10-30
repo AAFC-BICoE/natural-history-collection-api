@@ -26,8 +26,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.generator.EventType;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NaturalId;
 
 import ca.gc.aafc.dina.entity.DinaEntity;
@@ -70,7 +70,7 @@ public class StorageUnitUsage implements DinaEntity {
   private String usageType;
 
   @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank

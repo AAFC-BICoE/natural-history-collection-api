@@ -1,6 +1,5 @@
 package ca.gc.aafc.collection.api.entities;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 import org.hibernate.generator.EventType;
 import org.hibernate.type.SqlTypes;
 
@@ -96,12 +94,12 @@ public class Transaction implements DinaEntity {
   @Size(max = 20_000)
   private String remarks;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @Valid
   private Shipment shipment;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @Valid
   @Builder.Default
@@ -110,7 +108,7 @@ public class Transaction implements DinaEntity {
   @Column(columnDefinition = "uuid[]")
   private List<UUID> materialSamples = List.of();
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @NotNull
   @Builder.Default

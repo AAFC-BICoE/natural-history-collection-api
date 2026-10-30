@@ -3,10 +3,8 @@ package ca.gc.aafc.collection.api.entities;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Geometry;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,7 +47,7 @@ public class Site extends UserDescribedDinaEntity {
   @Enumerated(EnumType.STRING)
   private CollectingEvent.GeographicPlaceNameSource geographicPlaceNameSource;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "geographic_place_name_source_details", columnDefinition = "jsonb")
   @Valid
   private GeographicPlaceNameSourceDetail geographicPlaceNameSourceDetail;
@@ -63,7 +61,7 @@ public class Site extends UserDescribedDinaEntity {
   @Size(max = 100)
   private String dwcStateProvince;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   @NotNull
   @Builder.Default

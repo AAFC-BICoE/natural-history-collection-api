@@ -4,7 +4,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ca.gc.aafc.collection.api.CollectionModuleBaseIT;
 import ca.gc.aafc.collection.api.config.CollectionVocabularyConfiguration;
@@ -90,7 +90,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void hierarchy_onSetHierarchy_hierarchyLoaded() throws JsonProcessingException {
+  public void hierarchy_onSetHierarchy_hierarchyLoaded() throws JacksonException {
 
     Determination determination = DeterminationFactory.newDetermination()
             .verbatimScientificName("verbatimScientificName")
@@ -132,7 +132,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void targetIdentifiableEntitySummary_OnRequest_loaded() throws JsonProcessingException {
+  public void targetIdentifiableEntitySummary_OnRequest_loaded() throws JacksonException {
     Organism organism = OrganismEntityFactory.newOrganism()
       .isTarget(true)
       .build();
@@ -168,7 +168,7 @@ public class MaterialSampleServiceIT extends CollectionModuleBaseIT {
   }
 
   @Test
-  public void hierarchy_onHierarchyNoTargetOrganism_hierarchyLoaded() throws JsonProcessingException {
+  public void hierarchy_onHierarchyNoTargetOrganism_hierarchyLoaded() throws JacksonException {
 
     Determination determination = DeterminationFactory.newDetermination()
             .verbatimScientificName("verbatimScientificName")

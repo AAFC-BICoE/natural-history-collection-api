@@ -18,11 +18,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 @Data
 @Builder
+@Jacksonized
 @Value // This class is considered a "value" belonging to a Organism:
 public class Determination implements Serializable {
 
@@ -131,7 +134,9 @@ public class Determination implements Serializable {
 
   @Getter
   @Builder
+  @Jacksonized
   @RequiredArgsConstructor
+  @EqualsAndHashCode
   public static class ScientificNameSourceDetails implements Serializable {
     @Size(max = 255)
     private final String labelHtml;

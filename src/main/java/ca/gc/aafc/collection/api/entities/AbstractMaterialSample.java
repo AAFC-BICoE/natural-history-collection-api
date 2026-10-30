@@ -1,18 +1,16 @@
 package ca.gc.aafc.collection.api.entities;
 
+import org.hibernate.generator.EventType;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
 import ca.gc.aafc.collection.api.dto.ScheduledActionDto;
 import ca.gc.aafc.collection.api.dto.CitationDto;
 import ca.gc.aafc.dina.entity.DinaEntity;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -62,7 +60,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private MaterialSample.MaterialSampleType materialSampleType;
 
   @Column(name = "created_on", insertable = false, updatable = false)
-  @Generated(value = GenerationTime.INSERT)
+  @Generated(event = EventType.INSERT)
   private OffsetDateTime createdOn;
 
   @NotBlank
@@ -80,7 +78,7 @@ public class AbstractMaterialSample implements DinaEntity {
   private String materialSampleName;
 
   // Represents the alternative identifiers
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> identifiers = Map.of();
@@ -105,17 +103,17 @@ public class AbstractMaterialSample implements DinaEntity {
   @Size(max = 250)
   private String preparationSubstrate;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
   @Builder.Default
   private Map<String, String> preparationManagedAttributes = Map.of();
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "extension_values", columnDefinition = "jsonb")
   private Map<String, Map<String, String>> extensionValues = Map.of();
 
@@ -133,15 +131,15 @@ public class AbstractMaterialSample implements DinaEntity {
 
   private String[] tags;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private List<ScheduledActionDto> scheduledActions;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private List<CitationDto> citations;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private HostOrganism hostOrganism;
 
@@ -150,7 +148,7 @@ public class AbstractMaterialSample implements DinaEntity {
   @Builder.Default
   private Boolean allowDuplicateName = false;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   private Map<String, Map<String, String>> restrictionFieldsExtension;
 
   @Builder.Default

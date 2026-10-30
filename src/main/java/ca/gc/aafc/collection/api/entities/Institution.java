@@ -1,9 +1,9 @@
 package ca.gc.aafc.collection.api.entities;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.validator.constraints.URL;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
@@ -30,7 +30,7 @@ public class Institution extends UserDescribedDinaEntity {
   @Size(max = 1000)
   private String remarks;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Valid
   private List<InstitutionIdentifier> identifiers = new ArrayList<>();
 }

@@ -30,7 +30,7 @@ import java.util.Properties;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Replacement for CollectionModuleBaseIT

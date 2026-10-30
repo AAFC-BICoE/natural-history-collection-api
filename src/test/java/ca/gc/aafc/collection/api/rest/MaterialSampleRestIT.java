@@ -64,6 +64,18 @@ public class MaterialSampleRestIT extends BaseRestAssuredTest {
   }
 
   @Test
+  void createOrganism_withoutOptionalAttributes_defaultsApplied() {
+    // only send a minimal set of attributes, DTO defaults should be applied to the rest
+    Map<String, Object> attributes = Map.of("group", "aafc", "lifeStage", "adult");
+
+    String uuid = JsonAPITestHelper.extractId(sendPost(OrganismDto.TYPENAME,
+      JsonAPITestHelper.toJsonAPIMap(OrganismDto.TYPENAME, attributes, null, null)));
+
+    sendGet(OrganismDto.TYPENAME, uuid)
+      .body("data.attributes.managedAttributes", Matchers.anEmptyMap());
+  }
+
+  @Test
   @Disabled
   void post_withChild_childIgnored() {
     ImmutableMaterialSampleDto childDto = new ImmutableMaterialSampleDto();

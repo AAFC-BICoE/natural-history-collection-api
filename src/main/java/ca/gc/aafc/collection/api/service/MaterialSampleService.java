@@ -5,7 +5,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.SmartValidator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ca.gc.aafc.collection.api.dao.CollectionHierarchicalDataDAO;
 import ca.gc.aafc.collection.api.dto.MaterialSampleDto;
@@ -92,7 +92,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     if (matSampleOptFields.contains(MaterialSample.HIERARCHY_PROP_NAME)) {
       try {
         setHierarchy(entity);
-      } catch (JsonProcessingException e) {
+      } catch (JacksonException e) {
         throw new RuntimeException(e);
       }
     }
@@ -115,7 +115,7 @@ public class MaterialSampleService extends MessageProducingService<MaterialSampl
     }
   }
 
-  public void setHierarchy(MaterialSample sample) throws JsonProcessingException {
+  public void setHierarchy(MaterialSample sample) throws JacksonException {
     sample.setHierarchy(hierarchicalDataService.getHierarchy(sample.getId()));
   }
 
