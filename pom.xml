@@ -33,7 +33,7 @@
     <checkstyle.version>10.17.0</checkstyle.version>
     
     <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-    <dina-base-api.version>0.184-SNAPSHOT</dina-base-api.version>
+    <dina-base-api.version>1.0</dina-base-api.version>
 
     <apache.commons.collections4.version>4.4</apache.commons.collections4.version>
     <geolatte-geojson-jackson3.version>2.0.1</geolatte-geojson-jackson3.version>
