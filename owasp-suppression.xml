@@ -4,14 +4,6 @@
         <cpe>cpe:/a:pivotal_software:spring_security:5.4.5</cpe>
     </suppress>
     <suppress>
-        <notes>no UriComponentsBuilder</notes>
-        <cve>CVE-2024-22243</cve>
-    </suppress>
-    <suppress>
-        <notes>no UriComponentsBuilder</notes>
-        <cve>CVE-2024-22262</cve>
-    </suppress>
-    <suppress>
         <notes>AuthenticatedVoter no used</notes>
         <cve>CVE-2024-22257</cve>
     </suppress>
@@ -63,5 +55,10 @@
     <suppress>
         <notes>Eclipse GlassFish related. Not jaxb-core</notes>
         <cve>CVE-2026-2586</cve>
+    </suppress>
+    <suppress>
+        <notes>False positive: Spring Boot spring-boot-liquibase 4.0.9 was identified as Liquibase 4.0.9; resolved liquibase-core is 5.0.4.</notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-liquibase@.*$</packageUrl>
+        <cve>CVE-2022-0839</cve>
     </suppress>
 </suppressions>
