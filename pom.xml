@@ -3,7 +3,7 @@
 
   <groupId>ca.gc.aafc</groupId>
   <artifactId>natural-history-collection-api</artifactId>
-  <version>0.132-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <name>Natural History Collection API</name>
@@ -457,6 +457,11 @@
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
         <version>${dependency.check.version}</version>
+        <configuration>
+          <suppressionFiles>
+            <suppressionFile>owasp-suppression.xml</suppressionFile>
+          </suppressionFiles>
+        </configuration>
         <reportSets>
           <reportSet>
             <reports>

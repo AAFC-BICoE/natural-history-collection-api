@@ -58,7 +58,7 @@
     </suppress>
     <suppress>
         <notes>False positive: Spring Boot spring-boot-liquibase 4.0.9 was identified as Liquibase 4.0.9; resolved liquibase-core is 5.0.4.</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-liquibase@.*$</packageUrl>
+        <cpe>cpe:2.3:a:liquibase:liquibase:4.0.9:*:*:*:*:*:*:*</cpe>
         <cve>CVE-2022-0839</cve>
     </suppress>
 </suppressions>
