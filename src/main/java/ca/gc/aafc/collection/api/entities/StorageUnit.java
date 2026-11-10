@@ -17,8 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Column;
-import org.hibernate.annotations.Type;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.Map;
@@ -63,7 +63,8 @@ public class StorageUnit extends AbstractStorageUnit {
   @JoinColumn(name = TYPE_COLUMN_NAME)
   private StorageUnitType storageUnitType;
 
-  @Type(JsonType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(columnDefinition = "jsonb")
   @NotNull
   @Builder.Default
   private Map<String, String> managedAttributes = Map.of();
