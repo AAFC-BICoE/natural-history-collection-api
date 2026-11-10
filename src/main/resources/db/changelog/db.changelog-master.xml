@@ -212,4 +212,5 @@
   <include file="db/changelog/migrations/198-Add_transaction_table.xml"/>
   <include file="db/changelog/migrations/199-Add_loan_transaction_data_import.xml"/>
   <include file="db/changelog/migrations/200-Add_attachment_to_storage_unit.xml"/>
+  <include file="db/changelog/migrations/201-Add_managed_attributes_to_storage_unit.xml"/>
 </databaseChangeLog>

@@ -21,6 +21,7 @@ import org.javers.core.metamodel.annotation.TypeName;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import ca.gc.aafc.dina.dto.ExternalRelationDto;
 import ca.gc.aafc.dina.repository.meta.JsonApiExternalRelation;
@@ -48,6 +49,8 @@ public class StorageUnitDto implements JsonApiResource {
   private String barcode;
 
   private Boolean isGeneric;
+
+  private Map<String, String> managedAttributes = Map.of();
 
   // -- Optional fields --
   @JsonApiCalculatedAttribute

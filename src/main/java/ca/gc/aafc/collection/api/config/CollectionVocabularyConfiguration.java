@@ -50,6 +50,7 @@ public class CollectionVocabularyConfiguration
     PREPARATION,
     ASSEMBLAGE,
     SITE,
+    STORAGE_UNIT,
     COLLECTION,
     PROJECT,
     TRANSACTION;
