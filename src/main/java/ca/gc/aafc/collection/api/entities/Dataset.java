@@ -62,6 +62,9 @@ public class Dataset implements DinaEntity {
   private UUID uuid;
 
   @Size(max = 100)
+  private String exportName;
+
+  @Size(max = 100)
   private String datasetVersion;
 
   private LocalDate publicationDate;
