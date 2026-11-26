@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://local.xsd/dbchangelog-4.4.xsd"
                    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="203-Add_position_support_to_controlled_vocabulary_items" context="schema-change" author="cgendreau">
+    <changeSet id="204-Add_position_support_to_controlled_vocabulary_items" context="schema-change" author="cgendreau">
         <addColumn tableName="controlled_vocabulary">
             <column name="ordered" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
