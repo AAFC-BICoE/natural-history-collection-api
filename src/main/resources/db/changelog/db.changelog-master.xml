@@ -215,4 +215,5 @@
   <include file="db/changelog/migrations/201-Add_managed_attributes_to_storage_unit.xml"/>
   <include file="db/changelog/migrations/202-Add_export_name_to_dataset.xml"/>
   <include file="db/changelog/migrations/203-Add_system_defined_controlled_vocabulary_item.xml"/>
+  <include file="db/changelog/migrations/204-Add_position_support_to_controlled_vocabulary_items.xml"/>
 </databaseChangeLog>

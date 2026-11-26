@@ -22,4 +22,6 @@ This file is used for AI tools to better understand our project and development 
 - Add or update tests in the corresponding test package when behavior changes.
 - Do not edit generated output under `target/`; modify the source or configuration that produces it.
 - Preserve existing user changes and avoid unrelated refactors.
-- UUIDs must be real, generated values. Never hand-write or invent one (e.g. 00000000-0000-0000-0000-000000000001); generate it with a UUID generator such as UUID.randomUUID(), uuidgen, or python -c "import uuid; print(uuid.uuid4())" (this is also the accepted way to generate values for Liquibase XML changesets).
+- UUIDs inserted as database values must be real, generated values. Never hand-write or invent one (e.g. 00000000-0000-0000-0000-000000000001); generate it with a UUID generator such as UUID.randomUUID(), uuidgen, or python -c "import uuid; print(uuid.uuid4())".
+- Liquibase changeset IDs should follow the repository's existing naming convention.
+- Treat existing Liquibase migration files and changesets as immutable; do not alter them unless the user explicitly asks. Append new migration include entries to the master changelog as needed, but never change or remove its existing content.
