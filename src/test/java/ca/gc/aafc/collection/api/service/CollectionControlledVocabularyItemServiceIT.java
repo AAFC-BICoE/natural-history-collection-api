@@ -47,6 +47,18 @@ public class CollectionControlledVocabularyItemServiceIT extends CollectionModul
   }
 
   @Test
+  void delete_WhenSystemDefined_DeniesDelete() {
+    CollectionControlledVocabularyItem attribute = newAttribute(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT);
+    attribute.setSystemDefined(true);
+    collectionControlledVocabularyItemService.create(attribute);
+
+    Assertions.assertThrows(
+      IllegalStateException.class, () -> collectionControlledVocabularyItemService.delete(attribute));
+    assertNotNull(
+      collectionControlledVocabularyItemService.findOne(attribute.getUuid(), CollectionControlledVocabularyItem.class));
+  }
+
+  @Test
   void delete_WhenKeyInUseByEvent_DeniesDelete() {
     CollectionControlledVocabularyItem attribute = newAttribute(CollectionVocabularyConfiguration.DinaComponent.COLLECTING_EVENT);
     collectionControlledVocabularyItemService.create(attribute);
